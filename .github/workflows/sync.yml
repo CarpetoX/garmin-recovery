@@ -1,0 +1,91 @@
+name: Garmin Recovery Sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 7 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Obtener wellness de Intervals.icu
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, json, csv, base64, urllib.request
+          from datetime import date, timedelta
+
+          key = os.environ["INTERVALS_API_KEY"]
+
+          newest = date.today()
+          oldest = newest - timedelta(days=90)
+
+          url = (
+              "https://intervals.icu/api/v1/athlete/0/wellness"
+              f"?oldest={oldest.isoformat()}"
+              f"&newest={newest.isoformat()}"
+          )
+
+          auth = base64.b64encode(
+              f"API_KEY:{key}".encode()
+          ).decode()
+
+          req = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization": "Basic " + auth,
+                  "Accept": "application/json"
+              }
+          )
+
+          with urllib.request.urlopen(req) as r:
+              data = json.loads(r.read().decode())
+
+          with open("wellness.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+
+          fields = [
+              "date", "hrv", "hrvSDNN", "restingHR",
+              "sleepSecs", "sleepScore", "avgSleepingHR",
+              "spO2", "readiness", "weight", "vo2max",
+              "ctl", "atl", "rampRate"
+          ]
+
+          with open("recovery.csv", "w", newline="", encoding="utf-8") as f:
+              w = csv.DictWriter(f, fieldnames=fields)
+              w.writeheader()
+
+              for x in data:
+                  w.writerow({
+                      "date": x.get("id", ""),
+                      "hrv": x.get("hrv", ""),
+                      "hrvSDNN": x.get("hrvSDNN", ""),
+                      "restingHR": x.get("restingHR", ""),
+                      "sleepSecs": x.get("sleepSecs", ""),
+                      "sleepScore": x.get("sleepScore", ""),
+                      "avgSleepingHR": x.get("avgSleepingHR", ""),
+                      "spO2": x.get("spO2", ""),
+                      "readiness": x.get("readiness", ""),
+                      "weight": x.get("weight", ""),
+                      "vo2max": x.get("vo2max", ""),
+                      "ctl": x.get("ctl", ""),
+                      "atl": x.get("atl", ""),
+                      "rampRate": x.get("rampRate", "")
+                  })
+          PY
+
+      - name: Guardar datos
+        run: |
+          git config user.name "Garmin Recovery Bot"
+          git config user.email "actions@github.com"
+          git add recovery.csv wellness.json
+          git diff --cached --quiet || git commit -m "Actualizar recuperación"
+          git push
