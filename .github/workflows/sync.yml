@@ -76,13 +76,13 @@ jobs:
                       "spO2": x.get("spO2", ""),
                       "readiness": x.get("readiness", ""),
                       "weight": x.get("weight", ""),
-                      "vo2max": x.get("vo2max", ""),
+                      "vo2max": x by.get("vo2max", ""),
                       "ctl": x.get("ctl", ""),
                       "atl": x.get("atl", ""),
                       "rampRate": x.get("rampRate", "")
                   })
           PY
-                - name: Obtener actividades de Intervals.icu
+      - name: Obtener actividades de Intervals.icu
         env:
           INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
         run: |
@@ -167,6 +167,6 @@ jobs:
         run: |
           git config user.name "Garmin Recovery Bot"
           git config user.email "actions@github.com"
-          git add recovery.csv wellness.json
-          git diff --cached --quiet || git commit -m "Actualizar recuperación"
+          git add recovery.csv wellness.json activities.csv activities.json
+          git diff --cached --quiet || git commit -m "Actualizar recuperación y entrenamientos"
           git push
