@@ -3,10 +3,10 @@ name: Garmin Recovery Sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 9 * * *"
-      timezone: "Europe/Madrid"
-    - cron: "30 22 * * *"
-      timezone: "Europe/Madrid"
+  - cron: "20 9 * * *"
+    timezone: "Europe/Madrid"
+  - cron: "20 22 * * *"
+    timezone: "Europe/Madrid"
 
 permissions:
   contents: write
@@ -48,7 +48,7 @@ jobs:
               headers={
                   "Authorization": "Basic " + auth,
                   "Accept": "application/json",
-                  "User-Agent": "Garmin-Recovery-Sync/2.0"
+                  "User-Agent": "Garmin-Recovery-Sync/3.0"
               }
           )
 
@@ -137,7 +137,7 @@ jobs:
               headers={
                   "Authorization": "Basic " + auth,
                   "Accept": "application/json",
-                  "User-Agent": "Garmin-Recovery-Sync/2.0"
+                  "User-Agent": "Garmin-Recovery-Sync/3.0"
               }
           )
 
@@ -203,10 +203,11 @@ jobs:
                   })
           PY
 
-      - name: Crear resumen diario para ChatGPT
+      - name: Crear análisis profesional diario y semanal
         run: |
           python - <<'PY'
-          import json, statistics
+          import json, math, statistics
+          from collections import Counter, defaultdict
           from datetime import datetime, date, timedelta
           from zoneinfo import ZoneInfo
 
@@ -220,33 +221,182 @@ jobs:
           with open("activities.json", encoding="utf-8") as f:
               activities = json.load(f)
 
-          def number(v):
+          def num(v):
               return v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
 
-          def mean(values):
-              vals = [number(v) for v in values]
+          def avg(values):
+              vals = [num(v) for v in values]
               vals = [v for v in vals if v is not None]
               return round(statistics.fmean(vals), 2) if vals else None
 
-          def day_of(x):
+          def parse_day(value):
               try:
-                  return date.fromisoformat(x.get("id", ""))
+                  return date.fromisoformat(value)
               except Exception:
                   return None
 
+          def wellness_day(x):
+              return parse_day(x.get("id", ""))
+
           def baseline(days, field):
               start = today - timedelta(days=days)
-              vals = [x.get(field) for x in wellness if day_of(x) and start <= day_of(x) < today]
-              return mean(vals)
+              vals = [num(x.get(field)) for x in wellness if wellness_day(x) and start <= wellness_day(x) < today]
+              vals = [v for v in vals if v is not None]
+              return (round(statistics.fmean(vals), 2), len(vals)) if vals else (None, 0)
+
+          def pct_delta(value, ref):
+              if value is None or ref in (None, 0):
+                  return None
+              return round((value / ref - 1) * 100, 1)
+
+          def clamp(value, lo=0, hi=100):
+              return max(lo, min(hi, value))
+
+          def classify_activity(a):
+              name = (a.get("name") or "").lower()
+              typ = (a.get("type") or "").lower()
+              intensity = num(a.get("icu_intensity"))
+              zones = a.get("icu_hr_zone_times") or []
+              total = sum(v for v in zones if isinstance(v, (int, float)))
+              upper = sum(v for v in zones[3:] if isinstance(v, (int, float))) if len(zones) >= 4 else 0
+              upper_pct = (upper / total * 100) if total else 0
+
+              strength_words = ["strength", "weightlifting", "lifting", "squat", "deadlift", "bench", "clean", "snatch", "jerk"]
+              skill_words = ["skill", "gymnastic", "handstand", "double under", "mobility", "technique"]
+              recovery_words = ["recovery", "walk", "walking", "yoga", "stretch", "mobility"]
+              metcon_words = ["crossfit", "wod", "metcon", "amrap", "emom", "hiit", "interval"]
+              aerobic_types = ["run", "ride", "cycling", "swim", "row", "rowing", "walk", "hike"]
+
+              if any(w in name for w in recovery_words) or any(w in typ for w in recovery_words):
+                  return "recovery"
+              if any(w in name for w in skill_words):
+                  return "skill"
+              if any(w in name for w in strength_words) or "weighttraining" in typ or "strength" in typ:
+                  return "strength"
+              if any(w in name for w in metcon_words) or "highintensity" in typ:
+                  if (intensity is not None and intensity >= 65) or upper_pct >= 10:
+                      return "metcon"
+                  return "mixed"
+              if any(w in typ for w in aerobic_types):
+                  return "aerobic"
+              return "mixed"
 
           today_w = next((x for x in wellness if x.get("id") == today_s), None)
           latest_w = max(wellness, key=lambda x: x.get("id", "")) if wellness else None
           chosen_w = today_w or latest_w or {}
 
-          today_acts = [
-              x for x in activities
-              if (x.get("start_date_local", "") or "")[:10] == today_s
-          ]
+          today_acts = [x for x in activities if (x.get("start_date_local") or "")[:10] == today_s]
+
+          hrv7, hrv7_n = baseline(7, "hrv")
+          hrv28, hrv28_n = baseline(28, "hrv")
+          rhr7, rhr7_n = baseline(7, "restingHR")
+          rhr28, rhr28_n = baseline(28, "restingHR")
+          sleep7, sleep7_n = baseline(7, "sleepSecs")
+          sleep28, sleep28_n = baseline(28, "sleepSecs")
+          resp7, resp7_n = baseline(7, "respiration")
+          resp28, resp28_n = baseline(28, "respiration")
+
+          current_hrv = num(chosen_w.get("hrv"))
+          current_rhr = num(chosen_w.get("restingHR"))
+          current_sleep = num(chosen_w.get("sleepSecs"))
+          current_sleep_h = round(current_sleep / 3600, 2) if current_sleep is not None else None
+          current_sleep_score = num(chosen_w.get("sleepScore"))
+          current_resp = num(chosen_w.get("respiration"))
+
+          hrv_vs7 = pct_delta(current_hrv, hrv7)
+          hrv_vs28 = pct_delta(current_hrv, hrv28)
+          rhr_vs7 = round(current_rhr - rhr7, 1) if current_rhr is not None and rhr7 is not None else None
+          rhr_vs28 = round(current_rhr - rhr28, 1) if current_rhr is not None and rhr28 is not None else None
+          resp_vs7 = pct_delta(current_resp, resp7)
+
+          missing = [field for field in ["hrv", "restingHR", "sleepSecs", "sleepScore", "respiration"] if chosen_w.get(field) is None]
+
+          # Confianza: depende de actualidad, cobertura y número de días de línea base.
+          if chosen_w.get("id") == today_s and len(missing) <= 1 and min(hrv28_n, rhr28_n) >= 21:
+              confidence = "high"
+          elif chosen_w.get("id") == today_s and len(missing) <= 2 and min(hrv7_n, rhr7_n) >= 5:
+              confidence = "medium"
+          else:
+              confidence = "low"
+
+          readiness = 100
+          reasons = []
+          flags = []
+
+          if current_sleep_h is not None:
+              if current_sleep_h < 5:
+                  readiness -= 30; flags.append("sleep_very_short"); reasons.append("Sueño <5 h")
+              elif current_sleep_h < 6:
+                  readiness -= 20; flags.append("sleep_short"); reasons.append("Sueño <6 h")
+              elif current_sleep_h < 7:
+                  readiness -= 10; reasons.append("Sueño <7 h")
+
+          if current_sleep_score is not None:
+              if current_sleep_score < 50:
+                  readiness -= 15; flags.append("sleep_score_low")
+              elif current_sleep_score < 60:
+                  readiness -= 10; flags.append("sleep_score_low")
+              elif current_sleep_score < 70:
+                  readiness -= 5
+              elif current_sleep_score >= 85:
+                  readiness += 3
+
+          if hrv7_n >= 3 and hrv_vs7 is not None:
+              if hrv_vs7 <= -15:
+                  readiness -= 20; flags.append("hrv_strongly_suppressed"); reasons.append("HRV ≥15% por debajo de 7 d")
+              elif hrv_vs7 <= -10:
+                  readiness -= 15; flags.append("hrv_low"); reasons.append("HRV ≥10% por debajo de 7 d")
+              elif hrv_vs7 <= -5:
+                  readiness -= 8; reasons.append("HRV ligeramente por debajo de 7 d")
+              elif hrv_vs7 >= 5:
+                  readiness += 3
+
+          if rhr7_n >= 3 and rhr_vs7 is not None:
+              if rhr_vs7 >= 8:
+                  readiness -= 20; flags.append("resting_hr_high"); reasons.append("FC reposo +8 lpm vs 7 d")
+              elif rhr_vs7 >= 5:
+                  readiness -= 12; flags.append("resting_hr_high"); reasons.append("FC reposo +5 lpm vs 7 d")
+              elif rhr_vs7 >= 3:
+                  readiness -= 6; reasons.append("FC reposo algo elevada")
+              elif rhr_vs7 <= -3:
+                  readiness += 3
+
+          if resp7_n >= 3 and resp_vs7 is not None and resp_vs7 >= 10:
+              readiness -= 7; flags.append("respiration_elevated"); reasons.append("Respiración nocturna elevada vs 7 d")
+
+          # Penalización suave por carga aguda sólo cuando CTL ya tiene suficiente magnitud.
+          ctl = num(chosen_w.get("ctl"))
+          atl = num(chosen_w.get("atl"))
+          acute_chronic_ratio = round(atl / ctl, 2) if ctl not in (None, 0) else None
+          if ctl is not None and atl is not None and ctl >= 10:
+              if acute_chronic_ratio >= 1.8:
+                  readiness -= 12; flags.append("acute_load_high")
+              elif acute_chronic_ratio >= 1.5:
+                  readiness -= 6
+
+          readiness = int(round(clamp(readiness)))
+
+          coincidence_count = len(set(flags) & {
+              "sleep_very_short", "sleep_short", "sleep_score_low",
+              "hrv_strongly_suppressed", "hrv_low", "resting_hr_high",
+              "respiration_elevated", "acute_load_high"
+          })
+
+          if readiness >= 80 and coincidence_count <= 1:
+              status = "green"
+              recommendation = "normal"
+              volume_factor = "90-100%"
+              intensity_guidance = "Entrenamiento previsto; mantén intensidad normal si las sensaciones acompañan."
+          elif readiness >= 60 and coincidence_count <= 2:
+              status = "yellow"
+              recommendation = "moderate"
+              volume_factor = "70-85%"
+              intensity_guidance = "Mantén técnica/calidad y reduce volumen; evita acumular demasiado trabajo muy intenso."
+          else:
+              status = "red"
+              recommendation = "recovery"
+              volume_factor = "40-60%"
+              intensity_guidance = "Prioriza recuperación, técnica o trabajo aeróbico fácil; evita una sesión máxima salvo sensaciones excepcionalmente buenas."
 
           zone_len = max([len(x.get("icu_hr_zone_times") or []) for x in today_acts] + [0])
           zone_totals = [0] * zone_len
@@ -255,136 +405,26 @@ jobs:
                   if isinstance(sec, (int, float)):
                       zone_totals[i] += sec
 
-          total_moving = sum(number(a.get("moving_time")) or 0 for a in today_acts)
-          weighted_hr_num = sum(
-              (number(a.get("average_heartrate")) or 0) * (number(a.get("moving_time")) or 0)
-              for a in today_acts
-              if number(a.get("average_heartrate")) is not None
-          )
-          weighted_hr_den = sum(
-              number(a.get("moving_time")) or 0
-              for a in today_acts
-              if number(a.get("average_heartrate")) is not None
-          )
+          total_moving = sum(num(a.get("moving_time")) or 0 for a in today_acts)
+          weighted_hr_num = sum((num(a.get("average_heartrate")) or 0) * (num(a.get("moving_time")) or 0) for a in today_acts if num(a.get("average_heartrate")) is not None)
+          weighted_hr_den = sum(num(a.get("moving_time")) or 0 for a in today_acts if num(a.get("average_heartrate")) is not None)
+          upper_zone_secs = sum(zone_totals[3:]) if len(zone_totals) >= 4 else 0
+          upper_zone_pct = round(upper_zone_secs / total_moving * 100, 1) if total_moving else None
 
-          hrv7 = baseline(7, "hrv")
-          hrv28 = baseline(28, "hrv")
-          rhr7 = baseline(7, "restingHR")
-          rhr28 = baseline(28, "restingHR")
-          sleep7 = baseline(7, "sleepSecs")
-          sleep28 = baseline(28, "sleepSecs")
-
-          current_hrv = number(chosen_w.get("hrv"))
-          current_rhr = number(chosen_w.get("restingHR"))
-
-          missing = []
-          for field in ["hrv", "restingHR", "sleepSecs", "sleepScore", "respiration"]:
-              if chosen_w.get(field) is None:
-                  missing.append(field)
-
-          summary = {
-              "generated_at": now.isoformat(),
-              "timezone": "Europe/Madrid",
-              "date": today_s,
-              "data_quality": {
-                  "wellness_date": chosen_w.get("id"),
-                  "wellness_is_today": chosen_w.get("id") == today_s,
-                  "wellness_updated": chosen_w.get("updated"),
-                  "missing_key_metrics": missing,
-                  "activity_count_today": len(today_acts),
-                  "latest_activity_sync": max(
-                      [a.get("icu_sync_date") for a in today_acts if a.get("icu_sync_date")],
-                      default=None
-                  )
-              },
-              "recovery_today": {
-                  "hrv": current_hrv,
-                  "resting_hr": current_rhr,
-                  "sleep_secs": number(chosen_w.get("sleepSecs")),
-                  "sleep_hours": round(chosen_w.get("sleepSecs") / 3600, 2)
-                      if number(chosen_w.get("sleepSecs")) is not None else None,
-                  "sleep_score": number(chosen_w.get("sleepScore")),
-                  "sleep_quality": chosen_w.get("sleepQuality"),
-                  "avg_sleeping_hr": number(chosen_w.get("avgSleepingHR")),
-                  "spo2": number(chosen_w.get("spO2")),
-                  "readiness": number(chosen_w.get("readiness")),
-                  "respiration": number(chosen_w.get("respiration")),
-                  "steps": number(chosen_w.get("steps")),
-                  "floors_climbed": number(chosen_w.get("floorsClimbed")),
-                  "weight": number(chosen_w.get("weight")),
-                  "vo2max": number(chosen_w.get("vo2max")),
-                  "ctl": number(chosen_w.get("ctl")),
-                  "atl": number(chosen_w.get("atl")),
-                  "ctl_load": number(chosen_w.get("ctlLoad")),
-                  "atl_load": number(chosen_w.get("atlLoad")),
-                  "ramp_rate": number(chosen_w.get("rampRate"))
-              },
-              "baselines": {
-                  "hrv_7d": hrv7,
-                  "hrv_28d": hrv28,
-                  "resting_hr_7d": rhr7,
-                  "resting_hr_28d": rhr28,
-                  "sleep_hours_7d": round(sleep7 / 3600, 2) if sleep7 is not None else None,
-                  "sleep_hours_28d": round(sleep28 / 3600, 2) if sleep28 is not None else None
-              },
-              "signals": {
-                  "hrv_vs_7d_pct": round((current_hrv / hrv7 - 1) * 100, 1)
-                      if current_hrv is not None and hrv7 not in (None, 0) else None,
-                  "hrv_vs_28d_pct": round((current_hrv / hrv28 - 1) * 100, 1)
-                      if current_hrv is not None and hrv28 not in (None, 0) else None,
-                  "resting_hr_vs_7d_bpm": round(current_rhr - rhr7, 1)
-                      if current_rhr is not None and rhr7 is not None else None,
-                  "resting_hr_vs_28d_bpm": round(current_rhr - rhr28, 1)
-                      if current_rhr is not None and rhr28 is not None else None
-              },
-              "training_today": {
-                  "count": len(today_acts),
-                  "moving_time_secs": total_moving,
-                  "moving_time_minutes": round(total_moving / 60, 1),
-                  "calories": round(sum(number(a.get("calories")) or 0 for a in today_acts), 1),
-                  "training_load": round(sum(number(a.get("icu_training_load")) or 0 for a in today_acts), 2),
-                  "hr_load": round(sum(number(a.get("hr_load")) or 0 for a in today_acts), 2),
-                  "trimp": round(sum(number(a.get("trimp")) or 0 for a in today_acts), 2),
-                  "weighted_average_hr": round(weighted_hr_num / weighted_hr_den, 1)
-                      if weighted_hr_den else None,
-                  "max_hr": max(
-                      [number(a.get("max_heartrate")) for a in today_acts if number(a.get("max_heartrate")) is not None],
-                      default=None
-                  ),
-                  "hr_zone_times_secs": zone_totals,
-                  "hr_zone_times_minutes": [round(x / 60, 1) for x in zone_totals],
-                  "activities": [
-                      {
-                          "id": a.get("id"),
-                          "name": a.get("name"),
-                          "type": a.get("type"),
-                          "start_date_local": a.get("start_date_local"),
-                          "moving_time_secs": number(a.get("moving_time")),
-                          "average_hr": number(a.get("average_heartrate")),
-                          "max_hr": number(a.get("max_heartrate")),
-                          "training_load": number(a.get("icu_training_load")),
-                          "hr_load": number(a.get("hr_load")),
-                          "trimp": number(a.get("trimp")),
-                          "intensity": number(a.get("icu_intensity")),
-                          "hrr": a.get("icu_hrr"),
-                          "hr_zone_times_secs": a.get("icu_hr_zone_times"),
-                          "hr_zones_bpm": a.get("icu_hr_zones"),
-                          "device": a.get("device_name"),
-                          "source": a.get("source")
-                      }
-                      for a in today_acts
-                  ]
-              }
-          }
-
-          with open("daily_summary.json", "w", encoding="utf-8") as f:
-              json.dump(summary, f, indent=2, ensure_ascii=False)
-          PY
-
-      - name: Guardar datos
-        run: |
-          git config user.name "Garmin Recovery Bot"
-          git config user.email "actions@github.com"
-          git add recovery.csv wellness.json activities.csv activities.json daily_summary.json
-          git diff --cached --quiet || git commit -m "Actualizar recuperación, entrenamientos y resumen diario"
-          git push
+          activity_rows = []
+          for a in today_acts:
+              a_zones = a.get("icu_hr_zone_times") or []
+              a_total = sum(v for v in a_zones if isinstance(v, (int, float)))
+              a_upper = sum(v for v in a_zones[3:] if isinstance(v, (int, float))) if len(a_zones) >= 4 else 0
+              athlete_max = num(a.get("athlete_max_hr"))
+              max_hr = num(a.get("max_heartrate"))
+              activity_rows.append({
+                  "id": a.get("id"),
+                  "name": a.get("name"),
+                  "type": a.get("type"),
+                  "session_class": classify_activity(a),
+                  "start_date_local": a.get("start_date_local"),
+                  "moving_time_secs": num(a.get("moving_time")),
+                  "average_hr": num(a.get("average_heartrate")),
+                  "max_hr": max_hr,
+                  "max_hr_pct_of_configured_max": round(max_hr / athlete_max * 100, 1) if 
