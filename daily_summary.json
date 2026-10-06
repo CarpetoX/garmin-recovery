@@ -1,14 +1,43 @@
 {
-  "generated_at": "2026-10-06T23:11:42.010927+02:00",
+  "generated_at": "2026-10-06T23:17:20.332133+02:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-06",
   "data_quality": {
     "wellness_date": "2026-10-06",
     "wellness_is_today": true,
-    "wellness_updated": "2026-10-06T20:37:34.658+00:00",
+    "wellness_updated": "2026-10-06T21:13:42.160+00:00",
     "missing_key_metrics": [],
     "activity_count_today": 2,
-    "latest_activity_sync": "2026-10-06T09:18:59.668+00:00"
+    "latest_activity_sync": "2026-10-06T09:18:59.668+00:00",
+    "confidence": "low"
+  },
+  "baseline_quality": {
+    "hrv_days_7d": 2,
+    "hrv_days_28d": 2,
+    "resting_hr_days_7d": 1,
+    "resting_hr_days_28d": 1,
+    "sleep_days_7d": 0,
+    "sleep_days_28d": 0,
+    "respiration_days_7d": 0,
+    "respiration_days_28d": 0,
+    "interpretation": "provisional"
+  },
+  "readiness_model": {
+    "score": 70,
+    "status": "yellow",
+    "confidence": "low",
+    "recommendation": "moderate",
+    "recommended_volume": "70-85%",
+    "intensity_guidance": "Mantén técnica/calidad y reduce volumen; evita acumular demasiado trabajo muy intenso.",
+    "reasons": [
+      "Sueño <6 h"
+    ],
+    "alerts": [
+      "sleep_short",
+      "sleep_score_low"
+    ],
+    "coincident_alert_count": 2,
+    "note": "Score orientativo para decisiones de entrenamiento; no es una métrica médica ni sustituye síntomas/sensaciones."
   },
   "recovery_today": {
     "hrv": 51.944443,
@@ -19,14 +48,15 @@
     "sleep_quality": 4,
     "avg_sleeping_hr": null,
     "spo2": 95.0,
-    "readiness": null,
-    "respiration": 9.97,
-    "steps": 10829,
+    "garmin_or_source_readiness": null,
+    "respiration": 13.631429,
+    "steps": 10877,
     "floors_climbed": 4,
     "weight": null,
     "vo2max": null,
     "ctl": 0.77643436,
     "atl": 4.393029,
+    "acute_chronic_ratio": 5.66,
     "ctl_load": 33.0,
     "atl_load": 33.0,
     "ramp_rate": null
@@ -37,13 +67,16 @@
     "resting_hr_7d": 56.0,
     "resting_hr_28d": 56.0,
     "sleep_hours_7d": null,
-    "sleep_hours_28d": null
+    "sleep_hours_28d": null,
+    "respiration_7d": null,
+    "respiration_28d": null
   },
   "signals": {
     "hrv_vs_7d_pct": -5.1,
     "hrv_vs_28d_pct": -5.1,
     "resting_hr_vs_7d_bpm": 2.0,
-    "resting_hr_vs_28d_bpm": 2.0
+    "resting_hr_vs_28d_bpm": 2.0,
+    "respiration_vs_7d_pct": null
   },
   "training_today": {
     "count": 2,
@@ -55,6 +88,8 @@
     "trimp": 53.12,
     "weighted_average_hr": 125.5,
     "max_hr": 180,
+    "upper_zone_minutes": 2.3,
+    "upper_zone_pct": 4.0,
     "hr_zone_times_secs": [
       2544,
       95,
@@ -73,15 +108,21 @@
       0.0,
       0.0
     ],
+    "session_type_distribution": {
+      "metcon": 1,
+      "mixed": 1
+    },
     "activities": [
       {
         "id": "i194179774",
         "name": "HIIT",
         "type": "HighIntensityIntervalTraining",
+        "session_class": "metcon",
         "start_date_local": "2026-10-06T10:58:43",
         "moving_time_secs": 939,
         "average_hr": 158,
         "max_hr": 180,
+        "max_hr_pct_of_configured_max": 92.8,
         "training_load": 18,
         "hr_load": 18,
         "trimp": 30.218786,
@@ -96,6 +137,8 @@
           "average_watts": null,
           "hrr": 16
         },
+        "upper_zone_minutes": 2.3,
+        "upper_zone_pct": 14.5,
         "hr_zone_times_secs": [
           164,
           33,
@@ -121,15 +164,19 @@
         "id": "i194171569",
         "name": "HIIT",
         "type": "HighIntensityIntervalTraining",
+        "session_class": "mixed",
         "start_date_local": "2026-10-06T10:17:05",
         "moving_time_secs": 2442,
         "average_hr": 113,
         "max_hr": 158,
+        "max_hr_pct_of_configured_max": 81.4,
         "training_load": 15,
         "hr_load": 15,
         "trimp": 22.898924,
         "intensity": 46.99563,
         "hrr": null,
+        "upper_zone_minutes": 0.0,
+        "upper_zone_pct": 0.0,
         "hr_zone_times_secs": [
           2380,
           62,
