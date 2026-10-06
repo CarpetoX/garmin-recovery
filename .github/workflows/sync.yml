@@ -82,7 +82,87 @@ jobs:
                       "rampRate": x.get("rampRate", "")
                   })
           PY
+                - name: Obtener actividades de Intervals.icu
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, json, csv, base64, urllib.request
+          from datetime import date, timedelta
 
+          key = os.environ["INTERVALS_API_KEY"]
+
+          newest = date.today()
+          oldest = newest - timedelta(days=90)
+
+          url = (
+              "https://intervals.icu/api/v1/athlete/0/activities"
+              f"?oldest={oldest.isoformat()}"
+              f"&newest={newest.isoformat()}"
+          )
+
+          auth = base64.b64encode(
+              f"API_KEY:{key}".encode()
+          ).decode()
+
+          req = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization": "Basic " + auth,
+                  "Accept": "application/json",
+                  "User-Agent": "Mozilla/5.0"
+              }
+          )
+
+          with urllib.request.urlopen(req) as r:
+              body = r.read().decode()
+              activities = json.loads(body) if body else []
+
+          with open("activities.json", "w", encoding="utf-8") as f:
+              json.dump(activities, f, indent=2, ensure_ascii=False)
+
+          fields = [
+              "id", "date", "start_date_local", "name", "type",
+              "moving_time", "elapsed_time", "distance", "calories",
+              "average_heartrate", "max_heartrate", "trimp",
+              "icu_training_load", "icu_intensity",
+              "icu_fitness", "icu_fatigue",
+              "icu_rpe", "feel", "device_name", "hr_zone_times"
+          ]
+
+          with open("activities.csv", "w", newline="", encoding="utf-8") as f:
+              w = csv.DictWriter(f, fieldnames=fields)
+              w.writeheader()
+
+              for x in activities:
+                  start = x.get("start_date_local", "") or ""
+
+                  w.writerow({
+                      "id": x.get("id", ""),
+                      "date": start[:10],
+                      "start_date_local": start,
+                      "name": x.get("name", ""),
+                      "type": x.get("type", ""),
+                      "moving_time": x.get("moving_time", ""),
+                      "elapsed_time": x.get("elapsed_time", ""),
+                      "distance": x.get("distance", x.get("icu_distance", "")),
+                      "calories": x.get("calories", ""),
+                      "average_heartrate": x.get("average_heartrate", ""),
+                      "max_heartrate": x.get("max_heartrate", ""),
+                      "trimp": x.get("trimp", ""),
+                      "icu_training_load": x.get("icu_training_load", ""),
+                      "icu_intensity": x.get("icu_intensity", ""),
+                      "icu_fitness": x.get("icu_fitness", ""),
+                      "icu_fatigue": x.get("icu_fatigue", ""),
+                      "icu_rpe": x.get("icu_rpe", ""),
+                      "feel": x.get("feel", ""),
+                      "device_name": x.get("device_name", ""),
+                      "hr_zone_times": json.dumps(
+                          x.get("icu_hr_zone_times", ""),
+                          ensure_ascii=False
+                      )
+                  })
+          PY
       - name: Guardar datos
         run: |
           git config user.name "Garmin Recovery Bot"
