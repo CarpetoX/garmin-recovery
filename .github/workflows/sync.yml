@@ -3,8 +3,10 @@ name: Garmin Recovery Sync
 on:
   workflow_dispatch:
   schedule:
-  - cron: "30 7 * * *"
-  - cron: "30 20 * * *"
+    - cron: "30 9 * * *"
+      timezone: "Europe/Madrid"
+    - cron: "30 22 * * *"
+      timezone: "Europe/Madrid"
 
 permissions:
   contents: write
@@ -16,17 +18,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Obtener wellness de Intervals.icu
         env:
           INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
         run: |
           python - <<'PY'
           import os, json, csv, base64, urllib.request
-          from datetime import date, timedelta
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
 
           key = os.environ["INTERVALS_API_KEY"]
-
-          newest = date.today()
+          today = datetime.now(ZoneInfo("Europe/Madrid")).date()
+          newest = today
           oldest = newest - timedelta(days=90)
 
           url = (
@@ -35,44 +42,51 @@ jobs:
               f"&newest={newest.isoformat()}"
           )
 
-          auth = base64.b64encode(
-              f"API_KEY:{key}".encode()
-          ).decode()
-
+          auth = base64.b64encode(f"API_KEY:{key}".encode()).decode()
           req = urllib.request.Request(
               url,
               headers={
                   "Authorization": "Basic " + auth,
                   "Accept": "application/json",
-                  "User-Agent": "Mozilla/5.0"
+                  "User-Agent": "Garmin-Recovery-Sync/2.0"
               }
           )
 
-          with urllib.request.urlopen(req) as r:
-              data = json.loads(r.read().decode())
+          with urllib.request.urlopen(req, timeout=30) as r:
+              body = r.read().decode()
+              data = json.loads(body) if body else []
+
+          if not isinstance(data, list) or not data:
+              raise RuntimeError("Intervals.icu devolvió wellness vacío; no se sobrescriben los datos previos")
 
           with open("wellness.json", "w", encoding="utf-8") as f:
               json.dump(data, f, indent=2, ensure_ascii=False)
 
           fields = [
               "date", "hrv", "hrvSDNN", "restingHR",
-              "sleepSecs", "sleepScore", "avgSleepingHR",
-              "spO2", "readiness", "weight", "vo2max",
-              "ctl", "atl", "rampRate"
+              "sleepSecs", "sleepHours", "sleepScore", "sleepQuality",
+              "avgSleepingHR", "spO2", "readiness", "weight", "vo2max",
+              "ctl", "atl", "ctlLoad", "atlLoad", "rampRate",
+              "steps", "floorsClimbed", "respiration",
+              "stress", "fatigue", "soreness", "mood", "motivation",
+              "hydration", "hydrationVolume", "updated"
           ]
 
           with open("recovery.csv", "w", newline="", encoding="utf-8") as f:
               w = csv.DictWriter(f, fieldnames=fields)
               w.writeheader()
-
               for x in data:
+                  sleep_secs = x.get("sleepSecs")
+                  sleep_hours = round(sleep_secs / 3600, 2) if isinstance(sleep_secs, (int, float)) else ""
                   w.writerow({
                       "date": x.get("id", ""),
                       "hrv": x.get("hrv", ""),
                       "hrvSDNN": x.get("hrvSDNN", ""),
                       "restingHR": x.get("restingHR", ""),
-                      "sleepSecs": x.get("sleepSecs", ""),
+                      "sleepSecs": sleep_secs if sleep_secs is not None else "",
+                      "sleepHours": sleep_hours,
                       "sleepScore": x.get("sleepScore", ""),
+                      "sleepQuality": x.get("sleepQuality", ""),
                       "avgSleepingHR": x.get("avgSleepingHR", ""),
                       "spO2": x.get("spO2", ""),
                       "readiness": x.get("readiness", ""),
@@ -80,20 +94,35 @@ jobs:
                       "vo2max": x.get("vo2max", ""),
                       "ctl": x.get("ctl", ""),
                       "atl": x.get("atl", ""),
-                      "rampRate": x.get("rampRate", "")
+                      "ctlLoad": x.get("ctlLoad", ""),
+                      "atlLoad": x.get("atlLoad", ""),
+                      "rampRate": x.get("rampRate", ""),
+                      "steps": x.get("steps", ""),
+                      "floorsClimbed": x.get("floorsClimbed", ""),
+                      "respiration": x.get("respiration", ""),
+                      "stress": x.get("stress", ""),
+                      "fatigue": x.get("fatigue", ""),
+                      "soreness": x.get("soreness", ""),
+                      "mood": x.get("mood", ""),
+                      "motivation": x.get("motivation", ""),
+                      "hydration": x.get("hydration", ""),
+                      "hydrationVolume": x.get("hydrationVolume", ""),
+                      "updated": x.get("updated", "")
                   })
           PY
+
       - name: Obtener actividades de Intervals.icu
         env:
           INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
         run: |
           python - <<'PY'
           import os, json, csv, base64, urllib.request
-          from datetime import date, timedelta
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
 
           key = os.environ["INTERVALS_API_KEY"]
-
-          newest = date.today()
+          today = datetime.now(ZoneInfo("Europe/Madrid")).date()
+          newest = today
           oldest = newest - timedelta(days=90)
 
           url = (
@@ -102,42 +131,42 @@ jobs:
               f"&newest={newest.isoformat()}"
           )
 
-          auth = base64.b64encode(
-              f"API_KEY:{key}".encode()
-          ).decode()
-
+          auth = base64.b64encode(f"API_KEY:{key}".encode()).decode()
           req = urllib.request.Request(
               url,
               headers={
                   "Authorization": "Basic " + auth,
                   "Accept": "application/json",
-                  "User-Agent": "Mozilla/5.0"
+                  "User-Agent": "Garmin-Recovery-Sync/2.0"
               }
           )
 
-          with urllib.request.urlopen(req) as r:
+          with urllib.request.urlopen(req, timeout=30) as r:
               body = r.read().decode()
               activities = json.loads(body) if body else []
+
+          if not isinstance(activities, list):
+              raise RuntimeError("Respuesta de actividades no válida")
 
           with open("activities.json", "w", encoding="utf-8") as f:
               json.dump(activities, f, indent=2, ensure_ascii=False)
 
           fields = [
               "id", "date", "start_date_local", "name", "type",
-              "moving_time", "elapsed_time", "distance", "calories",
+              "moving_time", "elapsed_time", "recording_time", "distance", "calories",
               "average_heartrate", "max_heartrate", "trimp",
-              "icu_training_load", "icu_intensity",
-              "icu_fitness", "icu_fatigue",
-              "icu_rpe", "feel", "device_name", "hr_zone_times"
+              "icu_training_load", "hr_load", "icu_intensity",
+              "icu_ctl", "icu_atl", "lthr", "athlete_max_hr",
+              "icu_resting_hr", "icu_weight", "icu_hrr",
+              "icu_rpe", "session_rpe", "feel", "device_name", "source",
+              "hr_zone_times", "icu_hr_zones", "created", "icu_sync_date"
           ]
 
           with open("activities.csv", "w", newline="", encoding="utf-8") as f:
               w = csv.DictWriter(f, fieldnames=fields)
               w.writeheader()
-
               for x in activities:
                   start = x.get("start_date_local", "") or ""
-
                   w.writerow({
                       "id": x.get("id", ""),
                       "date": start[:10],
@@ -146,28 +175,216 @@ jobs:
                       "type": x.get("type", ""),
                       "moving_time": x.get("moving_time", ""),
                       "elapsed_time": x.get("elapsed_time", ""),
+                      "recording_time": x.get("icu_recording_time", ""),
                       "distance": x.get("distance", x.get("icu_distance", "")),
                       "calories": x.get("calories", ""),
                       "average_heartrate": x.get("average_heartrate", ""),
                       "max_heartrate": x.get("max_heartrate", ""),
                       "trimp": x.get("trimp", ""),
                       "icu_training_load": x.get("icu_training_load", ""),
+                      "hr_load": x.get("hr_load", ""),
                       "icu_intensity": x.get("icu_intensity", ""),
-                      "icu_fitness": x.get("icu_fitness", ""),
-                      "icu_fatigue": x.get("icu_fatigue", ""),
+                      "icu_ctl": x.get("icu_ctl", ""),
+                      "icu_atl": x.get("icu_atl", ""),
+                      "lthr": x.get("lthr", ""),
+                      "athlete_max_hr": x.get("athlete_max_hr", ""),
+                      "icu_resting_hr": x.get("icu_resting_hr", ""),
+                      "icu_weight": x.get("icu_weight", ""),
+                      "icu_hrr": json.dumps(x.get("icu_hrr"), ensure_ascii=False),
                       "icu_rpe": x.get("icu_rpe", ""),
+                      "session_rpe": x.get("session_rpe", ""),
                       "feel": x.get("feel", ""),
                       "device_name": x.get("device_name", ""),
-                      "hr_zone_times": json.dumps(
-                          x.get("icu_hr_zone_times", ""),
-                          ensure_ascii=False
-                      )
+                      "source": x.get("source", ""),
+                      "hr_zone_times": json.dumps(x.get("icu_hr_zone_times"), ensure_ascii=False),
+                      "icu_hr_zones": json.dumps(x.get("icu_hr_zones"), ensure_ascii=False),
+                      "created": x.get("created", ""),
+                      "icu_sync_date": x.get("icu_sync_date", "")
                   })
           PY
+
+      - name: Crear resumen diario para ChatGPT
+        run: |
+          python - <<'PY'
+          import json, statistics
+          from datetime import datetime, date, timedelta
+          from zoneinfo import ZoneInfo
+
+          TZ = ZoneInfo("Europe/Madrid")
+          now = datetime.now(TZ)
+          today = now.date()
+          today_s = today.isoformat()
+
+          with open("wellness.json", encoding="utf-8") as f:
+              wellness = json.load(f)
+          with open("activities.json", encoding="utf-8") as f:
+              activities = json.load(f)
+
+          def number(v):
+              return v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
+
+          def mean(values):
+              vals = [number(v) for v in values]
+              vals = [v for v in vals if v is not None]
+              return round(statistics.fmean(vals), 2) if vals else None
+
+          def day_of(x):
+              try:
+                  return date.fromisoformat(x.get("id", ""))
+              except Exception:
+                  return None
+
+          def baseline(days, field):
+              start = today - timedelta(days=days)
+              vals = [x.get(field) for x in wellness if day_of(x) and start <= day_of(x) < today]
+              return mean(vals)
+
+          today_w = next((x for x in wellness if x.get("id") == today_s), None)
+          latest_w = max(wellness, key=lambda x: x.get("id", "")) if wellness else None
+          chosen_w = today_w or latest_w or {}
+
+          today_acts = [
+              x for x in activities
+              if (x.get("start_date_local", "") or "")[:10] == today_s
+          ]
+
+          zone_len = max([len(x.get("icu_hr_zone_times") or []) for x in today_acts] + [0])
+          zone_totals = [0] * zone_len
+          for a in today_acts:
+              for i, sec in enumerate(a.get("icu_hr_zone_times") or []):
+                  if isinstance(sec, (int, float)):
+                      zone_totals[i] += sec
+
+          total_moving = sum(number(a.get("moving_time")) or 0 for a in today_acts)
+          weighted_hr_num = sum(
+              (number(a.get("average_heartrate")) or 0) * (number(a.get("moving_time")) or 0)
+              for a in today_acts
+              if number(a.get("average_heartrate")) is not None
+          )
+          weighted_hr_den = sum(
+              number(a.get("moving_time")) or 0
+              for a in today_acts
+              if number(a.get("average_heartrate")) is not None
+          )
+
+          hrv7 = baseline(7, "hrv")
+          hrv28 = baseline(28, "hrv")
+          rhr7 = baseline(7, "restingHR")
+          rhr28 = baseline(28, "restingHR")
+          sleep7 = baseline(7, "sleepSecs")
+          sleep28 = baseline(28, "sleepSecs")
+
+          current_hrv = number(chosen_w.get("hrv"))
+          current_rhr = number(chosen_w.get("restingHR"))
+
+          missing = []
+          for field in ["hrv", "restingHR", "sleepSecs", "sleepScore", "respiration"]:
+              if chosen_w.get(field) is None:
+                  missing.append(field)
+
+          summary = {
+              "generated_at": now.isoformat(),
+              "timezone": "Europe/Madrid",
+              "date": today_s,
+              "data_quality": {
+                  "wellness_date": chosen_w.get("id"),
+                  "wellness_is_today": chosen_w.get("id") == today_s,
+                  "wellness_updated": chosen_w.get("updated"),
+                  "missing_key_metrics": missing,
+                  "activity_count_today": len(today_acts),
+                  "latest_activity_sync": max(
+                      [a.get("icu_sync_date") for a in today_acts if a.get("icu_sync_date")],
+                      default=None
+                  )
+              },
+              "recovery_today": {
+                  "hrv": current_hrv,
+                  "resting_hr": current_rhr,
+                  "sleep_secs": number(chosen_w.get("sleepSecs")),
+                  "sleep_hours": round(chosen_w.get("sleepSecs") / 3600, 2)
+                      if number(chosen_w.get("sleepSecs")) is not None else None,
+                  "sleep_score": number(chosen_w.get("sleepScore")),
+                  "sleep_quality": chosen_w.get("sleepQuality"),
+                  "avg_sleeping_hr": number(chosen_w.get("avgSleepingHR")),
+                  "spo2": number(chosen_w.get("spO2")),
+                  "readiness": number(chosen_w.get("readiness")),
+                  "respiration": number(chosen_w.get("respiration")),
+                  "steps": number(chosen_w.get("steps")),
+                  "floors_climbed": number(chosen_w.get("floorsClimbed")),
+                  "weight": number(chosen_w.get("weight")),
+                  "vo2max": number(chosen_w.get("vo2max")),
+                  "ctl": number(chosen_w.get("ctl")),
+                  "atl": number(chosen_w.get("atl")),
+                  "ctl_load": number(chosen_w.get("ctlLoad")),
+                  "atl_load": number(chosen_w.get("atlLoad")),
+                  "ramp_rate": number(chosen_w.get("rampRate"))
+              },
+              "baselines": {
+                  "hrv_7d": hrv7,
+                  "hrv_28d": hrv28,
+                  "resting_hr_7d": rhr7,
+                  "resting_hr_28d": rhr28,
+                  "sleep_hours_7d": round(sleep7 / 3600, 2) if sleep7 is not None else None,
+                  "sleep_hours_28d": round(sleep28 / 3600, 2) if sleep28 is not None else None
+              },
+              "signals": {
+                  "hrv_vs_7d_pct": round((current_hrv / hrv7 - 1) * 100, 1)
+                      if current_hrv is not None and hrv7 not in (None, 0) else None,
+                  "hrv_vs_28d_pct": round((current_hrv / hrv28 - 1) * 100, 1)
+                      if current_hrv is not None and hrv28 not in (None, 0) else None,
+                  "resting_hr_vs_7d_bpm": round(current_rhr - rhr7, 1)
+                      if current_rhr is not None and rhr7 is not None else None,
+                  "resting_hr_vs_28d_bpm": round(current_rhr - rhr28, 1)
+                      if current_rhr is not None and rhr28 is not None else None
+              },
+              "training_today": {
+                  "count": len(today_acts),
+                  "moving_time_secs": total_moving,
+                  "moving_time_minutes": round(total_moving / 60, 1),
+                  "calories": round(sum(number(a.get("calories")) or 0 for a in today_acts), 1),
+                  "training_load": round(sum(number(a.get("icu_training_load")) or 0 for a in today_acts), 2),
+                  "hr_load": round(sum(number(a.get("hr_load")) or 0 for a in today_acts), 2),
+                  "trimp": round(sum(number(a.get("trimp")) or 0 for a in today_acts), 2),
+                  "weighted_average_hr": round(weighted_hr_num / weighted_hr_den, 1)
+                      if weighted_hr_den else None,
+                  "max_hr": max(
+                      [number(a.get("max_heartrate")) for a in today_acts if number(a.get("max_heartrate")) is not None],
+                      default=None
+                  ),
+                  "hr_zone_times_secs": zone_totals,
+                  "hr_zone_times_minutes": [round(x / 60, 1) for x in zone_totals],
+                  "activities": [
+                      {
+                          "id": a.get("id"),
+                          "name": a.get("name"),
+                          "type": a.get("type"),
+                          "start_date_local": a.get("start_date_local"),
+                          "moving_time_secs": number(a.get("moving_time")),
+                          "average_hr": number(a.get("average_heartrate")),
+                          "max_hr": number(a.get("max_heartrate")),
+                          "training_load": number(a.get("icu_training_load")),
+                          "hr_load": number(a.get("hr_load")),
+                          "trimp": number(a.get("trimp")),
+                          "intensity": number(a.get("icu_intensity")),
+                          "hrr": a.get("icu_hrr"),
+                          "hr_zone_times_secs": a.get("icu_hr_zone_times"),
+                          "hr_zones_bpm": a.get("icu_hr_zones"),
+                          "device": a.get("device_name"),
+                          "source": a.get("source")
+                      }
+                      for a in today_acts
+                  ]
+              }
+          }
+
+          with open("daily_summary.json", "w", encoding="utf-8") as f:
+              json.dump(summary, f, indent=2, ensure_ascii=False)
+          PY
+
       - name: Guardar datos
         run: |
           git config user.name "Garmin Recovery Bot"
           git config user.email "actions@github.com"
-          git add recovery.csv wellness.json activities.csv activities.json
-          git diff --cached --quiet || git commit -m "Actualizar recuperación y entrenamientos"
+          git add recovery.csv wellness.json activities.csv activities.json daily_summary.json
+          git diff --cached --quiet || git commit -m "Actualizar recuperación, entrenamientos y resumen diario"
           git push
