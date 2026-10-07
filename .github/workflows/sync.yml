@@ -593,12 +593,11 @@ jobs:
               },
               "current_readiness": daily_summary["readiness_model"]
           }
-
           with open("daily_summary.json", "w", encoding="utf-8") as f:
               json.dump(daily_summary, f, indent=2, ensure_ascii=False)
           with open("weekly_summary.json", "w", encoding="utf-8") as f:
-              json.dump(weekly_summary, f, indent=2, ensure_ascii=Fals
-              PY
+              json.dump(weekly_summary, f, indent=2, ensure_ascii=False)
+          PY
 
       - name: Obtener Stress y Body Battery de Garmin
         continue-on-error: true
@@ -613,5 +612,6 @@ jobs:
           git config user.name "Garmin Recovery Bot"
           git config user.email "actions@github.com"
           git add recovery.csv wellness.json activities.csv activities.json daily_summary.json weekly_summary.json
+          git add garmin_status.json garmin_stress.json garmin_body_battery.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Actualizar recuperación y análisis profesional"
           git push
