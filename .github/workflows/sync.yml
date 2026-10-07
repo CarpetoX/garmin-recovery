@@ -601,13 +601,15 @@ jobs:
 
       - name: Obtener Stress y Body Battery de Garmin
         continue-on-error: true
+      - name: Obtener Stress y Body Battery de Garmin
+        continue-on-error: true
         env:
           GARMIN_TOKENS_B64: ${{ secrets.GARMIN_TOKENS_B64 }}
         run: |
           python -m pip install --disable-pip-version-check "garminconnect==0.3.17"
           python garmin_metrics.py
 
-            - name: Guardar datos
+      - name: Guardar datos
         run: |
           git config user.name "Garmin Recovery Bot"
           git config user.email "actions@github.com"
