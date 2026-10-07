@@ -2,14 +2,12 @@ name: Garmin Recovery Sync
 
 on:
   workflow_dispatch:
+
   schedule:
-    - cron: "15 9 * * *"
+    - cron: "30 8,14,18 * * *"
       timezone: "Europe/Madrid"
-    - cron: "15 13 * * *"
-      timezone: "Europe/Madrid"
-    - cron: "15 18 * * *"
-      timezone: "Europe/Madrid"
-    - cron: "15 22 * * *"
+
+    - cron: "0 23 * * *"
       timezone: "Europe/Madrid"
 
 permissions:
