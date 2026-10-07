@@ -607,11 +607,15 @@ jobs:
           python -m pip install --disable-pip-version-check "garminconnect==0.3.17"
           python garmin_metrics.py
 
-      - name: Guardar datos
+            - name: Guardar datos
         run: |
           git config user.name "Garmin Recovery Bot"
           git config user.email "actions@github.com"
+
           git add recovery.csv wellness.json activities.csv activities.json daily_summary.json weekly_summary.json
-          git add garmin_status.json garmin_stress.json garmin_body_battery.json 2>/dev/null || true
+          git add garmin_status.json
+          [ -f garmin_stress.json ] && git add garmin_stress.json || true
+          [ -f garmin_body_battery.json ] && git add garmin_body_battery.json || true
+
           git diff --cached --quiet || git commit -m "Actualizar recuperación y análisis profesional"
           git push
