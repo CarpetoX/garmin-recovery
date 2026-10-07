@@ -430,9 +430,9 @@
     "activity_metrics_generated_at": "2026-10-07T16:31:10.802006+02:00"
   },
   "advanced_analytics": {
-    "generated_at": "2026-10-07T16:32:28.852978+02:00",
+    "generated_at": "2026-10-07T16:52:40.935362+02:00",
     "data_quality": {
-      "generated_at": "2026-10-07T16:32:28.852978+02:00",
+      "generated_at": "2026-10-07T16:52:40.935362+02:00",
       "score": 95,
       "status": "good",
       "confidence": "high",
@@ -500,21 +500,21 @@
       }
     },
     "personal_recovery_index": {
-      "score": 27,
-      "context": "night_sleep",
-      "baseline_used": "night_sleep",
+      "score": 29,
+      "context": "MT",
+      "baseline_used": "overall",
       "components": [
         {
           "metric": "hrv",
           "value": 41.40698,
-          "robust_z": -1.3,
-          "points": -8.7
+          "robust_z": -2.61,
+          "points": -10.0
         },
         {
           "metric": "nighttime_hr",
           "value": 66.5,
-          "robust_z": 2.96,
-          "points": -10.0
+          "robust_z": 1.42,
+          "points": -9.5
         },
         {
           "metric": "resting_hr",
@@ -543,8 +543,8 @@
         {
           "metric": "body_battery_latest",
           "value": 23.0,
-          "robust_z": 0.0,
-          "points": 0.0
+          "robust_z": 0.67,
+          "points": 2.2
         },
         {
           "metric": "recovery_time_hours",
@@ -955,12 +955,22 @@
         "2026-10-07": 0.0
       },
       "active_days": 1,
-      "sessions_with_rpe": 0,
+      "sessions_with_rpe": 2,
       "total_load": 33.0,
       "monotony": null,
       "strain": null,
       "valid_for_interpretation": false,
       "note": "Monotony/strain are contextual training-load descriptors, not medical thresholds."
+    },
+    "rpe_feedback": {
+      "feedback_activities": 2,
+      "matched_activities": 2,
+      "used_as_primary_rpe": 2,
+      "remote_csv_configured": false,
+      "remote_rows_loaded": 0,
+      "remote_fetch_error": null,
+      "discrepancies": [],
+      "policy": "Intervals RPE has priority when present; external feedback fills missing RPE. Differences >=0.5 are reported."
     }
   }
 }
