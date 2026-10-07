@@ -15,6 +15,7 @@ STATUS_PATH = Path("garmin_status.json")
 STRESS_PATH = Path("garmin_stress.json")
 BB_PATH = Path("garmin_body_battery.json")
 EXTENDED_PATH = Path("garmin_extended.json")
+HEART_RATE_PATH = Path("garmin_heart_rate.json")
 
 
 def load_json(path, default):
@@ -47,6 +48,280 @@ def first_numeric_sample(item):
 
 
 def stress_summary(raw):
+    def epoch_ms(value):
+    if number(value) is not None:
+        return int(value)
+    if isinstance(value, str):
+        try:
+            return int(
+                datetime.fromisoformat(
+                    value.replace("Z", "+00:00")
+                ).timestamp() * 1000
+            )
+        except Exception:
+            return None
+    return None
+
+
+def hr_samples(raw):
+    samples = []
+
+    if not isinstance(raw, dict):
+        return samples
+
+    for item in raw.get("heartRateValues") or []:
+        if not isinstance(item, (list, tuple)) or len(item) < 2:
+            continue
+
+        timestamp = epoch_ms(item[0])
+        bpm = number(item[1])
+
+        if timestamp is None or bpm is None:
+            continue
+
+        if 20 <= bpm <= 250:
+            samples.append((timestamp, float(bpm)))
+
+    return samples
+
+
+def sleep_window_gmt(raw):
+    if not isinstance(raw, dict):
+        return None, None
+
+    dto = raw.get("dailySleepDTO") or {}
+
+    start = epoch_ms(dto.get("sleepStartTimestampGMT"))
+    end = epoch_ms(dto.get("sleepEndTimestampGMT"))
+
+    if start is None or end is None or end <= start:
+        return None, None
+
+    return start, end
+
+
+def local_iso_from_ms(value):
+    value = epoch_ms(value)
+
+    if value is None:
+        return None
+
+    try:
+        return datetime.fromtimestamp(
+            value / 1000,
+            TZ
+        ).isoformat()
+    except Exception:
+        return None
+
+
+def inside_window(timestamp, start, end):
+    return (
+        start is not None
+        and end is not None
+        and start <= timestamp <= end
+    )
+
+
+def heart_rate_summary(
+    hr_today_raw,
+    hr_previous_raw,
+    sleep_today_raw,
+    sleep_next_raw=None,
+    partial_day=False,
+):
+    today_samples = hr_samples(hr_today_raw)
+    previous_samples = hr_samples(hr_previous_raw)
+
+    sleep_start, sleep_end = sleep_window_gmt(sleep_today_raw)
+    next_sleep_start, next_sleep_end = sleep_window_gmt(sleep_next_raw)
+
+    # FC nocturna:
+    # toda la ventana de sueño asociada a ese día, aunque empiece
+    # durante la noche anterior.
+    nighttime = []
+
+    if sleep_start is not None and sleep_end is not None:
+        for timestamp, bpm in previous_samples + today_samples:
+            if inside_window(timestamp, sleep_start, sleep_end):
+                nighttime.append(bpm)
+
+    # FC diurna:
+    # muestras del día fuera de las ventanas de sueño.
+    daytime = []
+
+    for timestamp, bpm in today_samples:
+        sleeping = (
+            inside_window(timestamp, sleep_start, sleep_end)
+            or inside_window(
+                timestamp,
+                next_sleep_start,
+                next_sleep_end,
+            )
+        )
+
+        if not sleeping:
+            daytime.append(bpm)
+
+    def mean(values):
+        return (
+            round(statistics.fmean(values), 1)
+            if values
+            else None
+        )
+
+    daytime_avg = mean(daytime)
+    nighttime_avg = mean(nighttime)
+
+    return {
+        "resting_hr": (
+            number(hr_today_raw.get("restingHeartRate"))
+            if isinstance(hr_today_raw, dict)
+            else None
+        ),
+
+        "overall_min_hr": (
+            number(hr_today_raw.get("minHeartRate"))
+            if isinstance(hr_today_raw, dict)
+            else None
+        ),
+
+        "overall_max_hr": (
+            number(hr_today_raw.get("maxHeartRate"))
+            if isinstance(hr_today_raw, dict)
+            else None
+        ),
+
+        "daytime_avg_hr": daytime_avg,
+        "daytime_min_hr": (
+            round(min(daytime), 1)
+            if daytime
+            else None
+        ),
+        "daytime_max_hr": (
+            round(max(daytime), 1)
+            if daytime
+            else None
+        ),
+        "daytime_sample_count": len(daytime),
+
+        "nighttime_avg_hr": nighttime_avg,
+        "nighttime_min_hr": (
+            round(min(nighttime), 1)
+            if nighttime
+            else None
+        ),
+        "nighttime_max_hr": (
+            round(max(nighttime), 1)
+            if nighttime
+            else None
+        ),
+        "nighttime_sample_count": len(nighttime),
+
+        "day_minus_night_bpm": (
+            round(daytime_avg - nighttime_avg, 1)
+            if daytime_avg is not None
+            and nighttime_avg is not None
+            else None
+        ),
+
+        "sleep_start_local": local_iso_from_ms(sleep_start),
+        "sleep_end_local": local_iso_from_ms(sleep_end),
+
+        "sleep_window_available": (
+            sleep_start is not None
+            and sleep_end is not None
+        ),
+
+        "partial_day": bool(partial_day),
+    }
+
+
+def weighted_hr_average(
+    days,
+    value_field,
+    count_field,
+    selected_dates,
+):
+    weighted_sum = 0.0
+    sample_count = 0
+    days_present = 0
+
+    for day in selected_dates:
+        row = days.get(day.isoformat())
+
+        if not isinstance(row, dict):
+            continue
+
+        value = number(row.get(value_field))
+        count = number(row.get(count_field))
+
+        if value is None or count in (None, 0):
+            continue
+
+        weighted_sum += value * count
+        sample_count += int(count)
+        days_present += 1
+
+    return {
+        "average": (
+            round(weighted_sum / sample_count, 1)
+            if sample_count
+            else None
+        ),
+        "days_present": days_present,
+        "sample_count": sample_count,
+    }
+
+
+def heart_rate_rolling(days, end_date):
+    result = {}
+
+    for window in (3, 7, 28):
+        selected_dates = [
+            end_date - timedelta(days=i)
+            for i in range(window - 1, -1, -1)
+        ]
+
+        daytime = weighted_hr_average(
+            days,
+            "daytime_avg_hr",
+            "daytime_sample_count",
+            selected_dates,
+        )
+
+        nighttime = weighted_hr_average(
+            days,
+            "nighttime_avg_hr",
+            "nighttime_sample_count",
+            selected_dates,
+        )
+
+        day_avg = daytime["average"]
+        night_avg = nighttime["average"]
+
+        result[f"{window}d"] = {
+            "daytime_avg_hr": day_avg,
+            "nighttime_avg_hr": night_avg,
+
+            "day_minus_night_bpm": (
+                round(day_avg - night_avg, 1)
+                if day_avg is not None
+                and night_avg is not None
+                else None
+            ),
+
+            "daytime_days_present": daytime["days_present"],
+            "nighttime_days_present": nighttime["days_present"],
+
+            "daytime_sample_count": daytime["sample_count"],
+            "nighttime_sample_count": nighttime["sample_count"],
+
+            "from": selected_dates[0].isoformat(),
+            "to": selected_dates[-1].isoformat(),
+        }
+
+    return result
     if not isinstance(raw, dict):
         return None
 
