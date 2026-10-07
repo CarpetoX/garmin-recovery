@@ -616,6 +616,7 @@ jobs:
           git add garmin_status.json
           [ -f garmin_stress.json ] && git add garmin_stress.json || true
           [ -f garmin_body_battery.json ] && git add garmin_body_battery.json || true
+          [ -f garmin_extended.json ] && git add garmin_extended.json || true
 
           git diff --cached --quiet || git commit -m "Actualizar recuperación y análisis profesional"
           git push
