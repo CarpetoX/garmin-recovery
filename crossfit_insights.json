@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-08T18:36:59.951464+02:00",
+  "generated_at": "2026-10-08T18:56:26.361966+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "live_csv",
   "sheet_error": null,
@@ -424,5 +424,111 @@
       "efficiency": "insufficient_matched_repeated_workouts",
       "neuromuscular_fatigue": "not_directly_measured"
     }
-  ]
+  ],
+  "muscle_load": {
+    "as_of_date": "2026-10-08",
+    "source": "explicit manual strength sets only",
+    "strength_exercises": [
+      {
+        "date": "2026-10-08",
+        "activity_id": "i194982429",
+        "exercise": "peso muerto",
+        "movement_pattern": "hinge",
+        "verified_volume_kg": 1030.0,
+        "known_sets": 2,
+        "total_sets": 4,
+        "volume_complete": false,
+        "estimated_1rm_kg": 198.3,
+        "estimated_1rm_method": "Epley, reps <= 10; approximate, not tested 1RM",
+        "rpe": 7.0,
+        "pain": null
+      }
+    ],
+    "movement_pattern_load": {
+      "7d": {
+        "hinge": {
+          "verified_volume_kg": 1030.0,
+          "known_sets": 2,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": false
+        }
+      },
+      "28d": {
+        "hinge": {
+          "verified_volume_kg": 1030.0,
+          "known_sets": 2,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": false
+        }
+      }
+    },
+    "best_estimated_1rm_by_exercise": [
+      {
+        "exercise": "peso muerto",
+        "date": "2026-10-08",
+        "estimated_1rm_kg": 198.3
+      }
+    ],
+    "limitations": [
+      "Unknown loads excluded from verified volume",
+      "Patterns are exercise categories, not isolated muscle-group loads",
+      "Metcon repetitions and loads are not counted as strength sets",
+      "7/28-day comparisons need adequate recorded history",
+      "Pain is only included when explicitly reported as structured 0-10 values",
+      "Epley estimates are approximate and not directly measured strength"
+    ]
+  },
+  "data_quality": {
+    "status": "ok",
+    "checked_at": "2026-10-08T18:56:26.361966+02:00",
+    "advanced_age_hours": 0.0,
+    "latest_activity_date": "2026-10-08",
+    "latest_activity_age_days": 0,
+    "sheet_rows": 5,
+    "manual_coverage_7d_pct": 100.0,
+    "flags": [
+      {
+        "severity": "info",
+        "code": "incomplete_strength_weights",
+        "count": 1
+      }
+    ],
+    "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
+  },
+  "weekly_report": {
+    "window_start": "2026-10-02",
+    "window_end": "2026-10-08",
+    "activities": 5,
+    "activities_with_manual_sheet_match": 5,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 5.6,
+    "recorded_srpe_sum": 612.7,
+    "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
+    "minimum_verified_strength_volume_kg": 1030.0,
+    "strength_blocks_with_missing_weights": 1,
+    "readiness_latest": {
+      "score": 80,
+      "raw_score_before_guardrails": 80,
+      "status": "green",
+      "recommended_volume": "90-100%",
+      "recommendation": "normal",
+      "garmin_score": 72,
+      "garmin_level": "MODERATE",
+      "local_score": 100,
+      "local_confidence": "low",
+      "weights": {
+        "garmin": 0.7,
+        "local": 0.3
+      },
+      "source_mode": "hybrid",
+      "recovery_time_hours": 0.5,
+      "guardrails_applied": [],
+      "note": "Readiness híbrido para orientar entrenamiento. No es un diagnóstico médico."
+    },
+    "recommendation": "Interpret trends cautiously; compare only equivalent workouts and consider shift-work and subjective symptoms.",
+    "confidence": "limited",
+    "not_a_diagnosis": true
+  }
 }
