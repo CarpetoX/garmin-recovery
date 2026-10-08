@@ -1,17 +1,15 @@
 {
-  "generated_at": "2026-10-08T08:28:10.329958+02:00",
+  "generated_at": "2026-10-08T08:43:21.207410+02:00",
   "timezone": "Europe/Madrid",
   "methodology_version": "1.1",
   "data_quality": {
-    "generated_at": "2026-10-08T08:28:10.329958+02:00",
-    "score": 70,
+    "generated_at": "2026-10-08T08:43:21.207410+02:00",
+    "score": 74,
     "status": "usable",
     "confidence": "medium",
     "baseline_maturity": "provisional",
     "key_history_days": 2,
     "issues": [
-      "missing_sleep_window",
-      "low_night_hr_coverage",
       "short_hrv_baseline",
       "short_sleep_baseline",
       "short_sleep_score_baseline",
@@ -67,15 +65,15 @@
     },
     "today": {
       "heart_rate_partial_day": true,
-      "day_hr_samples": 243,
-      "night_hr_samples": 0,
-      "sleep_window_available": false
+      "day_hr_samples": 20,
+      "night_hr_samples": 235,
+      "sleep_window_available": true
     },
     "source_generated_at": {
-      "heart_rate": "2026-10-08T08:27:53.857217+02:00",
-      "extended": "2026-10-08T08:27:56.400337+02:00",
-      "daily": "2026-10-08T08:27:40.084028+02:00",
-      "weekly": "2026-10-08T08:27:40.084028+02:00"
+      "heart_rate": "2026-10-08T08:43:00.460058+02:00",
+      "extended": "2026-10-08T08:43:03.700460+02:00",
+      "daily": "2026-10-08T08:42:42.529830+02:00",
+      "weekly": "2026-10-08T08:42:42.529830+02:00"
     }
   },
   "day_context": {
@@ -84,18 +82,21 @@
     "privacy_note": "Exact MT/TN/free labels are read only from optional day_context.json or DAY_CONTEXT_B64; no work schedule is embedded in this public repository."
   },
   "readiness_hybrid": {
-    "score": 100,
-    "raw_score_before_guardrails": 100,
+    "score": 80,
+    "raw_score_before_guardrails": 80,
     "status": "green",
     "recommended_volume": "90-100%",
     "recommendation": "normal",
-    "garmin_score": null,
-    "garmin_level": null,
+    "garmin_score": 72,
+    "garmin_level": "MODERATE",
     "local_score": 100,
     "local_confidence": "low",
-    "weights": null,
-    "source_mode": "local_only",
-    "recovery_time_hours": null,
+    "weights": {
+      "garmin": 0.7,
+      "local": 0.3
+    },
+    "source_mode": "hybrid",
+    "recovery_time_hours": 0.5,
     "guardrails_applied": [],
     "note": "Readiness híbrido para orientar entrenamiento. No es un diagnóstico médico."
   },
@@ -105,13 +106,13 @@
       "to": "2026-10-08",
       "metrics": {
         "hrv": {
-          "n": 2,
-          "median": 46.68,
-          "mean": 46.68,
-          "p10": 42.46,
-          "p90": 50.89,
-          "mad": 5.27,
-          "slope_per_day": null
+          "n": 3,
+          "median": 51.94,
+          "mean": 52.45,
+          "p10": 43.51,
+          "p90": 61.59,
+          "mad": 10.54,
+          "slope_per_day": 6.028
         },
         "resting_hr": {
           "n": 3,
@@ -123,22 +124,22 @@
           "slope_per_day": -2.5
         },
         "sleep_hours": {
-          "n": 2,
-          "median": 6.31,
-          "mean": 6.31,
-          "p10": 5.68,
-          "p90": 6.94,
-          "mad": 0.79,
-          "slope_per_day": null
+          "n": 3,
+          "median": 7.1,
+          "mean": 6.78,
+          "p10": 5.84,
+          "p90": 7.6,
+          "mad": 0.62,
+          "slope_per_day": 1.1
         },
         "sleep_score": {
-          "n": 2,
-          "median": 66.0,
-          "mean": 66.0,
-          "p10": 57.2,
-          "p90": 74.8,
+          "n": 3,
+          "median": 77.0,
+          "mean": 73.33,
+          "p10": 59.4,
+          "p90": 85.8,
           "mad": 11.0,
-          "slope_per_day": null
+          "slope_per_day": 16.5
         },
         "respiration": {
           "n": 3,
@@ -160,13 +161,13 @@
           "partial_days_excluded": 1
         },
         "nighttime_hr": {
-          "n": 2,
-          "median": 65.1,
-          "mean": 65.1,
-          "p10": 63.98,
-          "p90": 66.22,
-          "mad": 1.4,
-          "slope_per_day": null
+          "n": 3,
+          "median": 63.7,
+          "mean": 63.23,
+          "p10": 60.34,
+          "p90": 65.94,
+          "mad": 2.8,
+          "slope_per_day": -2.1
         },
         "stress_avg": {
           "n": 3,
@@ -180,11 +181,11 @@
         "body_battery_latest": {
           "n": 3,
           "median": 49.0,
-          "mean": 52.33,
+          "mean": 53.67,
           "p10": 24.2,
-          "p90": 81.8,
+          "p90": 85.0,
           "mad": 31.0,
-          "slope_per_day": 20.5
+          "slope_per_day": 22.5
         }
       }
     },
@@ -193,13 +194,13 @@
       "to": "2026-10-08",
       "metrics": {
         "hrv": {
-          "n": 4,
-          "median": 52.02,
-          "mean": 50.71,
-          "p10": 44.57,
-          "p90": 55.82,
-          "mad": 2.74,
-          "slope_per_day": -3.751
+          "n": 5,
+          "median": 52.09,
+          "mean": 53.37,
+          "p10": 45.62,
+          "p90": 61.37,
+          "mad": 5.33,
+          "slope_per_day": 0.782
         },
         "resting_hr": {
           "n": 7,
@@ -211,22 +212,22 @@
           "slope_per_day": 0.357
         },
         "sleep_hours": {
-          "n": 2,
-          "median": 6.31,
-          "mean": 6.31,
-          "p10": 5.68,
-          "p90": 6.94,
-          "mad": 0.79,
-          "slope_per_day": null
+          "n": 3,
+          "median": 7.1,
+          "mean": 6.78,
+          "p10": 5.84,
+          "p90": 7.6,
+          "mad": 0.62,
+          "slope_per_day": 1.1
         },
         "sleep_score": {
-          "n": 2,
-          "median": 66.0,
-          "mean": 66.0,
-          "p10": 57.2,
-          "p90": 74.8,
+          "n": 3,
+          "median": 77.0,
+          "mean": 73.33,
+          "p10": 59.4,
+          "p90": 85.8,
           "mad": 11.0,
-          "slope_per_day": null
+          "slope_per_day": 16.5
         },
         "respiration": {
           "n": 3,
@@ -248,13 +249,13 @@
           "partial_days_excluded": 1
         },
         "nighttime_hr": {
-          "n": 6,
-          "median": 61.6,
-          "mean": 62.3,
-          "p10": 60.2,
-          "p90": 65.1,
-          "mad": 1.4,
-          "slope_per_day": 1.109
+          "n": 7,
+          "median": 60.6,
+          "mean": 61.9,
+          "p10": 59.74,
+          "p90": 64.82,
+          "mad": 1.1,
+          "slope_per_day": 0.393
         },
         "stress_avg": {
           "n": 7,
@@ -268,11 +269,11 @@
         "body_battery_latest": {
           "n": 7,
           "median": 18.0,
-          "mean": 31.14,
+          "mean": 31.71,
           "p10": 11.8,
-          "p90": 65.4,
+          "p90": 67.0,
           "mad": 6.0,
-          "slope_per_day": 8.679
+          "slope_per_day": 9.107
         }
       }
     },
@@ -281,13 +282,13 @@
       "to": "2026-10-08",
       "metrics": {
         "hrv": {
-          "n": 4,
-          "median": 52.02,
-          "mean": 50.71,
-          "p10": 44.57,
-          "p90": 55.82,
-          "mad": 2.74,
-          "slope_per_day": -3.751
+          "n": 5,
+          "median": 52.09,
+          "mean": 53.37,
+          "p10": 45.62,
+          "p90": 61.37,
+          "mad": 5.33,
+          "slope_per_day": 0.782
         },
         "resting_hr": {
           "n": 15,
@@ -299,22 +300,22 @@
           "slope_per_day": -0.286
         },
         "sleep_hours": {
-          "n": 2,
-          "median": 6.31,
-          "mean": 6.31,
-          "p10": 5.68,
-          "p90": 6.94,
-          "mad": 0.79,
-          "slope_per_day": null
+          "n": 3,
+          "median": 7.1,
+          "mean": 6.78,
+          "p10": 5.84,
+          "p90": 7.6,
+          "mad": 0.62,
+          "slope_per_day": 1.1
         },
         "sleep_score": {
-          "n": 2,
-          "median": 66.0,
-          "mean": 66.0,
-          "p10": 57.2,
-          "p90": 74.8,
+          "n": 3,
+          "median": 77.0,
+          "mean": 73.33,
+          "p10": 59.4,
+          "p90": 85.8,
           "mad": 11.0,
-          "slope_per_day": null
+          "slope_per_day": 16.5
         },
         "respiration": {
           "n": 3,
@@ -336,13 +337,13 @@
           "partial_days_excluded": 1
         },
         "nighttime_hr": {
-          "n": 13,
-          "median": 62.5,
-          "mean": 63.32,
-          "p10": 59.92,
-          "p90": 65.94,
-          "mad": 1.9,
-          "slope_per_day": 0.204
+          "n": 14,
+          "median": 61.75,
+          "mean": 63.04,
+          "p10": 59.62,
+          "p90": 65.66,
+          "mad": 1.5,
+          "slope_per_day": 0.055
         },
         "stress_avg": {
           "n": 8,
@@ -356,11 +357,11 @@
         "body_battery_latest": {
           "n": 8,
           "median": 16.0,
-          "mean": 27.88,
+          "mean": 28.38,
           "p10": 8.5,
-          "p90": 61.3,
+          "p90": 62.5,
           "mad": 7.0,
-          "slope_per_day": 7.964
+          "slope_per_day": 8.298
         }
       }
     }
@@ -984,16 +985,44 @@
     }
   },
   "personal_recovery_index": {
-    "score": 67,
+    "score": 100,
     "context": "TN",
     "baseline_used": "overall",
-    "effective_baseline_days": 7,
+    "effective_baseline_days": 2,
     "components": [
+      {
+        "metric": "hrv",
+        "value": 64.0,
+        "robust_z": 2.95,
+        "baseline_n": 4,
+        "points": 10.0
+      },
+      {
+        "metric": "nighttime_hr",
+        "value": 59.5,
+        "robust_z": -1.06,
+        "baseline_n": 13,
+        "points": 7.1
+      },
       {
         "metric": "resting_hr",
         "value": 53.0,
         "robust_z": -1.35,
         "baseline_n": 14,
+        "points": 6.3
+      },
+      {
+        "metric": "sleep_hours",
+        "value": 7.72,
+        "robust_z": 1.2,
+        "baseline_n": 2,
+        "points": 5.6
+      },
+      {
+        "metric": "sleep_score",
+        "value": 88.0,
+        "robust_z": 1.35,
+        "baseline_n": 2,
         "points": 6.3
       },
       {
@@ -1005,10 +1034,20 @@
       },
       {
         "metric": "body_battery_latest",
-        "value": 90.0,
-        "robust_z": 12.82,
+        "value": 94.0,
+        "robust_z": 13.49,
         "baseline_n": 7,
         "points": 5.0
+      },
+      {
+        "metric": "recovery_time_hours",
+        "value": 0.5,
+        "points": 4
+      },
+      {
+        "metric": "garmin_training_readiness",
+        "value": 72.0,
+        "points": 4.4
       }
     ],
     "confidence": "low",
@@ -1092,8 +1131,8 @@
           "physiological_cost_signal": "high"
         },
         "48h": {
-          "hrv_pct": null,
-          "nighttime_hr_delta": null,
+          "hrv_pct": 16.9,
+          "nighttime_hr_delta": -1.0,
           "resting_hr_delta": -2.0,
           "sleep_hours_delta": null,
           "sleep_score_delta": null,
@@ -1149,7 +1188,7 @@
         "activity_id": "i194179774",
         "date": "2026-10-06",
         "activity_name": "HIIT",
-        "generated_at": "2026-10-08T08:28:10.329958+02:00"
+        "generated_at": "2026-10-08T08:43:21.207410+02:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.265,
@@ -1201,7 +1240,7 @@
         "activity_id": "i194171569",
         "date": "2026-10-06",
         "activity_name": "HIIT",
-        "generated_at": "2026-10-08T08:28:10.329958+02:00"
+        "generated_at": "2026-10-08T08:43:21.207410+02:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.175,
