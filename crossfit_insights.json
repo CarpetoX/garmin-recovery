@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-08T18:56:26.361966+02:00",
+  "generated_at": "2026-10-08T19:34:49.619574+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "live_csv",
   "sheet_error": null,
@@ -480,9 +480,128 @@
       "Epley estimates are approximate and not directly measured strength"
     ]
   },
+  "training_extensions": {
+    "metcon_exposure": {
+      "entries": [],
+      "movement_work": {
+        "7d": {},
+        "28d": {}
+      },
+      "coverage": "Only completed_movements explicitly provided in structured JSON; older narrative WODs not counted",
+      "note": "Repetitions are movement exposure, not an estimate of muscular force or tonnage."
+    },
+    "performance_trends": {
+      "comparisons": [],
+      "eligible_benchmarks": 0,
+      "note": "Only explicitly matching benchmark_id, benchmark_variant and metric are compared; no equivalence inferred from names."
+    },
+    "recovery_context": {
+      "existing_24_48h": [
+        {
+          "date": "2026-10-06",
+          "sessions": 2,
+          "loads": {
+            "intervals_training_load": 33.0,
+            "garmin_activity_load": 138.0,
+            "trimp": 53.1,
+            "session_rpe_load": 288.4
+          },
+          "baseline_previous_3d": {
+            "hrv": 54.75,
+            "nighttime_hr": 60.5,
+            "resting_hr": 55.0,
+            "sleep_hours": null,
+            "sleep_score": null
+          },
+          "response": {
+            "24h": {
+              "hrv_pct": -24.4,
+              "nighttime_hr_delta": 6.0,
+              "resting_hr_delta": 5.0,
+              "sleep_hours_delta": null,
+              "sleep_score_delta": null,
+              "adverse_signals": [
+                "hrv_down",
+                "night_hr_up",
+                "resting_hr_up"
+              ],
+              "physiological_cost_signal": "high"
+            },
+            "48h": {
+              "hrv_pct": 19.6,
+              "nighttime_hr_delta": -1.0,
+              "resting_hr_delta": -2.0,
+              "sleep_hours_delta": null,
+              "sleep_score_delta": null,
+              "adverse_signals": [],
+              "physiological_cost_signal": "none"
+            }
+          }
+        },
+        {
+          "date": "2026-10-08",
+          "sessions": 3,
+          "loads": {
+            "intervals_training_load": 39.0,
+            "garmin_activity_load": 112.0,
+            "trimp": 64.8,
+            "session_rpe_load": 324.9
+          },
+          "baseline_previous_3d": {
+            "hrv": 51.94,
+            "nighttime_hr": 63.7,
+            "resting_hr": 58.0,
+            "sleep_hours": 6.31,
+            "sleep_score": 66.0
+          },
+          "response": {
+            "24h": {
+              "hrv_pct": null,
+              "nighttime_hr_delta": null,
+              "resting_hr_delta": null,
+              "sleep_hours_delta": null,
+              "sleep_score_delta": null,
+              "adverse_signals": [],
+              "physiological_cost_signal": "none"
+            },
+            "48h": {
+              "hrv_pct": null,
+              "nighttime_hr_delta": null,
+              "resting_hr_delta": null,
+              "sleep_hours_delta": null,
+              "sleep_score_delta": null,
+              "adverse_signals": [],
+              "physiological_cost_signal": "none"
+            }
+          }
+        }
+      ],
+      "available_context_baseline_days": {
+        "overall": 20,
+        "unknown": 7,
+        "night_sleep": 5,
+        "day_sleep": 1,
+        "free": 3,
+        "MT": 2,
+        "TN": 1,
+        "post-TN": 1
+      },
+      "recorded_activities_by_shift_context": {
+        "TN": 3,
+        "free": 2
+      },
+      "confidence": "descriptive_only",
+      "limitations": [
+        "Do not attribute HRV or sleep changes causally to a specific workout or shift",
+        "Use actual measurement dates and sleep windows from upstream analytics",
+        "Small and uneven context groups cannot establish a personal baseline"
+      ]
+    },
+    "version": "1.0; conservative structured data only"
+  },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-08T18:56:26.361966+02:00",
+    "checked_at": "2026-10-08T19:34:49.619574+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-08",
     "latest_activity_age_days": 0,
