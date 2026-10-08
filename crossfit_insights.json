@@ -1,0 +1,308 @@
+{
+  "generated_at": "2026-10-08T16:56:17.630351+02:00",
+  "source_measurement_note": "La generación del JSON no es hora de medición",
+  "sheet_source": "live_csv",
+  "sheet_error": null,
+  "sheet_rows_loaded": 2,
+  "sheet_has_detail_json": false,
+  "manual_source_rule": "Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.",
+  "quality": {
+    "interpretation": "provisional",
+    "limitations": [
+      "Pocos WOD equivalentes para eficiencia",
+      "Fatiga neuromuscular no medida directamente",
+      "La respuesta 24-48 h no demuestra causalidad"
+    ]
+  },
+  "context_today": "TN",
+  "context_baseline_days": {
+    "overall": 20,
+    "unknown": 7,
+    "night_sleep": 5,
+    "day_sleep": 1,
+    "free": 3,
+    "MT": 2,
+    "TN": 1,
+    "post-TN": 1
+  },
+  "response_24_48h": [
+    {
+      "date": "2026-10-06",
+      "sessions": 2,
+      "loads": {
+        "intervals_training_load": 33.0,
+        "garmin_activity_load": 138.0,
+        "trimp": 53.1,
+        "session_rpe_load": 288.4
+      },
+      "baseline_previous_3d": {
+        "hrv": 54.75,
+        "nighttime_hr": 60.5,
+        "resting_hr": 55.0,
+        "sleep_hours": null,
+        "sleep_score": null
+      },
+      "response": {
+        "24h": {
+          "hrv_pct": -24.4,
+          "nighttime_hr_delta": 6.0,
+          "resting_hr_delta": 5.0,
+          "sleep_hours_delta": null,
+          "sleep_score_delta": null,
+          "adverse_signals": [
+            "hrv_down",
+            "night_hr_up",
+            "resting_hr_up"
+          ],
+          "physiological_cost_signal": "high"
+        },
+        "48h": {
+          "hrv_pct": 19.6,
+          "nighttime_hr_delta": -1.0,
+          "resting_hr_delta": -2.0,
+          "sleep_hours_delta": null,
+          "sleep_score_delta": null,
+          "adverse_signals": [],
+          "physiological_cost_signal": "none"
+        }
+      }
+    },
+    {
+      "date": "2026-10-08",
+      "sessions": 3,
+      "loads": {
+        "intervals_training_load": 39.0,
+        "garmin_activity_load": 112.0,
+        "trimp": 64.8,
+        "session_rpe_load": 0
+      },
+      "baseline_previous_3d": {
+        "hrv": 51.94,
+        "nighttime_hr": 63.7,
+        "resting_hr": 58.0,
+        "sleep_hours": 6.31,
+        "sleep_score": 66.0
+      },
+      "response": {
+        "24h": {
+          "hrv_pct": null,
+          "nighttime_hr_delta": null,
+          "resting_hr_delta": null,
+          "sleep_hours_delta": null,
+          "sleep_score_delta": null,
+          "adverse_signals": [],
+          "physiological_cost_signal": "none"
+        },
+        "48h": {
+          "hrv_pct": null,
+          "nighttime_hr_delta": null,
+          "resting_hr_delta": null,
+          "sleep_hours_delta": null,
+          "sleep_score_delta": null,
+          "adverse_signals": [],
+          "physiological_cost_signal": "none"
+        }
+      }
+    }
+  ],
+  "readiness_hybrid": {
+    "score": 80,
+    "raw_score_before_guardrails": 80,
+    "status": "green",
+    "recommended_volume": "90-100%",
+    "recommendation": "normal",
+    "garmin_score": 72,
+    "garmin_level": "MODERATE",
+    "local_score": 100,
+    "local_confidence": "low",
+    "weights": {
+      "garmin": 0.7,
+      "local": 0.3
+    },
+    "source_mode": "hybrid",
+    "recovery_time_hours": 0.5,
+    "guardrails_applied": [],
+    "note": "Readiness híbrido para orientar entrenamiento. No es un diagnóstico médico."
+  },
+  "activities": [
+    {
+      "activity_id": "i194982429",
+      "date": "2026-10-08",
+      "context": "TN",
+      "name": "Fuerza",
+      "manual_match": "unmatched",
+      "manual_blocks": [],
+      "manual_rpe_conflict": false,
+      "rpe_used": null,
+      "rpe_interval": null,
+      "rpe_disagreement": false,
+      "recorded_minutes": 20.93,
+      "srpe_using_recorded_minutes": null,
+      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "external_work": {
+        "distance_m": null,
+        "reps": null,
+        "strength_volume_kg": null
+      },
+      "internal_load_not_additive": {
+        "trimp": 17.25294,
+        "intervals_load": 10.0,
+        "hr_load": 10.0
+      },
+      "heart_rate": {
+        "average": 123.0,
+        "max": 141.0
+      },
+      "efficiency": "insufficient_matched_repeated_workouts",
+      "neuromuscular_fatigue": "not_directly_measured"
+    },
+    {
+      "activity_id": "i194967768",
+      "date": "2026-10-08",
+      "context": "TN",
+      "name": "HIIT",
+      "manual_match": "unmatched",
+      "manual_blocks": [],
+      "manual_rpe_conflict": false,
+      "rpe_used": null,
+      "rpe_interval": null,
+      "rpe_disagreement": false,
+      "recorded_minutes": 17.55,
+      "srpe_using_recorded_minutes": null,
+      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "external_work": {
+        "distance_m": null,
+        "reps": null,
+        "strength_volume_kg": null
+      },
+      "internal_load_not_additive": {
+        "trimp": 27.59131,
+        "intervals_load": 17.0,
+        "hr_load": 17.0
+      },
+      "heart_rate": {
+        "average": 148.0,
+        "max": 171.0
+      },
+      "efficiency": "insufficient_matched_repeated_workouts",
+      "neuromuscular_fatigue": "not_directly_measured"
+    },
+    {
+      "activity_id": "i194958710",
+      "date": "2026-10-08",
+      "context": "TN",
+      "name": "HIIT",
+      "manual_match": "unmatched",
+      "manual_blocks": [],
+      "manual_rpe_conflict": false,
+      "rpe_used": null,
+      "rpe_interval": null,
+      "rpe_disagreement": false,
+      "recorded_minutes": 37.83,
+      "srpe_using_recorded_minutes": null,
+      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "external_work": {
+        "distance_m": null,
+        "reps": null,
+        "strength_volume_kg": null
+      },
+      "internal_load_not_additive": {
+        "trimp": 19.97363,
+        "intervals_load": 12.0,
+        "hr_load": 12.0
+      },
+      "heart_rate": {
+        "average": 108.0,
+        "max": 153.0
+      },
+      "efficiency": "insufficient_matched_repeated_workouts",
+      "neuromuscular_fatigue": "not_directly_measured"
+    },
+    {
+      "activity_id": "i194179774",
+      "date": "2026-10-06",
+      "context": "free",
+      "name": "HIIT",
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Metcon 25-20-15-10-5",
+          "rpe": 8.0,
+          "notes": "",
+          "sensations": "",
+          "detail_json": {},
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
+      "manual_rpe_conflict": false,
+      "rpe_used": 8.0,
+      "rpe_interval": null,
+      "rpe_disagreement": false,
+      "recorded_minutes": 15.65,
+      "srpe_using_recorded_minutes": 125.2,
+      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "external_work": {
+        "distance_m": null,
+        "reps": null,
+        "strength_volume_kg": null
+      },
+      "internal_load_not_additive": {
+        "trimp": 30.218786,
+        "intervals_load": 18.0,
+        "hr_load": 18.0
+      },
+      "heart_rate": {
+        "average": 158.0,
+        "max": 180.0
+      },
+      "efficiency": "insufficient_matched_repeated_workouts",
+      "neuromuscular_fatigue": "not_directly_measured"
+    },
+    {
+      "activity_id": "i194171569",
+      "date": "2026-10-06",
+      "context": "free",
+      "name": "HIIT",
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "E2MOM2M fuerza/skill",
+          "rpe": 4.0,
+          "notes": "",
+          "sensations": "",
+          "detail_json": {},
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
+      "manual_rpe_conflict": false,
+      "rpe_used": 4.0,
+      "rpe_interval": null,
+      "rpe_disagreement": false,
+      "recorded_minutes": 40.7,
+      "srpe_using_recorded_minutes": 162.8,
+      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "external_work": {
+        "distance_m": null,
+        "reps": null,
+        "strength_volume_kg": null
+      },
+      "internal_load_not_additive": {
+        "trimp": 22.898924,
+        "intervals_load": 15.0,
+        "hr_load": 15.0
+      },
+      "heart_rate": {
+        "average": 113.0,
+        "max": 158.0
+      },
+      "efficiency": "insufficient_matched_repeated_workouts",
+      "neuromuscular_fatigue": "not_directly_measured"
+    }
+  ]
+}
