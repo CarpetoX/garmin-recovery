@@ -1,0 +1,34 @@
+name: Garmin Workflow Monitor and Monthly Report
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 20 * * *' # UTC; local Madrid time shifts with DST
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: garmin-monitor-monthly
+  cancel-in-progress: false
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect actual workflow runs and generate monthly summary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python monitor_monthly.py
+      - name: Commit diagnostics and report
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add workflow_health.json monthly_report.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update workflow health and monthly report'
+            git pull --rebase origin "${{ github.event.repository.default_branch }}"
+            git push origin HEAD:"${{ github.event.repository.default_branch }}"
+          fi
