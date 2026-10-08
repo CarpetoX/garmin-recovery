@@ -1,0 +1,42 @@
+name: Garmin CrossFit Insights
+
+on:
+  workflow_run:
+    workflows: ["Garmin Advanced Analytics"]
+    types: [completed]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 19 * * 0"  # Weekly UTC; Sunday evening Spain, DST may shift local hour
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-crossfit-insights
+  cancel-in-progress: false
+
+jobs:
+  crossfit:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate CrossFit analysis
+        env:
+          RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
+        run: python crossfit_insights.py
+      - name: Commit CrossFit insights
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add crossfit_insights.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update CrossFit insights'
+            git pull --rebase origin "${{ github.event.repository.default_branch }}"
+            git push origin HEAD:"${{ github.event.repository.default_branch }}"
+          fi
