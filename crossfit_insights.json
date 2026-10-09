@@ -1,9 +1,12 @@
 {
-  "generated_at": "2026-10-09T18:27:22.403070+02:00",
+  "generated_at": "2026-10-09T19:46:59.282856+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "live_csv",
   "sheet_error": null,
-  "sheet_rows_loaded": 5,
+  "sheet_rows_loaded": 7,
+  "sheet_fetch_policy": "cache_bust_query + no_cache_headers",
+  "sheet_latest_date": "2026-10-09",
+  "latest_activity_date": "2026-10-09",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.",
   "quality": {
@@ -114,7 +117,7 @@
         "intervals_training_load": 12.0,
         "garmin_activity_load": 56.2,
         "trimp": 19.8,
-        "session_rpe_load": 0
+        "session_rpe_load": 209.9
       },
       "baseline_previous_3d": {
         "hrv": 51.94,
@@ -172,7 +175,7 @@
     "recovery_assessment_state": "provisional"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-09T18:27:09.169811+02:00",
+    "generated_at": "2026-10-09T19:46:45.846933+02:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "provisional",
     "status": "red",
@@ -287,8 +290,7 @@
       "reason_codes": [
         "post_night_shift",
         "short_sleep",
-        "unconfirmed_body_battery_sleep_event",
-        "live_measurement_uncertain"
+        "unconfirmed_body_battery_sleep_event"
       ],
       "baseline_caution": "day_sleep_baseline_not_mature",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -297,26 +299,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-10-09T12:50:00+02:00",
-            "age_minutes": 337.2,
+            "age_minutes": 416.8,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-10-09T12:21:11+02:00",
-            "age_minutes": 366.0,
+            "age_minutes": 445.6,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
-            "state": "delayed",
-            "measured_at": "2026-10-09T16:36:00+02:00",
-            "age_minutes": 111.2,
+            "state": "recent",
+            "measured_at": "2026-10-09T19:02:00+02:00",
+            "age_minutes": 44.8,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "delayed",
-            "measured_at": "2026-10-09T15:51:00+02:00",
-            "age_minutes": 156.2,
+            "state": "recent",
+            "measured_at": "2026-10-09T19:00:00+02:00",
+            "age_minutes": 46.8,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -327,11 +329,8 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": true,
-        "limited_live_metrics": [
-          "heart_rate_live",
-          "body_battery_live"
-        ],
+        "live_data_limited": false,
+        "limited_live_metrics": [],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -351,8 +350,8 @@
           "easy_aerobic": "optional_easy_only_if_alert_and_symptoms_allow",
           "mobility": "optional_light_mobility"
         },
-        "recent_sessions_with_declared_rpe": 3,
-        "recent_high_rpe_sessions": 1,
+        "recent_sessions_with_declared_rpe": 5,
+        "recent_high_rpe_sessions": 3,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
     },
@@ -368,14 +367,59 @@
       "date": "2026-10-09",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "WOD 21-15-9 sentadilla frontal 60 kg + HSPU",
+          "rpe": 8.5,
+          "notes": "21-15-9 de sentadilla frontal 60 kg y handstand push-ups; 45 repeticiones de cada ejercicio (90 en total). Completado con time cap 8 min; Garmin 8:31 grabados. RPE 8,5.",
+          "sensations": "Cansado antes; sin dolor",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "metcon",
+            "format": "21-15-9",
+            "time_cap_minutes": 8,
+            "prescribed_rounds": [
+              21,
+              15,
+              9
+            ],
+            "exercises": [
+              {
+                "name": "sentadilla frontal",
+                "load_kg": 60,
+                "load_unit": "kg_total_barra"
+              },
+              {
+                "name": "handstand push-up",
+                "load_kg": null
+              }
+            ],
+            "performed": {
+              "completed": true,
+              "total_reps_each_exercise": 45,
+              "total_reps": 90,
+              "exact_finish_time_minutes": null
+            },
+            "rpe": 8.5,
+            "pre_training_sensations": "cansado; sin dolor",
+            "garmin_activity_id": "i195490222",
+            "recorded_garmin_minutes": 8.52,
+            "notes": "Completado dentro del time cap de 8 min según atleta; duración grabada Garmin 8 min 31 s, no igual al tiempo exacto de finalización."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 8.5,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 8.52,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 72.4,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -399,14 +443,104 @@
       "date": "2026-10-09",
       "context": "post-TN",
       "name": "Fuerza",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Fuerza - sentadilla 10x2",
+          "rpe": 9.0,
+          "notes": "10 series de 2: 60, 80, 110, 140, 150, 155, 160, 165, 167,5 (interpretación del dictado) y 170 kg. Series 1-6 cada 60 s; series 7-10 cada 75 s. Garmin 15:20.",
+          "sensations": "Cansado antes; sin dolor",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "exercises": [
+              {
+                "name": "sentadilla trasera",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 2,
+                    "load_kg": 60,
+                    "interval_seconds": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 80,
+                    "interval_seconds": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 110,
+                    "interval_seconds": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 140,
+                    "interval_seconds": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 150,
+                    "interval_seconds": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 155,
+                    "interval_seconds": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 160,
+                    "interval_seconds": 75
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 165,
+                    "interval_seconds": 75
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 167.5,
+                    "interval_seconds": 75,
+                    "load_interpretation": "167,5 kg interpretado de transcripción oral"
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 170,
+                    "interval_seconds": 75
+                  }
+                ]
+              }
+            ],
+            "cadence": [
+              {
+                "sets": "1-6",
+                "seconds": 60
+              },
+              {
+                "sets": "7-10",
+                "seconds": 75
+              }
+            ],
+            "rpe": 9,
+            "pre_training_sensations": "cansado; sin dolor",
+            "garmin_activity_id": "i195481427",
+            "recorded_garmin_minutes": 15.33,
+            "notes": "Serie 9 interpretada como 167,5 kg a partir del dictado; no confirmada independientemente."
+          },
+          "minimum_verified_volume_kg": 2715.0,
+          "volume_complete": true,
+          "structured_sets_known": 10,
+          "structured_sets_total": 10
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 9.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 15.33,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 138.0,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -730,6 +864,20 @@
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
+        "date": "2026-10-09",
+        "activity_id": "i195481427",
+        "exercise": "sentadilla trasera",
+        "movement_pattern": "squat",
+        "verified_volume_kg": 2715.0,
+        "known_sets": 10,
+        "total_sets": 10,
+        "volume_complete": true,
+        "estimated_1rm_kg": 181.3,
+        "estimated_1rm_method": "Epley, reps <= 10; approximate, not tested 1RM",
+        "rpe": 9.0,
+        "pain": null
+      },
+      {
         "date": "2026-10-08",
         "activity_id": "i194982429",
         "exercise": "peso muerto",
@@ -746,6 +894,13 @@
     ],
     "movement_pattern_load": {
       "7d": {
+        "squat": {
+          "verified_volume_kg": 2715.0,
+          "known_sets": 10,
+          "total_sets": 10,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "hinge": {
           "verified_volume_kg": 1030.0,
           "known_sets": 2,
@@ -755,6 +910,13 @@
         }
       },
       "28d": {
+        "squat": {
+          "verified_volume_kg": 2715.0,
+          "known_sets": 10,
+          "total_sets": 10,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "hinge": {
           "verified_volume_kg": 1030.0,
           "known_sets": 2,
@@ -765,6 +927,11 @@
       }
     },
     "best_estimated_1rm_by_exercise": [
+      {
+        "exercise": "sentadilla trasera",
+        "date": "2026-10-09",
+        "estimated_1rm_kg": 181.3
+      },
       {
         "exercise": "peso muerto",
         "date": "2026-10-08",
@@ -885,7 +1052,7 @@
             "intervals_training_load": 12.0,
             "garmin_activity_load": 56.2,
             "trimp": 19.8,
-            "session_rpe_load": 0
+            "session_rpe_load": 209.9
           },
           "baseline_previous_3d": {
             "hrv": 51.94,
@@ -942,22 +1109,13 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-09T18:27:22.403070+02:00",
+    "checked_at": "2026-10-09T19:46:59.282856+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-09",
     "latest_activity_age_days": 0,
-    "sheet_rows": 5,
-    "manual_coverage_7d_pct": 71.4,
+    "sheet_rows": 7,
+    "manual_coverage_7d_pct": 100.0,
     "flags": [
-      {
-        "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 2,
-        "ids": [
-          "i195490222",
-          "i195481427"
-        ]
-      },
       {
         "severity": "info",
         "code": "incomplete_strength_weights",
@@ -970,12 +1128,12 @@
     "window_start": "2026-10-03",
     "window_end": "2026-10-09",
     "activities": 7,
-    "activities_with_manual_sheet_match": 5,
-    "activities_missing_manual_match": 2,
-    "mean_rpe": 5.6,
-    "recorded_srpe_sum": 612.7,
+    "activities_with_manual_sheet_match": 7,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 6.5,
+    "recorded_srpe_sum": 823.1,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 1030.0,
+    "minimum_verified_strength_volume_kg": 3745.0,
     "strength_blocks_with_missing_weights": 1,
     "readiness_latest": {
       "score": 43,
@@ -1008,19 +1166,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-09T18:27:22.403070+02:00",
+    "checked_at": "2026-10-09T19:46:59.282856+02:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-09T18:26:30.227940+02:00",
+        "generated_at": "2026-10-09T19:46:06.017628+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-09T18:26:44.204813+02:00",
+        "generated_at": "2026-10-09T19:46:23.652373+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -1034,28 +1192,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-09T18:27:09.061806+02:00",
+        "generated_at": "2026-10-09T19:46:45.744474+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-09T18:27:09.061806+02:00",
+        "generated_at": "2026-10-09T19:46:45.744474+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-09T18:26:30.227940+02:00",
+        "generated_at": "2026-10-09T19:46:06.017628+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-09T18:26:44.204813+02:00",
+        "generated_at": "2026-10-09T19:46:23.652373+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
@@ -1075,7 +1233,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.6,
+    "generation_skew_minutes": 0.7,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
