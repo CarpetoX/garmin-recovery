@@ -1,0 +1,62 @@
+name: Upgrade Garmin Recovery V2.4 Core
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Aplicar núcleo V2.4
+        run: python upgrade_v240.py
+
+      - name: Validar sintaxis
+        run: |
+          python -m py_compile recovery_reliability.py pipeline_regression_tests.py
+          python pipeline_regression_tests.py --stage manual
+
+      - name: Publicar núcleo V2.4
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Garmin Recovery Bot"
+          git config user.email "actions@github.com"
+
+          git add recovery_reliability.py pipeline_regression_tests.py
+
+          if git diff --cached --quiet; then
+            echo "Sin cambios de núcleo V2.4."
+            exit 0
+          fi
+
+          git commit -m "Garmin Recovery V2.4 fused history and regression tests"
+
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
