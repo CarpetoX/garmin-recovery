@@ -2,6 +2,8 @@ import csv
 import io
 import json
 import os
+import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -83,9 +85,30 @@ def normalize_feedback(raw):
             "registered": item.get("registered") or item.get("Registrado"),
             "sensations": item.get("sensations") or item.get("Sensaciones"),
             "notes": item.get("notes") or item.get("Notas"),
+            "detail_json": (
+                item.get("detail_json")
+                or item.get("Detalle JSON")
+                or item.get("detail")
+            ),
         }
 
     return out
+
+
+def fresh_url(url):
+    """Evita respuestas CSV obsoletas de Google/Apps Script."""
+    parts = urllib.parse.urlsplit(url)
+    query = urllib.parse.parse_qsl(parts.query, keep_blank_values=True)
+    query.append(("_garmin_cache_bust", str(time.time_ns())))
+    return urllib.parse.urlunsplit(
+        (
+            parts.scheme,
+            parts.netloc,
+            parts.path,
+            urllib.parse.urlencode(query),
+            parts.fragment,
+        )
+    )
 
 
 def feedback_from_csv(url):
@@ -93,8 +116,12 @@ def feedback_from_csv(url):
         return {}
 
     req = urllib.request.Request(
-        url,
-        headers={"User-Agent": "Garmin-Recovery-RPE/1.0"},
+        fresh_url(url),
+        headers={
+            "User-Agent": "Garmin-Recovery-RPE/1.1",
+            "Cache-Control": "no-cache, no-store, max-age=0",
+            "Pragma": "no-cache",
+        },
     )
 
     with urllib.request.urlopen(req, timeout=20) as response:
@@ -125,11 +152,20 @@ def main():
     remote_url = os.environ.get("RPE_CSV_URL", "").strip()
     remote_error = None
     remote_count = 0
+    remote_latest_date = None
 
     if remote_url:
         try:
             remote = feedback_from_csv(remote_url)
             remote_count = len(remote)
+            remote_latest_date = max(
+                (
+                    str(item.get("date"))
+                    for item in remote.values()
+                    if isinstance(item, dict) and item.get("date")
+                ),
+                default=None,
+            )
             feedback.update(remote)
         except Exception as exc:
             remote_error = f"{type(exc).__name__}: {exc}"
@@ -188,8 +224,11 @@ def main():
             if remote_url
             else "Google Sheet snapshot / manual feedback"
         ),
+        "source_fetch_policy": "cache_bust_query + no_cache_headers",
         "spreadsheet_id": "1vbxls-yyBOs8_gAmp9ld2WI_Ss9jvXNMFbxV5TKWX_k",
         "sheet": "RPE",
+        "remote_rows_loaded": remote_count,
+        "remote_latest_date": remote_latest_date,
         "activities": feedback,
     }
     if remote_error:
@@ -214,6 +253,8 @@ def main():
         "used_as_primary_rpe": injected,
         "remote_csv_configured": bool(remote_url),
         "remote_rows_loaded": remote_count,
+        "remote_latest_date": remote_latest_date,
+        "remote_fetch_policy": "cache_bust_query + no_cache_headers",
         "remote_fetch_error": remote_error,
         "discrepancies": discrepancies,
         "policy": (
@@ -247,6 +288,7 @@ def main():
                         "rpe": fb_rpe,
                         "sensations": fb.get("sensations"),
                         "notes": fb.get("notes"),
+                        "detail_json": fb.get("detail_json"),
                         "source": "training_feedback",
                     }
 
@@ -286,6 +328,7 @@ def main():
                 "used_as_primary_rpe": injected,
                 "remote_csv_configured": bool(remote_url),
                 "remote_rows_loaded": remote_count,
+                "remote_latest_date": remote_latest_date,
                 "remote_fetch_error": remote_error,
             },
             ensure_ascii=False,

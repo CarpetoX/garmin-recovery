@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """CrossFit supplement: manual Sheet A:H + Garmin/Intervals, no invented data."""
-import csv, io, json, os, math, statistics, urllib.request
+import csv, io, json, os, math, statistics, time, urllib.parse, urllib.request
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -33,13 +33,29 @@ def detail(value):
         except ValueError: return {}
     return {}
 
+def fresh_url(url):
+    """Force a fresh Sheet/Apps Script CSV response instead of a cached export."""
+    parts=urllib.parse.urlsplit(url)
+    query=urllib.parse.parse_qsl(parts.query,keep_blank_values=True)
+    query.append(('_garmin_cache_bust',str(time.time_ns())))
+    return urllib.parse.urlunsplit(
+        (parts.scheme,parts.netloc,parts.path,urllib.parse.urlencode(query),parts.fragment)
+    )
+
 def sheet_rows():
     # Secret can be a published CSV URL, or an Apps Script endpoint exporting A:H.
     # A private Google Sheet cannot be fetched using only its spreadsheet ID.
     url=os.environ.get('RPE_CSV_URL','').strip()
     if not url: return [], 'not_configured', 'RPE_CSV_URL no configurada; no hay lectura en vivo'
     try:
-        req=urllib.request.Request(url,headers={'User-Agent':'Garmin-CrossFit-Insights/1.0'})
+        req=urllib.request.Request(
+            fresh_url(url),
+            headers={
+                'User-Agent':'Garmin-CrossFit-Insights/1.1',
+                'Cache-Control':'no-cache, no-store, max-age=0',
+                'Pragma':'no-cache'
+            }
+        )
         with urllib.request.urlopen(req,timeout=25) as response:
             raw=response.read(3_000_000).decode('utf-8-sig')
         rows=list(csv.reader(io.StringIO(raw)))
@@ -137,6 +153,8 @@ def main():
     if not isinstance(activities,list): activities=[]
     if not isinstance(advanced,dict): advanced={}
     if not isinstance(feedback,dict): feedback={}
+    sheet_latest_date=max((str(r.get('Fecha')) for r in rows if r.get('Fecha')),default=None)
+    latest_activity_date=max((local_date(a) for a in activities if isinstance(a,dict) and local_date(a)),default=None)
     results=[]
     for a in activities:
         if not isinstance(a,dict): continue
@@ -172,6 +190,8 @@ def main():
     counts={k:v.get('days') for k,v in ctx.items() if isinstance(v,dict)} if isinstance(ctx,dict) else {}
     out={'generated_at':now.isoformat(),'source_measurement_note':'La generación del JSON no es hora de medición',
          'sheet_source':source,'sheet_error':error,'sheet_rows_loaded':len(rows),
+         'sheet_fetch_policy':'cache_bust_query + no_cache_headers',
+         'sheet_latest_date':sheet_latest_date,'latest_activity_date':latest_activity_date,
          'sheet_has_detail_json':bool(rows and any(r.get('Detalle JSON','').strip() for r in rows)),
          'manual_source_rule':'Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.',
          'quality':{'interpretation':'provisional','limitations':['Pocos WOD equivalentes para eficiencia','Fatiga neuromuscular no medida directamente','La respuesta 24-48 h no demuestra causalidad']},
@@ -189,6 +209,8 @@ def main():
         raise RuntimeError('RPE CSV unavailable: refusing to overwrite last good report: ' + str(error))
     Path('crossfit_insights.json').write_text(json.dumps(out,indent=2,ensure_ascii=False,allow_nan=False)+'\n',encoding='utf-8')
     update_history(out,now)
-    print(json.dumps({'generated_at':out['generated_at'],'sheet_source':source,'sheet_rows':len(rows),'activities':len(results),'warning':error},ensure_ascii=False))
+    print(json.dumps({'generated_at':out['generated_at'],'sheet_source':source,'sheet_rows':len(rows),
+                      'sheet_latest_date':sheet_latest_date,'latest_activity_date':latest_activity_date,
+                      'activities':len(results),'warning':error},ensure_ascii=False))
 
 if __name__=='__main__': main()
