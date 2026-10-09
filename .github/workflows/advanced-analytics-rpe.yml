@@ -31,7 +31,7 @@ jobs:
 
       - name: Validar sintaxis
         run: |
-          python -m py_compile advanced_analytics.py rpe_enrichment.py validate_pipeline.py recovery_reliability.py
+          python -m py_compile advanced_analytics.py rpe_enrichment.py validate_pipeline.py recovery_reliability.py pipeline_regression_tests.py
 
       - name: Calcular analítica avanzada + RPE
         env:
@@ -48,6 +48,10 @@ jobs:
       - name: Validar integridad del pipeline
         run: |
           python validate_pipeline.py
+
+      - name: Pruebas de regresión V2.4
+        run: |
+          python pipeline_regression_tests.py --stage advanced
 
       - name: Guardar analítica avanzada con reintentos
         shell: bash

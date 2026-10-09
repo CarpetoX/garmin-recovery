@@ -25,6 +25,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Validar sintaxis V2.4
+        run: python -m py_compile crossfit_insights.py report_delivery_gate.py pipeline_regression_tests.py
       - name: Generate CrossFit analysis
         env:
           RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
@@ -36,6 +38,8 @@ jobs:
           CROSSFIT_RUN_ID: ${{ github.run_id }}
           ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
         run: python report_delivery_gate.py
+      - name: Pruebas de regresión V2.4
+        run: python pipeline_regression_tests.py --stage crossfit
       - name: Commit CrossFit insights and ready certificate
         run: |
           set -euo pipefail

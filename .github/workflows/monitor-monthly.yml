@@ -4,14 +4,17 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - Garmin Recovery Sync
-      - Garmin Heart Rate Enrichment
-      - Garmin Advanced Analytics
       - Garmin CrossFit Insights
     types: [completed]
   schedule:
-    - cron: '53 23 * * *'
-      timezone: 'Europe/Madrid' # Respaldo diario; no es el único disparador
+    # Watchdogs ~155 min after each nominal Sync slot.
+    # They catch a broken chain even when CrossFit never starts.
+    - cron: '5 11 * * *'
+      timezone: 'Europe/Madrid'
+    - cron: '20 19 * * *'
+      timezone: 'Europe/Madrid'
+    - cron: '20 1 * * *'
+      timezone: 'Europe/Madrid'
 
 permissions:
   contents: write
