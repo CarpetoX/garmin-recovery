@@ -400,6 +400,8 @@ def produce(now=None, files=None):
     sleep_fresh = source_is_fresh(sleep, now) or source_is_fresh(extended, now)
     hr_fresh = source_is_fresh(heart, now)
     assessment = recovery_assessment(records, now, adv, hrv_fresh and sleep_fresh and hr_fresh)
+    from recovery_v23 import enhance_assessment
+    assessment = enhance_assessment(assessment, extended, daily, now)
     assessment['input_freshness'] = {'hrv': hrv_fresh, 'sleep': sleep_fresh, 'heart_rate': hr_fresh}
     # Update the canonical analysis and the two report files; retain originals.
     adv['recovery_assessment_v2'] = assessment
