@@ -92,7 +92,7 @@ def validate_chain(crossfit, advanced_runs, heart_runs, sync_runs):
     heart = parent_before(heart_runs, advanced, {'workflow_run'})
     if not heart:
         return None, ['heart_missing_or_not_correlated']
-    sync = parent_before(sync_runs, heart, {'schedule', 'workflow_dispatch'})
+    sync = parent_before(sync_runs, heart, {'schedule', 'workflow_dispatch', 'repository_dispatch'})
     if not sync:
         return None, ['sync_missing_or_not_correlated']
     slot = slot_for_run(stamp(sync['created_at']))
@@ -133,7 +133,7 @@ def github_json(url, token):
         'Authorization': f'Bearer {token}',
         'Accept': 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'Garmin-Report-Delivery-Gate/2.3.4',
+        'User-Agent': 'Garmin-Report-Delivery-Gate/2.4.4',
     })
     with urllib.request.urlopen(req, timeout=25) as f:
         return json.load(f)

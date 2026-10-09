@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Garmin V2.3.4 monitor: separate cron failures, recovered syncs and real gaps.
+"""Garmin V2.4.4 monitor: distinguish cron, Apps Script backup and manual syncs.
 
 Retains V2.3.1 API: audit_slots and enhance_monitor, imported by monitor_monthly.py.
 A manual workflow_dispatch may have been issued by Apps Script OR by a person;
@@ -47,7 +47,8 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
                 'missed': [], 'uncovered': [], 'recovered': []}
     slots = due_slots(now, lookback_hours, grace_minutes)
     scheduled = []
-    dispatched = []
+    apps_dispatched = []
+    manual_dispatched = []
     for run in runs:
         if run.get('status') != 'completed' or run.get('conclusion') != 'success':
             continue
@@ -56,16 +57,23 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
             continue
         if run.get('event') == 'schedule':
             scheduled.append(started)
+        elif run.get('event') == 'repository_dispatch':
+            apps_dispatched.append(started)
         elif run.get('event') == 'workflow_dispatch':
-            dispatched.append(started)
+            manual_dispatched.append(started)
     matched, recovered, uncovered = [], [], []
+    recovered_apps, recovered_manual = [], []
     for slot in slots:
         lower = slot - timedelta(minutes=5)
         upper = slot + timedelta(minutes=grace_minutes)
         if any(lower <= t <= upper for t in scheduled):
             matched.append(slot.isoformat())
-        elif any(lower <= t <= upper for t in dispatched):
+        elif any(lower <= t <= upper for t in apps_dispatched):
             recovered.append(slot.isoformat())
+            recovered_apps.append(slot.isoformat())
+        elif any(lower <= t <= upper for t in manual_dispatched):
+            recovered.append(slot.isoformat())
+            recovered_manual.append(slot.isoformat())
         else:
             uncovered.append(slot.isoformat())
     state = ('attention' if uncovered else 'recovered' if recovered else
@@ -73,17 +81,19 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
     return {
         'state': state, 'due': len(slots), 'matched': len(matched),
         'recovered_count': len(recovered), 'recovered': recovered,
+        'recovered_by_apps_script': recovered_apps,
+        'recovered_by_manual': recovered_manual,
         'cron_missed': recovered + uncovered, 'uncovered': uncovered,
         'missed': uncovered,  # compatibility with V2.3.1 consumers
         'manual_runs_counted_as_schedule': False,
-        'dispatch_origin_verified': False,
+        'dispatch_origin_verified': True if recovered else None,
         'grace_minutes': grace_minutes, 'timezone': 'Europe/Madrid',
-        'schedule_version': 'three_syncs_v234',
+        'schedule_version': 'three_syncs_v244',
         'sync_slots': ['08:30', '16:45', '22:45'],
         'report_targets': ['08:45', '17:00', '23:00'],
         'effective_date': SCHEDULE_START,
-        'note': ('Recovered means a successful dispatch was found, but it is not '
-                 'provably an Apps Script dispatch rather than a human dispatch.'),
+        'note': ('repository_dispatch=Apps Script backup; '
+                 'workflow_dispatch=manual; schedule=GitHub cron.'),
     }
 
 
@@ -217,8 +227,13 @@ def enhance_monitor(base, now, repo, token, fetcher):
             if alert.get('code') == 'no_recent_successful_scheduled_run':
                 alert['severity'] = 'info'
                 alert['clarification'] = 'data_recovered_by_dispatch; cron_still_unreliable'
+        dispatch_origin = ('apps_script_backup' if slots.get('recovered_by_apps_script')
+                           else 'manual' if slots.get('recovered_by_manual')
+                           else 'unknown')
         alerts.append({'severity': 'info', 'code': 'cron_missed_dispatch_recovered',
-                       'slots': slots.get('recovered'), 'dispatch_origin': 'unverified'})
+                       'slots': slots.get('recovered'),
+                       'dispatch_origin': dispatch_origin,
+                       'dispatch_origin_verified': slots.get('dispatch_origin_verified')})
     elif slots.get('state') == 'attention':
         alerts.append({'severity': 'warning', 'code': 'sync_slot_not_recovered',
                        'slots': slots.get('uncovered'), 'cron_missed': slots.get('cron_missed')})
@@ -269,10 +284,15 @@ def self_test():
     morning = datetime(2026, 10, 11, 8, 35, tzinfo=TZ).astimezone(timezone.utc).isoformat()
     manual = {'event': 'workflow_dispatch', 'status': 'completed',
               'conclusion': 'success', 'created_at': morning}
+    apps = dict(manual, event='repository_dispatch')
     scheduled = dict(manual, event='schedule')
     assert audit_slots(datetime(2026, 10, 9, 23, 59, tzinfo=TZ), [])['due'] == 0
     a = audit_slots(now, [manual], lookback_hours=12)
     assert a['due'] == 1 and a['matched'] == 0 and a['recovered_count'] == 1 and a['state'] == 'recovered', a
+    assert a['recovered_by_manual'] and not a['recovered_by_apps_script'], a
+    app = audit_slots(now, [apps], lookback_hours=12)
+    assert app['state'] == 'recovered' and app['recovered_by_apps_script'], app
+    assert app['dispatch_origin_verified'] is True, app
     b = audit_slots(now, [scheduled], lookback_hours=12)
     assert b['due'] == 1 and b['matched'] == 1 and b['state'] == 'ok', b
     c = audit_slots(datetime(2026, 10, 11, 10, tzinfo=TZ), [], lookback_hours=28)
@@ -280,7 +300,7 @@ def self_test():
     d = audit_slots(now, [dict(manual, conclusion='failure')], lookback_hours=12)
     assert d['state'] == 'attention' and len(d['uncovered']) == 1, d
     assert SLOTS == ((8, 30), (16, 45), (22, 45))
-    print('OK: 6 tests of V2.3.4 schedule distinction')
+    print('OK: V2.4.4 schedule/manual/Apps Script distinction')
 
 
 if __name__ == '__main__':
