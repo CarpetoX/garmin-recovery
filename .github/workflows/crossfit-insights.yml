@@ -1,0 +1,60 @@
+name: Garmin CrossFit Insights
+
+on:
+  workflow_run:
+    workflows: ["Garmin Advanced Analytics"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: garmin-crossfit-insights
+  cancel-in-progress: false
+
+jobs:
+  crossfit:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate CrossFit analysis
+        env:
+          RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
+        run: python crossfit_insights.py
+      - name: Certify the complete reporting cycle
+        if: github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CROSSFIT_RUN_ID: ${{ github.run_id }}
+          ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: python report_delivery_gate.py
+      - name: Commit CrossFit insights and ready certificate
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add crossfit_insights.json report_history.json
+          [ ! -f report_ready.json ] || git add report_ready.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update CrossFit insights and report readiness'
+            for attempt in 1 2 3 4 5; do
+              if ! git pull --rebase origin "${{ github.event.repository.default_branch }}"; then
+                git rebase --abort || true
+                exit 1
+              fi
+              if git push origin HEAD:"${{ github.event.repository.default_branch }}"; then
+                exit 0
+              fi
+              sleep $((attempt * 3))
+            done
+            echo 'Failed to publish CrossFit insights and gate after retries.' >&2
+            exit 1
+          fi
