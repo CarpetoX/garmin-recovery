@@ -1,0 +1,86 @@
+name: Instalar Garmin Recovery V2.3.1
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  install-v231:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Comprobar requisitos
+        run: |
+          test -f recovery_v23.py
+          test -f recovery_v231.py
+          test -f monitor_v231.py
+          test -f recovery_reliability.py
+          test -f monitor_monthly.py
+          echo 'Base V2.3 y V2.3.1 disponibles.'
+
+      - name: Instalar cambios sin modificar workflows existentes
+        run: |
+          python recovery_v231.py --install
+          if git diff --name-only | grep -E '^\.github/workflows/'; then
+            echo 'ERROR: la instalación no debe modificar workflows'
+            exit 1
+          fi
+
+      - name: Comprobar sintaxis
+        run: |
+          python -m py_compile recovery_v23.py recovery_v231.py monitor_v231.py recovery_reliability.py monitor_monthly.py validate_pipeline.py
+
+      - name: Probar calidad de mediciones, sueño y privacidad
+        run: |
+          python recovery_v231.py --self-test
+          python monitor_v231.py
+
+      - name: Comprobar integración sin alterar informes publicados
+        run: |
+          python - <<'PY'
+          from recovery_reliability import produce, validate_report_consistency
+          result = produce()
+          assessment = result['recovery_assessment.json']
+          assert assessment['methodology_version'] == 'recovery-reliability-v2.3.1'
+          assert assessment['v23']['version'] == '2.3.1'
+          assert 'measurement_provenance' in assessment['v23']
+          assert 'sleep_fragmentation' in assessment['v23']
+          assert 'training_guidance' in assessment['v23']
+          errors = validate_report_consistency(
+              assessment,
+              result['advanced_analytics.json'],
+              result['daily_summary.json'],
+              result['weekly_summary.json'],
+              result['data_quality.json'],
+          )
+          assert not errors, f'Inconsistent report fields: {errors}'
+          print('V2.3.1 output structure, coherence and guardrails verified.')
+          PY
+
+      - name: Guardar únicamente cambios de Python
+        run: |
+          git config user.name 'Garmin Recovery Bot'
+          git config user.email 'actions@github.com'
+          git add recovery_reliability.py monitor_monthly.py
+          if ! git diff --cached --quiet; then
+            git commit -m 'V2.3.1: mediciones reales, post-TN y control horario'
+            git push origin HEAD:main
+          else
+            echo 'V2.3.1 ya instalada; sin cambios repetidos.'
+          fi
