@@ -163,5 +163,12 @@ def main():
         raise SystemExit(1)
 
 
+# V2.3.1: verify real schedule slots, independent of manual runs.
+from monitor_v231 import enhance_monitor
+__monitor_before_v231 = monitor
+def monitor(now, repo, token, fetcher=fetch_runs):
+    base = __monitor_before_v231(now, repo, token, fetcher=fetcher)
+    return enhance_monitor(base, now, repo, token, fetcher=fetcher)
+
 if __name__ == '__main__':
     main()
