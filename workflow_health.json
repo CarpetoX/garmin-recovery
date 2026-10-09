@@ -1,21 +1,21 @@
 {
-  "checked_at": "2026-10-09T15:05:27.786167+02:00",
+  "checked_at": "2026-10-09T15:59:13.986408+02:00",
   "repository": "CarpetoX/garmin-recovery",
   "status": "ok",
   "workflows": {
     "sync.yml": {
       "last_completed_conclusion": "success",
-      "last_completed_at": "2026-10-09T13:04:39Z",
-      "last_success_at": "2026-10-09T15:04:39+02:00",
-      "last_success_age_hours": 0.01,
-      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/37934272834",
+      "last_completed_at": "2026-10-09T13:59:05Z",
+      "last_success_at": "2026-10-09T15:59:05+02:00",
+      "last_success_age_hours": 0.0,
+      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/37940769296",
       "latest_run_event": "workflow_dispatch"
     },
     "garmin-heart-rate.yml": {
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-09T13:05:00Z",
       "last_success_at": "2026-10-09T15:05:00+02:00",
-      "last_success_age_hours": 0.01,
+      "last_success_age_hours": 0.9,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/37934304525",
       "latest_run_event": "workflow_run"
     },
@@ -23,7 +23,7 @@
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-09T13:05:15Z",
       "last_success_at": "2026-10-09T15:05:15+02:00",
-      "last_success_age_hours": 0.0,
+      "last_success_age_hours": 0.9,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/37934344779",
       "latest_run_event": "workflow_run"
     },
@@ -31,22 +31,27 @@
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-09T13:05:28Z",
       "last_success_at": "2026-10-09T15:05:28+02:00",
-      "last_success_age_hours": -0.0,
+      "last_success_age_hours": 0.9,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/37934373876",
       "latest_run_event": "workflow_run"
     }
   },
   "alerts": [],
-  "note": "Actual run outcomes and per-slot schedule audit; manual runs never satisfy scheduled slots. Apps Script backup is independent.",
+  "note": "Cron health and dispatch recovery are audited separately. report_ready.json certifies publication readiness, not actual ChatGPT delivery.",
   "schedule_v231": {
     "state": "awaiting_next_due_slot",
     "due": 0,
     "matched": 0,
+    "recovered_count": 0,
+    "recovered": [],
+    "cron_missed": [],
+    "uncovered": [],
     "missed": [],
     "manual_runs_counted_as_schedule": false,
+    "dispatch_origin_verified": false,
     "grace_minutes": 120,
     "timezone": "Europe/Madrid",
-    "schedule_version": "three_syncs_v1",
+    "schedule_version": "three_syncs_v2",
     "sync_slots": [
       "08:30",
       "16:45",
@@ -57,6 +62,10 @@
       "17:00",
       "23:00"
     ],
-    "effective_date": "2026-10-10"
+    "effective_date": "2026-10-10",
+    "note": "Recovered means a successful dispatch was found, but it is not provably an Apps Script dispatch rather than a human dispatch."
+  },
+  "delivery_gate": {
+    "state": "not_yet_published"
   }
 }
