@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T19:46:45.744474+02:00",
+  "generated_at": "2026-10-09T21:43:46.023728+02:00",
   "score": 74,
   "status": "usable",
   "confidence": "medium",
@@ -61,15 +61,15 @@
   },
   "today": {
     "heart_rate_partial_day": true,
-    "day_hr_samples": 377,
+    "day_hr_samples": 451,
     "night_hr_samples": 146,
     "sleep_window_available": true
   },
   "source_generated_at": {
-    "heart_rate": "2026-10-09T19:46:23.652373+02:00",
-    "extended": "2026-10-09T19:46:27.327496+02:00",
-    "daily": "2026-10-09T19:46:06.017628+02:00",
-    "weekly": "2026-10-09T19:46:06.017628+02:00"
+    "heart_rate": "2026-10-09T21:43:16.672537+02:00",
+    "extended": "2026-10-09T21:43:19.525742+02:00",
+    "daily": "2026-10-09T21:43:33.607744+02:00",
+    "weekly": "2026-10-09T21:43:33.607744+02:00"
   },
   "recovery_fused_coverage_28d": {
     "hrv_ms": {
@@ -94,5 +94,45 @@
     }
   },
   "recovery_v2_status": "provisional",
-  "recovery_v2_confidence": "medium"
+  "recovery_v2_confidence": "medium",
+  "recovery_fused_baseline_28d": {
+    "hrv_ms": {
+      "n": 14,
+      "median": 59.0,
+      "last7_mean": 57.14,
+      "scope": "overall"
+    },
+    "sleep_hours": {
+      "n": 12,
+      "median": 7.26,
+      "last7_mean": 7.13,
+      "scope": "overall"
+    },
+    "sleep_score": {
+      "n": 12,
+      "median": 80.0,
+      "last7_mean": 76.0,
+      "scope": "overall"
+    },
+    "resting_hr": {
+      "n": 15,
+      "median": 55.0,
+      "last7_mean": 55.86,
+      "scope": "overall"
+    },
+    "night_hr": {
+      "n": 14,
+      "median": 61.75,
+      "last7_mean": 61.9,
+      "scope": "overall"
+    }
+  },
+  "recovery_baseline_policy": {
+    "version": "2.3.4",
+    "canonical_for_recovery_reports": "recovery_assessment.baseline_28d",
+    "source": "fused Garmin timelines + Intervals fallback",
+    "excludes_current_day": true,
+    "scoring_changed": false,
+    "note": "Advanced convergence_alert keeps its existing independently validated record set; reports should use the fused baseline for recovery reference values and sample counts."
+  }
 }
