@@ -25,12 +25,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Validar sintaxis V2.4
         run: python -m py_compile crossfit_insights.py report_delivery_gate.py pipeline_regression_tests.py
+
       - name: Generate CrossFit analysis
         env:
           RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
         run: python crossfit_insights.py
+
       - name: Certify and record data-ready cycle
         if: github.event_name == 'workflow_run'
         env:
@@ -38,8 +41,10 @@ jobs:
           CROSSFIT_RUN_ID: ${{ github.run_id }}
           ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
         run: python report_delivery_gate.py
+
       - name: Pruebas de regresión V2.4
         run: python pipeline_regression_tests.py --stage crossfit
+
       - name: Commit CrossFit insights and ready certificate
         run: |
           set -euo pipefail
@@ -56,10 +61,52 @@ jobs:
                 exit 1
               fi
               if git push origin HEAD:"${{ github.event.repository.default_branch }}"; then
-                exit 0
+                break
+              fi
+              if [ "$attempt" -eq 5 ]; then
+                echo 'Failed to publish CrossFit insights and gate after retries.' >&2
+                exit 1
               fi
               sleep $((attempt * 3))
             done
-            echo 'Failed to publish CrossFit insights and gate after retries.' >&2
-            exit 1
           fi
+
+      - name: Disparar monitor final V2.4.1
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          token = os.environ["GH_TOKEN"]
+          run_id = os.environ["GITHUB_RUN_ID"]
+
+          payload = {
+              "event_type": "garmin-monitor",
+              "client_payload": {
+                  "crossfit_run_id": run_id,
+                  "source": "crossfit_completed_pipeline"
+              }
+          }
+
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/dispatches",
+              data=json.dumps(payload).encode("utf-8"),
+              method="POST",
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+                  "User-Agent": "Garmin-Recovery-Monitor-Dispatch/2.4.1",
+              },
+          )
+          with urllib.request.urlopen(req, timeout=20) as response:
+              if response.status != 204:
+                  raise RuntimeError(f"repository_dispatch returned HTTP {response.status}")
+
+          print("Monitor dispatch sent for CrossFit run", run_id)
+          PY
