@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Garmin Recovery V2.3.2: certificate for a completed cross-workflow report cycle.
+"""Garmin Recovery V2.3.3: certificate for a completed cross-workflow report cycle.
 
 Designed to run DURING the final CrossFit Insights workflow before its commit.
 Only publishes report_ready.json if the three upstream runs succeeded,
@@ -153,7 +153,7 @@ def build_certificate(chain, file_times, now):
     measurements = {k: {'state': v.get('state'), 'measured_at': v.get('measured_at')}
                     for k, v in sources.items() if isinstance(v, dict)}
     return {
-        'schema_version': 1, 'gate_version': '2.3.2', 'status': 'ready',
+        'schema_version': 1, 'gate_version': '2.3.3', 'status': 'ready',
         'cycle_id': chain['slot']['cycle_id'],
         'slot_at': chain['slot']['slot_at'].isoformat(),
         'target_report_at': chain['slot']['report_target'],
@@ -161,17 +161,48 @@ def build_certificate(chain, file_times, now):
         'chain': ids, 'source_generated_at': file_times,
         'measurement_provenance': measurements,
         'recovery_state': rec.get('state'), 'recovery_confidence': rec.get('confidence'),
-        'delivery_status': 'not_tracked',
+        'delivery_status': 'unconfirmed_no_chatgpt_receipt',
         'evidence': ('Three successful upstream GitHub Actions runs, current CrossFit step successful; '
                      'all key generated_at renewed; certificate committed atomically with CrossFit output'),
         'limitations': [
             'CrossFit→Advanced parent is verified with the GitHub event run ID; earlier ancestors are time-correlated',
             'CrossFit job is still running when marker is produced; its successful commit publishes both marker and output',
             'This marker certifies data readiness, not ChatGPT message delivery',
+            'Only a ChatGPT delivery callback/receipt could confirm an actual notification',
             'New file generation does not imply new physiological sensor samples',
         ],
     }
 
+
+
+def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
+    """Persist completed-data cycles. A readiness ledger is NOT a delivery receipt."""
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+        items = data.get('cycles', []) if isinstance(data, dict) else []
+        if not isinstance(items, list):
+            items = []
+    except (OSError, ValueError):
+        items = []
+    cycle_id = cert['cycle_id']
+    if any(isinstance(x, dict) and x.get('cycle_id') == cycle_id for x in items):
+        return False
+    items.append({
+        'cycle_id': cycle_id, 'ready_at': cert['verified_at'],
+        'slot_at': cert['slot_at'], 'target_report_at': cert['target_report_at'],
+        'sync_run_id': cert['chain']['sync']['id'],
+        'crossfit_run_id': cert['chain']['crossfit']['id'],
+        'state': 'data_ready',
+        'notification_delivery': 'unverified',
+        'notice': 'No ChatGPT delivery acknowledgment is available to GitHub Actions.'
+    })
+    items = sorted(items, key=lambda x: x.get('slot_at', ''))[-max_entries:]
+    path.write_text(json.dumps({
+        'schema_version': 1,
+        'purpose': 'Historical data-readiness ledger (not an outgoing notification receipt)',
+        'cycles': items, 'count': len(items)
+    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return True
 
 def main():
     repo = os.environ.get('GITHUB_REPOSITORY', '')
@@ -199,6 +230,7 @@ def main():
         try:
             prior = json.loads(output.read_text(encoding='utf-8'))
             if prior.get('status') == 'ready' and prior.get('cycle_id') == chain['slot']['cycle_id']:
+                append_ready_cycle(prior)
                 print('Report gate: certificate already published for this cycle; keep cycle_id immutable.')
                 return 0
             prior_sync = stamp(prior.get('chain', {}).get('sync', {}).get('started_at'))
@@ -210,6 +242,7 @@ def main():
             pass
     data = build_certificate(chain, generated, datetime.now(TZ))
     output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    append_ready_cycle(data)
     print('Report gate READY:', data['cycle_id'], 'sync_run', data['chain']['sync']['id'],
           'crossfit_run', data['chain']['crossfit']['id'])
     return 0
