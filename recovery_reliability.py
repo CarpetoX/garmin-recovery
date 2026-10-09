@@ -558,22 +558,28 @@ def produce(now=None, files=None):
     adv['recovery_data_coverage'] = coverage
     fused_baseline = assessment.get('baseline_28d', {})
     fused_alert = fused_convergence_alert(records, now, adv.get('convergence_alert'))
+    from convergence_domains_v242 import apply_domain_convergence
+    fused_alert = apply_domain_convergence(fused_alert)
     adv['convergence_alert'] = fused_alert
     for report in (daily, weekly):
         sub = report.get('advanced_analytics') if isinstance(report, dict) else None
         if isinstance(sub, dict):
             sub['convergence_alert'] = fused_alert
     baseline_policy = {
-        'version': '2.4.0',
+        'version': '2.4.2',
         'canonical_for_recovery_reports': 'recovery_assessment.baseline_28d',
         'convergence_history': 'fused_recovery_history_v2.4',
+        'convergence_aggregation': 'independent_domains',
+        'aggregation_version': 'domain_convergence_v2.4.2',
         'source': 'fused Garmin timelines + Intervals fallback',
         'excludes_current_day': True,
         'scoring_changed': False,
         'thresholds_changed': False,
-        'note': ('Advanced convergence_alert now reuses fused recovery history for '
-                 'HRV, sleep, resting HR and night HR; stress/body battery keep '
-                 'their Advanced Analytics sources. Thresholds and readiness scoring are unchanged.')
+        'aggregation_changed': True,
+        'note': ('Recovery-sensitive signals still use fused history with the same '
+                 'thresholds, but convergence severity is now based on independent '
+                 'domains so correlated metrics are not double-counted. Recovery '
+                 'Score and Hybrid Readiness scoring are unchanged.')
     }
     adv['recovery_fused_baseline_28d'] = fused_baseline
     adv['recovery_baseline_policy'] = baseline_policy

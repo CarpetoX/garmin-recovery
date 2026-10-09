@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression invariants for Garmin Recovery V2.4.
+"""Regression invariants for Garmin Recovery V2.4.2.
 
 These tests protect data semantics. They do not change recovery/readiness scores.
 """
@@ -198,7 +198,7 @@ def test_partial_day(heart, advanced, quality, errors, warnings):
 
 def test_fused_convergence(advanced, recovery, errors, warnings):
     policy = advanced.get("recovery_baseline_policy", {}) if isinstance(advanced, dict) else {}
-    if not isinstance(policy, dict) or policy.get("version") != "2.4.0":
+    if not isinstance(policy, dict) or policy.get("version") not in {"2.4.0", "2.4.2"}:
         return
 
     alert = advanced.get("convergence_alert", {})
@@ -232,6 +232,99 @@ def test_fused_convergence(advanced, recovery, errors, warnings):
         if isinstance(a_n, (int, float)) and isinstance(c_n, (int, float)) and int(a_n) != int(c_n):
             fail(errors, "fused_convergence_n_mismatch", f"{alert_key}:{a_n}!={c_n}")
 
+
+
+def test_domain_convergence(advanced, errors, warnings):
+    policy = advanced.get("recovery_baseline_policy", {}) if isinstance(advanced, dict) else {}
+    if not isinstance(policy, dict) or policy.get("version") != "2.4.2":
+        return
+
+    alert = advanced.get("convergence_alert", {})
+    if not isinstance(alert, dict):
+        fail(errors, "domain_convergence_alert_missing")
+        return
+
+    if alert.get("aggregation_version") != "domain_convergence_v2.4.2":
+        fail(errors, "domain_convergence_version_missing")
+
+    if policy.get("convergence_aggregation") != "independent_domains":
+        fail(errors, "domain_convergence_policy_missing")
+
+    if policy.get("thresholds_changed") is not False:
+        fail(errors, "domain_convergence_thresholds_must_be_unchanged")
+
+    if policy.get("scoring_changed") is not False:
+        fail(errors, "domain_convergence_scoring_must_be_unchanged")
+
+    from convergence_domains_v242 import (
+        severity_from_domains,
+        signal_domain,
+        signal_is_strong,
+    )
+
+    signals = [x for x in alert.get("signals", []) or [] if isinstance(x, dict)]
+    if alert.get("signal_count") != len(signals):
+        fail(
+            errors,
+            "domain_convergence_raw_signal_count_mismatch",
+            f"{alert.get('signal_count')}!={len(signals)}",
+        )
+
+    expected_domains = sorted({signal_domain(x) for x in signals})
+    active_domains = sorted(alert.get("active_domains", []) or [])
+    if active_domains != expected_domains:
+        fail(
+            errors,
+            "domain_convergence_active_domains_mismatch",
+            f"{active_domains}!={expected_domains}",
+        )
+
+    if alert.get("domain_count") != len(expected_domains):
+        fail(
+            errors,
+            "domain_convergence_domain_count_mismatch",
+            f"{alert.get('domain_count')}!={len(expected_domains)}",
+        )
+
+    expected_severity = severity_from_domains(
+        len(expected_domains),
+        any(signal_is_strong(x) for x in signals),
+    )
+    if alert.get("severity") != expected_severity:
+        fail(
+            errors,
+            "domain_convergence_severity_mismatch",
+            f"{alert.get('severity')}!={expected_severity}",
+        )
+
+    sleep_signals = {
+        x.get("signal")
+        for x in signals
+        if x.get("signal") in {"sleep_hours_low", "sleep_score_low"}
+    }
+    if len(sleep_signals) == 2:
+        if not all(
+            x.get("domain") == "sleep"
+            for x in signals
+            if x.get("signal") in sleep_signals
+        ):
+            fail(errors, "sleep_metrics_not_grouped")
+        sleep_summary = (alert.get("domain_summary") or {}).get("sleep", {})
+        if sleep_summary.get("signal_count") != 2:
+            fail(errors, "sleep_domain_double_count_guard_missing")
+
+    cardio_signals = {
+        x.get("signal")
+        for x in signals
+        if x.get("signal") in {"resting_hr_high", "night_hr_high"}
+    }
+    if len(cardio_signals) == 2:
+        if not all(
+            x.get("domain") == "cardiovascular"
+            for x in signals
+            if x.get("signal") in cardio_signals
+        ):
+            fail(errors, "cardiovascular_metrics_not_grouped")
 
 def test_cycle_snapshots(cycles, errors, warnings):
     if not isinstance(cycles, dict):
@@ -296,7 +389,7 @@ def main():
     test_cycle_snapshots(cycles, errors, warnings)
 
     result = {
-        "version": "2.4.0",
+        "version": "2.4.2",
         "stage": args.stage,
         "status": "error" if errors else "ok",
         "errors": errors,
@@ -308,6 +401,7 @@ def main():
             "load_units_kept_separate",
             "partial_day_excluded_from_daytime_trends",
             "fused_convergence_history",
+            "independent_domain_convergence",
             "historical_cycle_snapshot_hash",
         ],
     }
