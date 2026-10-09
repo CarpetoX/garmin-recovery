@@ -1,4 +1,4 @@
-name: Upgrade Garmin Recovery V2.3.4
+name: Upgrade Garmin Recovery V2.3.4 Core
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Aplicar V2.3.4
+      - name: Aplicar núcleo V2.3.4
         run: python upgrade_v234.py
 
       - name: Validar sintaxis y monitor
@@ -33,7 +33,7 @@ jobs:
           python -m py_compile report_delivery_gate.py monitor_v231.py recovery_reliability.py
           python monitor_v231.py
 
-      - name: Publicar V2.3.4 con reintentos
+      - name: Publicar núcleo V2.3.4
         shell: bash
         run: |
           set -euo pipefail
@@ -41,14 +41,13 @@ jobs:
           git config user.email "actions@github.com"
 
           git add report_delivery_gate.py monitor_v231.py recovery_reliability.py
-          git add .github/workflows/sync.yml .github/workflows/advanced-analytics-rpe.yml
 
           if git diff --cached --quiet; then
-            echo "No hay cambios que publicar."
+            echo "No hay cambios de núcleo que publicar."
             exit 0
           fi
 
-          git commit -m "Garmin Recovery V2.3.4 robustness"
+          git commit -m "Garmin Recovery V2.3.4 core robustness"
 
           for attempt in 1 2 3 4 5; do
             echo "Intento de publicación $attempt/5"
@@ -58,11 +57,11 @@ jobs:
               exit 1
             fi
             if git push origin HEAD:main; then
-              echo "V2.3.4 publicada correctamente."
+              echo "Núcleo V2.3.4 publicado correctamente."
               exit 0
             fi
             sleep $((attempt * 3))
           done
 
-          echo "No se pudo publicar V2.3.4 tras cinco intentos." >&2
+          echo "No se pudo publicar el núcleo V2.3.4 tras cinco intentos." >&2
           exit 1
