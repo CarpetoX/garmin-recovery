@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "gate_version": "2.3.3",
+  "status": "ready",
+  "cycle_id": "2026-10-09-1645",
+  "slot_at": "2026-10-09T16:45:00+02:00",
+  "target_report_at": "17:00",
+  "timezone": "Europe/Madrid",
+  "verified_at": "2026-10-09T17:00:25.288796+02:00",
+  "chain": {
+    "sync": {
+      "id": 37948290093,
+      "event": "workflow_dispatch",
+      "started_at": "2026-10-09T16:59:14+02:00",
+      "finished_at": "2026-10-09T16:59:25+02:00",
+      "conclusion": "success"
+    },
+    "heart": {
+      "id": 37948318138,
+      "event": "workflow_run",
+      "started_at": "2026-10-09T16:59:28+02:00",
+      "finished_at": "2026-10-09T16:59:56+02:00",
+      "conclusion": "success"
+    },
+    "advanced": {
+      "id": 37948382187,
+      "event": "workflow_run",
+      "started_at": "2026-10-09T16:59:59+02:00",
+      "finished_at": "2026-10-09T17:00:09+02:00",
+      "conclusion": "success"
+    },
+    "crossfit": {
+      "id": 37948413022,
+      "event": "workflow_run",
+      "started_at": "2026-10-09T17:00:12+02:00",
+      "finished_at": "2026-10-09T17:00:15+02:00",
+      "conclusion": "publishing_in_same_job"
+    }
+  },
+  "source_generated_at": {
+    "daily_summary.json": "2026-10-09T16:59:21.497641+02:00",
+    "weekly_summary.json": "2026-10-09T16:59:21.497641+02:00",
+    "garmin_status.json": "2026-10-09T16:59:39.079931+02:00",
+    "garmin_heart_rate.json": "2026-10-09T16:59:39.079931+02:00",
+    "recovery_assessment.json": "2026-10-09T17:00:05.163903+02:00",
+    "advanced_analytics.json": "2026-10-09T17:00:05.060472+02:00",
+    "data_quality.json": "2026-10-09T17:00:05.060472+02:00",
+    "crossfit_insights.json": "2026-10-09T17:00:19.060197+02:00"
+  },
+  "measurement_provenance": {
+    "confirmed_sleep": {
+      "state": "recent",
+      "measured_at": "2026-10-09T12:50:00+02:00"
+    },
+    "sleep_hrv": {
+      "state": "recent",
+      "measured_at": "2026-10-09T12:21:11+02:00"
+    },
+    "heart_rate_live": {
+      "state": "recent",
+      "measured_at": "2026-10-09T16:36:00+02:00"
+    },
+    "body_battery_live": {
+      "state": "recent",
+      "measured_at": "2026-10-09T15:51:00+02:00"
+    },
+    "resting_hr_summary": {
+      "state": "daily_summary_not_instantaneous",
+      "measured_at": null
+    }
+  },
+  "recovery_state": "provisional",
+  "recovery_confidence": "medium",
+  "delivery_status": "unconfirmed_no_chatgpt_receipt",
+  "evidence": "Three successful upstream GitHub Actions runs, current CrossFit step successful; all key generated_at renewed; certificate committed atomically with CrossFit output",
+  "limitations": [
+    "CrossFit→Advanced parent is verified with the GitHub event run ID; earlier ancestors are time-correlated",
+    "CrossFit job is still running when marker is produced; its successful commit publishes both marker and output",
+    "This marker certifies data readiness, not ChatGPT message delivery",
+    "Only a ChatGPT delivery callback/receipt could confirm an actual notification",
+    "New file generation does not imply new physiological sensor samples"
+  ]
+}
