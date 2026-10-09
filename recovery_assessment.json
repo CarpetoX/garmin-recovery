@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-09T12:55:22.501380+02:00",
-  "methodology_version": "recovery-reliability-v1",
+  "generated_at": "2026-10-09T13:19:04.140097+02:00",
+  "methodology_version": "recovery-reliability-v2.3",
   "state": "provisional",
   "status": "red",
   "score": 48,
@@ -84,12 +84,41 @@
     "sueno_menor_5h",
     "sueno_baja_calidad"
   ],
-  "recommendation": "Interpretación provisional: confirmar sensaciones y calentamiento; no inferir aptitud máxima.",
+  "recommendation": "Recuperación prioritaria; evitar cargas máximas y reevaluar sueño, síntomas y calentamiento.",
   "limitations": [
     "No mide fatiga neuromuscular directamente.",
     "Puntuación heurística no validada clínicamente.",
     "No suma valores Garmin + Intervals del mismo día."
   ],
+  "v23": {
+    "version": "2.3",
+    "shift_context": "post-TN",
+    "sleep_integrity": {
+      "main_sleep_confirmed": true,
+      "main_sleep_minutes": 288,
+      "unconfirmed_separate_events": 1,
+      "unconfirmed_separate_minutes": 66,
+      "overlapping_body_battery_events": 0,
+      "minutes_added_to_sleep": 0,
+      "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
+    },
+    "sleep_score_provenance": {
+      "confirmed_sleep_score": 56.0,
+      "readiness_sleep_field": 56.0,
+      "status": "close_values",
+      "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
+    },
+    "subjective_checkin": "not_provided",
+    "subjective_values_exported": false,
+    "intensity_guardrail": "avoid_maximum",
+    "reason_codes": [
+      "post_night_shift",
+      "short_sleep",
+      "unconfirmed_body_battery_sleep_event"
+    ],
+    "baseline_caution": "day_sleep_baseline_not_mature",
+    "note": "Conservative context layer; score remains V2.2, not a validated physiological measure."
+  },
   "input_freshness": {
     "hrv": true,
     "sleep": true,
