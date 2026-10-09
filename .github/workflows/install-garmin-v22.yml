@@ -1,0 +1,452 @@
+name: Instalar Garmin Recovery V2.2 - Coherencia y pruebas
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  install_v22:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar parches conservadores V2.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          #!/usr/bin/env python3
+          """Instalacion segura V2.2: parches idempotentes y comprobados de coherencia."""
+          from pathlib import Path
+
+          VERSION = 'Garmin Recovery V2.2 consistency guardrail'
+
+
+          def replace_once(path, old, new):
+              source = Path(path).read_text(encoding='utf-8')
+              if old == new:
+                  raise RuntimeError('Sustitucion vacia: ' + path)
+              if old not in source:
+                  if new in source:
+                      print('Ya aplicado:', path)
+                      return
+                  raise RuntimeError('Bloque original inesperado en ' + path + '; NO se modifica')
+              if source.count(old) != 1:
+                  raise RuntimeError('Ancla ambigua en ' + path + '; NO se modifica')
+              Path(path).write_text(source.replace(old, new, 1), encoding='utf-8')
+              print('Parcheado:', path)
+
+
+          REPLACEMENT_PATCH_HYBRID = '''def patch_hybrid(hybrid, assessment):
+              """Compatibilidad conservadora. La fuente autoritativa es recovery_assessment_v2.
+
+              Conserva el score original como auditoria, pero bloquea todos los mensajes
+              que pudieran interpretarse como autorizacion de intensidad maxima cuando
+              faltan datos, hay baja confianza o la evaluacion es desfavorable.
+              """
+              if not isinstance(hybrid, dict):
+                  return hybrid
+              hybrid = dict(hybrid)
+              raw = next((v for v in (
+                  n(hybrid.get('score_before_recovery_guardrail'), 0, 100),
+                  n(hybrid.get('raw_score_before_guardrails'), 0, 100),
+                  n(hybrid.get('score'), 0, 100),
+              ) if v is not None), None)
+              if raw is None:
+                  return hybrid
+              hybrid['score_before_recovery_guardrail'] = int(raw)
+              state = assessment.get('state')
+              confidence = assessment.get('confidence')
+              assessment_status = assessment.get('status')
+              assessed_green = (state == 'assessed' and confidence == 'high'
+                                and assessment_status == 'green')
+              if assessment_status == 'red':
+                  limit = 49
+              elif not assessed_green:
+                  limit = 74
+              else:
+                  limit = 100
+              capped = min(int(raw), limit)
+              hybrid['score'] = capped
+              hybrid['status'] = 'red' if capped < 50 else 'yellow' if capped < 75 else 'green'
+              if state == 'pending':
+                  hybrid['recommendation'] = 'pending'
+                  hybrid['recommended_volume'] = 'sin recomendación hasta completar datos'
+                  hybrid['intensity_guidance'] = assessment.get('recommendation') or 'Datos incompletos: no evaluar intensidad maxima.'
+              elif assessment_status == 'red' or (state == 'assessed' and capped < 50):
+                  hybrid['recommendation'] = 'recovery'
+                  hybrid['recommended_volume'] = 'priorizar recuperación y reevaluar sensaciones'
+                  hybrid['intensity_guidance'] = 'Señales de recuperación desfavorables: evita intensidad máxima y evalúa síntomas.'
+              elif not assessed_green or capped < 75:
+                  hybrid['recommendation'] = 'moderate'
+                  hybrid['recommended_volume'] = 'individualizar; evitar sesión máxima sin confirmar'
+                  hybrid['intensity_guidance'] = 'Evaluación provisional o limitada: adaptar carga a síntomas, calentamiento y RPE.'
+              else:
+                  # Solo aqui se puede respetar una recomendacion normal previa.
+                  hybrid['recommendation'] = hybrid.get('recommendation') or 'normal'
+                  hybrid['recommended_volume'] = hybrid.get('recommended_volume') or 'individualizar según rendimiento'
+                  if not hybrid.get('intensity_guidance'):
+                      hybrid['intensity_guidance'] = 'Interpretar con síntomas, dolor y sensaciones; no es un diagnóstico.'
+              hybrid['confidence'] = confidence
+              hybrid['recovery_assessment_state'] = state
+              hybrid['guardrails_applied'] = list(hybrid.get('guardrails_applied') or [])
+              if (not assessed_green or capped < 75 or limit < 100) and 'recovery_reliability_gate' not in hybrid['guardrails_applied']:
+                  hybrid['guardrails_applied'].append('recovery_reliability_gate')
+              hybrid['note'] = ('V2.2: score compatible, no indicador fisiológico independiente. '
+                                'Para decidir usar recovery_assessment_v2.state, status y confidence.')
+              return hybrid
+
+
+          def validate_report_consistency(assessment, advanced, daily, weekly, quality):
+              """Errores que deben impedir publicar un informe incoherente (no avisos)."""
+              faults = []
+              if not isinstance(assessment, dict):
+                  return ['recovery_v22_missing_authoritative_assessment']
+              state, confidence, status = (assessment.get(k) for k in ('state', 'confidence', 'status'))
+              if state not in {'pending', 'provisional', 'assessed'}:
+                  faults.append('recovery_v22_invalid_state')
+              if confidence not in {'low', 'medium', 'high'}:
+                  faults.append('recovery_v22_invalid_confidence')
+              if status not in {'unavailable', 'red', 'yellow', 'green'}:
+                  faults.append('recovery_v22_invalid_status')
+              if state == 'pending' and (status != 'unavailable' or assessment.get('score') is not None):
+                  faults.append('recovery_v22_pending_must_not_have_measured_score')
+              safe_green = state == 'assessed' and confidence == 'high' and status == 'green'
+              if status == 'green' and not safe_green:
+                  faults.append('recovery_v22_assessment_green_without_high_confidence')
+              roots = {'advanced': advanced, 'daily': daily, 'weekly': weekly}
+              for name, report in roots.items():
+                  if not isinstance(report, dict):
+                      faults.append(f'recovery_v22_{name}_not_an_object')
+                      continue
+                  if report.get('recovery_assessment_v2') != assessment:
+                      faults.append(f'recovery_v22_{name}_assessment_mismatch')
+                  nested = report.get('advanced_analytics')
+                  if name != 'advanced' and isinstance(nested, dict):
+                      if nested.get('recovery_assessment_v2') != assessment:
+                          faults.append(f'recovery_v22_{name}_nested_assessment_mismatch')
+                      if isinstance(advanced, dict) and nested.get('readiness_hybrid') != advanced.get('readiness_hybrid'):
+                          faults.append(f'recovery_v22_{name}_nested_hybrid_mismatch')
+              copies = {
+                  'advanced.readiness_hybrid': advanced.get('readiness_hybrid') if isinstance(advanced, dict) else None,
+                  'daily.readiness_hybrid': daily.get('readiness_hybrid') if isinstance(daily, dict) else None,
+                  'daily.readiness_model': daily.get('readiness_model') if isinstance(daily, dict) else None,
+                  'weekly.readiness_hybrid': weekly.get('readiness_hybrid') if isinstance(weekly, dict) else None,
+                  'weekly.current_readiness': weekly.get('current_readiness') if isinstance(weekly, dict) else None,
+                  'weekly.current_readiness_hybrid': weekly.get('current_readiness_hybrid') if isinstance(weekly, dict) else None,
+              }
+              for name, item in copies.items():
+                  if not isinstance(item, dict):
+                      faults.append(f'recovery_v22_missing_compatibility_view:{name}')
+                      continue
+                  sc = n(item.get('score'), 0, 100)
+                  if sc is None:
+                      faults.append(f'recovery_v22_invalid_compatibility_score:{name}')
+                  if not safe_green:
+                      if item.get('status') == 'green' or item.get('recommendation') == 'normal':
+                          faults.append(f'recovery_v22_unsafe_positive_signal:{name}')
+                      if item.get('recommended_volume') == '90-100%':
+                          faults.append(f'recovery_v22_unsafe_full_volume:{name}')
+                      if 'mantén intensidad normal' in str(item.get('intensity_guidance', '')).lower():
+                          faults.append(f'recovery_v22_unsafe_intensity_guidance:{name}')
+                      if 'recovery_reliability_gate' not in (item.get('guardrails_applied') or []):
+                          faults.append(f'recovery_v22_missing_guardrail:{name}')
+                  if state == 'pending':
+                      if item.get('recommendation') != 'pending':
+                          faults.append(f'recovery_v22_pending_recommendation_mismatch:{name}')
+                      if item.get('recommended_volume') != 'sin recomendación hasta completar datos':
+                          faults.append(f'recovery_v22_pending_volume_mismatch:{name}')
+                  if item.get('recovery_assessment_state') != state:
+                      faults.append(f'recovery_v22_state_mismatch:{name}')
+              if isinstance(advanced, dict):
+                  for name in ('daily', 'weekly'):
+                      report = roots.get(name)
+                      if isinstance(report, dict) and report.get('readiness_hybrid') != advanced.get('readiness_hybrid'):
+                          faults.append(f'recovery_v22_{name}_hybrid_mismatch')
+              if not isinstance(quality, dict):
+                  faults.append('recovery_v22_missing_quality')
+              else:
+                  if quality.get('recovery_v2_status') != state or quality.get('recovery_v2_confidence') != confidence:
+                      faults.append('recovery_v22_quality_state_mismatch')
+                  if (not isinstance(advanced, dict) or
+                      quality.get('recovery_fused_coverage_28d') != advanced.get('recovery_data_coverage')):
+                      faults.append('recovery_v22_fused_coverage_mismatch')
+              return faults
+
+
+          '''
+
+
+          def main():
+              recovery_path = 'recovery_reliability.py'
+              source = Path(recovery_path).read_text(encoding='utf-8')
+              start = source.find('def patch_hybrid(hybrid, assessment):\n')
+              end = source.find('\ndef produce(now=None, files=None):\n', start)
+              if start < 0 or end < 0 or end <= start:
+                  raise RuntimeError('No se localizan los limites de patch_hybrid; NO modificar')
+              old = source[start:end]
+              if 'validate_report_consistency' not in source:
+                  if 'recovery_reliability_gate' not in old or 'sin recomendación hasta completar datos' not in old:
+                      raise RuntimeError('Codigo de compatibilidad no reconocido; NO modificar')
+                  source = source[:start] + REPLACEMENT_PATCH_HYBRID + source[end:]
+              elif VERSION not in source and 'V2.2: score compatible' not in source:
+                  raise RuntimeError('Existe otra funcion de validacion: requiere revision')
+
+              old = '''    if isinstance(daily.get('readiness_model'), dict):
+                  daily['readiness_model'] = patch_hybrid(daily['readiness_model'], assessment)
+              current = assessment['current']
+          '''
+              new = '''    if isinstance(daily.get('readiness_model'), dict):
+                  daily['readiness_model'] = patch_hybrid(daily['readiness_model'], assessment)
+              # Dos copias historicas del resumen semanal retenian 94/100 verde.
+              for name in ('current_readiness', 'current_readiness_hybrid'):
+                  if isinstance(weekly.get(name), dict):
+                      weekly[name] = patch_hybrid(weekly[name], assessment)
+              current = assessment['current']
+          '''
+              if old in source:
+                  if source.count(old) != 1:
+                      raise RuntimeError('Ancla ambigua en patch de informes semanales')
+                  source = source.replace(old, new, 1)
+              elif new not in source:
+                  raise RuntimeError('No se localizan los modelos del informe diario')
+              Path(recovery_path).write_text(source, encoding='utf-8')
+              print('Recovery V2.2: actualizado')
+
+              validator_path = 'validate_pipeline.py'
+              val = Path(validator_path).read_text(encoding='utf-8')
+              start = '\nif errors:\n'
+              injected = '''
+          # V2.2: no publicar informes con colores/textos de recuperacion contradictorios.
+          from recovery_reliability import validate_report_consistency
+          try:
+              recovery_v22 = load_required(Path('recovery_assessment.json'))
+              if recovery_v22 is not None:
+                  errors.extend(validate_report_consistency(
+                      recovery_v22, adv, daily, weekly, quality,
+                  ))
+          except Exception as exc:
+              errors.append('recovery_v22_validation_exception:' + type(exc).__name__ + ':' + str(exc)[:150])
+
+          '''
+              if 'recovery_v22_validation_exception' not in val:
+                  if val.count(start) != 1:
+                      raise RuntimeError('No se localiza el final del validador; NO modificar')
+                  val = val.replace(start, '\n' + injected + start, 1)
+                  Path(validator_path).write_text(val, encoding='utf-8')
+              print('Validator V2.2: actualizado')
+
+              # Añadir evaluacion autoritativa a los informes de CrossFit, sin modificar el calculo del WOD.
+              crossfit_path = 'crossfit_insights.py'
+              crossfit = Path(crossfit_path).read_text(encoding='utf-8')
+              cross_old = "         'readiness_hybrid':advanced.get('readiness_hybrid'),\n"
+              cross_new = cross_old + "         'recovery_assessment_v2':advanced.get('recovery_assessment_v2'),\n"
+              if cross_new not in crossfit:
+                  if crossfit.count(cross_old) != 1:
+                      raise RuntimeError('No se localiza el informe CrossFit esperado')
+                  crossfit = crossfit.replace(cross_old, cross_new, 1)
+                  Path(crossfit_path).write_text(crossfit, encoding='utf-8')
+              print('CrossFit V2.2: incluye estado de recuperación autoritativo')
+
+              # El historico mensual no debe promediar un score de compatibilidad
+              # (74 amarillo) cuando la evaluacion fisiologica es pending.
+              audit_path = 'report_audit.py'
+              audit = Path(audit_path).read_text(encoding='utf-8')
+              audit_old = "    readiness=out.get('readiness_hybrid') or {}\n    audit=out.get('report_audit') or {}\n"
+              audit_new = "    readiness=out.get('readiness_hybrid') or {}\n    assessment=out.get('recovery_assessment_v2') or {}\n    audit=out.get('report_audit') or {}\n"
+              if audit_new not in audit:
+                  if audit.count(audit_old) != 1:
+                      raise RuntimeError('El historico CrossFit cambió; no se parchea a ciegas')
+                  audit = audit.replace(audit_old,audit_new,1)
+              score_old = "          'audit_status':audit.get('status'),'readiness_score':readiness.get('score'),\n          'readiness_confidence':readiness.get('local_confidence'),\n"
+              score_new = "          'audit_status':audit.get('status'),'readiness_score':(assessment.get('score') if assessment.get('state')=='assessed' and assessment.get('confidence')=='high' else None),\n          'readiness_state':assessment.get('state'),'readiness_confidence':assessment.get('confidence'),\n"
+              if score_new not in audit:
+                  if audit.count(score_old) != 1:
+                      raise RuntimeError('No se reconoce el score del historico; no se modifica')
+                  audit = audit.replace(score_old,score_new,1)
+              Path(audit_path).write_text(audit,encoding='utf-8')
+              print('Historico V2.2: no incluye scores pendientes en la media mensual')
+
+              monthly_path = 'monitor_monthly.py'
+              monthly = Path(monthly_path).read_text(encoding='utf-8')
+              monthly_old = "    readiness = [s['readiness_score'] for s in items\n                 if isinstance(s.get('readiness_score'), (int, float))\n                 and not isinstance(s['readiness_score'], bool)]\n"
+              monthly_new = "    readiness = [s['readiness_score'] for s in items\n                 if s.get('readiness_state') == 'assessed'\n                 and s.get('readiness_confidence') == 'high'\n                 and isinstance(s.get('readiness_score'), (int, float))\n                 and not isinstance(s['readiness_score'], bool)]\n"
+              if monthly_new not in monthly:
+                  if monthly.count(monthly_old) != 1:
+                      raise RuntimeError('No se reconoce la media mensual; no se modifica')
+                  monthly = monthly.replace(monthly_old,monthly_new,1)
+              Path(monthly_path).write_text(monthly,encoding='utf-8')
+              print('Informe mensual V2.2: usa solo scores evaluados con confianza alta')
+
+          if __name__ == '__main__':
+              main()
+          PY
+
+      - name: Compilar y comprobar regresiones V2.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile recovery_reliability.py validate_pipeline.py crossfit_insights.py report_audit.py monitor_monthly.py
+          python - <<'PY'
+          from recovery_reliability import patch_hybrid, validate_report_consistency as validate, produce, TZ
+          def a(state='pending', confidence='low', status='unavailable', score=None):
+              return {'generated_at':'2026-10-09T07:00:00+02:00', 'state':state, 'confidence':confidence,
+                      'status':status, 'score':score,
+                      'recommendation':'Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.',
+                      'current': {'date':'2026-10-09'}}
+
+          legacy = {'score':94, 'status':'green','recommendation':'normal',
+                    'recommended_volume':'90-100%',
+                    'intensity_guidance':'Entrenamiento previsto; mantén intensidad normal si las sensaciones acompañan.'}
+
+          cases = [
+              ('pending', 'low', 'unavailable', None, 'pending', False),
+              ('provisional', 'low', 'yellow', None, 'moderate', False),
+              ('provisional', 'medium', 'yellow', 79, 'moderate', False),
+              ('assessed', 'medium', 'green', 85, 'moderate', False),
+              ('assessed', 'high', 'yellow', 70, 'moderate', False),
+              ('assessed', 'high', 'red', 41, 'recovery', False),
+              ('assessed', 'high', 'green', 88, 'normal', True),
+          ]
+          for state,confidence,status,score,expected,can_green in cases:
+              assess = a(state,confidence,status,score)
+              item = patch_hybrid(legacy, assess)
+              assert item['recommendation'] == expected, (state,item)
+              assert (item['status'] == 'green') == can_green, (state,item)
+              assert item['score_before_recovery_guardrail'] == 94
+              assert item['recovery_assessment_state'] == state
+              assert item['intensity_guidance'] != legacy['intensity_guidance'] if not can_green else True
+              if not can_green:
+                  assert item['recommended_volume'] != '90-100%'
+                  assert 'recovery_reliability_gate' in item['guardrails_applied']
+              repeat = patch_hybrid(item, assess)
+              assert repeat['score_before_recovery_guardrail'] == 94, (state,repeat)
+              print('PASS: model',state,confidence,status)
+
+          assess=a()
+          x=patch_hybrid(legacy, assess)
+          advanced = {'recovery_assessment_v2':assess,'readiness_hybrid':x,'recovery_data_coverage':{'hrv_ms':{'days_present':13}}}
+          daily = {'recovery_assessment_v2':assess,'readiness_hybrid':x,'readiness_model':x,
+                   'advanced_analytics':{'recovery_assessment_v2':assess, 'readiness_hybrid':x}}
+          weekly = {'recovery_assessment_v2':assess,'readiness_hybrid':x,'current_readiness':x,
+                    'current_readiness_hybrid':x,
+                    'advanced_analytics':{'recovery_assessment_v2':assess,'readiness_hybrid':x}}
+          quality = {'recovery_v2_status':'pending','recovery_v2_confidence':'low',
+                     'recovery_fused_coverage_28d':{'hrv_ms':{'days_present':13}}}
+          assert validate(assess, advanced, daily, weekly, quality) == []
+          print('PASS: consistent reports accepted')
+
+          weekly['current_readiness_hybrid'] = dict(legacy)
+          err = validate(assess, advanced, daily, weekly, quality)
+          assert any('unsafe_positive_signal:weekly.current_readiness_hybrid' in x for x in err),err
+          print('PASS: old weekly green 94 blocked')
+          weekly['current_readiness_hybrid'] = x
+
+          daily['readiness_model'] = dict(x, intensity_guidance=legacy['intensity_guidance'])
+          err = validate(assess,advanced,daily,weekly,quality)
+          assert any('unsafe_intensity_guidance:daily.readiness_model' in x for x in err),err
+          print('PASS: misleading normal intensity text blocked')
+          daily['readiness_model'] = x
+
+          weekly['recovery_assessment_v2'] = dict(assess,confidence='high')
+          err=validate(assess,advanced,daily,weekly,quality)
+          assert 'recovery_v22_weekly_assessment_mismatch' in err,err
+          print('PASS: divergent assessment copy blocked')
+          weekly['recovery_assessment_v2'] = assess
+
+          quality['recovery_fused_coverage_28d'] = {}
+          err=validate(assess,advanced,daily,weekly,quality)
+          assert 'recovery_v22_fused_coverage_mismatch' in err,err
+          print('PASS: wrong fused coverage blocked')
+
+          print('PASS: 12 V2.2 regression scenarios')
+
+          # End-to-end in-memory test of the actual produce() adapter without touching files.
+          from datetime import datetime
+          now = datetime(2026,10,9,7,0,tzinfo=TZ)
+          source = {'generated_at':now.isoformat(),'days':{}}
+          fixture = {
+              'wellness.json': [],
+              'garmin_hrv_timeline.json':dict(source),
+              'garmin_sleep_history.json':dict(source),
+              'garmin_extended.json':dict(source),
+              'garmin_heart_rate.json':dict(source),
+              'advanced_analytics.json':{'day_context':{'today':'post-TN'},'readiness_hybrid':dict(legacy)},
+              'daily_summary.json':{'readiness_model':dict(legacy),'advanced_analytics':{}},
+              'weekly_summary.json':{'current_readiness':dict(legacy),
+                                     'current_readiness_hybrid':dict(legacy),'advanced_analytics':{}},
+              'data_quality.json':{},
+          }
+          result = produce(now,fixture)
+          ass = result['recovery_assessment.json']
+          assert ass['state']=='pending' and ass['score'] is None, ass
+          errs = validate(ass,result['advanced_analytics.json'],result['daily_summary.json'],
+                          result['weekly_summary.json'],result['data_quality.json'])
+          assert errs == [], errs
+          assert result['weekly_summary.json']['current_readiness']['recommendation']=='pending'
+          assert result['weekly_summary.json']['current_readiness_hybrid']['status'] != 'green'
+          assert 'mantén intensidad normal' not in result['daily_summary.json']['readiness_model']['intensity_guidance']
+          print('PASS: full in-memory recovery pipeline and all legacy mirrors')
+          # El historico mensual no debe promediar scores compatibles (74) con estado pending.
+          from datetime import timedelta
+          from report_audit import update_history
+          from monitor_monthly import monthly
+          from tempfile import TemporaryDirectory
+          from pathlib import Path
+          import json
+          with TemporaryDirectory() as tmp:
+              target = str(Path(tmp)/'history.json')
+              pending = {'recovery_assessment_v2':a(), 'readiness_hybrid':dict(legacy)}
+              update_history(pending, now, path=target)
+              hist = json.loads(Path(target).read_text())
+              assert hist['snapshots'][0]['readiness_score'] is None, hist
+              assert hist['snapshots'][0]['readiness_state'] == 'pending', hist
+              established = {'recovery_assessment_v2':a('assessed','high','green',86),
+                             'readiness_hybrid':dict(legacy)}
+              update_history(established, now+timedelta(days=1), path=target)
+              value=monthly(datetime(2026,11,2,7,0,tzinfo=TZ), history_path=target)
+              assert value['mean_readiness_score'] == 86, value
+              print('PASS: monthly mean excludes unassessed compatibility scores')
+          PY
+
+      - name: Publicar cambios de codigo (no informes ni historicos)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Garmin Recovery Bot'
+          git config user.email 'actions@github.com'
+          git add -- recovery_reliability.py validate_pipeline.py crossfit_insights.py report_audit.py monitor_monthly.py
+          if git diff --cached --quiet; then
+            echo 'V2.2 ya estaba instalada.'
+            exit 0
+          fi
+          git commit -m 'V2.2 validar coherencia de recuperacion en informes'
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo 'Conflicto, no se sobrescriben cambios remotos.' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'V2.2 instalada; ejecutar Garmin Recovery Sync para regenerar informes.'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          echo 'Error al publicar la V2.2' >&2
+          exit 1
