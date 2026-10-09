@@ -1,0 +1,80 @@
+{
+  "generated_at": "2026-10-09T06:10:46.746883+02:00",
+  "methodology_version": "recovery-reliability-v1",
+  "state": "pending",
+  "status": "unavailable",
+  "score": null,
+  "confidence": "low",
+  "reason": "faltan_sueno_vfc_o_fc_reposo",
+  "missing_essential": [
+    "hrv_ms",
+    "sleep_hours"
+  ],
+  "fresh_sources": true,
+  "context": "post-TN",
+  "work_shift_context": "post-TN",
+  "sleep_context": null,
+  "current": {
+    "date": "2026-10-09",
+    "hrv_ms": null,
+    "sleep_hours": null,
+    "sleep_score": null,
+    "resting_hr": 60.0,
+    "night_hr": null,
+    "sleep_context": null,
+    "sleep_start_local": null,
+    "sleep_end_local": null,
+    "sources": {
+      "hrv_ms": null,
+      "sleep_hours": null,
+      "sleep_score": null,
+      "resting_hr": "garmin_heart_rate",
+      "night_hr": null
+    }
+  },
+  "baseline_28d": {
+    "hrv_ms": {
+      "n": 13,
+      "median": 60.0,
+      "last7_mean": 57.14,
+      "scope": "overall"
+    },
+    "sleep_hours": {
+      "n": 5,
+      "median": 7.1,
+      "last7_mean": 6.74,
+      "scope": "overall"
+    },
+    "sleep_score": {
+      "n": 5,
+      "median": 77.0,
+      "last7_mean": 72.0,
+      "scope": "overall"
+    },
+    "resting_hr": {
+      "n": 15,
+      "median": 55.0,
+      "last7_mean": 55.86,
+      "scope": "overall"
+    },
+    "night_hr": {
+      "n": 14,
+      "median": 61.75,
+      "last7_mean": 61.9,
+      "scope": "overall"
+    }
+  },
+  "metrics_used": [],
+  "warnings": [],
+  "recommendation": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
+  "limitations": [
+    "No mide fatiga neuromuscular directamente.",
+    "Puntuación heurística no validada clínicamente.",
+    "No suma valores Garmin + Intervals del mismo día."
+  ],
+  "input_freshness": {
+    "hrv": true,
+    "sleep": true,
+    "heart_rate": true
+  }
+}
