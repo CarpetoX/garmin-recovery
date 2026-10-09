@@ -316,20 +316,71 @@ def compact_cycle_snapshot(cert):
     return snapshot, hashlib.sha256(encoded).hexdigest()
 
 
+
+def _mark_legacy_cycles(items):
+    """Mark pre-schema-2 rows without inventing unavailable historical snapshots."""
+    out = []
+    for raw in items:
+        if not isinstance(raw, dict):
+            out.append(raw)
+            continue
+        row = dict(raw)
+        if 'entry_schema_version' not in row:
+            if isinstance(row.get('snapshot'), dict) and isinstance(row.get('snapshot_sha256'), str):
+                row['entry_schema_version'] = 2
+            else:
+                row['entry_schema_version'] = 1
+                row['legacy_without_snapshot'] = True
+                row['snapshot_status'] = 'legacy_unavailable'
+                row['legacy_note'] = (
+                    'Created before report_cycles schema 2; no retrospective '
+                    'snapshot was fabricated.'
+                )
+        out.append(row)
+    return out
+
+
+def _write_ledger(path, items):
+    items = sorted(
+        items,
+        key=lambda x: x.get('slot_at', '') if isinstance(x, dict) else ''
+    )[-120:]
+    path.write_text(json.dumps({
+        'schema_version': 2,
+        'ledger_version': '2.3.4',
+        'purpose': 'Historical data-readiness ledger (not an outgoing notification receipt)',
+        'cycles': items,
+        'count': len(items)
+    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
 def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     """Persist completed-data cycles. A readiness ledger is NOT a delivery receipt."""
+    source_schema_version = 1
     try:
         data = json.loads(path.read_text(encoding='utf-8'))
+        source_schema_version = (
+            int(data.get('schema_version') or 1)
+            if isinstance(data, dict)
+            else 1
+        )
         items = data.get('cycles', []) if isinstance(data, dict) else []
         if not isinstance(items, list):
             items = []
-    except (OSError, ValueError):
+    except (OSError, ValueError, TypeError):
         items = []
+
+    if source_schema_version < 2:
+        items = _mark_legacy_cycles(items)
+
     cycle_id = cert['cycle_id']
     if any(isinstance(x, dict) and x.get('cycle_id') == cycle_id for x in items):
+        if source_schema_version < 2:
+            _write_ledger(path, items)
         return False
+
     snapshot, snapshot_sha256 = compact_cycle_snapshot(cert)
     items.append({
+        'entry_schema_version': 2,
         'cycle_id': cycle_id, 'ready_at': cert['verified_at'],
         'slot_at': cert['slot_at'], 'target_report_at': cert['target_report_at'],
         'sync_run_id': cert['chain']['sync']['id'],
@@ -345,13 +396,11 @@ def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
         'notification_delivery': 'unverified',
         'notice': 'No ChatGPT delivery acknowledgment is available to GitHub Actions.'
     })
-    items = sorted(items, key=lambda x: x.get('slot_at', ''))[-max_entries:]
-    path.write_text(json.dumps({
-        'schema_version': 2,
-        'ledger_version': '2.3.4',
-        'purpose': 'Historical data-readiness ledger (not an outgoing notification receipt)',
-        'cycles': items, 'count': len(items)
-    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    items = sorted(
+        items,
+        key=lambda x: x.get('slot_at', '') if isinstance(x, dict) else ''
+    )[-max_entries:]
+    _write_ledger(path, items)
     return True
 
 def main():

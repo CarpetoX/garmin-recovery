@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression invariants for Garmin Recovery V2.4.2.
+"""Regression invariants for Garmin Recovery V2.4.3.
 
 These tests protect data semantics. They do not change recovery/readiness scores.
 """
@@ -329,7 +329,9 @@ def test_domain_convergence(advanced, errors, warnings):
 def test_cycle_snapshots(cycles, errors, warnings):
     if not isinstance(cycles, dict):
         return
-    if int(number(cycles.get("schema_version")) or 0) < 2:
+
+    ledger_schema = int(number(cycles.get("schema_version")) or 0)
+    if ledger_schema < 2:
         return
 
     rows = cycles.get("cycles", [])
@@ -339,14 +341,32 @@ def test_cycle_snapshots(cycles, errors, warnings):
 
     for row in rows:
         if not isinstance(row, dict):
+            fail(errors, "report_cycle_entry_not_object")
             continue
+
+        cycle_id = str(row.get("cycle_id") or "")
+        entry_schema = int(number(row.get("entry_schema_version")) or 0)
+
+        if entry_schema < 2:
+            explicitly_legacy = (
+                row.get("legacy_without_snapshot") is True
+                and row.get("snapshot_status") == "legacy_unavailable"
+            )
+            if not explicitly_legacy:
+                fail(errors, "schema2_unmarked_legacy_cycle", cycle_id or "unknown")
+                continue
+            if isinstance(row.get("snapshot"), dict) or row.get("snapshot_sha256"):
+                fail(errors, "legacy_cycle_has_conflicting_snapshot", cycle_id or "unknown")
+            continue
+
         snapshot = row.get("snapshot")
         digest = row.get("snapshot_sha256")
         if not isinstance(snapshot, dict):
-            fail(errors, "v2_cycle_missing_snapshot", row.get("cycle_id"))
+            fail(errors, "v2_cycle_missing_snapshot", cycle_id)
             continue
         if snapshot.get("snapshot_version") != "2.3.4":
-            fail(errors, "bad_snapshot_version", row.get("cycle_id"))
+            fail(errors, "bad_snapshot_version", cycle_id)
+
         encoded = json.dumps(
             snapshot,
             ensure_ascii=False,
@@ -354,14 +374,13 @@ def test_cycle_snapshots(cycles, errors, warnings):
             separators=(",", ":"),
         ).encode("utf-8")
         actual = hashlib.sha256(encoded).hexdigest()
+
         if digest != actual:
-            fail(errors, "snapshot_hash_mismatch", row.get("cycle_id"))
-        cycle_id = str(row.get("cycle_id") or "")
+            fail(errors, "snapshot_hash_mismatch", cycle_id)
         if cycle_id[:10] and snapshot.get("date") != cycle_id[:10]:
             fail(errors, "snapshot_date_mismatch", cycle_id)
         if row.get("source_generated_at") != snapshot.get("source_generated_at"):
             fail(errors, "snapshot_provenance_mismatch", cycle_id)
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -386,10 +405,11 @@ def main():
     test_load_unit_separation(advanced, crossfit, errors, warnings)
     test_partial_day(heart, advanced, quality, errors, warnings)
     test_fused_convergence(advanced, recovery, errors, warnings)
+    test_domain_convergence(advanced, errors, warnings)
     test_cycle_snapshots(cycles, errors, warnings)
 
     result = {
-        "version": "2.4.2",
+        "version": "2.4.3",
         "stage": args.stage,
         "status": "error" if errors else "ok",
         "errors": errors,
@@ -402,6 +422,7 @@ def main():
             "partial_day_excluded_from_daytime_trends",
             "fused_convergence_history",
             "independent_domain_convergence",
+            "legacy_schema1_cycle_migration",
             "historical_cycle_snapshot_hash",
         ],
     }
