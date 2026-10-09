@@ -25,8 +25,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Aplicar parche V2.3 una sola vez
-        run: python recovery_v23.py --install
+      - name: Aplicar V2.3 sin editar otros workflows
+        run: |
+          python recovery_v23.py --install
+          # GitHub Actions no puede publicar cambios en workflows con este token.
+          # Conservamos el parche de recovery_reliability.py y restauramos
+          # los cambios locales no publicados del workflow de analítica.
+          git restore -- .github/workflows/advanced-analytics-rpe.yml
+          git diff --exit-code -- .github/workflows/advanced-analytics-rpe.yml
 
       - name: Comprobar sintaxis y escenarios críticos
         run: |
@@ -54,7 +60,7 @@ jobs:
         run: |
           git config user.name "Garmin Recovery Bot"
           git config user.email "actions@github.com"
-          git add recovery_reliability.py .github/workflows/advanced-analytics-rpe.yml
+          git add recovery_reliability.py
           if ! git diff --cached --quiet; then
             git commit -m "Instalar recuperación V2.3: sueño post-TN y procedencia de puntuaciones"
             git push origin HEAD:main
