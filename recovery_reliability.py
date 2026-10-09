@@ -436,6 +436,25 @@ def produce(now=None, files=None):
     quality['recovery_v2_status'] = assessment['state']
     quality['recovery_v2_confidence'] = assessment['confidence']
     adv['recovery_data_coverage'] = coverage
+    fused_baseline = assessment.get('baseline_28d', {})
+    baseline_policy = {
+        'version': '2.3.4',
+        'canonical_for_recovery_reports': 'recovery_assessment.baseline_28d',
+        'source': 'fused Garmin timelines + Intervals fallback',
+        'excludes_current_day': True,
+        'scoring_changed': False,
+        'note': ('Advanced convergence_alert keeps its existing independently '
+                 'validated record set; reports should use the fused baseline '
+                 'for recovery reference values and sample counts.')
+    }
+    adv['recovery_fused_baseline_28d'] = fused_baseline
+    adv['recovery_baseline_policy'] = baseline_policy
+    quality['recovery_fused_baseline_28d'] = fused_baseline
+    quality['recovery_baseline_policy'] = baseline_policy
+    daily['recovery_fused_baseline_28d'] = fused_baseline
+    daily['recovery_baseline_policy'] = baseline_policy
+    weekly['recovery_fused_baseline_28d'] = fused_baseline
+    weekly['recovery_baseline_policy'] = baseline_policy
     daily['recovery_data_coverage'] = coverage
     weekly['recovery_data_coverage'] = coverage
     return {'advanced_analytics.json': adv, 'daily_summary.json': daily,

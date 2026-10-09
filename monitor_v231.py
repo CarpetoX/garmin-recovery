@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Garmin V2.3.3 monitor: separate cron failures, recovered syncs and real gaps.
+"""Garmin V2.3.4 monitor: separate cron failures, recovered syncs and real gaps.
 
 Retains V2.3.1 API: audit_slots and enhance_monitor, imported by monitor_monthly.py.
 A manual workflow_dispatch may have been issued by Apps Script OR by a person;
@@ -22,7 +22,7 @@ def _utc_local(value):
         return None
 
 
-def due_slots(now, lookback_hours=28, grace_minutes=120):
+def due_slots(now, lookback_hours=28, grace_minutes=150):
     if now.tzinfo is None:
         now = now.replace(tzinfo=TZ)
     now = now.astimezone(TZ)
@@ -38,7 +38,7 @@ def due_slots(now, lookback_hours=28, grace_minutes=120):
     return sorted(slots)
 
 
-def audit_slots(now, runs, lookback_hours=28, grace_minutes=120):
+def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
     if now.tzinfo is None:
         now = now.replace(tzinfo=TZ)
     if not isinstance(runs, list):
@@ -78,7 +78,7 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=120):
         'manual_runs_counted_as_schedule': False,
         'dispatch_origin_verified': False,
         'grace_minutes': grace_minutes, 'timezone': 'Europe/Madrid',
-        'schedule_version': 'three_syncs_v2',
+        'schedule_version': 'three_syncs_v234',
         'sync_slots': ['08:30', '16:45', '22:45'],
         'report_targets': ['08:45', '17:00', '23:00'],
         'effective_date': SCHEDULE_START,
@@ -280,7 +280,7 @@ def self_test():
     d = audit_slots(now, [dict(manual, conclusion='failure')], lookback_hours=12)
     assert d['state'] == 'attention' and len(d['uncovered']) == 1, d
     assert SLOTS == ((8, 30), (16, 45), (22, 45))
-    print('OK: 6 tests of V2.3.3 schedule distinction')
+    print('OK: 6 tests of V2.3.4 schedule distinction')
 
 
 if __name__ == '__main__':

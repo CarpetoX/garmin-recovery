@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Garmin Recovery V2.3.3: certificate for a completed cross-workflow report cycle.
+"""Garmin Recovery V2.3.4: certificate for a completed cross-workflow report cycle.
 
 Designed to run DURING the final CrossFit Insights workflow before its commit.
 Only publishes report_ready.json if the three upstream runs succeeded,
@@ -7,6 +7,7 @@ the fourth (current CrossFit run) reached this successful processing step,
 are time-correlated in the correct order, and essential JSON files were renewed.
 The certificate is NOT evidence that a ChatGPT notification was delivered.
 """
+import hashlib
 import json
 import os
 import sys
@@ -132,7 +133,7 @@ def github_json(url, token):
         'Authorization': f'Bearer {token}',
         'Accept': 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'Garmin-Report-Delivery-Gate/2.3.2',
+        'User-Agent': 'Garmin-Report-Delivery-Gate/2.3.4',
     })
     with urllib.request.urlopen(req, timeout=25) as f:
         return json.load(f)
@@ -153,7 +154,7 @@ def build_certificate(chain, file_times, now):
     measurements = {k: {'state': v.get('state'), 'measured_at': v.get('measured_at')}
                     for k, v in sources.items() if isinstance(v, dict)}
     return {
-        'schema_version': 1, 'gate_version': '2.3.3', 'status': 'ready',
+        'schema_version': 1, 'gate_version': '2.3.4', 'status': 'ready',
         'cycle_id': chain['slot']['cycle_id'],
         'slot_at': chain['slot']['slot_at'].isoformat(),
         'target_report_at': chain['slot']['report_target'],
@@ -174,6 +175,146 @@ def build_certificate(chain, file_times, now):
     }
 
 
+def _read_json(name, default):
+    try:
+        return json.loads(Path(name).read_text(encoding='utf-8'))
+    except (OSError, ValueError, TypeError):
+        return default
+
+
+def _today_row(obj, day):
+    if not isinstance(obj, dict):
+        return {}
+    days = obj.get('days')
+    if isinstance(days, dict) and isinstance(days.get(day), dict):
+        return days[day]
+    return {}
+
+
+def _last_body_battery(row):
+    values = row.get('bodyBatteryValuesArray') if isinstance(row, dict) else None
+    if not isinstance(values, list):
+        return None
+    valid = [
+        x for x in values
+        if isinstance(x, list)
+        and len(x) >= 2
+        and isinstance(x[1], (int, float))
+    ]
+    return valid[-1][1] if valid else None
+
+
+def compact_cycle_snapshot(cert):
+    """Freeze the report inputs used by this cycle."""
+    day = str(cert.get('cycle_id') or '')[:10]
+    daily = _read_json('daily_summary.json', {})
+    recovery = _read_json('recovery_assessment.json', {})
+    advanced = _read_json('advanced_analytics.json', {})
+    quality = _read_json('data_quality.json', {})
+    crossfit = _read_json('crossfit_insights.json', {})
+    status = _read_json('garmin_status.json', {})
+    heart = _read_json('garmin_heart_rate.json', {})
+    stress = _today_row(_read_json('garmin_stress.json', {}), day)
+    battery = _today_row(_read_json('garmin_body_battery.json', {}), day)
+    extended = _today_row(_read_json('garmin_extended.json', {}), day)
+    hr_day = _today_row(heart, day)
+
+    crossfit_day = []
+    for row in crossfit.get('activities', []) if isinstance(crossfit, dict) else []:
+        if isinstance(row, dict) and str(row.get('date') or '') == day:
+            crossfit_day.append(row)
+
+    rec_v23 = recovery.get('v23') if isinstance(recovery.get('v23'), dict) else {}
+    snapshot = {
+        'snapshot_version': '2.3.4',
+        'date': day,
+        'source_generated_at': cert.get('source_generated_at'),
+        'measurement_provenance': cert.get('measurement_provenance'),
+        'recovery_assessment': {
+            'generated_at': recovery.get('generated_at'),
+            'state': recovery.get('state'),
+            'status': recovery.get('status'),
+            'score': recovery.get('score'),
+            'confidence': recovery.get('confidence'),
+            'reason': recovery.get('reason'),
+            'current': recovery.get('current'),
+            'baseline_28d': recovery.get('baseline_28d'),
+            'metrics_used': recovery.get('metrics_used'),
+            'warnings': recovery.get('warnings'),
+            'recommendation': recovery.get('recommendation'),
+            'work_shift_context': recovery.get('work_shift_context'),
+            'sleep_integrity': rec_v23.get('sleep_integrity'),
+            'reason_codes': rec_v23.get('reason_codes'),
+            'training_guidance': rec_v23.get('training_guidance'),
+        },
+        'daily': {
+            'generated_at': daily.get('generated_at'),
+            'recovery_today': daily.get('recovery_today'),
+            'training_today': daily.get('training_today'),
+            'readiness_model': daily.get('readiness_model'),
+            'readiness_hybrid': daily.get('readiness_hybrid'),
+        },
+        'advanced': {
+            'generated_at': advanced.get('generated_at'),
+            'readiness_hybrid': advanced.get('readiness_hybrid'),
+            'personal_recovery_index': advanced.get('personal_recovery_index'),
+            'convergence_alert': advanced.get('convergence_alert'),
+            'weekly_load': advanced.get('weekly_load'),
+            'heart_rate_recovery': advanced.get('heart_rate_recovery'),
+            'recovery_data_coverage': advanced.get('recovery_data_coverage'),
+            'recovery_fused_baseline_28d': advanced.get('recovery_fused_baseline_28d'),
+            'rpe_feedback': advanced.get('rpe_feedback'),
+        },
+        'data_quality': quality,
+        'crossfit': {
+            'generated_at': crossfit.get('generated_at'),
+            'sheet_source': crossfit.get('sheet_source'),
+            'sheet_error': crossfit.get('sheet_error'),
+            'sheet_rows_loaded': crossfit.get('sheet_rows_loaded'),
+            'sheet_latest_date': crossfit.get('sheet_latest_date'),
+            'data_quality': crossfit.get('data_quality'),
+            'weekly_report': crossfit.get('weekly_report'),
+            'activities_today': crossfit_day,
+        },
+        'garmin': {
+            'status': {
+                'generated_at': status.get('generated_at'),
+                'status': status.get('status'),
+                'error': status.get('error'),
+                'activity_metrics_available': status.get('activity_metrics_available'),
+                'activity_metrics_error': status.get('activity_metrics_error'),
+            },
+            'heart_rate_today': hr_day,
+            'heart_rate_rolling': heart.get('rolling') if isinstance(heart, dict) else None,
+            'stress_today': {
+                'avgStressLevel': stress.get('avgStressLevel'),
+                'maxStressLevel': stress.get('maxStressLevel'),
+                'endTimestampLocal': stress.get('endTimestampLocal'),
+            },
+            'body_battery_today': {
+                'charged': battery.get('charged'),
+                'drained': battery.get('drained'),
+                'latest': _last_body_battery(battery),
+                'endTimestampLocal': battery.get('endTimestampLocal'),
+            },
+            'extended_today': {
+                'training_readiness': extended.get('training_readiness'),
+                'recovery_time': extended.get('recovery_time'),
+                'hrv_status': extended.get('hrv_status'),
+                'sleep_detail': extended.get('sleep_detail'),
+                'four_week_load_balance': extended.get('four_week_load_balance'),
+                'activity_metrics': extended.get('activity_metrics'),
+            },
+        },
+    }
+    encoded = json.dumps(
+        snapshot,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(',', ':'),
+    ).encode('utf-8')
+    return snapshot, hashlib.sha256(encoded).hexdigest()
+
 
 def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     """Persist completed-data cycles. A readiness ledger is NOT a delivery receipt."""
@@ -187,18 +328,27 @@ def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     cycle_id = cert['cycle_id']
     if any(isinstance(x, dict) and x.get('cycle_id') == cycle_id for x in items):
         return False
+    snapshot, snapshot_sha256 = compact_cycle_snapshot(cert)
     items.append({
         'cycle_id': cycle_id, 'ready_at': cert['verified_at'],
         'slot_at': cert['slot_at'], 'target_report_at': cert['target_report_at'],
         'sync_run_id': cert['chain']['sync']['id'],
         'crossfit_run_id': cert['chain']['crossfit']['id'],
+        'chain': cert.get('chain'),
+        'source_generated_at': cert.get('source_generated_at'),
+        'measurement_provenance': cert.get('measurement_provenance'),
+        'recovery_state': cert.get('recovery_state'),
+        'recovery_confidence': cert.get('recovery_confidence'),
+        'snapshot': snapshot,
+        'snapshot_sha256': snapshot_sha256,
         'state': 'data_ready',
         'notification_delivery': 'unverified',
         'notice': 'No ChatGPT delivery acknowledgment is available to GitHub Actions.'
     })
     items = sorted(items, key=lambda x: x.get('slot_at', ''))[-max_entries:]
     path.write_text(json.dumps({
-        'schema_version': 1,
+        'schema_version': 2,
+        'ledger_version': '2.3.4',
         'purpose': 'Historical data-readiness ledger (not an outgoing notification receipt)',
         'cycles': items, 'count': len(items)
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
