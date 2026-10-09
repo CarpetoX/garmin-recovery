@@ -446,6 +446,19 @@ if isinstance(weekly, dict):
         )
 
 
+
+# V2.2: no publicar informes con colores/textos de recuperacion contradictorios.
+from recovery_reliability import validate_report_consistency
+try:
+    recovery_v22 = load_required(Path('recovery_assessment.json'))
+    if recovery_v22 is not None:
+        errors.extend(validate_report_consistency(
+            recovery_v22, adv, daily, weekly, quality,
+        ))
+except Exception as exc:
+    errors.append('recovery_v22_validation_exception:' + type(exc).__name__ + ':' + str(exc)[:150])
+
+
 if errors:
     print(
         json.dumps(

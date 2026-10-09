@@ -53,12 +53,13 @@ def update_history(out, now, path='report_history.json'):
     quality=out.get('data_quality') or {}
     weekly=out.get('weekly_report') or {}
     readiness=out.get('readiness_hybrid') or {}
+    assessment=out.get('recovery_assessment_v2') or {}
     audit=out.get('report_audit') or {}
     # Store only aggregate metrics; no raw sheet notes, shifts or individual activity records.
     snap={'generated_at':now.isoformat(),'date':now.date().isoformat(),
           'sheet_rows_loaded':out.get('sheet_rows_loaded'),'quality_status':quality.get('status'),
-          'audit_status':audit.get('status'),'readiness_score':readiness.get('score'),
-          'readiness_confidence':readiness.get('local_confidence'),
+          'audit_status':audit.get('status'),'readiness_score':(assessment.get('score') if assessment.get('state')=='assessed' and assessment.get('confidence')=='high' else None),
+          'readiness_state':assessment.get('state'),'readiness_confidence':assessment.get('confidence'),
           'weekly_activities':weekly.get('activities'),
           'minimum_verified_strength_volume_kg':weekly.get('minimum_verified_strength_volume_kg')}
     # Keep at most one snapshot per local day; latest successful report wins.

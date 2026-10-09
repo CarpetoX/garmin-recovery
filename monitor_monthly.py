@@ -124,7 +124,9 @@ def monthly(now, history_path='report_history.json'):
         key=lambda s: s.get('date', ''),
     )
     readiness = [s['readiness_score'] for s in items
-                 if isinstance(s.get('readiness_score'), (int, float))
+                 if s.get('readiness_state') == 'assessed'
+                 and s.get('readiness_confidence') == 'high'
+                 and isinstance(s.get('readiness_score'), (int, float))
                  and not isinstance(s['readiness_score'], bool)]
     counts = Counter(s.get('quality_status', 'unknown') for s in items)
     return {

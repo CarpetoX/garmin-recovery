@@ -178,6 +178,7 @@ def main():
          'context_today':shift(now.date().isoformat()),'context_baseline_days':counts,
          'response_24_48h':advanced.get('training_response_24_48h'),
          'readiness_hybrid':advanced.get('readiness_hybrid'),
+         'recovery_assessment_v2':advanced.get('recovery_assessment_v2'),
          'activities':results[-90:],
          'muscle_load':analyze_muscle_load(results, now.date().isoformat()),
          'training_extensions':analyze_training_extensions(results, advanced, now.date().isoformat())}

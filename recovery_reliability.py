@@ -242,36 +242,141 @@ def recovery_assessment(records, now, advanced, inputs_fresh=True):
 
 
 def patch_hybrid(hybrid, assessment):
+    """Compatibilidad conservadora. La fuente autoritativa es recovery_assessment_v2.
+
+    Conserva el score original como auditoria, pero bloquea todos los mensajes
+    que pudieran interpretarse como autorizacion de intensidad maxima cuando
+    faltan datos, hay baja confianza o la evaluacion es desfavorable.
+    """
     if not isinstance(hybrid, dict):
         return hybrid
     hybrid = dict(hybrid)
-    raw = n(hybrid.get('score'), 0, 100)
+    raw = next((v for v in (
+        n(hybrid.get('score_before_recovery_guardrail'), 0, 100),
+        n(hybrid.get('raw_score_before_guardrails'), 0, 100),
+        n(hybrid.get('score'), 0, 100),
+    ) if v is not None), None)
     if raw is None:
         return hybrid
     hybrid['score_before_recovery_guardrail'] = int(raw)
-    # State pending/provisional is not physiologic "yellow". We use a yellow
-    # compatibility envelope because the existing validator expects 0..100 +
-    # green/yellow/red; the authoritative result is recovery_assessment_v2.
-    if assessment['score'] is not None and assessment['score'] < 50:
+    state = assessment.get('state')
+    confidence = assessment.get('confidence')
+    assessment_status = assessment.get('status')
+    assessed_green = (state == 'assessed' and confidence == 'high'
+                      and assessment_status == 'green')
+    if assessment_status == 'red':
         limit = 49
-    elif assessment['state'] in ('pending', 'provisional') or assessment['confidence'] != 'high':
-        limit = 74
-    elif assessment['score'] is not None and assessment['score'] < 75:
+    elif not assessed_green:
         limit = 74
     else:
         limit = 100
     capped = min(int(raw), limit)
     hybrid['score'] = capped
     hybrid['status'] = 'red' if capped < 50 else 'yellow' if capped < 75 else 'green'
-    hybrid['recommended_volume'] = 'sin recomendación hasta completar datos' if assessment['state'] == 'pending' else 'individualizar; evitar sesión máxima sin confirmar' if assessment['state'] == 'provisional' else hybrid.get('recommended_volume')
-    hybrid['recommendation'] = 'pending' if assessment['state'] == 'pending' else 'moderate' if assessment['state'] == 'provisional' else hybrid.get('recommendation')
-    hybrid['confidence'] = assessment['confidence']
-    hybrid['recovery_assessment_state'] = assessment['state']
+    if state == 'pending':
+        hybrid['recommendation'] = 'pending'
+        hybrid['recommended_volume'] = 'sin recomendación hasta completar datos'
+        hybrid['intensity_guidance'] = assessment.get('recommendation') or 'Datos incompletos: no evaluar intensidad maxima.'
+    elif assessment_status == 'red' or (state == 'assessed' and capped < 50):
+        hybrid['recommendation'] = 'recovery'
+        hybrid['recommended_volume'] = 'priorizar recuperación y reevaluar sensaciones'
+        hybrid['intensity_guidance'] = 'Señales de recuperación desfavorables: evita intensidad máxima y evalúa síntomas.'
+    elif not assessed_green or capped < 75:
+        hybrid['recommendation'] = 'moderate'
+        hybrid['recommended_volume'] = 'individualizar; evitar sesión máxima sin confirmar'
+        hybrid['intensity_guidance'] = 'Evaluación provisional o limitada: adaptar carga a síntomas, calentamiento y RPE.'
+    else:
+        # Solo aqui se puede respetar una recomendacion normal previa.
+        hybrid['recommendation'] = hybrid.get('recommendation') or 'normal'
+        hybrid['recommended_volume'] = hybrid.get('recommended_volume') or 'individualizar según rendimiento'
+        if not hybrid.get('intensity_guidance'):
+            hybrid['intensity_guidance'] = 'Interpretar con síntomas, dolor y sensaciones; no es un diagnóstico.'
+    hybrid['confidence'] = confidence
+    hybrid['recovery_assessment_state'] = state
     hybrid['guardrails_applied'] = list(hybrid.get('guardrails_applied') or [])
-    if limit < 100 and 'recovery_reliability_gate' not in hybrid['guardrails_applied']:
+    if (not assessed_green or capped < 75 or limit < 100) and 'recovery_reliability_gate' not in hybrid['guardrails_applied']:
         hybrid['guardrails_applied'].append('recovery_reliability_gate')
-    hybrid['note'] = 'Compatibilidad; para decisiones usar recovery_assessment_v2.state y confidence, NO solo score.'
+    hybrid['note'] = ('V2.2: score compatible, no indicador fisiológico independiente. '
+                      'Para decidir usar recovery_assessment_v2.state, status y confidence.')
     return hybrid
+
+
+def validate_report_consistency(assessment, advanced, daily, weekly, quality):
+    """Errores que deben impedir publicar un informe incoherente (no avisos)."""
+    faults = []
+    if not isinstance(assessment, dict):
+        return ['recovery_v22_missing_authoritative_assessment']
+    state, confidence, status = (assessment.get(k) for k in ('state', 'confidence', 'status'))
+    if state not in {'pending', 'provisional', 'assessed'}:
+        faults.append('recovery_v22_invalid_state')
+    if confidence not in {'low', 'medium', 'high'}:
+        faults.append('recovery_v22_invalid_confidence')
+    if status not in {'unavailable', 'red', 'yellow', 'green'}:
+        faults.append('recovery_v22_invalid_status')
+    if state == 'pending' and (status != 'unavailable' or assessment.get('score') is not None):
+        faults.append('recovery_v22_pending_must_not_have_measured_score')
+    safe_green = state == 'assessed' and confidence == 'high' and status == 'green'
+    if status == 'green' and not safe_green:
+        faults.append('recovery_v22_assessment_green_without_high_confidence')
+    roots = {'advanced': advanced, 'daily': daily, 'weekly': weekly}
+    for name, report in roots.items():
+        if not isinstance(report, dict):
+            faults.append(f'recovery_v22_{name}_not_an_object')
+            continue
+        if report.get('recovery_assessment_v2') != assessment:
+            faults.append(f'recovery_v22_{name}_assessment_mismatch')
+        nested = report.get('advanced_analytics')
+        if name != 'advanced' and isinstance(nested, dict):
+            if nested.get('recovery_assessment_v2') != assessment:
+                faults.append(f'recovery_v22_{name}_nested_assessment_mismatch')
+            if isinstance(advanced, dict) and nested.get('readiness_hybrid') != advanced.get('readiness_hybrid'):
+                faults.append(f'recovery_v22_{name}_nested_hybrid_mismatch')
+    copies = {
+        'advanced.readiness_hybrid': advanced.get('readiness_hybrid') if isinstance(advanced, dict) else None,
+        'daily.readiness_hybrid': daily.get('readiness_hybrid') if isinstance(daily, dict) else None,
+        'daily.readiness_model': daily.get('readiness_model') if isinstance(daily, dict) else None,
+        'weekly.readiness_hybrid': weekly.get('readiness_hybrid') if isinstance(weekly, dict) else None,
+        'weekly.current_readiness': weekly.get('current_readiness') if isinstance(weekly, dict) else None,
+        'weekly.current_readiness_hybrid': weekly.get('current_readiness_hybrid') if isinstance(weekly, dict) else None,
+    }
+    for name, item in copies.items():
+        if not isinstance(item, dict):
+            faults.append(f'recovery_v22_missing_compatibility_view:{name}')
+            continue
+        sc = n(item.get('score'), 0, 100)
+        if sc is None:
+            faults.append(f'recovery_v22_invalid_compatibility_score:{name}')
+        if not safe_green:
+            if item.get('status') == 'green' or item.get('recommendation') == 'normal':
+                faults.append(f'recovery_v22_unsafe_positive_signal:{name}')
+            if item.get('recommended_volume') == '90-100%':
+                faults.append(f'recovery_v22_unsafe_full_volume:{name}')
+            if 'mantén intensidad normal' in str(item.get('intensity_guidance', '')).lower():
+                faults.append(f'recovery_v22_unsafe_intensity_guidance:{name}')
+            if 'recovery_reliability_gate' not in (item.get('guardrails_applied') or []):
+                faults.append(f'recovery_v22_missing_guardrail:{name}')
+        if state == 'pending':
+            if item.get('recommendation') != 'pending':
+                faults.append(f'recovery_v22_pending_recommendation_mismatch:{name}')
+            if item.get('recommended_volume') != 'sin recomendación hasta completar datos':
+                faults.append(f'recovery_v22_pending_volume_mismatch:{name}')
+        if item.get('recovery_assessment_state') != state:
+            faults.append(f'recovery_v22_state_mismatch:{name}')
+    if isinstance(advanced, dict):
+        for name in ('daily', 'weekly'):
+            report = roots.get(name)
+            if isinstance(report, dict) and report.get('readiness_hybrid') != advanced.get('readiness_hybrid'):
+                faults.append(f'recovery_v22_{name}_hybrid_mismatch')
+    if not isinstance(quality, dict):
+        faults.append('recovery_v22_missing_quality')
+    else:
+        if quality.get('recovery_v2_status') != state or quality.get('recovery_v2_confidence') != confidence:
+            faults.append('recovery_v22_quality_state_mismatch')
+        if (not isinstance(advanced, dict) or
+            quality.get('recovery_fused_coverage_28d') != advanced.get('recovery_data_coverage')):
+            faults.append('recovery_v22_fused_coverage_mismatch')
+    return faults
+
 
 
 def produce(now=None, files=None):
@@ -308,6 +413,10 @@ def produce(now=None, files=None):
             sub['readiness_hybrid'] = adv['readiness_hybrid']
     if isinstance(daily.get('readiness_model'), dict):
         daily['readiness_model'] = patch_hybrid(daily['readiness_model'], assessment)
+    # Dos copias historicas del resumen semanal retenian 94/100 verde.
+    for name in ('current_readiness', 'current_readiness_hybrid'):
+        if isinstance(weekly.get(name), dict):
+            weekly[name] = patch_hybrid(weekly[name], assessment)
     current = assessment['current']
     if isinstance(daily.get('recovery_today'), dict):
         mapping = {'hrv': 'hrv_ms', 'sleep_hours': 'sleep_hours', 'sleep_score': 'sleep_score', 'resting_hr': 'resting_hr'}
