@@ -164,11 +164,10 @@ def decode_context_map():
         except Exception:
             pass
 
-    return {
-        str(k): str(v)
-        for k, v in merged.items()
-        if isinstance(v, str)
-    }
+    from shift_calendar import context_map as shift_context_map
+    return shift_context_map({
+        str(k): str(v) for k, v in merged.items() if isinstance(v, str)
+    })
 
 
 def infer_sleep_context(hr_row):
@@ -2255,6 +2254,7 @@ def main():
     if not isinstance(wellness, list):
         wellness = []
 
+    from shift_calendar import resolve_day
     context_map = decode_context_map()
 
     records = build_day_records(
@@ -2340,10 +2340,12 @@ def main():
             "explicit_context_days": len(
                 context_map
             ),
-            "privacy_note": (
-                "Exact MT/TN/free labels are read only from optional "
-                "day_context.json or DAY_CONTEXT_B64; no work schedule "
-                "is embedded in this public repository."
+            "calendar_source": "shift_calendar.json",
+            "work_shift": resolve_day(TODAY.isoformat())["shift"],
+            "post_tn": resolve_day(TODAY.isoformat())["post_tn"],
+            "calendar_note": (
+                "MT/TN/free via shift_calendar.json; DAY_CONTEXT_B64 "
+                "continua como respaldo para fechas sin calendario."
             ),
         },
         "readiness_hybrid": hybrid,

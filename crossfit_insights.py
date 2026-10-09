@@ -122,17 +122,11 @@ def sets_volume(obj):
     return volume, complete, known_sets, total_sets
 
 def shift(day):
-    try: d=datetime.fromisoformat(day).date()
-    except (TypeError,ValueError): return 'unknown'
-    mt={10:{2,7,12,17,22},11:{1,6,11,16,21,26}}
-    tn={10:{3,8,13,18,23,30},11:{2,7,12,17,22,27}}
-    if d.year!=2026 or d.month not in mt: return 'unknown'
-    if d.day in tn[d.month]: return 'TN'
-    if d.day in mt[d.month]: return 'MT'
-    from datetime import timedelta
-    prev=d-timedelta(days=1)
-    if prev.month in tn and prev.day in tn[prev.month]: return 'post-TN'
-    return 'free'
+    from shift_calendar import resolve_day
+    try:
+        return resolve_day(day)['label']
+    except (ValueError, TypeError):
+        return 'unknown'
 
 def main():
     now=datetime.now(TZ)
