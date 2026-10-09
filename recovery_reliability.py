@@ -167,6 +167,126 @@ def baselines(records, now, day_context):
     return result
 
 
+
+def _robust_stats(values):
+    xs = [v for v in (n(x) for x in values) if v is not None]
+    if not xs:
+        return {'n': 0, 'median': None, 'mad': None}
+    med = statistics.median(xs)
+    mad = statistics.median([abs(x - med) for x in xs])
+    return {'n': len(xs), 'median': round(med, 2), 'mad': round(mad, 2)}
+
+
+def _robust_z(value, stats):
+    value = n(value)
+    med = n((stats or {}).get('median'))
+    mad = n((stats or {}).get('mad'))
+    if value is None or med is None or mad in (None, 0):
+        return None
+    return round(0.6745 * (value - med) / mad, 2)
+
+
+def fused_convergence_alert(records, now, previous_alert):
+    """Use fused recovery history for recovery-sensitive convergence signals.
+
+    Thresholds and severity rules remain identical to Advanced Analytics.
+    """
+    current = records.get(now.date().isoformat(), {})
+    recent_day_sleep = observations(records, now, 'hrv_ms', 'day_sleep')
+    selected_context = (
+        'day_sleep'
+        if current.get('sleep_context') == 'day_sleep' and len(recent_day_sleep) >= 7
+        else None
+    )
+
+    checks = [
+        ('hrv_low', 'hrv_ms', -1, -1.0),
+        ('night_hr_high', 'night_hr', +1, 1.0),
+        ('resting_hr_high', 'resting_hr', +1, 1.0),
+        ('sleep_hours_low', 'sleep_hours', -1, -1.0),
+        ('sleep_score_low', 'sleep_score', -1, -1.0),
+    ]
+    fused_names = {x[0] for x in checks}
+
+    previous_alert = previous_alert if isinstance(previous_alert, dict) else {}
+    signals = [
+        dict(x)
+        for x in previous_alert.get('signals', [])
+        if isinstance(x, dict) and x.get('signal') not in fused_names
+    ]
+    skipped = [
+        dict(x)
+        for x in previous_alert.get('skipped_for_short_baseline', [])
+        if isinstance(x, dict) and x.get('signal') not in fused_names
+    ]
+
+    strong = any(
+        abs(n(x.get('robust_z')) or 0) >= 1.5
+        or (
+            x.get('signal') == 'recovery_time_high'
+            and (n(x.get('value_hours')) or 0) >= 36
+        )
+        for x in signals
+    )
+
+    baseline_metrics = {}
+    for name, metric, direction, threshold in checks:
+        values = observations(records, now, metric, selected_context)
+        stats = _robust_stats(values)
+        stats['scope'] = selected_context or 'overall'
+        baseline_metrics[metric] = stats
+
+        if stats['n'] < 7:
+            skipped.append({
+                'signal': name,
+                'metric': metric,
+                'baseline_n': stats['n'],
+                'baseline_source': 'fused_recovery_history',
+            })
+            continue
+
+        z = _robust_z(current.get(metric), stats)
+        if z is None:
+            continue
+
+        triggered = z <= threshold if direction < 0 else z >= threshold
+        if triggered:
+            signals.append({
+                'signal': name,
+                'value': current.get(metric),
+                'robust_z': z,
+                'baseline_n': stats['n'],
+                'baseline_source': 'fused_recovery_history',
+                'baseline_scope': stats['scope'],
+            })
+            if abs(z) >= 1.5:
+                strong = True
+
+    severity = (
+        'red'
+        if len(signals) >= 4 or (len(signals) >= 3 and strong)
+        else 'yellow'
+        if len(signals) >= 3
+        else 'none'
+    )
+
+    return {
+        'severity': severity,
+        'signal_count': len(signals),
+        'signals': signals,
+        'skipped_for_short_baseline': skipped,
+        'baseline_source': 'fused_recovery_history_v2.4',
+        'baseline_scope': selected_context or 'overall',
+        'baseline_metrics': baseline_metrics,
+        'rule': (
+            'Alerts require converging signals and at least 7 historical observations '
+            'per metric. HRV/sleep/resting/night HR use fused recovery history; '
+            'stress/body battery/recovery time retain Advanced Analytics sources. '
+            'Thresholds are unchanged and isolated changes are not diagnostic.'
+        ),
+    }
+
+
 def recovery_assessment(records, now, advanced, inputs_fresh=True):
     current = records[now.date().isoformat()]
     shift = str((advanced.get('day_context') or {}).get('today') or 'unknown')
@@ -437,15 +557,23 @@ def produce(now=None, files=None):
     quality['recovery_v2_confidence'] = assessment['confidence']
     adv['recovery_data_coverage'] = coverage
     fused_baseline = assessment.get('baseline_28d', {})
+    fused_alert = fused_convergence_alert(records, now, adv.get('convergence_alert'))
+    adv['convergence_alert'] = fused_alert
+    for report in (daily, weekly):
+        sub = report.get('advanced_analytics') if isinstance(report, dict) else None
+        if isinstance(sub, dict):
+            sub['convergence_alert'] = fused_alert
     baseline_policy = {
-        'version': '2.3.4',
+        'version': '2.4.0',
         'canonical_for_recovery_reports': 'recovery_assessment.baseline_28d',
+        'convergence_history': 'fused_recovery_history_v2.4',
         'source': 'fused Garmin timelines + Intervals fallback',
         'excludes_current_day': True,
         'scoring_changed': False,
-        'note': ('Advanced convergence_alert keeps its existing independently '
-                 'validated record set; reports should use the fused baseline '
-                 'for recovery reference values and sample counts.')
+        'thresholds_changed': False,
+        'note': ('Advanced convergence_alert now reuses fused recovery history for '
+                 'HRV, sleep, resting HR and night HR; stress/body battery keep '
+                 'their Advanced Analytics sources. Thresholds and readiness scoring are unchanged.')
     }
     adv['recovery_fused_baseline_28d'] = fused_baseline
     adv['recovery_baseline_policy'] = baseline_policy
