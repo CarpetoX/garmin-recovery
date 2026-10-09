@@ -1,0 +1,79 @@
+name: Garmin Heart Rate Enrichment
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Garmin Recovery Sync"]
+    types: [completed]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  heart-rate:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validar sintaxis Garmin
+        run: python -m py_compile garmin_metrics.py garmin_activity_metrics.py garmin_hr_timeline.py
+
+      - name: Instalar Garmin Connect
+        run: python -m pip install --disable-pip-version-check 'garminconnect==0.3.17'
+
+      - name: Actualizar métricas y curva horaria Garmin
+        env:
+          GARMIN_TOKENS_B64: ${{ secrets.GARMIN_TOKENS_B64 }}
+        run: |
+          python garmin_metrics.py
+          python garmin_activity_metrics.py
+          python garmin_hr_timeline.py
+
+      - name: Guardar métricas Garmin con reintentos
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Garmin Recovery Bot'
+          git config user.email 'actions@github.com'
+
+          for f in garmin_heart_rate.json garmin_hr_timeline.json daily_summary.json weekly_summary.json garmin_status.json garmin_stress.json garmin_body_battery.json garmin_extended.json; do
+            if [ -f "$f" ]; then git add -- "$f"; fi
+          done
+
+          if git diff --cached --quiet; then
+            echo 'Sin cambios de métricas que publicar.'
+            exit 0
+          fi
+
+          git commit -m 'Actualizar métricas Garmin y curva horaria FC'
+
+          for attempt in 1 2 3 4 5; do
+            echo "Intento de publicación $attempt/5"
+            if ! git pull --rebase origin main; then
+              echo 'Conflicto al integrar cambios remotos. Se detiene sin sobrescribir datos.'
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'Métricas publicadas correctamente.'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+
+          echo 'No se pudo publicar después de cinco intentos.' >&2
+          exit 1
