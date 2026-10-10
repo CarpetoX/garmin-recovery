@@ -1,76 +1,76 @@
 {
   "schema_version": 1,
-  "gate_version": "2.3.4",
+  "gate_version": "2.4.7",
   "status": "ready",
-  "cycle_id": "2026-10-10-0830",
-  "slot_at": "2026-10-10T08:30:00+02:00",
-  "target_report_at": "08:45",
+  "cycle_id": "2026-10-10-1645",
+  "slot_at": "2026-10-10T16:45:00+02:00",
+  "target_report_at": "17:10",
   "timezone": "Europe/Madrid",
-  "verified_at": "2026-10-10T08:50:08.736055+02:00",
+  "verified_at": "2026-10-10T17:00:12.802697+02:00",
   "chain": {
     "sync": {
-      "id": 38032250524,
+      "id": 38061776695,
       "event": "workflow_dispatch",
-      "started_at": "2026-10-10T08:49:10+02:00",
-      "finished_at": "2026-10-10T08:49:23+02:00",
+      "started_at": "2026-10-10T16:59:11+02:00",
+      "finished_at": "2026-10-10T16:59:23+02:00",
       "conclusion": "success"
     },
     "heart": {
-      "id": 38032264499,
+      "id": 38061791002,
       "event": "workflow_run",
-      "started_at": "2026-10-10T08:49:24+02:00",
-      "finished_at": "2026-10-10T08:49:43+02:00",
+      "started_at": "2026-10-10T16:59:24+02:00",
+      "finished_at": "2026-10-10T16:59:48+02:00",
       "conclusion": "success"
     },
     "advanced": {
-      "id": 38032282748,
+      "id": 38061816703,
       "event": "workflow_run",
-      "started_at": "2026-10-10T08:49:45+02:00",
-      "finished_at": "2026-10-10T08:49:56+02:00",
+      "started_at": "2026-10-10T16:59:50+02:00",
+      "finished_at": "2026-10-10T16:59:59+02:00",
       "conclusion": "success"
     },
     "crossfit": {
-      "id": 38032293881,
+      "id": 38061828125,
       "event": "workflow_run",
-      "started_at": "2026-10-10T08:49:58+02:00",
-      "finished_at": "2026-10-10T08:50:01+02:00",
+      "started_at": "2026-10-10T17:00:01+02:00",
+      "finished_at": "2026-10-10T17:00:04+02:00",
       "conclusion": "publishing_in_same_job"
     }
   },
   "source_generated_at": {
-    "daily_summary.json": "2026-10-10T08:49:18.109777+02:00",
-    "weekly_summary.json": "2026-10-10T08:49:18.109777+02:00",
-    "garmin_status.json": "2026-10-10T08:49:32.530489+02:00",
-    "garmin_heart_rate.json": "2026-10-10T08:49:32.530489+02:00",
-    "recovery_assessment.json": "2026-10-10T08:49:51.893872+02:00",
-    "advanced_analytics.json": "2026-10-10T08:49:51.777748+02:00",
-    "data_quality.json": "2026-10-10T08:49:51.777748+02:00",
-    "crossfit_insights.json": "2026-10-10T08:50:04.126547+02:00"
+    "daily_summary.json": "2026-10-10T16:59:19.557062+02:00",
+    "weekly_summary.json": "2026-10-10T16:59:19.557062+02:00",
+    "garmin_status.json": "2026-10-10T16:59:34.364187+02:00",
+    "garmin_heart_rate.json": "2026-10-10T16:59:34.364187+02:00",
+    "recovery_assessment.json": "2026-10-10T16:59:55.954760+02:00",
+    "advanced_analytics.json": "2026-10-10T16:59:55.838663+02:00",
+    "data_quality.json": "2026-10-10T16:59:55.838663+02:00",
+    "crossfit_insights.json": "2026-10-10T17:00:07.814609+02:00"
   },
   "measurement_provenance": {
     "confirmed_sleep": {
-      "state": "delayed",
-      "measured_at": "2026-10-09T12:24:12+02:00"
+      "state": "recent",
+      "measured_at": "2026-10-10T09:07:03+02:00"
     },
     "sleep_hrv": {
-      "state": "unverified_timestamp",
-      "measured_at": null
+      "state": "recent",
+      "measured_at": "2026-10-10T09:06:12+02:00"
     },
     "heart_rate_live": {
-      "state": "recent",
-      "measured_at": "2026-10-10T08:14:00+02:00"
+      "state": "delayed",
+      "measured_at": "2026-10-10T14:14:00+02:00"
     },
     "body_battery_live": {
-      "state": "recent",
-      "measured_at": "2026-10-10T08:12:00+02:00"
+      "state": "delayed",
+      "measured_at": "2026-10-10T14:00:00+02:00"
     },
     "resting_hr_summary": {
       "state": "daily_summary_not_instantaneous",
       "measured_at": null
     }
   },
-  "recovery_state": "pending",
-  "recovery_confidence": "low",
+  "recovery_state": "assessed",
+  "recovery_confidence": "medium",
   "delivery_status": "unconfirmed_no_chatgpt_receipt",
   "evidence": "Three successful upstream GitHub Actions runs, current CrossFit step successful; all key generated_at renewed; certificate committed atomically with CrossFit output",
   "limitations": [
@@ -78,6 +78,18 @@
     "CrossFit job is still running when marker is produced; its successful commit publishes both marker and output",
     "This marker certifies data readiness, not ChatGPT message delivery",
     "Only a ChatGPT delivery callback/receipt could confirm an actual notification",
-    "New file generation does not imply new physiological sensor samples"
-  ]
+    "New file generation does not imply new physiological sensor samples",
+    "Data-ready certificate does not prove completed sleep or ChatGPT delivery; morning sleep evidence must be fresh and validated."
+  ],
+  "morning_sleep": {
+    "state": "confirmed_ready",
+    "is_definitive_source": true,
+    "evidence_valid": true,
+    "evidence_issues": [],
+    "generated_at": "2026-10-10T16:59:56.046853+02:00",
+    "date": "2026-10-10",
+    "sleep_end_local": "2026-10-10T09:07:03+02:00",
+    "earliest_definitive_at": "2026-10-10T09:37:03+02:00"
+  },
+  "physiological_report_status": "not_evaluated_for_this_slot"
 }
