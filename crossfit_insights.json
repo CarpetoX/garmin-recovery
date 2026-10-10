@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T00:39:13.080311+02:00",
+  "generated_at": "2026-10-11T01:03:44.930212+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "live_csv",
   "sheet_error": null,
@@ -139,7 +139,7 @@
         "48h": {
           "hrv_pct": null,
           "nighttime_hr_delta": null,
-          "resting_hr_delta": 3.0,
+          "resting_hr_delta": 2.0,
           "sleep_hours_delta": null,
           "sleep_score_delta": null,
           "adverse_signals": [],
@@ -167,7 +167,7 @@
         "24h": {
           "hrv_pct": null,
           "nighttime_hr_delta": null,
-          "resting_hr_delta": 4.0,
+          "resting_hr_delta": 3.0,
           "sleep_hours_delta": null,
           "sleep_score_delta": null,
           "adverse_signals": [],
@@ -187,28 +187,31 @@
   ],
   "readiness_hybrid": {
     "score": 74,
-    "raw_score_before_guardrails": 94,
+    "raw_score_before_guardrails": 84,
     "status": "yellow",
     "recommended_volume": "sin recomendación hasta completar datos",
     "recommendation": "pending",
-    "garmin_score": null,
-    "garmin_level": null,
+    "garmin_score": 79,
+    "garmin_level": "HIGH",
     "local_score": 94,
     "local_confidence": "low",
-    "weights": null,
-    "source_mode": "local_only",
-    "recovery_time_hours": null,
+    "weights": {
+      "garmin": 0.7,
+      "local": 0.3
+    },
+    "source_mode": "hybrid",
+    "recovery_time_hours": 0.4,
     "guardrails_applied": [
       "recovery_reliability_gate"
     ],
     "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-    "score_before_recovery_guardrail": 94,
+    "score_before_recovery_guardrail": 84,
     "intensity_guidance": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
     "confidence": "low",
     "recovery_assessment_state": "pending"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-11T00:39:01.525591+02:00",
+    "generated_at": "2026-10-11T01:03:34.082830+02:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "pending",
     "status": "unavailable",
@@ -228,7 +231,7 @@
       "hrv_ms": null,
       "sleep_hours": null,
       "sleep_score": null,
-      "resting_hr": 61.0,
+      "resting_hr": 60.0,
       "night_hr": null,
       "sleep_context": null,
       "sleep_start_local": null,
@@ -322,14 +325,14 @@
           },
           "heart_rate_live": {
             "state": "recent",
-            "measured_at": "2026-10-11T00:20:00+02:00",
-            "age_minutes": 19.0,
+            "measured_at": "2026-10-11T00:58:00+02:00",
+            "age_minutes": 5.6,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
             "state": "recent",
-            "measured_at": "2026-10-11T00:18:00+02:00",
-            "age_minutes": 21.0,
+            "measured_at": "2026-10-11T00:57:00+02:00",
+            "age_minutes": 6.6,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -1512,13 +1515,142 @@
   },
   "training_extensions": {
     "metcon_exposure": {
-      "entries": [],
+      "entries": [
+        {
+          "date": "2026-10-09",
+          "activity_id": "i195490222",
+          "movement": "sentadilla frontal",
+          "verified_reps": 45,
+          "verified_distance_m": null,
+          "declared_load_kg": 60.0,
+          "evidence": "performed.completed_exercises",
+          "time_cap_minutes": 8.0,
+          "recorded_garmin_minutes": 8.52
+        },
+        {
+          "date": "2026-10-09",
+          "activity_id": "i195490222",
+          "movement": "handstand push-up",
+          "verified_reps": 45,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.completed_exercises",
+          "time_cap_minutes": 8.0,
+          "recorded_garmin_minutes": 8.52
+        },
+        {
+          "date": "2026-10-08",
+          "activity_id": "i194967768",
+          "movement": "carrera",
+          "verified_reps": null,
+          "verified_distance_m": 1200.0,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 17.55
+        },
+        {
+          "date": "2026-10-08",
+          "activity_id": "i194967768",
+          "movement": "thruster alterno con mancuerna",
+          "verified_reps": 63,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 17.55
+        },
+        {
+          "date": "2026-10-08",
+          "activity_id": "i194967768",
+          "movement": "toes-to-bar",
+          "verified_reps": 33,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 17.55
+        },
+        {
+          "date": "2026-10-08",
+          "activity_id": "i194967768",
+          "movement": "devil press alterno con mancuerna",
+          "verified_reps": 18,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 17.55
+        }
+      ],
       "movement_work": {
-        "7d": {},
-        "28d": {}
+        "7d": {
+          "sentadilla frontal": {
+            "reps": 45,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "handstand push-up": {
+            "reps": 45,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "carrera": {
+            "reps": 0,
+            "distance_m": 1200.0,
+            "entries": 1
+          },
+          "thruster alterno con mancuerna": {
+            "reps": 63,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "toes-to-bar": {
+            "reps": 33,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "devil press alterno con mancuerna": {
+            "reps": 18,
+            "distance_m": 0.0,
+            "entries": 1
+          }
+        },
+        "28d": {
+          "sentadilla frontal": {
+            "reps": 45,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "handstand push-up": {
+            "reps": 45,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "carrera": {
+            "reps": 0,
+            "distance_m": 1200.0,
+            "entries": 1
+          },
+          "thruster alterno con mancuerna": {
+            "reps": 63,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "toes-to-bar": {
+            "reps": 33,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "devil press alterno con mancuerna": {
+            "reps": 18,
+            "distance_m": 0.0,
+            "entries": 1
+          }
+        }
       },
-      "coverage": "Only completed_movements explicitly provided in structured JSON; older narrative WODs not counted",
-      "note": "Repetitions are movement exposure, not an estimate of muscular force or tonnage."
+      "coverage": "Explicit completed_movements, performed.totals or a confirmed completed per-exercise total; no prescribed-only extrapolation",
+      "note": "Repetitions and distance represent exposure, never estimated force, effective tonnage or medical fatigue."
     },
     "performance_trends": {
       "comparisons": [],
@@ -1637,7 +1769,7 @@
             "48h": {
               "hrv_pct": null,
               "nighttime_hr_delta": null,
-              "resting_hr_delta": 3.0,
+              "resting_hr_delta": 2.0,
               "sleep_hours_delta": null,
               "sleep_score_delta": null,
               "adverse_signals": [],
@@ -1665,7 +1797,7 @@
             "24h": {
               "hrv_pct": null,
               "nighttime_hr_delta": null,
-              "resting_hr_delta": 4.0,
+              "resting_hr_delta": 3.0,
               "sleep_hours_delta": null,
               "sleep_score_delta": null,
               "adverse_signals": [],
@@ -1705,11 +1837,11 @@
         "Small and uneven context groups cannot establish a personal baseline"
       ]
     },
-    "version": "1.0; conservative structured data only"
+    "version": "1.1; completed-work normalized, conservative"
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-11T00:39:13.080311+02:00",
+    "checked_at": "2026-10-11T01:03:44.930212+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-10",
     "latest_activity_age_days": 1,
@@ -1737,22 +1869,25 @@
     "strength_blocks_with_missing_weights": 2,
     "readiness_latest": {
       "score": 74,
-      "raw_score_before_guardrails": 94,
+      "raw_score_before_guardrails": 84,
       "status": "yellow",
       "recommended_volume": "sin recomendación hasta completar datos",
       "recommendation": "pending",
-      "garmin_score": null,
-      "garmin_level": null,
+      "garmin_score": 79,
+      "garmin_level": "HIGH",
       "local_score": 94,
       "local_confidence": "low",
-      "weights": null,
-      "source_mode": "local_only",
-      "recovery_time_hours": null,
+      "weights": {
+        "garmin": 0.7,
+        "local": 0.3
+      },
+      "source_mode": "hybrid",
+      "recovery_time_hours": 0.4,
       "guardrails_applied": [
         "recovery_reliability_gate"
       ],
       "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-      "score_before_recovery_guardrail": 94,
+      "score_before_recovery_guardrail": 84,
       "intensity_guidance": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
       "confidence": "low",
       "recovery_assessment_state": "pending"
@@ -1762,19 +1897,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-11T00:39:13.080311+02:00",
+    "checked_at": "2026-10-11T01:03:44.930212+02:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T00:38:29.520680+02:00",
+        "generated_at": "2026-10-11T01:02:57.779786+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T00:38:42.654803+02:00",
+        "generated_at": "2026-10-11T01:03:13.338426+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -1788,28 +1923,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T00:39:01.430165+02:00",
+        "generated_at": "2026-10-11T01:03:33.984811+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T00:39:01.430165+02:00",
+        "generated_at": "2026-10-11T01:03:33.984811+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T00:38:29.520680+02:00",
+        "generated_at": "2026-10-11T01:02:57.779786+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T00:38:42.654803+02:00",
+        "generated_at": "2026-10-11T01:03:13.338426+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
@@ -1829,7 +1964,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.5,
+    "generation_skew_minutes": 0.6,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
