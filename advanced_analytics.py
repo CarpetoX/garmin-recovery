@@ -1724,11 +1724,22 @@ def data_quality(
         {},
     )
 
+    # V2.4.10: early-day Garmin readings are pending, not missing.
+    # Las lecturas del día no se consideran definitivas al inicio de la jornada.
+    # La certificación de sueño y recuperación sigue siendo independiente.
+    day_start_pending = NOW.hour < 10 and (
+        not today or bool(today.get("hr_partial_day"))
+    )
+    pending_today = []
+
     score = 100
 
     if not today:
-        issues.append("missing_today_record")
-        score -= 30
+        if day_start_pending:
+            pending_today.append("today_record_pending_day_start")
+        else:
+            issues.append("missing_today_record")
+            score -= 30
 
     if (
         today
@@ -1736,8 +1747,11 @@ def data_quality(
             "sleep_window_available"
         )
     ):
-        issues.append("missing_sleep_window")
-        score -= 15
+        if day_start_pending:
+            pending_today.append("sleep_window_pending_day_start")
+        else:
+            issues.append("missing_sleep_window")
+            score -= 15
 
     if (
         today
@@ -1746,8 +1760,11 @@ def data_quality(
             0,
         ) < 60
     ):
-        issues.append("low_night_hr_coverage")
-        score -= 10
+        if day_start_pending:
+            pending_today.append("night_hr_pending_day_start")
+        else:
+            issues.append("low_night_hr_coverage")
+            score -= 10
 
     if (
         today
@@ -1844,6 +1861,11 @@ def data_quality(
     else:
         baseline_maturity = "mature"
 
+    # Las lecturas pendientes no equivalen a una recuperación definitiva.
+    # No elevar artificialmente la confianza de una jornada incompleta.
+    if pending_today:
+        score = min(score, 74)
+
     latest = {}
 
     for name, obj in advanced_inputs.items():
@@ -1878,6 +1900,10 @@ def data_quality(
         "baseline_maturity": baseline_maturity,
         "key_history_days": key_history_days,
         "issues": issues,
+        "pending_today": pending_today,
+        "today_availability_state": (
+            "early_day_pending" if pending_today else "evaluated"
+        ),
         "coverage_28d": coverage,
         "today": {
             "heart_rate_partial_day": bool(
