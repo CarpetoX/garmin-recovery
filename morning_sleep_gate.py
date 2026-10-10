@@ -39,9 +39,14 @@ def classify(now=None, sleep=None, recovery=None, shifts=None):
     rec_end=dt(rec_current.get('sleep_end_local'))
     rec_matches=rec_end is not None and end is not None and abs((rec_end-end).total_seconds())<=300
     age_minutes=round((now-end).total_seconds()/60,1) if confirmed else None
+    # After a night shift, a 03:00-05:00 episode can precede the main sleep.
+    # Do not declare a definitive morning report from an episode ending before 07:00.
+    early_post_shift_episode=bool(post_night_shift and confirmed and end.hour<7)
     fresh_sleep=(recovery.get('input_freshness') or {}).get('sleep') is True
     if confirmed:
-        if age_minutes<30:
+        if early_post_shift_episode:
+            state='post_night_shift_early_sleep_pending'
+        elif age_minutes<30:
             state='confirmed_wait_30m'
         elif not rec_matches or not fresh_sleep:
             state='confirmed_recovery_sync_pending'
@@ -52,9 +57,11 @@ def classify(now=None, sleep=None, recovery=None, shifts=None):
     return {
         'schema_version':1,'generated_at':now.isoformat(),'date':today,
         'state':state,'is_definitive':state=='confirmed_ready',
-        'possible_sleep_in_progress':not confirmed,
-        'wake_confirmed':confirmed,
+        'possible_sleep_in_progress':not confirmed or early_post_shift_episode,
+        'wake_confirmed':confirmed and not early_post_shift_episode,
+        'episode_end_confirmed':confirmed,
         'post_night_shift':post_night_shift,
+        'early_post_shift_episode':early_post_shift_episode,
         'sleep_end_local':end.isoformat() if confirmed else None,
         'minutes_since_sleep_end':age_minutes,
         'recovery_matches_sleep_episode':rec_matches if confirmed else None,
@@ -65,6 +72,7 @@ def classify(now=None, sleep=None, recovery=None, shifts=None):
           'confirmed_wait_30m':'Despertar confirmado; pendiente margen de 30 minutos.',
           'confirmed_recovery_sync_pending':'Sueño confirmado; falta sincronizar el análisis de recuperación del mismo episodio.',
           'post_night_shift_sleep_pending':'Posible sueño diurno o fragmentado tras turno de noche; no asumir despertar.',
+          'post_night_shift_early_sleep_pending':'Episodio temprano tras TN confirmado; puede faltar el descanso principal.',
           'sleep_or_sync_pending':'Sueño posiblemente en curso o despertar pendiente de sincronizar; no se puede distinguir con certeza.'
         }[state],
         'policy':'No usar sueño anterior como actual ni inferir vigilia sin episodio confirmado.',

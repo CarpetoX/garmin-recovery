@@ -46,9 +46,44 @@ def _validated_sleep(state, now):
     return not reasons, reasons
 
 
+def live_sensor_summary(provenance, now):
+    """Audit age of actual HR/Body Battery samples; NEVER alter recovery scores."""
+    details = {}
+    for key in ('heart_rate_live', 'body_battery_live'):
+        source = provenance.get(key) if isinstance(provenance, dict) else None
+        source = source if isinstance(source, dict) else {}
+        measured = _parse(source.get('measured_at'))
+        minutes = round((now - measured).total_seconds() / 60, 1) if measured else None
+        if minutes is None:
+            state = 'unknown'
+        elif minutes < -2:
+            state = 'invalid_future_measurement'
+        elif minutes > 90 or source.get('state') in ('delayed', 'old_measurement'):
+            state = 'delayed'
+        else:
+            state = 'recent'
+        details[key] = {
+            'state': state,
+            'measured_at': source.get('measured_at'),
+            'age_minutes_at_report': minutes,
+            'source_state': source.get('state'),
+        }
+    attention = [key for key, item in details.items()
+                 if item['state'] in ('delayed', 'invalid_future_measurement', 'unknown')]
+    return {
+        'live_measurements': details,
+        'not_confirmed_recent': attention,
+        'interpretation': 'caution' if attention else 'available_recent',
+        'note': ('Data generation time never proves a new sensor reading. '
+                 'Sleep HRV is measured during sleep, not continuously.'),
+    }
+
+
 def build(chain, file_times, now):
     cert = _original_build(chain, file_times, now)
-    cert['gate_version'] = '2.4.7'
+    cert['gate_version'] = '2.4.8'
+    cert['live_sensor_quality'] = live_sensor_summary(
+        cert.get('measurement_provenance', {}), now)
     slot = chain['slot']['slot']
     cert['target_report_at'] = TARGETS.get(slot, cert['target_report_at'])
     state = sleep_state()
@@ -76,6 +111,7 @@ def build(chain, file_times, now):
 def snapshot(cert):
     data, _ = _original_snapshot(cert)
     data['morning_sleep'] = cert.get('morning_sleep', {})
+    data['live_sensor_quality'] = cert.get('live_sensor_quality', {})
     data['physiological_report_status'] = cert.get('physiological_report_status', 'unknown')
     raw = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()
     return data, hashlib.sha256(raw).hexdigest()

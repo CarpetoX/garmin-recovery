@@ -241,7 +241,8 @@ def enhance_monitor(base, now, repo, token, fetcher):
         dispatch_origin = ('apps_script_backup' if slots.get('recovered_by_apps_script')
                            else 'manual' if slots.get('recovered_by_manual')
                            else 'unknown')
-        alerts.append({'severity': 'info', 'code': 'cron_missed_dispatch_recovered',
+        severity = 'warning' if slots.get('recovered_by_manual') else 'info'
+        alerts.append({'severity': severity, 'code': 'cron_missed_dispatch_recovered',
                        'slots': slots.get('recovered'),
                        'dispatch_origin': dispatch_origin,
                        'dispatch_origin_verified': slots.get('dispatch_origin_verified')})

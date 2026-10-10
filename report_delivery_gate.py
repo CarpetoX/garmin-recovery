@@ -17,7 +17,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo('Europe/Madrid')
-SLOTS = ((8, 30, '0830', '08:45'), (16, 45, '1645', '17:00'), (22, 45, '2245', '23:00'))
+SLOTS = ((8, 30, '0830', '09:05'), (16, 45, '1645', '17:10'), (22, 45, '2245', '23:10'))
 WORKFLOW = {
     'sync': 'sync.yml',
     'heart': 'garmin-heart-rate.yml',
