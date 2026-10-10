@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-10T11:20:21.070019+02:00",
+  "generated_at": "2026-10-10T11:34:16.860938+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "live_csv",
   "sheet_error": null,
-  "sheet_rows_loaded": 7,
+  "sheet_rows_loaded": 8,
   "sheet_fetch_policy": "cache_bust_query + no_cache_headers",
-  "sheet_latest_date": "2026-10-09",
+  "sheet_latest_date": "2026-10-10",
   "latest_activity_date": "2026-10-10",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.",
@@ -154,7 +154,7 @@
         "intervals_training_load": 19.0,
         "garmin_activity_load": 18.6,
         "trimp": 31.3,
-        "session_rpe_load": 0
+        "session_rpe_load": 386.4
       },
       "baseline_previous_3d": {
         "hrv": 55.63,
@@ -211,7 +211,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-10T11:20:08.642718+02:00",
+    "generated_at": "2026-10-10T11:34:04.624200+02:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "yellow",
@@ -320,9 +320,7 @@
       "subjective_checkin": "not_provided",
       "subjective_values_exported": false,
       "intensity_guardrail": "use_v22_guidance",
-      "reason_codes": [
-        "live_measurement_uncertain"
-      ],
+      "reason_codes": [],
       "baseline_caution": "standard",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
       "measurement_provenance": {
@@ -330,26 +328,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-10-10T09:07:03+02:00",
-            "age_minutes": 133.1,
+            "age_minutes": 147.0,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-10-10T09:06:12+02:00",
-            "age_minutes": 133.9,
+            "age_minutes": 147.9,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
             "state": "recent",
-            "measured_at": "2026-10-10T10:24:00+02:00",
-            "age_minutes": 56.1,
+            "measured_at": "2026-10-10T11:20:00+02:00",
+            "age_minutes": 14.1,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "delayed",
-            "measured_at": "2026-10-10T09:00:00+02:00",
-            "age_minutes": 140.1,
+            "state": "recent",
+            "measured_at": "2026-10-10T11:12:00+02:00",
+            "age_minutes": 22.1,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -360,10 +358,8 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": true,
-        "limited_live_metrics": [
-          "body_battery_live"
-        ],
+        "live_data_limited": false,
+        "limited_live_metrics": [],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -383,7 +379,7 @@
           "easy_aerobic": "light_to_moderate_by_perceived_effort",
           "mobility": "usual_light_mobility"
         },
-        "recent_sessions_with_declared_rpe": 5,
+        "recent_sessions_with_declared_rpe": 6,
         "recent_high_rpe_sessions": 3,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
@@ -400,14 +396,148 @@
       "date": "2026-10-10",
       "context": "free",
       "name": "Fuerza",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Fuerza - pecho, tríceps y abdominales",
+          "rpe": 6.0,
+          "notes": "Press inclinado mancuernas 12x16, 12x21, 12x26, 8x31, 8x33,5, 4x40, 12x26 (kg por mancuerna). Press banca máquina sentado 4x8 65 kg. Press superinclinado iso lateral 5x8 30 kg por lado. Aperturas máquina 4x10 50,5 kg. Tríceps polea 4x12 60 kg. Fondos 4x8 con peso corporal 89,6 kg. Sit-ups 4x25. RPE global 6. 32 series, 360 reps.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "garmin_activity_id": "i195697438",
+            "rpe": 6,
+            "bodyweight_kg_morning": 89.6,
+            "exercises": [
+              {
+                "name": "press de pecho inclinado con mancuernas",
+                "load_unit": "kg_total_dos_mancuernas",
+                "implements": 2,
+                "sets": [
+                  {
+                    "reps": 12,
+                    "load_kg": 32,
+                    "load_per_dumbbell_kg": 16
+                  },
+                  {
+                    "reps": 12,
+                    "load_kg": 42,
+                    "load_per_dumbbell_kg": 21
+                  },
+                  {
+                    "reps": 12,
+                    "load_kg": 52,
+                    "load_per_dumbbell_kg": 26
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 62,
+                    "load_per_dumbbell_kg": 31
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 67,
+                    "load_per_dumbbell_kg": 33.5
+                  },
+                  {
+                    "reps": 4,
+                    "load_kg": 80,
+                    "load_per_dumbbell_kg": 40
+                  },
+                  {
+                    "reps": 12,
+                    "load_kg": 52,
+                    "load_per_dumbbell_kg": 26
+                  }
+                ]
+              },
+              {
+                "name": "press banca en máquina sentado",
+                "load_unit": "kg_indicado_maquina",
+                "sets": [
+                  {
+                    "count": 4,
+                    "reps": 8,
+                    "load_kg": 65
+                  }
+                ]
+              },
+              {
+                "name": "press superinclinado iso lateral",
+                "load_unit": "kg_total_dos_lados",
+                "sets": [
+                  {
+                    "count": 5,
+                    "reps": 8,
+                    "load_kg": 60,
+                    "load_per_side_kg": 30
+                  }
+                ]
+              },
+              {
+                "name": "aperturas de pecho en máquina sentado",
+                "load_unit": "kg_indicado_maquina",
+                "sets": [
+                  {
+                    "count": 4,
+                    "reps": 10,
+                    "load_kg": 50.5
+                  }
+                ]
+              },
+              {
+                "name": "tríceps en polea",
+                "load_unit": "kg_indicado_maquina",
+                "sets": [
+                  {
+                    "count": 4,
+                    "reps": 12,
+                    "load_kg": 60
+                  }
+                ]
+              },
+              {
+                "name": "fondos de pecho",
+                "load_unit": "peso_corporal",
+                "sets": [
+                  {
+                    "count": 4,
+                    "reps": 8,
+                    "bodyweight_kg": 89.6
+                  }
+                ]
+              },
+              {
+                "name": "sit-ups",
+                "load_unit": "peso_corporal",
+                "sets": [
+                  {
+                    "count": 4,
+                    "reps": 25
+                  }
+                ]
+              }
+            ],
+            "total_sets": 32,
+            "total_reps": 360,
+            "declared_external_volume_kg": 12868,
+            "recorded_garmin_minutes": 64.37,
+            "notes": "RPE 6 global. Mancuernas: kg por mancuerna; iso lateral: kg por lado. Volumen externo suma pares, no incluye peso corporal de fondos o sit-ups."
+          },
+          "minimum_verified_volume_kg": 12868.0,
+          "volume_complete": false,
+          "structured_sets_known": 24,
+          "structured_sets_total": 32
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 6.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 64.37,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 386.2,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -928,6 +1058,104 @@
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "press de pecho inclinado con mancuernas",
+        "movement_pattern": "other",
+        "verified_volume_kg": 3488.0,
+        "known_sets": 7,
+        "total_sets": 7,
+        "volume_complete": true,
+        "estimated_1rm_kg": 90.7,
+        "estimated_1rm_method": "Epley, reps <= 10; approximate, not tested 1RM",
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "press banca en máquina sentado",
+        "movement_pattern": "horizontal_push",
+        "verified_volume_kg": 2080.0,
+        "known_sets": 4,
+        "total_sets": 4,
+        "volume_complete": true,
+        "estimated_1rm_kg": 82.3,
+        "estimated_1rm_method": "Epley, reps <= 10; approximate, not tested 1RM",
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "press superinclinado iso lateral",
+        "movement_pattern": "other",
+        "verified_volume_kg": 2400.0,
+        "known_sets": 5,
+        "total_sets": 5,
+        "volume_complete": true,
+        "estimated_1rm_kg": 76.0,
+        "estimated_1rm_method": "Epley, reps <= 10; approximate, not tested 1RM",
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "aperturas de pecho en máquina sentado",
+        "movement_pattern": "other",
+        "verified_volume_kg": 2020.0,
+        "known_sets": 4,
+        "total_sets": 4,
+        "volume_complete": true,
+        "estimated_1rm_kg": 67.3,
+        "estimated_1rm_method": "Epley, reps <= 10; approximate, not tested 1RM",
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "tríceps en polea",
+        "movement_pattern": "other",
+        "verified_volume_kg": 2880.0,
+        "known_sets": 4,
+        "total_sets": 4,
+        "volume_complete": true,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "fondos de pecho",
+        "movement_pattern": "other",
+        "verified_volume_kg": null,
+        "known_sets": 0,
+        "total_sets": 4,
+        "volume_complete": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-10",
+        "activity_id": "i195697438",
+        "exercise": "sit-ups",
+        "movement_pattern": "other",
+        "verified_volume_kg": null,
+        "known_sets": 0,
+        "total_sets": 4,
+        "volume_complete": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
         "date": "2026-10-09",
         "activity_id": "i195481427",
         "exercise": "sentadilla trasera",
@@ -958,6 +1186,20 @@
     ],
     "movement_pattern_load": {
       "7d": {
+        "other": {
+          "verified_volume_kg": 10788.0,
+          "known_sets": 20,
+          "total_sets": 28,
+          "sessions": 6,
+          "volume_complete": false
+        },
+        "horizontal_push": {
+          "verified_volume_kg": 2080.0,
+          "known_sets": 4,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "squat": {
           "verified_volume_kg": 2715.0,
           "known_sets": 10,
@@ -974,6 +1216,20 @@
         }
       },
       "28d": {
+        "other": {
+          "verified_volume_kg": 10788.0,
+          "known_sets": 20,
+          "total_sets": 28,
+          "sessions": 6,
+          "volume_complete": false
+        },
+        "horizontal_push": {
+          "verified_volume_kg": 2080.0,
+          "known_sets": 4,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "squat": {
           "verified_volume_kg": 2715.0,
           "known_sets": 10,
@@ -991,6 +1247,26 @@
       }
     },
     "best_estimated_1rm_by_exercise": [
+      {
+        "exercise": "press de pecho inclinado con mancuernas",
+        "date": "2026-10-10",
+        "estimated_1rm_kg": 90.7
+      },
+      {
+        "exercise": "press banca en máquina sentado",
+        "date": "2026-10-10",
+        "estimated_1rm_kg": 82.3
+      },
+      {
+        "exercise": "press superinclinado iso lateral",
+        "date": "2026-10-10",
+        "estimated_1rm_kg": 76.0
+      },
+      {
+        "exercise": "aperturas de pecho en máquina sentado",
+        "date": "2026-10-10",
+        "estimated_1rm_kg": 67.3
+      },
       {
         "exercise": "sentadilla trasera",
         "date": "2026-10-09",
@@ -1153,7 +1429,7 @@
             "intervals_training_load": 19.0,
             "garmin_activity_load": 18.6,
             "trimp": 31.3,
-            "session_rpe_load": 0
+            "session_rpe_load": 386.4
           },
           "baseline_previous_3d": {
             "hrv": 55.63,
@@ -1210,25 +1486,17 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-10T11:20:21.070019+02:00",
+    "checked_at": "2026-10-10T11:34:16.860938+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-10",
     "latest_activity_age_days": 0,
-    "sheet_rows": 7,
-    "manual_coverage_7d_pct": 87.5,
+    "sheet_rows": 8,
+    "manual_coverage_7d_pct": 100.0,
     "flags": [
       {
         "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 1,
-        "ids": [
-          "i195697438"
-        ]
-      },
-      {
-        "severity": "info",
         "code": "incomplete_strength_weights",
-        "count": 1
+        "count": 2
       }
     ],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
@@ -1237,13 +1505,13 @@
     "window_start": "2026-10-04",
     "window_end": "2026-10-10",
     "activities": 8,
-    "activities_with_manual_sheet_match": 7,
-    "activities_missing_manual_match": 1,
-    "mean_rpe": 6.5,
-    "recorded_srpe_sum": 823.1,
+    "activities_with_manual_sheet_match": 8,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 6.44,
+    "recorded_srpe_sum": 1209.3,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 3745.0,
-    "strength_blocks_with_missing_weights": 1,
+    "minimum_verified_strength_volume_kg": 16613.0,
+    "strength_blocks_with_missing_weights": 2,
     "readiness_latest": {
       "score": 74,
       "raw_score_before_guardrails": 84,
@@ -1274,19 +1542,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-10T11:20:21.070019+02:00",
+    "checked_at": "2026-10-10T11:34:16.860938+02:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-10T11:19:33.437231+02:00",
+        "generated_at": "2026-10-10T11:33:26.673239+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-10T11:19:47.351460+02:00",
+        "generated_at": "2026-10-10T11:33:42.153168+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -1300,28 +1568,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-10T11:20:08.537063+02:00",
+        "generated_at": "2026-10-10T11:34:04.510232+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-10T11:20:08.537063+02:00",
+        "generated_at": "2026-10-10T11:34:04.510232+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-10T11:19:33.437231+02:00",
+        "generated_at": "2026-10-10T11:33:26.673239+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-10T11:19:47.351460+02:00",
+        "generated_at": "2026-10-10T11:33:42.153168+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
