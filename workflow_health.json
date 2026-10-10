@@ -1,13 +1,13 @@
 {
-  "checked_at": "2026-10-10T09:12:46.279295+02:00",
+  "checked_at": "2026-10-10T09:37:11.674022+02:00",
   "repository": "CarpetoX/garmin-recovery",
-  "status": "ok",
+  "status": "attention",
   "workflows": {
     "sync.yml": {
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-10T07:11:50Z",
       "last_success_at": "2026-10-10T09:11:50+02:00",
-      "last_success_age_hours": 0.02,
+      "last_success_age_hours": 0.42,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/38033576556",
       "latest_run_event": "workflow_dispatch"
     },
@@ -15,7 +15,7 @@
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-10T07:12:12Z",
       "last_success_at": "2026-10-10T09:12:12+02:00",
-      "last_success_age_hours": 0.01,
+      "last_success_age_hours": 0.42,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/38033588009",
       "latest_run_event": "workflow_run"
     },
@@ -23,7 +23,7 @@
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-10T07:12:24Z",
       "last_success_at": "2026-10-10T09:12:24+02:00",
-      "last_success_age_hours": 0.01,
+      "last_success_age_hours": 0.41,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/38033607580",
       "latest_run_event": "workflow_run"
     },
@@ -31,12 +31,20 @@
       "last_completed_conclusion": "success",
       "last_completed_at": "2026-10-10T07:12:43Z",
       "last_success_at": "2026-10-10T09:12:43+02:00",
-      "last_success_age_hours": 0.0,
+      "last_success_age_hours": 0.41,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/38033620220",
       "latest_run_event": "workflow_run"
     }
   },
-  "alerts": [],
+  "alerts": [
+    {
+      "severity": "warning",
+      "code": "latest_pipeline_not_complete",
+      "stage": "ready_certificate",
+      "state": "attention",
+      "sync_run_id": 38033576556
+    }
+  ],
   "note": "pipeline_progress tracks the current Sync→Heart→Advanced→CrossFit chain; a previous successful stage is not presented as completion of a running cycle. report_cycles.json records readiness, NOT delivery receipts.",
   "schedule_v231": {
     "state": "awaiting_next_due_slot",
@@ -71,13 +79,13 @@
     "state": "ready",
     "cycle_id": "2026-10-10-0830",
     "last_verified_at": "2026-10-10T08:50:08.736055+02:00",
-    "age_hours": 0.38,
+    "age_hours": 0.78,
     "last_sync_run_id": 38032250524,
     "report_delivered": "not_verified"
   },
   "pipeline_progress": {
-    "state": "awaiting_certificate",
-    "age_minutes": 1.1,
+    "state": "attention",
+    "age_minutes": 25.5,
     "sync_run_id": 38033576556,
     "current_stage": "ready_certificate",
     "stages": {
