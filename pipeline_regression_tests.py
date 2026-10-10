@@ -191,9 +191,21 @@ def test_partial_day(heart, advanced, quality, errors, warnings):
         if excluded < 1:
             fail(errors, "partial_day_not_excluded_from_daytime_trend", window)
 
+    # Quality.today refers to the date of its own generation, not necessarily
+    # to the last Garmin HR day (which may still be yesterday at 00:00).
     today = quality.get("today", {}) if isinstance(quality, dict) else {}
-    if isinstance(today, dict) and today.get("heart_rate_partial_day") is not True:
-        fail(errors, "partial_day_quality_flag_lost", latest_day)
+    quality_date = str(quality.get("generated_at") or "")[:10] if isinstance(quality, dict) else ""
+    if len(quality_date) != 10 or not quality_date[4:5] == "-" or not quality_date[7:8] == "-":
+        fail(errors, "partial_day_quality_date_missing")
+    elif quality_date == latest_day:
+        if not isinstance(today, dict) or today.get("heart_rate_partial_day") is not True:
+            fail(errors, "partial_day_quality_flag_lost", latest_day)
+    elif quality_date > latest_day:
+        warn(warnings, "partial_day_hr_source_behind_quality_date",
+             f"{latest_day}_vs_{quality_date}")
+    else:
+        fail(errors, "partial_day_quality_outdated",
+             f"{quality_date}_vs_{latest_day}")
 
 
 def test_fused_convergence(advanced, recovery, errors, warnings):
