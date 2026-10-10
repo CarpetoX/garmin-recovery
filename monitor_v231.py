@@ -82,7 +82,9 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
         'state': state, 'due': len(slots), 'matched': len(matched),
         'recovered_count': len(recovered), 'recovered': recovered,
         'recovered_by_apps_script': recovered_apps,
-        'recovered_by_manual': recovered_manual,
+        'recovered_by_manual': recovered_manual,  # legado: etiqueta basada solo en evento
+        'recovered_by_unattributed': recovered_manual,
+        'dispatch_caller_verified': False if recovered else None,
         'cron_missed': recovered + uncovered, 'uncovered': uncovered,
         'missed': uncovered,  # compatibility with V2.3.1 consumers
         'manual_runs_counted_as_schedule': False,
@@ -238,14 +240,20 @@ def enhance_monitor(base, now, repo, token, fetcher):
             if alert.get('code') == 'no_recent_successful_scheduled_run':
                 alert['severity'] = 'info'
                 alert['clarification'] = 'data_recovered_by_dispatch; cron_still_unreliable'
-        dispatch_origin = ('apps_script_backup' if slots.get('recovered_by_apps_script')
-                           else 'manual' if slots.get('recovered_by_manual')
-                           else 'unknown')
+        # V2.4.12: workflow_dispatch actor unverified; event type is not caller identity.
+        dispatch_origin = ('repository_dispatch_caller_unverified'
+                           if slots.get('recovered_by_apps_script')
+                           else 'workflow_dispatch_caller_unverified'
+                           if slots.get('recovered_by_unattributed') else 'unknown')
         severity = 'warning' if slots.get('recovered_by_manual') else 'info'
         alerts.append({'severity': severity, 'code': 'cron_missed_dispatch_recovered',
                        'slots': slots.get('recovered'),
                        'dispatch_origin': dispatch_origin,
-                       'dispatch_origin_verified': slots.get('dispatch_origin_verified')})
+                       'dispatch_origin_verified': False,
+                       'dispatch_caller_verified': False,
+                       'evidence_level': 'github_event_type_only',
+                       'note': ('El tipo workflow_dispatch no distingue Apps Script de '
+                                'una persona; ningún actor está certificado.')})
     elif slots.get('state') == 'attention':
         alerts.append({'severity': 'warning', 'code': 'sync_slot_not_recovered',
                        'slots': slots.get('uncovered'), 'cron_missed': slots.get('cron_missed')})
