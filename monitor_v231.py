@@ -90,7 +90,7 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
         'grace_minutes': grace_minutes, 'timezone': 'Europe/Madrid',
         'schedule_version': 'three_syncs_v244',
         'sync_slots': ['08:30', '16:45', '22:45'],
-        'report_targets': ['08:45', '17:00', '23:00'],
+        'report_targets': ['09:05', '17:10', '23:10'],
         'effective_date': SCHEDULE_START,
         'note': ('repository_dispatch=Apps Script backup; '
                  'workflow_dispatch=manual; schedule=GitHub cron.'),
