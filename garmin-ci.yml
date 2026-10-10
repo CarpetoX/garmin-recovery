@@ -1,0 +1,188 @@
+name: Garmin Recovery CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '.github/workflows/*.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '.github/workflows/*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: garmin-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Syntax-check all Python source files
+        run: python -m compileall -q .
+
+      - name: Install pinned YAML parser for workflow validation
+        run: python -m pip install --disable-pip-version-check 'PyYAML==6.0.3'
+
+      - name: Validate workflow YAML, triggers and pipeline topology
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          class StrictLoader(yaml.BaseLoader):
+              def construct_mapping(self, node, deep=False):
+                  seen = set()
+                  for key_node, _ in node.value:
+                      key = self.construct_object(key_node, deep=deep)
+                      if key in seen:
+                          raise ValueError(f"Duplicate YAML key: {key!r}")
+                      seen.add(key)
+                  return super().construct_mapping(node, deep=deep)
+
+          folder = Path('.github/workflows')
+          workflows = {}
+          for file in sorted(folder.glob('*.yml')):
+              doc = yaml.load(file.read_text(encoding='utf-8'), Loader=StrictLoader)
+              assert isinstance(doc, dict), f'{file}: invalid YAML document'
+              assert isinstance(doc.get('on'), dict), f'{file}: missing event configuration'
+              assert isinstance(doc.get('jobs'), dict) and doc['jobs'], f'{file}: missing jobs'
+              assert doc.get('permissions'), f'{file}: missing explicit token permissions'
+              workflows[file.name] = doc
+
+          required = {
+              'sync.yml', 'garmin-heart-rate.yml',
+              'advanced-analytics-rpe.yml', 'crossfit-insights.yml',
+              'monitor-monthly.yml', 'garmin-ci.yml',
+          }
+          assert required <= workflows.keys(), f'Missing workflows: {required - workflows.keys()}'
+          for child, parent in (
+              ('garmin-heart-rate.yml', 'Garmin Recovery Sync'),
+              ('advanced-analytics-rpe.yml', 'Garmin Heart Rate Enrichment'),
+              ('crossfit-insights.yml', 'Garmin Advanced Analytics'),
+          ):
+              parents = workflows[child]['on']['workflow_run']['workflows']
+              assert parent in parents, f'{child}: missing workflow_run parent {parent}'
+
+          sync = workflows['sync.yml']['on']
+          assert 'workflow_dispatch' in sync
+          assert 'garmin-sync' in sync['repository_dispatch']['types']
+          schedules = sync['schedule']
+          assert len(schedules) == 3
+          assert [entry['cron'] for entry in schedules] == [
+              '30 8 * * *', '45 16 * * *', '45 22 * * *',
+          ], 'Sync slots were unexpectedly changed'
+          assert all(entry.get('timezone') == 'Europe/Madrid' for entry in schedules)
+          monitor = workflows['monitor-monthly.yml']['on']
+          assert 'garmin-monitor' in monitor['repository_dispatch']['types']
+          ci = workflows['garmin-ci.yml']['on']
+          assert 'push' in ci and 'pull_request' in ci and 'workflow_dispatch' in ci
+          assert 'schedule' not in ci, 'CI must not consume scheduled pipeline cycles'
+          print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
+          PY
+
+      - name: Tests for morning reports, post-night-shift sleep and strength metrics
+        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions
+
+      - name: Verify midnight and partial-day regression scenarios
+        run: |
+          python - <<'PY'
+          from pipeline_regression_tests import test_partial_day
+
+          def check(latest, generated, flag, expected_error=None, expected_warning=None,
+                    excluded=1):
+              hr = {'days': {latest: {'partial_day': True}}}
+              advanced = {'robust_trends': {
+                  w: {'metrics': {'daytime_hr': {'partial_days_excluded': excluded}}}
+                  for w in ('3d', '7d', '28d')
+              }}
+              quality = {'generated_at': generated,
+                         'today': {'heart_rate_partial_day': flag,
+                                   'day_hr_samples': 0, 'night_hr_samples': 0}}
+              errors, warnings = [], []
+              test_partial_day(hr, advanced, quality, errors, warnings)
+              if expected_error is None:
+                  assert not errors, (latest, generated, errors)
+              else:
+                  assert any(x.startswith(expected_error) for x in errors), errors
+              if expected_warning is None:
+                  assert not warnings, (latest, generated, warnings)
+              else:
+                  assert any(x.startswith(expected_warning) for x in warnings), warnings
+
+          check('2026-10-10', '2026-10-10T23:55:00+02:00', True)
+          check('2026-10-10', '2026-10-11T00:01:00+02:00', False,
+                expected_warning='partial_day_hr_source_behind_quality_date')
+          check('2026-10-11', '2026-10-11T00:09:00+02:00', True)
+          check('2026-10-10', '2026-10-10T23:55:00+02:00', False,
+                expected_error='partial_day_quality_flag_lost')
+          check('2026-10-10', '2026-10-09T23:00:00+02:00', False,
+                expected_error='partial_day_quality_outdated')
+          check('2026-10-10', 'invalid-date', False,
+                expected_error='partial_day_quality_date_missing')
+          check('2026-10-10', '2026-10-10T23:55:00+02:00', True,
+                expected_error='partial_day_not_excluded_from_daytime_trend', excluded=0)
+          print('OK: seven midnight/partial-day regression scenarios.')
+          PY
+
+      - name: Validate pending sleep at midnight and after night shifts
+        run: |
+          python - <<'PYCODE'
+          from datetime import datetime
+          from unittest.mock import patch
+          from zoneinfo import ZoneInfo
+          import advanced_analytics as aa
+          tz = ZoneInfo('Europe/Madrid')
+          saved_now, saved_today = aa.NOW, aa.TODAY
+
+          def evaluate(hour, post_tn, sleep=False, night_samples=0):
+              now = datetime(2026, 10, 11, hour, 30, tzinfo=tz)
+              aa.NOW, aa.TODAY = now, now.date()
+              try:
+                  row = {'hr_partial_day': True,
+                         'sleep_window_available': sleep,
+                         'night_hr_samples': night_samples,
+                         'day_hr_samples': 0}
+                  with patch('shift_calendar.resolve_day',
+                             return_value={'post_tn': post_tn}):
+                      return aa.data_quality(
+                          {now.date().isoformat(): row},
+                          [{'id': 'synthetic'}], {'days': {'2026-10-10': {}}}, {}, {})
+              finally:
+                  aa.NOW, aa.TODAY = saved_now, saved_today
+
+          midnight = evaluate(0, False)
+          assert midnight['today_availability_state'] == 'early_day_pending', midnight
+          assert 'sleep_window_pending_day_start' in midnight['pending_today']
+          assert 'missing_sleep_window' not in midnight['issues']
+          assert midnight['score'] <= 74
+
+          post_night_shift = evaluate(14, True)
+          assert post_night_shift['today_availability_state'] == 'post_tn_sleep_pending'
+          assert 'missing_sleep_window' not in post_night_shift['issues']
+          assert post_night_shift['score'] <= 74
+
+          observed = evaluate(14, True, sleep=True, night_samples=120)
+          assert observed['today_availability_state'] == 'evaluated'
+          assert not observed['pending_today']
+
+          regular_noon = evaluate(14, False)
+          assert 'missing_sleep_window' in regular_noon['issues']
+          late_post_shift = evaluate(19, True)
+          assert 'missing_sleep_window' in late_post_shift['issues']
+          print('OK: five permanent day-start / post-night-shift regression checks')
+          PYCODE
+
+      - name: Monitor schedule and fallback provenance tests
+        run: python monitor_v231.py
