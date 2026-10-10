@@ -26,21 +26,24 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Validar sintaxis V2.4
-        run: python -m py_compile crossfit_insights.py report_delivery_gate.py pipeline_regression_tests.py
+      - name: Validar sintaxis V2.4.6
+        run: python -m py_compile crossfit_insights.py report_delivery_gate.py report_sleep_integration.py test_sleep_integration.py pipeline_regression_tests.py
+
+      - name: Pruebas integración sueño V2.4.6
+        run: python -m unittest -v test_sleep_integration
 
       - name: Generate CrossFit analysis
         env:
           RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
         run: python crossfit_insights.py
 
-      - name: Certify and record data-ready cycle
+      - name: Certify and record data-ready cycle V2.4.6
         if: github.event_name == 'workflow_run'
         env:
           GH_TOKEN: ${{ github.token }}
           CROSSFIT_RUN_ID: ${{ github.run_id }}
           ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
-        run: python report_delivery_gate.py
+        run: python report_sleep_integration.py
 
       - name: Pruebas de regresión V2.4
         run: python pipeline_regression_tests.py --stage crossfit
@@ -54,7 +57,7 @@ jobs:
           [ ! -f report_cycles.json ] || git add report_cycles.json
           [ ! -f report_ready.json ] || git add report_ready.json
           if ! git diff --cached --quiet; then
-            git commit -m 'Update CrossFit insights and report readiness'
+            git commit -m 'Update CrossFit insights and report readiness V2.4.6'
             for attempt in 1 2 3 4 5; do
               if ! git pull --rebase origin "${{ github.event.repository.default_branch }}"; then
                 git rebase --abort || true
