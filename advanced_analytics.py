@@ -1727,7 +1727,14 @@ def data_quality(
     # V2.4.10: early-day Garmin readings are pending, not missing.
     # Las lecturas del día no se consideran definitivas al inicio de la jornada.
     # La certificación de sueño y recuperación sigue siendo independiente.
-    day_start_pending = NOW.hour < 10 and (
+    # V2.4.11: post-night-shift sleep may extend into the afternoon.
+    # La ausencia de sueno posterior a TN no prueba un fallo de Garmin.
+    # Mantener una ventana mas amplia SOLO en dia post-TN.
+    # El modelo principal de recuperacion conserva sus bloqueos.
+    from shift_calendar import resolve_day
+    post_tn = bool(resolve_day(TODAY.isoformat()).get("post_tn"))
+    pending_limit_hour = 18 if post_tn else 10
+    day_start_pending = NOW.hour < pending_limit_hour and (
         not today or bool(today.get("hr_partial_day"))
     )
     pending_today = []
@@ -1902,7 +1909,8 @@ def data_quality(
         "issues": issues,
         "pending_today": pending_today,
         "today_availability_state": (
-            "early_day_pending" if pending_today else "evaluated"
+            "post_tn_sleep_pending" if post_tn and pending_today
+            else "early_day_pending" if pending_today else "evaluated"
         ),
         "coverage_28d": coverage,
         "today": {
