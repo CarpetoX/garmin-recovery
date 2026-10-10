@@ -31,7 +31,7 @@ jobs:
 
       - name: Validar sintaxis
         run: |
-          python -m py_compile advanced_analytics.py rpe_enrichment.py validate_pipeline.py recovery_reliability.py pipeline_regression_tests.py
+          python -m py_compile advanced_analytics.py rpe_enrichment.py validate_pipeline.py recovery_reliability.py pipeline_regression_tests.py morning_sleep_gate.py
 
       - name: Calcular analítica avanzada + RPE
         env:
@@ -44,6 +44,10 @@ jobs:
       - name: Fusionar recuperación, sueño y VFC con guardrails
         run: |
           python recovery_reliability.py
+
+      - name: Clasificar sueño matinal sin alterar el modelo de recuperación
+        run: |
+          python morning_sleep_gate.py
 
       - name: Validar integridad del pipeline
         run: |
@@ -61,7 +65,7 @@ jobs:
           git config user.email "actions@github.com"
 
           git add advanced_analytics.json data_quality.json activity_hr_recovery.json
-          git add daily_summary.json weekly_summary.json recovery_assessment.json
+          git add daily_summary.json weekly_summary.json recovery_assessment.json morning_sleep_status.json
           [ -f training_feedback.json ] && git add training_feedback.json || true
           [ -f day_context.json ] && git add day_context.json || true
 
@@ -70,7 +74,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Actualizar analítica, RPE y fiabilidad de recuperación"
+          git commit -m "Actualizar analítica, RPE y estado de sueño matinal"
 
           for attempt in 1 2 3 4 5; do
             echo "Intento de publicación $attempt/5"
