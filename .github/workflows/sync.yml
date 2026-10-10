@@ -2,6 +2,9 @@ name: Garmin Recovery Sync
 
 on:
   workflow_dispatch:
+  # Backup independently triggered by Apps Script, once its Code.gs is configured.
+  repository_dispatch:
+    types: [garmin-sync]
 
   schedule:
     - cron: "30 8 * * *"
