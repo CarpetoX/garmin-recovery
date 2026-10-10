@@ -28,9 +28,113 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Syntax-check all Python source files
         run: python -m compileall -q .
+
+      - name: Install pinned YAML parser for workflow validation
+        run: python -m pip install --disable-pip-version-check 'PyYAML==6.0.3'
+
+      - name: Validate workflow YAML, triggers and pipeline topology
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          class StrictLoader(yaml.BaseLoader):
+              def construct_mapping(self, node, deep=False):
+                  seen = set()
+                  for key_node, _ in node.value:
+                      key = self.construct_object(key_node, deep=deep)
+                      if key in seen:
+                          raise ValueError(f"Duplicate YAML key: {key!r}")
+                      seen.add(key)
+                  return super().construct_mapping(node, deep=deep)
+
+          folder = Path('.github/workflows')
+          workflows = {}
+          for file in sorted(folder.glob('*.yml')):
+              doc = yaml.load(file.read_text(encoding='utf-8'), Loader=StrictLoader)
+              assert isinstance(doc, dict), f'{file}: invalid YAML document'
+              assert isinstance(doc.get('on'), dict), f'{file}: missing event configuration'
+              assert isinstance(doc.get('jobs'), dict) and doc['jobs'], f'{file}: missing jobs'
+              assert doc.get('permissions'), f'{file}: missing explicit token permissions'
+              workflows[file.name] = doc
+
+          required = {
+              'sync.yml', 'garmin-heart-rate.yml',
+              'advanced-analytics-rpe.yml', 'crossfit-insights.yml',
+              'monitor-monthly.yml', 'garmin-ci.yml',
+          }
+          assert required <= workflows.keys(), f'Missing workflows: {required - workflows.keys()}'
+          for child, parent in (
+              ('garmin-heart-rate.yml', 'Garmin Recovery Sync'),
+              ('advanced-analytics-rpe.yml', 'Garmin Heart Rate Enrichment'),
+              ('crossfit-insights.yml', 'Garmin Advanced Analytics'),
+          ):
+              parents = workflows[child]['on']['workflow_run']['workflows']
+              assert parent in parents, f'{child}: missing workflow_run parent {parent}'
+
+          sync = workflows['sync.yml']['on']
+          assert 'workflow_dispatch' in sync
+          assert 'garmin-sync' in sync['repository_dispatch']['types']
+          schedules = sync['schedule']
+          assert len(schedules) == 3
+          assert [entry['cron'] for entry in schedules] == [
+              '30 8 * * *', '45 16 * * *', '45 22 * * *',
+          ], 'Sync slots were unexpectedly changed'
+          assert all(entry.get('timezone') == 'Europe/Madrid' for entry in schedules)
+          monitor = workflows['monitor-monthly.yml']['on']
+          assert 'garmin-monitor' in monitor['repository_dispatch']['types']
+          ci = workflows['garmin-ci.yml']['on']
+          assert 'push' in ci and 'pull_request' in ci and 'workflow_dispatch' in ci
+          assert 'schedule' not in ci, 'CI must not consume scheduled pipeline cycles'
+          print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
+          PY
+
       - name: Tests for morning reports, post-night-shift sleep and strength metrics
         run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248
+
+      - name: Verify midnight and partial-day regression scenarios
+        run: |
+          python - <<'PY'
+          from pipeline_regression_tests import test_partial_day
+
+          def check(latest, generated, flag, expected_error=None, expected_warning=None,
+                    excluded=1):
+              hr = {'days': {latest: {'partial_day': True}}}
+              advanced = {'robust_trends': {
+                  w: {'metrics': {'daytime_hr': {'partial_days_excluded': excluded}}}
+                  for w in ('3d', '7d', '28d')
+              }}
+              quality = {'generated_at': generated,
+                         'today': {'heart_rate_partial_day': flag,
+                                   'day_hr_samples': 0, 'night_hr_samples': 0}}
+              errors, warnings = [], []
+              test_partial_day(hr, advanced, quality, errors, warnings)
+              if expected_error is None:
+                  assert not errors, (latest, generated, errors)
+              else:
+                  assert any(x.startswith(expected_error) for x in errors), errors
+              if expected_warning is None:
+                  assert not warnings, (latest, generated, warnings)
+              else:
+                  assert any(x.startswith(expected_warning) for x in warnings), warnings
+
+          check('2026-10-10', '2026-10-10T23:55:00+02:00', True)
+          check('2026-10-10', '2026-10-11T00:01:00+02:00', False,
+                expected_warning='partial_day_hr_source_behind_quality_date')
+          check('2026-10-11', '2026-10-11T00:09:00+02:00', True)
+          check('2026-10-10', '2026-10-10T23:55:00+02:00', False,
+                expected_error='partial_day_quality_flag_lost')
+          check('2026-10-10', '2026-10-09T23:00:00+02:00', False,
+                expected_error='partial_day_quality_outdated')
+          check('2026-10-10', 'invalid-date', False,
+                expected_error='partial_day_quality_date_missing')
+          check('2026-10-10', '2026-10-10T23:55:00+02:00', True,
+                expected_error='partial_day_not_excluded_from_daytime_trend', excluded=0)
+          print('OK: seven midnight/partial-day regression scenarios.')
+          PY
+
       - name: Monitor schedule and fallback provenance tests
         run: python monitor_v231.py
