@@ -86,7 +86,7 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
         'cron_missed': recovered + uncovered, 'uncovered': uncovered,
         'missed': uncovered,  # compatibility with V2.3.1 consumers
         'manual_runs_counted_as_schedule': False,
-        'dispatch_origin_verified': True if recovered else None,
+        'dispatch_origin_verified': True if recovered_apps else False if recovered_manual else None,
         'grace_minutes': grace_minutes, 'timezone': 'Europe/Madrid',
         'schedule_version': 'three_syncs_v244',
         'sync_slots': ['08:30', '16:45', '22:45'],
@@ -182,6 +182,17 @@ def run_progress(now, runs_by_stage, certificate=None, stage_timeout_minutes=35)
     cert_run = (certificate or {}).get('chain', {}).get('sync', {}).get('id')
     if (certificate or {}).get('status') == 'ready' and str(cert_run) == str(root.get('id')):
         state = 'ready'
+    elif ((certificate or {}).get('status') == 'ready'
+          and (certificate or {}).get('cycle_id') == root_at.strftime('%Y-%m-%d') + '-'
+          + min((f'{h:02d}{m:02d}' for h, m in SLOTS
+                 if -2 <= (root_at - datetime(root_at.year, root_at.month, root_at.day, h, m, tzinfo=TZ)).total_seconds()/60 <= 150),
+                default='')
+          and (certificate or {}).get('cycle_id') != root_at.strftime('%Y-%m-%d') + '-'):
+        return {'state': 'already_certified_cycle', 'age_minutes': age_min,
+                'sync_run_id': root.get('id'), 'certificate_sync_run_id': cert_run,
+                'cycle_id': certificate.get('cycle_id'),
+                'explanation': 'This cycle already has an immutable certificate; later runs do not replace it.',
+                'stages': pieces}
     else:
         last = _utc_local(parent.get('updated_at'))
         seconds = (now - last).total_seconds() if last else 0
@@ -300,6 +311,24 @@ def self_test():
     d = audit_slots(now, [dict(manual, conclusion='failure')], lookback_hours=12)
     assert d['state'] == 'attention' and len(d['uncovered']) == 1, d
     assert SLOTS == ((8, 30), (16, 45), (22, 45))
+    # Completed repeat of a slot must not look like a missing certificate.
+    from datetime import timezone
+    def run(stage, time, event='workflow_run', run_id=1):
+        ts = datetime(2026, 10, 11, 8, time, tzinfo=TZ).astimezone(timezone.utc).isoformat()
+        return {'id': run_id, 'event': event, 'status': 'completed',
+                'conclusion': 'success', 'created_at': ts, 'updated_at': ts}
+    chain = {'sync': [run('sync', 35, 'workflow_dispatch', 100)],
+             'heart': [run('heart', 36, run_id=101)],
+             'advanced': [run('advanced', 37, run_id=102)],
+             'crossfit': [run('crossfit', 38, run_id=103)]}
+    prior = {'status': 'ready', 'cycle_id': '2026-10-11-0830',
+             'chain': {'sync': {'id': 99}}}
+    result = run_progress(datetime(2026, 10, 11, 8, 45, tzinfo=TZ), chain, prior)
+    assert result['state'] == 'already_certified_cycle', result
+    assert result['certificate_sync_run_id'] == 99
+    prior['cycle_id'] = '2026-10-10-0830'
+    result = run_progress(datetime(2026, 10, 11, 8, 45, tzinfo=TZ), chain, prior)
+    assert result['state'] == 'awaiting_certificate', result
     print('OK: V2.4.4 schedule/manual/Apps Script distinction')
 
 
