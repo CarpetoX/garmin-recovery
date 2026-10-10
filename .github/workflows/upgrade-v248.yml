@@ -1,0 +1,69 @@
+name: Upgrade Garmin Recovery V2.4.8
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Share the same write-queue as the upstream sync and advanced analytics jobs.
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Apply V2.4.8 fixes (idempotent)
+        run: python upgrade_v248.py
+
+      - name: Syntax-check modified Python files
+        run: |
+          python -m py_compile upgrade_v248.py test_quality_v248.py
+          python -m py_compile morning_sleep_gate.py muscle_load.py report_sleep_integration.py report_delivery_gate.py monitor_v231.py
+
+      - name: Run 2026 night-shift, report, backup and strength tests
+        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248
+
+      - name: Run workflow monitor self-tests
+        run: python monitor_v231.py
+
+      - name: Commit only if ALL tests succeeded
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/sync.yml morning_sleep_gate.py muscle_load.py
+          git add report_delivery_gate.py report_sleep_integration.py monitor_v231.py
+          if git diff --cached --quiet; then
+            echo 'V2.4.8 already applied; no commit necessary.'
+            exit 0
+          fi
+          git commit -m 'Garmin Recovery V2.4.8: backup, sleep, strength and source freshness'
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo 'A newer incompatible change appeared; aborting safely.' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'V2.4.8 published successfully.'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          echo 'Failed to push V2.4.8 after five attempts.' >&2
+          exit 1

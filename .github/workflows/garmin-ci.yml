@@ -1,0 +1,36 @@
+name: Garmin Recovery CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '.github/workflows/*.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.py'
+      - '.github/workflows/*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: garmin-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax-check all Python source files
+        run: python -m compileall -q .
+      - name: Tests for morning reports, post-night-shift sleep and strength metrics
+        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248
+      - name: Monitor schedule and fallback provenance tests
+        run: python monitor_v231.py
