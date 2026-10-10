@@ -93,7 +93,7 @@ jobs:
           PY
 
       - name: Tests for morning reports, post-night-shift sleep and strength metrics
-        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248
+        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions
 
       - name: Verify midnight and partial-day regression scenarios
         run: |
@@ -135,6 +135,54 @@ jobs:
                 expected_error='partial_day_not_excluded_from_daytime_trend', excluded=0)
           print('OK: seven midnight/partial-day regression scenarios.')
           PY
+
+      - name: Validate pending sleep at midnight and after night shifts
+        run: |
+          python - <<'PYCODE'
+          from datetime import datetime
+          from unittest.mock import patch
+          from zoneinfo import ZoneInfo
+          import advanced_analytics as aa
+          tz = ZoneInfo('Europe/Madrid')
+          saved_now, saved_today = aa.NOW, aa.TODAY
+
+          def evaluate(hour, post_tn, sleep=False, night_samples=0):
+              now = datetime(2026, 10, 11, hour, 30, tzinfo=tz)
+              aa.NOW, aa.TODAY = now, now.date()
+              try:
+                  row = {'hr_partial_day': True,
+                         'sleep_window_available': sleep,
+                         'night_hr_samples': night_samples,
+                         'day_hr_samples': 0}
+                  with patch('shift_calendar.resolve_day',
+                             return_value={'post_tn': post_tn}):
+                      return aa.data_quality(
+                          {now.date().isoformat(): row},
+                          [{'id': 'synthetic'}], {'days': {'2026-10-10': {}}}, {}, {})
+              finally:
+                  aa.NOW, aa.TODAY = saved_now, saved_today
+
+          midnight = evaluate(0, False)
+          assert midnight['today_availability_state'] == 'early_day_pending', midnight
+          assert 'sleep_window_pending_day_start' in midnight['pending_today']
+          assert 'missing_sleep_window' not in midnight['issues']
+          assert midnight['score'] <= 74
+
+          post_night_shift = evaluate(14, True)
+          assert post_night_shift['today_availability_state'] == 'post_tn_sleep_pending'
+          assert 'missing_sleep_window' not in post_night_shift['issues']
+          assert post_night_shift['score'] <= 74
+
+          observed = evaluate(14, True, sleep=True, night_samples=120)
+          assert observed['today_availability_state'] == 'evaluated'
+          assert not observed['pending_today']
+
+          regular_noon = evaluate(14, False)
+          assert 'missing_sleep_window' in regular_noon['issues']
+          late_post_shift = evaluate(19, True)
+          assert 'missing_sleep_window' in late_post_shift['issues']
+          print('OK: five permanent day-start / post-night-shift regression checks')
+          PYCODE
 
       - name: Monitor schedule and fallback provenance tests
         run: python monitor_v231.py
