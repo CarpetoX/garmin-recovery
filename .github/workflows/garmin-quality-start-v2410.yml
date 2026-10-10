@@ -1,0 +1,238 @@
+name: Garmin Recovery - Calidad al inicio del dia V2.4.10
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  quality-day-start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar rama main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Distinguir lecturas pendientes de errores reales al comenzar el dia
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('advanced_analytics.py')
+          src = p.read_text(encoding='utf-8')
+          marker = '# V2.4.10: early-day Garmin readings are pending, not missing.'
+          if marker in src:
+              print('V2.4.10 ya aplicada. Sin cambios.')
+              raise SystemExit(0)
+
+          substitutions = [
+              (
+                  '''    score = 100
+
+              if not today:''',
+                  '''    # V2.4.10: early-day Garmin readings are pending, not missing.
+              # Do not treat missing new-day samples as an acquisition failure at 00:xx.
+              # Historical coverage and the authoritative recovery gate remain unchanged.
+              day_start_pending = NOW.hour < 10 and (
+                  not today or bool(today.get("hr_partial_day"))
+              )
+              pending_today = []
+              score = 100
+
+              if not today:'''
+              ),
+              (
+                  '''    if not today:
+                  issues.append("missing_today_record")
+                  score -= 30
+
+              if (
+                  today
+                  and not today.get(
+            "sleep_window_available"
+                  )
+              ):
+                  issues.append("missing_sleep_window")
+                  score -= 15
+
+              if (
+                  today
+                  and today.get(
+            "night_hr_samples",
+            0,
+                  ) < 60
+              ):
+                  issues.append("low_night_hr_coverage")
+                  score -= 10''',
+                  '''    if not today:
+                  if day_start_pending:
+            pending_today.append("today_record_pending_day_start")
+                  else:
+            issues.append("missing_today_record")
+            score -= 30
+
+              if (
+                  today
+                  and not today.get(
+            "sleep_window_available"
+                  )
+              ):
+                  if day_start_pending:
+            pending_today.append("sleep_window_pending_day_start")
+                  else:
+            issues.append("missing_sleep_window")
+            score -= 15
+
+              if (
+                  today
+                  and today.get(
+            "night_hr_samples",
+            0,
+                  ) < 60
+              ):
+                  if day_start_pending:
+            pending_today.append("night_hr_pending_day_start")
+                  else:
+            issues.append("low_night_hr_coverage")
+            score -= 10'''
+              ),
+              (
+                  '''    latest = {}
+
+              for name, obj in advanced_inputs.items():''',
+                  '''    # Pending is never a green/full-confidence recovery signal.
+              # The score remains capped until expected readings have arrived.
+              if pending_today:
+                  score = min(score, 74)
+
+              latest = {}
+
+              for name, obj in advanced_inputs.items():'''
+              ),
+              (
+                  '''        "issues": issues,
+                  "coverage_28d": coverage,''',
+                  '''        "issues": issues,
+                  "pending_today": pending_today,
+                  "today_availability_state": (
+            "early_day_pending" if pending_today else "evaluated"
+                  ),
+                  "coverage_28d": coverage,'''
+              )
+          ]
+
+          for before, after in substitutions:
+              occurrences = src.count(before)
+              if occurrences != 1:
+                  raise SystemExit(
+                      f'ABORT: expected one matching anchor in {p}, found {occurrences}: '
+                      f'{before[:65]!r}. No file published.'
+                  )
+              src = src.replace(before, after, 1)
+
+          compile(src, str(p), 'exec')
+          p.write_text(src, encoding='utf-8')
+          print('OK: solo advanced_analytics.py modificado.')
+          PY
+
+      - name: Probar inicio de dia, disponibilidad y ausencia real de datos
+        shell: bash
+        run: |
+          python -m py_compile advanced_analytics.py
+          python - <<'PY'
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+          import advanced_analytics as aa
+
+          original_now, original_today = aa.NOW, aa.TODAY
+          madrid = ZoneInfo('Europe/Madrid')
+
+          def evaluate(hour, sleep_ok=False, night_samples=0, partial=True):
+              now = datetime(2026, 10, 11, hour, 9, tzinfo=madrid)
+              aa.NOW, aa.TODAY = now, now.date()
+              rec = {
+                  'hr_partial_day': partial,
+                  'sleep_window_available': sleep_ok,
+                  'night_hr_samples': night_samples,
+                  'day_hr_samples': 0,
+              }
+              try:
+                  return aa.data_quality(
+                      {aa.TODAY.isoformat(): rec},
+                      [{'id': 'synthetic-activity'}],
+                      {'days': {'2026-10-10': {}}}, {}, {}
+                  )
+              finally:
+                  aa.NOW, aa.TODAY = original_now, original_today
+
+          midnight = evaluate(0)
+          assert midnight['today_availability_state'] == 'early_day_pending'
+          assert {'sleep_window_pending_day_start',
+                  'night_hr_pending_day_start'} <= set(midnight['pending_today'])
+          assert 'missing_sleep_window' not in midnight['issues']
+          assert 'low_night_hr_coverage' not in midnight['issues']
+          assert midnight['score'] <= 74
+          assert midnight['confidence'] != 'high'
+
+          morning = evaluate(8)
+          assert morning['today_availability_state'] == 'early_day_pending'
+
+          observed = evaluate(8, sleep_ok=True, night_samples=120)
+          assert not observed['pending_today']
+          assert observed['today_availability_state'] == 'evaluated'
+
+          overdue = evaluate(12)
+          assert 'missing_sleep_window' in overdue['issues']
+          assert 'low_night_hr_coverage' in overdue['issues']
+          assert not overdue['pending_today']
+
+          print('OK: medianoche, pos-TN temprano, datos reales y ausencia tardia.')
+          PY
+
+      - name: Validar regresiones existentes y monitor
+        run: |
+          python -m compileall -q .
+          python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248
+          python pipeline_regression_tests.py --stage advanced
+          python monitor_v231.py
+
+      - name: Publicar unicamente la correccion comprobada
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add advanced_analytics.py
+          if git diff --cached --quiet; then
+            echo 'La correccion V2.4.10 ya estaba aplicada; no se publica nada.'
+            exit 0
+          fi
+          git commit -m 'Garmin V2.4.10: distinguish pending day-start sensor data'
+          for attempt in 1 2 3 4 5; do
+            echo "Intento de publicacion $attempt/5"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo 'Conflicto de cambios. No se sobrescriben datos.' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'V2.4.10 publicada correctamente.'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          echo 'No se pudo publicar V2.4.10 tras cinco intentos.' >&2
+          exit 1
