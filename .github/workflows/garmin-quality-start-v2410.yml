@@ -30,122 +30,127 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
+          
           p = Path('advanced_analytics.py')
-          src = p.read_text(encoding='utf-8')
+          original = p.read_text(encoding='utf-8')
           marker = '# V2.4.10: early-day Garmin readings are pending, not missing.'
-          if marker in src:
-              print('V2.4.10 ya aplicada. Sin cambios.')
+          if marker in original:
+              print('V2.4.10 ya aplicada. No es necesario repetir cambios.')
               raise SystemExit(0)
-
-          substitutions = [
-              (
-                  '''    score = 100
-
-              if not today:''',
-                  '''    # V2.4.10: early-day Garmin readings are pending, not missing.
-              # Do not treat missing new-day samples as an acquisition failure at 00:xx.
-              # Historical coverage and the authoritative recovery gate remain unchanged.
-              day_start_pending = NOW.hour < 10 and (
-                  not today or bool(today.get("hr_partial_day"))
-              )
-              pending_today = []
-              score = 100
-
-              if not today:'''
-              ),
-              (
-                  '''    if not today:
-                  issues.append("missing_today_record")
-                  score -= 30
-
-              if (
-                  today
-                  and not today.get(
-            "sleep_window_available"
-                  )
-              ):
-                  issues.append("missing_sleep_window")
-                  score -= 15
-
-              if (
-                  today
-                  and today.get(
-            "night_hr_samples",
-            0,
-                  ) < 60
-              ):
-                  issues.append("low_night_hr_coverage")
-                  score -= 10''',
-                  '''    if not today:
-                  if day_start_pending:
-            pending_today.append("today_record_pending_day_start")
-                  else:
-            issues.append("missing_today_record")
-            score -= 30
-
-              if (
-                  today
-                  and not today.get(
-            "sleep_window_available"
-                  )
-              ):
-                  if day_start_pending:
-            pending_today.append("sleep_window_pending_day_start")
-                  else:
-            issues.append("missing_sleep_window")
-            score -= 15
-
-              if (
-                  today
-                  and today.get(
-            "night_hr_samples",
-            0,
-                  ) < 60
-              ):
-                  if day_start_pending:
-            pending_today.append("night_hr_pending_day_start")
-                  else:
-            issues.append("low_night_hr_coverage")
-            score -= 10'''
-              ),
-              (
-                  '''    latest = {}
-
-              for name, obj in advanced_inputs.items():''',
-                  '''    # Pending is never a green/full-confidence recovery signal.
-              # The score remains capped until expected readings have arrived.
-              if pending_today:
-                  score = min(score, 74)
-
-              latest = {}
-
-              for name, obj in advanced_inputs.items():'''
-              ),
-              (
-                  '''        "issues": issues,
-                  "coverage_28d": coverage,''',
-                  '''        "issues": issues,
-                  "pending_today": pending_today,
-                  "today_availability_state": (
-            "early_day_pending" if pending_today else "evaluated"
-                  ),
-                  "coverage_28d": coverage,'''
-              )
-          ]
-
-          for before, after in substitutions:
-              occurrences = src.count(before)
-              if occurrences != 1:
-                  raise SystemExit(
-                      f'ABORT: expected one matching anchor in {p}, found {occurrences}: '
-                      f'{before[:65]!r}. No file published.'
-                  )
-              src = src.replace(before, after, 1)
-
-          compile(src, str(p), 'exec')
-          p.write_text(src, encoding='utf-8')
-          print('OK: solo advanced_analytics.py modificado.')
+          
+          start = original.find('def data_quality(')
+          end = original.find('\ndef pearson(', start)
+          if start < 0 or end < 0 or end <= start:
+              raise SystemExit('ABORT: no se puede delimitar data_quality; no se publican cambios.')
+          quality = original[start:end]
+          
+          def patch(needle, replacement, label):
+              global quality
+              count = quality.count(needle)
+              if count != 1:
+                  raise SystemExit(f'ABORT: {label} encontrado {count} veces en data_quality (se esperaba 1). No publicado.')
+              quality = quality.replace(needle, replacement, 1)
+          
+          patch(
+              '    score = 100\n\n    if not today:\n',
+              '    ' + marker + '\n'
+              '    # Las lecturas del día no se consideran definitivas al inicio de la jornada.\n'
+              '    # La certificación de sueño y recuperación sigue siendo independiente.\n'
+              '    day_start_pending = NOW.hour < 10 and (\n'
+              '        not today or bool(today.get("hr_partial_day"))\n'
+              '    )\n'
+              '    pending_today = []\n\n'
+              '    score = 100\n\n    if not today:\n',
+              'insertar marcador y ventana matinal',
+          )
+          
+          patch(
+              '    if not today:\n'
+              '        issues.append("missing_today_record")\n'
+              '        score -= 30\n',
+              '    if not today:\n'
+              '        if day_start_pending:\n'
+              '            pending_today.append("today_record_pending_day_start")\n'
+              '        else:\n'
+              '            issues.append("missing_today_record")\n'
+              '            score -= 30\n',
+              'sin registro nuevo',
+          )
+          
+          patch(
+              '    if (\n'
+              '        today\n'
+              '        and not today.get(\n'
+              '            "sleep_window_available"\n'
+              '        )\n'
+              '    ):\n'
+              '        issues.append("missing_sleep_window")\n'
+              '        score -= 15\n',
+              '    if (\n'
+              '        today\n'
+              '        and not today.get(\n'
+              '            "sleep_window_available"\n'
+              '        )\n'
+              '    ):\n'
+              '        if day_start_pending:\n'
+              '            pending_today.append("sleep_window_pending_day_start")\n'
+              '        else:\n'
+              '            issues.append("missing_sleep_window")\n'
+              '            score -= 15\n',
+              'sueño al inicio del día',
+          )
+          
+          patch(
+              '    if (\n'
+              '        today\n'
+              '        and today.get(\n'
+              '            "night_hr_samples",\n'
+              '            0,\n'
+              '        ) < 60\n'
+              '    ):\n'
+              '        issues.append("low_night_hr_coverage")\n'
+              '        score -= 10\n',
+              '    if (\n'
+              '        today\n'
+              '        and today.get(\n'
+              '            "night_hr_samples",\n'
+              '            0,\n'
+              '        ) < 60\n'
+              '    ):\n'
+              '        if day_start_pending:\n'
+              '            pending_today.append("night_hr_pending_day_start")\n'
+              '        else:\n'
+              '            issues.append("low_night_hr_coverage")\n'
+              '            score -= 10\n',
+              'FC nocturna al inicio del día',
+          )
+          
+          patch(
+              '    latest = {}\n\n    for name, obj in advanced_inputs.items():',
+              '    # Las lecturas pendientes no equivalen a una recuperación definitiva.\n'
+              '    # No elevar artificialmente la confianza de una jornada incompleta.\n'
+              '    if pending_today:\n'
+              '        score = min(score, 74)\n\n'
+              '    latest = {}\n\n    for name, obj in advanced_inputs.items():',
+              'limitar confianza con mediciones pendientes',
+          )
+          
+          patch(
+              '        "issues": issues,\n'
+              '        "coverage_28d": coverage,',
+              '        "issues": issues,\n'
+              '        "pending_today": pending_today,\n'
+              '        "today_availability_state": (\n'
+              '            "early_day_pending" if pending_today else "evaluated"\n'
+              '        ),\n'
+              '        "coverage_28d": coverage,',
+              'estado explicativo de disponibilidad',
+          )
+          
+          updated = original[:start] + quality + original[end:]
+          compile(updated, str(p), 'exec')
+          p.write_text(updated, encoding='utf-8')
+          print('OK: advanced_analytics.py actualizado; sin cambios en datos o modelos de recuperación.')
           PY
 
       - name: Probar inicio de dia, disponibilidad y ausencia real de datos
