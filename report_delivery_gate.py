@@ -60,6 +60,40 @@ def slot_for_run(sync_started):
     return None
 
 
+def late_post_sleep_slot(sync_started):
+    """Map a late verified post-sleep sync to the prior pending morning cycle.
+
+    This is only candidate routing; _publish_post_sleep checks all evidence.
+    """
+    if sync_started is None:
+        return None
+    local = sync_started.astimezone(TZ)
+    day = local.date().isoformat()
+    if not (datetime(local.year, local.month, local.day, 8, 30, tzinfo=TZ)
+            <= local < datetime(local.year, local.month, local.day, 22, 45, tzinfo=TZ)):
+        return None
+    ledger = _read_json('report_cycles.json', {})
+    cycles = ledger.get('cycles', []) if isinstance(ledger, dict) else []
+    base = next((row for row in cycles if isinstance(row, dict)
+                 and row.get('cycle_id') == day + '-0830'), None)
+    if not base or (base.get('snapshot') or {}).get('morning_sleep', {}).get('evidence_valid') is not False:
+        return None
+    sleep = _read_json('morning_sleep_status.json', {})
+    if sleep.get('date') != day or sleep.get('state') != 'confirmed_ready':
+        return None
+    end = stamp(sleep.get('sleep_end_local'))
+    margin = stamp(sleep.get('earliest_definitive_at'))
+    generated = stamp(sleep.get('generated_at'))
+    if (not end or not margin or not generated or
+            margin > local or generated < local - timedelta(minutes=5)):
+        return None
+    slot_time = stamp(base.get('slot_at'))
+    if slot_time is None:
+        return None
+    return {'cycle_id': day + '-0830', 'slot_at': slot_time,
+            'report_target': '09:05', 'slot': '0830'}
+
+
 def successful(run, allowed_events):
     return (isinstance(run, dict) and run.get('status') == 'completed'
             and run.get('conclusion') == 'success' and run.get('event') in allowed_events
@@ -96,6 +130,8 @@ def validate_chain(crossfit, advanced_runs, heart_runs, sync_runs):
     if not sync:
         return None, ['sync_missing_or_not_correlated']
     slot = slot_for_run(stamp(sync['created_at']))
+    if not slot:
+        slot = late_post_sleep_slot(stamp(sync['created_at']))
     if not slot:
         return None, ['sync_outside_report_slot']
     return dict(slot=slot, runs={'sync': sync, 'heart': heart,
@@ -274,6 +310,7 @@ def compact_cycle_snapshot(cert):
             'sheet_latest_date': crossfit.get('sheet_latest_date'),
             'data_quality': crossfit.get('data_quality'),
             'weekly_report': crossfit.get('weekly_report'),
+            'performance_report': (crossfit.get('training_extensions') or {}).get('performance_report'),
             'activities_today': crossfit_day,
         },
         'garmin': {
@@ -381,6 +418,8 @@ def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     snapshot, snapshot_sha256 = compact_cycle_snapshot(cert)
     items.append({
         'entry_schema_version': 2,
+        'certificate_kind': cert.get('certificate_kind', 'scheduled_cycle'),
+        'parent_cycle_id': cert.get('parent_cycle_id'),
         'cycle_id': cycle_id, 'ready_at': cert['verified_at'],
         'slot_at': cert['slot_at'], 'target_report_at': cert['target_report_at'],
         'sync_run_id': cert['chain']['sync']['id'],
@@ -402,6 +441,98 @@ def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     )[-max_entries:]
     _write_ledger(path, items)
     return True
+
+def _publish_post_sleep(chain, generated, now, output):
+    """Append one supplemental certificate; keep original 08:30 immutable.
+
+    A data-ready certificate is not proof of a ChatGPT delivery.
+    """
+    sync_start = stamp(chain['runs']['sync']['created_at'])
+    if sync_start is None:
+        return False
+    local = sync_start.astimezone(TZ)
+    day = local.date().isoformat()
+    original_id, supplement_id = day + '-0830', day + '-0830-post-sleep'
+    ledger = _read_json('report_cycles.json', {})
+    cycles = ledger.get('cycles', []) if isinstance(ledger, dict) else []
+    if not isinstance(cycles, list):
+        return False
+    original = next((row for row in cycles if isinstance(row, dict)
+                     and row.get('cycle_id') == original_id), None)
+    if not original or any(isinstance(row, dict) and row.get('cycle_id') == supplement_id for row in cycles):
+        return False
+    initial_sleep = (original.get('snapshot') or {}).get('morning_sleep') or {}
+    if initial_sleep.get('evidence_valid') is not False:
+        return False
+    original_sync = stamp((original.get('chain') or {}).get('sync', {}).get('started_at'))
+    if not original_sync or sync_start <= original_sync:
+        return False
+
+    sleep = _read_json('morning_sleep_status.json', {})
+    if (sleep.get('date') != day or sleep.get('state') != 'confirmed_ready'
+            or sleep.get('is_definitive') is not True
+            or sleep.get('wake_confirmed') is not True
+            or sleep.get('episode_end_confirmed') is not True
+            or sleep.get('recovery_matches_sleep_episode') is not True
+            or sleep.get('recovery_sleep_fresh') is not True):
+        return False
+    end = stamp(sleep.get('sleep_end_local'))
+    margin = stamp(sleep.get('earliest_definitive_at'))
+    checked = stamp(sleep.get('generated_at'))
+    if (not end or not margin or not checked or end.date().isoformat() != day
+            or abs((margin - end).total_seconds() - 1800) > 120
+            or sync_start < margin or margin > now
+            or checked < sync_start - timedelta(minutes=5)
+            or checked > now + timedelta(minutes=2)):
+        return False
+
+    rec = _read_json('recovery_assessment.json', {})
+    recent = rec.get('current') or {}
+    freshness = rec.get('input_freshness') or {}
+    measured_end = stamp(recent.get('sleep_end_local'))
+    if (rec.get('state') != 'assessed'
+            or recent.get('date') != day or not measured_end
+            or abs((measured_end - end).total_seconds()) > 300
+            or not all(freshness.get(k) is True for k in ('hrv', 'sleep', 'heart_rate'))
+            or not isinstance(recent.get('hrv_ms'), (int, float))
+            or recent['hrv_ms'] <= 0):
+        return False
+
+    confirmed = (_read_json('garmin_sleep_history.json', {}).get('days') or {}).get(day) or {}
+    confirmed_end = stamp(confirmed.get('sleep_end_local'))
+    hrv = (_read_json('garmin_hrv_timeline.json', {}).get('days') or {}).get(day) or {}
+    hrv_end = stamp(hrv.get('sleep_end_local'))
+    if (confirmed.get('window_confirmed') is not True
+            or not confirmed_end or abs((confirmed_end - end).total_seconds()) > 300
+            or not hrv_end or abs((hrv_end - end).total_seconds()) > 300
+            or not isinstance(hrv.get('night_avg_ms'), (int, float))
+            or hrv['night_avg_ms'] <= 0):
+        return False
+
+    certificate = build_certificate(chain, generated, now)
+    certified_sleep = certificate.get('morning_sleep') or {}
+    if certified_sleep.get('evidence_valid') is not True:
+        return False
+    certificate.update(
+        cycle_id=supplement_id,
+        parent_cycle_id=original_id,
+        certificate_kind='post_sleep_supplement',
+        physiological_report_status='definitive',
+        target_report_at='after_confirmed_sleep',
+    )
+    if not append_ready_cycle(certificate):
+        return False
+    # The new certificate may be the latest pointer only when no different
+    # afternoon/evening certificate would be overwritten.
+    prior = _read_json('report_ready.json', {})
+    if prior.get('cycle_id') in (original_id, supplement_id):
+        output.write_text(json.dumps(certificate, ensure_ascii=False, indent=2)
+                          + '\n', encoding='utf-8')
+    print('Post-sleep certificate READY:', supplement_id,
+          'sync_run', chain['runs']['sync']['id'],
+          'delivery remains UNVERIFIED')
+    return True
+
 
 def main():
     repo = os.environ.get('GITHUB_REPOSITORY', '')
@@ -425,6 +556,12 @@ def main():
         print('Report gate: NOT READY: ' + ', '.join(problems))
         return 1
     output = Path('report_ready.json')
+    _publish_post_sleep(chain, generated, datetime.now(TZ), output)
+    stored_cycles = _read_json('report_cycles.json', {}).get('cycles', [])
+    if any(isinstance(row, dict) and row.get('cycle_id') == chain['slot']['cycle_id']
+           for row in stored_cycles):
+        print('Report gate: original cycle is immutable in ledger; leave current pointer unchanged.')
+        return 0
     if output.is_file():
         try:
             prior = json.loads(output.read_text(encoding='utf-8'))
