@@ -1,0 +1,344 @@
+name: Garmin Recovery - Instalar informes rendimiento V2.5
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-pipeline-main
+  cancel-in-progress: false
+
+jobs:
+  install-performance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Mejorar SOLO training_extensions.py
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          file = Path('training_extensions.py')
+          source = file.read_text(encoding='utf-8')
+          original = source
+          anchor = '\ndef analyze(activities, advanced, as_of):\n    today = d(as_of)'
+          if source.count(anchor) != 1:
+              raise RuntimeError('training_extensions.py changed; abort without editing')
+          addition = '''
+          def performance_report(activities, advanced, today, benchmarks):
+              """Evidence-based coaching summary; no invented benchmark equivalence.
+
+              Garmin/Intervals/TRIMP and duration*RPE are separate load units. Recorded
+              machine/dumbbell/barbell kilograms are exposure descriptors, not a common
+              physiological workload or directly comparable mechanical tonnage.
+              """
+              groups = {}
+              if today is None:
+                  return {'status': 'date_unavailable', 'interpretation': 'insufficient_data'}
+              for key in ('recent_7d', 'previous_7d', 'recent_28d'):
+                  groups[key] = {
+                      'sessions': 0, 'sessions_with_rpe': 0, 'rpe_total': 0.0,
+                      'high_rpe_sessions': 0, 'recorded_duration_minutes': 0.0,
+                      'sessions_with_duration': 0,
+                      'srpe_from_recorded_duration': 0.0, 'srpe_sessions': 0,
+                      'minimum_recorded_external_volume_kg': 0.0,
+                      'strength_blocks_with_quantified_weight': 0,
+                      'strength_blocks_missing_quantified_weight': 0,
+                      'garmin_intervals_load_separate': 0.0,
+                      'intervals_load_sessions': 0,
+                      'trimp_separate': 0.0, 'trimp_sessions': 0,
+                  }
+              daily = {}
+              latest = None
+              eligible = []
+              for a in activities:
+                  if not isinstance(a, dict):
+                      continue
+                  on = d(a.get('date'))
+                  if on is None:
+                      continue
+                  age = (today - on).days
+                  if age < 0 or age >= 28:
+                      continue
+                  eligible.append(a)
+                  bucket_names = ['recent_28d']
+                  if age <= 6:
+                      bucket_names.append('recent_7d')
+                  elif age <= 13:
+                      bucket_names.append('previous_7d')
+                  rpe = n(a.get('rpe_used'))
+                  if rpe is not None and not 0 <= rpe <= 10:
+                      rpe = None
+                  minutes = n(a.get('recorded_minutes'))
+                  if minutes is not None and minutes < 0:
+                      minutes = None
+                  srpe = n(a.get('srpe_using_recorded_minutes'))
+                  if srpe is not None and srpe < 0:
+                      srpe = None
+                  loads = a.get('internal_load_not_additive') or {}
+                  intervals_load = n(loads.get('intervals_load'))
+                  trimp = n(loads.get('trimp'))
+                  blocks = a.get('manual_blocks') or []
+                  quantified = [n(b.get('minimum_verified_volume_kg')) for b in blocks if isinstance(b, dict)]
+                  vol = sum(value for value in quantified if value is not None and value >= 0)
+                  known = sum(1 for v in quantified if v is not None and v >= 0)
+                  unknown = sum(1 for v in quantified if v is None)
+                  for name in bucket_names:
+                      group = groups[name]
+                      group['sessions'] += 1
+                      if rpe is not None:
+                          group['sessions_with_rpe'] += 1
+                          group['rpe_total'] += rpe
+                          group['high_rpe_sessions'] += int(rpe >= 8)
+                      if minutes is not None:
+                          group['recorded_duration_minutes'] += minutes
+                          group['sessions_with_duration'] += 1
+                      if srpe is not None:
+                          group['srpe_from_recorded_duration'] += srpe
+                          group['srpe_sessions'] += 1
+                      group['minimum_recorded_external_volume_kg'] += vol
+                      group['strength_blocks_with_quantified_weight'] += known
+                      group['strength_blocks_missing_quantified_weight'] += unknown
+                      if intervals_load is not None:
+                          group['garmin_intervals_load_separate'] += intervals_load
+                          group['intervals_load_sessions'] += 1
+                      if trimp is not None:
+                          group['trimp_separate'] += trimp
+                          group['trimp_sessions'] += 1
+                  if age <= 6:
+                      item = daily.setdefault(on.isoformat(), {'sessions': 0, 'rpe_sum': 0.0,
+                                      'rpe_count': 0, 'recorded_minutes': 0.0,
+                                      'srpe_from_recorded_duration': 0.0})
+                      item['sessions'] += 1
+                      if rpe is not None:
+                          item['rpe_count'] += 1
+                          item['rpe_sum'] += rpe
+                      if minutes is not None:
+                          item['recorded_minutes'] += minutes
+                      if srpe is not None:
+                          item['srpe_from_recorded_duration'] += srpe
+              for name, group in groups.items():
+                  group['mean_recorded_rpe'] = (
+                      round(group['rpe_total'] / group['sessions_with_rpe'], 2)
+                      if group['sessions_with_rpe'] else None)
+                  del group['rpe_total']
+                  for fld in ('recorded_duration_minutes', 'srpe_from_recorded_duration',
+                              'minimum_recorded_external_volume_kg',
+                              'garmin_intervals_load_separate', 'trimp_separate'):
+                      group[fld] = round(group[fld], 1)
+              from datetime import timedelta
+              chronological = []
+              for age in range(6, -1, -1):
+                  key = (today - timedelta(days=age)).isoformat()
+                  record = daily.get(key, {'sessions': 0, 'rpe_count': 0, 'rpe_sum': 0,
+                                           'recorded_minutes': 0, 'srpe_from_recorded_duration': 0})
+                  chronological.append({'date': key, 'sessions': record['sessions'],
+                                        'mean_recorded_rpe': round(record['rpe_sum']/record['rpe_count'], 2)
+                                        if record['rpe_count'] else None,
+                                        'recorded_minutes': round(record['recorded_minutes'], 1),
+                                        'srpe_from_recorded_duration': round(record['srpe_from_recorded_duration'], 1)})
+              if eligible:
+                  latest = max(eligible, key=lambda x: (str(x.get('date')), str(x.get('activity_id'))))
+              last = None
+              if latest is not None:
+                  last = {'date': latest.get('date'), 'activity_id': latest.get('activity_id'),
+                          'name': latest.get('name'), 'rpe': n(latest.get('rpe_used')),
+                          'recorded_minutes': n(latest.get('recorded_minutes')),
+                          'heart_rate': latest.get('heart_rate'),
+                          'manual_blocks_recorded': len(latest.get('manual_blocks') or [])}
+              recovery = advanced.get('recovery_assessment_v2') or {}
+              rec_state = recovery.get('state')
+              rec_status = recovery.get('status')
+              recommendations = []
+              if rec_state != 'assessed':
+                  recommendations.append({'code': 'recovery_unconfirmed',
+                      'text': 'Esperar al sueño y HRV confirmados antes de fijar intensidad; decidir con sensaciones y calentamiento.'})
+              elif rec_status == 'red':
+                  recommendations.append({'code': 'recovery_red',
+                      'text': 'Valorar descarga, técnica o actividad suave; evitar máximos según síntomas y calentamiento.'})
+              elif rec_status == 'yellow':
+                  recommendations.append({'code': 'recovery_yellow',
+                      'text': 'Individualizar intensidad y revisar calentamiento, fatiga y RPE antes de subir cargas.'})
+              else:
+                  recommendations.append({'code': 'recovery_context',
+                      'text': 'Usar recuperación junto con objetivos de entrenamiento, síntomas y rendimiento, no como permiso automático para hacer máximos.'})
+              if groups['recent_7d']['high_rpe_sessions'] >= 3:
+                  recommendations.append({'code': 'frequent_high_rpe',
+                      'text': 'Registrar recuperación 24-48 h y ajustar volumen si coinciden fatiga o bajada del rendimiento; no asumir sobreentrenamiento.'})
+              if not benchmarks['comparisons']:
+                  recommendations.append({'code': 'benchmark_history_incomplete',
+                      'text': 'Repetir algún WOD con misma variante, cargas y estándares para comparar tiempos o repeticiones objetivamente.'})
+              recent, previous = groups['recent_7d'], groups['previous_7d']
+              comparable = recent['sessions'] >= 2 and previous['sessions'] >= 2
+              return {
+                  'status': 'descriptive_ready' if eligible else 'insufficient_data',
+                  'as_of_date': today.isoformat(),
+                  'window_summaries': groups,
+                  'daily_chart_7d': chronological,
+                  'latest_session': last,
+                  'previous_week_context': {
+                      'sufficient_for_descriptive_comparison': comparable,
+                      'session_count_change': recent['sessions'] - previous['sessions'] if comparable else None,
+                      'mean_rpe_change': round(recent['mean_recorded_rpe']-previous['mean_recorded_rpe'], 2)
+                          if comparable and recent['mean_recorded_rpe'] is not None
+                          and previous['mean_recorded_rpe'] is not None else None,
+                      'note': 'El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento.'},
+                  'benchmark_comparisons': benchmarks['comparisons'],
+                  'recovery_context': {'state': rec_state or 'unavailable',
+                                       'status': rec_status or 'unavailable',
+                                       'confidence': recovery.get('confidence')},
+                  'recommendations': recommendations,
+                  'data_confidence': 'limited' if not comparable else 'descriptive',
+                  'limitations': [
+                      'Los pesos de barra, máquina y mancuerna no son comparables como fuerza externa equivalente.',
+                      'Volumen cuantificado es un mínimo declarado: no incluye ejercicios sin peso conocido.',
+                      'No se suman TRIMP, carga Intervals, carga Garmin ni sRPE entre unidades distintas.',
+                      'Duración Garmin grabada no es duración efectiva del WOD.',
+                      'No usar planificados como realizados ni asumir rondas no confirmadas.',
+                      'Las correlaciones de 24-48h no prueban causalidad y las referencias iniciales son provisionales.'
+                  ]
+              }
+
+          '''
+          source = source.replace(anchor, '\n'+addition+anchor, 1)
+          old = "        'recovery_context': recovery(activities, advanced),\n        'version': '1.1; completed-work normalized, conservative',"
+          new = "        'recovery_context': recovery(activities, advanced),\n        'performance_report': performance_report(activities, advanced, today, benchmark_results),\n        'version': '2.5; coaching insights with verified comparisons',"
+          source = source.replace("    today = d(as_of)\n    return {\n", "    today = d(as_of)\n    benchmark_results = performance(activities)\n    return {\n", 1)
+          source = source.replace("        'performance_trends': performance(activities),", "        'performance_trends': benchmark_results,", 1)
+
+          if source.count(old) != 1:
+              raise RuntimeError('Training-extension return signature changed; abort without editing')
+          source=source.replace(old,new,1)
+          assert len(source)>len(original)+6500
+          compile(source,str(file),'exec')
+          file.write_text(source,encoding='utf-8')
+          print('OK v2.5: verified performance summaries, conservative recommendations and daily chart')
+          PY
+      - name: Pruebas rendimiento V2.5 (8 casos) y regresiones anteriores
+        shell: bash
+        run: |
+          cat > /tmp/verify_performance_v25.py <<'PY'
+          import os,sys
+          sys.path.insert(0,os.getcwd())
+          import unittest
+          from training_extensions import analyze
+
+          TODAY='2026-10-11'
+
+          def session(date, aid, rpe=6, minutes=30, vol=500, trimp=22, intervals=15):
+              return {'date':date,'activity_id':aid,'name':'Fuerza y CrossFit',
+                      'rpe_used':rpe,'recorded_minutes':minutes,
+                      'srpe_using_recorded_minutes':rpe*minutes if rpe is not None else None,
+                      'internal_load_not_additive': {'trimp':trimp,'intervals_load':intervals},
+                      'heart_rate':{'average':112,'max':145},
+                      'manual_blocks':[{'rpe':rpe,'minimum_verified_volume_kg':vol,'detail_json':{}}]}
+
+          class PerformanceTests(unittest.TestCase):
+              def test_summary_recent_previous_and_28d(self):
+                  x=[session('2026-10-11','a',8,50,2000),
+                     session('2026-10-09','b',6,40,1000),
+                     session('2026-10-03','c',5,60,700),
+                     session('2026-09-30','d',7,30,400)]
+                  out=analyze(x,{},TODAY)['performance_report']
+                  self.assertEqual(out['window_summaries']['recent_7d']['sessions'],2)
+                  self.assertEqual(out['window_summaries']['previous_7d']['sessions'],2)
+                  self.assertEqual(out['window_summaries']['recent_28d']['sessions'],4)
+                  self.assertEqual(out['window_summaries']['recent_7d']['mean_recorded_rpe'],7)
+                  self.assertEqual(out['window_summaries']['recent_7d']['minimum_recorded_external_volume_kg'],3000)
+                  self.assertEqual(out['previous_week_context']['session_count_change'],0)
+                  self.assertTrue(out['previous_week_context']['sufficient_for_descriptive_comparison'])
+                  self.assertEqual(len(out['daily_chart_7d']),7)
+
+              def test_no_fake_0_for_missing_rpe(self):
+                  out=analyze([session('2026-10-10','a',rpe=None)],{},TODAY)['performance_report']
+                  w=out['window_summaries']['recent_7d']
+                  self.assertEqual(w['sessions'],1)
+                  self.assertEqual(w['sessions_with_rpe'],0)
+                  self.assertIsNone(w['mean_recorded_rpe'])
+                  self.assertFalse(out['previous_week_context']['sufficient_for_descriptive_comparison'])
+
+              def test_no_future_or_out_of_window(self):
+                  x=[session('2026-10-12','future'),session('2026-09-01','old')]
+                  out=analyze(x,{},TODAY)['performance_report']
+                  self.assertEqual(out['window_summaries']['recent_28d']['sessions'],0)
+                  self.assertEqual(out['status'],'insufficient_data')
+
+              def test_high_rpe_caution_is_not_diagnosis(self):
+                  x=[session('2026-10-08','a',9),session('2026-10-09','b',8),session('2026-10-10','c',9)]
+                  rec=analyze(x,{'recovery_assessment_v2':{'state':'assessed','status':'red','confidence':'medium'}},TODAY)['performance_report']
+                  codes=[r['code'] for r in rec['recommendations']]
+                  self.assertIn('recovery_red',codes)
+                  self.assertIn('frequent_high_rpe',codes)
+                  self.assertFalse(any('sobreentrenamiento confirmado' in r['text'] for r in rec['recommendations']))
+
+              def test_no_benchmark_assumptions(self):
+                  x=[session('2026-10-09','a'),session('2026-10-10','b')]
+                  x[0]['manual_blocks'][0]['detail_json']={'benchmark_id':'Fran','benchmark_variant':'RX',
+                             'benchmark_result':{'metric':'time_seconds','value':320}}
+                  x[1]['manual_blocks'][0]['detail_json']={'benchmark_id':'Fran','benchmark_variant':'Scaled',
+                             'benchmark_result':{'metric':'time_seconds','value':280}}
+                  out=analyze(x,{},TODAY)['performance_report']
+                  self.assertEqual(out['benchmark_comparisons'],[])
+                  self.assertIn('benchmark_history_incomplete',[r['code'] for r in out['recommendations']])
+
+              def test_recorded_load_units_are_separate(self):
+                  out=analyze([session('2026-10-10','a',6,60,1000,trimp=20,intervals=15)],{},TODAY)['performance_report']
+                  w=out['window_summaries']['recent_7d']
+                  self.assertEqual(w['srpe_from_recorded_duration'],360)
+                  self.assertEqual(w['trimp_separate'],20)
+                  self.assertEqual(w['garmin_intervals_load_separate'],15)
+                  self.assertEqual(w['minimum_recorded_external_volume_kg'],1000)
+
+              def test_no_fake_movement_totals(self):
+                  row=session('2026-10-10','a')
+                  row['manual_blocks'][0]['detail_json']={'prescribed_round':[{'name':'Burpee','reps':21}]}
+                  out=analyze([row],{},TODAY)
+                  self.assertEqual(out['metcon_exposure']['entries'],[])
+
+              def test_pending_recovery_cannot_authorize_high_intensity(self):
+                  out=analyze([session('2026-10-10','a')],{'recovery_assessment_v2':{'state':'pending'}},TODAY)['performance_report']
+                  self.assertEqual(out['recommendations'][0]['code'],'recovery_unconfirmed')
+
+          if __name__=='__main__':unittest.main(verbosity=2)
+          PY
+          python /tmp/verify_performance_v25.py
+          python -m unittest -v test_training_extensions test_quality_v248 test_sleep_integration test_morning_sleep_gate
+          python -m py_compile training_extensions.py crossfit_insights.py
+      - name: Publicar solamente training_extensions.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- training_extensions.py
+          if git diff --cached --quiet; then
+            echo 'Sin cambios; version instalada o comprobar main.'
+            exit 0
+          fi
+          git diff --cached --name-only | grep -Fx 'training_extensions.py'
+          test "$(git diff --cached --name-only | wc -l)" -eq 1
+          git commit -m 'Garmin v2.5: evidence-based strength and CrossFit performance reports'
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'OK: analisis de rendimiento V2.5 publicado.'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          echo 'ERROR: push no confirmado' >&2
+          exit 1
