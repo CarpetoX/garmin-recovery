@@ -93,7 +93,10 @@ jobs:
           PY
 
       - name: Tests for morning reports, post-night-shift sleep, strength and RPE cycle snapshots
-        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot
+        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot test_archive_report_cycles test_sync_publish
+
+      - name: Audit certificate ledger hashes without modifying records
+        run: python archive_report_cycles.py
 
       - name: Verify midnight and partial-day regression scenarios
         run: |
