@@ -1,0 +1,195 @@
+name: Garmin Recovery V2.6 - Maintenance Once
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-v26-maintenance-once
+  cancel-in-progress: false
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Restore and validate installer (SHA-256)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64
+          import hashlib
+          import pathlib
+          import zlib
+
+          encoded = '''
+          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
+          '''
+          payload = zlib.decompress(base64.b64decode(''.join(encoded.split())))
+          expected = '0f473833ab25e4a47a63daf4cd6147a4db6d45e38cfaafb0211d1325419dc8aa'
+          actual = hashlib.sha256(payload).hexdigest()
+          if actual != expected:
+              raise RuntimeError('Installer integrity check failed; no files changed')
+          destination = pathlib.Path('/tmp/garmin-v26-maintenance-patch.py')
+          compile(payload, str(destination), 'exec')
+          destination.write_bytes(payload)
+          print('Installer SHA-256 verified:', actual)
+          PY
+
+      - name: Apply guarded patch and run regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/garmin-v26-maintenance-patch.py
+          python -m compileall -q .
+          python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot
+          python monitor_v231.py
+
+      - name: Publish one commit only if all tests pass
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Garmin Recovery Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Preserve the whitespace check: fix legacy trailing spaces in the
+          # operating guide before staging (its revised line 3 ends with two).
+          python - <<'PYFIX'
+          from pathlib import Path
+          guide = Path('OPERACION_Y_VALIDACION.md')
+          original = guide.read_text(encoding='utf-8')
+          normalized = ''.join(line.rstrip(' \t\r\n') + ('\n' if line.endswith('\n') else '')
+                               for line in original.splitlines(keepends=True))
+          if normalized != original:
+              guide.write_text(normalized, encoding='utf-8')
+              print('Whitespace normalized: OPERACION_Y_VALIDACION.md')
+          PYFIX
+          git add README.md .gitignore MAINTENIMIENTO.md OPERACION_Y_VALIDACION.md
+          git add rpe_cycle_snapshot.py test_rpe_cycle_snapshot.py
+          git add rpe_enrichment.py crossfit_insights.py data_quality.py
+          git add .github/workflows/crossfit-insights.yml .github/workflows/garmin-ci.yml
+          git diff --cached --check
+          git commit -m 'V2.6: repository maintenance and single-source RPE cycle snapshots'
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo 'Concurrent change conflict - publication stopped safely' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'V2.6 successfully published; run Garmin CI before any Sync'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
