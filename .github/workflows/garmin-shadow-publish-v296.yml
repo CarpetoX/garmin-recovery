@@ -1,0 +1,185 @@
+name: Garmin V2.9.6 - Publicar espejo persistente MANUAL
+
+# Publica SOLO una copia verificada en la rama garmin-v296-shadow.
+# Nunca modifica main, report_cycles.json, Sync, CrossFit ni Apps Script.
+# Unicamente manual: no cron, no workflow_run, no repository_dispatch.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-v296-shadow-branch-publish
+  cancel-in-progress: false
+
+jobs:
+  publish-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obtener la version vigente de main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Pasar las 95 pruebas de almacenamiento antes de escribir
+        run: python -m unittest -q test_cycle_shards_v296 test_ledger_compact_preview_v296 test_ledger_reader_v296 test_ledger_access_v296 test_shadow_mirror_v296
+
+      - name: Publicar espejo VALIDADO sin modificar main
+        env:
+          TARGET_BRANCH: garmin-v296-shadow
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          import shutil
+          import subprocess
+          from pathlib import Path
+
+          from cycle_shards_v296 import ShardError, load_source
+          from ledger_access_v296 import read_compatible
+          from shadow_mirror_v296 import prepare_candidate, verify_candidate
+
+          root = Path.cwd()
+          original_path = root / 'report_cycles.json'
+          source, source_bytes = load_source(original_path)
+          source_sha = hashlib.sha256(source_bytes).hexdigest()
+          branch = os.environ['TARGET_BRANCH']
+          temp = Path(os.environ['RUNNER_TEMP']) / 'garmin-v296-persist'
+          temp.mkdir(parents=True, exist_ok=False)
+          checkout = temp / 'branch-worktree'
+          candidate = temp / 'validated-candidate'
+
+          def git(*args, cwd=root, check=True, capture=True):
+              return subprocess.run(['git', *args], cwd=cwd, check=check,
+                                    stdout=subprocess.PIPE if capture else None,
+                                    stderr=subprocess.PIPE if capture else None)
+
+          def origin_branch_sha():
+              result = git('ls-remote', '--heads', 'origin', f'refs/heads/{branch}')
+              rows = result.stdout.decode('utf-8').strip().splitlines()
+              if len(rows) > 1:
+                  raise RuntimeError('No se pudo determinar una rama de espejo unica')
+              return rows[0].split()[0] if rows else None
+
+          def main_matches_original():
+              git('fetch', '--no-tags', 'origin', 'main')
+              actual = git('show', 'FETCH_HEAD:report_cycles.json').stdout
+              if actual != source_bytes:
+                  raise RuntimeError('STOP: main actualizo report_cycles.json durante la preparacion; repetir manualmente')
+              if original_path.read_bytes() != source_bytes:
+                  raise RuntimeError('STOP: el historico local cambio durante el proceso')
+
+          main_matches_original()
+          before_branch = origin_branch_sha()
+          if before_branch:
+              git('fetch', '--no-tags', 'origin',
+                  f'+refs/heads/{branch}:refs/remotes/origin/{branch}')
+              git('worktree', 'add', '--detach', str(checkout),
+                  f'refs/remotes/origin/{branch}')
+              if git('rev-parse', 'HEAD', cwd=checkout).stdout.decode().strip() != before_branch:
+                  raise RuntimeError('STOP: rama previa distinta de la esperada')
+              previous = checkout / 'mirror'
+              if not (previous / 'state.json').is_file():
+                  raise RuntimeError('STOP: la rama previa no contiene un espejo valido')
+              result = prepare_candidate(original_path, candidate, previous=previous)
+              verify_candidate(original_path, candidate, previous=previous)
+          else:
+              git('worktree', 'add', '--detach', str(checkout), 'HEAD')
+              git('switch', '--orphan', branch, cwd=checkout)
+              previous = None
+              result = prepare_candidate(original_path, candidate)
+              verify_candidate(original_path, candidate)
+
+          # Reconstruir y comparar ANTES de crear el commit.
+          independent, audit = read_compatible(
+              temp / 'not-present.json', mode='shards_only',
+              preview_path=candidate / 'compact-preview.json',
+              archive_dir=candidate / 'archive',
+          )
+          if independent != source or audit['certificates'] != source['count']:
+              raise RuntimeError('STOP: el espejo no reconstruye el historico completo')
+          if result['production_cutover'] or result['committed']:
+              raise RuntimeError('STOP: el candidato intenta activar produccion')
+
+          # La rama solo conserva el espejo vigente; sus versiones anteriores
+          # permanecen accesibles en el historial Git SIN force push.
+          dest = checkout / 'mirror'
+          if dest.exists():
+              shutil.rmtree(dest)
+          shutil.copytree(candidate, dest)
+          # Segunda lectura desde los archivos realmente preparados para el commit.
+          published_view, published_audit = read_compatible(
+              temp / 'still-not-present.json', mode='shards_only',
+              preview_path=dest / 'compact-preview.json',
+              archive_dir=dest / 'archive',
+          )
+          if published_view != source or published_audit['certificates'] != source['count']:
+              raise RuntimeError('STOP: copia de publicación no reproduce el origen')
+          git('add', '--all', '--', 'mirror', cwd=checkout)
+          git('config', 'user.name', 'github-actions[bot]', cwd=checkout)
+          git('config', 'user.email',
+              '41898282+github-actions[bot]@users.noreply.github.com', cwd=checkout)
+
+          staged = git('diff', '--cached', '--quiet', cwd=checkout, check=False)
+          if staged.returncode not in (0, 1):
+              raise RuntimeError('Error inspeccionando los cambios preparados')
+          if staged.returncode == 1:
+              git('commit', '-m', f'Verified Garmin V2.9.6 shadow {source_sha[:12]}',
+                  cwd=checkout)
+
+          # Doble control de concurrencia: main estable y rama sin avance ajeno.
+          main_matches_original()
+          if origin_branch_sha() != before_branch:
+              raise RuntimeError('STOP: el espejo remoto cambio; no publicar sobre una version distinta')
+          if staged.returncode == 1:
+              # Push NORMAL, nunca --force. Git rechaza ramas avanzadas en paralelo.
+              git('push', 'origin', f'HEAD:refs/heads/{branch}', cwd=checkout)
+              status = 'persistent_shadow_branch_published'
+          else:
+              status = 'persistent_shadow_branch_unchanged'
+
+          after_sha = origin_branch_sha()
+          local_sha = git('rev-parse', 'HEAD', cwd=checkout).stdout.decode().strip()
+          if after_sha != local_sha:
+              raise RuntimeError('STOP: la rama publicada no coincide con el commit validado')
+          if original_path.read_bytes() != source_bytes:
+              raise RuntimeError('STOP: report_cycles.json local ha cambiado')
+
+          report = {
+              'version': '2.9.6',
+              'status': status,
+              'branch': branch,
+              'branch_commit': after_sha,
+              'source_file_sha256': source_sha,
+              'certificates': source['count'],
+              'certificates_preserved_from_previous_mirror': result['preserved'],
+              'new_certificates': result['new_certificates'],
+              'shards': result['shard_count'],
+              'readback_matches_original': True,
+              'no_force_push': True,
+              'production_cutover': False,
+              'main_modified': False,
+          }
+          print(json.dumps(report, indent=2, ensure_ascii=False))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
+              f.write('## Garmin V2.9.6 - Espejo persistente independiente\n\n')
+              f.write('| Verificacion | Resultado |\n|---|---|\n')
+              for key, value in report.items():
+                  f.write(f'| `{key}` | `{value}` |\n')
+              f.write('\nEl historico de produccion sigue siendo report_cycles.json en main.\n')
+          PY
+
+      - name: Verificar que el historico de main no ha cambiado localmente
+        run: git diff --exit-code -- report_cycles.json
