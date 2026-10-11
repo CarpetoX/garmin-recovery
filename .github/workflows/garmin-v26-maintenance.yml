@@ -1,0 +1,180 @@
+name: Garmin Recovery V2.6 - Maintenance Once
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-v26-maintenance-once
+  cancel-in-progress: false
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Guarded patch and tests (no JSON modification)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          #!/usr/bin/env python3
+          """Guarded, atomic one-time Garner Recovery V2.6 maintenance patch.
+
+          Designed for Github Actions checkout; never mutates generated fitness JSON.
+          """
+          import re
+          from pathlib import Path
+
+
+          def once(data, old, new, filename):
+              c = data.count(old)
+              if c != 1:
+                  raise RuntimeError(f'{filename}: missing or ambiguous anchor ({c}): {old[:90]!r}')
+              return data.replace(old, new, 1)
+
+
+          def edit(filename, transformations):
+              data = Path(filename).read_text(encoding='utf-8')
+              for old, new in transformations:
+                  data = once(data, old, new, filename)
+              compile(data, filename, 'exec') if filename.endswith('.py') else None
+              return data
+
+
+          def build():
+              edits = {}
+              files = {'README.md': '# Garmin Recovery — plataforma de recuperación y CrossFit\n\nRegistro Garmin/Intervals + RPE de Google Sheets y resúmenes reproducibles. Zona horaria operativa: **Europe/Madrid**. Arquitectura conservadora: **seis workflows permanentes**; no añadir automatizaciones permanentes por cada actualización.\n\n## Arquitectura y ejecución\n\n| Orden | Workflow | Función |\n|---|---|---|\n| 1 | `sync.yml` | Actividades Intervals y resumen diario/semanal |\n| 2 | `garmin-heart-rate.yml` | FC, HRV y sueño Garmin |\n| 3 | `advanced-analytics-rpe.yml` | RPE, recuperación y calidad de datos |\n| 4 | `crossfit-insights.yml` | Fuerza, WOD, informes y certificados de datos preparados |\n| Independiente | `monitor-monthly.yml` | Control de salud y vigilancia de sincronizaciones |\n| Independiente | `garmin-ci.yml` | Pruebas, sin sincronizar datos personales |\n\n**Sync:** 08:30, 16:45, 22:45. **Objetivos de informe:** 09:05, 17:10, 23:10. **Watchdog:** 11:05, 19:20, 01:20. Los cron no prueban por sí solos que GitHub haya iniciado una ejecución. Los horarios deben evaluarse en Europe/Madrid y con marcas de tiempo reales.\n\n## Fuente de datos y trazabilidad\n\n- Garmin/Intervals aporta mediciones y sesiones; Google Sheets pestaña `RPE` aporta ejercicios detallados y RPE por **ID exacto** de actividad. No emparejar sólo por fecha.\n- Advanced Analytics recupera el CSV y lo deja en `training_feedback.json` con huella SHA-256 y su `GITHUB_RUN_ID`.\n- CrossFit Insights activado por la ejecución anterior lee **esa misma fotografía** y verifica ID, huella, hora y conteos. Nunca debe hacer una segunda descarga independiente en un ciclo encadenado. Una ejecución manual independiente mantiene la lectura en vivo.\n- `report_ready.json` acredita datos preparados, **no** entrega de una notificación en ChatGPT. Las muestras recientes se evalúan por su timestamp real, no por la fecha del archivo.\n- No comparar kilos de barra, polea o máquina entre sí; el RPE general no es RIR de cada serie.\n\n## Cómo operar y mantener\n\n1. Para actualizar todo: ejecutar `Garmin Recovery Sync` en `main` y **esperar los cuatro workflows** en verde. No ejecutar Advanced Analytics aisladamente tras más de 60 minutos de la última Sync.\n2. Confirmar que `training_feedback.json` y `crossfit_insights.json` contienen la misma actividad e ID; revisar el origen del RPE y las fechas.\n3. Si falla una etapa, leer el paso concreto y conservar los últimos archivos válidos. No aumentar el límite de frescura simplemente para pintar el workflow de verde.\n4. Tras editar Python o YAML, verificar `Garmin Recovery CI` en el commit; luego probar una cadena completa. No se deben borrar scripts históricos por el número que llevan en el nombre.\n5. Los cambios en Google Apps Script requieren ver el `Code.gs` real y comprobar su trigger. Un `workflow_dispatch` no prueba quién lo activó.\n6. Antes de declarar autonomía: tres ciclos automáticos consecutivos verificados y seguimiento mensual de la fiabilidad.\n\nVer [MAINTENIMIENTO.md](MAINTENIMIENTO.md) y [OPERACION_Y_VALIDACION.md](OPERACION_Y_VALIDACION.md).\n', '.gitignore': '# Python temporales\n__pycache__/\n*.py[cod]\n.pytest_cache/\n.mypy_cache/\n.ruff_cache/\n.coverage\nhtmlcov/\n.venv/\nvenv/\n.env\n.env.*\n!.env.example\n\n# Credenciales, tokens y copias locales no publicables\n*.pem\n*.key\n*.p12\n*.pfx\n*.bak\n*.tmp\n*.swp\n.garminconnect/\n.garmin_tokens/\ngarmin_tokens.json\ncredentials.json\nsecrets.json\n\n# Editores y SO\n.DS_Store\nThumbs.db\n.idea/\n.vscode/\n\n# NO ignorar *.json: los JSON de Garmin Recovery publicados forman parte del pipeline.\n', 'MAINTENIMIENTO.md': '# Política de mantenimiento — Garmin Recovery V2.6\n\n## Invariantes\n\n1. Siempre seis workflows permanentes; workflows de actualización temporales se eliminan **después de verificar su resultado**, no durante la ejecución.\n2. Un cambio requiere código + pruebas CI + una sincronización completa verificada. No certificar resultados futuros.\n3. Los ID de actividad y las marcas temporales de medición deben mantenerse. No se borran registros de entrenamiento, sesiones, sueño ni certificados.\n4. `training_feedback.json` representa una instantánea de RPE; en la cadena Advanced→CrossFit el mismo CSV debe utilizarse una sola vez y validarse por huella, run ID y frescura.\n5. No generar estimaciones de 1RM a partir del RPE de la sesión ni completar repeticiones de WOD con lo previsto.\n6. Los informes generados no son avisos recibidos. Sin acuse externo la entrega sigue como no verificada.\n7. El origen de una ejecución `repository_dispatch` o `workflow_dispatch` requiere evidencia del iniciador; no deducir Apps Script de un evento.\n\n## Próximas etapas de refactorización (no ejecutar a ciegas)\n\n- `sync.yml` concentra cientos de líneas y debe modularizarse moviendo **un paso por cambio** a scripts comprobados, conservando IDs, JSON publicados y semántica.\n- `report_cycles.json` almacena snapshots y sus SHA-256: conservar todos. Antes de archivar por mes, introducir prueba de lectura/reconstrucción, comprobación SHA y capacidad de reversión. No truncar ni comprimir sin pruebas de recuperación.\n- Mantener bajo vigilancia el tamaño del repositorio, duración de workflows, frecuencia real de `schedule`, frescura de datos y fallos del respaldo Apps Script.\n- Para cambios sensibles, probar primero en una rama/PR si es posible; nunca sobrescribir el histórico sin copia verificable.\n\n## Validación segura\n\n```bash\npython -m compileall -q .\npython -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot\npython monitor_v231.py\n```\n\nLa puntuación de calidad fisiológica de Garmin no representa el porcentaje de CI de GitHub. Históricos de HRV/sueño inmaduros requieren más mediciones, no estimaciones artificiales.\n', 'rpe_cycle_snapshot.py': '"""Verified single-source RPE snapshot for chained Garmin Recovery workflows.\n\nNever infer identity by date; never silently substitute stale/other run rows.\nPure functions facilitate CI tests without Google or Garmin credentials.\n"""\nimport hashlib\nimport json\nfrom datetime import datetime, timedelta, timezone\n\nCOLUMNS = (\'Fecha\', \'ID actividad\', \'Actividad\', \'RPE\', \'Sensaciones\',\n           \'Notas\', \'Registrado\', \'Detalle JSON\')\n\n\nclass SnapshotError(ValueError):\n    pass\n\n\ndef canonical_digest(rows):\n    encoded = json.dumps(rows, sort_keys=True, ensure_ascii=False,\n                         separators=(\',\', \':\'), allow_nan=False).encode(\'utf-8\')\n    return hashlib.sha256(encoded).hexdigest()\n\n\ndef validate_rows(rows):\n    if not isinstance(rows, list) or not rows:\n        raise SnapshotError(\'RPE CSV sin filas utilizables\')\n    seen_rows = set()\n    rpe_by_id = {}\n    for index, row in enumerate(rows, start=1):\n        if not isinstance(row, dict) or any(col not in row for col in COLUMNS):\n            raise SnapshotError(f\'RPE fila {index}: cabeceras A:H incompletas\')\n        activity_id = str(row.get(\'ID actividad\') or \'\').strip().casefold()\n        if not activity_id:\n            raise SnapshotError(f\'RPE fila {index}: falta ID actividad\')\n        if not str(row.get(\'Fecha\') or \'\').strip():\n            raise SnapshotError(f\'RPE fila {index}: falta fecha\')\n        signature = canonical_digest([row])\n        if signature in seen_rows:\n            raise SnapshotError(\'Fila RPE exactamente duplicada para \' + activity_id)\n        seen_rows.add(signature)\n        # Several distinct blocks can share one Garmin activity, but their RPE\n        # must not contradict each other. Preserve all blocks for CrossFit.\n        rpe = str(row.get(\'RPE\') or \'\').strip().replace(\',\', \'.\')\n        if rpe:\n            try:\n                numeric_rpe = float(rpe)\n            except ValueError as exc:\n                raise SnapshotError(\'RPE no numérico para \' + activity_id) from exc\n            if not 0 <= numeric_rpe <= 10:\n                raise SnapshotError(\'RPE fuera de rango para \' + activity_id)\n            if activity_id in rpe_by_id and rpe_by_id[activity_id] != numeric_rpe:\n                raise SnapshotError(\'RPE contradictorio entre bloques de \' + activity_id)\n            rpe_by_id[activity_id] = numeric_rpe\n    return rows\n\n\ndef parse_timestamp(value):\n    try:\n        result = datetime.fromisoformat(str(value).replace(\'Z\', \'+00:00\'))\n        return result if result.tzinfo is not None else None\n    except (ValueError, TypeError):\n        return None\n\n\ndef verified_snapshot(feedback, advanced, expected_run_id, now=None, max_age_minutes=40):\n    """Use exactly the rows fetched by the corresponding Advanced Analytics run.\n\n    On mismatch raise SnapshotError so CrossFit refuses to overwrite the last good\n    report. A direct/manual CrossFit run can still use its original live CSV path.\n    """\n    if not expected_run_id:\n        raise SnapshotError(\'Falta ID de la ejecución padre Advanced Analytics\')\n    if not isinstance(feedback, dict) or not isinstance(advanced, dict):\n        raise SnapshotError(\'Falta instantánea de RPE o Advanced Analytics\')\n    if str(feedback.get(\'advanced_run_id\') or \'\') != str(expected_run_id):\n        raise SnapshotError(\'La instantánea RPE pertenece a otra ejecución Advanced\')\n    rows = validate_rows(feedback.get(\'source_rows_AH\'))\n    if canonical_digest(rows) != feedback.get(\'source_rows_sha256\'):\n        raise SnapshotError(\'Huella SHA-256 de RPE no coincide\')\n    if feedback.get(\'remote_fetch_error\'):\n        raise SnapshotError(\'RPE remoto tuvo errores de lectura\')\n    if int(feedback.get(\'remote_rows_loaded\') or 0) != len(rows):\n        raise SnapshotError(\'Conteo de filas RPE incoherente\')\n    advanced_rpe = advanced.get(\'rpe_feedback\') or {}\n    if not isinstance(advanced_rpe, dict) or advanced_rpe.get(\'remote_fetch_error\'):\n        raise SnapshotError(\'Advanced Analytics no confirmó la lectura RPE\')\n    if str(advanced_rpe.get(\'advanced_run_id\') or \'\') != str(expected_run_id):\n        raise SnapshotError(\'La analítica Advanced pertenece a otra ejecución\')\n    if advanced_rpe.get(\'source_rows_sha256\') != canonical_digest(rows):\n        raise SnapshotError(\'La analítica Advanced usó otra instantánea RPE\')\n    if int(advanced_rpe.get(\'remote_rows_loaded\') or 0) != len(rows):\n        raise SnapshotError(\'Advanced Analytics usó otro número de filas\')\n    last_date = max(str(row[\'Fecha\']) for row in rows)\n    if feedback.get(\'remote_latest_date\') != last_date or advanced_rpe.get(\'remote_latest_date\') != last_date:\n        raise SnapshotError(\'Fecha máxima de RPE inconsistente\')\n    checked = parse_timestamp(feedback.get(\'source_fetched_at\'))\n    advanced_at = parse_timestamp(advanced.get(\'generated_at\'))\n    now = now or datetime.now(timezone.utc)\n    if now.tzinfo is None or checked is None or advanced_at is None:\n        raise SnapshotError(\'Faltan timestamps con huso horario\')\n    if not timedelta(minutes=-2) <= now - checked <= timedelta(minutes=max_age_minutes):\n        raise SnapshotError(\'Instantánea RPE antigua o futura\')\n    if not timedelta(minutes=-2) <= advanced_at - checked <= timedelta(minutes=max_age_minutes):\n        raise SnapshotError(\'Advanced y RPE tienen tiempos incoherentes\')\n    if not timedelta(minutes=-2) <= now - advanced_at <= timedelta(minutes=max_age_minutes):\n        raise SnapshotError(\'La generación de Advanced es demasiado antigua\')\n    return rows\n', 'test_rpe_cycle_snapshot.py': '"""Tests for RPE same-cycle lineage, tampering, duplicates and staleness."""\nimport copy\nimport unittest\nfrom datetime import datetime, timedelta, timezone\nfrom rpe_cycle_snapshot import (COLUMNS, SnapshotError, canonical_digest,\n                                validate_rows, verified_snapshot)\n\n\nclass SnapshotTests(unittest.TestCase):\n    def setUp(self):\n        self.now = datetime(2026, 10, 11, 13, 7, tzinfo=timezone.utc)\n        self.rows = [dict(zip(COLUMNS, [\'2026-10-11\', \'i196047961\', \'Fuerza\', \'6\',\n                                        \'\', \'Sentadilla\', \'2026-10-11\', \'{}\']))]\n        self.snapshot = {\'advanced_run_id\': \'12345\', \'source_rows_AH\': self.rows,\n                         \'source_rows_sha256\': canonical_digest(self.rows),\n                         \'source_fetched_at\': (self.now - timedelta(minutes=1)).isoformat(),\n                         \'remote_rows_loaded\': 1, \'remote_latest_date\': \'2026-10-11\'}\n        self.advanced = {\'generated_at\': (self.now - timedelta(seconds=10)).isoformat(),\n                         \'rpe_feedback\': {\'remote_rows_loaded\': 1,\n                                          \'remote_latest_date\': \'2026-10-11\',\n                                          \'remote_fetch_error\': None,\n                                          \'advanced_run_id\': \'12345\',\n                                          \'source_rows_sha256\': canonical_digest(self.rows)}}\n\n    def ok(self, snapshot=None, advanced=None, run_id=\'12345\', now=None):\n        return verified_snapshot(snapshot or self.snapshot, advanced or self.advanced,\n                                 run_id, now or self.now)\n\n    def test_same_parent_snapshot_passes(self):\n        self.assertEqual(self.ok(), self.rows)\n\n    def test_other_parent_fails_closed(self):\n        with self.assertRaisesRegex(SnapshotError, \'otra ejecución\'):\n            self.ok(run_id=\'12346\')\n\n    def test_tampered_rows_rejected(self):\n        x = copy.deepcopy(self.snapshot)\n        x[\'source_rows_AH\'][0][\'RPE\'] = \'9\'\n        with self.assertRaisesRegex(SnapshotError, \'SHA-256\'):\n            self.ok(snapshot=x)\n\n    def test_stale_snapshot_rejected(self):\n        with self.assertRaisesRegex(SnapshotError, \'antigua\'):\n            self.ok(now=self.now + timedelta(minutes=41))\n\n    def test_duplicates_not_silently_reduced(self):\n        with self.assertRaisesRegex(SnapshotError, \'duplicada\'):\n            validate_rows(self.rows + self.rows)\n\n    def test_multiple_blocks_same_activity_allowed(self):\n        second = copy.deepcopy(self.rows[0])\n        second[\'Actividad\'] = \'Curl femoral\'\n        self.assertEqual(len(validate_rows(self.rows + [second])), 2)\n\n    def test_conflicting_rpe_same_activity_rejected(self):\n        second = copy.deepcopy(self.rows[0])\n        second[\'Actividad\'] = \'Curl femoral\'\n        second[\'RPE\'] = \'9\'\n        with self.assertRaisesRegex(SnapshotError, \'contradictorio\'):\n            validate_rows(self.rows + [second])\n\n    def test_missing_id_rejected(self):\n        x = copy.deepcopy(self.rows)\n        x[0][\'ID actividad\'] = \'\'\n        with self.assertRaisesRegex(SnapshotError, \'ID actividad\'):\n            validate_rows(x)\n\n    def test_mismatched_advanced_count_rejected(self):\n        x = copy.deepcopy(self.advanced)\n        x[\'rpe_feedback\'][\'remote_rows_loaded\'] = 2\n        with self.assertRaisesRegex(SnapshotError, \'número de filas\'):\n            self.ok(advanced=x)\n\n    def test_advanced_from_other_run_rejected(self):\n        x = copy.deepcopy(self.advanced)\n        x[\'rpe_feedback\'][\'advanced_run_id\'] = \'another\'\n        with self.assertRaisesRegex(SnapshotError, \'otra ejecución\'):\n            self.ok(advanced=x)\n\n    def test_advanced_hash_mismatch_rejected(self):\n        x = copy.deepcopy(self.advanced)\n        x[\'rpe_feedback\'][\'source_rows_sha256\'] = \'f\' * 64\n        with self.assertRaisesRegex(SnapshotError, \'otra instantánea\'):\n            self.ok(advanced=x)\n\n    def test_missing_parent_id_rejected(self):\n        with self.assertRaisesRegex(SnapshotError, \'Falta ID\'):\n            self.ok(run_id=\'\')\n\n\nif __name__ == \'__main__\':\n    unittest.main()\n'}
+              for filename in files:
+                  if Path(filename).exists():
+                      raise RuntimeError(f'{filename}: already exists, refusing to overwrite')
+
+              edits['rpe_enrichment.py'] = edit('rpe_enrichment.py', [
+                  ('import csv\n', 'import csv\nfrom datetime import datetime, timezone\nfrom rpe_cycle_snapshot import validate_rows, canonical_digest\n'),
+                  ('    return normalize_feedback({"activities": rows})\n',
+                   '    rows = [r for r in rows if isinstance(r, dict) and str(r.get("Fecha") or "").strip()]\n'
+                   '    validate_rows(rows)\n'
+                   '    return normalize_feedback({"activities": rows}), rows\n'),
+                  ('    remote_latest_date = None\n', '    remote_latest_date = None\n    raw_remote_rows = None\n'),
+                  ('            remote = feedback_from_csv(remote_url)\n            remote_count = len(remote)\n',
+                   '            remote, raw_remote_rows = feedback_from_csv(remote_url)\n            remote_count = len(raw_remote_rows)\n'),
+                  ('        "remote_rows_loaded": remote_count,\n        "remote_latest_date": remote_latest_date,\n        "activities": feedback,',
+                   '        "remote_rows_loaded": remote_count,\n        "remote_latest_date": remote_latest_date,\n'
+                   '        "source_rows_AH": raw_remote_rows,\n'
+                   '        "source_rows_sha256": canonical_digest(raw_remote_rows) if raw_remote_rows else None,\n'
+                   '        "source_fetched_at": datetime.now(timezone.utc).isoformat() if raw_remote_rows else None,\n'
+                   '        "advanced_run_id": os.environ.get("GITHUB_RUN_ID"),\n'
+                   '        "activities": feedback,'),
+                  ('        "remote_fetch_policy": "cache_bust_query + no_cache_headers",\n        "remote_fetch_error": remote_error,',
+                   '        "remote_fetch_policy": "cache_bust_query + no_cache_headers",\n'
+                   '        "advanced_run_id": os.environ.get("GITHUB_RUN_ID"),\n'
+                   '        "source_rows_sha256": canonical_digest(raw_remote_rows) if raw_remote_rows else None,\n'
+                   '        "remote_fetch_error": remote_error,'),
+              ])
+
+              edits['crossfit_insights.py'] = edit('crossfit_insights.py', [
+                  ('from training_extensions import analyze as analyze_training_extensions\n',
+                   'from training_extensions import analyze as analyze_training_extensions\n'
+                   'from rpe_cycle_snapshot import verified_snapshot, SnapshotError\n'),
+                  ('def normalize_id(x):', """def cycle_sheet_rows(feedback, advanced, now):
+              # Only use the parent Advanced RPE snapshot in workflow_run.
+              if os.environ.get('GITHUB_EVENT_NAME') != 'workflow_run':
+                  return sheet_rows()
+              try:
+                  rows = verified_snapshot(feedback, advanced,
+                                           os.environ.get('PARENT_ADVANCED_RUN_ID'), now)
+                  return rows, 'cycle_snapshot', None
+              except SnapshotError as exc:
+                  return [], 'unavailable', str(exc)
+
+
+          def normalize_id(x):"""),
+                  ("    rows,source,error=sheet_rows()\n", "    rows,source,error=cycle_sheet_rows(feedback,advanced,now)\n"),
+                  ("         'sheet_fetch_policy':'cache_bust_query + no_cache_headers',",
+                   "         'sheet_fetch_policy':('same_advanced_run_sha256_snapshot' if source=='cycle_snapshot' else 'manual_live_csv_cache_bust'),"),
+                  ("         'manual_source_rule':'Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.',",
+                   "         'manual_source_rule':'Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.',"),
+                  ("    if source != 'live_csv':\n", "    if source not in ('live_csv', 'cycle_snapshot'):\n"),
+              ])
+
+              edits['data_quality.py'] = edit('data_quality.py', [
+                  ("    if sheet_source != 'live_csv':\n", "    if sheet_source not in ('live_csv', 'cycle_snapshot'):\n"),
+                  ("    if sheet_source == 'live_csv' and not rows:\n", "    if sheet_source in ('live_csv', 'cycle_snapshot') and not rows:\n"),
+              ])
+              edits['.github/workflows/crossfit-insights.yml'] = edit('.github/workflows/crossfit-insights.yml', [
+                  ("          RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}\n        run: python crossfit_insights.py",
+                   "          RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}\n"
+                   "          PARENT_ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}\n"
+                   "        run: python crossfit_insights.py"),
+              ])
+              edits['.github/workflows/garmin-ci.yml'] = edit('.github/workflows/garmin-ci.yml', [
+                  ('test_quality_v248 test_training_extensions\n', 'test_quality_v248 test_training_extensions test_rpe_cycle_snapshot\n'),
+              ])
+
+              op = Path('OPERACION_Y_VALIDACION.md').read_text(encoding='utf-8')
+              op = once(op, '**Revisión:** 2.4.11', '**Revisión:** 2.6', 'OPERACION_Y_VALIDACION.md')
+              op = once(op, '- Cinco etapas de la cadena terminadas en `success` después de una sincronización de prueba.',
+                        '- Las cuatro etapas Sync → Heart → Advanced → CrossFit terminadas en `success`, con monitor comprobado por separado.',
+                        'OPERACION_Y_VALIDACION.md')
+              op += '\n## 9. Instantánea única de RPE V2.6\n\nEn la cadena normal, Advanced descarga RPE y publica `training_feedback.json` con ID de run, huella SHA-256 y hora de descarga. CrossFit verifica exactamente esa instantánea: si no coincide el padre, la huella o la frescura, falla sin sobrescribir el informe previo. Ejecuciones manuales independientes siguen permitiendo CSV en vivo. Ver `README.md` y `MAINTENIMIENTO.md`.\n'
+              edits['OPERACION_Y_VALIDACION.md'] = op
+
+              for filename, content in files.items():
+                  compile(content, filename, 'exec') if filename.endswith('.py') else None
+                  edits[filename] = content
+              return edits
+
+
+          def main():
+              edits = build()  # fail closed: validate ALL anchors before touching any file
+              for filename, content in edits.items():
+                  target = Path(filename)
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_text(content if content.endswith('\n') else content+'\n', encoding='utf-8')
+                  print('V2.6 updated:', filename)
+
+
+          if __name__ == '__main__':
+              main()
+          PY
+          python -m compileall -q .
+          python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot
+          python monitor_v231.py
+
+      - name: Atomic publish only after test success
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Garmin Recovery Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.md .gitignore MAINTENIMIENTO.md OPERACION_Y_VALIDACION.md
+          git add rpe_cycle_snapshot.py test_rpe_cycle_snapshot.py
+          git add rpe_enrichment.py crossfit_insights.py data_quality.py
+          git add .github/workflows/crossfit-insights.yml .github/workflows/garmin-ci.yml
+          git diff --cached --check
+          git commit -m 'V2.6: repository maintenance and single-source RPE cycle snapshots'
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo 'Concurrent change conflict - publication stopped safely' >&2
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo 'V2.6 successfully published; run Garmin CI before any Sync'
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
