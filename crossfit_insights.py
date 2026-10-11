@@ -8,6 +8,7 @@ from muscle_load import analyze as analyze_muscle_load
 from data_quality import analyze as analyze_data_quality
 from report_audit import provenance, update_history
 from training_extensions import analyze as analyze_training_extensions
+from rpe_cycle_snapshot import verified_snapshot, SnapshotError, parent_run_id_from_event
 
 TZ = ZoneInfo('Europe/Madrid')
 SHEET_ID = '1vbxls-yyBOs8_gAmp9ld2WI_Ss9jvXNMFbxV5TKWX_k'
@@ -75,6 +76,18 @@ def sheet_rows():
         return output,'live_csv',None
     except Exception as exc:
         return [],'unavailable',str(exc)[:250]
+
+def cycle_sheet_rows(feedback, advanced, now):
+    # Only use the parent Advanced RPE snapshot in workflow_run.
+    if os.environ.get('GITHUB_EVENT_NAME') != 'workflow_run':
+        return sheet_rows()
+    try:
+        rows = verified_snapshot(feedback, advanced,
+                                 parent_run_id_from_event(os.environ.get('GITHUB_EVENT_PATH')), now)
+        return rows, 'cycle_snapshot', None
+    except SnapshotError as exc:
+        return [], 'unavailable', str(exc)
+
 
 def normalize_id(x): return str(x or '').strip().lower()
 
@@ -149,7 +162,7 @@ def main():
     activities=load('activities.json',[])
     advanced=load('advanced_analytics.json',{})
     feedback=load('training_feedback.json',{})
-    rows,source,error=sheet_rows()
+    rows,source,error=cycle_sheet_rows(feedback,advanced,now)
     if not isinstance(activities,list): activities=[]
     if not isinstance(advanced,dict): advanced={}
     if not isinstance(feedback,dict): feedback={}
@@ -190,10 +203,10 @@ def main():
     counts={k:v.get('days') for k,v in ctx.items() if isinstance(v,dict)} if isinstance(ctx,dict) else {}
     out={'generated_at':now.isoformat(),'source_measurement_note':'La generación del JSON no es hora de medición',
          'sheet_source':source,'sheet_error':error,'sheet_rows_loaded':len(rows),
-         'sheet_fetch_policy':'cache_bust_query + no_cache_headers',
+         'sheet_fetch_policy':('same_advanced_run_sha256_snapshot' if source=='cycle_snapshot' else 'manual_live_csv_cache_bust'),
          'sheet_latest_date':sheet_latest_date,'latest_activity_date':latest_activity_date,
          'sheet_has_detail_json':bool(rows and any(r.get('Detalle JSON','').strip() for r in rows)),
-         'manual_source_rule':'Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.',
+         'manual_source_rule':'Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.',
          'quality':{'interpretation':'provisional','limitations':['Pocos WOD equivalentes para eficiencia','Fatiga neuromuscular no medida directamente','La respuesta 24-48 h no demuestra causalidad']},
          'context_today':shift(now.date().isoformat()),'context_baseline_days':counts,
          'response_24_48h':advanced.get('training_response_24_48h'),
@@ -205,7 +218,7 @@ def main():
     out.update(analyze_data_quality(rows, results, advanced, now, source, error))
     out['report_audit']=provenance(now)
     # Preserve the last complete report when the live CSV cannot be read.
-    if source != 'live_csv':
+    if source not in ('live_csv', 'cycle_snapshot'):
         raise RuntimeError('RPE CSV unavailable: refusing to overwrite last good report: ' + str(error))
     Path('crossfit_insights.json').write_text(json.dumps(out,indent=2,ensure_ascii=False,allow_nan=False)+'\n',encoding='utf-8')
     update_history(out,now)

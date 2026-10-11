@@ -44,9 +44,9 @@ def analyze(rows, activities, advanced, now, sheet_source, sheet_error):
     latest_activity = max((d for d in dates if d and d <= today), default=None)
     activity_age_days = (today - latest_activity).days if latest_activity else None
     flags = []
-    if sheet_source != 'live_csv':
+    if sheet_source not in ('live_csv', 'cycle_snapshot'):
         flags.append({'severity':'error','code':'sheet_unavailable','detail':sheet_error or 'CSV not loaded'})
-    if sheet_source == 'live_csv' and not rows:
+    if sheet_source in ('live_csv', 'cycle_snapshot') and not rows:
         flags.append({'severity':'warning','code':'sheet_empty','detail':'CSV loaded but contains no activity rows'})
     if duplicates:
         flags.append({'severity':'warning','code':'duplicate_sheet_ids','count':len(duplicates),'ids':duplicates[:20]})

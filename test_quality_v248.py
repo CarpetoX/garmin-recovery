@@ -1,5 +1,6 @@
 """Quality and regression checks for Garmin Recovery V2.4.8."""
 import unittest
+from test_rpe_cycle_snapshot import SnapshotTests
 from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo

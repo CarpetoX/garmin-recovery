@@ -1,6 +1,6 @@
 # Garmin Recovery — Operación, trazabilidad y control de cambios
 
-**Revisión:** 2.4.11 · Europe/Madrid  
+**Revisión:** 2.6 · Europe/Madrid
 **Ámbito:** documentación operativa; no altera automatizaciones, credenciales ni datos deportivos.
 
 ## 1. Arquitectura vigente
@@ -66,7 +66,7 @@ Para certificar el respaldo comparar la hora de ejecución en Apps Script y GitH
 ## 7. Criterios objetivos de aceptación sugeridos
 
 - CI verde en el commit de cambio; pruebas de medianoche, turnos y parser de WOD incluidas.
-- Cinco etapas de la cadena terminadas en `success` después de una sincronización de prueba.
+- Las cuatro etapas Sync → Heart → Advanced → CrossFit terminadas en `success`, con monitor comprobado por separado.
 - Cero WOD con repeticiones prescritas contabilizadas como realizadas sin evidencia.
 - Recuperación `pending` hasta sueño/HRV actuales confirmados.
 - RPE por ID coincidente (sin emparejar por fecha cuando hay múltiples sesiones).
@@ -82,3 +82,7 @@ Para certificar el respaldo comparar la hora de ejecución en Apps Script y GitH
 **H06: planificación.** En Google Sheets `Planificados` existe la sentadilla prevista del 09/10 como `PREVISTO`. Contrastar con la sesión realizada 10×2 hasta 170 kg y actualizar manualmente el estado a `SUSTITUIDO/REALIZADO DISTINTO`, conservando ambos registros; no sobrescribir lo prescrito con lo ejecutado.
 
 **H07: HRR y series históricas.** Necesitan más mediciones válidas y comparables; mejorar el código no crea datos retrospectivos.
+
+## 9. Instantánea única de RPE V2.6
+
+En la cadena normal, Advanced descarga RPE y publica `training_feedback.json` con ID de run, huella SHA-256 y hora de descarga. CrossFit verifica exactamente esa instantánea: si no coincide el padre, la huella o la frescura, falla sin sobrescribir el informe previo. Ejecuciones manuales independientes siguen permitiendo CSV en vivo. Ver `README.md` y `MAINTENIMIENTO.md`.

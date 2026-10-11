@@ -1,4 +1,6 @@
 import csv
+from datetime import datetime, timezone
+from rpe_cycle_snapshot import validate_rows, canonical_digest
 import io
 import json
 import os
@@ -130,7 +132,9 @@ def feedback_from_csv(url):
     reader = csv.DictReader(io.StringIO(text))
     rows = list(reader)
 
-    return normalize_feedback({"activities": rows})
+    rows = [r for r in rows if isinstance(r, dict) and str(r.get("Fecha") or "").strip()]
+    validate_rows(rows)
+    return normalize_feedback({"activities": rows}), rows
 
 
 def intervals_rpe(activity):
@@ -153,11 +157,12 @@ def main():
     remote_error = None
     remote_count = 0
     remote_latest_date = None
+    raw_remote_rows = None
 
     if remote_url:
         try:
-            remote = feedback_from_csv(remote_url)
-            remote_count = len(remote)
+            remote, raw_remote_rows = feedback_from_csv(remote_url)
+            remote_count = len(raw_remote_rows)
             remote_latest_date = max(
                 (
                     str(item.get("date"))
@@ -229,6 +234,10 @@ def main():
         "sheet": "RPE",
         "remote_rows_loaded": remote_count,
         "remote_latest_date": remote_latest_date,
+        "source_rows_AH": raw_remote_rows,
+        "source_rows_sha256": canonical_digest(raw_remote_rows) if raw_remote_rows else None,
+        "source_fetched_at": datetime.now(timezone.utc).isoformat() if raw_remote_rows else None,
+        "advanced_run_id": os.environ.get("GITHUB_RUN_ID"),
         "activities": feedback,
     }
     if remote_error:
@@ -255,6 +264,8 @@ def main():
         "remote_rows_loaded": remote_count,
         "remote_latest_date": remote_latest_date,
         "remote_fetch_policy": "cache_bust_query + no_cache_headers",
+        "advanced_run_id": os.environ.get("GITHUB_RUN_ID"),
+        "source_rows_sha256": canonical_digest(raw_remote_rows) if raw_remote_rows else None,
         "remote_fetch_error": remote_error,
         "discrepancies": discrepancies,
         "policy": (
