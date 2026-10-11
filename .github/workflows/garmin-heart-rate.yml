@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: garmin-pipeline-main
@@ -28,6 +29,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: V2.9 - Descargar filiacion del Sync que disparo Garmin FC
+        if: github.event_name == 'workflow_run'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: garmin-lineage-v29
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+          path: .lineage_parent
 
       - name: Validar sintaxis Garmin
         run: python -m py_compile garmin_metrics.py garmin_activity_metrics.py garmin_hr_timeline.py garmin_hrv_timeline.py garmin_sleep_history.py
@@ -79,3 +91,18 @@ jobs:
 
           echo 'No se pudo publicar después de cinco intentos.' >&2
           exit 1
+
+      - name: V2.9 - Capturar filiacion del run Heart Rate
+        continue-on-error: true
+        run: |
+          mkdir -p .lineage_current
+          python pipeline_lineage_v29.py --stage heart --out .lineage_current/pipeline_lineage_v29.json
+
+      - name: V2.9 - Conservar filiacion por 14 dias
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-lineage-v29
+          path: .lineage_current/pipeline_lineage_v29.json
+          retention-days: 14
+          if-no-files-found: error
