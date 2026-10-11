@@ -98,7 +98,7 @@ jobs:
         run: bash -n sync_publish.sh
 
       - name: Tests for morning reports, post-night-shift sleep, strength and RPE cycle snapshots
-        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot test_archive_report_cycles test_sync_publish test_ledger_safety_v28 test_ops_metrics_v28 test_pipeline_lineage_v29 test_json_contracts_v30 test_training_trends_v31 test_garmin_dispatch_auth_v291 test_origin_monitor_v292 test_monitor_origin_integration_v292 test_reliability_history_v294 test_cycle_shards_v296 test_ledger_compact_preview_v296 test_ledger_reader_v296
+        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot test_archive_report_cycles test_sync_publish test_ledger_safety_v28 test_ops_metrics_v28 test_pipeline_lineage_v29 test_json_contracts_v30 test_training_trends_v31 test_garmin_dispatch_auth_v291 test_origin_monitor_v292 test_monitor_origin_integration_v292 test_reliability_history_v294 test_cycle_shards_v296 test_ledger_compact_preview_v296 test_ledger_reader_v296 test_ledger_access_v296
 
       - name: Audit certificate ledger hashes without modifying records
         run: python archive_report_cycles.py
