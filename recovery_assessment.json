@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T11:56:38.255333+02:00",
+  "generated_at": "2026-10-11T13:06:33.184390+02:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "assessed",
   "status": "red",
@@ -121,26 +121,26 @@
         "confirmed_sleep": {
           "state": "recent",
           "measured_at": "2026-10-11T09:10:13+02:00",
-          "age_minutes": 166.4,
+          "age_minutes": 236.3,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
           "state": "recent",
           "measured_at": "2026-10-11T09:06:12+02:00",
-          "age_minutes": 170.4,
+          "age_minutes": 240.4,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
-          "state": "recent",
+          "state": "delayed",
           "measured_at": "2026-10-11T11:32:00+02:00",
-          "age_minutes": 24.6,
+          "age_minutes": 94.6,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "delayed",
+          "state": "old_measurement",
           "measured_at": "2026-10-11T09:33:00+02:00",
-          "age_minutes": 143.6,
+          "age_minutes": 213.6,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -153,6 +153,7 @@
       "invalid_core_episode": false,
       "live_data_limited": true,
       "limited_live_metrics": [
+        "heart_rate_live",
         "body_battery_live"
       ],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
@@ -174,7 +175,7 @@
         "easy_aerobic": "optional_easy_only_if_alert_and_symptoms_allow",
         "mobility": "optional_light_mobility"
       },
-      "recent_sessions_with_declared_rpe": 3,
+      "recent_sessions_with_declared_rpe": 4,
       "recent_high_rpe_sessions": 2,
       "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
     }
