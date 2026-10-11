@@ -225,5 +225,158 @@ class PerformanceReportV32Tests(unittest.TestCase):
         self.assertIsNone(r['charts']['daily_28d'][-1]['sleep_hours'])
 
 
+# V3.3 tests: loaded by the already-configured Garmin CI test_training_trends_v31 suite.
+import copy
+import json
+import tempfile
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+from zoneinfo import ZoneInfo
+from validate_performance_v33 import audit, main
+
+
+class PerformanceContractV33Tests(unittest.TestCase):
+    def setUp(self):
+        self.now = datetime(2026, 10, 11, 21, 12, tzinfo=ZoneInfo('Europe/Madrid'))
+        self.day = self.now.date()
+        self.crossfit = {
+            'generated_at': datetime(2026, 10, 11, 21, 10,
+                                     tzinfo=ZoneInfo('Europe/Madrid')).isoformat(),
+            'sheet_source': 'cycle_snapshot',
+            'activities': [
+                {'activity_id': 'a1', 'date': self.day.isoformat(), 'name': 'Fuerza',
+                 'rpe_used': 6, 'recorded_minutes': 40,
+                 'srpe_using_recorded_minutes': 240,
+                 'heart_rate': {'average': 118},
+                 'internal_load_not_additive': {'trimp': 25.2}},
+            ],
+            'muscle_load': {'strength_exercises': []},
+        }
+        self.candidate = trend(self.crossfit, self.day)
+        self.candidate['performance_report_v32'] = build_report(
+            self.crossfit, [], {}, self.day)
+        self.candidate['generated_at'] = datetime(2026, 10, 11, 19, 11,
+                                                  tzinfo=timezone.utc).isoformat()
+
+    def codes(self, modify=None, crossfit=None, now=None):
+        candidate = copy.deepcopy(self.candidate)
+        if modify:
+            modify(candidate)
+        return audit(candidate, crossfit or self.crossfit, now or self.now)
+
+    def test_valid_provisional_report_is_accepted(self):
+        self.assertEqual(self.codes(), [])
+
+    def test_missing_v32_is_failure(self):
+        self.assertIn('performance_v32_missing', self.codes(lambda c: c.pop('performance_report_v32')))
+
+    def test_empty_candidate_rejected(self):
+        self.assertIn('wrong_top_level_contract', audit({}, self.crossfit, self.now))
+
+    def test_crossfit_generated_at_mismatch(self):
+        self.assertIn('source_timestamp_mismatch',
+                      self.codes(lambda c: c.update(source_generated_at='2026-10-11T20:00:00+02:00')))
+
+    def test_v32_provenance_mismatch(self):
+        self.assertIn('performance_v32_source_mismatch',
+                      self.codes(lambda c: c['performance_report_v32']['provenance'].update(
+                          crossfit_generated_at='2026-10-11T20:00:00+02:00')))
+
+    def test_old_source_rejected_even_when_json_present(self):
+        self.assertIn('crossfit_source_not_fresh', self.codes(now=self.now + timedelta(hours=2)))
+
+    def test_future_clock_rejected(self):
+        self.assertIn('crossfit_source_not_fresh', self.codes(now=self.now - timedelta(minutes=10)))
+
+    def test_wrong_local_day_rejected(self):
+        self.assertIn('report_local_day_invalid', self.codes(lambda c: c.update(as_of_date='2026-10-10')))
+
+    def test_corrupted_v31_chart_rejected(self):
+        self.assertIn('v31_chart_28d_missing', self.codes(lambda c: c['daily_chart_28d'].pop()))
+
+    def test_corrupted_v32_chart_dates_rejected(self):
+        self.assertIn('performance_v32_chart_dates_inconsistent',
+                      self.codes(lambda c: c['performance_report_v32']['charts']['daily_28d'][0].update(
+                          date='2026-09-20')))
+
+    def test_missing_rpe_is_valid_if_explicitly_null(self):
+        self.crossfit['activities'][0]['rpe_used'] = None
+        self.crossfit['activities'][0]['srpe_using_recorded_minutes'] = None
+        self.candidate = trend(self.crossfit, self.day)
+        self.candidate['performance_report_v32'] = build_report(self.crossfit, [], {}, self.day)
+        self.candidate['generated_at'] = '2026-10-11T19:11:00+00:00'
+        self.assertEqual(self.codes(), [])
+
+    def test_no_sessions_is_valid_not_fake_zero_historical_activity(self):
+        self.crossfit['activities'] = []
+        self.candidate = trend(self.crossfit, self.day)
+        self.candidate['performance_report_v32'] = build_report(self.crossfit, [], {}, self.day)
+        self.candidate['generated_at'] = '2026-10-11T19:11:00+00:00'
+        self.assertEqual(self.codes(), [])
+
+    def test_machine_and_bodyweight_safety_required(self):
+        self.assertIn('performance_v32_strength_guardrails_missing', self.codes(
+            lambda c: c['performance_report_v32']['strength'].update(
+                mixed_equipment_tonnage_comparable=True)))
+
+    def test_weekly_load_guardrail_required(self):
+        self.assertIn('performance_v32_load_guardrail_missing', self.codes(
+            lambda c: c['performance_report_v32']['window_comparison']['current_vs_previous_7d'].update(
+                load_metrics_are_not_additive=False)))
+
+    def test_cli_fails_if_candidate_missing_without_modifying_previous_good(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            existing = root / 'published.json'
+            existing.write_bytes(b'{"last_good":true}')
+            source = root / 'crossfit.json'
+            source.write_text(json.dumps(self.crossfit), encoding='utf-8')
+            self.assertEqual(main(['--candidate', str(root / 'missing.json'), '--crossfit', str(source)]), 1)
+            self.assertEqual(existing.read_bytes(), b'{"last_good":true}')
+
+    def test_cli_fails_on_nonfinite_json(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            candidate = root / 'candidate.json'
+            candidate.write_text('{"generated_at":NaN}', encoding='utf-8')
+            source = root / 'crossfit.json'
+            source.write_text(json.dumps(self.crossfit), encoding='utf-8')
+            self.assertEqual(main(['--candidate', str(candidate), '--crossfit', str(source)]), 1)
+
+    def test_cli_accepts_valid_generated_candidate(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            candidate = root / 'candidate.json'
+            source = root / 'crossfit.json'
+            # Replace both source and candidate timestamps with the current clock.
+            current = datetime.now(ZoneInfo('Europe/Madrid'))
+            self.crossfit['generated_at'] = (current - timedelta(minutes=2)).isoformat()
+            self.crossfit['activities'][0]['date'] = current.date().isoformat()
+            valid = trend(self.crossfit, current.date())
+            valid['performance_report_v32'] = build_report(self.crossfit, [], {}, current.date())
+            valid['generated_at'] = current.astimezone(timezone.utc).isoformat()
+            candidate.write_text(json.dumps(valid), encoding='utf-8')
+            source.write_text(json.dumps(self.crossfit), encoding='utf-8')
+            self.assertEqual(main(['--candidate', str(candidate), '--crossfit', str(source)]), 0)
+
+    def test_cli_rejects_exponent_overflow_json(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            candidate = root / 'candidate.json'
+            candidate.write_text('{"generated_at":1e999}', encoding='utf-8')
+            source = root / 'crossfit.json'
+            source.write_text(json.dumps(self.crossfit), encoding='utf-8')
+            self.assertEqual(main(['--candidate', str(candidate), '--crossfit', str(source)]), 1)
+
+    def test_missing_nested_recovery_rejected(self):
+        self.assertIn('performance_v32_recovery_missing', self.codes(
+            lambda c: c['performance_report_v32'].pop('recovery')))
+
+    def test_missing_1rm_safety_rejected(self):
+        self.assertIn('performance_v32_1rm_guardrail_missing', self.codes(
+            lambda c: c['performance_report_v32']['interpretation_quality'].update(
+                no_set_rir_inferred_from_session_rpe=False)))
+
+
 if __name__=='__main__':
     unittest.main()
