@@ -126,3 +126,11 @@ jobs:
           done
           echo 'Failed to publish monitor reports after five attempts.' >&2
           exit 1
+
+      # V2.9.6 AUTO: al terminar el monitor, comparar el historico validado
+      # con el espejo persistente. No crea tareas ni toca report_cycles.json.
+      - name: V2.9.6 - Solicitar espejo automatico si hay certificados nuevos
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python shadow_autodispatch_v296.py --source report_cycles.json

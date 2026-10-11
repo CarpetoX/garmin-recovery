@@ -1,10 +1,14 @@
-name: Garmin V2.9.6 - Publicar espejo persistente MANUAL
+name: Garmin V2.9.6 - Espejo persistente (auto y manual)
 
 # Publica SOLO una copia verificada en la rama garmin-v296-shadow.
 # Nunca modifica main, report_cycles.json, Sync, CrossFit ni Apps Script.
-# Unicamente manual: no cron, no workflow_run, no repository_dispatch.
+# Automatico SOLO mediante repository_dispatch independiente lanzado por monitor.
+# Se conserva workflow_dispatch manual. Evita otra etapa workflow_run
+# porque Sync -> Heart -> Advanced -> CrossFit ya alcanza el limite.
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [garmin-shadow-publish]
 
 permissions:
   contents: write
