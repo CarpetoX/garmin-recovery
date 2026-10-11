@@ -378,33 +378,15 @@ def _mark_legacy_cycles(items):
 
 
 def _write_ledger(path, items):
-    items = sorted(
-        items,
-        key=lambda x: x.get('slot_at', '') if isinstance(x, dict) else ''
-    )[-120:]
-    path.write_text(json.dumps({
-        'schema_version': 2,
-        'ledger_version': '2.3.4',
-        'purpose': 'Historical data-readiness ledger (not an outgoing notification receipt)',
-        'cycles': items,
-        'count': len(items)
-    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    # V2.8: fail closed on corruption, retain every old cycle and write atomically.
+    from ledger_safety_v28 import atomic_write_ledger
+    return atomic_write_ledger(path, items)
 
 def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     """Persist completed-data cycles. A readiness ledger is NOT a delivery receipt."""
-    source_schema_version = 1
-    try:
-        data = json.loads(path.read_text(encoding='utf-8'))
-        source_schema_version = (
-            int(data.get('schema_version') or 1)
-            if isinstance(data, dict)
-            else 1
-        )
-        items = data.get('cycles', []) if isinstance(data, dict) else []
-        if not isinstance(items, list):
-            items = []
-    except (OSError, ValueError, TypeError):
-        items = []
+    from ledger_safety_v28 import read_ledger
+    data, source_schema_version = read_ledger(path)
+    items = data.get('cycles', []) if data else []
 
     if source_schema_version < 2:
         items = _mark_legacy_cycles(items)
@@ -435,10 +417,8 @@ def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
         'notification_delivery': 'unverified',
         'notice': 'No ChatGPT delivery acknowledgment is available to GitHub Actions.'
     })
-    items = sorted(
-        items,
-        key=lambda x: x.get('slot_at', '') if isinstance(x, dict) else ''
-    )[-max_entries:]
+    # V2.8: max_entries kept only for API compatibility. Never drop old cycles.
+    items = sorted(items, key=lambda x: x.get('slot_at', ''))
     _write_ledger(path, items)
     return True
 

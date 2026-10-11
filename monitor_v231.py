@@ -9,6 +9,7 @@ import json
 from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from ops_metrics_v28 import report as operational_report_v28
 
 TZ = ZoneInfo('Europe/Madrid')
 SLOTS = ((8, 30), (16, 45), (22, 45))
@@ -235,6 +236,7 @@ def enhance_monitor(base, now, repo, token, fetcher):
     else:
         progress = {'state': 'unverified', 'reason': 'run_history_unavailable'}
     base['pipeline_progress'] = progress
+    base['operational_quality_v28'] = operational_report_v28(now, slots, progress, runs)
     alerts = base.setdefault('alerts', [])
     if slots.get('state') == 'recovered':
         for alert in alerts:
