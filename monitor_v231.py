@@ -81,21 +81,22 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150):
     return {
         'state': state, 'due': len(slots), 'matched': len(matched),
         'recovered_count': len(recovered), 'recovered': recovered,
-        'recovered_by_apps_script': recovered_apps,
+        'recovered_by_apps_script': recovered_apps,  # legacy event-based alias, NOT verified caller
+        'recovered_by_repository_dispatch_unverified': recovered_apps,
         'recovered_by_manual': recovered_manual,  # legado: etiqueta basada solo en evento
         'recovered_by_unattributed': recovered_manual,
         'dispatch_caller_verified': False if recovered else None,
         'cron_missed': recovered + uncovered, 'uncovered': uncovered,
         'missed': uncovered,  # compatibility with V2.3.1 consumers
         'manual_runs_counted_as_schedule': False,
-        'dispatch_origin_verified': True if recovered_apps else False if recovered_manual else None,
+        'dispatch_origin_verified': False if recovered else None,
         'grace_minutes': grace_minutes, 'timezone': 'Europe/Madrid',
         'schedule_version': 'three_syncs_v244',
         'sync_slots': ['08:30', '16:45', '22:45'],
         'report_targets': ['09:05', '17:10', '23:10'],
         'effective_date': SCHEDULE_START,
-        'note': ('repository_dispatch=Apps Script backup; '
-                 'workflow_dispatch=manual; schedule=GitHub cron.'),
+        'note': ('repository_dispatch is compatible with Apps Script but sender unverified; '
+                 'workflow_dispatch caller unverified; only schedule confirms GitHub cron.'),
     }
 
 
@@ -312,7 +313,7 @@ def self_test():
     assert a['recovered_by_manual'] and not a['recovered_by_apps_script'], a
     app = audit_slots(now, [apps], lookback_hours=12)
     assert app['state'] == 'recovered' and app['recovered_by_apps_script'], app
-    assert app['dispatch_origin_verified'] is True, app
+    assert app['dispatch_origin_verified'] is False, app
     b = audit_slots(now, [scheduled], lookback_hours=12)
     assert b['due'] == 1 and b['matched'] == 1 and b['state'] == 'ok', b
     c = audit_slots(datetime(2026, 10, 11, 10, tzinfo=TZ), [], lookback_hours=28)

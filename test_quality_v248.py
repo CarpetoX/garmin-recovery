@@ -56,6 +56,9 @@ class QualityTestsV248(unittest.TestCase):
             'tríceps en polea': 'triceps_isolation',
             'sit-ups': 'core',
             'sentadilla frontal': 'squat',
+            'prensa horizontal': 'squat',
+            'curl femoral tumbado': 'knee_flexion',
+            'curl femoral de pie unilateral': 'knee_flexion',
         }
         for name, category in expected.items():
             with self.subTest(name=name):
@@ -82,7 +85,51 @@ class QualityTestsV248(unittest.TestCase):
         self.assertTrue(by_equipment['horizontal_push:bodyweight']['volume_complete'])
         self.assertEqual(out['strength_exercises'][2]['volume_status'],
                          'bodyweight_no_external_load')
-        self.assertEqual(len(out['best_estimated_1rm_by_exercise']), 2)
+        # Session RPE 6 is not set RPE and cannot justify estimating a max.
+        self.assertEqual(len(out['best_estimated_1rm_by_exercise']), 0)
+
+    def test_explicit_set_rir_and_observed_peak(self):
+        activity = {'date': '2026-10-11', 'activity_id': 'squat-test',
+                    'manual_blocks': [{'rpe': 6, 'detail_json': {'exercises': [
+                        {'name': 'sentadilla trasera', 'load_unit': 'kg_total_barra',
+                         'sets': [{'reps': 8, 'load_kg': 100},
+                                  {'reps': 1, 'load_kg': 150}]},
+                    ]}}]}
+        out = analyze([activity], '2026-10-11')
+        squat = out['strength_exercises'][0]
+        self.assertEqual(squat['peak_declared_load_kg'], 150)
+        self.assertEqual(squat['verified_volume_kg'], 950)
+        self.assertIsNone(squat['estimated_1rm_kg'])
+        self.assertEqual(squat['estimated_1rm_status'], 'set_effort_not_reported')
+        activity['manual_blocks'][0]['detail_json']['exercises'][0]['sets'][1]['rir'] = 1
+        confirmed = analyze([activity], '2026-10-11')['strength_exercises'][0]
+        self.assertEqual(confirmed['estimated_1rm_kg'], 160.0)
+
+    def test_unilateral_machine_reps_are_not_doubled(self):
+        activity = {'date': '2026-10-11', 'activity_id': 'femoral-test',
+                    'manual_blocks': [{'rpe': 6, 'detail_json': {'exercises': [
+                        {'name': 'curl femoral unilateral de pie',
+                         'load_unit': 'kg_indicado_maquina',
+                         'reps_per_leg_unconfirmed': True,
+                         'sets': [{'count': 4, 'reps': 8, 'load_kg': 40}]},
+                    ]}}]}
+        out = analyze([activity], '2026-10-11')
+        exercise = out['strength_exercises'][0]
+        self.assertEqual(exercise['movement_pattern'], 'knee_flexion')
+        self.assertEqual(exercise['total_sets'], 4)
+        self.assertEqual(exercise['verified_volume_kg'], 1280)
+        self.assertTrue(exercise['laterality_unconfirmed'])
+        self.assertIsNone(exercise['estimated_1rm_kg'])
+
+    def test_matching_feedback_by_id_not_just_date(self):
+        from crossfit_insights import match_feedback
+        activity = {'id': 'i196047961', 'start_date_local': '2026-10-11T11:12:57'}
+        rows = [{'ID actividad': 'another-id', 'Fecha': '2026-10-11'},
+                {'ID actividad': 'i196047961', 'Fecha': '2026-10-11'}]
+        matched, source = match_feedback(activity, rows, {})
+        self.assertEqual(source, 'sheet_id')
+        self.assertEqual(len(matched), 1)
+        self.assertEqual(matched[0]['ID actividad'], 'i196047961')
 
     def test_sensor_age_uses_actual_measurement(self):
         now = datetime(2026, 10, 10, 17, 0, tzinfo=TZ)
@@ -101,6 +148,16 @@ class QualityTestsV248(unittest.TestCase):
         self.assertNotIn('body_battery_live', quality['not_confirmed_recent'])
         self.assertEqual(
             quality['live_measurements']['heart_rate_live']['age_minutes_at_report'], 185.0)
+
+    def test_repository_dispatch_not_proof_of_apps_script(self):
+        now = datetime(2026, 10, 11, 11, 30, tzinfo=TZ)
+        run = {'event': 'repository_dispatch',
+               'created_at': datetime(2026, 10, 11, 8, 35, tzinfo=TZ).isoformat(),
+               'status': 'completed', 'conclusion': 'success'}
+        result = monitor.audit_slots(now, [run], lookback_hours=12)
+        self.assertEqual(result['recovered_count'], 1)
+        self.assertFalse(result['dispatch_origin_verified'])
+        self.assertFalse(result['dispatch_caller_verified'])
 
     def test_manual_dispatch_does_not_pass_as_schedule(self):
         now = datetime(2026, 10, 11, 11, 30, tzinfo=TZ)

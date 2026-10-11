@@ -9,7 +9,9 @@ import math
 
 PATTERNS = {
     'hinge': ('peso muerto', 'deadlift', 'rdl', 'romanian deadlift', 'good morning', 'kettlebell swing'),
-    'squat': ('sentadilla', 'squat', 'thruster', 'wall ball', 'goblet squat'),
+    'squat': ('sentadilla', 'squat', 'thruster', 'wall ball', 'goblet squat',
+              'prensa horizontal', 'prensa de piernas', 'prensa inclinada', 'leg press'),
+    'knee_flexion': ('curl femoral', 'curl de isquios', 'leg curl', 'hamstring curl'),
     'chest_isolation': ('aperturas de pecho', 'chest fly', 'pec deck', 'crossover'),
     'triceps_isolation': ('tríceps', 'triceps', 'pressdown', 'extensión de codo'),
     'horizontal_push': ('bench press', 'press banca', 'press de pecho', 'press inclinado',
@@ -44,6 +46,45 @@ def classify(name):
     n = str(name or '').casefold()
     return next((p for p, words in PATTERNS.items() if any(w in n for w in words)), 'other')
 
+def strength_estimate(sets, equipment):
+    """Estimate free-weight strength only with explicit set-level RIR.
+
+    Session RPE must never be used as a per-set RIR estimate. Machine-stack
+    kilograms are not a mechanically comparable barbell 1RM.
+    """
+    if equipment not in ('barbell', 'dumbbell_pair'):
+        return None, 'unsupported_equipment'
+    best = None
+    status = 'set_effort_not_reported'
+    for item in sets:
+        if not isinstance(item, dict):
+            continue
+        reps = num(item.get('reps'))
+        kg = num(item.get('load_kg'))
+        if kg is None:
+            kg = num(item.get('weight_kg'))
+        if reps is None or kg is None or reps <= 0 or kg <= 0 or reps > 10:
+            continue
+        rir = num(item.get('reps_in_reserve'))
+        if rir is None:
+            rir = num(item.get('rir'))
+        if rir is None:
+            set_rpe = num(item.get('set_rpe'))
+            if set_rpe is not None and 0 <= set_rpe <= 10:
+                rir = 10 - set_rpe
+        if rir is None and item.get('confirmed_to_failure') is True:
+            rir = 0
+        if rir is None:
+            continue
+        if rir < 0 or rir > 2 or reps + rir > 10:
+            status = 'set_not_near_failure'
+            continue
+        estimate = kg * (1 + (reps + rir) / 30)
+        best = max(best or 0, estimate)
+        status = 'eligible'
+    return (round(best, 1) if best is not None else None), status
+
+
 def pain(obj):
     """Only accept explicit numeric 0-10 pain entries; no inference from notes."""
     if not isinstance(obj, dict): return None
@@ -73,7 +114,8 @@ def analyze(activities, as_of):
                 external_expected = equipment != 'bodyweight'
                 known_volume = 0.0
                 known_sets = total_sets = 0
-                best_e1rm = None
+                best_e1rm, estimate_status = strength_estimate(exercise.get('sets', []), equipment)
+                peak_load = None
                 for item in exercise.get('sets', []):
                     if not isinstance(item, dict): continue
                     count = num(item.get('count'))
@@ -85,9 +127,7 @@ def analyze(activities, as_of):
                     if reps is None or reps <= 0 or kg is None or kg <= 0: continue
                     known_sets += count
                     known_volume += reps * kg * count
-                    if reps <= 10:
-                        estimate = kg * (1 + reps / 30)
-                        best_e1rm = max(best_e1rm or 0, estimate)
+                    peak_load = max(peak_load or 0, kg)
                 if total_sets:
                     sessions.append({'date':day.isoformat(), 'activity_id':a.get('activity_id'),
                         'exercise':name, 'movement_pattern':pattern,
@@ -98,8 +138,11 @@ def analyze(activities, as_of):
                         'volume_complete':(known_sets == total_sets) if external_expected else None,
                         'volume_status':('complete' if known_sets == total_sets else 'partial')
                                          if external_expected else 'bodyweight_no_external_load',
-                        'estimated_1rm_kg':round(best_e1rm, 1) if best_e1rm else None,
-                        'estimated_1rm_method':'Epley, reps <= 10; approximate, not tested 1RM' if best_e1rm else None,
+                        'peak_declared_load_kg':peak_load,
+                        'laterality_unconfirmed':bool(exercise.get('reps_per_leg_unconfirmed')),
+                        'estimated_1rm_kg':best_e1rm,
+                        'estimated_1rm_status':estimate_status,
+                        'estimated_1rm_method':('Epley using explicit set RIR (0-2); approximate' if best_e1rm is not None else None),
                         'rpe':block.get('rpe'), 'pain':pain(obj)})
     windows = {}
     equipment_windows = {}
@@ -150,4 +193,6 @@ def analyze(activities, as_of):
           'Metcon repetitions and loads are not counted as strength sets',
           '7/28-day comparisons need adequate recorded history',
           'Pain is only included when explicitly reported as structured 0-10 values',
-          'Epley estimates are approximate and not directly measured strength']}
+          'Estimated 1RM requires explicitly reported set-level RIR (0-2), not session RPE',
+          'Machine loads are descriptive and are not used for free-weight 1RM',
+          'Unilateral exercises with unknown side assignment are never doubled']}
