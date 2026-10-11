@@ -1,0 +1,125 @@
+name: Garmin V2.9.6 - Prueba REAL del historico (temporal)
+
+# Diagnostico manual y de solo lectura. No hace commits ni inicia Garmin Sync.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: garmin-v296-historical-dry-run
+  cancel-in-progress: false
+
+jobs:
+  test-real-ledger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Leer exactamente el commit actual, sin credenciales persistentes
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Confirmar 24 pruebas V2.9.6
+        run: python -m unittest -q test_cycle_shards_v296
+
+      - name: Auditar el histórico ORIGINAL y guardar su SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum report_cycles.json > "$RUNNER_TEMP/garmin-v296-source.sha256"
+          python cycle_shards_v296.py --audit --ledger report_cycles.json
+
+      - name: Crear fragmentos TEMPORALES con todos los certificados
+        shell: bash
+        run: |
+          set -euo pipefail
+          python cycle_shards_v296.py --prepare \
+            --ledger report_cycles.json \
+            --archive-dir "$RUNNER_TEMP/garmin-v296-shards" \
+            --max-shard-bytes 524288
+
+      - name: Verificar fragmentos y reconstruir el histórico original
+        shell: bash
+        run: |
+          set -euo pipefail
+          python cycle_shards_v296.py --verify \
+            --ledger report_cycles.json \
+            --archive-dir "$RUNNER_TEMP/garmin-v296-shards"
+          python cycle_shards_v296.py --restore \
+            --ledger report_cycles.json \
+            --archive-dir "$RUNNER_TEMP/garmin-v296-shards" \
+            --out "$RUNNER_TEMP/garmin-v296-restored.json"
+          sha256sum --check "$RUNNER_TEMP/garmin-v296-source.sha256"
+
+      - name: Certificar igualdad real, sin exponer los datos médicos
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path(os.environ['RUNNER_TEMP'])
+          original_path = Path('report_cycles.json')
+          restored_path = root / 'garmin-v296-restored.json'
+          index_path = root / 'garmin-v296-shards' / 'index.json'
+          original = json.loads(original_path.read_bytes())
+          reconstructed = json.loads(restored_path.read_bytes())
+          manifest = json.loads(index_path.read_bytes())
+
+          if original != reconstructed:
+              raise SystemExit('ERROR: histórico reconstruido diferente del original')
+          if (manifest['cycle_count'] != len(original['cycles'])
+                  or original['count'] != len(original['cycles'])):
+              raise SystemExit('ERROR: diferencia en el número de certificados')
+          src_hash = hashlib.sha256(original_path.read_bytes()).hexdigest()
+          if manifest['source_file_sha256'] != src_hash:
+              raise SystemExit('ERROR: archivo original modificado')
+          snapshots = sum(isinstance(row.get('snapshot'), dict)
+                          for row in original['cycles'])
+          legacy = sum(row.get('legacy_without_snapshot') is True
+                       for row in original['cycles'])
+          summary = {
+              'version': '2.9.6',
+              'status': 'real_ledger_reconstruction_verified',
+              'source_commit_sha': os.environ.get('GITHUB_SHA'),
+              'run_id': os.environ.get('GITHUB_RUN_ID'),
+              'certificate_count': len(original['cycles']),
+              'snapshot_count': snapshots,
+              'legacy_count': legacy,
+              'fragment_count': len(manifest['shards']),
+              'source_file_bytes': original_path.stat().st_size,
+              'source_file_sha256': src_hash,
+              'snapshots_verified_by_checksum': True,
+              'all_cycles_reconstructed': True,
+              'original_source_unmodified': True,
+              'production_cutover': False,
+              'no_garmin_sync': True,
+              'no_data_in_evidence_report': True,
+          }
+          dest = root / 'garmin-v296-reconstruction-proof.json'
+          dest.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as log:
+              log.write('## Garmin V2.9.6 — Histórico real reconstruido\n\n')
+              log.write('| Métrica | Valor |\n|---|---|\n')
+              for key, value in summary.items():
+                  log.write(f'| `{key}` | `{value}` |\n')
+          PY
+
+      - name: Publicar SOLAMENTE la prueba compacta (sin los datos Garmin)
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-v296-reconstruction-proof
+          path: ${{ runner.temp }}/garmin-v296-reconstruction-proof.json
+          retention-days: 7
+          if-no-files-found: error
