@@ -91,6 +91,9 @@ jobs:
         continue-on-error: true
         run: python monitor_origin_integration_v292.py
 
+      - name: V2.9.4 - Calcular fiabilidad historica de 7 y 28 dias
+        run: python reliability_history_v294.py --ledger report_cycles.json --out reliability_history_v294.json
+
       - name: Commit diagnostics and report
         if: always()
         shell: bash
@@ -100,6 +103,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add workflow_health.json monthly_report.json
           [ ! -f origin_monitor_v292.json ] || git add origin_monitor_v292.json
+          [ ! -f reliability_history_v294.json ] || git add reliability_history_v294.json
           if git diff --cached --quiet; then
             echo 'No diagnostic changes to publish.'
             exit 0
