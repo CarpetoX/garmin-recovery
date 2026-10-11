@@ -102,6 +102,16 @@ jobs:
               result = prepare_candidate(original_path, candidate)
               verify_candidate(original_path, candidate)
 
+          # Si la fuente es IDENTICA a la ya publicada, preservar la carpeta
+          # tal cual. La preparacion del candidato puede actualizar contadores
+          # internos sin que haya ningun certificado nuevo; ese mero contador
+          # NO justifica otro commit.
+          unchanged_source = bool(
+              before_branch
+              and result['new_certificates'] == 0
+              and json.loads((previous / 'state.json').read_bytes()).get('source_file_sha256') == source_sha
+          )
+
           # Reconstruir y comparar ANTES de crear el commit.
           independent, audit = read_compatible(
               temp / 'not-present.json', mode='shards_only',
@@ -113,13 +123,16 @@ jobs:
           if result['production_cutover'] or result['committed']:
               raise RuntimeError('STOP: el candidato intenta activar produccion')
 
-          # La rama solo conserva el espejo vigente; sus versiones anteriores
-          # permanecen accesibles en el historial Git SIN force push.
+          # Con fuente inalterada NO se reescribe el espejo persistente.
+          # Con fuente nueva, la rama solo conserva el espejo vigente; sus
+          # versiones anteriores permanecen en Git SIN force push.
           dest = checkout / 'mirror'
-          if dest.exists():
-              shutil.rmtree(dest)
-          shutil.copytree(candidate, dest)
-          # Segunda lectura desde los archivos realmente preparados para el commit.
+          if not unchanged_source:
+              if dest.exists():
+                  shutil.rmtree(dest)
+              shutil.copytree(candidate, dest)
+
+          # Segunda lectura desde los archivos que se van a conservar/publicar.
           published_view, published_audit = read_compatible(
               temp / 'still-not-present.json', mode='shards_only',
               preview_path=dest / 'compact-preview.json',
@@ -135,6 +148,8 @@ jobs:
           staged = git('diff', '--cached', '--quiet', cwd=checkout, check=False)
           if staged.returncode not in (0, 1):
               raise RuntimeError('Error inspeccionando los cambios preparados')
+          if unchanged_source and staged.returncode != 0:
+              raise RuntimeError('STOP: una repeticion identica ha preparado cambios')
           if staged.returncode == 1:
               git('commit', '-m', f'Verified Garmin V2.9.6 shadow {source_sha[:12]}',
                   cwd=checkout)
