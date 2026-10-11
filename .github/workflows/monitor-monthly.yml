@@ -91,6 +91,10 @@ jobs:
         continue-on-error: true
         run: python monitor_origin_integration_v292.py
 
+      # V3.4: distinguir ciclo, informe publicado y entrega real; sin recibos ficticios.
+      - name: V3.4 - Auditar trazabilidad y post-sueno sin duplicar certificados
+        run: python report_monitor_v34.py
+
       - name: V2.9.4 - Calcular fiabilidad historica de 7 y 28 dias
         run: python reliability_history_v294.py --ledger report_cycles.json --out reliability_history_v294.json
 
