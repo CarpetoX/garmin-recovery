@@ -237,11 +237,189 @@ def recovery(activities, advanced):
     }
 
 
+
+def performance_report(activities, advanced, today, benchmarks):
+    """Evidence-based coaching summary; no invented benchmark equivalence.
+
+    Garmin/Intervals/TRIMP and duration*RPE are separate load units. Recorded
+    machine/dumbbell/barbell kilograms are exposure descriptors, not a common
+    physiological workload or directly comparable mechanical tonnage.
+    """
+    groups = {}
+    if today is None:
+        return {'status': 'date_unavailable', 'interpretation': 'insufficient_data'}
+    for key in ('recent_7d', 'previous_7d', 'recent_28d'):
+        groups[key] = {
+            'sessions': 0, 'sessions_with_rpe': 0, 'rpe_total': 0.0,
+            'high_rpe_sessions': 0, 'recorded_duration_minutes': 0.0,
+            'sessions_with_duration': 0,
+            'srpe_from_recorded_duration': 0.0, 'srpe_sessions': 0,
+            'minimum_recorded_external_volume_kg': 0.0,
+            'strength_blocks_with_quantified_weight': 0,
+            'strength_blocks_missing_quantified_weight': 0,
+            'garmin_intervals_load_separate': 0.0,
+            'intervals_load_sessions': 0,
+            'trimp_separate': 0.0, 'trimp_sessions': 0,
+        }
+    daily = {}
+    latest = None
+    eligible = []
+    for a in activities:
+        if not isinstance(a, dict):
+            continue
+        on = d(a.get('date'))
+        if on is None:
+            continue
+        age = (today - on).days
+        if age < 0 or age >= 28:
+            continue
+        eligible.append(a)
+        bucket_names = ['recent_28d']
+        if age <= 6:
+            bucket_names.append('recent_7d')
+        elif age <= 13:
+            bucket_names.append('previous_7d')
+        rpe = n(a.get('rpe_used'))
+        if rpe is not None and not 0 <= rpe <= 10:
+            rpe = None
+        minutes = n(a.get('recorded_minutes'))
+        if minutes is not None and minutes < 0:
+            minutes = None
+        srpe = n(a.get('srpe_using_recorded_minutes'))
+        if srpe is not None and srpe < 0:
+            srpe = None
+        loads = a.get('internal_load_not_additive') or {}
+        intervals_load = n(loads.get('intervals_load'))
+        trimp = n(loads.get('trimp'))
+        blocks = a.get('manual_blocks') or []
+        quantified = [n(b.get('minimum_verified_volume_kg')) for b in blocks if isinstance(b, dict)]
+        vol = sum(value for value in quantified if value is not None and value >= 0)
+        known = sum(1 for v in quantified if v is not None and v >= 0)
+        unknown = sum(1 for v in quantified if v is None)
+        for name in bucket_names:
+            group = groups[name]
+            group['sessions'] += 1
+            if rpe is not None:
+                group['sessions_with_rpe'] += 1
+                group['rpe_total'] += rpe
+                group['high_rpe_sessions'] += int(rpe >= 8)
+            if minutes is not None:
+                group['recorded_duration_minutes'] += minutes
+                group['sessions_with_duration'] += 1
+            if srpe is not None:
+                group['srpe_from_recorded_duration'] += srpe
+                group['srpe_sessions'] += 1
+            group['minimum_recorded_external_volume_kg'] += vol
+            group['strength_blocks_with_quantified_weight'] += known
+            group['strength_blocks_missing_quantified_weight'] += unknown
+            if intervals_load is not None:
+                group['garmin_intervals_load_separate'] += intervals_load
+                group['intervals_load_sessions'] += 1
+            if trimp is not None:
+                group['trimp_separate'] += trimp
+                group['trimp_sessions'] += 1
+        if age <= 6:
+            item = daily.setdefault(on.isoformat(), {'sessions': 0, 'rpe_sum': 0.0,
+                            'rpe_count': 0, 'recorded_minutes': 0.0,
+                            'srpe_from_recorded_duration': 0.0})
+            item['sessions'] += 1
+            if rpe is not None:
+                item['rpe_count'] += 1
+                item['rpe_sum'] += rpe
+            if minutes is not None:
+                item['recorded_minutes'] += minutes
+            if srpe is not None:
+                item['srpe_from_recorded_duration'] += srpe
+    for name, group in groups.items():
+        group['mean_recorded_rpe'] = (
+            round(group['rpe_total'] / group['sessions_with_rpe'], 2)
+            if group['sessions_with_rpe'] else None)
+        del group['rpe_total']
+        for fld in ('recorded_duration_minutes', 'srpe_from_recorded_duration',
+                    'minimum_recorded_external_volume_kg',
+                    'garmin_intervals_load_separate', 'trimp_separate'):
+            group[fld] = round(group[fld], 1)
+    from datetime import timedelta
+    chronological = []
+    for age in range(6, -1, -1):
+        key = (today - timedelta(days=age)).isoformat()
+        record = daily.get(key, {'sessions': 0, 'rpe_count': 0, 'rpe_sum': 0,
+                                 'recorded_minutes': 0, 'srpe_from_recorded_duration': 0})
+        chronological.append({'date': key, 'sessions': record['sessions'],
+                              'mean_recorded_rpe': round(record['rpe_sum']/record['rpe_count'], 2)
+                              if record['rpe_count'] else None,
+                              'recorded_minutes': round(record['recorded_minutes'], 1),
+                              'srpe_from_recorded_duration': round(record['srpe_from_recorded_duration'], 1)})
+    if eligible:
+        latest = max(eligible, key=lambda x: (str(x.get('date')), str(x.get('activity_id'))))
+    last = None
+    if latest is not None:
+        last = {'date': latest.get('date'), 'activity_id': latest.get('activity_id'),
+                'name': latest.get('name'), 'rpe': n(latest.get('rpe_used')),
+                'recorded_minutes': n(latest.get('recorded_minutes')),
+                'heart_rate': latest.get('heart_rate'),
+                'manual_blocks_recorded': len(latest.get('manual_blocks') or [])}
+    recovery = advanced.get('recovery_assessment_v2') or {}
+    rec_state = recovery.get('state')
+    rec_status = recovery.get('status')
+    recommendations = []
+    if rec_state != 'assessed':
+        recommendations.append({'code': 'recovery_unconfirmed',
+            'text': 'Esperar al sueño y HRV confirmados antes de fijar intensidad; decidir con sensaciones y calentamiento.'})
+    elif rec_status == 'red':
+        recommendations.append({'code': 'recovery_red',
+            'text': 'Valorar descarga, técnica o actividad suave; evitar máximos según síntomas y calentamiento.'})
+    elif rec_status == 'yellow':
+        recommendations.append({'code': 'recovery_yellow',
+            'text': 'Individualizar intensidad y revisar calentamiento, fatiga y RPE antes de subir cargas.'})
+    else:
+        recommendations.append({'code': 'recovery_context',
+            'text': 'Usar recuperación junto con objetivos de entrenamiento, síntomas y rendimiento, no como permiso automático para hacer máximos.'})
+    if groups['recent_7d']['high_rpe_sessions'] >= 3:
+        recommendations.append({'code': 'frequent_high_rpe',
+            'text': 'Registrar recuperación 24-48 h y ajustar volumen si coinciden fatiga o bajada del rendimiento; no asumir sobreentrenamiento.'})
+    if not benchmarks['comparisons']:
+        recommendations.append({'code': 'benchmark_history_incomplete',
+            'text': 'Repetir algún WOD con misma variante, cargas y estándares para comparar tiempos o repeticiones objetivamente.'})
+    recent, previous = groups['recent_7d'], groups['previous_7d']
+    comparable = recent['sessions'] >= 2 and previous['sessions'] >= 2
+    return {
+        'status': 'descriptive_ready' if eligible else 'insufficient_data',
+        'as_of_date': today.isoformat(),
+        'window_summaries': groups,
+        'daily_chart_7d': chronological,
+        'latest_session': last,
+        'previous_week_context': {
+            'sufficient_for_descriptive_comparison': comparable,
+            'session_count_change': recent['sessions'] - previous['sessions'] if comparable else None,
+            'mean_rpe_change': round(recent['mean_recorded_rpe']-previous['mean_recorded_rpe'], 2)
+                if comparable and recent['mean_recorded_rpe'] is not None
+                and previous['mean_recorded_rpe'] is not None else None,
+            'note': 'El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento.'},
+        'benchmark_comparisons': benchmarks['comparisons'],
+        'recovery_context': {'state': rec_state or 'unavailable',
+                             'status': rec_status or 'unavailable',
+                             'confidence': recovery.get('confidence')},
+        'recommendations': recommendations,
+        'data_confidence': 'limited' if not comparable else 'descriptive',
+        'limitations': [
+            'Los pesos de barra, máquina y mancuerna no son comparables como fuerza externa equivalente.',
+            'Volumen cuantificado es un mínimo declarado: no incluye ejercicios sin peso conocido.',
+            'No se suman TRIMP, carga Intervals, carga Garmin ni sRPE entre unidades distintas.',
+            'Duración Garmin grabada no es duración efectiva del WOD.',
+            'No usar planificados como realizados ni asumir rondas no confirmadas.',
+            'Las correlaciones de 24-48h no prueban causalidad y las referencias iniciales son provisionales.'
+        ]
+    }
+
+
 def analyze(activities, advanced, as_of):
     today = d(as_of)
+    benchmark_results = performance(activities)
     return {
         'metcon_exposure': metcon(activities, today),
-        'performance_trends': performance(activities),
+        'performance_trends': benchmark_results,
         'recovery_context': recovery(activities, advanced),
-        'version': '1.1; completed-work normalized, conservative',
+        'performance_report': performance_report(activities, advanced, today, benchmark_results),
+        'version': '2.5; coaching insights with verified comparisons',
     }
