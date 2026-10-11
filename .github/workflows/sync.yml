@@ -2,6 +2,27 @@ name: Garmin Recovery Sync
 
 on:
   workflow_dispatch:
+    inputs:
+      origin_source:
+        description: 'Opcional: origen firmado del respaldo Apps Script'
+        required: false
+        type: string
+      cycle_id:
+        description: 'Opcional: ciclo firmado YYYY-MM-DD-HHMM'
+        required: false
+        type: string
+      requested_at:
+        description: 'Opcional: hora UTC del respaldo firmado'
+        required: false
+        type: string
+      request_id:
+        description: 'Opcional: identificador del respaldo firmado'
+        required: false
+        type: string
+      origin_proof:
+        description: 'Opcional: prueba HMAC del respaldo'
+        required: false
+        type: string
   # Backup independently triggered by Apps Script, once its Code.gs is configured.
   repository_dispatch:
     types: [garmin-sync]
@@ -33,6 +54,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+
+      - name: V2.9.1 - Verificar origen antes de sincronizar
+        env:
+          GARMIN_ORIGIN_KEY_V291: ${{ secrets.GARMIN_ORIGIN_KEY_V291 }}
+        run: python garmin_dispatch_auth_v291.py --out .garmin_origin_v291.json
 
       - name: Obtener wellness de Intervals.icu
         env:
@@ -608,6 +634,7 @@ jobs:
         run: |
           mkdir -p .lineage_current
           python pipeline_lineage_v29.py --stage sync --out .lineage_current/pipeline_lineage_v29.json
+          python garmin_dispatch_auth_v291.py --attach-lineage .lineage_current/pipeline_lineage_v29.json --origin-file .garmin_origin_v291.json
 
       - name: V2.9 - Conservar filiacion del run Sync por 14 dias
         continue-on-error: true
