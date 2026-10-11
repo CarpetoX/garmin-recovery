@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-10-11T13:06:45.187626+02:00",
+  "generated_at": "2026-10-11T13:59:04.467172+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
-  "sheet_source": "live_csv",
+  "sheet_source": "cycle_snapshot",
   "sheet_error": null,
   "sheet_rows_loaded": 9,
-  "sheet_fetch_policy": "cache_bust_query + no_cache_headers",
+  "sheet_fetch_policy": "same_advanced_run_sha256_snapshot",
   "sheet_latest_date": "2026-10-11",
   "latest_activity_date": "2026-10-11",
   "sheet_has_detail_json": true,
-  "manual_source_rule": "Sheet A:H en vivo es prioritario; GitHub training_feedback es respaldo.",
+  "manual_source_rule": "Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.",
   "quality": {
     "interpretation": "provisional",
     "limitations": [
@@ -254,7 +254,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-11T13:06:33.184390+02:00",
+    "generated_at": "2026-10-11T13:58:51.837089+02:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "red",
@@ -366,9 +366,7 @@
       "subjective_checkin": "not_provided",
       "subjective_values_exported": false,
       "intensity_guardrail": "avoid_maximum",
-      "reason_codes": [
-        "live_measurement_uncertain"
-      ],
+      "reason_codes": [],
       "baseline_caution": "standard",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
       "measurement_provenance": {
@@ -376,26 +374,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-10-11T09:10:13+02:00",
-            "age_minutes": 236.3,
+            "age_minutes": 288.6,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-10-11T09:06:12+02:00",
-            "age_minutes": 240.4,
+            "age_minutes": 292.7,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
-            "state": "delayed",
-            "measured_at": "2026-10-11T11:32:00+02:00",
-            "age_minutes": 94.6,
+            "state": "recent",
+            "measured_at": "2026-10-11T13:54:00+02:00",
+            "age_minutes": 4.9,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "old_measurement",
-            "measured_at": "2026-10-11T09:33:00+02:00",
-            "age_minutes": 213.6,
+            "state": "recent",
+            "measured_at": "2026-10-11T13:45:00+02:00",
+            "age_minutes": 13.9,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -406,11 +404,8 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": true,
-        "limited_live_metrics": [
-          "heart_rate_live",
-          "body_battery_live"
-        ],
+        "live_data_limited": false,
+        "limited_live_metrics": [],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -2380,7 +2375,7 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-11T13:06:45.187626+02:00",
+    "checked_at": "2026-10-11T13:59:04.467172+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-11",
     "latest_activity_age_days": 0,
@@ -2436,19 +2431,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-11T13:06:45.187626+02:00",
+    "checked_at": "2026-10-11T13:59:04.467172+02:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T13:05:55.259396+02:00",
+        "generated_at": "2026-10-11T13:58:18.833934+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T13:06:11.739706+02:00",
+        "generated_at": "2026-10-11T13:58:31.081334+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -2462,28 +2457,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T13:06:33.061801+02:00",
+        "generated_at": "2026-10-11T13:58:51.743120+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T13:06:33.061801+02:00",
+        "generated_at": "2026-10-11T13:58:51.743120+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T13:05:55.259396+02:00",
+        "generated_at": "2026-10-11T13:58:18.833934+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-11T13:06:11.739706+02:00",
+        "generated_at": "2026-10-11T13:58:31.081334+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
@@ -2503,7 +2498,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.6,
+    "generation_skew_minutes": 0.5,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
