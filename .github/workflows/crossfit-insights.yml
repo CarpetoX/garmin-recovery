@@ -32,10 +32,42 @@ jobs:
       - name: Pruebas integración sueño V2.4.6
         run: python -m unittest -v test_sleep_integration
 
+      - name: V2.9 - Descargar cadena exacta del run Advanced
+        if: github.event_name == 'workflow_run'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: garmin-lineage-v29
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+          path: .lineage_parent
+
       - name: Generate CrossFit analysis
         env:
           RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
         run: python crossfit_insights.py
+
+      - name: V2.9 - Capturar filiacion por IDs reales
+        continue-on-error: true
+        run: |
+          mkdir -p .lineage_current
+          python pipeline_lineage_v29.py --stage crossfit --out .lineage_current/pipeline_lineage_v29.json
+          cp .lineage_current/pipeline_lineage_v29.json pipeline_lineage_v29.json
+
+      - name: V3.0 - Auditar contratos JSON sin alterar las fuentes
+        continue-on-error: true
+        run: |
+          mkdir -p .diagnostics_current
+          python json_contracts_v30.py --out .diagnostics_current/schema_health_v30.json
+          cp .diagnostics_current/schema_health_v30.json schema_health_v30.json
+
+      - name: V3.1 - Calcular tendencias 3, 7 y 28 dias
+        continue-on-error: true
+        run: |
+          mkdir -p .diagnostics_current
+          python training_trends_v31.py --out .diagnostics_current/training_trends_v31.json
+          cp .diagnostics_current/training_trends_v31.json training_trends_v31.json
 
       - name: Certify and record data-ready cycle V2.4.6
         if: github.event_name == 'workflow_run'
@@ -56,6 +88,10 @@ jobs:
           git add crossfit_insights.json report_history.json
           [ ! -f report_cycles.json ] || git add report_cycles.json
           [ ! -f report_ready.json ] || git add report_ready.json
+          # Informes secundarios: se publican solo si se generaron.
+          [ ! -f schema_health_v30.json ] || git add schema_health_v30.json
+          [ ! -f training_trends_v31.json ] || git add training_trends_v31.json
+          [ ! -f pipeline_lineage_v29.json ] || git add pipeline_lineage_v29.json
           if ! git diff --cached --quiet; then
             git commit -m 'Update CrossFit insights and report readiness V2.4.6'
             for attempt in 1 2 3 4 5; do
@@ -73,6 +109,15 @@ jobs:
               sleep $((attempt * 3))
             done
           fi
+
+      - name: V2.9 - Conservar evidencia de esta ejecucion (14 dias)
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-lineage-v29
+          path: .lineage_current/pipeline_lineage_v29.json
+          retention-days: 14
+          if-no-files-found: error
 
       - name: Disparar monitor final V2.4.1
         if: success()
