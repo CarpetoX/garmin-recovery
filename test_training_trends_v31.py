@@ -68,5 +68,162 @@ class TrendsV31Tests(unittest.TestCase):
         self.assertEqual(r['strength_by_exact_equipment'][0]['progression_status'],'descriptive_only')
 
 
+# V3.2 tests are hosted here so the EXISTING Garmin CI test invocation
+# (python -m unittest ... test_training_trends_v31 ...) runs them automatically.
+from performance_report_v32 import build_report
+
+
+class PerformanceReportV32Tests(unittest.TestCase):
+    TODAY=date(2026,10,11)
+
+    def make(self, activities=None, strength=None, wellness=None, daily=None):
+        crossfit={'sheet_source':'cycle_snapshot','generated_at':'2026-10-11T21:05:00+02:00',
+            'activities':activities if activities is not None else [],
+            'muscle_load':{'strength_exercises':strength if strength is not None else []}}
+        return build_report(crossfit, wellness if wellness is not None else [],
+                            daily if daily is not None else {}, self.TODAY)
+
+    @staticmethod
+    def act(aid, day, rpe=6, minutes=30, trimp=35):
+        return {'activity_id':aid,'date':day,'name':'Fuerza',
+                'rpe_used':rpe,'recorded_minutes':minutes,
+                'srpe_using_recorded_minutes':rpe*minutes if rpe is not None else None,
+                'internal_load_not_additive':{'trimp':trimp},
+                'heart_rate':{'average':118}}
+
+    def test_new_report_28_daily_chart_rows(self):
+        r=self.make([self.act('a','2026-10-11')])
+        self.assertEqual(len(r['charts']['daily_28d']),28)
+        self.assertEqual(r['charts']['daily_28d'][-1]['date'],'2026-10-11')
+        self.assertTrue(r['charts']['daily_28d'][0]['missing_training_entry_is_not_rest'])
+        self.assertIsNone(r['charts']['daily_28d'][0]['trimp'])
+
+    def test_no_fake_7_day_comparison(self):
+        r=self.make([self.act('a','2026-10-11')])
+        self.assertEqual(r['window_comparison']['current_vs_previous_7d']['comparison_status'],
+                         'insufficient_sessions_in_either_week')
+        self.assertIsNone(r['window_comparison']['current_vs_previous_7d']['srpe_proxy_delta_pct'])
+
+    def test_two_weeks_with_three_complete_sessions_allow_descriptive_delta(self):
+        dates=['2026-10-11','2026-10-10','2026-10-09',
+               '2026-10-04','2026-10-03','2026-10-02']
+        r=self.make([self.act(str(i),d,6,30,35) for i,d in enumerate(dates)])
+        cmp=r['window_comparison']['current_vs_previous_7d']
+        self.assertEqual(cmp['comparison_status'],'descriptive_only')
+        self.assertEqual(cmp['srpe_proxy_delta_pct'],0.0)
+        self.assertEqual(cmp['trimp_delta_pct'],0.0)
+        self.assertTrue(cmp['load_metrics_are_not_additive'])
+
+    def test_incomplete_rpe_disables_srpe_comparison(self):
+        dates=['2026-10-11','2026-10-10','2026-10-09',
+               '2026-10-04','2026-10-03','2026-10-02']
+        acts=[self.act(str(i),d) for i,d in enumerate(dates)]
+        acts[0]['rpe_used']=None
+        acts[0]['srpe_using_recorded_minutes']=None
+        r=self.make(acts)
+        self.assertIsNone(r['window_comparison']['current_vs_previous_7d']['srpe_proxy_delta_pct'])
+        self.assertEqual(r['window_comparison']['windows']['7d']['sessions_with_rpe'],2)
+
+    def test_machine_bar_and_load_units_separate(self):
+        s=[{'date':'2026-10-11','activity_id':'a','exercise':'sentadilla trasera',
+            'equipment':'barbell','load_unit':'kg_total_barra','peak_declared_load_kg':150},
+           {'date':'2026-10-11','activity_id':'b','exercise':'sentadilla trasera',
+            'equipment':'machine_stack','load_unit':'kg_indicado_maquina','peak_declared_load_kg':150},
+           {'date':'2026-10-10','activity_id':'c','exercise':'sentadilla trasera',
+            'equipment':'barbell','load_unit':'kg_por_pierna','peak_declared_load_kg':150}]
+        r=self.make(strength=s)
+        self.assertEqual(len(r['strength']['exact_exercise_groups']),3)
+        self.assertFalse(r['strength']['mixed_equipment_tonnage_comparable'])
+
+    def test_strength_change_is_only_descriptive(self):
+        s=[{'date':'2026-10-10','exercise':'sentadilla trasera','activity_id':'a',
+            'equipment':'barbell','load_unit':'kg_total_barra','peak_declared_load_kg':100,
+            'verified_volume_kg':1200,'volume_complete':True},
+           {'date':'2026-10-11','exercise':'sentadilla trasera','activity_id':'b',
+            'equipment':'barbell','load_unit':'kg_total_barra','peak_declared_load_kg':150,
+            'verified_volume_kg':2000,'volume_complete':True}]
+        r=self.make(strength=s)
+        x=r['strength']['exact_exercise_groups'][0]
+        self.assertEqual(x['observed_peak_change_kg'],50)
+        self.assertEqual(x['peak_change_interpretation'],'descriptive_only_not_strength_gain_or_1rm')
+        self.assertFalse(r['strength']['est_1rm_from_session_rpe'])
+
+    def test_volume_same_equipment_only_and_incomplete_disables_comparison(self):
+        a={'exercise':'sentadilla trasera','equipment':'barbell',
+           'load_unit':'kg_total_barra','peak_declared_load_kg':100,
+           'verified_volume_kg':1000,'volume_complete':True}
+        days=['2026-10-11','2026-10-10','2026-10-04','2026-10-03']
+        s=[{**a,'date':d,'activity_id':str(i)} for i,d in enumerate(days)]
+        g=self.make(strength=s)['strength']['exact_exercise_groups'][0]
+        self.assertEqual(g['volume_windows']['7d']['verified_volume_kg'],2000)
+        self.assertEqual(g['volume_change_7d_vs_previous_pct'],0)
+        s[0]['volume_complete']=False
+        g=self.make(strength=s)['strength']['exact_exercise_groups'][0]
+        self.assertIsNone(g['volume_windows']['7d']['verified_volume_kg'])
+        self.assertIsNone(g['volume_change_7d_vs_previous_pct'])
+
+    def test_unconfirmed_laterality_never_counts_complete_volume(self):
+        s=[{'date':'2026-10-11','exercise':'curl femoral unilateral','activity_id':'a',
+            'equipment':'machine_stack','load_unit':'kg_indicado_maquina',
+            'peak_declared_load_kg':40,'verified_volume_kg':2560,
+            'volume_complete':True,'laterality_unconfirmed':True}]
+        x=self.make(strength=s)['strength']['exact_exercise_groups'][0]['points'][0]
+        self.assertIsNone(x['verified_volume_kg'])
+        self.assertEqual(x['partial_volume_lower_bound_kg'],2560)
+
+    def test_confirmed_unilateral_uses_recorded_volume_without_doubling(self):
+        s=[{'date':'2026-10-11','exercise':'curl femoral unilateral','activity_id':'a',
+            'equipment':'machine_stack','load_unit':'kg_indicado_maquina',
+            'peak_declared_load_kg':40,'verified_volume_kg':2560,
+            'volume_complete':True,'laterality_unconfirmed':False}]
+        x=self.make(strength=s)['strength']['exact_exercise_groups'][0]['points'][0]
+        self.assertEqual(x['verified_volume_kg'],2560)
+
+    def test_recovery_comparison_requires_4_days_each_week(self):
+        w=[{'id':'2026-10-11','hrv':61,'restingHR':48,'sleepSecs':27000,'sleepScore':81},
+           {'id':'2026-10-10','hrv':62,'restingHR':49,'sleepSecs':25200}]
+        r=self.make(wellness=w)
+        a=r['recovery']['7d_vs_previous_7d']
+        self.assertIsNone(a['hrv']['delta_mean'])
+        self.assertFalse(a['hrv']['comparison_supported'])
+
+    def test_supported_recovery_delta_with_4_days_both_sides(self):
+        w=[]
+        for day in ['2026-10-11','2026-10-10','2026-10-09','2026-10-08']:
+            w.append({'id':day,'hrv':70,'restingHR':48,'sleepSecs':28800})
+        for day in ['2026-10-04','2026-10-03','2026-10-02','2026-10-01']:
+            w.append({'id':day,'hrv':60,'restingHR':50,'sleepSecs':25200})
+        r=self.make(wellness=w)
+        self.assertEqual(r['recovery']['7d_vs_previous_7d']['hrv']['delta_mean'],10)
+        self.assertEqual(r['recovery']['7d_vs_previous_7d']['sleep_hours']['delta_mean'],1)
+
+    def test_old_daily_summary_does_not_become_today_readiness(self):
+        r=self.make(daily={'date':'2026-10-10','readiness_model':{'score':99,'status':'green'}})
+        self.assertIsNone(r['readiness_today']['score'])
+        self.assertEqual(r['readiness_today']['status'],'unavailable')
+
+    def test_future_and_duplicate_ids_not_double_counted(self):
+        acts=[self.act('a','2026-10-11'),self.act('a','2026-10-11'),
+              self.act('f','2026-10-12')]
+        r=self.make(acts)
+        self.assertEqual(r['window_comparison']['windows']['7d']['sessions'],1)
+        self.assertEqual(r['provenance']['deduplicated_activity_ids'],1)
+
+    def test_rpe_hr_pairs_no_correlation_claim(self):
+        r=self.make([self.act('a','2026-10-11')])
+        self.assertEqual(len(r['charts']['rpe_vs_garmin_hr']),1)
+        self.assertIn('not_correlation',r['charts']['rpe_hr_scatter_interpretation'])
+
+    def test_invalid_data_rejected(self):
+        with self.assertRaises(ValueError):
+            build_report({},[],{},self.TODAY)
+
+    def test_wellness_absent_not_zero(self):
+        r=self.make()
+        self.assertIsNone(r['recovery']['7d']['hrv']['mean'])
+        self.assertEqual(r['recovery']['7d']['hrv']['days'],0)
+        self.assertIsNone(r['charts']['daily_28d'][-1]['sleep_hours'])
+
+
 if __name__=='__main__':
     unittest.main()

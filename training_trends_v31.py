@@ -12,6 +12,7 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from performance_report_v32 import build_report
 
 TZ = ZoneInfo('Europe/Madrid')
 WINDOWS = (3, 7, 28)
@@ -123,6 +124,13 @@ def main(argv=None):
     raw=json.loads(a.input.read_text(encoding='utf-8'))
     day=date.fromisoformat(a.today) if a.today else datetime.now(TZ).date()
     result=trend(raw,day)
+    # V3.2: anadir un informe compatible al JSON existente; no crear otro workflow.
+    # Las fuentes siguen separadas, sin inferir datos ausentes.
+    wellness_path=Path('wellness.json')
+    daily_path=Path('daily_summary.json')
+    wellness=json.loads(wellness_path.read_text(encoding='utf-8')) if wellness_path.exists() else []
+    daily=json.loads(daily_path.read_text(encoding='utf-8')) if daily_path.exists() else {}
+    result['performance_report_v32']=build_report(raw,wellness,daily,day)
     result['generated_at']=datetime.now(timezone.utc).isoformat()
     a.out.write_text(json.dumps(result,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
     print(json.dumps({'status':'ok','sessions_28d':result['windows']['28d']['recorded_sessions'],
