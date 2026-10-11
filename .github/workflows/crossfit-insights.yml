@@ -62,11 +62,18 @@ jobs:
           python json_contracts_v30.py --out .diagnostics_current/schema_health_v30.json
           cp .diagnostics_current/schema_health_v30.json schema_health_v30.json
 
-      - name: V3.1 - Calcular tendencias 3, 7 y 28 dias
-        continue-on-error: true
+      # V3.3: no permitir 'verde' si falla el informe de tendencias/rendimiento.
+      # La salida candidata se valida antes de reemplazar el JSON publicado.
+      - name: V3.3 - Generar y validar informe de rendimiento OBLIGATORIO
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p .diagnostics_current
+          rm -f .diagnostics_current/training_trends_v31.json
           python training_trends_v31.py --out .diagnostics_current/training_trends_v31.json
+          python validate_performance_v33.py \
+            --candidate .diagnostics_current/training_trends_v31.json \
+            --crossfit crossfit_insights.json
           cp .diagnostics_current/training_trends_v31.json training_trends_v31.json
 
       - name: Certify and record data-ready cycle V2.4.6
@@ -88,9 +95,9 @@ jobs:
           git add crossfit_insights.json report_history.json
           [ ! -f report_cycles.json ] || git add report_cycles.json
           [ ! -f report_ready.json ] || git add report_ready.json
-          # Informes secundarios: se publican solo si se generaron.
+          # V3.3: informe requerido tras validacion, no es opcional.
+          git add training_trends_v31.json
           [ ! -f schema_health_v30.json ] || git add schema_health_v30.json
-          [ ! -f training_trends_v31.json ] || git add training_trends_v31.json
           [ ! -f pipeline_lineage_v29.json ] || git add pipeline_lineage_v29.json
           if ! git diff --cached --quiet; then
             git commit -m 'Update CrossFit insights and report readiness V2.4.6'
