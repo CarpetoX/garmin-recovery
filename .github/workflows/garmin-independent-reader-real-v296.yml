@@ -1,0 +1,135 @@
+name: Garmin V2.9.6 - Lector independiente REAL (temporal)
+
+# PRUEBA MANUAL AISLADA. No modifica GitHub, Sync ni Apps Script.
+# Solo publica un JSON técnico; NO publica los certificados ni datos de salud.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: garmin-v296-independent-reader-real
+  cancel-in-progress: false
+
+jobs:
+  verify-independent-reader:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Leer codigo de main sin guardar credenciales
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Preparar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Ejecutar 53 pruebas de fragmentacion indice y lector
+        run: python -m unittest -q test_cycle_shards_v296 test_ledger_compact_preview_v296 test_ledger_reader_v296
+
+      - name: Registrar huella del historico de origen
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum report_cycles.json > "$RUNNER_TEMP/garmin-v296-source.sha256"
+          python cycle_shards_v296.py --audit --ledger report_cycles.json
+
+      - name: Preparar una copia fragmentada verificada SOLO en el runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/garmin-v296-independent"
+          python cycle_shards_v296.py --prepare \
+            --ledger report_cycles.json \
+            --archive-dir "$RUNNER_TEMP/garmin-v296-independent/shards" \
+            --max-shard-bytes 524288
+          python ledger_compact_preview_v296.py \
+            --ledger report_cycles.json \
+            --archive-dir "$RUNNER_TEMP/garmin-v296-independent/shards" \
+            --prepare "$RUNNER_TEMP/garmin-v296-independent/compact-preview.json"
+          sha256sum --check "$RUNNER_TEMP/garmin-v296-source.sha256"
+
+      - name: Reconstruir SIN acceso al original desde un directorio independiente
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/garmin-v296-independent/isolated-no-source"
+          cd "$RUNNER_TEMP/garmin-v296-independent/isolated-no-source"
+          test ! -e report_cycles.json
+          PYTHONPATH="$GITHUB_WORKSPACE" python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          from ledger_reader_v296 import reconstruct
+
+          repo = Path(os.environ['GITHUB_WORKSPACE'])
+          workspace = Path(os.environ['RUNNER_TEMP']) / 'garmin-v296-independent'
+          preview = workspace / 'compact-preview.json'
+          shards = workspace / 'shards'
+          # La llamada independiente SOLO recibe indice y fragmentos.
+          # No se entrega la ruta del original al lector.
+          reconstructed, evidence = reconstruct(preview, shards)
+          if evidence['original_cross_checked'] is not False or evidence['source_writes'] != 0:
+              raise SystemExit('El lector no opero en modo independiente de solo lectura')
+          # Comparar POR SEPARADO una vez reconstruido el historico.
+          source = repo / 'report_cycles.json'
+          original_bytes = source.read_bytes()
+          original = json.loads(original_bytes)
+          if reconstructed != original:
+              raise SystemExit('Los certificados reales NO coinciden con el original')
+          original_hash = hashlib.sha256(original_bytes).hexdigest()
+          manifest = json.loads((shards / 'index.json').read_bytes())
+          if original_hash != manifest['source_file_sha256']:
+              raise SystemExit('Huella del original distinta del manifiesto')
+          if len(reconstructed['cycles']) != original['count']:
+              raise SystemExit('Se perdieron certificados durante la lectura independiente')
+          if not 0 < preview.stat().st_size < len(original_bytes):
+              raise SystemExit('El indice no reduce el tamano del original')
+          proof = {
+              'version': '2.9.6',
+              'status': 'real_independent_reader_verified',
+              'run_id': os.environ.get('GITHUB_RUN_ID'),
+              'source_commit': os.environ.get('GITHUB_SHA'),
+              'certificates_reconstructed': len(reconstructed['cycles']),
+              'snapshot_sha256_verified': evidence['snapshots_verified'],
+              'legacy_records_preserved': evidence['legacy_records_preserved'],
+              'fragments_verified': evidence['shards_verified'],
+              'original_ledger_bytes': len(original_bytes),
+              'compact_index_bytes': preview.stat().st_size,
+              'compact_index_reduction_pct': round(100 * (1 - preview.stat().st_size / len(original_bytes)), 1),
+              'independent_without_original_argument': True,
+              'original_cross_check_equal': True,
+              'source_sha256': original_hash,
+              'production_cutover': False,
+              'source_modified': False,
+              'health_payload_in_artifact': False,
+          }
+          target = workspace / 'garmin-v296-independent-reader-proof.json'
+          target.write_text(json.dumps(proof, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          print(json.dumps(proof, indent=2, ensure_ascii=False))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
+              f.write('## Garmin V2.9.6 — Lector independiente REAL\n\n')
+              f.write('| Comprobacion | Resultado |\n|---|---|\n')
+              for k, v in proof.items():
+                  f.write(f'| `{k}` | `{v}` |\n')
+              f.write('\n**Sin cambios en produccion. Sin datos fisiologicos en el artefacto.**\n')
+          PY
+
+      - name: Confirmar que el original sigue identico
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum --check "$RUNNER_TEMP/garmin-v296-source.sha256"
+          git diff --exit-code -- report_cycles.json
+
+      - name: Publicar solo justificante tecnico sin datos Garmin
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-v296-independent-reader-proof
+          path: ${{ runner.temp }}/garmin-v296-independent/garmin-v296-independent-reader-proof.json
+          retention-days: 7
+          if-no-files-found: error
