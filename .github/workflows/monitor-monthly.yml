@@ -87,6 +87,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python monitor_monthly.py
 
+      - name: V2.9.2 - Vincular origen y puntualidad al monitor
+        continue-on-error: true
+        run: python monitor_origin_integration_v292.py
+
       - name: Commit diagnostics and report
         if: always()
         shell: bash
@@ -95,6 +99,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add workflow_health.json monthly_report.json
+          [ ! -f origin_monitor_v292.json ] || git add origin_monitor_v292.json
           if git diff --cached --quiet; then
             echo 'No diagnostic changes to publish.'
             exit 0
