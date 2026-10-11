@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - '**.py'
+      - '**.sh'
       - '.github/workflows/*.yml'
   pull_request:
     branches: [main]
     paths:
       - '**.py'
+      - '**.sh'
       - '.github/workflows/*.yml'
   workflow_dispatch:
 
@@ -91,6 +93,9 @@ jobs:
           assert 'schedule' not in ci, 'CI must not consume scheduled pipeline cycles'
           print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
           PY
+
+      - name: Validate Sync publication shell syntax
+        run: bash -n sync_publish.sh
 
       - name: Tests for morning reports, post-night-shift sleep, strength and RPE cycle snapshots
         run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot test_archive_report_cycles test_sync_publish
