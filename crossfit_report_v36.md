@@ -1,32 +1,32 @@
-# Garmin Recovery · Informe CrossFit V3.6 · 2026-10-12
+# Garmin Recovery · Informe CrossFit V3.6 · 2026-10-13
 
 **Estado:** descriptive_limited · **Origen:** CrossFit y tendencias V3.2/V3.5 verificados.
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **9**; RPE disponible: **9 de 9**.
-- RPE medio por sesión: **6.39**.
-- Duración registrada Garmin: **262.3 min**.
-- Proxy sRPE × minutos Garmin: **1457.7** (no equivale al tiempo efectivo del WOD).
+- Sesiones registradas: **7**; RPE disponible: **7 de 7**.
+- RPE medio por sesión: **6.5**.
+- Duración registrada Garmin: **205.9 min**.
+- Proxy sRPE × minutos Garmin: **1169.7** (no equivale al tiempo efectivo del WOD).
 - Comparación semanal: **insuficiente historial comparable**.
 
 ## Recuperación y calidad
 
-- Recuperación: **same_day_assessed**; puntuación heurística **88**, estado original **yellow**, confianza **medium**.
-- HRV: **66 ms**; sueño: **7.23 h**; FC reposo: **53 lpm**.
+- Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
+- HRV: **—**; sueño: **—**; FC reposo: **—**.
 - Calidad de datos Garmin: **74/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
 
 | Fecha | Sesiones | RPE medio | Proxy sRPE | HRV ms | Sueño h | FC reposo |
 |---|---:|---:|---:|---:|---:|---:|
-| 2026-10-06 | 2 | 6 | 288 | 51.94 | 5.52 | 58 |
 | 2026-10-07 | 0 | — | — | 41.41 | 7.1 | 60 |
 | 2026-10-08 | 3 | 5.33 | 324.7 | 65.46 | 7.72 | 53 |
 | 2026-10-09 | 2 | 8.75 | 210.4 | 55.63 | 4.79 | 57 |
 | 2026-10-10 | 1 | 6 | 386.2 | 52.75 | 8.93 | 57 |
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
+| 2026-10-13 | 0 | — | — | — | — | — |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -53,7 +53,7 @@
 
 ## Estado y limitaciones
 
-- Certificado: **matched_data_ready_source**.
+- Certificado: **not_linked_to_current_certificate**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
