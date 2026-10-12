@@ -1,0 +1,65 @@
+name: Garmin V3.8.3 - Verify Historical Publication
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run V3.8.3 regression tests
+        run: python -m unittest -v test_cycle_report_publisher_v383 test_cycle_real_integration_v382
+      - name: Validate real historical publication, idempotence and tampering
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import copy
+          import hashlib
+          import json
+          import tempfile
+          from pathlib import Path
+          from cycle_report_publisher_v383 import publish
+          from cycle_snapshot_report_v38 import SnapshotError
+
+          cycle_id = '2026-10-12-1645'
+          ledger_path = Path('report_cycles.json')
+          before = hashlib.sha256(ledger_path.read_bytes()).hexdigest()
+          ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
+          with tempfile.TemporaryDirectory() as temporary:
+              output = Path(temporary) / 'certified_cycle_reports'
+              first = publish(ledger, cycle_id, output)
+              assert first['state'] == 'dry_run', first
+              assert not output.exists(), 'Dry run created output directory'
+              second = publish(ledger, cycle_id, output, write=True)
+              assert second['state'] == 'published_local', second
+              path = Path(second['path'])
+              assert path.is_file() and path.stat().st_size > 100
+              content = path.read_bytes()
+              assert hashlib.sha256(content).hexdigest() == second['sha256']
+              assert cycle_id.encode() in content
+              third = publish(ledger, cycle_id, output, write=True)
+              assert third['state'] == 'already_present', third
+              assert len(list(output.iterdir())) == 1, 'Duplicate output detected'
+              assert path.read_bytes() == content
+              tampered = copy.deepcopy(ledger)
+              row = next(r for r in tampered['cycles'] if r['cycle_id'] == cycle_id)
+              row['snapshot']['recovery_assessment']['current']['hrv_ms'] = 999
+              try:
+                  publish(tampered, cycle_id, output, write=True)
+              except SnapshotError:
+                  pass
+              else:
+                  raise AssertionError('Tampered snapshot was accepted')
+              assert path.read_bytes() == content, 'Tampering changed report'
+              print(json.dumps({'dry_run': first['state'], 'first_publication': second['state'], 'repeat': third['state'], 'tampering': 'rejected', 'report_sha256': second['sha256']}, sort_keys=True))
+          assert hashlib.sha256(ledger_path.read_bytes()).hexdigest() == before, 'Historical ledger changed'
+          PY
