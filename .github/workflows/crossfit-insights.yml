@@ -88,6 +88,25 @@ jobs:
           ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
         run: python report_sleep_integration.py
 
+      # V3.6: informe independiente sobre fuentes YA verificadas por V3.3.
+      # Un fallo opcional de presentacion no detiene certificados ni espejo.
+      - name: V3.6 - Generar informe CrossFit con graficas y trazabilidad
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest -q test_crossfit_report_v36
+          mkdir -p .diagnostics_current
+          rm -f .diagnostics_current/crossfit_report_v36.json .diagnostics_current/crossfit_report_v36.md .diagnostics_current/crossfit_chart_v36.svg
+          python crossfit_report_v36.py \
+            --out .diagnostics_current/crossfit_report_v36.json \
+            --markdown .diagnostics_current/crossfit_report_v36.md \
+            --chart .diagnostics_current/crossfit_chart_v36.svg
+          python crossfit_report_v36.py --validate .diagnostics_current/crossfit_report_v36.json
+          cp .diagnostics_current/crossfit_report_v36.json crossfit_report_v36.json
+          cp .diagnostics_current/crossfit_report_v36.md crossfit_report_v36.md
+          cp .diagnostics_current/crossfit_chart_v36.svg crossfit_chart_v36.svg
+
       - name: Pruebas de regresión V2.4
         run: python pipeline_regression_tests.py --stage crossfit
 
@@ -101,6 +120,12 @@ jobs:
           [ ! -f report_ready.json ] || git add report_ready.json
           # V3.3: informe requerido tras validacion, no es opcional.
           git add training_trends_v31.json
+          # V3.6: publicar solo si la validacion produjo ambos archivos.
+          if [ -f .diagnostics_current/crossfit_report_v36.json ] && \
+             [ -f .diagnostics_current/crossfit_report_v36.md ] && \
+             [ -f .diagnostics_current/crossfit_chart_v36.svg ]; then
+            git add crossfit_report_v36.json crossfit_report_v36.md crossfit_chart_v36.svg
+          fi
           [ ! -f schema_health_v30.json ] || git add schema_health_v30.json
           [ ! -f pipeline_lineage_v29.json ] || git add pipeline_lineage_v29.json
           if ! git diff --cached --quiet; then
