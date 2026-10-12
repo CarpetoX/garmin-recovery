@@ -110,6 +110,19 @@ jobs:
           guard = [x for x in crossfit_steps if 'crossfit_report_guard_v361.py' in x.get('run', '')]
           assert len(guard) == 1 and guard[0].get('continue-on-error') == 'true'
           assert any('crossfit_report_status_v361.json' in x.get('run', '') for x in crossfit_steps)
+          # V3.9.0: monitor-linked certified reports, no duplicate workflow_run.
+          report_jobs = workflows['monitor-monthly.yml']['jobs']
+          assert 'certified-reports-after-monitor' in report_jobs
+          certified = report_jobs['certified-reports-after-monitor']
+          assert certified.get('needs') == 'monitor'
+          assert certified.get('if') == "${{ needs.monitor.result == 'success' }}"
+          assert certified.get('permissions', {}).get('contents') == 'read'
+          report_steps = certified.get('steps', [])
+          assert any('cycle_report_batch_v386.py' in x.get('run', '') for x in report_steps)
+          assert any(x.get('uses', '').startswith('actions/upload-artifact@') for x in report_steps)
+          manual = workflows['garmin-certified-reports.yml']['on']
+          assert 'workflow_dispatch' in manual
+          assert 'workflow_run' not in manual and 'schedule' not in manual
           print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
           PY
 
@@ -124,6 +137,9 @@ jobs:
 
       - name: V3.8.3 - Test safe offline report publisher
         run: python -m unittest -v test_cycle_report_publisher_v383
+
+      - name: V3.9.0 - Certified report regression suite
+        run: python -m unittest -v test_cycle_report_v386 test_cycle_report_v385 test_cycle_report_batch_v384 test_cycle_report_publisher_v383 test_cycle_real_integration_v382
 
       - name: Audit certificate ledger hashes without modifying records
         run: python archive_report_cycles.py
