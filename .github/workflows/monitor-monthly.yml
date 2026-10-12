@@ -176,3 +176,33 @@ jobs:
           path: certified_cycle_reports_v386/
           if-no-files-found: error
           retention-days: 30
+  enriched-reports-after-monitor:
+    name: V3.9.2.2 - Enriched reports (parallel, artifact only)
+    needs: monitor
+    if: ${{ needs.monitor.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout latest default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate enriched report regression
+        run: python -m unittest -v test_report_interpretation_v391 test_cycle_report_enriched_v391 test_cycle_report_publisher_v392
+      - name: Generate enriched reports (artifact only)
+        run: python cycle_report_batch_v392.py --ledger report_cycles.json --outdir enriched_cycle_reports_v392
+      - name: Upload enriched reports and quarantine manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-enriched-reports-v392-${{ github.run_id }}
+          path: enriched_cycle_reports_v392/
+          if-no-files-found: error
+          retention-days: 30
