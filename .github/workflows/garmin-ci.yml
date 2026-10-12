@@ -141,6 +141,9 @@ jobs:
       - name: V3.9.0 - Certified report regression suite
         run: python -m unittest -v test_cycle_report_v386 test_cycle_report_v385 test_cycle_report_batch_v384 test_cycle_report_publisher_v383 test_cycle_real_integration_v382
 
+      - name: V3.9.1.2 - Interpretation and enriched report regression suite
+        run: python -m unittest -v test_report_interpretation_v391 test_cycle_report_enriched_v391
+
       - name: Audit certificate ledger hashes without modifying records
         run: python archive_report_cycles.py
 
