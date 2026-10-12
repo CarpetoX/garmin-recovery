@@ -206,3 +206,35 @@ jobs:
           path: enriched_cycle_reports_v392/
           if-no-files-found: error
           retention-days: 30
+
+  # V4.0 PREVIEW: isolated observer. Never writes to the repository or affects V3.8/V3.9.
+  v40-preview-after-monitor:
+    name: V4.0 - Technical CrossFit reports (shadow artifact only)
+    needs: monitor
+    if: ${{ needs.monitor.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout latest default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: V4.0 - Validate snapshot integrity and report regression
+        run: python -m unittest -v test_garmin_report_v40
+      - name: V4.0 - Generate latest certified report (artifact only)
+        run: python garmin_report_v40.py --ledger report_cycles.json --outdir v40_preview_reports --write
+      - name: V4.0 - Upload preview and manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-v40-preview-${{ github.run_id }}
+          path: v40_preview_reports/
+          if-no-files-found: error
+          retention-days: 30
