@@ -10,6 +10,8 @@ from cycle_report_publisher_v385 import publish
 from cycle_snapshot_report_v38 import SnapshotError
 
 LEDGER = Path(__file__).with_name('report_cycles.json')
+LEGACY_CYCLE = '2026-10-09-1645'
+
 
 class HistoricalCompatibilityTests(unittest.TestCase):
     @classmethod
@@ -29,7 +31,7 @@ class HistoricalCompatibilityTests(unittest.TestCase):
 
     def test_invalid_digest_remains_rejected(self):
         with self.assertRaises(SnapshotError):
-            render(self.ledger, '2026-10-09-1645')
+            render(self.ledger, LEGACY_CYCLE)
 
     def test_complete_cycle_unchanged(self):
         report, status = render(self.ledger, '2026-10-12-1645')
@@ -44,12 +46,26 @@ class HistoricalCompatibilityTests(unittest.TestCase):
             self.assertEqual(b['state'], 'already_present')
             self.assertEqual(len(list(Path(tmp).glob('*.md'))), 1)
 
-    def test_batch_six_recovered_one_quarantined(self):
+    def test_batch_recovers_all_certified_and_quarantines_legacy(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = run(self.ledger, tmp)
-            self.assertEqual(result['count'], 10)
+            eligible = {
+                row['cycle_id']
+                for row in self.ledger['cycles']
+                if isinstance(row, dict)
+                and row.get('state') == 'data_ready'
+                and isinstance(row.get('cycle_id'), str)
+            }
+            self.assertIn(LEGACY_CYCLE, eligible)
+            self.assertGreaterEqual(len(eligible), 11)  # Prevent unnoticed historical loss.
+            self.assertEqual(result['count'], len(eligible) - 1)
+            self.assertEqual(result['count'], len(result['reports']))
             self.assertEqual(result['rejected_count'], 1)
-            self.assertEqual(result['rejected'][0]['cycle_id'], '2026-10-09-1645')
+            self.assertEqual(result['rejected'][0]['cycle_id'], LEGACY_CYCLE)
+            self.assertEqual(
+                {item['cycle_id'] for item in result['reports']},
+                eligible - {LEGACY_CYCLE},
+            )
 
     def test_no_path_traversal(self):
         with self.assertRaises(SnapshotError):
@@ -61,6 +77,7 @@ class HistoricalCompatibilityTests(unittest.TestCase):
         row['snapshot']['recovery_assessment']['current']['hrv_ms'] = 999
         with self.assertRaises(SnapshotError):
             render(altered, '2026-10-12-1645')
+
 
 if __name__ == '__main__':
     unittest.main()
