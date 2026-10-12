@@ -1,4 +1,4 @@
-name: Garmin V3.8.7 - Certified Reports Automatic
+name: Garmin V3.8.8 - Certified Reports Manual Verification
 
 on:
   workflow_dispatch:
@@ -7,20 +7,16 @@ on:
         description: 'Optional certified cycle ID (blank = all eligible cycles)'
         required: false
         type: string
-  workflow_run:
-    workflows: ['Garmin Workflow Monitor and Monthly Report']
-    types: [completed]
 
 permissions:
   contents: read
 
 concurrency:
-  group: garmin-certified-reports-v387
+  group: garmin-certified-reports-v388-manual
   cancel-in-progress: false
 
 jobs:
   certified-reports:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -48,7 +44,7 @@ jobs:
       - name: Upload reports and quarantine manifest
         uses: actions/upload-artifact@v4
         with:
-          name: garmin-certified-reports-v387-${{ github.run_id }}
+          name: garmin-certified-reports-manual-v388-${{ github.run_id }}
           path: certified_cycle_reports_v386/
           if-no-files-found: error
           retention-days: 30

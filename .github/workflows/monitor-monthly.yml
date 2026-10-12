@@ -147,3 +147,32 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python shadow_autodispatch_v296.py --source report_cycles.json
+  certified-reports-after-monitor:
+    name: V3.8.8 - Certified reports after successful monitor
+    needs: monitor
+    if: ${{ needs.monitor.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout latest default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate certified report regression
+        run: python -m unittest -v test_cycle_report_v386 test_cycle_report_v385 test_cycle_report_batch_v384 test_cycle_report_publisher_v383 test_cycle_real_integration_v382
+      - name: Generate certified reports (artifact only)
+        run: python cycle_report_batch_v386.py --ledger report_cycles.json --outdir certified_cycle_reports_v386
+      - name: Upload reports and quarantine manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: garmin-certified-reports-v388-${{ github.run_id }}
+          path: certified_cycle_reports_v386/
+          if-no-files-found: error
+          retention-days: 30
