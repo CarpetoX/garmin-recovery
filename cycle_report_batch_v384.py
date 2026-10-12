@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""V3.8.4: generate certified cycle reports into a local artifact directory.
+"""V3.8.4.1: fail-closed per cycle, artifact-only batch publisher.
 
-No network, live Garmin files, repository commits, or ChatGPT delivery claims.
+Invalid cycles are quarantined in manifest; explicit cycle requests fail.
+Never changes snapshots, source data, or production workflows.
 """
 import argparse
 import json
@@ -17,15 +18,20 @@ def run(ledger, outdir, cycle_id=None):
     eligible = [r['cycle_id'] for r in rows if isinstance(r, dict) and r.get('state') == 'data_ready' and isinstance(r.get('cycle_id'), str)]
     if len(eligible) != len(set(eligible)):
         raise SnapshotError('Duplicate eligible cycle IDs')
-    if cycle_id:
+    if cycle_id is not None:
         if cycle_id not in eligible:
             raise SnapshotError('Requested cycle not eligible')
         eligible = [cycle_id]
-    eligible.sort()
-    results = []
-    for cid in eligible:
-        results.append({'cycle_id': cid, **publish(ledger, cid, outdir, write=True)})
-    return {'version': '3.8.4', 'mode': 'artifact_only', 'delivery': 'unverified_no_receipt', 'count': len(results), 'reports': results}
+    reports, rejected = [], []
+    for cid in sorted(eligible):
+        try:
+            reports.append({'cycle_id': cid, **publish(ledger, cid, outdir, write=True)})
+        except (SnapshotError, ValueError, TypeError, OSError) as exc:
+            if cycle_id is not None:
+                raise
+            rejected.append({'cycle_id': cid, 'reason': type(exc).__name__, 'detail': str(exc)[:200]})
+    return {'version': '3.8.4.1', 'mode': 'artifact_only', 'delivery': 'unverified_no_receipt',
+            'count': len(reports), 'rejected_count': len(rejected), 'reports': reports, 'rejected': rejected}
 
 
 def main():
@@ -38,7 +44,10 @@ def main():
     result = run(ledger, args.outdir, args.cycle_id)
     args.outdir.mkdir(parents=True, exist_ok=True)
     (args.outdir / 'manifest.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps({'count': result['count'], 'mode': result['mode'], 'delivery': result['delivery']}))
+    print(json.dumps({'count': result['count'], 'rejected_count': result['rejected_count'],
+                      'mode': result['mode'], 'delivery': result['delivery']}))
+    if result['rejected_count']:
+        print('WARNING: invalid cycles quarantined; inspect artifact manifest.json')
 
 
 if __name__ == '__main__':

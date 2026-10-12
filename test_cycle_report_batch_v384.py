@@ -46,3 +46,26 @@ class BatchTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class InvalidCycleIsolationTests(unittest.TestCase):
+    def test_invalid_cycle_does_not_block_certified_cycle(self):
+        ledger = copy.deepcopy(BatchTests.ledger)
+        bad = copy.deepcopy(next(x for x in ledger['cycles'] if x.get('cycle_id') == CID))
+        bad['cycle_id'] = '2026-10-13-1645'
+        bad['slot_at'] = '2026-10-13T16:45:00+02:00'
+        # Tampered snapshot digest must never be accepted.
+        bad['snapshot']['recovery_assessment']['current']['hrv_ms'] = 999
+        ledger['cycles'].append(bad)
+        with tempfile.TemporaryDirectory() as tmp:
+            result = run(ledger, tmp)
+            self.assertGreaterEqual(result['count'], 1)
+            self.assertIn('2026-10-13-1645', [x['cycle_id'] for x in result['rejected']])
+            self.assertNotIn('2026-10-13-1645', [x['cycle_id'] for x in result['reports']])
+            self.assertEqual(result['delivery'], 'unverified_no_receipt')
+
+    def test_explicit_invalid_cycle_still_fails(self):
+        ledger = copy.deepcopy(BatchTests.ledger)
+        row = next(x for x in ledger['cycles'] if x.get('cycle_id') == CID)
+        row['snapshot']['recovery_assessment']['current']['hrv_ms'] = 999
+        with tempfile.TemporaryDirectory() as tmp, self.assertRaises(SnapshotError):
+            run(ledger, tmp, CID)
