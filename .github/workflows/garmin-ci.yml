@@ -115,7 +115,7 @@ jobs:
           assert 'certified-reports-after-monitor' in report_jobs
           certified = report_jobs['certified-reports-after-monitor']
           assert certified.get('needs') == 'monitor'
-          assert certified.get('if') == "${{ needs.monitor.result == 'success' }}"
+          assert certified.get('if') == ("$" + "{{ needs.monitor.result == 'success' }}")
           assert certified.get('permissions', {}).get('contents') == 'read'
           report_steps = certified.get('steps', [])
           assert any('cycle_report_batch_v386.py' in x.get('run', '') for x in report_steps)
