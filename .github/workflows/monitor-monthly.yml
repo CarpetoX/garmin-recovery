@@ -209,7 +209,7 @@ jobs:
 
   # V4.0 PREVIEW: isolated observer. Never writes to the repository or affects V3.8/V3.9.
   v40-preview-after-monitor:
-    name: V4.0 - Technical CrossFit reports (shadow artifact only)
+    name: V4.0.2 - Visual Performance (parallel artifact only)
     needs: monitor
     if: ${{ needs.monitor.result == 'success' }}
     runs-on: ubuntu-latest
@@ -228,14 +228,17 @@ jobs:
         with:
           python-version: '3.12'
       - name: V4.0.1 - Validate report integrity and cross-version quality
-        run: python -m unittest -v test_garmin_report_v40 test_report_quality_compare_v401 test_report_visual_v401
+        run: python -m unittest -v test_garmin_report_v40 test_report_quality_compare_v401 test_report_visual_v401 test_report_visual_data_v402 test_report_visual_v402
       - name: V4.0 - Generate latest certified report (artifact only)
         run: python garmin_report_v40.py --ledger report_cycles.json --outdir v40_preview_reports --write
       - name: V4.0.1 - Compare V3.9.2.2 and V4.0 from the same snapshot
         run: python report_quality_compare_v401.py --ledger report_cycles.json --outdir v40_preview_reports
       - name: V4.0.1 - Generate responsive offline HTML dashboard
         run: python report_visual_v401.py --ledger report_cycles.json --outdir v40_preview_reports --write
-      - name: V4.0.1 - Upload Markdown, HTML, manifests and quality audit
+      # Additive V4.0.2 offline visual charts; never blocks legacy report jobs.
+      - name: V4.0.2 - Generate visual performance dashboard and coverage manifest
+        run: python report_visual_v402.py --ledger report_cycles.json --outdir v40_preview_reports --write
+      - name: V4.0.2 - Upload Markdown, HTML, manifests and quality audit
         uses: actions/upload-artifact@v4
         with:
           name: garmin-v40-preview-${{ github.run_id }}
