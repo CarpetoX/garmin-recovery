@@ -95,6 +95,11 @@ jobs:
       - name: V3.4 - Auditar trazabilidad y post-sueno sin duplicar certificados
         run: python report_monitor_v34.py
 
+      # V2.9.7: capa aditiva, sin alterar el estado historico ni bloquear el espejo.
+      - name: V2.9.7 - Separar el ciclo actual de las alertas historicas
+        continue-on-error: true
+        run: python monitor_clarity_v297.py
+
       - name: V2.9.4 - Calcular fiabilidad historica de 7 y 28 dias
         run: python reliability_history_v294.py --ledger report_cycles.json --out reliability_history_v294.json
 
