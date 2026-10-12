@@ -122,6 +122,9 @@ jobs:
       - name: Validate real historical V3.8.2 report against pinned cycle snapshot
         run: python -m unittest -v test_cycle_real_integration_v382
 
+      - name: V3.8.3 - Test safe offline report publisher
+        run: python -m unittest -v test_cycle_report_publisher_v383
+
       - name: Audit certificate ledger hashes without modifying records
         run: python archive_report_cycles.py
 
