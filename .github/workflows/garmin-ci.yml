@@ -123,6 +123,17 @@ jobs:
           manual = workflows['garmin-certified-reports.yml']['on']
           assert 'workflow_dispatch' in manual
           assert 'workflow_run' not in manual and 'schedule' not in manual
+          # V4.0.1: visual preview remains strictly parallel, read-only and optional.
+          v40 = report_jobs['v40-preview-after-monitor']
+          assert v40.get('needs') == 'monitor'
+          assert v40.get('if') == ("$" + "{{ needs.monitor.result == 'success' }}")
+          assert v40.get('permissions', {}).get('contents') == 'read'
+          assert v40.get('continue-on-error') == 'true'
+          v40_commands = '\n'.join(str(x.get('run') or '') for x in v40.get('steps', []))
+          for source in ('garmin_report_v40.py', 'report_quality_compare_v401.py', 'report_visual_v401.py'):
+              assert source in v40_commands, f'V4.0.1 missing command: {source}'
+          assert any(x.get('uses', '').startswith('actions/upload-artifact@') for x in v40.get('steps', []))
+          assert 'workflow_run' not in workflows['monitor-monthly.yml']['on']
           print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
           PY
 
@@ -146,6 +157,9 @@ jobs:
 
       - name: V3.9.2.1 - Enriched publisher regression suite
         run: python -m unittest -v test_cycle_report_publisher_v392
+
+      - name: V4.0.1 - Compare V4 reports against V3.9 with certified snapshots
+        run: python -m unittest -v test_garmin_report_v40 test_report_quality_compare_v401 test_report_visual_v401
 
       - name: Audit certificate ledger hashes without modifying records
         run: python archive_report_cycles.py
