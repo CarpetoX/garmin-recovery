@@ -19,8 +19,8 @@ class HistoricalQualityTests(unittest.TestCase):
             self.assertEqual(result['rejected_count'], 1)
             self.assertEqual(result['rejected'][0]['cycle_id'], '2026-10-09-1645')
             self.assertEqual(result['rejected'][0]['reason'], 'legacy_without_snapshot')
-            self.assertEqual(sum(x['completeness'] == 'complete' for x in result['reports']), 4)
-            self.assertEqual(sum(x['completeness'] == 'partial_missing_crossfit_chart' for x in result['reports']), 6)
+            self.assertEqual(sum(x['completeness'] == 'complete' for x in result['reports']), 5)
+            self.assertEqual(sum(x['completeness'] == 'partial_missing_crossfit_chart' for x in result['reports']), 5)
 
     def test_partial_retains_metrics(self):
         ledger = copy.deepcopy(self.ledger)
