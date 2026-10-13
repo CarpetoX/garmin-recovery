@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "version": "3.6",
-  "generated_at": "2026-10-13T12:09:27.041406+02:00",
+  "generated_at": "2026-10-13T12:42:14.192264+02:00",
   "as_of_date": "2026-10-13",
   "timezone": "Europe/Madrid",
   "status": "descriptive_limited",
   "source_provenance": {
-    "crossfit_generated_at": "2026-10-13T12:09:21.075222+02:00",
-    "trends_generated_at": "2026-10-13T10:09:21.260288+00:00",
+    "crossfit_generated_at": "2026-10-13T12:42:08.675409+02:00",
+    "trends_generated_at": "2026-10-13T10:42:08.914455+00:00",
     "same_source_verified": true,
     "certificate_state": "not_linked_to_current_certificate",
     "chatgpt_delivery": "unverified_no_receipt"
@@ -16,12 +16,12 @@
     "last_7d": {
       "registered_sessions": 9,
       "rpe_coverage": {
-        "with_rpe": 7,
+        "with_rpe": 9,
         "sessions": 9
       },
-      "mean_session_rpe": 6.5,
+      "mean_session_rpe": 6.72,
       "recorded_minutes": 247.3,
-      "srpe_recorded_minutes_proxy": 1169.7
+      "srpe_recorded_minutes_proxy": 1454.8
     },
     "last_28d": {
       "registered_sessions": 11,
@@ -499,8 +499,8 @@
       {
         "date": "2026-10-13",
         "recorded_sessions": 2,
-        "mean_rpe": null,
-        "srpe_proxy": null,
+        "mean_rpe": 7.5,
+        "srpe_proxy": 285.1,
         "trimp": 47.2,
         "sleep_hours": 7.5,
         "hrv_ms": 70.87,
@@ -585,8 +585,8 @@
       {
         "date": "2026-10-13",
         "recorded_sessions": 2,
-        "mean_rpe": null,
-        "srpe_proxy": null,
+        "mean_rpe": 7.5,
+        "srpe_proxy": 285.1,
         "trimp": 47.2,
         "sleep_hours": 7.5,
         "hrv_ms": 70.87,
@@ -618,14 +618,14 @@
       {
         "category": "HIIT",
         "sessions": 5,
-        "rpe_samples": 3,
-        "mean_rpe": 5.83,
-        "sessions_rpe_8_plus": 2,
+        "rpe_samples": 5,
+        "mean_rpe": 6.5,
+        "sessions_rpe_8_plus": 3,
         "rpe_distribution": {
           "0_to_3": 1,
-          "4_to_6": 0,
+          "4_to_6": 1,
           "7_to_8_9": 2,
-          "9_to_10": 0
+          "9_to_10": 1
         },
         "garmin_minutes_sum": 105.3,
         "minutes_samples": 5,
@@ -640,12 +640,6 @@
   "recommendations": [
     {
       "source": "existing_v32_v35_rule",
-      "kind": "data_quality",
-      "priority": 1,
-      "text": "Registrar RPE y actividad Garmin por ID en 2 sesiones de los ultimos 7 dias."
-    },
-    {
-      "source": "existing_v32_v35_rule",
       "kind": "trend_confidence",
       "priority": 1,
       "text": "Registrar una segunda semana completa antes de interpretar cambios de carga 7d frente a 7d."
@@ -655,6 +649,12 @@
       "kind": "insufficient_history",
       "priority": 1,
       "text": "Registrar otra semana de sesiones comparables antes de valorar una tendencia semanal."
+    },
+    {
+      "source": "existing_v32_v35_rule",
+      "kind": "strength_tracking",
+      "priority": 2,
+      "text": "Comparar las series de cada ejercicio solo con la misma variante, equipamiento, repeticiones y esfuerzo; el peso pico aislado es descriptivo."
     }
   ],
   "limitations": [
