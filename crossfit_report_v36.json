@@ -1,31 +1,31 @@
 {
   "schema_version": 1,
   "version": "3.6",
-  "generated_at": "2026-10-13T10:00:37.908461+02:00",
+  "generated_at": "2026-10-13T12:09:27.041406+02:00",
   "as_of_date": "2026-10-13",
   "timezone": "Europe/Madrid",
   "status": "descriptive_limited",
   "source_provenance": {
-    "crossfit_generated_at": "2026-10-13T10:00:31.601201+02:00",
-    "trends_generated_at": "2026-10-13T08:00:31.839514+00:00",
+    "crossfit_generated_at": "2026-10-13T12:09:21.075222+02:00",
+    "trends_generated_at": "2026-10-13T10:09:21.260288+00:00",
     "same_source_verified": true,
     "certificate_state": "not_linked_to_current_certificate",
     "chatgpt_delivery": "unverified_no_receipt"
   },
   "training": {
     "last_7d": {
-      "registered_sessions": 7,
+      "registered_sessions": 9,
       "rpe_coverage": {
         "with_rpe": 7,
-        "sessions": 7
+        "sessions": 9
       },
       "mean_session_rpe": 6.5,
-      "recorded_minutes": 205.9,
+      "recorded_minutes": 247.3,
       "srpe_recorded_minutes_proxy": 1169.7
     },
     "last_28d": {
-      "registered_sessions": 9,
-      "trend_confidence": "provisional"
+      "registered_sessions": 11,
+      "trend_confidence": "descriptive"
     },
     "week_comparison": {
       "eligible": false,
@@ -498,15 +498,15 @@
       },
       {
         "date": "2026-10-13",
-        "recorded_sessions": 0,
+        "recorded_sessions": 2,
         "mean_rpe": null,
         "srpe_proxy": null,
-        "trimp": null,
+        "trimp": 47.2,
         "sleep_hours": 7.5,
         "hrv_ms": 70.87,
         "resting_hr_bpm": 51.0,
         "sleep_score": 89.0,
-        "no_record_does_not_prove_rest": true
+        "no_record_does_not_prove_rest": false
       }
     ],
     "last_7d": [
@@ -584,15 +584,15 @@
       },
       {
         "date": "2026-10-13",
-        "recorded_sessions": 0,
+        "recorded_sessions": 2,
         "mean_rpe": null,
         "srpe_proxy": null,
-        "trimp": null,
+        "trimp": 47.2,
         "sleep_hours": 7.5,
         "hrv_ms": 70.87,
         "resting_hr_bpm": 51.0,
         "sleep_score": 89.0,
-        "no_record_does_not_prove_rest": true
+        "no_record_does_not_prove_rest": false
       }
     ],
     "modality_rpe_7d": [
@@ -617,7 +617,7 @@
       },
       {
         "category": "HIIT",
-        "sessions": 3,
+        "sessions": 5,
         "rpe_samples": 3,
         "mean_rpe": 5.83,
         "sessions_rpe_8_plus": 2,
@@ -627,10 +627,10 @@
           "7_to_8_9": 2,
           "9_to_10": 0
         },
-        "garmin_minutes_sum": 63.9,
-        "minutes_samples": 3,
-        "mean_of_session_average_hr_bpm_unweighted": 135.0,
-        "hr_samples": 3,
+        "garmin_minutes_sum": 105.3,
+        "minutes_samples": 5,
+        "mean_of_session_average_hr_bpm_unweighted": 136.4,
+        "hr_samples": 5,
         "category_origin": "garmin_activity_name_not_a_verified_wod_variant",
         "session_hr_average_is_unweighted": true
       }
@@ -638,6 +638,12 @@
     "no_causal_inference": true
   },
   "recommendations": [
+    {
+      "source": "existing_v32_v35_rule",
+      "kind": "data_quality",
+      "priority": 1,
+      "text": "Registrar RPE y actividad Garmin por ID en 2 sesiones de los ultimos 7 dias."
+    },
     {
       "source": "existing_v32_v35_rule",
       "kind": "trend_confidence",
@@ -649,12 +655,6 @@
       "kind": "insufficient_history",
       "priority": 1,
       "text": "Registrar otra semana de sesiones comparables antes de valorar una tendencia semanal."
-    },
-    {
-      "source": "existing_v32_v35_rule",
-      "kind": "strength_tracking",
-      "priority": 2,
-      "text": "Comparar las series de cada ejercicio solo con la misma variante, equipamiento, repeticiones y esfuerzo; el peso pico aislado es descriptivo."
     }
   ],
   "limitations": [
