@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T13:05:58.959017+02:00",
+  "generated_at": "2026-10-14T14:05:59.079606+02:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "pending",
   "status": "unavailable",
@@ -7,7 +7,6 @@
   "confidence": "low",
   "reason": "faltan_sueno_vfc_o_fc_reposo",
   "missing_essential": [
-    "hrv_ms",
     "sleep_hours"
   ],
   "fresh_sources": true,
@@ -16,16 +15,16 @@
   "sleep_context": null,
   "current": {
     "date": "2026-10-14",
-    "hrv_ms": null,
+    "hrv_ms": 56.0,
     "sleep_hours": null,
     "sleep_score": null,
-    "resting_hr": 59.0,
+    "resting_hr": 56.0,
     "night_hr": null,
     "sleep_context": null,
     "sleep_start_local": null,
     "sleep_end_local": null,
     "sources": {
-      "hrv_ms": null,
+      "hrv_ms": "garmin_hrv_timeline",
       "sleep_hours": null,
       "sleep_score": null,
       "resting_hr": "garmin_heart_rate",
@@ -78,15 +77,15 @@
     "sleep_integrity": {
       "main_sleep_confirmed": false,
       "main_sleep_minutes": null,
-      "unconfirmed_separate_events": 0,
-      "unconfirmed_separate_minutes": 0,
+      "unconfirmed_separate_events": 1,
+      "unconfirmed_separate_minutes": 275,
       "overlapping_body_battery_events": 0,
       "minutes_added_to_sleep": 0,
       "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
     },
     "sleep_score_provenance": {
       "confirmed_sleep_score": null,
-      "readiness_sleep_field": null,
+      "readiness_sleep_field": 57.0,
       "status": "missing_comparison",
       "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
     },
@@ -95,7 +94,7 @@
     "intensity_guardrail": "use_v22_guidance",
     "reason_codes": [
       "post_night_shift",
-      "live_measurement_uncertain"
+      "unconfirmed_body_battery_sleep_event"
     ],
     "baseline_caution": "standard",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -109,21 +108,21 @@
           "garmin_episode_confirmed": false
         },
         "sleep_hrv": {
-          "state": "unverified_timestamp",
-          "measured_at": null,
-          "age_minutes": null,
+          "state": "recent",
+          "measured_at": "2026-10-14T13:26:14+02:00",
+          "age_minutes": 39.8,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
-          "state": "old_measurement",
-          "measured_at": "2026-10-14T08:04:00+02:00",
-          "age_minutes": 302.0,
+          "state": "recent",
+          "measured_at": "2026-10-14T13:50:00+02:00",
+          "age_minutes": 16.0,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "old_measurement",
-          "measured_at": "2026-10-14T07:57:00+02:00",
-          "age_minutes": 309.0,
+          "state": "recent",
+          "measured_at": "2026-10-14T13:30:00+02:00",
+          "age_minutes": 36.0,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -134,11 +133,8 @@
         }
       },
       "invalid_core_episode": false,
-      "live_data_limited": true,
-      "limited_live_metrics": [
-        "heart_rate_live",
-        "body_battery_live"
-      ],
+      "live_data_limited": false,
+      "limited_live_metrics": [],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
     },
     "sleep_fragmentation": {
