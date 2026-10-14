@@ -4,17 +4,17 @@
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **9**; RPE disponible: **9 de 9**.
+- Sesiones registradas: **11**; RPE disponible: **9 de 11**.
 - RPE medio por sesión: **6.72**.
-- Duración registrada Garmin: **247.3 min**.
+- Duración registrada Garmin: **310.2 min**.
 - Proxy sRPE × minutos Garmin: **1454.8** (no equivale al tiempo efectivo del WOD).
 - Comparación semanal: **insuficiente historial comparable**.
 
 ## Recuperación y calidad
 
-- Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
-- HRV: **—**; sueño: **—**; FC reposo: **—**.
-- Calidad de datos Garmin: **75/100** (same_local_day; no es la nota del software).
+- Recuperación: **same_day_assessed**; puntuación heurística **60**, estado original **yellow**, confianza **medium**.
+- HRV: **56 ms**; sueño: **4.58 h**; FC reposo: **56 lpm**.
+- Calidad de datos Garmin: **84/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
 
@@ -26,7 +26,7 @@
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
-| 2026-10-14 | 0 | — | — | 56 | — | 56 |
+| 2026-10-14 | 2 | — | — | 56 | 4.58 | 56 |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -47,9 +47,9 @@
 
 ## Recomendaciones con evidencia
 
-1. Registrar una segunda semana completa antes de interpretar cambios de carga 7d frente a 7d.
-2. Registrar otra semana de sesiones comparables antes de valorar una tendencia semanal.
-3. Comparar las series de cada ejercicio solo con la misma variante, equipamiento, repeticiones y esfuerzo; el peso pico aislado es descriptivo.
+1. Registrar RPE y actividad Garmin por ID en 2 sesiones de los ultimos 7 dias.
+2. Registrar una segunda semana completa antes de interpretar cambios de carga 7d frente a 7d.
+3. Registrar otra semana de sesiones comparables antes de valorar una tendencia semanal.
 
 ## Estado y limitaciones
 
