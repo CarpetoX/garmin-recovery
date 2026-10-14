@@ -14,7 +14,7 @@
 
 - Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
 - HRV: **—**; sueño: **—**; FC reposo: **—**.
-- Calidad de datos Garmin: **74/100** (same_local_day; no es la nota del software).
+- Calidad de datos Garmin: **75/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
 
@@ -53,7 +53,7 @@
 
 ## Estado y limitaciones
 
-- Certificado: **matched_data_ready_source**.
+- Certificado: **not_linked_to_current_certificate**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
