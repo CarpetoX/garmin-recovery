@@ -1,32 +1,32 @@
-# Garmin Recovery · Informe CrossFit V3.6 · 2026-10-14
+# Garmin Recovery · Informe CrossFit V3.6 · 2026-10-15
 
-**Estado:** descriptive_limited · **Origen:** CrossFit y tendencias V3.2/V3.5 verificados.
+**Estado:** descriptive · **Origen:** CrossFit y tendencias V3.2/V3.5 verificados.
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **13**; RPE disponible: **12 de 13**.
-- RPE medio por sesión: **7.25**.
-- Duración registrada Garmin: **334.3 min**.
-- Proxy sRPE × minutos Garmin: **2117.1** (no equivale al tiempo efectivo del WOD).
-- Comparación semanal: **insuficiente historial comparable**.
+- Sesiones registradas: **10**; RPE disponible: **9 de 10**.
+- RPE medio por sesión: **7.89**.
+- Duración registrada Garmin: **258 min**.
+- Proxy sRPE × minutos Garmin: **1792.4** (no equivale al tiempo efectivo del WOD).
+- Comparación semanal: **descriptiva disponible**.
 
 ## Recuperación y calidad
 
-- Recuperación: **same_day_assessed**; puntuación heurística **60**, estado original **yellow**, confianza **medium**.
-- HRV: **56 ms**; sueño: **4.58 h**; FC reposo: **56 lpm**.
+- Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
+- HRV: **—**; sueño: **—**; FC reposo: **—**.
 - Calidad de datos Garmin: **84/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
 
 | Fecha | Sesiones | RPE medio | Proxy sRPE | HRV ms | Sueño h | FC reposo |
 |---|---:|---:|---:|---:|---:|---:|
-| 2026-10-08 | 3 | 5.33 | 324.7 | 65.46 | 7.72 | 53 |
 | 2026-10-09 | 2 | 8.75 | 210.4 | 55.63 | 4.79 | 57 |
 | 2026-10-10 | 1 | 6 | 386.2 | 52.75 | 8.93 | 57 |
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
 | 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
+| 2026-10-15 | 0 | — | — | — | — | — |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -48,12 +48,12 @@
 ## Recomendaciones con evidencia
 
 1. Registrar RPE y actividad Garmin por ID en 1 sesiones de los ultimos 7 dias.
-2. Registrar una segunda semana completa antes de interpretar cambios de carga 7d frente a 7d.
-3. Registrar otra semana de sesiones comparables antes de valorar una tendencia semanal.
+2. Comparar las series de cada ejercicio solo con la misma variante, equipamiento, repeticiones y esfuerzo; el peso pico aislado es descriptivo.
+3. Para comparar WOD, registrar benchmark_id, variante, estándares, tiempo o repeticiones efectivas y RPE.
 
 ## Estado y limitaciones
 
-- Certificado: **matched_data_ready_source**.
+- Certificado: **not_linked_to_current_certificate**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
