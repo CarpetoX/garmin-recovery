@@ -4,10 +4,10 @@
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **13**; RPE disponible: **9 de 13**.
-- RPE medio por sesión: **6.72**.
+- Sesiones registradas: **13**; RPE disponible: **12 de 13**.
+- RPE medio por sesión: **7.25**.
 - Duración registrada Garmin: **334.3 min**.
-- Proxy sRPE × minutos Garmin: **1454.8** (no equivale al tiempo efectivo del WOD).
+- Proxy sRPE × minutos Garmin: **2117.1** (no equivale al tiempo efectivo del WOD).
 - Comparación semanal: **insuficiente historial comparable**.
 
 ## Recuperación y calidad
@@ -26,7 +26,7 @@
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
-| 2026-10-14 | 4 | — | — | 56 | 4.58 | 56 |
+| 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -47,13 +47,13 @@
 
 ## Recomendaciones con evidencia
 
-1. Registrar RPE y actividad Garmin por ID en 4 sesiones de los ultimos 7 dias.
+1. Registrar RPE y actividad Garmin por ID en 1 sesiones de los ultimos 7 dias.
 2. Registrar una segunda semana completa antes de interpretar cambios de carga 7d frente a 7d.
 3. Registrar otra semana de sesiones comparables antes de valorar una tendencia semanal.
 
 ## Estado y limitaciones
 
-- Certificado: **not_linked_to_current_certificate**.
+- Certificado: **matched_data_ready_source**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
