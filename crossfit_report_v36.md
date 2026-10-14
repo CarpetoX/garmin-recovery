@@ -26,7 +26,7 @@
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
-| 2026-10-14 | 0 | — | — | — | — | — |
+| 2026-10-14 | 0 | — | — | — | — | 59 |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -53,7 +53,7 @@
 
 ## Estado y limitaciones
 
-- Certificado: **not_linked_to_current_certificate**.
+- Certificado: **matched_data_ready_source**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
