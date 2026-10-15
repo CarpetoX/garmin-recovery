@@ -12,8 +12,8 @@
 
 ## Recuperación y calidad
 
-- Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
-- HRV: **—**; sueño: **—**; FC reposo: **—**.
+- Recuperación: **same_day_assessed**; puntuación heurística **47**, estado original **red**, confianza **medium**.
+- HRV: **41 ms**; sueño: **7.6 h**; FC reposo: **60 lpm**.
 - Calidad de datos Garmin: **84/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
@@ -26,7 +26,7 @@
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
 | 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
-| 2026-10-15 | 0 | — | — | — | — | — |
+| 2026-10-15 | 0 | — | — | 41 | 7.6 | 60 |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -53,7 +53,7 @@
 
 ## Estado y limitaciones
 
-- Certificado: **not_linked_to_current_certificate**.
+- Certificado: **matched_data_ready_source**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
