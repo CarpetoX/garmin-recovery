@@ -4,10 +4,10 @@
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **11**; RPE disponible: **9 de 11**.
-- RPE medio por sesión: **7.89**.
-- Duración registrada Garmin: **287.3 min**.
-- Proxy sRPE × minutos Garmin: **1792.4** (no equivale al tiempo efectivo del WOD).
+- Sesiones registradas: **12**; RPE disponible: **10 de 12**.
+- RPE medio por sesión: **7.9**.
+- Duración registrada Garmin: **300.6 min**.
+- Proxy sRPE × minutos Garmin: **1898.4** (no equivale al tiempo efectivo del WOD).
 - Comparación semanal: **descriptiva disponible**.
 
 ## Recuperación y calidad
@@ -26,7 +26,7 @@
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
 | 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
-| 2026-10-15 | 1 | — | — | 41 | 8.04 | 60 |
+| 2026-10-15 | 2 | 8 | 106 | 41 | 8.04 | 60 |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
