@@ -14,7 +14,7 @@
 
 - Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
 - HRV: **—**; sueño: **—**; FC reposo: **—**.
-- Calidad de datos Garmin: **74/100** (same_local_day; no es la nota del software).
+- Calidad de datos Garmin: **75/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
 
@@ -26,7 +26,7 @@
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
 | 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
 | 2026-10-15 | 2 | 8 | 106 | 41 | 8.04 | 60 |
-| 2026-10-16 | 0 | — | — | — | — | — |
+| 2026-10-16 | 0 | — | — | — | — | 60 |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
