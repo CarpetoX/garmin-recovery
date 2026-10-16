@@ -1,32 +1,32 @@
-# Garmin Recovery · Informe CrossFit V3.6 · 2026-10-16
+# Garmin Recovery · Informe CrossFit V3.6 · 2026-10-17
 
 **Estado:** descriptive · **Origen:** CrossFit y tendencias V3.2/V3.5 verificados.
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **10**; RPE disponible: **8 de 10**.
-- RPE medio por sesión: **7.69**.
-- Duración registrada Garmin: **276.7 min**.
-- Proxy sRPE × minutos Garmin: **1688** (no equivale al tiempo efectivo del WOD).
+- Sesiones registradas: **9**; RPE disponible: **7 de 9**.
+- RPE medio por sesión: **7.93**.
+- Duración registrada Garmin: **212.4 min**.
+- Proxy sRPE × minutos Garmin: **1301.8** (no equivale al tiempo efectivo del WOD).
 - Comparación semanal: **descriptiva disponible**.
 
 ## Recuperación y calidad
 
 - Recuperación: **not_current_or_unavailable**; puntuación heurística **—**, estado original **—**, confianza **—**.
 - HRV: **—**; sueño: **—**; FC reposo: **—**.
-- Calidad de datos Garmin: **75/100** (same_local_day; no es la nota del software).
+- Calidad de datos Garmin: **74/100** (same_local_day; no es la nota del software).
 
 ## Evolución reciente
 
 | Fecha | Sesiones | RPE medio | Proxy sRPE | HRV ms | Sueño h | FC reposo |
 |---|---:|---:|---:|---:|---:|---:|
-| 2026-10-10 | 1 | 6 | 386.2 | 52.75 | 8.93 | 57 |
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
 | 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
 | 2026-10-15 | 2 | 8 | 106 | 41 | 8.04 | 60 |
-| 2026-10-16 | 0 | — | — | — | — | 59 |
+| 2026-10-16 | 0 | — | — | — | — | 60 |
+| 2026-10-17 | 0 | — | — | — | — | — |
 
 *Una fecha con cero sesiones registradas no demuestra que fuera un día de descanso.*
 
@@ -53,7 +53,7 @@
 
 ## Estado y limitaciones
 
-- Certificado: **matched_data_ready_source**.
+- Certificado: **not_linked_to_current_certificate**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
