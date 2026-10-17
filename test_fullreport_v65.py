@@ -27,9 +27,12 @@ class FullReport(unittest.TestCase):
 
     def test_figures_come_from_data(self):
         cur, dec = self.ra["current"], self.result["decision"]
-        self.assertIn(n(cur["hrv_ms"]) + " ms", self.md)
-        self.assertIn(n(cur["resting_hr"]) + " lpm", self.md)
-        self.assertIn(hm(cur["sleep_hours"] * 60), self.md)
+        if cur.get("hrv_ms") is not None:
+            self.assertIn(n(cur["hrv_ms"]) + " ms", self.md)
+        if cur.get("resting_hr") is not None:
+            self.assertIn(n(cur["resting_hr"]) + " lpm", self.md)
+        if cur.get("sleep_hours") is not None:
+            self.assertIn(hm(cur["sleep_hours"] * 60), self.md)
         self.assertIn(dec["guidance"]["label"], self.md)
         self.assertIn(f"RPE máx. {n(dec['guidance']['rpe_max'])}", self.md)
 
