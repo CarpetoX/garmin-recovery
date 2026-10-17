@@ -72,3 +72,23 @@ Formato (español, conciso, en este orden):
    Si certificate.status es "con_avisos", menciónalo al principio del informe.
 Si la cadena no terminó bien, empieza indicándolo y qué etapa falló.
 ```
+
+## V6.6 — Publicar el análisis en la app
+
+La rutina puede además dejar su análisis en `app/analisis_ia.md`; la web lo muestra al final del informe completo
+(sección «Análisis de Claude»). Solo se publica si es del ciclo vigente; si no, la web lo marca como desactualizado y
+avisa de las cifras que no consten en los datos.
+
+1. En la rutina, activa el permiso para subir a `main` («Allow unrestricted branch pushes» o equivalente). Sin él, el push se rechaza y la web simplemente no muestra análisis.
+2. Sustituye en las instrucciones la frase «no modifiques archivos ni hagas commits» por: «solo puedes crear o modificar `app/analisis_ia.md`».
+3. Añade al final de las instrucciones:
+
+```
+Además del informe en esta sesión, escribe un análisis breve (máx. 250 palabras: qué explica la
+puntuación, carga reciente, 3 recomendaciones) en app/analisis_ia.md. La primera línea debe ser exactamente
+<!-- cycle_id: <cycle_id del bloque routine-fire-payload> -->
+seguida del texto en Markdown, español, solo con cifras presentes en app/informe_completo.md y los datos.
+Sin información personal más allá de la que ya publica el informe. Después:
+git pull --rebase origin main && git add app/analisis_ia.md && git commit -m "analisis IA <cycle_id>" && git push origin HEAD:main
+Si el push falla, no reintentes más de una vez y dilo en la sesión.
+```

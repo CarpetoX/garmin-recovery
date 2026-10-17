@@ -154,6 +154,7 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     full = root / "app" / "informe_completo.md"
     if full.exists():
         from .mdhtml import page
-        (out / "informe_completo.html").write_text(page(full.read_text(encoding="utf-8")), encoding="utf-8")
+        from .ai_analysis import section
+        (out / "informe_completo.html").write_text(page(full.read_text(encoding="utf-8") + section(root)), encoding="utf-8")
     return {"out": str(out), "history": len(extras["history"]), "date": result["date"],
             "generated_at": result.get("generated_at")}
