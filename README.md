@@ -50,6 +50,20 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 
 Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `history/` anteriores, de modo que nunca se publica un informe roto, y guarda el motivo en `app/validation.json`.
 
+**V6.1, web instalable:** el panel se publica en **https://carpetox.github.io/garmin-recovery/** después de cada ciclo (workflow `pages.yml`, que se lanza con el mismo aviso que el monitor). Se puede añadir a la pantalla de inicio del móvil y abre a pantalla completa, con el último panel disponible aunque no haya red. Incluye:
+- el resumen de tres líneas;
+- un **calendario de 4 semanas** con la decisión de cada día, el RPE máximo y un anillo rojo si se superó; al tocar un día se ven el sueño, la HRV, la FC y las sesiones;
+- el **RPE frente al máximo del día**, con valores al pasar el dedo o el ratón;
+- la semana frente a la anterior, la progresión de fuerza (1RM mínimo) y la puntualidad;
+- el **histórico de informes**: cada informe publicado en los últimos 30 días, tal como salió y con sus gráficas.
+
+Se genera con `python -m garmin_recovery site`.
+
+**V6.1, fiabilidad:**
+- **Avisos de fuentes desconectadas:** si Garmin o Intervals.icu dejan de aportar datos nuevos (más de un día), se avisa en el mismo issue de GitHub. Si el error de Garmin es de acceso, el aviso pide renovar `GARMIN_TOKENS_B64`; si falla Intervals, revisar `INTERVALS_API_KEY`.
+- **Fuentes de reserva visibles:** si la HRV, el sueño o la FC de hoy vienen de Intervals.icu porque Garmin no los trajo, el informe de la mañana lo dice. La reserva ya existía; ahora se ve.
+- **Prueba de extremo a extremo** (`test_e2e_frozen_v61.py`): ejecuta la app completa sobre un día real congelado (`tests_fixtures/`) y compara la decisión, las puntuaciones, la carga, las secciones y las gráficas con la foto esperada.
+
 **V6.0, avisos y seguimiento:**
 - **Aviso en GitHub** (issue «⚠️ Garmin Recovery: atención necesaria», con mención al propietario). Lo abre la cadena si CrossFit Insights falla antes de publicar o si el informe no pasa la validación. Lo abre la vigilancia programada, después de calcular `workflow_health.json`, si no hay informe en 11 h o se perdió una franja en las últimas 12 h. Cada uno solo cierra sus propios avisos: un fallo de la cadena solo lo cierra un ciclo que publique bien. Comenta solo cuando cambian los avisos, se cierra solo y nunca bloquea la cadena.
 - **Puntualidad en el resumen semanal:** hora del Sync y hora del informe de cada franja, frente a las 09:05, 17:10 y 23:10.

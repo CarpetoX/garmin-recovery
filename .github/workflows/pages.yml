@@ -1,0 +1,54 @@
+name: Garmin Recovery Web (GitHub Pages)
+
+# Publica el panel como web instalable en el móvil (https://carpetox.github.io/garmin-recovery/).
+# Se dispara con el mismo repository_dispatch que CrossFit Insights envía al monitor tras publicar
+# (workflow_run no alcanza: la cadena Sync → Heart → Advanced → CrossFit ya llega al límite).
+on:
+  repository_dispatch:
+    types: [garmin-monitor]
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'garmin_recovery/**'
+      - '.github/workflows/pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: garmin-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0   # histórico de informes (app/informe.md) de los últimos 30 días
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generar la web (panel, calendario, histórico, PWA)
+        run: python -m garmin_recovery site --out _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

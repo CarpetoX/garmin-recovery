@@ -494,6 +494,17 @@ def what_changed(result) -> list[str]:
     return out
 
 
+FALLBACK_LABELS = {"hrv_ms": "HRV", "sleep_hours": "sueño", "sleep_score": "puntuación de sueño", "resting_hr": "FC en reposo"}
+
+
+def fallback_notes(result) -> list[str]:
+    """Métricas de hoy que no llegaron de Garmin y se tomaron de Intervals.icu (reserva)."""
+    src = result.get("today_sources") or {}
+    used = [label for key, label in FALLBACK_LABELS.items() if src.get(key) == "intervals_icu"]
+    return ([f"Hoy {', '.join(used)} se ha tomado de Intervals.icu porque Garmin no lo trajo; puede diferir algo "
+             "del valor de Garmin."] if used else [])
+
+
 def coincident_signals(result) -> str:
     comps = (result.get("readiness") or {}).get("components") or {}
     scored = {k: c for k, c in comps.items() if c.get("z") is not None}
@@ -804,7 +815,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
     if slot == "mañana":
         md += ["## Qué ha cambiado respecto a tu línea base", ""] + ([f"- {x}" for x in what_changed(result)] or ["_Sin datos de hoy todavía._"]) + [""]
         md += [f"**Señales coincidentes:** {coincident_signals(result)}", ""]
-        md += ["## Incertidumbre", ""] + [f"- {x}" for x in uncertainty(result)] + [""]
+        md += ["## Incertidumbre", ""] + [f"- {x}" for x in uncertainty(result) + fallback_notes(result)] + [""]
         plan = shift_notes(result, trend)
         md += ["## Plan del día", "", f"- {g.get('text', '')} RPE ≤ {g.get('rpe_max', '—')}, volumen {g.get('volume', '—')}."]
         md += [f"- {n}" for n in plan] + [""]

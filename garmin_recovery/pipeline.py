@@ -113,6 +113,7 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
         "sessions_28d": sorted((s_ for s_ in sessions.values()
                                 if (s_.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=27)).isoformat()),
                                key=lambda s_: (s_["date"], s_.get("start_local") or "")),
+        "today_sources": dict(x.split(":", 1) for x in ((daily.get(today) or {}).get("sources") or "").split("|") if ":" in x),
         "mode": "shadow",
         "mode_note": ("Modelo v3 en paralelo: no sustituye recovery_assessment.json. La recomendación del día es "
                       "decision.guidance (la más conservadora entre modelos), no readiness.guidance."),
