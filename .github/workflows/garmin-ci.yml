@@ -116,11 +116,7 @@ jobs:
           clarity = [x for x in steps if 'monitor_clarity_v297.py' in x.get('run', '')]
           assert len(clarity) == 1 and clarity[0].get('continue-on-error') == 'true'
           assert steps.index(clarity[0]) < steps.index(dispatcher[0])
-          # V3.6.1: CI comprueba el generador y su contrato de publicacion opcional.
           crossfit_steps = workflows['crossfit-insights.yml']['jobs']['crossfit']['steps']
-          guard = [x for x in crossfit_steps if 'crossfit_report_guard_v361.py' in x.get('run', '')]
-          assert len(guard) == 1 and guard[0].get('continue-on-error') == 'true'
-          assert any('crossfit_report_status_v361.json' in x.get('run', '') for x in crossfit_steps)
           # V3.9.0: monitor-linked certified reports, no duplicate workflow_run.
           report_jobs = workflows['monitor-monthly.yml']['jobs']
           assert 'certified-reports-after-monitor' in report_jobs

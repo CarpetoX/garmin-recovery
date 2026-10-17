@@ -25,8 +25,6 @@ def observe(root, *, now, fetch_run):
     try:
         cert = json.loads((root / 'report_ready.json').read_text(encoding='utf-8'))
         ledger = json.loads((root / 'report_cycles.json').read_text(encoding='utf-8'))
-        status_path = root / 'crossfit_report_status_v361.json'
-        report_status = json.loads(status_path.read_text(encoding='utf-8')) if status_path.exists() else {}
         chain = cert.get('chain', {})
         evidence = {}
         for stage in STAGES:
@@ -36,7 +34,7 @@ def observe(root, *, now, fetch_run):
             run = fetch_run(run_id)
             evidence[stage] = {'id': run.get('id'), 'status': run.get('status'),
                                'conclusion': run.get('conclusion')}
-        result.update(evaluate(cert, ledger, report_status, now=now, actions=evidence))
+        result.update(evaluate(cert, ledger, now=now, actions=evidence))
     except (OSError, KeyError, ValueError, TypeError, IndexError) as exc:
         result['reason'] = f'{type(exc).__name__}: {str(exc)[:160]}'
     return result
