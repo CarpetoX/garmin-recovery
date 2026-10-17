@@ -24,6 +24,8 @@ def main(argv=None) -> int:
     p_al = sub.add_parser("alert", help="Abre, comenta o cierra el issue de aviso en GitHub")
     p_al.add_argument("--root", default=".")
     p_al.add_argument("--scope", choices=("chain", "watchdog"), default="chain")
+    p_nt = sub.add_parser("notify", help="Envía el aviso ntfy del informe nuevo (si NTFY_TOPIC está configurado)")
+    p_nt.add_argument("--root", default=".")
     p_site = sub.add_parser("site", help="Genera la web publicada (GitHub Pages, instalable en el móvil)")
     p_site.add_argument("--root", default=".")
     p_site.add_argument("--out", default="_site")
@@ -33,6 +35,9 @@ def main(argv=None) -> int:
         from .site import build_site
         print(json.dumps(build_site(args.root, args.out, history=not args.no_history), ensure_ascii=False))
         return 0
+    if args.cmd == "notify":
+        from .notify import main as notify_main
+        return notify_main(args.root)
     if args.cmd == "alert":
         from .alerts import main as alert_main
         return alert_main(args.root, args.scope)

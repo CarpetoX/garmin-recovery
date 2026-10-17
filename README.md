@@ -137,3 +137,9 @@ El modelo v3 **no sustituye** `recovery_assessment.json` ni los informes: corre 
 6. Antes de declarar autonomía: tres ciclos automáticos consecutivos verificados y seguimiento mensual de la fiabilidad.
 
 Ver [MAINTENIMIENTO.md](MAINTENIMIENTO.md) y [OPERACION_Y_VALIDACION.md](OPERACION_Y_VALIDACION.md).
+
+## V6.3 — Aviso al móvil con ntfy
+
+Cada ciclo que publica un informe válido envía una notificación al móvil («Informe nuevo · HH:MM», la decisión del día y el RPE máximo, con enlace al panel). No lleva datos fisiológicos.
+
+Configuración (una vez): instala la app **ntfy** (Android/iOS), suscríbete a un tema con un nombre largo y difícil de adivinar (quien lo conozca puede leer los avisos) y guárdalo en GitHub → Settings → Secrets and variables → Actions → secreto `NTFY_TOPIC`. Sin ese secreto no se envía nada. Opcional: `NTFY_SERVER` si usas un servidor propio. Un fallo del aviso nunca bloquea la cadena.
