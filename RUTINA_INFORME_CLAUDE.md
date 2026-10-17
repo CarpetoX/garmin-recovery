@@ -84,10 +84,10 @@ avisa de las cifras que no consten en los datos.
 3. Añade al final de las instrucciones:
 
 ```
-Además del informe en esta sesión, escribe un análisis breve (máx. 250 palabras: qué explica la
-puntuación, carga reciente, 3 recomendaciones) en app/analisis_ia.md. La primera línea debe ser exactamente
+Además del informe en esta sesión, escribe un análisis breve (máx. 300 palabras: qué explica la
+puntuación, carga reciente, 3 prioridades de mejora física y de recuperación, plan de 7 días) en app/analisis_ia.md. La primera línea debe ser exactamente
 <!-- cycle_id: <cycle_id del bloque routine-fire-payload> -->
-seguida del texto en Markdown, español, solo con cifras presentes en app/informe_completo.md y los datos.
+seguida del texto en Markdown, español, solo con cifras presentes en app/informe_completo.md y los datos. Parte de su sección 8 (análisis de mejora por reglas): no la contradigas; interpreta el conjunto y propón un plan concreto de 7 días (sesiones suaves y duras, sueño) respetando decision.guidance.
 Sin información personal más allá de la que ya publica el informe. Después:
 git pull --rebase origin main && git add app/analisis_ia.md && git commit -m "analisis IA <cycle_id>" && git push origin HEAD:main
 Si el push falla, no reintentes más de una vez y dilo en la sesión.
