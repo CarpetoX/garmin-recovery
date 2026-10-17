@@ -24,7 +24,15 @@ def main(argv=None) -> int:
     p_al = sub.add_parser("alert", help="Abre, comenta o cierra el issue de aviso en GitHub")
     p_al.add_argument("--root", default=".")
     p_al.add_argument("--scope", choices=("chain", "watchdog"), default="chain")
+    p_site = sub.add_parser("site", help="Genera la web publicada (GitHub Pages, instalable en el móvil)")
+    p_site.add_argument("--root", default=".")
+    p_site.add_argument("--out", default="_site")
+    p_site.add_argument("--no-history", action="store_true")
     args = parser.parse_args(argv)
+    if args.cmd == "site":
+        from .site import build_site
+        print(json.dumps(build_site(args.root, args.out, history=not args.no_history), ensure_ascii=False))
+        return 0
     if args.cmd == "alert":
         from .alerts import main as alert_main
         return alert_main(args.root, args.scope)

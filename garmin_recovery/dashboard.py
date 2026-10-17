@@ -18,36 +18,77 @@ def _esc(value) -> str:
     return html.escape("" if value is None else str(value))
 
 
-def render(result: dict) -> str:
-    payload = json.dumps(result, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
+def render(result: dict, extras: dict | None = None) -> str:
+    """``extras`` (solo la web publicada): puntualidad, histórico, fuerza y etiquetas PWA."""
+    from .report import rpe_by_day
+    extras = extras or {}
+    data = dict(result)
+    data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
+    payload = json.dumps(data, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
     zone = (result.get("decision") or {}).get("zone") or rd["zone"]
     tone, icon = ZONE_UI.get(zone, ZONE_UI["unavailable"])
     title = "Rendimiento y recuperación"
-    extra = _extra_sections(result)
+    extra = _extra_sections(result, extras)
+    head = PWA_HEAD if extras.get("pwa") else ""
     return TEMPLATE.replace("{{TITLE}}", title) \
+        .replace("{{HEAD}}", head) \
         .replace("{{EXTRA}}", extra) \
         .replace("{{DATE}}", _esc(result["date"])) \
         .replace("{{TONE}}", tone).replace("{{ICON}}", icon) \
         .replace("{{DATA}}", payload)
 
 
-def _extra_sections(result: dict) -> str:
+PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2a78d6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Recuperación">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>"""
+
+
+def _punctuality_html(pun: dict | None) -> str:
+    if not pun or not pun.get("total"):
+        return ""
+    rows = "".join(
+        f"<tr><td>{_esc(x['date'][8:10] + '/' + x['date'][5:7])}</td><td>{_esc(x['slot'])}</td>"
+        f"<td class='num'>{_esc(x['sync'] or '—')}</td><td class='num'>{_esc(x['ready'] or 'sin informe')}</td>"
+        f"<td class='num'>{'—' if x['minutes_margin'] is None else _esc(str(x['minutes_margin']) + ' min')} "
+        f"{'<span class=pos>✓</span>' if x['on_time'] else '<span class=neg>!</span>'}</td></tr>" for x in pun["slots"])
+    return (f'<section class="card"><h2>Puntualidad · {pun["on_time"]} de {pun["total"]} a tiempo</h2>'
+            '<p class="h2sub">informe listo antes de que ChatGPT lo lea (09:05, 17:10, 23:10) · últimos 7 días</p>'
+            '<div class="scroll"><table><thead><tr><th>Fecha</th><th>Franja</th><th class="num">Sync</th>'
+            f'<th class="num">Informe</th><th class="num">Margen</th></tr></thead><tbody>{rows}</tbody></table></div></section>')
+
+
+def _history_html(items: list | None) -> str:
+    if not items:
+        return ""
+    zone_es = {"green": "verde", "yellow": "ámbar", "red": "rojo", "unavailable": "pendiente"}
+    lis = "".join(
+        f"<li><a href='{_esc(x['url'])}' rel='noopener'><span class='hz z-{_esc(x.get('zone') or 'unavailable')}'></span>"
+        f"{_esc(x['label'])}</a> <span class='weight'>{_esc(zone_es.get(x.get('zone'), '—'))}"
+        f"{' · ' + _esc(x['report_id']) if x.get('report_id') else ''}</span></li>" for x in items)
+    return ('<section class="card"><h2>Informes anteriores</h2><p class="h2sub">cada enlace abre el informe tal como se '
+            f'publicó, con sus gráficas, en GitHub</p><ul class="clean hist">{lis}</ul></section>')
+
+
+def _extra_sections(result: dict, extras: dict | None = None) -> str:
     """Resumen de tres líneas, RPE frente al máximo del día y la semana (mismo contenido que el informe)."""
     import re
     from .readiness import GUIDANCE
-    from .report import chart_rpe, summary_block
+    from .report import summary_block
     from .weekly import weekly_summary
     dec = result.get("decision") or {}
     zone = dec.get("zone") or "unavailable"
     g = dec.get("guidance") or GUIDANCE.get(zone) or GUIDANCE["unavailable"]
+    extras = extras or {}
     lines = [x[2:] for x in summary_block(result, dec, g, zone) if x.startswith("> **")]
 
     def md_inline(t):
         return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", _esc(t))
     summary = "".join(f"<p style='margin:4px 0'>{md_inline(x)}</p>" for x in lines)
-    rpe_svg = chart_rpe(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"])
-    rpe_svg = rpe_svg.replace('width="640" height="230"', 'width="100%" preserveAspectRatio="xMidYMid meet"')
     try:
         w = weekly_summary(result)
     except Exception:  # noqa: BLE001 — la tarjeta semanal nunca rompe el panel
@@ -62,12 +103,25 @@ def _extra_sections(result: dict) -> str:
         week = ("<table><thead><tr><th></th><th class='num'>Esta semana</th><th class='num'>Semana previa</th></tr></thead><tbody>"
                 + "".join(f"<tr><td>{_esc(n)}</td><td class='num'>{f(a, d)}</td><td class='num'>{f(b, d)}</td></tr>"
                           for n, a, b, d in rows) + "</tbody></table>")
+    strength = extras.get("strength_svg")
+    strength_html = ("" if not strength else
+                     '<section class="card"><h2>Progresión de fuerza</h2><p class="h2sub">1RM mínimo estimado (Epley con '
+                     'tu mejor serie) cuando hay repeticiones; si no, carga máxima declarada</p>'
+                     f'<div class="svgwrap">{strength}</div></section>')
     return (f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
-            f'<section class="grid cols-2"><div class="card"><h2>RPE frente al máximo del día</h2>'
-            f'<p class="h2sub">barras: sesión más dura por tipo · raya: máximo de la decisión · punto rojo: por encima</p>'
-            f'<div style="width:100%">{rpe_svg}</div></div>'
-            f'<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
-            f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
+            '<section class="card" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
+            '<p class="h2sub">color = decisión del día (o v3 atenuado si no se guardó) · número = RPE máximo · '
+            'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
+            '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
+            '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>'
+            '<section class="grid cols-2"><div class="card"><h2>RPE frente al máximo del día</h2>'
+            '<p class="h2sub">barra = sesión más dura · raya = máximo que permitía la decisión · rojo = por encima</p>'
+            '<div class="legend"><span><i class="key-dot"></i>Dentro</span><span><i class="key-dot" style="background:var(--critical)"></i>Por encima</span>'
+            '<span><i class="key-ref" style="border-top:3px solid var(--text-2)"></i>Máximo del día</span></div>'
+            '<div class="chart" id="c-rpe"></div></div>'
+            '<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
+            f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>'
+            + strength_html + _punctuality_html(extras.get("punctuality")) + _history_html(extras.get("history")))
 
 
 TEMPLATE = r"""<!doctype html>
@@ -76,6 +130,7 @@ TEMPLATE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
+{{HEAD}}
 <style>
 :root{
   color-scheme: light;
@@ -166,6 +221,29 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 details summary{cursor:pointer;color:var(--text-2);font-size:13px}
 footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
 .empty{color:var(--text-3);font-size:13px;padding:24px 0;text-align:center}
+.cal-head,.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:560px}
+.cal-head span{font-size:11px;color:var(--text-3);text-align:center}
+.cal{margin-top:4px}
+.cal button{all:unset;cursor:pointer;height:54px;border-radius:10px;display:grid;place-items:center;position:relative;
+  background:var(--surface-2);font-size:13px;font-variant-numeric:tabular-nums;color:var(--text);min-width:0}
+.cal button .dn{position:absolute;top:4px;left:6px;font-size:10px;color:var(--text-3)}
+.cal button.z-green{background:color-mix(in srgb,var(--good) 30%,transparent)}
+.cal button.z-yellow{background:color-mix(in srgb,var(--warning) 34%,transparent)}
+.cal button.z-red{background:color-mix(in srgb,var(--critical) 30%,transparent)}
+.cal button.z-unavailable{background:color-mix(in srgb,var(--muted) 28%,transparent)}
+.cal button.v3{opacity:.55}
+.cal button.over{box-shadow:inset 0 0 0 2px var(--critical)}
+.cal button.sel{outline:2px solid var(--series-1);outline-offset:1px}
+.cal button.empty-day{background:transparent;cursor:default}
+.cal button b{font-weight:650}
+.cal-detail{margin-top:12px;font-size:14px;min-height:20px}
+.cal-detail table{margin-top:6px}
+.svgwrap{max-width:680px} .svgwrap svg{width:100%;height:auto}
+.hist li{padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.hist li:first-child{border-top:0}
+.hist a{color:var(--text);text-decoration:none} .hist a:hover{text-decoration:underline}
+.hz{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;background:var(--muted)}
+.hz.z-green{background:var(--good)} .hz.z-yellow{background:var(--warning)} .hz.z-red{background:var(--critical)}
 </style>
 </head>
 <body>
@@ -350,7 +428,11 @@ function chart(el, opt){
     });
     opt.series.forEach(se => {
       const col = `var(${se.color || '--series-1'})`;
-      if (se.kind === 'bar') {
+      if (se.kind === 'tick') {
+        const w = Math.min(24, bw * .62) + 10;
+        T.forEach((d, i) => { const v = d[se.key]; if (v == null) return;
+          s += `<line x1="${x(i) - w/2}" x2="${x(i) + w/2}" y1="${y(v)}" y2="${y(v)}" stroke="${col}" stroke-width="3" stroke-linecap="round"/>`; });
+      } else if (se.kind === 'bar') {
         const w = Math.min(24, bw * .62);
         T.forEach((d, i) => { const v = d[se.key]; if (v == null || v <= 0) return;
           const top = y(v), base = y(Math.max(lo, 0)), h = Math.max(1, base - top), rr = Math.min(4, w / 2, h);
@@ -436,6 +518,40 @@ $('integrity').innerHTML = `<thead><tr><th>Integridad del entrenamiento (${TI.wi
   <tr><td>Fechas RPE ≠ actividad</td><td class="num">${(TI.date_mismatch || []).length} ${okTxt(!(TI.date_mismatch || []).length)}</td></tr>
   ${(TI.without_rpe || []).map(x => `<tr><td colspan="2" class="weight">Sin RPE: ${x.start_local ? dshort(x.start_local.slice(0,10)) + ' ' + x.start_local.slice(11,16) : ''} · ${esc(typeEs(x.type))} · ${fmt(x.duration_min)} min · carga ${fmt(x.load)}</td></tr>`).join('')}
   <tr><td colspan="2" class="weight">Datos: ${esc(DC.level || '—')}${(DC.why || []).length ? ' (' + esc(DC.why.join('; ')) + ')' : ''} · Recomendación: ${esc(RC.level || '—')}${(RC.why || []).length ? ' (' + esc(RC.why.join('; ')) + ')' : ''}</td></tr></tbody>`;
+
+// ---------- RPE frente al máximo y calendario ----------
+const RPE = {}; (D._rpe_days || []).forEach(r => { RPE[r.date] = r; });
+T.forEach(d => { const r = RPE[d.date] || {}; d.rpe_ok = r.rpe != null && !r.over ? r.rpe : null;
+  d.rpe_over = r.over ? r.rpe : null; d.rpe_cap = r.cap; d.rpe_type = r.type; });
+chart($('c-rpe'), {label:'RPE frente al máximo del día', min:0, max:10,
+  series:[{key:'rpe_ok', kind:'bar'}, {key:'rpe_over', kind:'bar', color:'--critical'}, {key:'rpe_cap', kind:'tick', color:'--text-2'}],
+  tip: d => (d.rpe_ok ?? d.rpe_over) == null ? 'Sin sesión con RPE' :
+    `RPE <b>${fmt(d.rpe_ok ?? d.rpe_over, 1)}</b> · ${esc(d.rpe_type || '')}` + (d.rpe_cap != null ? `<br>Máximo del día ${d.rpe_cap}` + (d.rpe_over != null ? ' · <b>por encima</b>' : ' · dentro') : '<br>Sin decisión guardada ese día')});
+const SESS = D.sessions_28d || [];
+const cal = $('cal'), det = $('cal-detail');
+if (cal && T.length) {
+  const first = new Date(T[0].date + 'T12:00'), lead = (first.getDay() + 6) % 7;
+  let html = ''; for (let k = 0; k < lead; k++) html += '<button class="empty-day" tabindex="-1" aria-hidden="true"></button>';
+  T.forEach((d, i) => {
+    const z = d.decision_zone || d.zone || 'unavailable', r = RPE[d.date] || {};
+    const cls = `z-${z}${d.decision_zone ? '' : ' v3'}${r.over ? ' over' : ''}`;
+    html += `<button class="${cls}" data-i="${i}" aria-label="${esc(d.date)}"><span class="dn">${+d.date.slice(8)}</span>${r.rpe != null ? `<b>${fmt(r.rpe)}</b>` : (d.sessions ? '•' : '')}</button>`;
+  });
+  cal.innerHTML = html;
+  const show = i => {
+    const d = T[i], r = RPE[d.date] || {}, z = d.decision_zone || d.zone;
+    cal.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.i == i));
+    const ss = SESS.filter(x => x.date === d.date);
+    det.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'long', day:'numeric', month:'long'})}</b>` +
+      (d.shift ? ` · turno ${esc(d.shift)}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (v3; decisión no guardada ese día)'}` +
+      (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
+      (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
+        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td>${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
+        : '<br><span class="weight">Sin sesiones registradas.</span>');
+  };
+  cal.addEventListener('click', ev => { const b = ev.target.closest('button[data-i]'); if (b) show(+b.dataset.i); });
+  show(T.length - 1);
+}
 
 $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días frente a tu línea base de hasta 60 días con banda de cambio mínimo relevante (±0,5 DE). FC en reposo y nocturna en desviaciones robustas (mediana/MAD). Sueño frente a ${fmt(S.need_hours,1)} h de necesidad y deuda de ${'3'} noches. La carga solo puntúa cuando la carga crónica (CTL) permite interpretar la forma. Sin datos de hoy o con sueño sin confirmar no se autoriza intensidad alta.<br>${esc(R.disclaimer)} · App ${esc(D.app_version)} · Historial desde ${esc(D.history.first_date || '—')} (${D.history.sessions} sesiones).`;
 })();

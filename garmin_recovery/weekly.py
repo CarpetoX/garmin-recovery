@@ -116,11 +116,13 @@ def punctuality(reports: list[dict], today: date, now: datetime | None = None, t
         for k, (slot_txt, target_txt) in enumerate(SLOT_TARGETS):
             slot = datetime.combine(day, datetime.strptime(slot_txt, "%H:%M").time(), zone)
             target = datetime.combine(day, datetime.strptime(target_txt, "%H:%M").time(), zone)
-            if target > now or first_record is None or target < first_record - timedelta(hours=1):
+            if slot > now or first_record is None or target < first_record - timedelta(hours=1):
                 continue  # aún no toca, o anterior al registro de informes
             nxt = (datetime.combine(day, datetime.strptime(SLOT_TARGETS[k + 1][0], "%H:%M").time(), zone)
                    if k + 1 < len(SLOT_TARGETS) else slot + timedelta(hours=9, minutes=45))
-            hit = [(s_, g) for s_, g in rows if slot - timedelta(minutes=5) <= s_ < nxt]
+            hit = [(s_, g) for s_, g in rows if slot - timedelta(minutes=5) <= s_ < nxt and g <= now]
+            if target > now and not hit:
+                continue  # franja en curso: aún puede llegar a tiempo
             s_, g = min(hit, key=lambda x: x[1]) if hit else (None, None)
             out.append({"date": day.isoformat(), "slot": slot_txt, "target": target_txt,
                         "sync": s_.strftime("%H:%M") if s_ else None, "ready": g.strftime("%H:%M") if g else None,
