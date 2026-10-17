@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre nocturno
 
-Domingo, 18 de octubre de 2026 · 01:10 · `GR-2026-10-18-0110-43c7a7`
+Domingo, 18 de octubre de 2026 · 01:39 · `GR-2026-10-18-0139-f82779`
 
 ```cards
 Decisión|Pendiente de datos|RPE máx. 6|unavailable
@@ -242,4 +242,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ 
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-10-17-2245 · generado 18/10/2026 01:10 Europe/Madrid · certificado READY · sync_run_id 39068162128.
+Traza: cierre nocturno · ciclo 2026-10-17-2245 · generado 18/10/2026 01:39 Europe/Madrid · certificado READY · sync_run_id 39068162128.
