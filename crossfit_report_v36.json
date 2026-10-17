@@ -1,27 +1,27 @@
 {
   "schema_version": 1,
   "version": "3.6",
-  "generated_at": "2026-10-17T13:56:56.959732+02:00",
+  "generated_at": "2026-10-17T17:05:02.463049+02:00",
   "as_of_date": "2026-10-17",
   "timezone": "Europe/Madrid",
   "status": "descriptive",
   "source_provenance": {
-    "crossfit_generated_at": "2026-10-17T13:56:52.066557+02:00",
-    "trends_generated_at": "2026-10-17T11:56:52.242443+00:00",
+    "crossfit_generated_at": "2026-10-17T17:04:57.545541+02:00",
+    "trends_generated_at": "2026-10-17T15:04:57.763707+00:00",
     "same_source_verified": true,
-    "certificate_state": "not_linked_to_current_certificate",
+    "certificate_state": "matched_data_ready_source",
     "chatgpt_delivery": "unverified_no_receipt"
   },
   "training": {
     "last_7d": {
       "registered_sessions": 9,
       "rpe_coverage": {
-        "with_rpe": 7,
+        "with_rpe": 9,
         "sessions": 9
       },
-      "mean_session_rpe": 7.93,
+      "mean_session_rpe": 7.06,
       "recorded_minutes": 212.4,
-      "srpe_recorded_minutes_proxy": 1301.8
+      "srpe_recorded_minutes_proxy": 1451.0
     },
     "last_28d": {
       "registered_sessions": 17,
@@ -29,7 +29,7 @@
     },
     "week_comparison": {
       "eligible": true,
-      "srpe_delta_pct": null,
+      "srpe_delta_pct": 20.0,
       "trimp_delta_pct": 27.2,
       "status": "descriptive_only"
     },
@@ -60,6 +60,16 @@
         "load_unit": "kg_indicado_maquina",
         "distinct_days": 1,
         "last_day": "2026-10-11",
+        "observed_peak_change_kg": null,
+        "progression_state": "insufficient_repeated_days",
+        "verified_1rm": false
+      },
+      {
+        "exercise": "fuerza - squat snatch emom 8 min",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "distinct_days": 1,
+        "last_day": "2026-10-13",
         "observed_peak_change_kg": null,
         "progression_state": "insufficient_repeated_days",
         "verified_1rm": false
@@ -162,12 +172,12 @@
   },
   "live_measures": {
     "heart_rate_live": {
-      "state": "unverified",
-      "measured_at": null
+      "state": "recent",
+      "measured_at": "2026-10-17T16:44:00+02:00"
     },
     "body_battery_live": {
-      "state": "unverified",
-      "measured_at": null
+      "state": "recent",
+      "measured_at": "2026-10-17T16:18:00+02:00"
     }
   },
   "charts": {
@@ -463,8 +473,8 @@
       {
         "date": "2026-10-14",
         "recorded_sessions": 4,
-        "mean_rpe": 8.83,
-        "srpe_proxy": 662.3,
+        "mean_rpe": 7.62,
+        "srpe_proxy": 694.0,
         "trimp": 110.0,
         "sleep_hours": 4.58,
         "hrv_ms": 56.0,
@@ -475,8 +485,8 @@
       {
         "date": "2026-10-15",
         "recorded_sessions": 2,
-        "mean_rpe": 8.0,
-        "srpe_proxy": 106.0,
+        "mean_rpe": 6.0,
+        "srpe_proxy": 223.5,
         "trimp": 31.1,
         "sleep_hours": 8.04,
         "hrv_ms": 41.0,
@@ -549,8 +559,8 @@
       {
         "date": "2026-10-14",
         "recorded_sessions": 4,
-        "mean_rpe": 8.83,
-        "srpe_proxy": 662.3,
+        "mean_rpe": 7.62,
+        "srpe_proxy": 694.0,
         "trimp": 110.0,
         "sleep_hours": 4.58,
         "hrv_ms": 56.0,
@@ -561,8 +571,8 @@
       {
         "date": "2026-10-15",
         "recorded_sessions": 2,
-        "mean_rpe": 8.0,
-        "srpe_proxy": 106.0,
+        "mean_rpe": 6.0,
+        "srpe_proxy": 223.5,
         "trimp": 31.1,
         "sleep_hours": 8.04,
         "hrv_ms": 41.0,
@@ -618,12 +628,12 @@
       {
         "category": "HIIT",
         "sessions": 8,
-        "rpe_samples": 6,
-        "mean_rpe": 8.25,
+        "rpe_samples": 8,
+        "mean_rpe": 7.19,
         "sessions_rpe_8_plus": 5,
         "rpe_distribution": {
           "0_to_3": 0,
-          "4_to_6": 1,
+          "4_to_6": 3,
           "7_to_8_9": 2,
           "9_to_10": 3
         },
@@ -638,12 +648,6 @@
     "no_causal_inference": true
   },
   "recommendations": [
-    {
-      "source": "existing_v32_v35_rule",
-      "kind": "data_quality",
-      "priority": 1,
-      "text": "Registrar RPE y actividad Garmin por ID en 2 sesiones de los ultimos 7 dias."
-    },
     {
       "source": "existing_v32_v35_rule",
       "kind": "strength_tracking",

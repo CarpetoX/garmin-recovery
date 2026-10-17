@@ -4,10 +4,10 @@
 
 ## Entrenamiento (últimos 7 días)
 
-- Sesiones registradas: **9**; RPE disponible: **7 de 9**.
-- RPE medio por sesión: **7.93**.
+- Sesiones registradas: **9**; RPE disponible: **9 de 9**.
+- RPE medio por sesión: **7.06**.
 - Duración registrada Garmin: **212.4 min**.
-- Proxy sRPE × minutos Garmin: **1301.8** (no equivale al tiempo efectivo del WOD).
+- Proxy sRPE × minutos Garmin: **1451** (no equivale al tiempo efectivo del WOD).
 - Comparación semanal: **descriptiva disponible**.
 
 ## Recuperación y calidad
@@ -23,8 +23,8 @@
 | 2026-10-11 | 1 | 6 | 248.4 | 39 | 7.05 | 59 |
 | 2026-10-12 | 0 | — | — | 69.3 | 7.23 | 53 |
 | 2026-10-13 | 2 | 7.5 | 285.1 | 70.87 | 7.5 | 51 |
-| 2026-10-14 | 4 | 8.83 | 662.3 | 56 | 4.58 | 56 |
-| 2026-10-15 | 2 | 8 | 106 | 41 | 8.04 | 60 |
+| 2026-10-14 | 4 | 7.62 | 694 | 56 | 4.58 | 56 |
+| 2026-10-15 | 2 | 6 | 223.5 | 41 | 8.04 | 60 |
 | 2026-10-16 | 0 | — | — | — | 3.5 | 60 |
 | 2026-10-17 | 0 | — | — | 46.64 | 7.84 | 60 |
 
@@ -37,6 +37,7 @@
 | aperturas de pecho en máquina sentado | machine_stack | kg_indicado_maquina | 1 | insufficient_repeated_days |
 | curl femoral de pie unilateral | machine_stack | kg_indicado_maquina | 1 | insufficient_repeated_days |
 | curl femoral tumbado | machine_stack | kg_indicado_maquina | 1 | insufficient_repeated_days |
+| fuerza - squat snatch emom 8 min | barbell | kg_total_barra | 1 | insufficient_repeated_days |
 | peso muerto | barbell | kg_total_barra | 1 | insufficient_repeated_days |
 | prensa horizontal | machine_stack | kg_indicado_maquina | 1 | insufficient_repeated_days |
 | press banca en máquina sentado | machine_stack | kg_indicado_maquina | 1 | insufficient_repeated_days |
@@ -47,13 +48,12 @@
 
 ## Recomendaciones con evidencia
 
-1. Registrar RPE y actividad Garmin por ID en 2 sesiones de los ultimos 7 dias.
-2. Comparar las series de cada ejercicio solo con la misma variante, equipamiento, repeticiones y esfuerzo; el peso pico aislado es descriptivo.
-3. Para comparar WOD, registrar benchmark_id, variante, estándares, tiempo o repeticiones efectivas y RPE.
+1. Comparar las series de cada ejercicio solo con la misma variante, equipamiento, repeticiones y esfuerzo; el peso pico aislado es descriptivo.
+2. Para comparar WOD, registrar benchmark_id, variante, estándares, tiempo o repeticiones efectivas y RPE.
 
 ## Estado y limitaciones
 
-- Certificado: **not_linked_to_current_certificate**.
+- Certificado: **matched_data_ready_source**.
 - Entrega en ChatGPT: **no verificada**.
 - Frecuencia cardíaca y Body Battery: usar siempre la hora real de la muestra, no la hora de generación del JSON.
 - El informe es descriptivo, no diagnóstico, y no demuestra causalidad.
