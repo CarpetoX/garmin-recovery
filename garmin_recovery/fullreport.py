@@ -73,8 +73,8 @@ def short_date(iso: str) -> str:
     return f"{d.day} {MONTHS[d.month - 1][:3]}"
 
 
-def slot_title(when: datetime) -> str:
-    h = when.hour
+def slot_title(when: datetime, cycle_id: str = "") -> str:
+    h = int(cycle_id[-4:-2]) if len(cycle_id or "") >= 4 and cycle_id[-4:].isdigit() else when.hour
     return "Cierre matinal" if h < 12 else "Informe de tarde" if h < 20 else "Cierre nocturno"
 
 
@@ -124,7 +124,8 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
     L: list[str] = []
     add = L.append
 
-    add(f"# Garmin Recovery · {slot_title(now)}")
+    slot_id = (_read(root, "report_ready.json").get("cycle_id") or cert.get("cycle_id") or "")
+    add(f"# Garmin Recovery · {slot_title(now, slot_id)}")
     add(f"\n{long_date(today)} · {now.strftime('%H:%M')}" + (f" · `{report_id}`" if report_id else ""))
     add("\n## Resumen ejecutivo\n")
     chain = cert.get("chain") or {}
@@ -241,7 +242,8 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
                                                    for label, k in (("HRV", "hrv_ms"), ("Sueño", "sleep_hours"), ("Puntuación de sueño", "sleep_score"), ("FC en reposo", "resting_hr"))]))
     add("\n### Estrés y Body Battery\n")
     _, sd = _last_day(stress)
-    add(f"- Estrés medio: {n(sd.get('avgStressLevel'))}, máximo {n(sd.get('maxStressLevel'))}.")
+    avg_s, max_s = (_num(sd.get("avgStressLevel")), _num(sd.get("maxStressLevel")))
+    add(f"- Estrés medio: {n(avg_s) if avg_s is not None and avg_s >= 0 else '—'}, máximo {n(max_s) if max_s is not None and max_s >= 0 else '—'}.")
     _, bd = _last_day(bb)
     arr = [p for p in (bd.get("bodyBatteryValuesArray") or []) if isinstance(p, list) and len(p) >= 2 and p[1] is not None]
     if arr:
@@ -353,6 +355,6 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
         f"la decisión es **{ZONE_ICON.get(zone, '')} {guidance.get('label') or dec.get('zone_es') or '—'}**. "
         "No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.")
     add("\n---\n")
-    add(f"Traza: {slot_title(now).lower()} · ciclo {cyc_id or '—'} · generado {now.strftime('%d/%m/%Y %H:%M')} Europe/Madrid · "
+    add(f"Traza: {slot_title(now, slot_id).lower()} · ciclo {cyc_id or '—'} · generado {now.strftime('%d/%m/%Y %H:%M')} Europe/Madrid · "
         f"certificado {str(ready.get('status') or '—').upper()} · sync_run_id {_d(chain, 'sync', 'run_id') or '—'}.")
     return "\n".join(L) + "\n"
