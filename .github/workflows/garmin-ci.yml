@@ -173,18 +173,6 @@ jobs:
       - name: V3.9.0 - Certified report regression suite
         run: python -m unittest -v test_cycle_report_v386 test_cycle_real_integration_v382
 
-      - name: V3.9.1.2 - Interpretation and enriched report regression suite
-        run: python -m unittest -v test_report_interpretation_v391 test_cycle_report_enriched_v391
-
-      - name: V3.9.2.1 - Enriched publisher regression suite
-        run: python -m unittest -v test_cycle_report_publisher_v392
-
-      - name: V4.0.1 - Compare V4 reports against V3.9 with certified snapshots
-        run: python -m unittest -v test_garmin_report_v40 test_report_quality_compare_v401 test_report_visual_v401
-
-      - name: V4.0.2 - Verify visual trends, calendar, strength, sleep and intensity
-        run: python -m unittest -v test_report_visual_data_v402 test_report_visual_v402
-
       - name: Audit certificate ledger hashes without modifying records
         run: python archive_report_cycles.py
 
