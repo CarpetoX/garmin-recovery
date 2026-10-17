@@ -17,7 +17,15 @@ def main(argv=None) -> int:
     p_run.add_argument("--root", default=".")
     p_run.add_argument("--dry-run", action="store_true", help="Calcula e imprime sin escribir archivos")
     p_run.add_argument("--now", help="Instante ISO para reproducir un día concreto")
+    p_val = sub.add_parser("validate", help="Valida JSON, informe, gráficas e historial publicados")
+    p_val.add_argument("--root", default=".")
     args = parser.parse_args(argv)
+    if args.cmd == "validate":
+        from .validate import validate, write_result
+        res = validate(args.root)
+        write_result(args.root, res)
+        print(json.dumps(res, ensure_ascii=False))
+        return 0 if res["status"] == "ok" else 1
 
     now = None
     if args.now:
