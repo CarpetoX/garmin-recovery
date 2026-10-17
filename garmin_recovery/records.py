@@ -1,7 +1,7 @@
 """Registro diario canónico y sesiones normalizadas.
 
 La fusión fisiológica (HRV, sueño, FC en reposo, FC nocturna) reutiliza
-``recovery_reliability.nightly_rows`` para que la app y la cadena existente
+``reliability.nightly_rows`` para que la app y la cadena existente
 usen exactamente las mismas prioridades de fuente. Aquí solo se añaden los
 campos que el modelo v3 necesita (carga, estrés, subjetivo, turnos…).
 """
@@ -119,7 +119,7 @@ def aggregate_sessions(sessions) -> dict:
 
 def build_day_records(inputs: dict, now: datetime, sessions: list[dict] | None = None) -> dict:
     """Devuelve {fecha: registro} para los últimos 60 días con cualquier dato."""
-    from recovery_reliability import nightly_rows  # misma fusión que la cadena
+    from .reliability import nightly_rows  # misma fusión que la cadena
 
     base = nightly_rows(inputs.get("wellness") or [], inputs.get("hrv") or {},
                         inputs.get("sleep") or {}, inputs.get("extended") or {},
