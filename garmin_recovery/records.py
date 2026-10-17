@@ -24,6 +24,8 @@ DAILY_FIELDS = [
     "weight_kg", "vo2max",
     "sessions", "duration_min", "load", "srpe", "rpe_sessions",
     "shift", "sources",
+    # V5.3: puntuaciones de cada modelo y decisión operativa del día (para su histórico)
+    "v2_score", "hybrid_score", "v3_score", "decision_zone",
 ]
 
 SESSION_FIELDS = [
@@ -32,7 +34,7 @@ SESSION_FIELDS = [
 ]
 
 TEXT_FIELDS = {"date", "sleep_context", "sleep_start_local", "sleep_end_local",
-               "garmin_hrv_status", "shift", "sources",
+               "garmin_hrv_status", "shift", "sources", "decision_zone",
                "id", "start_local", "type", "name", "label"}
 
 
@@ -172,7 +174,7 @@ def build_day_records(inputs: dict, now: datetime, sessions: list[dict] | None =
             "shift": shift_days.get(day) or None,
             "sources": "|".join(f"{k}:{v}" for k, v in sorted((row.get("sources") or {}).items()) if v) or None,
         }
-        if any(rec[k] is not None for k in DAILY_FIELDS if k not in ("date", "shift", "sources")):
+        if any(rec.get(k) is not None for k in DAILY_FIELDS if k not in ("date", "shift", "sources")):
             records[day] = rec
     return records
 

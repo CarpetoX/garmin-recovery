@@ -136,8 +136,14 @@ jobs:
           assert 'workflow_run' not in workflows['monitor-monthly.yml']['on']
           # V5.0: la app corre en modo sombra y nunca bloquea la cadena.
           adv_steps = workflows['advanced-analytics-rpe.yml']['jobs']['advanced-analytics']['steps']
-          app = [x for x in adv_steps if 'python -m garmin_recovery run' in x.get('run', '')]
+          assert not any('garmin_recovery run' in x.get('run', '') for x in adv_steps), 'App V5.3 runs in CrossFit'
+          cf_steps = workflows['crossfit-insights.yml']['jobs']['crossfit']['steps']
+          app = [x for x in cf_steps if 'python -m garmin_recovery run' in x.get('run', '')]
           assert len(app) == 1 and app[0].get('continue-on-error') == 'true', 'App V5 must be non-blocking'
+          names = [x.get('name', '') for x in cf_steps]
+          cert_i = next(i for i, n in enumerate(names) if n.startswith('Certify and record'))
+          commit_i = next(i for i, n in enumerate(names) if n.startswith('Commit CrossFit'))
+          assert cert_i < cf_steps.index(app[0]) < commit_i, 'App must run after certificate and before commit'
           for wf_name, job in (('sync.yml', 'sync'), ('garmin-heart-rate.yml', 'heart-rate'),
                                ('advanced-analytics-rpe.yml', 'advanced-analytics'), ('crossfit-insights.yml', 'crossfit')):
               assert workflows[wf_name]['jobs'][job].get('timeout-minutes'), f'{wf_name}: missing job timeout'

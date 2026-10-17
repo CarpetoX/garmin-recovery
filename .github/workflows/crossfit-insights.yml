@@ -128,6 +128,12 @@ jobs:
               atomic_write(path, json.dumps(status, ensure_ascii=False, indent=2) + '\n')
           PY_FALLBACK
 
+      # V5.3: la app corre al final, con el certificado del ciclo y los datos de fuerza ya generados.
+      - name: V5.3 - App de seguimiento e informe del ciclo (no bloqueante)
+        continue-on-error: true
+        timeout-minutes: 5
+        run: python -m garmin_recovery run
+
       - name: Pruebas de regresión V2.4
         run: python pipeline_regression_tests.py --stage crossfit
 
@@ -137,6 +143,10 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add crossfit_insights.json report_history.json
+          for f in app/readiness_v3.json app/dashboard.html app/informe.md history/daily.csv history/sessions.csv; do
+            [ ! -f "$f" ] || git add "$f"
+          done
+          [ ! -d app/charts ] || git add app/charts
           [ ! -f report_cycles.json ] || git add report_cycles.json
           [ ! -f report_ready.json ] || git add report_ready.json
           # V3.3: informe requerido tras validacion, no es opcional.
