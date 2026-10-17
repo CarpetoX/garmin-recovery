@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-18T00:51:20.574728+02:00",
+  "generated_at": "2026-10-18T01:01:16.850594+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
@@ -363,29 +363,32 @@
     }
   ],
   "readiness_hybrid": {
-    "score": 74,
-    "raw_score_before_guardrails": 100,
+    "score": 65,
+    "raw_score_before_guardrails": 65,
     "status": "yellow",
     "recommended_volume": "sin recomendación hasta completar datos",
     "recommendation": "pending",
-    "garmin_score": null,
-    "garmin_level": null,
+    "garmin_score": 50,
+    "garmin_level": "MODERATE",
     "local_score": 100,
     "local_confidence": "low",
-    "weights": null,
-    "source_mode": "local_only",
-    "recovery_time_hours": null,
+    "weights": {
+      "garmin": 0.7,
+      "local": 0.3
+    },
+    "source_mode": "hybrid",
+    "recovery_time_hours": 17.7,
     "guardrails_applied": [
       "recovery_reliability_gate"
     ],
     "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-    "score_before_recovery_guardrail": 100,
+    "score_before_recovery_guardrail": 65,
     "intensity_guidance": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
     "confidence": "low",
     "recovery_assessment_state": "pending"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-18T00:51:05.681200+02:00",
+    "generated_at": "2026-10-18T01:00:59.238271+02:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "pending",
     "status": "unavailable",
@@ -509,7 +512,7 @@
           "body_battery_live": {
             "state": "recent",
             "measured_at": "2026-10-18T00:42:00+02:00",
-            "age_minutes": 9.1,
+            "age_minutes": 19.0,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -3292,7 +3295,7 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-18T00:51:20.574728+02:00",
+    "checked_at": "2026-10-18T01:01:16.850594+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-15",
     "latest_activity_age_days": 3,
@@ -3313,23 +3316,26 @@
     "minimum_verified_strength_volume_kg": 578.0,
     "strength_blocks_with_missing_weights": 0,
     "readiness_latest": {
-      "score": 74,
-      "raw_score_before_guardrails": 100,
+      "score": 65,
+      "raw_score_before_guardrails": 65,
       "status": "yellow",
       "recommended_volume": "sin recomendación hasta completar datos",
       "recommendation": "pending",
-      "garmin_score": null,
-      "garmin_level": null,
+      "garmin_score": 50,
+      "garmin_level": "MODERATE",
       "local_score": 100,
       "local_confidence": "low",
-      "weights": null,
-      "source_mode": "local_only",
-      "recovery_time_hours": null,
+      "weights": {
+        "garmin": 0.7,
+        "local": 0.3
+      },
+      "source_mode": "hybrid",
+      "recovery_time_hours": 17.7,
       "guardrails_applied": [
         "recovery_reliability_gate"
       ],
       "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-      "score_before_recovery_guardrail": 100,
+      "score_before_recovery_guardrail": 65,
       "intensity_guidance": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
       "confidence": "low",
       "recovery_assessment_state": "pending"
@@ -3339,19 +3345,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-18T00:51:20.574728+02:00",
+    "checked_at": "2026-10-18T01:01:16.850594+02:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-18T00:50:24.245388+02:00",
+        "generated_at": "2026-10-18T01:00:19.349172+02:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-18T00:50:40.933874+02:00",
+        "generated_at": "2026-10-18T01:00:37.199086+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -3365,28 +3371,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-18T00:51:05.151380+02:00",
-        "age_hours": 0.0,
+        "generated_at": "2026-10-18T01:00:58.575259+02:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-18T00:51:05.151380+02:00",
-        "age_hours": 0.0,
+        "generated_at": "2026-10-18T01:00:58.575259+02:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-18T00:50:24.245388+02:00",
+        "generated_at": "2026-10-18T01:00:19.349172+02:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-18T00:50:40.933874+02:00",
+        "generated_at": "2026-10-18T01:00:37.199086+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"

@@ -1,6 +1,6 @@
 # Informe matutino · 18/10/2026
 
-`GR-2026-10-18-0051-2dac70` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-0101-d7d3b8` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 2 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -14,17 +14,17 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 6 | según sensaciones | — ms | — lpm | — h | —/100 |
+| 6 | según sensaciones | — ms | — lpm | — h | 50/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
 | Recuperación v2 (oficial) | — | pendiente | oficial |
-| Híbrido Garmin + local | 74 | ámbar | salvaguarda |
+| Híbrido Garmin + local | 65 | ámbar | salvaguarda |
 | Disponibilidad v3 (en pruebas) | — | pendiente | sombra |
 | Modelo de compatibilidad | 74 | ámbar | compatibilidad |
-| Garmin Training Readiness | — | — | contexto |
+| Garmin Training Readiness | 50 | — | contexto |
 
 _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
 
@@ -55,8 +55,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-0038-aff960 (18/10 00:38):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-18-0051-2dac70 (18/10 00:51):
+- Híbrido: 74 → 65 (-9).
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -124,16 +124,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-0051-2dac70`
+- **Identificador del informe:** `GR-2026-10-18-0101-d7d3b8`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-17-2245 · datos sincronizados a las 00:50 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 17,2 h ✓ · última HRV hace 17,3 h ✓ · última FC hace 2,6 h ✓ · último Body Battery hace 9 min ✓
+- **Ciclo:** 2026-10-17-2245 · datos sincronizados a las 01:00 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 17,4 h ✓ · última HRV hace 17,5 h ✓ · última FC hace 2,8 h ✓ · último Body Battery hace 19 min ✓
 - **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 17/17
 - **Ejecución:** 2 franja(s) de Sync perdidas (17/10 08:30, 17/10 16:45)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 00:51 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 01:01 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
