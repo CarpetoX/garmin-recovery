@@ -134,14 +134,21 @@ jobs:
               assert source in v40_commands, f'V4.0.1 missing command: {source}'
           assert any(x.get('uses', '').startswith('actions/upload-artifact@') for x in v40.get('steps', []))
           assert 'workflow_run' not in workflows['monitor-monthly.yml']['on']
+          # V5.0: la app corre en modo sombra y nunca bloquea la cadena.
+          adv_steps = workflows['advanced-analytics-rpe.yml']['jobs']['advanced-analytics']['steps']
+          app = [x for x in adv_steps if 'python -m garmin_recovery run' in x.get('run', '')]
+          assert len(app) == 1 and app[0].get('continue-on-error') == 'true', 'App V5 must be non-blocking'
+          for wf_name, job in (('sync.yml', 'sync'), ('garmin-heart-rate.yml', 'heart-rate'),
+                               ('advanced-analytics-rpe.yml', 'advanced-analytics'), ('crossfit-insights.yml', 'crossfit')):
+              assert workflows[wf_name]['jobs'][job].get('timeout-minutes'), f'{wf_name}: missing job timeout'
           print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
           PY
 
       - name: Validate Sync publication shell syntax
         run: bash -n sync_publish.sh
 
-      - name: Tests for morning reports, post-night-shift sleep, strength and RPE cycle snapshots
-        run: python -m unittest -v test_morning_sleep_gate test_sleep_integration test_quality_v248 test_training_extensions test_rpe_cycle_snapshot test_archive_report_cycles test_sync_publish test_ledger_safety_v28 test_ops_metrics_v28 test_pipeline_lineage_v29 test_json_contracts_v30 test_training_trends_v31 test_performance_enhancements_v35 test_garmin_dispatch_auth_v291 test_origin_monitor_v292 test_monitor_origin_integration_v292 test_reliability_history_v294 test_cycle_shards_v296 test_ledger_compact_preview_v296 test_ledger_reader_v296 test_ledger_access_v296 test_shadow_mirror_v296 test_report_monitor_v34 test_shadow_autodispatch_v296 test_monitor_clarity_v297 test_crossfit_report_v36 test_crossfit_report_guard_v361 test_report_cycle_guard_v37 test_report_cycle_integration_v371 test_cycle_observer_v373 test_cycle_snapshot_report_v38 test_cycle_visual_report_v381 test_cycle_visual_report_v382
+      - name: Full unit test suite (auto-discovered, includes app V5 tests)
+        run: python -m unittest discover -v -s . -p 'test_*.py'
 
       - name: Validate real historical V3.8.2 report against pinned cycle snapshot
         run: python -m unittest -v test_cycle_real_integration_v382

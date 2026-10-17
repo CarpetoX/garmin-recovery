@@ -18,6 +18,7 @@ jobs:
   advanced-analytics:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Descargar repositorio
@@ -65,6 +66,12 @@ jobs:
         run: |
           python validate_pipeline.py
 
+      - name: V5.0 - App de seguimiento (readiness v3, historial y panel) en modo sombra
+        continue-on-error: true
+        timeout-minutes: 5
+        run: |
+          python -m garmin_recovery run
+
       - name: Pruebas de regresión V2.4
         run: |
           python pipeline_regression_tests.py --stage advanced
@@ -86,6 +93,9 @@ jobs:
           git add daily_summary.json weekly_summary.json recovery_assessment.json morning_sleep_status.json
           [ -f training_feedback.json ] && git add training_feedback.json || true
           [ -f day_context.json ] && git add day_context.json || true
+          for f in app/readiness_v3.json app/dashboard.html history/daily.csv history/sessions.csv; do
+            [ -f "$f" ] && git add "$f" || true
+          done
 
           if git diff --cached --quiet; then
             echo "Sin cambios de analítica que publicar."

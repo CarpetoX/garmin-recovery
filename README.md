@@ -12,6 +12,43 @@ Registro Garmin/Intervals + RPE de Google Sheets y resúmenes reproducibles. Zon
 | 4 | `crossfit-insights.yml` | Fuerza, WOD, informes y certificados de datos preparados |
 | Independiente | `monitor-monthly.yml` | Control de salud y vigilancia de sincronizaciones |
 | Independiente | `garmin-ci.yml` | Pruebas, sin sincronizar datos personales |
+| Auxiliar | `garmin-shadow-publish-v296.yml` | Espejo de publicación (V2.9.6), disparo manual o `repository_dispatch` |
+| Auxiliar | `garmin-certified-reports.yml` | Informes certificados bajo demanda (V3.9) |
+
+> Nota: en `.github/workflows` hay hoy **ocho** archivos: los seis permanentes y dos auxiliares sin `schedule` ni `workflow_run`.
+
+## App de seguimiento V5 (nuevo, en modo sombra)
+
+Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso no bloqueante, `continue-on-error`) y genera:
+
+| Salida | Contenido |
+|---|---|
+| `history/daily.csv` | Registro diario canónico persistente (HRV, FC, sueño, estrés, carga, sensaciones, turno, fuente por métrica). Upsert por fecha; nunca borra datos. |
+| `history/sessions.csv` | Sesiones por ID de actividad con duración, carga, FC, RPE y sRPE (Foster). |
+| `app/readiness_v3.json` | Disponibilidad de hoy, componentes, factores, carga (ATL/CTL/TSB, monotonía, strain, ACWR) y tendencia de 28 días. |
+| `app/dashboard.html` | Panel autocontenido (claro/oscuro, móvil) para abrir en el navegador. |
+
+**Modelo readiness v3** (`garmin_recovery/readiness.py`):
+
+- HRV en ln(rMSSD): media de 7 días frente a tu línea base (hasta 60 días previos a esa semana) con banda de cambio mínimo relevante ±0,5 DE. Una noche mala pesa menos que una semana mala.
+- FC en reposo y nocturna en desviaciones robustas (mediana/MAD); sueño frente a la necesidad configurada y deuda de 3 noches; carga solo cuando la CTL permite interpretar la forma; sensaciones de Intervals.icu (1 = mejor, 4 = peor).
+- Puntuaciones continuas (`75 + 12,5·z`), ponderadas y renormalizadas. Zonas: verde ≥ 70, ámbar 50–69, rojo < 50, con RPE máximo y volumen recomendados.
+- Salvaguardas: sin HRV/sueño/FC de hoy o sueño sin confirmar → `pending` (no autoriza intensidad alta); línea base < 7 noches → sin puntuación; < 14 → `provisional`, nunca verde; sueño < 5 h nunca verde.
+- Avisos según turno (TN y post-TN) desde `shift_calendar.json`.
+
+Uso local:
+
+```bash
+python -m garmin_recovery run              # escribe history/ y app/
+python -m garmin_recovery run --dry-run    # solo calcula e imprime el resumen
+python -m unittest discover -p 'test_*.py' # toda la batería, incluida test_app_readiness_v5
+```
+
+Umbrales en `garmin_recovery/config.py`; para personalizarlos crear `app_config.json` en la raíz con solo las claves a cambiar (p. ej. `{"sleep_need_hours": 8}`).
+
+El modelo v3 **no sustituye** `recovery_assessment.json` ni los informes: corre en paralelo para compararlo con el v2 antes de promoverlo.
+
+**Privacidad:** este repositorio es público y contiene datos fisiológicos, calendario de turnos e identificadores de Intervals y de la hoja de Google. Se recomienda hacerlo privado (GitHub Actions sigue funcionando igual).
 
 **Sync:** 08:30, 16:45, 22:45. **Objetivos de informe:** 09:05, 17:10, 23:10. **Watchdog:** 11:05, 19:20, 01:20. Los cron no prueban por sí solos que GitHub haya iniciado una ejecución. Los horarios deben evaluarse en Europe/Madrid y con marcas de tiempo reales.
 
