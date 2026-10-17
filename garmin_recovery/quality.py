@@ -101,7 +101,7 @@ def certificate(root: Path, inputs: dict, readiness: dict, now: datetime, tz, cf
     # Datos más nuevos que el último ciclo certificado → vienen de un Sync no programado
     newer_than_cycle = bool(verified and heart_gen and heart_gen > verified + timedelta(minutes=5))
     hashes = {}
-    for key, (name, _) in SOURCE_FILES.items():
+    for name, _ in SOURCE_FILES.values():
         digest = _sha256(Path(root) / name)
         if digest:
             hashes[name] = digest[:16]
