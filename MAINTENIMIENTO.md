@@ -33,9 +33,9 @@ Los cron usan `timezone: Europe/Madrid`. GitHub los retrasa 2–5 h: Apps Script
 
 ## Código obsoleto
 
-`sync.yml` se modulariza un paso por cambio: el resumen diario/semanal ya vive en `sync_daily_analysis.py` (salida idéntica comprobada; test `test_sync_daily_analysis.py`). Siguientes candidatos: la descarga de wellness y la de actividades.
+`sync.yml` ya no tiene código Python en línea: `sync_fetch_wellness.py`, `sync_fetch_activities.py` y `sync_daily_analysis.py` (salida idéntica comprobada byte a byte; tests `test_sync_daily_analysis.py` y `test_structure_v59.py`).
 
-Algunos scripts antiguos se ejecutan al importarlos y escriben JSON (p. ej. `garmin_metrics.py`): no importarlos fuera de la cadena.
+`garmin_metrics.py`, `garmin_activity_metrics.py` y `validate_pipeline.py` ya no se ejecutan al importarlos (`main()` + `if __name__ == "__main__"`); misma salida al ejecutarlos.
 
 Un número de versión en el nombre (`recovery_v231.py`, `monitor_v231.py`…) no significa que sobre: muchos siguen importados. Antes de borrar un módulo, comprobar que ningún workflow lo ejecuta y que ningún módulo en uso lo importa (análisis de imports desde los scripts que ejecutan los workflows), y quitar sus tests y referencias en los YAML en el mismo PR.
 
@@ -59,3 +59,18 @@ python -m garmin_recovery validate              # contrato y coherencia de app/ 
 - El v3 sigue en sombra (`model_validated: false`) hasta contrastarlo 4–6 semanas con RPE y rendimiento reales.
 
 La puntuación de calidad fisiológica de Garmin no es el porcentaje de CI de GitHub. Un historial de HRV/sueño inmaduro requiere más mediciones, no estimaciones.
+
+## Plan de migración al paquete `garmin_recovery`
+
+Hoy conviven la cadena antigua (≈ 40 scripts ejecutados por los workflows, más sus dependencias) y el paquete V5, que genera el informe vigente. Se migra **una pieza por PR**, siempre con una prueba de salida idéntica sobre datos reales y sin cambiar los JSON que leen ChatGPT o Apps Script (`report_ready.json`, `recovery_assessment.json`, `shift_calendar.json`, `morning_sleep_status.json`, `app/*`).
+
+| Paso | Qué | Estado |
+|---|---|---|
+| 0 | `sync.yml` sin código en línea; scripts sin efectos al importarlos | Hecho (V5.9) |
+| 1 | Retirar del monitor los informes previos que solo generaban artefactos (V3.9.2.2 enriquecido, V4.0.2 visual) | Hecho (V5.9): los módulos se conservan y se prueban hasta el paso 5 |
+| 2 | Calcular el v2 (`recovery_assessment.json`) dentro del paquete, con pruebas *golden* sobre ≥ 14 días reales; el archivo se sigue publicando igual | Pendiente |
+| 3 | Pasar al paquete la extracción de fuerza y WOD de `crossfit_insights.py` (mismas reglas de unidades e implementos) | Pendiente |
+| 4 | Unificar certificados y monitor (`report_cycles.json`, `report_ready.json`) en un módulo del paquete, conservando el historial con SHA-256 | Pendiente |
+| 5 | Borrar los módulos que ya no ejecute ningún workflow ni importe ningún módulo en uso, con sus tests | Pendiente |
+
+Regla: si una salida pública cambia, aunque sea un campo, el PR lo declara y se valida antes con un Sync real.

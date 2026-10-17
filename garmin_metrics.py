@@ -512,359 +512,365 @@ def call_optional(label, func, errors):
         return None
 
 
-status = {
-    "generated_at": NOW.isoformat(),
-    "timezone": "Europe/Madrid",
-    "status": "error",
-    "error": None,
-    "latest_stress_date": None,
-    "latest_body_battery_date": None,
-    "latest_extended_date": None,
-    "latest_heart_rate_date": None,
-}
-
-try:
-    token_b64 = os.environ.get("GARMIN_TOKENS_B64", "").strip()
-    if not token_b64:
-        raise RuntimeError("GARMIN_TOKENS_B64 no está disponible")
-
-    token_dir = Path.home() / ".garminconnect"
-    token_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
-    token_file = token_dir / "garmin_tokens.json"
-    token_file.write_bytes(base64.b64decode(token_b64))
-    token_file.chmod(0o600)
-
-    from garminconnect import Garmin
-
-    api = Garmin()
-    api.login(str(token_dir))
-
-    stress_store = load_json(STRESS_PATH, {"timezone": "Europe/Madrid", "days": {}})
-    if not isinstance(stress_store, dict):
-        stress_store = {"timezone": "Europe/Madrid", "days": {}}
-    stress_store.setdefault("days", {})
-
-    bb_store = load_json(BB_PATH, {"timezone": "Europe/Madrid", "days": {}})
-    if not isinstance(bb_store, dict):
-        bb_store = {"timezone": "Europe/Madrid", "days": {}}
-    bb_store.setdefault("days", {})
-
-    extended_store = load_json(EXTENDED_PATH, {"timezone": "Europe/Madrid", "days": {}})
-    if not isinstance(extended_store, dict):
-        extended_store = {"timezone": "Europe/Madrid", "days": {}}
-    extended_store.setdefault("days", {})
-
-    heart_store = load_json(HEART_RATE_PATH, {"timezone": "Europe/Madrid", "days": {}})
-    if not isinstance(heart_store, dict):
-        heart_store = {"timezone": "Europe/Madrid", "days": {}}
-    heart_store.setdefault("days", {})
-
-    if stress_store["days"]:
-        stress_dates = [TODAY - timedelta(days=1), TODAY]
-    else:
-        stress_dates = [TODAY - timedelta(days=i) for i in range(6, -1, -1)]
-
-    stress_errors = {}
-    for day in stress_dates:
-        date_str = day.isoformat()
-        try:
-            payload = api.get_stress_data(date_str)
-            if isinstance(payload, dict) and payload:
-                stress_store["days"][date_str] = payload
-        except Exception as exc:
-            stress_errors[date_str] = f"{type(exc).__name__}: {exc}"
-
-    bb_start = TODAY - timedelta(days=6 if not bb_store["days"] else 1)
-    body_battery_error = None
-    try:
-        payload = api.get_body_battery(bb_start.isoformat(), TODAY.isoformat())
-        if isinstance(payload, list):
-            for item in payload:
-                if isinstance(item, dict):
-                    date_str = item.get("date")
-                    if date_str:
-                        bb_store["days"][date_str] = item
-    except Exception as exc:
-        body_battery_error = f"{type(exc).__name__}: {exc}"
-
-    today_str = TODAY.isoformat()
-    extended_errors = {}
-
-    readiness_raw = call_optional(
-        "training_readiness",
-        lambda: api.get_morning_training_readiness(today_str),
-        extended_errors,
-    )
-    hrv_raw = call_optional(
-        "hrv_status",
-        lambda: api.get_hrv_data(today_str),
-        extended_errors,
-    )
-    sleep_raw = call_optional(
-        "sleep_detail",
-        lambda: api.get_sleep_data(today_str),
-        extended_errors,
-    )
-
-    target_hr_dates = [TODAY - timedelta(days=i) for i in range(28)]
-    missing_hr_dates = []
-    for day in target_hr_dates:
-        existing_hr = heart_store["days"].get(day.isoformat())
-        if (
-            not isinstance(existing_hr, dict)
-            or existing_hr.get("daytime_avg_hr") is None
-            or existing_hr.get("nighttime_avg_hr") is None
-        ):
-            missing_hr_dates.append(day)
-
-    requested_hr_dates = missing_hr_dates[:7] + [TODAY - timedelta(days=1), TODAY]
-    heart_dates = []
-    seen_dates = set()
-    for day in requested_hr_dates:
-        key = day.isoformat()
-        if key not in seen_dates:
-            seen_dates.add(key)
-            heart_dates.append(day)
-
-    heart_rate_errors = {}
-    hr_cache = {}
-    sleep_cache = {TODAY.isoformat(): sleep_raw}
-
-    def get_hr_cached(day):
-        key = day.isoformat()
-        if key not in hr_cache:
-            hr_cache[key] = api.get_heart_rates(key)
-        return hr_cache[key]
-
-    def get_sleep_cached(day):
-        key = day.isoformat()
-        if key not in sleep_cache:
-            sleep_cache[key] = api.get_sleep_data(key)
-        return sleep_cache[key]
-
-    for day in heart_dates:
-        date_str = day.isoformat()
-        try:
-            hr_today_raw = get_hr_cached(day)
-            hr_previous_raw = get_hr_cached(day - timedelta(days=1))
-            sleep_today_hr = get_sleep_cached(day)
-
-            sleep_next_hr = None
-            if day < TODAY:
-                try:
-                    sleep_next_hr = get_sleep_cached(day + timedelta(days=1))
-                except Exception:
-                    sleep_next_hr = None
-
-            summary = heart_rate_summary(
-                hr_today_raw=hr_today_raw,
-                hr_previous_raw=hr_previous_raw,
-                sleep_today_raw=sleep_today_hr,
-                sleep_next_raw=sleep_next_hr,
-                partial_day=(day == TODAY),
-            )
-            if summary is not None:
-                summary["date"] = date_str
-                summary["generated_at"] = NOW.isoformat()
-                heart_store["days"][date_str] = summary
-        except Exception as exc:
-            heart_rate_errors[date_str] = f"{type(exc).__name__}: {exc}"
-
-    today_hr = heart_store["days"].get(today_str)
-    hr_rolling = heart_rate_rolling(heart_store["days"], TODAY)
-
-    daily_training_status_raw = call_optional(
-        "daily_training_status",
-        lambda: api.get_daily_training_status(today_str),
-        extended_errors,
-    )
-    training_status_raw = call_optional(
-        "training_status",
-        lambda: api.get_training_status(today_str),
-        extended_errors,
-    )
-    load_balance_raw = call_optional(
-        "four_week_load_balance",
-        lambda: api.get_training_four_week_load_balance(today_str),
-        extended_errors,
-    )
-    bb_events_raw = call_optional(
-        "body_battery_events",
-        lambda: api.get_body_battery_events(today_str),
-        extended_errors,
-    )
-
-    readiness_summary = summarize_readiness(readiness_raw)
-    hrv_summary = summarize_hrv(hrv_raw)
-    sleep_summary = summarize_sleep(sleep_raw)
-    daily_training_status_summary = summarize_training_payload(daily_training_status_raw)
-    training_status_summary = summarize_training_payload(training_status_raw)
-    load_balance_summary = summarize_training_payload(load_balance_raw)
-    bb_events_summary = summarize_bb_events(bb_events_raw)
-
-    recovery_time = None
-    if readiness_summary:
-        recovery_time = {
-            "minutes": readiness_summary.get("recovery_time_minutes"),
-            "hours": readiness_summary.get("recovery_time_hours"),
-            "factor_percent": readiness_summary.get("recovery_time_factor_percent"),
-            "feedback": readiness_summary.get("recovery_time_feedback"),
-            "change_phrase": readiness_summary.get("recovery_time_change_phrase"),
-        }
-
-    extended_today = {
+def main():
+    """Descarga métricas de Garmin y escribe los JSON (solo al ejecutarse como script, no al importarlo)."""
+    status = {
         "generated_at": NOW.isoformat(),
-        "training_readiness": readiness_summary,
-        "recovery_time": recovery_time,
-        "hrv_status": hrv_summary,
-        "sleep_detail": sleep_summary,
-        "training_status": training_status_summary,
-        "daily_training_status": daily_training_status_summary,
-        "four_week_load_balance": load_balance_summary,
-        "body_battery_events": bb_events_summary,
-        "availability": {
-            "training_readiness": readiness_summary is not None,
-            "recovery_time": recovery_time is not None and recovery_time.get("minutes") is not None,
-            "hrv_status": hrv_summary is not None,
-            "sleep_detail": sleep_summary is not None,
-            "training_status": training_status_summary is not None or daily_training_status_summary is not None,
-            "four_week_load_balance": load_balance_summary is not None,
-            "body_battery_events": bb_events_summary is not None,
-        },
-        "fetch_errors": extended_errors,
+        "timezone": "Europe/Madrid",
+        "status": "error",
+        "error": None,
+        "latest_stress_date": None,
+        "latest_body_battery_date": None,
+        "latest_extended_date": None,
+        "latest_heart_rate_date": None,
     }
 
-    extended_store["days"][today_str] = extended_today
+    try:
+        token_b64 = os.environ.get("GARMIN_TOKENS_B64", "").strip()
+        if not token_b64:
+            raise RuntimeError("GARMIN_TOKENS_B64 no está disponible")
 
-    stress_store["generated_at"] = NOW.isoformat()
-    bb_store["generated_at"] = NOW.isoformat()
-    extended_store["generated_at"] = NOW.isoformat()
-    heart_store["generated_at"] = NOW.isoformat()
-    heart_store["rolling"] = hr_rolling
+        token_dir = Path.home() / ".garminconnect"
+        token_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+        token_file = token_dir / "garmin_tokens.json"
+        token_file.write_bytes(base64.b64decode(token_b64))
+        token_file.chmod(0o600)
 
-    save_json(STRESS_PATH, stress_store)
-    save_json(BB_PATH, bb_store)
-    save_json(EXTENDED_PATH, extended_store)
-    save_json(HEART_RATE_PATH, heart_store)
+        from garminconnect import Garmin
 
-    today_stress = stress_summary(stress_store["days"].get(today_str))
-    today_bb = body_battery_summary(bb_store["days"].get(today_str))
+        api = Garmin()
+        api.login(str(token_dir))
 
-    daily = load_json("daily_summary.json", {})
-    if isinstance(daily, dict):
-        existing = daily.get("garmin_metrics")
-        if not isinstance(existing, dict):
-            existing = {}
+        stress_store = load_json(STRESS_PATH, {"timezone": "Europe/Madrid", "days": {}})
+        if not isinstance(stress_store, dict):
+            stress_store = {"timezone": "Europe/Madrid", "days": {}}
+        stress_store.setdefault("days", {})
 
-        existing.update({
-            "source": "Garmin Connect",
+        bb_store = load_json(BB_PATH, {"timezone": "Europe/Madrid", "days": {}})
+        if not isinstance(bb_store, dict):
+            bb_store = {"timezone": "Europe/Madrid", "days": {}}
+        bb_store.setdefault("days", {})
+
+        extended_store = load_json(EXTENDED_PATH, {"timezone": "Europe/Madrid", "days": {}})
+        if not isinstance(extended_store, dict):
+            extended_store = {"timezone": "Europe/Madrid", "days": {}}
+        extended_store.setdefault("days", {})
+
+        heart_store = load_json(HEART_RATE_PATH, {"timezone": "Europe/Madrid", "days": {}})
+        if not isinstance(heart_store, dict):
+            heart_store = {"timezone": "Europe/Madrid", "days": {}}
+        heart_store.setdefault("days", {})
+
+        if stress_store["days"]:
+            stress_dates = [TODAY - timedelta(days=1), TODAY]
+        else:
+            stress_dates = [TODAY - timedelta(days=i) for i in range(6, -1, -1)]
+
+        stress_errors = {}
+        for day in stress_dates:
+            date_str = day.isoformat()
+            try:
+                payload = api.get_stress_data(date_str)
+                if isinstance(payload, dict) and payload:
+                    stress_store["days"][date_str] = payload
+            except Exception as exc:
+                stress_errors[date_str] = f"{type(exc).__name__}: {exc}"
+
+        bb_start = TODAY - timedelta(days=6 if not bb_store["days"] else 1)
+        body_battery_error = None
+        try:
+            payload = api.get_body_battery(bb_start.isoformat(), TODAY.isoformat())
+            if isinstance(payload, list):
+                for item in payload:
+                    if isinstance(item, dict):
+                        date_str = item.get("date")
+                        if date_str:
+                            bb_store["days"][date_str] = item
+        except Exception as exc:
+            body_battery_error = f"{type(exc).__name__}: {exc}"
+
+        today_str = TODAY.isoformat()
+        extended_errors = {}
+
+        readiness_raw = call_optional(
+            "training_readiness",
+            lambda: api.get_morning_training_readiness(today_str),
+            extended_errors,
+        )
+        hrv_raw = call_optional(
+            "hrv_status",
+            lambda: api.get_hrv_data(today_str),
+            extended_errors,
+        )
+        sleep_raw = call_optional(
+            "sleep_detail",
+            lambda: api.get_sleep_data(today_str),
+            extended_errors,
+        )
+
+        target_hr_dates = [TODAY - timedelta(days=i) for i in range(28)]
+        missing_hr_dates = []
+        for day in target_hr_dates:
+            existing_hr = heart_store["days"].get(day.isoformat())
+            if (
+                not isinstance(existing_hr, dict)
+                or existing_hr.get("daytime_avg_hr") is None
+                or existing_hr.get("nighttime_avg_hr") is None
+            ):
+                missing_hr_dates.append(day)
+
+        requested_hr_dates = missing_hr_dates[:7] + [TODAY - timedelta(days=1), TODAY]
+        heart_dates = []
+        seen_dates = set()
+        for day in requested_hr_dates:
+            key = day.isoformat()
+            if key not in seen_dates:
+                seen_dates.add(key)
+                heart_dates.append(day)
+
+        heart_rate_errors = {}
+        hr_cache = {}
+        sleep_cache = {TODAY.isoformat(): sleep_raw}
+
+        def get_hr_cached(day):
+            key = day.isoformat()
+            if key not in hr_cache:
+                hr_cache[key] = api.get_heart_rates(key)
+            return hr_cache[key]
+
+        def get_sleep_cached(day):
+            key = day.isoformat()
+            if key not in sleep_cache:
+                sleep_cache[key] = api.get_sleep_data(key)
+            return sleep_cache[key]
+
+        for day in heart_dates:
+            date_str = day.isoformat()
+            try:
+                hr_today_raw = get_hr_cached(day)
+                hr_previous_raw = get_hr_cached(day - timedelta(days=1))
+                sleep_today_hr = get_sleep_cached(day)
+
+                sleep_next_hr = None
+                if day < TODAY:
+                    try:
+                        sleep_next_hr = get_sleep_cached(day + timedelta(days=1))
+                    except Exception:
+                        sleep_next_hr = None
+
+                summary = heart_rate_summary(
+                    hr_today_raw=hr_today_raw,
+                    hr_previous_raw=hr_previous_raw,
+                    sleep_today_raw=sleep_today_hr,
+                    sleep_next_raw=sleep_next_hr,
+                    partial_day=(day == TODAY),
+                )
+                if summary is not None:
+                    summary["date"] = date_str
+                    summary["generated_at"] = NOW.isoformat()
+                    heart_store["days"][date_str] = summary
+            except Exception as exc:
+                heart_rate_errors[date_str] = f"{type(exc).__name__}: {exc}"
+
+        today_hr = heart_store["days"].get(today_str)
+        hr_rolling = heart_rate_rolling(heart_store["days"], TODAY)
+
+        daily_training_status_raw = call_optional(
+            "daily_training_status",
+            lambda: api.get_daily_training_status(today_str),
+            extended_errors,
+        )
+        training_status_raw = call_optional(
+            "training_status",
+            lambda: api.get_training_status(today_str),
+            extended_errors,
+        )
+        load_balance_raw = call_optional(
+            "four_week_load_balance",
+            lambda: api.get_training_four_week_load_balance(today_str),
+            extended_errors,
+        )
+        bb_events_raw = call_optional(
+            "body_battery_events",
+            lambda: api.get_body_battery_events(today_str),
+            extended_errors,
+        )
+
+        readiness_summary = summarize_readiness(readiness_raw)
+        hrv_summary = summarize_hrv(hrv_raw)
+        sleep_summary = summarize_sleep(sleep_raw)
+        daily_training_status_summary = summarize_training_payload(daily_training_status_raw)
+        training_status_summary = summarize_training_payload(training_status_raw)
+        load_balance_summary = summarize_training_payload(load_balance_raw)
+        bb_events_summary = summarize_bb_events(bb_events_raw)
+
+        recovery_time = None
+        if readiness_summary:
+            recovery_time = {
+                "minutes": readiness_summary.get("recovery_time_minutes"),
+                "hours": readiness_summary.get("recovery_time_hours"),
+                "factor_percent": readiness_summary.get("recovery_time_factor_percent"),
+                "feedback": readiness_summary.get("recovery_time_feedback"),
+                "change_phrase": readiness_summary.get("recovery_time_change_phrase"),
+            }
+
+        extended_today = {
             "generated_at": NOW.isoformat(),
-            "stress": today_stress,
-            "body_battery": today_bb,
             "training_readiness": readiness_summary,
             "recovery_time": recovery_time,
             "hrv_status": hrv_summary,
             "sleep_detail": sleep_summary,
-            "heart_rate": today_hr,
-            "heart_rate_rolling": hr_rolling,
             "training_status": training_status_summary,
             "daily_training_status": daily_training_status_summary,
             "four_week_load_balance": load_balance_summary,
             "body_battery_events": bb_events_summary,
-            "extended_availability": extended_today["availability"],
-            "extended_fetch_errors": extended_errors,
-            "heart_rate_fetch_errors": heart_rate_errors,
-            "note": (
-                "Métricas propietarias de Garmin: interpretar como señales contextuales "
-                "junto con sueño, HRV, FC, carga, RPE y sensaciones; no como diagnóstico."
-            ),
-        })
-        daily["garmin_metrics"] = existing
-
-        if isinstance(daily.get("recovery_today"), dict) and isinstance(today_hr, dict):
-            daily["recovery_today"]["avg_daytime_hr"] = today_hr.get("daytime_avg_hr")
-            daily["recovery_today"]["avg_sleeping_hr"] = today_hr.get("nighttime_avg_hr")
-            daily["recovery_today"]["daytime_min_hr"] = today_hr.get("daytime_min_hr")
-            daily["recovery_today"]["daytime_max_hr"] = today_hr.get("daytime_max_hr")
-            daily["recovery_today"]["nighttime_min_hr"] = today_hr.get("nighttime_min_hr")
-            daily["recovery_today"]["nighttime_max_hr"] = today_hr.get("nighttime_max_hr")
-            daily["recovery_today"]["day_minus_night_bpm"] = today_hr.get("day_minus_night_bpm")
-            daily["recovery_today"]["heart_rate_partial_day"] = today_hr.get("partial_day")
-            daily["recovery_today"]["heart_rate_3d"] = hr_rolling.get("3d")
-            daily["recovery_today"]["heart_rate_7d"] = hr_rolling.get("7d")
-            daily["recovery_today"]["heart_rate_28d"] = hr_rolling.get("28d")
-
-        save_json("daily_summary.json", daily)
-
-    weekly = load_json("weekly_summary.json", {})
-    if isinstance(weekly, dict):
-        week_start = TODAY - timedelta(days=6)
-        per_day = {}
-
-        for i in range(7):
-            date_str = (week_start + timedelta(days=i)).isoformat()
-            ext = extended_store["days"].get(date_str)
-            per_day[date_str] = {
-                "stress": stress_summary(stress_store["days"].get(date_str)),
-                "body_battery": body_battery_summary(bb_store["days"].get(date_str)),
-                "heart_rate": heart_store["days"].get(date_str),
-                "extended": ext,
-            }
-
-        weekly["garmin"] = {
-            "source": "Garmin Connect",
-            "generated_at": NOW.isoformat(),
-            "days": per_day,
-            "stress_days_present": sum(
-                1 for value in per_day.values() if value["stress"] is not None
-            ),
-            "body_battery_days_present": sum(
-                1 for value in per_day.values() if value["body_battery"] is not None
-            ),
-            "extended_days_present": sum(
-                1 for value in per_day.values() if value["extended"] is not None
-            ),
-            "heart_rate_days_present": sum(
-                1 for value in per_day.values() if value["heart_rate"] is not None
-            ),
-            "heart_rate_rolling": hr_rolling,
+            "availability": {
+                "training_readiness": readiness_summary is not None,
+                "recovery_time": recovery_time is not None and recovery_time.get("minutes") is not None,
+                "hrv_status": hrv_summary is not None,
+                "sleep_detail": sleep_summary is not None,
+                "training_status": training_status_summary is not None or daily_training_status_summary is not None,
+                "four_week_load_balance": load_balance_summary is not None,
+                "body_battery_events": bb_events_summary is not None,
+            },
+            "fetch_errors": extended_errors,
         }
 
-        weekly_recovery = weekly.get("recovery")
-        if isinstance(weekly_recovery, dict):
-            rolling_7d = hr_rolling.get("7d") or {}
-            weekly_recovery["avg_daytime_hr"] = rolling_7d.get("daytime_avg_hr")
-            weekly_recovery["avg_sleeping_hr"] = rolling_7d.get("nighttime_avg_hr")
+        extended_store["days"][today_str] = extended_today
 
-        save_json("weekly_summary.json", weekly)
+        stress_store["generated_at"] = NOW.isoformat()
+        bb_store["generated_at"] = NOW.isoformat()
+        extended_store["generated_at"] = NOW.isoformat()
+        heart_store["generated_at"] = NOW.isoformat()
+        heart_store["rolling"] = hr_rolling
 
-    core_ok = today_stress is not None or today_bb is not None
-    extended_ok_count = sum(1 for value in extended_today["availability"].values() if value)
+        save_json(STRESS_PATH, stress_store)
+        save_json(BB_PATH, bb_store)
+        save_json(EXTENDED_PATH, extended_store)
+        save_json(HEART_RATE_PATH, heart_store)
 
-    status["status"] = "success" if core_ok else "partial"
-    status["latest_stress_date"] = max(stress_store["days"].keys(), default=None)
-    status["latest_body_battery_date"] = max(bb_store["days"].keys(), default=None)
-    status["latest_extended_date"] = max(extended_store["days"].keys(), default=None)
-    status["latest_heart_rate_date"] = max(heart_store["days"].keys(), default=None)
-    status["stress_fetch_errors"] = stress_errors
-    status["body_battery_fetch_error"] = body_battery_error
-    status["extended_metrics_available"] = extended_ok_count
-    status["extended_availability"] = extended_today["availability"]
-    status["extended_fetch_errors"] = extended_errors
-    status["heart_rate_fetch_errors"] = heart_rate_errors
-    status["heart_rate_rolling"] = hr_rolling
+        today_stress = stress_summary(stress_store["days"].get(today_str))
+        today_bb = body_battery_summary(bb_store["days"].get(today_str))
 
-    if status["status"] == "partial":
-        status["error"] = (
-            "No se obtuvieron Stress ni Body Battery para hoy; "
-            "se preservaron los datos previos."
-        )
+        daily = load_json("daily_summary.json", {})
+        if isinstance(daily, dict):
+            existing = daily.get("garmin_metrics")
+            if not isinstance(existing, dict):
+                existing = {}
 
-except Exception as exc:
-    status["error"] = f"{type(exc).__name__}: {exc}"
+            existing.update({
+                "source": "Garmin Connect",
+                "generated_at": NOW.isoformat(),
+                "stress": today_stress,
+                "body_battery": today_bb,
+                "training_readiness": readiness_summary,
+                "recovery_time": recovery_time,
+                "hrv_status": hrv_summary,
+                "sleep_detail": sleep_summary,
+                "heart_rate": today_hr,
+                "heart_rate_rolling": hr_rolling,
+                "training_status": training_status_summary,
+                "daily_training_status": daily_training_status_summary,
+                "four_week_load_balance": load_balance_summary,
+                "body_battery_events": bb_events_summary,
+                "extended_availability": extended_today["availability"],
+                "extended_fetch_errors": extended_errors,
+                "heart_rate_fetch_errors": heart_rate_errors,
+                "note": (
+                    "Métricas propietarias de Garmin: interpretar como señales contextuales "
+                    "junto con sueño, HRV, FC, carga, RPE y sensaciones; no como diagnóstico."
+                ),
+            })
+            daily["garmin_metrics"] = existing
 
-save_json(STATUS_PATH, status)
-print(json.dumps(status, ensure_ascii=False))
+            if isinstance(daily.get("recovery_today"), dict) and isinstance(today_hr, dict):
+                daily["recovery_today"]["avg_daytime_hr"] = today_hr.get("daytime_avg_hr")
+                daily["recovery_today"]["avg_sleeping_hr"] = today_hr.get("nighttime_avg_hr")
+                daily["recovery_today"]["daytime_min_hr"] = today_hr.get("daytime_min_hr")
+                daily["recovery_today"]["daytime_max_hr"] = today_hr.get("daytime_max_hr")
+                daily["recovery_today"]["nighttime_min_hr"] = today_hr.get("nighttime_min_hr")
+                daily["recovery_today"]["nighttime_max_hr"] = today_hr.get("nighttime_max_hr")
+                daily["recovery_today"]["day_minus_night_bpm"] = today_hr.get("day_minus_night_bpm")
+                daily["recovery_today"]["heart_rate_partial_day"] = today_hr.get("partial_day")
+                daily["recovery_today"]["heart_rate_3d"] = hr_rolling.get("3d")
+                daily["recovery_today"]["heart_rate_7d"] = hr_rolling.get("7d")
+                daily["recovery_today"]["heart_rate_28d"] = hr_rolling.get("28d")
 
-if status.get("status") == "error":
-    raise SystemExit(1)
+            save_json("daily_summary.json", daily)
+
+        weekly = load_json("weekly_summary.json", {})
+        if isinstance(weekly, dict):
+            week_start = TODAY - timedelta(days=6)
+            per_day = {}
+
+            for i in range(7):
+                date_str = (week_start + timedelta(days=i)).isoformat()
+                ext = extended_store["days"].get(date_str)
+                per_day[date_str] = {
+                    "stress": stress_summary(stress_store["days"].get(date_str)),
+                    "body_battery": body_battery_summary(bb_store["days"].get(date_str)),
+                    "heart_rate": heart_store["days"].get(date_str),
+                    "extended": ext,
+                }
+
+            weekly["garmin"] = {
+                "source": "Garmin Connect",
+                "generated_at": NOW.isoformat(),
+                "days": per_day,
+                "stress_days_present": sum(
+                    1 for value in per_day.values() if value["stress"] is not None
+                ),
+                "body_battery_days_present": sum(
+                    1 for value in per_day.values() if value["body_battery"] is not None
+                ),
+                "extended_days_present": sum(
+                    1 for value in per_day.values() if value["extended"] is not None
+                ),
+                "heart_rate_days_present": sum(
+                    1 for value in per_day.values() if value["heart_rate"] is not None
+                ),
+                "heart_rate_rolling": hr_rolling,
+            }
+
+            weekly_recovery = weekly.get("recovery")
+            if isinstance(weekly_recovery, dict):
+                rolling_7d = hr_rolling.get("7d") or {}
+                weekly_recovery["avg_daytime_hr"] = rolling_7d.get("daytime_avg_hr")
+                weekly_recovery["avg_sleeping_hr"] = rolling_7d.get("nighttime_avg_hr")
+
+            save_json("weekly_summary.json", weekly)
+
+        core_ok = today_stress is not None or today_bb is not None
+        extended_ok_count = sum(1 for value in extended_today["availability"].values() if value)
+
+        status["status"] = "success" if core_ok else "partial"
+        status["latest_stress_date"] = max(stress_store["days"].keys(), default=None)
+        status["latest_body_battery_date"] = max(bb_store["days"].keys(), default=None)
+        status["latest_extended_date"] = max(extended_store["days"].keys(), default=None)
+        status["latest_heart_rate_date"] = max(heart_store["days"].keys(), default=None)
+        status["stress_fetch_errors"] = stress_errors
+        status["body_battery_fetch_error"] = body_battery_error
+        status["extended_metrics_available"] = extended_ok_count
+        status["extended_availability"] = extended_today["availability"]
+        status["extended_fetch_errors"] = extended_errors
+        status["heart_rate_fetch_errors"] = heart_rate_errors
+        status["heart_rate_rolling"] = hr_rolling
+
+        if status["status"] == "partial":
+            status["error"] = (
+                "No se obtuvieron Stress ni Body Battery para hoy; "
+                "se preservaron los datos previos."
+            )
+
+    except Exception as exc:
+        status["error"] = f"{type(exc).__name__}: {exc}"
+
+    save_json(STATUS_PATH, status)
+    print(json.dumps(status, ensure_ascii=False))
+
+    if status.get("status") == "error":
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()
