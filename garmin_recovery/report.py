@@ -54,6 +54,28 @@ def slot_for(result: dict) -> str:
     return "mañana" if hour < 12.5 else "tarde" if hour < 20 else "noche"
 
 
+def validation_block(mv: dict | None) -> list[str]:
+    """Sección nocturna: ¿qué modelo anticipa mejor cómo te sienta el entrenamiento?"""
+    if not mv:
+        return []
+    out = ["## Validación de modelos", "",
+           "_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo "
+           "relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo "
+           "útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._", "",
+           f"**{mv.get('verdict', '')}**", ""]
+    rows = [m for m in mv.get("models") or [] if m.get("effort")]
+    if rows:
+        out += ["| Modelo | ρ esfuerzo | IC 90 % | Días |", "|---|--:|---|--:|"]
+        for m in rows:
+            e = m["effort"]
+            out.append(f"| {m['label']} | {fmt(e['rho'], 2)} | {fmt(e['ci90'][0], 2)} a {fmt(e['ci90'][1], 2)} | {e['n']} |")
+        out.append("")
+    over = mv.get("days_over_cap")
+    if mv.get("training_days"):
+        out += [f"- Días entrenados con predicción: {mv['training_days']}; por encima del RPE máximo del día: {over}.", ""]
+    return out
+
+
 def categorize(session: dict) -> str:
     text = f"{session.get('label') or ''} {session.get('name') or ''}".lower()
     if any(k in text for k in ("snatch", "clean", "jerk", "arrancada", "envión", "envion", "cargada", "halterofilia")):
@@ -718,6 +740,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
             md += [f"- Planificado para mañana {t.get('time') or ''}: **{t['planned']}** ({t['type']}). Se ajustará con el sueño y la HRV de esta noche."]
         md += ["- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.", ""]
         md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Disponibilidad](charts/readiness.svg)", ""]
+        md += validation_block(result.get("model_validation"))
 
     md += ["## Recuperación: tendencias de 28 días", "", "![HRV](charts/hrv.svg)", "", "![FC](charts/rhr.svg)", "",
            "![Sueño](charts/sleep.svg)", ""]

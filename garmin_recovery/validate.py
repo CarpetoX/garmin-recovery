@@ -71,6 +71,16 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
         checks += 1
         _check(errors, p.get("rpe_max") is not None and p["rpe_max"] <= g.get("rpe_max", 10),
                "json: un ajuste del plan supera el RPE máximo de la decisión")
+    mv = data.get("model_validation")
+    checks += 1
+    _check(errors, isinstance(mv, dict) and mv.get("status") in {"acumulando", "v3_mejor", "v3_util", "v3_no_probado"},
+           "json: model_validation ausente o con estado inválido")
+    preds = hist / "model_predictions.csv"
+    if preds.exists():
+        pd = [r.get("date") for r in csv.DictReader(preds.open(encoding="utf-8"))]
+        checks += 1
+        _check(errors, pd == sorted(pd) and len(pd) == len(set(pd)) and (not pd or pd[-1] <= str(data.get("date"))),
+               "historial: model_predictions.csv con fechas duplicadas, desordenadas o futuras")
     dates = [t.get("date") for t in data.get("trend_28d") or []]
     checks += 1
     _check(errors, dates == sorted(dates) and len(set(dates)) == len(dates) and (not dates or dates[-1] == data.get("date")),

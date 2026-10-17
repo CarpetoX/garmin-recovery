@@ -46,6 +46,8 @@ DEFAULTS: dict = {
     },
     # Pasa a True solo tras validar v3 frente a RPE/rendimiento real (≥ 4–6 semanas)
     "model_validated": False,
+    # Validación prospectiva: días con entrenamiento, RPE y predicción de la mañana antes de emitir veredicto
+    "min_validation_days": 20,
     # Consistencia: el v3 y el v2 deben leer el mismo valor de hoy para estas métricas
     "consistency_tolerance": 0.05,
     # Rutas
