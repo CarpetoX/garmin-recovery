@@ -227,7 +227,8 @@ jobs:
         timeout-minutes: 2
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python -m garmin_recovery alert
+          CHAIN_STATUS: ${{ job.status }}
+        run: python -m garmin_recovery alert --scope chain
 
       - name: Disparar monitor final V2.4.1
         if: success()

@@ -43,45 +43,67 @@ class Problems(unittest.TestCase):
         old = (NOW - timedelta(hours=16)).isoformat()
         recent = (NOW - timedelta(minutes=30)).isoformat()
         keys = [p["key"] for p in alerts.problems(workspace(missed=[old, recent]), NOW)]
-        self.assertEqual(keys, ["missed:18/10 08:30"])
+        self.assertEqual(keys, ["missed:2026-10-18T08:30"])
 
 
 class FakeGitHub:
-    def __init__(self, issues=None, comments=None):
-        self.issues, self.comments, self.calls = issues or [], comments or [], []
+    """Simula issues y comentarios con estado (crear, comentar, cerrar)."""
+
+    def __init__(self):
+        self.issue, self.comments, self.calls = None, [], []
 
     def __call__(self, method, path, token, body=None):
         self.calls.append((method, path, body))
-        if method == "GET" and path.endswith("/comments?per_page=100"):
-            return self.comments
+        if method == "GET" and "/comments" in path:
+            return list(self.comments)
         if method == "GET":
-            return self.issues
+            return [self.issue] if self.issue and self.issue["state"] == "open" else []
+        if method == "POST" and path.endswith("/issues"):
+            self.issue, self.comments = {"number": 7, "title": body["title"], "body": body["body"], "state": "open"}, []
+        elif method == "POST":
+            self.comments.append({"body": body["body"]})
+        elif method == "PATCH":
+            self.issue["state"] = body["state"]
         return {}
 
 
-class IssueLifecycle(unittest.TestCase):
-    P = [{"key": "stale", "text": "Sin informe"}]
+def run(gh, found, scope="chain"):
+    return alerts.sync_issue(found, "o/r", "t", "CarpetoX", scope=scope, api=gh)
 
+
+A, B = {"key": "validation", "text": "A"}, {"key": "stale", "text": "B"}
+
+
+class IssueLifecycle(unittest.TestCase):
     def test_opens_once_and_mentions_owner(self):
         gh = FakeGitHub()
-        self.assertEqual(alerts.sync_issue(self.P, "o/r", "t", "CarpetoX", api=gh), "opened")
-        method, path, body = gh.calls[-1]
-        self.assertEqual((method, path), ("POST", "/repos/o/r/issues"))
-        self.assertIn("@CarpetoX", body["body"])
+        self.assertEqual(run(gh, [B]), "opened")
+        self.assertIn("@CarpetoX", gh.issue["body"])
+        self.assertEqual(run(gh, [B]), "unchanged")
 
-    def test_no_repeat_for_same_problem(self):
+    def test_change_back_is_announced(self):  # A → A+B → A
         gh = FakeGitHub()
-        alerts.sync_issue(self.P, "o/r", "t", "x", api=gh)
-        body = gh.calls[-1][2]["body"]
-        gh2 = FakeGitHub(issues=[{"number": 7, "title": alerts.TITLE, "body": body}])
-        self.assertEqual(alerts.sync_issue(self.P, "o/r", "t", "x", api=gh2), "unchanged")
-        self.assertEqual(alerts.sync_issue([{"key": "validation", "text": "x"}], "o/r", "t", "x", api=gh2), "commented")
+        run(gh, [A])
+        self.assertEqual(run(gh, [A, B]), "commented")
+        self.assertEqual(run(gh, [A]), "commented")
+        self.assertEqual(run(gh, [A]), "unchanged")
 
-    def test_closes_when_resolved(self):
-        gh = FakeGitHub(issues=[{"number": 7, "title": alerts.TITLE, "body": "..."}])
-        self.assertEqual(alerts.sync_issue([], "o/r", "t", "x", api=gh), "closed")
-        self.assertEqual(gh.calls[-1][0:2], ("PATCH", "/repos/o/r/issues/7"))
-        self.assertEqual(alerts.sync_issue([], "o/r", "t", "x", api=FakeGitHub()), "ok")
+    def test_watchdog_cannot_close_chain_failure(self):
+        gh = FakeGitHub()
+        run(gh, [{"key": "chain_failed", "text": "x"}], scope="chain")
+        self.assertEqual(run(gh, [], scope="watchdog"), "unchanged")
+        self.assertEqual(gh.issue["state"], "open")
+        self.assertEqual(run(gh, [], scope="chain"), "closed")
+        self.assertEqual(gh.issue["state"], "closed")
+        self.assertIn("garmin-keys: -->", gh.comments[-1]["body"])
+
+    def test_watchdog_and_chain_keys_merge(self):
+        gh = FakeGitHub()
+        run(gh, [A], scope="chain")
+        self.assertEqual(run(gh, [B], scope="watchdog"), "commented")
+        self.assertIn("Sigue pendiente: `validation`", gh.comments[-1]["body"])
+        self.assertEqual(run(gh, [], scope="watchdog"), "commented")  # stale resuelto; validation sigue
+        self.assertEqual(gh.issue["state"], "open")
 
     def test_network_errors_never_fail(self):
         import os
@@ -90,6 +112,23 @@ class IssueLifecycle(unittest.TestCase):
         with mock.patch.dict(os.environ, {"GH_TOKEN": "t", "GITHUB_REPOSITORY": "o/r"}), \
                 mock.patch.object(alerts, "_api", side_effect=OSError("red caída")):
             self.assertEqual(alerts.main(str(root)), 0)
+
+
+class ChainStatus(unittest.TestCase):
+    def test_failed_job_reports_chain_failed_not_local_files(self):
+        keys = [p["key"] for p in alerts.problems(workspace(validation="failed"), NOW, "chain", job_status="failure")]
+        self.assertEqual(keys, ["chain_failed"])
+
+    def test_watchdog_reads_workflow_health_and_madrid_time(self):
+        root = workspace()
+        slot = datetime(2026, 10, 18, 8, 30, tzinfo=TZ)
+        (root / "workflow_health.json").write_text(json.dumps(
+            {"alerts": [{"code": "sync_slot_not_recovered", "slots": [slot.isoformat()]}]}))
+        p = alerts.problems(root, NOW.astimezone(ZoneInfo("UTC")), "watchdog")
+        self.assertEqual(p[0]["key"], "missed:2026-10-18T08:30")
+        self.assertIn("18/10 08:30", p[0]["text"])
+        stale = alerts.problems(workspace(gen=NOW - timedelta(hours=12)), NOW.astimezone(ZoneInfo("UTC")), "watchdog")
+        self.assertIn((NOW - timedelta(hours=12)).strftime("%d/%m %H:%M"), stale[0]["text"])
 
 
 class Punctuality(unittest.TestCase):

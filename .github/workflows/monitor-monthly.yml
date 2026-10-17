@@ -83,14 +83,6 @@ jobs:
               raise SystemExit("Timed out waiting for triggering CrossFit run to complete")
           PY
 
-      - name: V6.0 - Aviso en GitHub si no hay informe reciente (vigilancia programada)
-        if: github.event_name == 'schedule'
-        continue-on-error: true
-        timeout-minutes: 2
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python -m garmin_recovery alert
-
       - name: Inspect actual workflow runs and generate monthly summary
         env:
           GH_TOKEN: ${{ github.token }}
@@ -118,6 +110,14 @@ jobs:
 
       - name: V2.9.4 - Calcular fiabilidad historica de 7 y 28 dias
         run: python reliability_history_v294.py --ledger report_cycles.json --out reliability_history_v294.json
+
+      - name: V6.0 - Aviso en GitHub si no hay informe reciente (vigilancia programada)
+        if: always() && github.event_name == 'schedule'
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m garmin_recovery alert --scope watchdog
 
       - name: Commit diagnostics and report
         if: always()

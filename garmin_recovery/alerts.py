@@ -2,62 +2,80 @@
 
 Un único issue abierto a la vez («⚠️ Garmin Recovery: atención necesaria»):
 
-* se abre si el informe del ciclo no se pudo publicar (validación fallida), si se ha
-  perdido una franja de Sync en las últimas 12 h o si no hay informe nuevo en 11 h (el hueco normal 22:45→08:30 es de casi 10 h);
-* si ya está abierto, solo comenta cuando cambia el problema (no repite avisos);
-* se cierra solo, con un comentario, cuando todo vuelve a estar bien.
+* **cadena** (CrossFit Insights, cada ciclo): avisa si el job falló antes de publicar o si
+  el informe no pasó la validación. Solo un ciclo que publica bien puede cerrar estos avisos.
+* **vigilancia** (monitor programado, tras calcular `workflow_health.json`): avisa si no hay
+  informe nuevo en 11 h (el hueco normal 22:45→08:30 es de casi 10 h) o si se perdió una
+  franja de Sync en las últimas 12 h. No puede cerrar avisos de la cadena.
+* Cada ejecución solo cambia los problemas de su ámbito; el issue guarda los problemas
+  activos en una marca oculta, comenta solo si cambian y se cierra cuando no queda ninguno.
 
-GitHub notifica los issues nuevos al propietario del repositorio (correo o app).
-Nunca bloquea la cadena: cualquier error de red se registra y se ignora.
+GitHub notifica los issues nuevos al propietario (mención). Nunca bloquea la cadena.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import os
+import re
 import urllib.request
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 TITLE = "⚠️ Garmin Recovery: atención necesaria"
-MARK = "<!-- garmin-alert:"
+TZ = ZoneInfo("Europe/Madrid")
+KEYS_RE = re.compile(r"<!-- garmin-keys:([^>]*) -->")
+SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:"), "watchdog": ("stale", "missed:")}
 
 
-def problems(root: Path, now: datetime, stale_hours: float = 11, missed_hours: float = 12) -> list[dict]:
-    root = Path(root)
+def _in_scope(key: str, scope: str) -> bool:
+    return any(key == k or (k.endswith(":") and key.startswith(k)) for k in SCOPES[scope])
+
+
+def _read(path: Path) -> dict:
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+        return obj if isinstance(obj, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _dt(v):
+    try:
+        d = datetime.fromisoformat(str(v))
+    except (TypeError, ValueError):
+        return None
+    return d if d.tzinfo else d.replace(tzinfo=TZ)
+
+
+def problems(root: Path, now: datetime, scope: str = "chain", job_status: str = "success",
+             stale_hours: float = 11, missed_hours: float = 12) -> list[dict]:
+    root, now = Path(root), now.astimezone(TZ)
+    ok_job = job_status in ("", "success")
     out: list[dict] = []
-    try:
-        val = json.loads((root / "app" / "validation.json").read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        val = {}
-    if val.get("status") == "failed":
-        out.append({"key": "validation", "text": "El informe de este ciclo **no se publicó** porque no pasó la validación; "
-                    "sigue visible el anterior. Motivos: " + "; ".join(str(e) for e in (val.get("errors") or [])[:5])})
-    try:
-        data = json.loads((root / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        data = {}
-    gen = None
-    try:
-        gen = datetime.fromisoformat(str(data.get("generated_at")))
-    except ValueError:
-        pass
-    if gen is None or (now - gen) > timedelta(hours=stale_hours):
-        when = gen.astimezone(now.tzinfo).strftime("%d/%m %H:%M") if gen else "desconocido"
+    if scope == "chain" and not ok_job:
+        out.append({"key": "chain_failed", "text": "La cadena *CrossFit Insights* falló en este ciclo antes de publicar: "
+                    "sigue visible el informe anterior. Revisa la ejecución enlazada."})
+    if scope == "chain" and ok_job:
+        val = _read(root / "app" / "validation.json")
+        if val.get("status") == "failed":
+            out.append({"key": "validation", "text": "El informe de este ciclo **no se publicó** porque no pasó la validación; "
+                        "sigue visible el anterior. Motivos: " + "; ".join(str(e) for e in (val.get("errors") or [])[:5])})
+    data = _read(root / "app" / "readiness_v3.json")
+    gen = _dt(data.get("generated_at"))
+    if ok_job and (gen is None or now - gen > timedelta(hours=stale_hours)):
+        when = gen.astimezone(TZ).strftime("%d/%m %H:%M") if gen else "desconocido"
         out.append({"key": "stale", "text": f"No hay informe nuevo desde {when}. Revisa los activadores de Apps Script "
                     "y las ejecuciones de *Garmin Recovery Sync*."})
-    missed = (((data.get("certificate") or {}).get("execution_health") or {}).get("missed_slots")) or []
-    recent = []
-    for s in missed:
-        try:
-            t = datetime.fromisoformat(s)
-        except (TypeError, ValueError):
-            continue
-        if timedelta(0) <= now - t <= timedelta(hours=missed_hours):
-            recent.append(t.astimezone(now.tzinfo).strftime("%d/%m %H:%M"))
-    if recent:
-        out.append({"key": "missed:" + ",".join(recent), "text": f"Franja(s) de Sync perdidas: {', '.join(recent)}. "
-                    "Apps Script no lanzó el Sync o la cadena no terminó."})
+    missed = set((((data.get("certificate") or {}).get("execution_health") or {}).get("missed_slots")) or [])
+    for alert in _read(root / "workflow_health.json").get("alerts") or []:
+        if isinstance(alert, dict) and alert.get("code") == "sync_slot_not_recovered":
+            missed |= {s for s in alert.get("slots") or [] if isinstance(s, str)}
+    recent = sorted(t.astimezone(TZ) for t in (_dt(s) for s in missed)
+                    if t is not None and timedelta(0) <= now - t <= timedelta(hours=missed_hours))
+    for t in recent:
+        out.append({"key": "missed:" + t.strftime("%Y-%m-%dT%H:%M"),
+                    "text": f"Franja de Sync perdida: {t.strftime('%d/%m %H:%M')} (Apps Script no lanzó el Sync o la cadena no terminó)."})
     return out
 
 
@@ -72,46 +90,70 @@ def _api(method: str, path: str, token: str, body: dict | None = None):
         return json.loads(raw) if raw else None
 
 
-def sync_issue(found: list[dict], repo: str, token: str, owner: str, api=None, run_url: str = "") -> str:
+def _find_issue(api, repo, token):
+    for page in range(1, 6):
+        batch = api("GET", f"/repos/{repo}/issues?state=open&per_page=100&page={page}", token) or []
+        hit = next((i for i in batch if i.get("title") == TITLE and "pull_request" not in i), None)
+        if hit or len(batch) < 100:
+            return hit
+    return None
+
+
+def _active_keys(api, repo, token, issue) -> set[str]:
+    texts = [issue.get("body") or ""] + [c.get("body") or "" for c in
+                                         api("GET", f"/repos/{repo}/issues/{issue['number']}/comments?per_page=100", token) or []]
+    for t in reversed(texts):  # la marca más reciente manda
+        m = KEYS_RE.search(t)
+        if m:
+            return {k for k in m.group(1).split(",") if k}
+    return set()
+
+
+def sync_issue(found: list[dict], repo: str, token: str, owner: str, scope: str = "chain",
+               api=None, run_url: str = "") -> str:
     """Abre, comenta o cierra el issue de aviso. Devuelve la acción realizada."""
     api = api or _api
-    fingerprint = hashlib.sha256("|".join(sorted(p["key"] for p in found)).encode()).hexdigest()[:12]
-    issues = api("GET", f"/repos/{repo}/issues?state=open&per_page=50", token) or []
-    current = next((i for i in issues if i.get("title") == TITLE and "pull_request" not in i), None)
-    body_lines = [f"- {p['text']}" for p in found]
+    current = _find_issue(api, repo, token)
+    previous = _active_keys(api, repo, token, current) if current else set()
+    texts = {p["key"]: p["text"] for p in found}
+    active = {k for k in previous if not _in_scope(k, scope)} | set(texts)
     tail = f"\n\n[Ejecución]({run_url})" if run_url else ""
-    if found:
-        text = "\n".join(body_lines) + tail + f"\n\n{MARK}{fingerprint} -->"
+    marker = f"\n\n<!-- garmin-keys:{','.join(sorted(active))} -->"
+    if active:
+        kept = sorted(active - set(texts))
+        lines = [f"- {texts[k]}" for k in sorted(texts)] + [f"- Sigue pendiente: `{k}`" for k in kept]
         if current is None:
             api("POST", f"/repos/{repo}/issues", token,
-                {"title": TITLE, "body": f"@{owner}\n\n" + text + "\n\n_Este aviso se cierra solo cuando todo vuelve a ir bien._"})
+                {"title": TITLE, "body": f"@{owner}\n\n" + "\n".join(lines) + tail
+                 + "\n\n_Este aviso se cierra solo cuando todo vuelve a ir bien._" + marker})
             return "opened"
-        if f"{MARK}{fingerprint} -->" in (current.get("body") or "") + "".join(
-                c.get("body") or "" for c in api("GET", f"/repos/{repo}/issues/{current['number']}/comments?per_page=100", token) or []):
+        if active == previous:
             return "unchanged"
-        api("POST", f"/repos/{repo}/issues/{current['number']}/comments", token, {"body": text})
+        api("POST", f"/repos/{repo}/issues/{current['number']}/comments", token,
+            {"body": "Cambio en los avisos:\n\n" + "\n".join(lines) + tail + marker})
         return "commented"
     if current is not None:
         api("POST", f"/repos/{repo}/issues/{current['number']}/comments", token,
-            {"body": "✅ Todo vuelve a estar bien: el último informe se publicó y no hay franjas perdidas recientes." + tail})
+            {"body": "✅ Sin avisos activos: el último informe se publicó y no hay franjas perdidas en las últimas 12 h." + tail
+             + "\n\n<!-- garmin-keys: -->"})
         api("PATCH", f"/repos/{repo}/issues/{current['number']}", token, {"state": "closed", "state_reason": "completed"})
         return "closed"
     return "ok"
 
 
-def main(root: str = ".", stale_hours: float = 11) -> int:
+def main(root: str = ".", scope: str = "chain") -> int:
     token, repo = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
     owner = os.environ.get("GITHUB_REPOSITORY_OWNER") or (repo or "/").split("/")[0]
     run_url = (f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
                if os.environ.get("GITHUB_RUN_ID") and repo else "")
-    found = problems(Path(root), datetime.now(timezone.utc).astimezone(), stale_hours=stale_hours)
-    if not token or not repo:
-        print(json.dumps({"alert": "sin_credenciales", "problems": [p["key"] for p in found]}))
-        return 0
     try:
-        action = sync_issue(found, repo, token, owner, run_url=run_url)
+        found = problems(Path(root), datetime.now(TZ), scope=scope, job_status=os.environ.get("CHAIN_STATUS", "success"))
+        if not token or not repo:
+            print(json.dumps({"alert": "sin_credenciales", "problems": [p["key"] for p in found]}))
+            return 0
+        action = sync_issue(found, repo, token, owner, scope=scope, run_url=run_url)
     except Exception as exc:  # noqa: BLE001 — un aviso nunca bloquea la cadena
         print(json.dumps({"alert": "error", "detail": f"{type(exc).__name__}: {exc}"[:200]}))
         return 0
-    print(json.dumps({"alert": action, "problems": [p["key"] for p in found]}, ensure_ascii=False))
+    print(json.dumps({"alert": action, "scope": scope, "problems": [p["key"] for p in found]}, ensure_ascii=False))
     return 0

@@ -23,10 +23,11 @@ def main(argv=None) -> int:
                        help="Falla si la salida tiene más minutos de antigüedad (en la cadena: 60)")
     p_al = sub.add_parser("alert", help="Abre, comenta o cierra el issue de aviso en GitHub")
     p_al.add_argument("--root", default=".")
+    p_al.add_argument("--scope", choices=("chain", "watchdog"), default="chain")
     args = parser.parse_args(argv)
     if args.cmd == "alert":
         from .alerts import main as alert_main
-        return alert_main(args.root)
+        return alert_main(args.root, args.scope)
     if args.cmd == "validate":
         from .validate import validate, write_result
         res = validate(args.root, max_age_minutes=args.max_age_min)
