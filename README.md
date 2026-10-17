@@ -54,6 +54,7 @@ Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `histor
 - **Arriba del todo, tres líneas:** la decisión con su RPE máximo, por qué se ha tomado (qué modelos la marcan y las dos señales que más pesan) y qué hacer.
 - **Una sola decisión visible.** La comparación entre v2, híbrido y v3 queda en un desplegable "Cómo se decide".
 - **Secciones repetidas plegadas** (`<details>`): tendencias de 28 días (abiertas solo por la mañana), reglas por tipo de sesión, fuerza y detalle del certificado.
+- **Gráfica de RPE frente al máximo del día** (`charts/rpe.svg`, 14 días; informes de la tarde, de la noche y semanal). Las barras son el RPE de la sesión más dura de cada día, coloreadas por tipo. Una raya gris marca el máximo que permitía la decisión ese día (verde 9, ámbar 7, rojo 4, pendiente 6) y un punto rojo señala cuando se superó. En días verdes, un WOD a RPE 8–9 queda dentro.
 - **Nuevo `app/informe_semanal.md`:** los últimos 7 días frente a los 7 anteriores, con sesiones, minutos, carga y sRPE; días por encima del RPE máximo; HRV, FC y sueño; fuerza de la semana; calidad de los datos; y validación. Se regenera en cada ciclo, y el del domingo por la noche es el cierre de la semana.
 
 **V5.9, estructura:** `sync.yml` ya no tiene código en línea (tres scripts con salida idéntica comprobada). Los scripts antiguos ya no se ejecutan al importarlos. El monitor deja de generar los informes previos V3.9.2.2 y V4.0.2, que solo producían artefactos. Plan de migración en `MAINTENIMIENTO.md`.

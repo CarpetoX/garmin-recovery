@@ -126,6 +126,11 @@ def build_weekly(result: dict, strength: list | None = None, report_id: str | No
         sentence.append(f"ningún día por encima del RPE máximo ({w['cap_checked_days']} de {w['trained_days']} días entrenados comprobados)")
     md += ["- " + "; ".join(sentence) + ".", f"- Decisión registrada en {w['days_with_decision']}/7 días: {zones_txt}.", ""]
 
+    md += ["## Gráficas de la semana", "",
+           "![RPE frente al máximo del día](charts/rpe.svg)", "",
+           "_Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permitía la decisión; punto rojo: por encima._", "",
+           "![Carga por sesión y tipo](charts/sessions.svg)", "", "![Disponibilidad](charts/readiness.svg)", "",
+           "![HRV](charts/hrv.svg)", "", "![Sueño](charts/sleep.svg)", ""]
     md += ["## Entrenamiento", "", "| | Esta semana | Semana previa |", "|---|--:|--:|",
            f"| Sesiones | {w['sessions']} | {w['sessions_prev']} |",
            f"| Minutos | {_f(w['minutes'], 0)} | {_f(w['minutes_prev'], 0)} |",
