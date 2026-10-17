@@ -3,7 +3,7 @@
 
 **Qué explica la puntuación**
 - Faltan HRV, sueño y FC en reposo de hoy; el sueño no está confirmado. Confianza de datos y de recomendación: baja.
-- Deuda de sueño: 4,0 h en 2 noches (necesidad 7,5 h). HRV media 7 días 53 ms frente a referencia de 58 ms, −8 % (↓).
+- Último sueño confirmado (fin 07:36 del 17/10) con 18,2 h de antigüedad; HRV de hoy sin dato. HRV media 7 días 53 ms frente a referencia de 58 ms, −8 % (↓).
 - Estrés Garmin de ayer: 38 de media (mediana 39) → neutro.
 
 **Carga reciente (7 días)**
@@ -15,4 +15,4 @@
 2. Reevalúa cuando se sincronice el sueño; hasta entonces no subas intensidad.
 3. Registra fatiga, agujetas, estrés, ánimo y motivación en Intervals.icu para afinar el modelo.
 
-_Aviso: certificado con avisos (2 franjas de Sync perdidas el 17/10). No es un diagnóstico médico._
+_Aviso: certificado con avisos (3 franjas de Sync perdidas el 17/10: 08:30, 16:45 y 22:45; datos sincronizados a las 01:47, fuera de franja). No es un diagnóstico médico._
