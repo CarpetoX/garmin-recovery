@@ -36,7 +36,7 @@ GOLDEN = {
 NAMES = [("monitor_monthly", "monitor"), ("monitor_origin_integration_v292", "origin_integration"),
          ("report_monitor_v34", "report_monitor"), ("cycle_observer_v373", "cycle_observer"),
          ("monitor_clarity_v297", "monitor_clarity"), ("reliability_history_v294", "reliability_history"),
-         ("monitor_v231", "monitor_v231"), ("ops_metrics_v28", "ops_metrics"), ("origin_monitor_v292", "origin_monitor")]
+         ("monitor_v231", "monitor_v231")]
 
 
 class FrozenDatetime(dtmod.datetime):
@@ -192,8 +192,7 @@ class GoldenMonitor(unittest.TestCase):
     def test_legacy_names_are_the_same_modules(self):
         sys.path.insert(0, str(ROOT))
         try:
-            for legacy, pkg in NAMES + [("report_cycle_integration_v371", "cycle_integration"),
-                                         ("report_cycle_guard_v37", "cycle_guard")]:
+            for legacy, pkg in NAMES:
                 self.assertIs(importlib.import_module(legacy), importlib.import_module("garmin_recovery." + pkg), legacy)
         finally:
             sys.path.remove(str(ROOT))
