@@ -31,7 +31,7 @@ PRED_FIELDS = ["date", "recorded_at", "slot", "frozen", "after_training", "decis
                "v2_score", "v2_zone", "hybrid_score", "hybrid_zone", "v3_score", "v3_zone", "v3_state"]
 MODELS = [("recovery_assessment_v2", "v2", "Oficial v2"), ("readiness_hybrid", "hybrid", "Híbrido"),
           ("readiness_v3", "v3", "v3 (en pruebas)")]
-ZONE_SCORE = {"red": 0, "unavailable": 1, "yellow": 2, "green": 3}
+ZONE_SCORE = {"red": 0, "yellow": 1, "green": 2}  # "pendiente" no es un nivel de disponibilidad: se excluye
 
 
 # ------------------------------------------------------------------ predicciones
@@ -114,6 +114,23 @@ def effort_by_day(sessions: dict, categorize) -> dict:
     return {d: sum(z) / len(z) for d, z in days.items()}
 
 
+def first_session_start(sessions: dict) -> dict:
+    out: dict = {}
+    for s in sessions.values():
+        st = (s.get("start_local") or "")[:19]
+        if s.get("removed") or not s.get("date") or not st:
+            continue
+        out[s["date"]] = min(out.get(s["date"], st), st)
+    return out
+
+
+def _after(recorded_at, start_local) -> bool:
+    """¿La predicción se registró después de empezar a entrenar? (ambas en hora local de Madrid)."""
+    if not recorded_at or not start_local:
+        return False
+    return str(recorded_at)[:19] >= str(start_local)[:19]
+
+
 def max_rpe_by_day(sessions: dict) -> dict:
     out: dict = {}
     for s in sessions.values():
@@ -147,19 +164,19 @@ def _ranks(xs):
 
 
 def spearman(pairs):
-    """ρ de Spearman con IC 90 % (Fisher). None si n < 5 o sin variación."""
+    """ρ de Spearman con IC 90 % (Fisher con error de Bonett–Wright). None si n < 5 o sin variación."""
     n = len(pairs)
     if n < 5:
         return None
     rx, ry = _ranks([p[0] for p in pairs]), _ranks([p[1] for p in pairs])
     mx, my = sum(rx) / n, sum(ry) / n
-    sxy = sum((a - mx) * (b - my) for a, b in zip(rx, ry))
+    sxy = sum((a - mx) * (b - my) for a, b in zip(rx, ry, strict=True))
     sxx = sum((a - mx) ** 2 for a in rx)
     syy = sum((b - my) ** 2 for b in ry)
     if not sxx or not syy:
         return None
-    rho = max(-0.999999, min(0.999999, sxy / math.sqrt(sxx * syy)))
-    se = 1 / math.sqrt(n - 3) if n > 3 else float("inf")
+    rho = max(-0.999, min(0.999, sxy / math.sqrt(sxx * syy)))
+    se = math.sqrt((1 + rho ** 2 / 2) / (n - 3))  # Bonett y Wright (2000), adecuado para Spearman
     z = math.atanh(rho)
     lo, hi = math.tanh(z - 1.645 * se), math.tanh(z + 1.645 * se)
     return {"rho": round(rho, 2), "ci90": [round(lo, 2), round(hi, 2)], "n": n}
@@ -170,14 +187,19 @@ def evaluate(predictions: dict, daily: dict, sessions: dict, today: str, cfg: di
     need = cfg.get("min_validation_days", 20)
     effort = effort_by_day(sessions, categorize)
     max_rpe = max_rpe_by_day(sessions)
+    first_start = first_session_start(sessions)
     usable = {d: p for d, p in predictions.items()
-              if d <= today and str(p.get("after_training")) != "1"}
+              if d <= today and str(p.get("after_training")) != "1"
+              and not _after(p.get("recorded_at"), first_start.get(d))}
+
+    def scorer(key):
+        if key == "decision":
+            return lambda p: ZONE_SCORE.get(p.get("decision_zone"))
+        return lambda p: _f(p.get(f"{key}_score"))
+
     models = []
     for _, key, label in MODELS + [("decision", "decision", "Decisión operativa")]:
-        if key == "decision":
-            score = lambda p: ZONE_SCORE.get(p.get("decision_zone"))
-        else:
-            score = lambda p, k=key: _f(p.get(f"{k}_score"))
+        score = scorer(key)
         eff = [(score(p), effort[d]) for d, p in usable.items() if score(p) is not None and d in effort]
         feel = [(score(p), next_morning_feel(daily, d)) for d, p in usable.items()
                 if d < today and score(p) is not None and next_morning_feel(daily, d) is not None]
@@ -193,16 +215,18 @@ def evaluate(predictions: dict, daily: dict, sessions: dict, today: str, cfg: di
     trained_days = [d for d in usable if d in max_rpe]
     exceeded = [d for d in trained_days
                 if _f(usable[d].get("rpe_cap")) is not None and max_rpe[d] > _f(usable[d]["rpe_cap"])]
-    n_eff = max((m["n_effort"] for m in models), default=0)
-    v2 = next(m for m in models if m["id"] == "v2")
-    v3 = next(m for m in models if m["id"] == "v3")
+    # Comparación justa: v2 y v3 sobre los mismos días (ambos con puntuación y resultado)
+    s2, s3 = scorer("v2"), scorer("v3")
+    common = [d for d, p in usable.items() if d in effort and s2(p) is not None and s3(p) is not None]
+    e2 = spearman([(s2(usable[d]), effort[d]) for d in common])
+    e3 = spearman([(s3(usable[d]), effort[d]) for d in common])
+    n_eff = len(common)
     if n_eff < need:
         status, verdict = "acumulando", (f"Acumulando datos: {n_eff}/{need} días con entrenamiento, RPE y "
-                                          "predicción de la mañana. Aún no hay veredicto.")
+                                          "predicción de la mañana del v2 y del v3. Aún no hay veredicto.")
     else:
-        e2, e3 = v2["effort"], v3["effort"]
         useful3 = e3 is not None and e3["ci90"][1] < 0
-        better = useful3 and (e2 is None or e3["rho"] <= e2["rho"] - 0.10)
+        better = useful3 and e2 is not None and e3["rho"] <= e2["rho"] - 0.10
         if better:
             status, verdict = "v3_mejor", ("El v3 anticipa mejor que el v2 el esfuerzo relativo. Puede "
                                            "valorarse promoverlo (model_validated: true).")
@@ -215,6 +239,7 @@ def evaluate(predictions: dict, daily: dict, sessions: dict, today: str, cfg: di
         "expected_sign": "negativo", "min_days": need, "status": status, "verdict": verdict,
         "predictions": len(predictions), "first_prediction": min(predictions) if predictions else None,
         "training_days": len(trained_days), "days_over_cap": len(exceeded), "models": models,
+        "paired": {"n": n_eff, "v2": e2, "v3": e3},
     }
 
 

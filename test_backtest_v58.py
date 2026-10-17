@@ -106,5 +106,41 @@ class Evaluate(unittest.TestCase):
         self.assertEqual(validation_block(None), [])
 
 
+class ReviewFindings(unittest.TestCase):
+    build = Evaluate.build
+
+    def test_gate_uses_v3_days_and_common_days(self):
+        rows, sessions = self.build(25)
+        for i, d in enumerate(sorted(rows)):
+            if i >= 6:
+                rows[d]["v3_score"] = None  # v3 pendiente casi siempre
+        ev = bt.evaluate(rows, {}, sessions, "2026-11-30", DEFAULTS, categorize)
+        self.assertEqual(ev["status"], "acumulando")
+        self.assertEqual(ev["paired"]["n"], 6)
+
+    def test_missing_v2_does_not_make_v3_better(self):
+        rows, sessions = self.build(25)
+        for d in rows:
+            rows[d]["v2_score"] = 60  # sin variación: no hay correlación del v2
+        self.assertNotEqual(bt.evaluate(rows, {}, sessions, "2026-11-30", DEFAULTS, categorize)["status"], "v3_mejor")
+
+    def test_ci_never_collapses(self):
+        r = bt.spearman([(i, -i) for i in range(6)])
+        self.assertGreater(r["ci90"][1] - r["ci90"][0], 0.01)
+
+    def test_prediction_recorded_after_training_started_is_excluded(self):
+        rows, sessions = self.build(3)
+        d = sorted(rows)[0]
+        rows[d]["recorded_at"] = d + "T15:00:00+01:00"
+        for s_ in sessions.values():
+            if s_["date"] == d:
+                s_["start_local"] = d + "T10:00:00"
+        ev = bt.evaluate(rows, {}, sessions, "2026-11-30", DEFAULTS, categorize)
+        self.assertEqual(ev["training_days"], 2)
+
+    def test_pending_decision_is_not_a_readiness_level(self):
+        self.assertNotIn("unavailable", bt.ZONE_SCORE)
+
+
 if __name__ == "__main__":
     unittest.main()
