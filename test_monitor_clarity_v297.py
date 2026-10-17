@@ -1,7 +1,6 @@
 """Isolated regression tests; no GitHub or sensor access required."""
 import copy
 from datetime import datetime, timezone
-import json
 from pathlib import Path
 import tempfile
 import unittest

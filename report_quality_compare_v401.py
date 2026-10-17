@@ -13,7 +13,7 @@ import math
 from pathlib import Path
 import re
 
-from cycle_snapshot_report_v38 import build, SnapshotError
+from cycle_snapshot_report_v38 import build
 from cycle_report_enriched_v391 import render as render_v39
 from garmin_report_v40 import render as render_v40, latest_id
 

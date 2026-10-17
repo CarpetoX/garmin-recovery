@@ -1,15 +1,15 @@
 """V3.6.1 regression: freshness, independent optional report, rollback, and provenance."""
 import copy
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 import json
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
 
-from crossfit_report_v36 import make_report, validate
+from crossfit_report_v36 import validate
 from crossfit_report_guard_v361 import (
-    REPORT_NAMES, STATE_NAME, check_fresh_sources, cycle_status, positive_id,
+    REPORT_NAMES, STATE_NAME, positive_id,
     previous_report, run_once,
 )
 from test_crossfit_report_v36 import fixture, NOW

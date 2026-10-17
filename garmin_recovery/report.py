@@ -636,7 +636,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
     md += [
         f"## {ZONE_ICON.get(zone, '')} Decisión: {ZONE_ES.get(zone, zone)} — {g.get('label', '')}",
         "",
-        f"| Oficial v2 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |",
+        "| Oficial v2 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |",
         "|--:|--:|--:|--:|--:|--:|--:|",
         f"| {fmt((reg.get('recovery_assessment_v2') or {}).get('score'))}/100 | {g.get('rpe_max', '—')} | {g.get('volume', '—')} | "
         f"{fmt(_component(result, 'hrv').get('today_ms'))} ms | {fmt(card.get('resting_hr'))} lpm | {fmt(slp.get('hours'), 2)} h | "

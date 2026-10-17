@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """CrossFit supplement: manual Sheet A:H + Garmin/Intervals, no invented data."""
-import csv, io, json, os, math, statistics, time, urllib.parse, urllib.request
+import csv
+import io
+import json
+import os
+import math
+import time
+import urllib.parse
+import urllib.request
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo

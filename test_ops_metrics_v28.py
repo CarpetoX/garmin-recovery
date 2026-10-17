@@ -1,4 +1,3 @@
-import copy
 import unittest
 from datetime import datetime, timezone
 from ops_metrics_v28 import report

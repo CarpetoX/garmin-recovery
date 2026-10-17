@@ -19,7 +19,6 @@ compact-preview.json y state.json. No se descarta ningun certificado.
 """
 import argparse
 import json
-import os
 import shutil
 import tempfile
 from pathlib import Path

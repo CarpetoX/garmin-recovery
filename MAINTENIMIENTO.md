@@ -32,6 +32,10 @@ Los cron usan `timezone: Europe/Madrid`. GitHub puede retrasarlos horas: Apps Sc
 
 ## Código obsoleto
 
+`sync.yml` se modulariza un paso por cambio: el resumen diario/semanal ya vive en `sync_daily_analysis.py` (salida idéntica comprobada; test `test_sync_daily_analysis.py`). Siguientes candidatos: la descarga de wellness y la de actividades.
+
+Algunos scripts antiguos se ejecutan al importarlos y escriben JSON (p. ej. `garmin_metrics.py`): no importarlos fuera de la cadena.
+
 Un número de versión en el nombre (`recovery_v231.py`, `monitor_v231.py`…) no significa que sobre: muchos siguen importados. Antes de borrar un módulo, comprobar que ningún workflow lo ejecuta y que ningún módulo en uso lo importa (análisis de imports desde los scripts que ejecutan los workflows), y quitar sus tests y referencias en los YAML en el mismo PR.
 
 ## Validación local
@@ -45,7 +49,9 @@ python -m garmin_recovery validate              # contrato y coherencia de app/ 
 
 ## Vigilancia continua
 
-- Tamaño del repositorio (los JSON de estrés y de ciclos superan 1 MB cada uno), duración de workflows y retraso real del cron.
+- Tamaño del repositorio. Medido el 17/10/2026 (historial completo): 6,4 MB comprimidos tras 11 días y 1.232 commits, unos 0,5 MB/día (~180 MB/año). Git comprime bien las versiones sucesivas de los JSON grandes (165 versiones de `garmin_stress.json` ocupan 282 KB), así que **no hace falta compactar todavía**; revisar al superar ~500 MB.
+- Retraso real del cron de GitHub: en 60 ejecuciones llegó entre 2,3 y 5,7 h tarde. El disparador fiable es Apps Script; un vigilante basado en cron de GitHub no recuperaría a tiempo una franja perdida.
+- Duración de los workflows.
 - Frescura de datos por marca temporal de cada muestra, no por `generated_at`.
 - Fallos del disparador de Apps Script (huecos entre ciclos firmados).
 - Cobertura de RPE: la monotonía, el strain y el ACWR solo se calculan con ≥ 75 % de sesiones con RPE.

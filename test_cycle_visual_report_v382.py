@@ -1,4 +1,3 @@
-import copy
 import unittest
 from cycle_snapshot_report_v38 import digest, SnapshotError
 from cycle_visual_report_v382 import make
