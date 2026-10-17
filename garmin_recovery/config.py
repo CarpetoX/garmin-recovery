@@ -36,6 +36,16 @@ DEFAULTS: dict = {
         "subjective": 0.10,
     },
     "zones": {"green": 70, "red": 50},
+    # Confianza de la recomendación (umbrales mínimos de histórico)
+    "recommendation_thresholds": {
+        "media_baseline_n": 14,
+        "alta_baseline_n": 28,
+        "alta_rolling_n": 6,
+    },
+    # Pasa a True solo tras validar v3 frente a RPE/rendimiento real (≥ 4–6 semanas)
+    "model_validated": False,
+    # Consistencia: el v3 y el v2 deben leer el mismo valor de hoy para estas métricas
+    "consistency_tolerance": 0.05,
     # Rutas
     "history_dir": "history",
     "output_dir": "app",

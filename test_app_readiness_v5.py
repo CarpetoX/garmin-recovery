@@ -226,3 +226,55 @@ class PipelineOnRepoDataTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class QualityTests(unittest.TestCase):
+    def test_data_and_recommendation_confidence_are_separate(self):
+        res = assess(make_daily(days=40), TODAY.isoformat(), DEFAULTS)
+        self.assertEqual(res["data_confidence"]["level"], "alta")
+        # Sin validar el modelo, la recomendación nunca pasa de "media"
+        self.assertEqual(res["recommendation_confidence"]["level"], "media")
+        self.assertFalse(res["recommendation_confidence"]["model_validated"])
+
+    def test_validated_model_can_reach_high_recommendation_confidence(self):
+        cfg = load_config("/nonexistent") | {"model_validated": True}
+        res = assess(make_daily(days=40), TODAY.isoformat(), cfg)
+        self.assertEqual(res["recommendation_confidence"]["level"], "alta")
+
+    def test_missing_today_lowers_data_confidence(self):
+        res = assess(make_daily(today={"sleep_hours": None}), TODAY.isoformat(), DEFAULTS)
+        self.assertEqual(res["data_confidence"]["level"], "baja")
+        self.assertEqual(res["recommendation_confidence"]["level"], "baja")
+
+    def test_training_integrity_matches_by_id(self):
+        from garmin_recovery.quality import training_integrity
+        sessions = {"a": {"id": "a", "date": "2026-10-16", "rpe": 8.0},
+                    "b": {"id": "b", "date": "2026-10-16", "rpe": None, "start_local": "2026-10-16T10:00:00"}}
+        feedback = {"activities": {"a": {"date": "2026-10-16", "rpe": 8},
+                                   "zzz": {"date": "2026-10-15", "rpe": 7}}}
+        out = training_integrity(sessions, feedback, TODAY.isoformat())
+        self.assertEqual(out["with_rpe"], 1)
+        self.assertEqual([x["id"] for x in out["without_rpe"]], ["b"])
+        self.assertEqual(out["rpe_without_activity"], ["zzz"])
+        self.assertEqual(out["status"], "revisar")
+
+    def test_consistency_detects_mismatch(self):
+        from garmin_recovery.quality import consistency
+        rd = {"date": "2026-10-17", "components": {"hrv": {"today_ms": 46.0}, "cardiac": {"resting_hr": 60.0},
+                                                   "sleep": {"hours": 7.84}}}
+        same = {"current": {"date": "2026-10-17", "hrv_ms": 46.0, "resting_hr": 60.0, "sleep_hours": 7.84}}
+        diff = {"current": {"date": "2026-10-17", "hrv_ms": 52.0, "resting_hr": 60.0, "sleep_hours": 7.84}}
+        self.assertEqual(consistency(rd, same, 0.05)["status"], "ok")
+        self.assertEqual(consistency(rd, diff, 0.05)["status"], "discrepancia")
+
+    def test_data_age_uses_sample_timestamps(self):
+        from garmin_recovery.quality import data_age
+        now = datetime(2026, 10, 17, 9, 0, tzinfo=TZ)
+        inputs = {"sleep": {"days": {"2026-10-17": {"sleep_end_local": "2026-10-17T07:30:00+02:00",
+                                                    "window_confirmed": True}}},
+                  "hr_timeline": {"days": {"2026-10-17": {"last_sample_local": "2026-10-17T03:00:00+02:00"}}}}
+        ages = data_age(inputs, now, TZ)
+        self.assertEqual(ages["confirmed_sleep"]["state"], "reciente")
+        self.assertEqual(ages["confirmed_sleep"]["age_minutes"], 90)
+        self.assertEqual(ages["heart_rate_live"]["state"], "antigua")
+        self.assertEqual(ages["sleep_hrv"]["state"], "sin_marca_temporal")
