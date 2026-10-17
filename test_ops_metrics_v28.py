@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timezone
-from ops_metrics_v28 import report
+from garmin_recovery.ops_metrics import report
 
 NOW = datetime(2026, 10, 11, 13, 0, tzinfo=timezone.utc)
 

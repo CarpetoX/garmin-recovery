@@ -83,14 +83,10 @@ class GoldenV2b(unittest.TestCase):
         try:
             import convergence_domains_v242
             import recovery_reliability
-            import recovery_v23
-            import recovery_v231
-            from garmin_recovery import convergence_domains, recovery_v23 as p23, recovery_v231 as p231, reliability
+            from garmin_recovery import convergence_domains, reliability
         finally:
             sys.path.remove(str(ROOT))
         self.assertIs(recovery_reliability, reliability)
-        self.assertIs(recovery_v23, p23)
-        self.assertIs(recovery_v231, p231)
         self.assertIs(convergence_domains_v242, convergence_domains)
 
 

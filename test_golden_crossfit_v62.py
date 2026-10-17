@@ -101,15 +101,14 @@ class GoldenCrossfit(unittest.TestCase):
             import crossfit_insights
             import data_quality
             import muscle_load
-            import report_audit
             import rpe_cycle_snapshot
             import training_extensions
-            from garmin_recovery import crossfit, data_quality as dq, muscle_load as ml, report_audit as ra
+            from garmin_recovery import crossfit, data_quality as dq, muscle_load as ml
             from garmin_recovery import rpe_cycle_snapshot as rs, training_extensions as te
         finally:
             sys.path.remove(str(ROOT))
         for old, new in ((crossfit_insights, crossfit), (data_quality, dq), (muscle_load, ml),
-                         (report_audit, ra), (rpe_cycle_snapshot, rs), (training_extensions, te)):
+                         (rpe_cycle_snapshot, rs), (training_extensions, te)):
             self.assertIs(old, new)
 
 

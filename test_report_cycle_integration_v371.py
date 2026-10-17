@@ -1,6 +1,6 @@
 import copy
 import unittest
-from report_cycle_integration_v371 import evaluate, digest
+from garmin_recovery.cycle_integration import evaluate, digest
 from test_report_cycle_guard_v37 import fixture, NOW
 
 

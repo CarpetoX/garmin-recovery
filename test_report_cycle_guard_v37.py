@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from report_cycle_guard_v37 import validate_certificate, CycleNotReady, SOURCES
+from garmin_recovery.cycle_guard import validate_certificate, CycleNotReady, SOURCES
 
 TZ=ZoneInfo('Europe/Madrid')
 NOW=datetime(2026,10,12,17,10,tzinfo=TZ)

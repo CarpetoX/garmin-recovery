@@ -1,6 +1,6 @@
 import unittest
 from copy import deepcopy
-from origin_monitor_v292 import origin, report
+from garmin_recovery.origin_monitor import origin, report
 
 
 def example(source='signed'):
