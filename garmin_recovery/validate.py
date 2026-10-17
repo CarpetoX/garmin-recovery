@@ -124,6 +124,9 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
         wtxt = weekly.read_text(encoding="utf-8")
         _check(errors, wtxt.startswith("# Resumen semanal") and "None" not in wtxt and "NaN" not in wtxt
                and (not report_id or report_id in wtxt), "semanal: informe_semanal.md incompleto o de otro ciclo")
+        for name in re.findall(r"\(charts/([A-Za-z0-9_.-]+\.svg)\)", wtxt):
+            checks += 1
+            _check(errors, (app / "charts" / name).exists(), f"semanal: gráfica {name} ausente")
     else:
         errors.append("semanal: falta app/informe_semanal.md")
 

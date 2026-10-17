@@ -116,5 +116,35 @@ class WeeklyReview(unittest.TestCase):
             self.assertTrue((Path(tmp) / "app" / "informe.md").exists())
 
 
+class RpeChart(unittest.TestCase):
+    def test_rpe_by_day_against_daily_cap(self):
+        from garmin_recovery.report import rpe_by_day
+        trend = [{"date": "2026-10-15", "decision_zone": "green"}, {"date": "2026-10-16", "decision_zone": "yellow"},
+                 {"date": "2026-10-17", "decision_zone": None}]
+        sessions = [{"date": "2026-10-15", "rpe": 9, "name": "WOD"}, {"date": "2026-10-16", "rpe": 8, "name": "WOD"},
+                    {"date": "2026-10-16", "rpe": 5, "name": "Fuerza"}, {"date": "2026-10-17", "rpe": 9, "name": "WOD"},
+                    {"date": "2026-10-17", "rpe": 10, "name": "WOD", "removed": 1}]
+        rows = {r["date"]: r for r in rpe_by_day(sessions, trend, "2026-10-17", 3)}
+        self.assertEqual((rows["2026-10-15"]["cap"], rows["2026-10-15"]["over"]), (9, False))  # WOD 9 en verde: dentro
+        self.assertEqual((rows["2026-10-16"]["rpe"], rows["2026-10-16"]["over"]), (8, True))   # 8 en ámbar (máx. 7)
+        self.assertEqual((rows["2026-10-17"]["rpe"], rows["2026-10-17"]["cap"]), (9, None))    # sin decisión: no se juzga
+
+    def test_chart_marks_cap_and_over(self):
+        from garmin_recovery.report import chart_rpe
+        svg = chart_rpe([{"date": "2026-10-16", "rpe": 8, "name": "WOD"}],
+                        [{"date": "2026-10-16", "decision_zone": "yellow"}], "2026-10-17", 3)
+        self.assertIn("Máximo del día", svg)
+        self.assertIn("Por encima", svg)
+        self.assertTrue(svg.startswith("<svg"))
+
+    def test_reports_link_rpe_chart(self):
+        r = fake_result()
+        r["certificate"] = {"cycle": {"data_synced_at": "2026-10-17T22:50:00+02:00"}}
+        md, charts = build_report(r, {}, None, "GR-2026-10-17-2250-abcdef")
+        self.assertIn("rpe.svg", charts)
+        self.assertIn("(charts/rpe.svg)", md)
+        self.assertIn("(charts/rpe.svg)", build_weekly(r, [], "GR-2026-10-17-2250-abcdef"))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -54,6 +54,11 @@ def slot_for(result: dict) -> str:
     return "mañana" if hour < 12.5 else "tarde" if hour < 20 else "noche"
 
 
+RPE_NOTE = ("_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día "
+            "(verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima "
+            "del máximo. Franja superior: decisión del día._")
+
+
 def _open(expanded: bool, summary: str) -> list[str]:
     """Bloque plegable de GitHub; las líneas en blanco permiten Markdown dentro."""
     return [f"<details{' open' if expanded else ''}><summary>{summary}</summary>", ""]
@@ -375,6 +380,51 @@ def chart_sessions(sessions, end: str, days=14):
     return c.render()
 
 
+def rpe_by_day(sessions, trend, end: str, days=14):
+    """Por día: RPE máximo, tipo de la sesión más dura y RPE máximo permitido por la decisión."""
+    from .readiness import GUIDANCE
+    last = date.fromisoformat(end)
+    dates = [(last - timedelta(days=i)).isoformat() for i in range(days - 1, -1, -1)]
+    zone = {t["date"]: t.get("decision_zone") for t in trend or []}
+    out = []
+    for d in dates:
+        day = [s for s in sessions or [] if s.get("date") == d and s.get("rpe") is not None and not s.get("removed")]
+        top = max(day, key=lambda s: s["rpe"]) if day else None
+        z = zone.get(d)
+        cap = (GUIDANCE.get(z) or {}).get("rpe_max") if z else None
+        out.append({"date": d, "rpe": top["rpe"] if top else None, "type": categorize(top) if top else None,
+                    "zone": z, "cap": cap, "over": bool(top and cap is not None and top["rpe"] > cap)})
+    return out
+
+
+def chart_rpe(sessions, trend, end: str, days=14):
+    """RPE de la sesión más dura de cada día frente al máximo que marcaba la decisión de ese día."""
+    rows = rpe_by_day(sessions, trend, end, days)
+    c = Chart([r["date"] for r in rows], [0, 10], lo=0, hi=10, label="RPE frente al máximo del día")
+    c.axes()
+    c.strip([r["zone"] for r in rows])
+    used = []
+    c.stacked_bars([[(r["rpe"], CATEGORY_COLORS[r["type"]])] if r["rpe"] else [] for r in rows])
+    for i, r in enumerate(rows):
+        if r["type"] and r["type"] not in used:
+            used.append(r["type"])
+        if r["cap"] is not None:
+            w = min(24, c.bw * 0.62) + 10
+            yy = c.y(r["cap"])
+            c.parts.append(f'<line x1="{c.x(i) - w / 2:.1f}" x2="{c.x(i) + w / 2:.1f}" y1="{yy:.1f}" y2="{yy:.1f}" '
+                           f'stroke="{INK}" stroke-width="3" stroke-linecap="round"/>')
+        if r["over"]:
+            c.parts.append(f'<circle cx="{c.x(i):.1f}" cy="{c.y(r["rpe"]) - 9:.1f}" r="5" fill="{STATUS_HEX["red"]}"/>')
+    for cat in CATEGORY_COLORS:
+        if cat in used:
+            c.legend.append(("bar", CATEGORY_COLORS[cat], cat))
+    if any(r["cap"] is not None for r in rows):
+        c.legend.append(("line", INK, "Máximo del día"))
+    if any(r["over"] for r in rows):
+        c.legend.append(("dot", STATUS_HEX["red"], "Por encima"))
+    return c.render()
+
+
 def chart_readiness(trend):
     d = [t["date"] for t in trend]
     c = Chart(d, [0, 100], lo=0, hi=100, label="Disponibilidad: oficial frente a v3")
@@ -676,6 +726,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         "sleep.svg": chart_sleep(trend, slp.get("need_hours")),
         "load.svg": chart_load(trend, bool(load.get("form_interpretable"))),
         "sessions.svg": chart_sessions(result.get("sessions_28d") or sessions, today),
+        "rpe.svg": chart_rpe(result.get("sessions_28d") or sessions, trend, today),
     }
     strength_svg = chart_strength(strength)
     if strength_svg:
@@ -752,7 +803,8 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         md += [f"**Carga 7 días:** {fmt(load.get('week_load'))} en {load.get('week_sessions', '—')} sesiones"
                + (f" ({signed(load.get('week_change_pct'))} % vs. semana previa)" if load.get('week_change_pct') is not None else "")
                + f" · sRPE {fmt(load.get('week_srpe'))} · monotonía {fmt(load.get('monotony'), 2)}.", ""]
-        md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Sesiones](charts/sessions.svg)", ""]
+        md += ["## Gráficas", "", "![RPE frente al máximo del día](charts/rpe.svg)", "", "![Carga](charts/load.svg)", "",
+               "![Sesiones](charts/sessions.svg)", "", RPE_NOTE, ""]
     else:
         today_sessions = [s for s in sessions if s.get("date") == today]
         md += ["## Balance del día", "", sessions_table(sessions, day=today)]
@@ -772,7 +824,8 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         for t in (result.get("planned") or {}).get("tomorrow") or []:
             md += [f"- Planificado para mañana {t.get('time') or ''}: **{t['planned']}** ({t['type']}). Se ajustará con el sueño y la HRV de esta noche."]
         md += ["- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.", ""]
-        md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Disponibilidad](charts/readiness.svg)", ""]
+        md += ["## Gráficas", "", "![RPE frente al máximo del día](charts/rpe.svg)", "", RPE_NOTE, "",
+               "![Carga](charts/load.svg)", "", "![Disponibilidad](charts/readiness.svg)", ""]
         md += validation_block(result.get("model_validation"))
 
     md += ["## Recuperación: tendencias de 28 días", ""] + _open(slot == "mañana", "HRV, FC y sueño") + [
