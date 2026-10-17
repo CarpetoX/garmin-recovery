@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from monitor_origin_integration_v292 import integrate, main
+from garmin_recovery.origin_integration import integrate, main
 
 NOW = datetime(2026, 10, 11, 15, 2, tzinfo=timezone.utc)
 

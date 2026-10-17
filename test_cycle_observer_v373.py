@@ -6,7 +6,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 from unittest.mock import patch
 
-import cycle_observer_v373 as m
+from garmin_recovery import cycle_observer as m
 
 NOW = datetime(2026, 10, 12, 18, 0, tzinfo=ZoneInfo('Europe/Madrid'))
 

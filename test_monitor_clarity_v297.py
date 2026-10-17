@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from monitor_clarity_v297 import analyze, target_at, parsed, read_json, atomic_json
+from garmin_recovery.monitor_clarity import analyze, target_at, parsed, read_json, atomic_json
 
 NOW = datetime(2026, 10, 12, 7, 15, tzinfo=timezone.utc)
 

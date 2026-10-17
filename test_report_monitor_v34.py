@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from report_monitor_v34 import analyze, main
+from garmin_recovery.report_monitor import analyze, main
 
 NOW = datetime(2026, 10, 11, 19, 50, tzinfo=timezone.utc)
 

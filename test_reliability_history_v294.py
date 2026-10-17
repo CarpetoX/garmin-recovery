@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
-from reliability_history_v294 import analyze
+from garmin_recovery.reliability_history import analyze
 
 NOW = datetime(2026, 10, 11, 18, 20, tzinfo=timezone.utc)  # 20:20 local
 
@@ -99,7 +99,7 @@ class ReliabilityTest(unittest.TestCase):
     def test_cli_writes_file(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d);(p/'ledger.json').write_text('{"cycles":[]}',encoding='utf-8')
-            cp=subprocess.run([sys.executable,'reliability_history_v294.py','--ledger',str(p/'ledger.json'), '--out',str(p/'report.json'), '--now','2026-10-11T18:20:00Z'], capture_output=True,text=True)
+            cp=subprocess.run([sys.executable,'-m','garmin_recovery.reliability_history','--ledger',str(p/'ledger.json'), '--out',str(p/'report.json'), '--now','2026-10-11T18:20:00Z'], capture_output=True,text=True)
             self.assertEqual(cp.returncode,0,cp.stderr)
             self.assertEqual(json.loads((p/'report.json').read_text())['version'],'2.9.4')
 

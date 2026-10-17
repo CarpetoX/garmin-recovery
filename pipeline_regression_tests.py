@@ -267,7 +267,7 @@ def test_domain_convergence(advanced, errors, warnings):
     if policy.get("scoring_changed") is not False:
         fail(errors, "domain_convergence_scoring_must_be_unchanged")
 
-    from convergence_domains_v242 import (
+    from garmin_recovery.convergence_domains import (
         severity_from_domains,
         signal_domain,
         signal_is_strong,

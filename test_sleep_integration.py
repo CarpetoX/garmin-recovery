@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime, timedelta
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
-import report_sleep_integration as integration
+from garmin_recovery import sleep_integration as integration
 
 TZ = ZoneInfo('Europe/Madrid')
 

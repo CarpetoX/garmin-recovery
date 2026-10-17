@@ -86,30 +86,30 @@ jobs:
       - name: Inspect actual workflow runs and generate monthly summary
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python monitor_monthly.py
+        run: python -m garmin_recovery.monitor
 
       - name: V2.9.2 - Vincular origen y puntualidad al monitor
         continue-on-error: true
-        run: python monitor_origin_integration_v292.py
+        run: python -m garmin_recovery.origin_integration
 
       # V3.4: distinguir ciclo, informe publicado y entrega real; sin recibos ficticios.
       - name: V3.4 - Auditar trazabilidad y post-sueno sin duplicar certificados
-        run: python report_monitor_v34.py
+        run: python -m garmin_recovery.report_monitor
 
       # V3.7.3: consulta independiente Actions, sin bloqueo ni recibos ficticios.
       - name: V3.7.3 - Observar certificado de ciclo y enlace CrossFit
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python cycle_observer_v373.py
+        run: python -m garmin_recovery.cycle_observer
 
       # V2.9.7: capa aditiva, sin alterar el estado historico ni bloquear el espejo.
       - name: V2.9.7 - Separar el ciclo actual de las alertas historicas
         continue-on-error: true
-        run: python monitor_clarity_v297.py
+        run: python -m garmin_recovery.monitor_clarity
 
       - name: V2.9.4 - Calcular fiabilidad historica de 7 y 28 dias
-        run: python reliability_history_v294.py --ledger report_cycles.json --out reliability_history_v294.json
+        run: python -m garmin_recovery.reliability_history --ledger report_cycles.json --out reliability_history_v294.json
 
       - name: V6.0 - Aviso en GitHub si no hay informe reciente (vigilancia programada)
         if: always() && github.event_name == 'schedule'

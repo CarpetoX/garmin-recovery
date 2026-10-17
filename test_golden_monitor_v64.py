@@ -142,7 +142,7 @@ def run_monitor(style: str) -> dict:
             os.environ["GH_TOKEN"] = "x"
 
             def mod(legacy, pkg):
-                return importlib.import_module(legacy if style == "legacy" else "garmin_recovery." + pkg)
+                return importlib.import_module("garmin_recovery." + pkg)
             for legacy, pkg in NAMES:
                 mod(legacy, pkg)
             known = dict(NAMES)
@@ -185,17 +185,6 @@ def run_monitor(style: str) -> dict:
 class GoldenMonitor(unittest.TestCase):
     def test_package_modules_output_is_identical(self):
         self.assertEqual(run_monitor("package"), GOLDEN)
-
-    def test_legacy_names_output_is_identical(self):
-        self.assertEqual(run_monitor("legacy"), GOLDEN)
-
-    def test_legacy_names_are_the_same_modules(self):
-        sys.path.insert(0, str(ROOT))
-        try:
-            for legacy, pkg in NAMES:
-                self.assertIs(importlib.import_module(legacy), importlib.import_module("garmin_recovery." + pkg), legacy)
-        finally:
-            sys.path.remove(str(ROOT))
 
 
 if __name__ == "__main__":
