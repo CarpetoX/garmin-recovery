@@ -339,6 +339,29 @@ def chart_sleep(trend, need):
     return c.render()
 
 
+def chart_sleep_stages(trend):
+    """Sueño por noche: profundo, REM y resto (ligero y vigilia no se separan: el dato no existe)."""
+    rows = [t for t in trend if _is_num(t.get("sleep_hours")) and _is_num(t.get("deep_min")) and _is_num(t.get("rem_min"))
+            and t.get("sleep_context") != "day_sleep"]
+    if len(rows) < 3:
+        return None
+    d = [t["date"] for t in rows]
+    stacks = []
+    for t in rows:
+        total = t["sleep_hours"] * 60
+        rest = max(0.0, total - t["deep_min"] - t["rem_min"])
+        stacks.append([(t["deep_min"], S1), (t["rem_min"], "#1baf7a"), (rest, "#9a9990")])
+    c = Chart(d, [sum(v for v, _ in st) for st in stacks], zero=True, label="Sueño por fases (minutos)")
+    c.axes()
+    c.stacked_bars(stacks)
+    c.legend += [("bar", S1, "Profundo"), ("bar", "#1baf7a", "REM"), ("bar", "#9a9990", "Resto (ligero y vigilia)")]
+    return c.render()
+
+
+def _is_num(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
 def chart_load(trend, ctl_ok):
     d = [t["date"] for t in trend]
     c = Chart(d, [t.get("load") for t in trend] + [t.get("atl") for t in trend] + [t.get("ctl") for t in trend],
@@ -758,6 +781,9 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         "sessions.svg": chart_sessions(result.get("sessions_28d") or sessions, today),
         "rpe.svg": chart_rpe(result.get("sessions_28d") or sessions, trend, today),
     }
+    stages_svg = chart_sleep_stages(trend)
+    if stages_svg:
+        charts["sleep_stages.svg"] = stages_svg
     strength_svg = chart_strength(strength)
     if strength_svg:
         charts["strength.svg"] = strength_svg
@@ -925,7 +951,7 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     (out_dir / "informe_semanal.md").write_text(weekly_md, encoding="utf-8")
     from .fullreport import build_full_report
     try:
-        full_md = build_full_report(root, result, rid)
+        full_md = build_full_report(root, result, rid, charts_dir=out_dir / "charts")
     except Exception as exc:  # noqa: BLE001 — el informe completo nunca debe bloquear el informe del ciclo
         full_md = (f"# Informe completo\n\n_No se pudo generar en este ciclo (`{rid}`): {type(exc).__name__}. "
                    "El informe del día no se ve afectado._\n")

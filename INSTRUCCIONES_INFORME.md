@@ -49,3 +49,8 @@ Título: **Garmin Recovery · <Cierre matinal | Informe de tarde | Cierre noctur
 **Conclusión** (2–3 líneas) y, al final, una línea de traza: franja, `cycle_id`, hora de la consulta, estado del certificado, `sync_run_id`.
 
 Enlaza el panel https://carpetox.github.io/garmin-recovery/ y el informe base https://github.com/CarpetoX/garmin-recovery/blob/main/app/informe.md.
+
+
+## Sección 8 — Análisis de mejora
+
+`app/informe_completo.md` incluye al final de las siete secciones un «Análisis de mejora física y recuperación» calculado por reglas (`garmin_recovery/improvement.py`): prioridades, detalle por área, constancia semanal y reglas para 7 días. Al redactar tu análisis, parte de esa sección, no la contradigas y no añadas cifras que no estén en los datos. Aporta lo que las reglas no hacen: interpretar el conjunto, priorizar según el turno y el momento, y proponer un plan concreto de 7 días (sesiones suaves y duras, sueño) respetando `decision.guidance`.

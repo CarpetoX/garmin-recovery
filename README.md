@@ -151,3 +151,7 @@ Cada ciclo escribe además `app/informe_completo.md` (`garmin_recovery/fullrepor
 los archivos de datos ya publicados, sin IA ni estimaciones nuevas; si falta un dato, la línea muestra «—». Se publica en la web como
 `informe_completo.html` (renderizador propio en `mdhtml.py`), se enlaza desde el panel, lo comprueba `validate` y la notificación
 ntfy lo abre al tocarla. `test_fullreport_v65.py` verifica estructura, cifras frente a los datos y que no se inventen fases de sueño.
+
+## V6.8 — Informe visual y análisis de mejora
+
+El informe completo incluye tarjetas de estado, las gráficas del ciclo (HRV con rango normal, FC, sueño y fases, carga, RPE, fuerza) y la sección 8 «Análisis de mejora física y recuperación» (`improvement.py`): tendencia de HRV y FC en reposo, cantidad y regularidad del sueño, distribución de la intensidad, respuesta a las sesiones duras, fuerza y huecos de registro, con prioridades y reglas para 7 días. Todo por reglas sobre los datos publicados; si no hay datos suficientes, lo dice y no concluye.

@@ -12,6 +12,9 @@ _INLINE = ((re.compile(r"`([^`]+)`"), r"<code>\1</code>"), (re.compile(r"\*\*([^
            (re.compile(r"(?<![\w*])_([^_]+)_(?![\w*])"), r"<em>\1</em>"))
 
 
+IMG = re.compile(r"^!\[([^\]]*)\]\((charts/[A-Za-z0-9_.-]+\.svg)\)\s*$")
+
+
 def inline(text: str) -> str:
     out = html.escape(text.replace("\\*", "\u0001"), quote=False)
     for rx, rep in _INLINE:
@@ -27,12 +30,28 @@ def render(md: str) -> str:
     out, lines, i = [], md.splitlines(), 0
     while i < len(lines):
         ln = lines[i]
-        if ln.startswith("```"):
+        if ln.startswith("```cards"):
+            j = i + 1
+            while j < len(lines) and not lines[j].startswith("```"):
+                j += 1
+            cards = []
+            for row in lines[i + 1:j]:
+                parts = (row.split("|") + ["", "", "", ""])[:4]
+                zone = parts[3] if parts[3] in ("green", "yellow", "red") else "unavailable"
+                cards.append(f'<div class="kpi {zone}"><span>{html.escape(parts[0])}</span><strong>{html.escape(parts[1])}</strong>'
+                             f'<small>{html.escape(parts[2])}</small></div>')
+            out.append('<div class="kpis">' + "".join(cards) + "</div>")
+            i = j + 1
+        elif ln.startswith("```"):
             j = i + 1
             while j < len(lines) and not lines[j].startswith("```"):
                 j += 1
             out.append("<pre>" + html.escape("\n".join(lines[i + 1:j])) + "</pre>")
             i = j + 1
+        elif IMG.match(ln):
+            m = IMG.match(ln)
+            out.append(f'<figure><img src="{m.group(2)}" alt="{html.escape(m.group(1), quote=True)}" loading="lazy"></figure>')
+            i += 1
         elif ln.startswith("|") and i + 1 < len(lines) and set(lines[i + 1].replace("|", "").strip()) <= set("-: "):
             head, j, body = _cells(ln), i + 2, []
             while j < len(lines) and lines[j].startswith("|"):
@@ -81,7 +100,7 @@ body{{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,san
 main{{max-width:760px;margin:0 auto;padding:16px}}a{{color:inherit}}h1{{font-size:1.5rem}}h2{{font-size:1.2rem;margin-top:1.8em;border-bottom:1px solid var(--line);padding-bottom:.2em}}
 h3{{font-size:1.02rem}}table{{border-collapse:collapse;width:100%;font-size:.92rem}}th,td{{border:1px solid var(--line);padding:6px 8px;text-align:left}}
 th{{background:var(--card)}}.scroll{{overflow-x:auto}}pre{{background:var(--card);padding:10px;overflow-x:auto;border-radius:6px}}
-code{{background:var(--card);padding:1px 4px;border-radius:4px}}li{{margin:.3em 0}}.back{{color:var(--mut);font-size:.9rem}}</style></head>
+code{{background:var(--card);padding:1px 4px;border-radius:4px}}li{{margin:.3em 0}}figure{{margin:12px 0}}figure img{{width:100%;height:auto;background:#fff;border-radius:8px}}.kpis{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}}.kpi{{background:var(--card);border-radius:8px;padding:10px 12px;border-left:5px solid #9a9990;display:flex;flex-direction:column}}.kpi span{{font-size:.78rem;color:var(--mut)}}.kpi strong{{font-size:1.15rem}}.kpi small{{color:var(--mut)}}.kpi.green{{border-color:#0ca30c}}.kpi.yellow{{border-color:#fab219}}.kpi.red{{border-color:#d03b3b}}.back{{color:var(--mut);font-size:.9rem}}</style></head>
 <body><main><p class="back"><a href="./">← Panel</a></p>{body}</main></body></html>
 """
 

@@ -135,7 +135,10 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
     if full.exists():
         ftxt = full.read_text(encoding="utf-8")
         _check(errors, ftxt.startswith("# Garmin Recovery") and "None" not in ftxt and "NaN" not in ftxt
-               and "## 7." in ftxt and (not report_id or report_id in ftxt), "completo: informe_completo.md incompleto o de otro ciclo")
+               and "## 7." in ftxt and "## 8." in ftxt and (not report_id or report_id in ftxt), "completo: informe_completo.md incompleto o de otro ciclo")
+        for name in re.findall(r"!\[[^\]]*\]\(charts/([A-Za-z0-9_.-]+\.svg)\)", ftxt):
+            checks += 1
+            _check(errors, (app / "charts" / name).exists(), f"completo: gráfica {name} ausente")
     else:
         errors.append("completo: falta app/informe_completo.md")
 

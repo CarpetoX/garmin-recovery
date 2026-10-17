@@ -95,8 +95,9 @@ def _clean(text, limit=420):
     return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
 
 
-def build_full_report(root, result: dict, report_id: str = "") -> str:
+def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) -> str:
     root = Path(root)
+    charts_ok = {p.name for p in Path(charts_dir).glob("*.svg")} if charts_dir and Path(charts_dir).is_dir() else set()
     now = datetime.fromisoformat(result["generated_at"]).astimezone(TZ) if result.get("generated_at") else datetime.now(TZ)
     today = result.get("date") or now.date().isoformat()
     dec = result.get("decision") or {}
@@ -124,9 +125,21 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
     L: list[str] = []
     add = L.append
 
+    def img(name, alt):
+        if name in charts_ok:
+            add(f"\n![{alt}](charts/{name})")
+
     slot_id = (_read(root, "report_ready.json").get("cycle_id") or cert.get("cycle_id") or "")
     add(f"# Garmin Recovery · {slot_title(now, slot_id)}")
     add(f"\n{long_date(today)} · {now.strftime('%H:%M')}" + (f" · `{report_id}`" if report_id else ""))
+    cards = [("Decisión", guidance.get("label") or dec.get("zone_es") or "—", f"RPE máx. {n(guidance.get('rpe_max'))}", zone),
+             ("Recuperación v2", f"{n(v2.get('score'))}/100", f"confianza {v2.get('confidence') or '—'}", v2.get("zone") or "unavailable"),
+             ("HRV", f"{n(cur.get('hrv_ms'))} ms", (f"{'+' if hrv_pct > 0 else ''}{n(hrv_pct)} % vs mediana" if hrv_pct is not None else "sin dato hoy"),
+              "red" if hrv_pct is not None and hrv_pct <= -10 else "yellow" if hrv_pct is not None and hrv_pct <= -5 else "green" if hrv_pct is not None else "unavailable"),
+             ("Sueño", hm(_num(cur.get("sleep_hours")) * 60 if _num(cur.get("sleep_hours")) is not None else None), f"puntuación {n(cur.get('sleep_score'))}", "unavailable"),
+             ("FC en reposo", f"{n(cur.get('resting_hr'))} lpm", f"mediana {n(_d(base, 'resting_hr', 'median'))}", "unavailable"),
+             ("Carga 7 días", f"{n(_d(result, 'load', 'week_sessions'))} sesiones", f"sRPE {n(_d(result, 'load', 'week_srpe'))}", "unavailable")]
+    add("\n```cards\n" + "\n".join("|".join(str(x) for x in c) for c in cards) + "\n```")
     add("\n## Resumen ejecutivo\n")
     chain = cert.get("chain") or {}
     ok_stages = sum(1 for s in chain.values() if (s or {}).get("conclusion") in ("success", "publishing_in_same_job"))
@@ -187,6 +200,8 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
         notes.append(f"la FC en reposo está {n(abs(rhr - rhm))} lpm {'por encima' if rhr > rhm else 'por debajo'}" if rhr != rhm else "la FC en reposo coincide con su mediana")
     if notes:
         add("\n" + "; ".join(notes) + ".")
+    img("hrv.svg", "HRV nocturna con tu rango normal")
+    img("readiness.svg", "Disponibilidad: oficial frente a v3")
     add("\n### Modelos de recuperación\n")
     rows = [[m.get("label"), f"{ZONE_ICON.get(m.get('zone'), '⚪')} {n(m.get('score'))}/100" if m.get("score") is not None else "—", m.get("role") or "—"]
             for m in dec.get("registry") or [] if isinstance(m, dict)]
@@ -223,6 +238,8 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
                 add("La duración supera tu referencia, pero la puntuación queda por debajo: más horas no se acompañan de una recuperación igual de favorable.")
     else:
         add("No consta un episodio de sueño confirmado en los datos de este ciclo.")
+    img("sleep.svg", "Sueño por noche frente a tu necesidad")
+    img("sleep_stages.svg", "Sueño por fases")
     add("\nNo se incorporan siestas no confirmadas.")
 
     # 4 ------------------------------------------------------------------
@@ -240,6 +257,7 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
     add("\nCobertura histórica fusionada (días con dato de 28):\n")
     add(table(["Indicador", "Datos disponibles"], [[label, f"{n(_d(cov, k, 'days_present'))}/{n(_d(cov, k, 'days_expected', default=28))} días"]
                                                    for label, k in (("HRV", "hrv_ms"), ("Sueño", "sleep_hours"), ("Puntuación de sueño", "sleep_score"), ("FC en reposo", "resting_hr"))]))
+    img("rhr.svg", "FC en reposo y nocturna")
     add("\n### Estrés y Body Battery\n")
     _, sd = _last_day(stress)
     avg_s, max_s = (_num(sd.get("avgStressLevel")), _num(sd.get("maxStressLevel")))
@@ -271,6 +289,9 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
             ["TRIMP", n(sum(_num(s.get("trimp")) or 0 for s in sess7), 1)],
             ["Carga de actividades (Intervals)", n(sum(_num(s.get("load")) or 0 for s in sess7))],
             ["Volumen externo mínimo verificado", n(wr.get("minimum_verified_strength_volume_kg"), 0, " kg")]]
+    img("sessions.svg", "Sesiones de los últimos 14 días")
+    img("rpe.svg", "RPE frente al máximo del día")
+    img("load.svg", "Carga diaria, ATL y CTL")
     add("\n### Últimos 7 días\n\n" + table(["Métrica", "Resultado"], rows))
     add("\nEl volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, mancuernas y máquinas.")
     s28 = [s for s in result.get("sessions_28d") or [] if isinstance(s, dict)]
@@ -350,6 +371,12 @@ def build_full_report(root, result: dict, report_id: str = "") -> str:
     recs.append("Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.")
     for i, r in enumerate(recs, 1):
         add(f"{i}. {r}")
+    img("strength.svg", "Progresión de fuerza")
+    from . import improvement
+    try:
+        add("\n" + improvement.run(root, result).rstrip())
+    except Exception as exc:  # noqa: BLE001 — el análisis de mejora nunca debe bloquear el informe
+        add(f"\n## 8. Análisis de mejora física y recuperación\n\n_No se pudo calcular en este ciclo ({type(exc).__name__})._")
     add("\n## Conclusión\n")
     add(f"Datos {'suficientes' if v2.get('state') in ('assessed', None) and zone != 'unavailable' else 'insuficientes'} para evaluar la recuperación de hoy: "
         f"la decisión es **{ZONE_ICON.get(zone, '')} {guidance.get('label') or dec.get('zone_es') or '—'}**. "
