@@ -81,13 +81,11 @@ class GoldenV2b(unittest.TestCase):
     def test_legacy_names_are_the_same_modules(self):
         sys.path.insert(0, str(ROOT))
         try:
-            import convergence_domains_v242
             import recovery_reliability
-            from garmin_recovery import convergence_domains, reliability
+            from garmin_recovery import reliability
         finally:
             sys.path.remove(str(ROOT))
         self.assertIs(recovery_reliability, reliability)
-        self.assertIs(convergence_domains_v242, convergence_domains)
 
 
 if __name__ == "__main__":

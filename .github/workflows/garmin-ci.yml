@@ -113,7 +113,7 @@ jobs:
           assert len(dispatcher) == 1 and dispatcher[0].get('if') == 'success()'
 
           # V2.9.7: nueva telemetria opcional, nunca bloquea el espejo.
-          clarity = [x for x in steps if 'monitor_clarity_v297.py' in x.get('run', '')]
+          clarity = [x for x in steps if 'garmin_recovery.monitor_clarity' in x.get('run', '')]
           assert len(clarity) == 1 and clarity[0].get('continue-on-error') == 'true'
           assert steps.index(clarity[0]) < steps.index(dispatcher[0])
           crossfit_steps = workflows['crossfit-insights.yml']['jobs']['crossfit']['steps']
@@ -263,4 +263,4 @@ jobs:
           PYCODE
 
       - name: Monitor schedule and fallback provenance tests
-        run: python monitor_v231.py
+        run: python -m garmin_recovery.monitor_v231

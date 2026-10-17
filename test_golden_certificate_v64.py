@@ -126,17 +126,6 @@ class GoldenCertificate(unittest.TestCase):
     def test_package_module_output_is_identical(self):
         self.assertEqual(run_certificate("garmin_recovery.delivery_gate", "garmin_recovery.sleep_integration"), GOLDEN)
 
-    def test_legacy_names_are_the_same_modules(self):
-        sys.path.insert(0, str(ROOT))
-        try:
-            import report_delivery_gate
-            import report_sleep_integration
-            from garmin_recovery import delivery_gate, sleep_integration
-        finally:
-            sys.path.remove(str(ROOT))
-        self.assertIs(report_delivery_gate, delivery_gate)
-        self.assertIs(report_sleep_integration, sleep_integration)
-
 
 if __name__ == "__main__":
     unittest.main()

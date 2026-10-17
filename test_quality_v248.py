@@ -6,8 +6,8 @@ from zoneinfo import ZoneInfo
 
 from morning_sleep_gate import classify
 from muscle_load import analyze, classify as classify_movement
-import monitor_v231 as monitor
-import report_sleep_integration as integration
+from garmin_recovery import monitor_v231 as monitor
+from garmin_recovery import sleep_integration as integration
 
 TZ = ZoneInfo('Europe/Madrid')
 

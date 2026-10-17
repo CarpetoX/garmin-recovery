@@ -29,7 +29,7 @@ jobs:
           python-version: '3.12'
 
       - name: Validar sintaxis V2.4.6
-        run: python -m py_compile crossfit_insights.py report_delivery_gate.py report_sleep_integration.py test_sleep_integration.py pipeline_regression_tests.py
+        run: python -m py_compile crossfit_insights.py test_sleep_integration.py pipeline_regression_tests.py
 
       - name: Pruebas integración sueño V2.4.6
         run: python -m unittest -v test_sleep_integration
@@ -88,7 +88,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           CROSSFIT_RUN_ID: ${{ github.run_id }}
           ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
-        run: python report_sleep_integration.py
+        run: python -m garmin_recovery.sleep_integration
 
       # V5.3: la app corre al final, con el certificado del ciclo y los datos de fuerza ya generados.
       - name: V5.3 - App de seguimiento e informe del ciclo (no bloqueante)
