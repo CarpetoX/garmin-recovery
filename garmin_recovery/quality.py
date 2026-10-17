@@ -13,6 +13,7 @@ Responde a cuatro preguntas que el informe debe poder demostrar:
 from __future__ import annotations
 
 import hashlib
+import json
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -153,26 +154,55 @@ def certificate(root: Path, inputs: dict, readiness: dict, now: datetime, tz, cf
     }
 
 
+NO_RPE_TYPES = {"warmup", "skill", "mobility", "technique", "cooldown"}
+
+
+def rpe_not_applicable(entry) -> bool:
+    """La hoja declara explícitamente que esa actividad no lleva RPE (calentamiento, técnica…)."""
+    if not isinstance(entry, dict) or entry.get("rpe") not in (None, ""):
+        return False
+    detail = entry.get("detail_json")
+    if isinstance(detail, str) and detail.strip():
+        try:
+            detail = json.loads(detail)
+        except ValueError:
+            detail = {}
+    kind = str((detail or {}).get("type") or "").lower() if isinstance(detail, dict) else ""
+    notes = f"{entry.get('notes') or ''} {(detail or {}).get('notes') if isinstance(detail, dict) else ''}".lower()
+    return kind in NO_RPE_TYPES or "rpe no declarado" in notes or "sin rpe" in notes or "no imputar" in notes
+
+
 def training_integrity(sessions: dict, feedback: dict, today: str, days: int = 14) -> dict:
     """Empareja sesiones y RPE por ID exacto (nunca solo por fecha)."""
     end = date.fromisoformat(today)
     start = (end - timedelta(days=days - 1)).isoformat()
-    fb = (feedback or {}).get("activities") or {}
+    fb = dict((feedback or {}).get("activities") or {})
+    # Filas de la hoja sin RPE no llegan a "activities": se leen de la instantánea completa.
+    for row in (feedback or {}).get("source_rows_AH") or []:
+        if isinstance(row, dict) and row.get("ID actividad") and row["ID actividad"] not in fb:
+            fb[row["ID actividad"]] = {"date": row.get("Fecha"), "activity": row.get("Actividad"),
+                                       "rpe": row.get("RPE") or None, "notes": row.get("Notas"),
+                                       "detail_json": row.get("Detalle JSON"), "_rpe_missing_row": True}
     window = {k: s for k, s in sessions.items() if start <= (s.get("date") or "") <= today}
     with_rpe = [s for s in window.values() if s.get("rpe") is not None]
-    without = sorted((s for s in window.values() if s.get("rpe") is None),
-                     key=lambda s: s.get("start_local") or "")
+    no_rpe = [s for s in window.values() if s.get("rpe") is None]
+    declared = sorted((s for s in no_rpe if rpe_not_applicable(fb.get(s["id"]))), key=lambda s: s.get("start_local") or "")
+    declared_ids = {s["id"] for s in declared}
+    without = sorted((s for s in no_rpe if s["id"] not in declared_ids), key=lambda s: s.get("start_local") or "")
     orphan = sorted(k for k, v in fb.items()
                     if isinstance(v, dict) and start <= str(v.get("date") or "") <= today and k not in sessions)
     date_mismatch = sorted(k for k, v in fb.items()
                            if isinstance(v, dict) and k in sessions and v.get("date")
                            and v.get("date") != sessions[k].get("date"))
     total = len(window)
-    pct = 100.0 * len(with_rpe) / total if total else None
+    applicable = total - len(declared)
+    pct = 100.0 * len(with_rpe) / applicable if applicable else None
     status = "ok" if not without and not orphan and not date_mismatch else "revisar"
     return {
         "window_days": days, "from": start, "to": today,
         "sessions": total, "with_rpe": len(with_rpe), "rpe_coverage_pct": r(pct, 0),
+        "rpe_not_applicable": [{"id": s["id"], "start_local": s.get("start_local"),
+                                "label": (fb.get(s["id"]) or {}).get("activity")} for s in declared],
         "without_rpe": [{"id": s["id"], "start_local": s.get("start_local"), "type": s.get("type"),
                          "duration_min": s.get("duration_min"), "load": s.get("load")} for s in without],
         "rpe_without_activity": orphan, "date_mismatch": date_mismatch,
