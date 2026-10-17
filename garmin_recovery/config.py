@@ -16,7 +16,7 @@ DEFAULTS: dict = {
     "baseline_days": 60,          # línea base personal (excluye el día evaluado)
     "rolling_days": 7,            # media móvil de HRV (enfoque ln rMSSD 7 días)
     "min_baseline_n": 7,          # por debajo: no hay puntuación
-    "mature_baseline_n": 21,      # desde aquí: confianza alta
+    "provisional_below_n": 14,    # por debajo: evaluación "provisional" (nunca verde)
     "min_rolling_n": 4,           # noches mínimas para la media móvil de 7 días
     "swc_factor": 0.5,            # cambio mínimo relevante = 0.5 · DE de la base
     # Sueño
@@ -26,7 +26,8 @@ DEFAULTS: dict = {
     "atl_days": 7,
     "ctl_days": 42,
     "min_ctl_for_form": 15.0,     # con CTL menor, la "forma" (TSB %) no es interpretable
-    "min_load_coverage_days": 28, # días de historial de sesiones para ACWR propio
+    "min_load_coverage_days": 28, # días de historial con RPE para ACWR propio
+    "min_srpe_coverage_pct": 75,  # % de sesiones con RPE para monotonía, strain y ACWR
     # Composición de la puntuación (se renormaliza con los componentes disponibles)
     "weights": {
         "hrv": 0.30,
@@ -50,7 +51,6 @@ DEFAULTS: dict = {
     # Rutas
     "history_dir": "history",
     "output_dir": "app",
-    "history_retention_days": 3650,
 }
 
 

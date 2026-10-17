@@ -79,10 +79,31 @@ def update_history(history_dir: str | Path, day_records: dict, sessions: list[di
     return daily, sess
 
 
+def flag_removed_sessions(sessions: dict, fresh: list[dict]) -> dict:
+    """Marca como eliminadas las sesiones que faltan en la fuente dentro de su ventana.
+
+    No se borra ninguna fila (política del repo). Se ignora el día más antiguo de la
+    ventana por si la fuente lo trae incompleto; si la fuente viene vacía no se marca nada."""
+    dates = sorted(s["date"] for s in fresh if s.get("date"))
+    if not dates:
+        return sessions
+    fresh_ids = {s["id"] for s in fresh}
+    for sid, s in sessions.items():
+        if sid in fresh_ids:
+            s["removed"] = 0
+        elif (s.get("date") or "") > dates[0]:
+            s["removed"] = 1
+    return sessions
+
+
 def recompute_daily_load(daily: dict, sessions: dict) -> dict:
     """La carga diaria se deriva siempre del historial completo de sesiones."""
     from .records import aggregate_sessions
-    agg = aggregate_sessions(sessions.values())
+    agg = aggregate_sessions(s for s in sessions.values() if not s.get("removed"))
+    keys = ("sessions", "duration_min", "load", "srpe", "rpe_sessions")
+    for row in daily.values():  # un día cuyas sesiones se eliminaron no conserva carga antigua
+        for k in keys:
+            row[k] = None
     for day, values in agg.items():
         row = daily.setdefault(day, {f: None for f in DAILY_FIELDS} | {"date": day})
         row.update(values)

@@ -3,6 +3,7 @@
 Principios (coherentes con la política fisiológica del repositorio):
 
 * HRV en ln(rMSSD): media móvil de 7 días frente a la línea base personal
+  robusta (mediana y MAD, insensible a noches anómalas)
   (hasta 60 días previos a esa semana) con banda de cambio mínimo relevante
   (± 0.5 DE). Una sola noche mala no hunde la puntuación; una tendencia sí.
 * Puntuaciones continuas por componente (sin escalones bruscos):
@@ -19,7 +20,7 @@ import math
 from datetime import date, timedelta
 
 from . import MODEL_VERSION
-from .stats import clamp, cv_pct, mean, median, r, robust_z, sd
+from .stats import clamp, cv_pct, mad_sigma, mean, median, r, robust_z, sd
 
 COMPONENT_LABELS = {
     "hrv": "Variabilidad cardiaca (HRV)",
@@ -70,7 +71,8 @@ def hrv_component(daily: dict, today: date, cfg: dict) -> dict:
     out = {"n_baseline": len(base_ln), "n_rolling": len(roll_ln), "today_ms": current}
     if len(base_ln) < 3 or not current:
         return out | {"z": None}
-    m, s = mean(base_ln), sd(base_ln) or 0.0
+    # Línea base robusta (mediana/MAD): una noche anómala (p. ej. 20 ms) no ensancha el rango normal.
+    m, s = median(base_ln), mad_sigma(base_ln) or 0.0
     swc = cfg["swc_factor"] * s
     ln_today = math.log(current)
     # Una sola noche no puede dominar: su z se acota antes de combinar con la tendencia.
@@ -280,7 +282,7 @@ def assess(daily: dict, today_str: str, cfg: dict, load: dict | None = None,
         total_w = sum(c["weight"] for c in available.values())
         score = sum(c["score"] * c["weight"] for c in available.values()) / total_w
 
-    state = "pending" if reasons else ("provisional" if n_base < 14 else "assessed")
+    state = "pending" if reasons else ("provisional" if n_base < cfg.get("provisional_below_n", 14) else "assessed")
     zone = zone_for(score, cfg)
     caps = []
     if state == "provisional" and zone == "green":

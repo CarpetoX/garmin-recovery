@@ -56,13 +56,19 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
     root = Path(root)
     cfg = load_config(root)
     tz = ZoneInfo(cfg["timezone"])
-    now = now or datetime.now(tz)
+    now = (now or datetime.now(tz)).astimezone(tz)  # la fecha del día siempre en Europe/Madrid
     today = now.date().isoformat()
 
     inputs = load_inputs(root)
     sessions_fresh = build_sessions(inputs)
     day_records = build_day_records(inputs, now, sessions_fresh)
     daily, sessions = update_history(root / cfg["history_dir"], day_records, sessions_fresh, write=write)
+    from .history import flag_removed_sessions, write_table as _wt
+    from .records import SESSION_FIELDS
+    sessions = flag_removed_sessions(sessions, sessions_fresh)
+    if write:
+        _wt(root / cfg["history_dir"] / "sessions.csv", sessions, SESSION_FIELDS, "id")
+    sessions = {k: v for k, v in sessions.items() if not v.get("removed")}
     daily = recompute_daily_load(daily, sessions)
 
     load = compute_load(daily, sessions, today, cfg)
@@ -73,7 +79,7 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
 
     garmin_today = (daily.get(today) or {}).get("garmin_readiness")
     decision = operative_decision(readiness, legacy, inputs.get("daily_summary") or {}, garmin_today,
-                                  GUIDANCE, bool(cfg.get("model_validated")))
+                                  GUIDANCE, bool(cfg.get("model_validated")), today=today)
     # Histórico de modelos: se guarda la foto del día (la última ejecución del día prevalece)
     scores = {m["id"]: m.get("score") for m in decision["registry"]}
     today_row = daily.setdefault(today, {f: None for f in DAILY_FIELDS} | {"date": today})
@@ -103,6 +109,10 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
         "history": {"days": len(daily), "first_date": dates[0] if dates else None,
                     "last_date": dates[-1] if dates else None, "sessions": len(sessions)},
         "trend_28d": series, "recent_sessions": recent_sessions,
+        # Todas las sesiones de los últimos 28 días (para gráficas; recent_sessions es solo la tabla)
+        "sessions_28d": sorted((s_ for s_ in sessions.values()
+                                if (s_.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=27)).isoformat()),
+                               key=lambda s_: (s_["date"], s_.get("start_local") or "")),
         "mode": "shadow",
         "mode_note": ("Modelo v3 en paralelo: no sustituye recovery_assessment.json. La recomendación del día es "
                       "decision.guidance (la más conservadora entre modelos), no readiness.guidance."),

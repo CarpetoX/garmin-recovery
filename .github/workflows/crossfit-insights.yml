@@ -130,27 +130,42 @@ jobs:
 
       # V5.3: la app corre al final, con el certificado del ciclo y los datos de fuerza ya generados.
       - name: V5.3 - App de seguimiento e informe del ciclo (no bloqueante)
+        id: app_v5
         continue-on-error: true
         timeout-minutes: 5
         env:
           PLANNED_CSV_URL: ${{ secrets.PLANNED_CSV_URL }}
         run: python -m garmin_recovery run
 
-      # V5.6: nunca publicar un informe roto; si la validación falla se conserva el anterior.
+      # V5.6/V5.7: nunca publicar un informe roto. Sin "set -e": la restauración se ejecuta
+      # aunque falle la app, el validador o la copia de su resultado.
       - name: V5.6 - Validar salidas de la app antes de publicar
+        id: validate_v56
+        if: always()
         continue-on-error: true
-        timeout-minutes: 2
-        shell: bash
+        timeout-minutes: 5
+        shell: bash {0}
+        env:
+          APP_OUTCOME: ${{ steps.app_v5.outcome }}
         run: |
-          if python -m garmin_recovery validate; then
+          valid=false
+          rm -f app/validation.json
+          if [ "$APP_OUTCOME" = "success" ] && timeout 90 python -m garmin_recovery validate --max-age-min 60; then
+            valid=true
             echo "Salidas de la app validadas."
-          else
-            cp app/validation.json "$RUNNER_TEMP/validation.json"
-            git checkout -- app history 2>/dev/null || true
-            git clean -fdq app history 2>/dev/null || true
-            mkdir -p app && cp "$RUNNER_TEMP/validation.json" app/validation.json
-            echo "::warning::Validación fallida: se conserva el informe anterior."
           fi
+          if [ "$valid" != "true" ]; then
+            tmp="${RUNNER_TEMP:-/tmp}/validation.json"
+            if [ -s app/validation.json ] && [ "$APP_OUTCOME" = "success" ]; then cp app/validation.json "$tmp"; else
+              reason="app_outcome:$APP_OUTCOME"; [ "$APP_OUTCOME" = "success" ] && reason="validator_error_or_timeout"
+              printf '{"status":"failed","errors":["%s"],"checks":0}\n' "$reason" > "$tmp"; fi
+            git checkout -- app history 2>/dev/null
+            git clean -fdq app history 2>/dev/null
+            mkdir -p app && cp "$tmp" app/validation.json
+            echo "::warning::Salidas no válidas (app: $APP_OUTCOME): se conserva el informe anterior."
+          fi
+          echo "valid=$valid" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Pruebas de regresión V2.4
         run: python pipeline_regression_tests.py --stage crossfit
@@ -246,7 +261,7 @@ jobs:
           PY
 
       - name: V5.1 - Avisar a la rutina de Claude para el informe del ciclo
-        if: success() && github.event_name == 'workflow_run'
+        if: success() && github.event_name == 'workflow_run' && steps.validate_v56.outputs.valid == 'true'
         continue-on-error: true
         timeout-minutes: 2
         env:

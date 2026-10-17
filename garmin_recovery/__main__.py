@@ -19,10 +19,12 @@ def main(argv=None) -> int:
     p_run.add_argument("--now", help="Instante ISO para reproducir un día concreto")
     p_val = sub.add_parser("validate", help="Valida JSON, informe, gráficas e historial publicados")
     p_val.add_argument("--root", default=".")
+    p_val.add_argument("--max-age-min", type=float, default=None,
+                       help="Falla si la salida tiene más minutos de antigüedad (en la cadena: 60)")
     args = parser.parse_args(argv)
     if args.cmd == "validate":
         from .validate import validate, write_result
-        res = validate(args.root)
+        res = validate(args.root, max_age_minutes=args.max_age_min)
         write_result(args.root, res)
         print(json.dumps(res, ensure_ascii=False))
         return 0 if res["status"] == "ok" else 1

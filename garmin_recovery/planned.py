@@ -76,8 +76,42 @@ def parse_scheme(fmt: str):
     return (int(m.group(1)), int(m.group(2))) if m else None
 
 
+def parse_load_spec(text: str) -> dict:
+    """Interpreta la carga prevista sin inventar cifras.
+
+    * ``80 % 1RM`` / ``75-80 %``      → porcentajes (relativos, no kg)
+    * ``2x20`` / ``2 × 22,5``           → kg por implemento (mancuernas/kettlebells)
+    * ``150–160`` · ``150,160`` · ``150/160`` · ``167,5`` → kg; la coma con 1–2 decimales es decimal
+    """
+    t = text or ""
+    nums = [float(x.replace(",", ".")) for x in re.findall(r"\d+(?:[.,]\d{1,2})?(?!\d)", t)]
+    if "%" in t:  # solo cuentan los números unidos a "%" (o rangos "75-80 %"), no series ni repeticiones
+        pcts = []
+        for a, b in re.findall(r"(\d+(?:[.,]\d+)?)\s*(?:[-–]\s*(\d+(?:[.,]\d+)?)\s*)?%", t):
+            pcts += [float(x.replace(",", ".")) for x in (a, b) if x]
+        return {"kind": "percent", "values": [n for n in pcts if 0 < n <= 100]}
+    m = re.fullmatch(r"\s*(\d+)\s*[×xX]\s*(\d+(?:[.,]\d{1,2})?)\s*(kg)?\s*", t)
+    if m:
+        return {"kind": "per_implement", "count": int(m.group(1)), "values": [float(m.group(2).replace(",", "."))]}
+    return {"kind": "kg", "values": nums}
+
+
 def parse_loads(text: str) -> list[float]:
-    return [float(x.replace(",", ".")) for x in re.findall(r"\d+(?:[.,]\d+)?", text or "")]
+    spec = parse_load_spec(text)
+    return spec["values"] if spec["kind"] == "kg" else []
+
+
+def reduced_sets(sets: int) -> int:
+    """75 % de las series, con al menos una serie menos cuando hay más de una."""
+    if sets <= 1:
+        return 1
+    return max(1, min(sets - 1, int(sets * 0.75 + 0.5)))
+
+
+def parse_rpe(text) -> float | None:
+    """'7-8' o '7–8' → 7 (límite inferior, el más prudente)."""
+    nums = [float(x.replace(",", ".")) for x in re.findall(r"\d+(?:[.,]\d+)?", str(text or ""))]
+    return min(nums) if nums else None
 
 
 def plate(x: float, step: float = 2.5) -> float:
@@ -90,12 +124,15 @@ def _kg(v: float) -> str:
 
 def adjust(row: dict, zone: str, rpe_cap: int | None) -> dict:
     kind = session_type(row)
-    target = _num(row.get("rpe_target"))
+    target = parse_rpe(row.get("rpe_target"))
     scheme = parse_scheme(row.get("format", ""))
-    loads = parse_loads(row.get("load_text", ""))
+    spec = parse_load_spec(row.get("load_text", ""))
+    loads = spec["values"] if spec["kind"] == "kg" else []
     dur = _num(row.get("duration_min"))
-    planned_txt = " · ".join(x for x in (row.get("activity"), row.get("format"),
-                                         f"{row['load_text']} kg" if row.get("load_text") else "",
+    load_txt = row.get("load_text") or ""
+    if load_txt and spec["kind"] != "percent" and "kg" not in load_txt.lower():
+        load_txt += " kg"
+    planned_txt = " · ".join(x for x in (row.get("activity"), row.get("format"), load_txt,
                                          f"RPE {row['rpe_target']}" if row.get("rpe_target") else "",
                                          f"{row['duration_min']} min" if row.get("duration_min") else "") if x)
     cap = rpe_cap if rpe_cap is not None else 6
@@ -131,10 +168,17 @@ def adjust(row: dict, zone: str, rpe_cap: int | None) -> dict:
         factor = 0.90 if kind == "Fuerza" else 0.80
         if scheme:
             sets, reps = scheme
-            parts.append(f"{max(1, round(sets * 0.75))} × {reps}")
+            parts.append(f"{reduced_sets(sets)} × {reps}")
         else:
             parts.append("−25 % de series")
-        if loads:
+        if spec["kind"] == "percent" and spec["values"]:
+            pcts = [p_ * factor for p_ in spec["values"]]
+            rng = "–".join(f"{x:.0f}" for x in (min(pcts), max(pcts))) if len(set(round(x) for x in pcts)) > 1 else f"{pcts[0]:.0f}"
+            parts.append(f"intensidad máx. {rng} % de tu referencia ({int(factor * 100)} % de lo previsto)")
+        elif spec["kind"] == "per_implement" and spec["values"]:
+            per = plate(spec["values"][0] * factor, 1.0 if spec["values"][0] < 30 else 2.0)
+            parts.append(f"{spec['count']} × {_kg(per)} kg por implemento ({int(factor * 100)} % de lo previsto)")
+        elif loads:
             adj = [plate(x * factor) for x in loads]
             rng = "–".join(_kg(x) for x in (min(adj), max(adj))) if len(set(adj)) > 1 else _kg(adj[0])
             parts.append(f"carga máx. {rng} kg ({int(factor * 100)} % de lo previsto)")

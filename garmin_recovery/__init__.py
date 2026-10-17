@@ -12,5 +12,5 @@ Uso::
     python -m garmin_recovery run --dry-run  # calcula sin escribir
 """
 
-APP_VERSION = "5.6.0"
-MODEL_VERSION = "readiness-v3.1"
+APP_VERSION = "5.7.0"
+MODEL_VERSION = "readiness-v3.2"
