@@ -11,7 +11,11 @@ import csv
 import json
 import re
 import xml.dom.minidom
+from datetime import datetime, timezone
 from pathlib import Path
+
+from .decision import operative_zone
+from .readiness import GUIDANCE
 
 GR_RE = re.compile(r"^GR-\d{4}-\d{2}-\d{2}-\d{4}-[0-9a-f]{6}$")
 ZONES = {"green", "yellow", "red", "unavailable"}
@@ -22,7 +26,7 @@ def _check(errors: list, cond: bool, msg: str) -> None:
         errors.append(msg)
 
 
-def validate(root: str | Path = ".") -> dict:
+def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: datetime | None = None) -> dict:
     root = Path(root)
     app, hist = root / "app", root / "history"
     errors: list[str] = []
@@ -45,10 +49,24 @@ def validate(root: str | Path = ".") -> dict:
     _check(errors, isinstance(g.get("rpe_max"), int) and 0 <= g["rpe_max"] <= 10, "json: guidance.rpe_max fuera de rango")
     _check(errors, bool(g.get("text")), "json: guidance.text vacío")
     voting = [m for m in dec.get("registry") or [] if m.get("used_in_decision")]
-    order = {"unavailable": 0, "red": 1, "yellow": 2, "green": 3}
-    if voting and dec.get("zone") in order and all(m.get("zone") in order for m in voting):
-        _check(errors, order[dec["zone"]] == min(order[m["zone"]] for m in voting),
+    if voting:
+        checks += 1
+        _check(errors, dec.get("zone") == operative_zone([m.get("zone") for m in voting]),
                "json: la decisión no es la más conservadora de los modelos")
+    if dec.get("zone") in GUIDANCE:
+        checks += 1
+        ref = GUIDANCE[dec["zone"]]
+        _check(errors, g.get("rpe_max") == ref["rpe_max"] and g.get("text") == ref["text"],
+               "json: la pauta no corresponde a la zona de la decisión")
+    gen = None
+    try:
+        gen = datetime.fromisoformat(str(data.get("generated_at")))
+    except ValueError:
+        errors.append("json: generated_at inválido")
+    if max_age_minutes is not None and gen is not None:
+        checks += 1
+        age = ((now or datetime.now(timezone.utc)) - gen).total_seconds() / 60
+        _check(errors, -5 <= age <= max_age_minutes, f"json: salida generada hace {age:.0f} min (máx. {max_age_minutes:.0f})")
     for p in (data.get("planned") or {}).get("today") or []:
         checks += 1
         _check(errors, p.get("rpe_max") is not None and p["rpe_max"] <= g.get("rpe_max", 10),
@@ -73,6 +91,10 @@ def validate(root: str | Path = ".") -> dict:
         _check(errors, bool(g.get("text")) and g["text"] in md, "md: la recomendación no coincide con decision.guidance")
         _check(errors, "None" not in md and "NaN" not in md, "md: contiene None/NaN")
         _check(errors, "## Certificado" in md, "md: falta el certificado")
+        if report_id and gen is not None:
+            checks += 1
+            _check(errors, report_id.startswith(f"GR-{data.get('date')}-{gen.strftime('%H%M')}-"),
+                   "md: el informe no corresponde a este JSON (fecha/hora del identificador distintas)")
         # 3) Gráficas enlazadas
         for name in re.findall(r"\(charts/([A-Za-z0-9_.-]+\.svg)\)", md):
             checks += 1
@@ -95,6 +117,10 @@ def validate(root: str | Path = ".") -> dict:
         _check(errors, all(i and GR_RE.match(i) for i in ids), "historial: identificador GR inválido en reports.csv")
         _check(errors, len(ids) == len(set(ids)), "historial: identificadores GR duplicados")
         _check(errors, not report_id or (ids and ids[-1] == report_id), "historial: el último registro no es el informe publicado")
+        if rows:
+            checks += 1
+            _check(errors, rows[-1].get("generated_at") == data.get("generated_at"),
+                   "historial: el último registro no corresponde a este JSON")
     daily = hist / "daily.csv"
     if daily.exists():
         dd = [r.get("date") for r in csv.DictReader(daily.open(encoding="utf-8"))]

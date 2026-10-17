@@ -8,7 +8,9 @@ rol, regla) y deriva UNA decisión operativa con una regla conservadora:
   hasta que el v3 se valide frente al rendimiento real.
 * Zona operativa = la MÁS CONSERVADORA entre el oficial (v2), el híbrido
   (que incorpora Garmin Training Readiness) y el v3 en sombra.
-* Cualquier modelo pendiente o sin datos → la decisión es "pendiente"
+* Orden de prudencia (de más a menos estricto): rojo → pendiente → ámbar →
+  verde. Un rojo de cualquier modelo prevalece siempre; si ninguno es rojo y
+  alguno está pendiente, sin datos o es de otro día, la decisión es "pendiente"
   (no autoriza intensidad alta).
 
 Así una discrepancia entre modelos nunca produce una recomendación más
@@ -16,14 +18,15 @@ exigente que la del modelo más prudente.
 """
 from __future__ import annotations
 
-ORDER = {"unavailable": 0, "red": 1, "yellow": 2, "green": 3}
+# Ordenado por la exigencia de su pauta (RPE máx. 4 < 6 < 7 < 9): el menor gana.
+ORDER = {"red": 0, "unavailable": 1, "yellow": 2, "green": 3}
 ZONE_ES = {"unavailable": "pendiente", "red": "rojo", "yellow": "ámbar", "green": "verde"}
 
 
 CROSSFIT = {
     "green": ["Sesión planificada completa: halterofilia pesada, fuerza y WOD a intensidad alta si el calentamiento responde.",
               "Calentamiento progresivo; si la barra va lenta en las aproximaciones, baja a la pauta ámbar."],
-    "yellow": ["Halterofilia solo técnica (≤ 70 % de tus cargas habituales), sin singles pesados.",
+    "yellow": ["Halterofilia técnica al ≤ 80 % de tus cargas habituales, sin singles pesados.",
                "Fuerza submáxima: deja 2–3 repeticiones en reserva, sin series al fallo.",
                "WOD a ritmo controlado (sin all-out ni lucha contra el cap); recorta un 20–30 % de volumen."],
     "red": ["Sin WOD ni cargas pesadas: movilidad, técnica con PVC o barra vacía.",
@@ -39,11 +42,16 @@ def _zone(status, state=None) -> str | None:
     return s if s in ORDER else None
 
 
-def model_registry(readiness_v3: dict, legacy: dict, daily_summary: dict, garmin_readiness) -> list[dict]:
+def model_registry(readiness_v3: dict, legacy: dict, daily_summary: dict, garmin_readiness,
+                   today: str | None = None) -> list[dict]:
     ds = daily_summary or {}
     hybrid = ds.get("readiness_hybrid") or {}
     compat = ds.get("readiness_model") or {}
-    return [
+    v2_date = (legacy.get("current") or {}).get("date")
+    ds_date = ds.get("date")
+    v2_stale = bool(today and v2_date and v2_date != today)
+    ds_stale = bool(today and ds_date and ds_date != today)
+    registry = [
         {"id": "recovery_assessment_v2", "label": "Recuperación v2 (oficial)",
          "version": legacy.get("methodology_version"), "role": "oficial", "used_in_decision": True,
          "score": legacy.get("score"), "zone": _zone(legacy.get("status"), legacy.get("state")),
@@ -69,19 +77,28 @@ def model_registry(readiness_v3: dict, legacy: dict, daily_summary: dict, garmin
          "score": garmin_readiness, "zone": None, "state": None, "confidence": None,
          "rule": "Métrica propietaria (ya incluida en el híbrido); escala distinta, solo contexto."},
     ]
+    # Un modelo de otro día no puede decidir hoy: cuenta como sin datos (→ pendiente, salvo rojo).
+    for m, stale, d in ((registry[0], v2_stale, v2_date), (registry[1], ds_stale, ds_date), (registry[3], ds_stale, ds_date)):
+        if stale:
+            m.update(zone=None, state="desactualizado", stale_date=d)
+    return registry
+
+
+def operative_zone(zones: list) -> str:
+    """Zona más prudente; un modelo sin datos cuenta como "pendiente", nunca anula un rojo."""
+    effective = [z if z in ORDER else "unavailable" for z in zones] or ["unavailable"]
+    return min(effective, key=lambda z: ORDER[z])
 
 
 def operative_decision(readiness_v3: dict, legacy: dict, daily_summary: dict,
-                       garmin_readiness, guidance_table: dict, model_validated: bool) -> dict:
-    registry = model_registry(readiness_v3, legacy, daily_summary, garmin_readiness)
+                       garmin_readiness, guidance_table: dict, model_validated: bool,
+                       today: str | None = None) -> dict:
+    registry = model_registry(readiness_v3, legacy, daily_summary, garmin_readiness, today)
     voting = [m for m in registry if m["used_in_decision"]]
     zones = [m["zone"] for m in voting]
     missing = [m["id"] for m in voting if m["zone"] is None]
-    if missing:
-        zone = "unavailable"
-    else:
-        zone = min(zones, key=lambda z: ORDER[z])
-    deciding = [m["id"] for m in voting if m["zone"] == zone]
+    zone = operative_zone(zones)
+    deciding = [m["id"] for m in voting if (m["zone"] or "unavailable") == zone]
     v3_zone = readiness_v3.get("zone")
     divergence = []
     if v3_zone in ORDER and zone in ORDER and ORDER[v3_zone] > ORDER[zone]:
@@ -93,8 +110,8 @@ def operative_decision(readiness_v3: dict, legacy: dict, daily_summary: dict,
     return {
         "zone": zone, "zone_es": ZONE_ES[zone], "guidance": guidance, "crossfit": CROSSFIT[zone],
         "official_model": "recovery_assessment_v2" if not model_validated else "readiness_v3",
-        "rule": ("Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3; "
-                 "si alguno está pendiente o sin datos, la decisión queda pendiente."),
+        "rule": ("Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3. Un rojo prevalece "
+                 "siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente."),
         "decided_by": deciding, "missing_models": missing,
         "agreement": agreement, "divergence": divergence,
         "registry": registry,

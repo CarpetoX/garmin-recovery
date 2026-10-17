@@ -149,6 +149,7 @@ class LoadTests(unittest.TestCase):
         for i in range(7):
             d = (TODAY - timedelta(days=i)).isoformat()
             daily[d]["load"] = 20.0 if i % 2 else 40.0
+            daily[d]["srpe"] = 200.0 if i % 2 else 400.0
             sessions[f"s{i}"] = {"id": f"s{i}", "date": d}
         load = compute_load(daily, sessions, TODAY.isoformat(), self.cfg)
         self.assertEqual(load["week_load"], 220.0)

@@ -25,15 +25,15 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 |---|---|
 | `history/daily.csv` | Registro diario canónico persistente (HRV, FC, sueño, estrés, carga, sensaciones, turno, fuente por métrica). Upsert por fecha; nunca borra datos. |
 | `history/sessions.csv` | Sesiones por ID de actividad con duración, carga, FC, RPE y sRPE (Foster). |
-| `app/readiness_v3.json` | Disponibilidad de hoy, componentes, factores, carga (ATL/CTL/TSB, monotonía, strain, ACWR) y tendencia de 28 días. |
+| `app/readiness_v3.json` | Disponibilidad de hoy, componentes, factores, carga (ATL/CTL/TSB de Intervals; monotonía, strain y ACWR sobre sRPE) y tendencia de 28 días. |
 | `app/dashboard.html` | Panel autocontenido (claro/oscuro, móvil) para abrir en el navegador. |
 
 **Modelo readiness v3** (`garmin_recovery/readiness.py`):
 
-- HRV en ln(rMSSD): media de 7 días frente a tu línea base (hasta 60 días previos a esa semana) con banda de cambio mínimo relevante ±0,5 DE. Una noche mala pesa menos que una semana mala.
+- HRV en ln(rMSSD): media de 7 días frente a tu línea base (mediana de hasta 60 días previos a esa semana) con banda de cambio mínimo relevante ±0,5 σ robusta (MAD). Una noche mala pesa menos que una semana mala, y una lectura aislada anómala no ensancha el rango normal.
 - FC en reposo y nocturna en desviaciones robustas (mediana/MAD); sueño frente a la necesidad configurada y deuda de 3 noches; carga solo cuando la CTL permite interpretar la forma; sensaciones de Intervals.icu (1 = mejor, 4 = peor).
 - Puntuaciones continuas (`75 + 12,5·z`), ponderadas y renormalizadas. Zonas: verde ≥ 70, ámbar 50–69, rojo < 50, con RPE máximo y volumen recomendados.
-- Salvaguardas: sin HRV/sueño/FC de hoy o sueño sin confirmar → `pending` (no autoriza intensidad alta); línea base < 7 noches → sin puntuación; < 14 → `provisional`, nunca verde; sueño < 5 h nunca verde.
+- Salvaguardas: sin HRV/sueño/FC de hoy o sueño sin confirmar → `pending` (no autoriza intensidad alta); línea base < 7 noches → sin puntuación; < 14 (`provisional_below_n`) → `provisional`, nunca verde; sueño < 5 h nunca verde.
 - Avisos según turno (TN y post-TN) desde `shift_calendar.json`.
 - **Dos confianzas separadas** (V5.1): *datos* (completos y cubiertos 7 días) y *recomendación* (histórico mínimo: media ≥ 14 noches, alta ≥ 28; nunca alta mientras `model_validated` sea `false`).
 
@@ -50,6 +50,14 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 
 Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `history/` anteriores, de modo que nunca se publica un informe roto, y guarda el motivo en `app/validation.json`.
 
+**V5.7, correcciones de la auditoría de calidad** (un test por corrección en `test_audit_fixes_v57.py`):
+- **Decisión:** un rojo prevalece sobre un modelo pendiente (antes daba "pendiente" con RPE 6); v2 e híbrido de otro día cuentan como desactualizados y no deciden.
+- **Publicación segura:** el paso de validación ya no puede saltarse la restauración si la app falla; el aviso a la rutina solo sale si la validación pasa. El validador comprueba además que la pauta corresponda a la zona, que el JSON, el Markdown y `reports.csv` sean del mismo ciclo y que la salida tenga menos de 60 min.
+- **Modelo:** línea base de HRV robusta (mediana/MAD); monotonía, strain y ACWR sobre sRPE (Foster), con ACWR por medias 7/28 días solo con 28 días de historial; EWMA propia sin sesgo de arranque.
+- **Informe:** la gráfica de sesiones usa los 14 días completos (antes, como mucho 12 sesiones); halterofilia en ámbar al ≤ 80 % en todo el informe.
+- **Plan:** entiende `80 % 1RM`, `2x20` (kg por implemento), `150,160`, `167,5` y `RPE 7-8`; en ámbar quita al menos una serie (2 × → 1 ×).
+- **Historial:** las sesiones borradas en Intervals se marcan `removed=1` (no se borra ninguna fila) y dejan de contar en la carga; `--now` con otra zona horaria usa la fecha de Madrid.
+
 **V5.5, plan ajustado:** la app lee la pestaña `Planificados` de la hoja RPE CrossFit (secreto `PLANNED_CSV_URL`, con la pestaña publicada como CSV; también vale un `planned_sessions.csv` en la raíz) y ajusta cada sesión de hoy a la decisión del día:
 - **Verde:** se mantiene.
 - **Ámbar:** 75 % de las series; fuerza al 90 % y halterofilia al 80 % de la carga prevista, redondeadas a 2,5 kg; WOD al 75 % del tiempo.
@@ -59,7 +67,7 @@ Nunca supera el RPE máximo de la decisión. Por la tarde compara lo planificado
 
 **V5.4, calidad de datos del informe:** cada informe lleva un identificador (`GR-AAAA-MM-DD-HHMM-xxxxxx`) para poder citarlo y rastrearlo. Incluye "Qué ha cambiado desde el informe anterior", calculado a partir de `history/reports.csv`, una foto por ciclo. Las cargas de fuerza se muestran con su unidad real: total y por mancuerna, con barra, indicada en máquina o en máquina de discos. Hay una sección de acciones pendientes: RPE que faltan por ID exacto, ejercicios con la unidad sin especificar y sensaciones sin registrar. Se añaden pautas específicas para el box según la zona y las gráficas de recuperación con medias de 7 días en todas las franjas.
 
-**Decisión operativa y registro de modelos** (`decision`, V5.2): conviven varias puntuaciones (v2 oficial, híbrido Garmin + local, v3 en pruebas, compatibilidad V2.2 y Garmin Training Readiness). `decision.registry` declara versión, rol, escala y regla de cada una, y la **zona operativa es la más conservadora entre v2, híbrido y v3**; si alguno está pendiente o sin datos, la decisión queda pendiente. La recomendación del día es `decision.guidance`, nunca `readiness.guidance`. El v3 incluye desde V5.2 el estrés de Garmin del día anterior (completo) frente a tu línea base.
+**Decisión operativa y registro de modelos** (`decision`, V5.2): conviven varias puntuaciones (v2 oficial, híbrido Garmin + local, v3 en pruebas, compatibilidad V2.2 y Garmin Training Readiness). `decision.registry` declara versión, rol, escala y regla de cada una, y la **zona operativa es la más conservadora entre v2, híbrido y v3**: un rojo prevalece siempre; si no hay rojo y alguno está pendiente, sin datos o es de otro día, la decisión queda pendiente. La recomendación del día es `decision.guidance`, nunca `readiness.guidance`. El v3 incluye desde V5.2 el estrés de Garmin del día anterior (completo) frente a tu línea base.
 
 **Certificado del informe** (`certificate` en `app/readiness_v3.json`, V5.1): ciclo y runs de la cadena, hora real de sincronización (detecta Sync fuera de franja), antigüedad de cada medición por su marca temporal, huellas SHA-256 de las fuentes, coherencia v3/v2 de los valores de hoy y estado de entrega declarado como no verificable desde los datos. **Integridad del entrenamiento** (`training_integrity`): sesiones ↔ RPE emparejadas por ID exacto, RPE sin actividad, fechas discrepantes y sesiones sin RPE (no se rellenan ni estiman).
 

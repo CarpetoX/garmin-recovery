@@ -90,3 +90,57 @@ class ValidateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RollbackStepTests(unittest.TestCase):
+    """Ejecuta el paso real del workflow en un repo git temporal con un 'python' simulado."""
+
+    def run_step(self, app_outcome, validator_exit, writes_json):
+        import subprocess
+        import yaml
+        wf = yaml.safe_load((ROOT / ".github/workflows/crossfit-insights.yml").read_text(encoding="utf-8"))
+        step = [x for x in wf["jobs"]["crossfit"]["steps"] if x.get("id") == "validate_v56"][0]
+        self.assertEqual(step["shell"], "bash {0}")
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp)
+        sh = lambda *a: subprocess.run(a, cwd=tmp, check=True, capture_output=True)
+        sh("git", "init", "-q"); sh("git", "config", "user.email", "t@t"); sh("git", "config", "user.name", "t")
+        (tmp / "app").mkdir(); (tmp / "history").mkdir()
+        (tmp / "app" / "informe.md").write_text("VIEJO"); (tmp / "app" / "validation.json").write_text('{"status":"ok"}')
+        (tmp / "history" / "daily.csv").write_text("viejo")
+        sh("git", "add", "-A"); sh("git", "commit", "-qm", "base")
+        (tmp / "app" / "informe.md").write_text("NUEVO"); (tmp / "app" / "nuevo.svg").write_text("x")
+        (tmp / "history" / "daily.csv").write_text("nuevo")
+        bindir = tmp / "bin"; bindir.mkdir()
+        body = ("echo '{\"status\":\"failed\",\"errors\":[\"x\"]}' > app/validation.json\n" if writes_json else "") + f"exit {validator_exit}\n"
+        (bindir / "python").write_text("#!/bin/bash\n" + body); (bindir / "python").chmod(0o755)
+        out_file = tmp / "gh_output"
+        env = {"PATH": f"{bindir}:/usr/bin:/bin", "APP_OUTCOME": app_outcome, "GITHUB_OUTPUT": str(out_file),
+               "RUNNER_TEMP": str(tmp), "HOME": str(tmp)}
+        r = subprocess.run(["bash", "-c", step["run"]], cwd=tmp, env=env, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        return tmp, out_file.read_text()
+
+    def test_validator_crash_restores_previous(self):
+        tmp, out = self.run_step("success", 1, writes_json=False)
+        self.assertIn("valid=false", out)
+        self.assertEqual((tmp / "app" / "informe.md").read_text(), "VIEJO")
+        self.assertEqual((tmp / "history" / "daily.csv").read_text(), "viejo")
+        self.assertFalse((tmp / "app" / "nuevo.svg").exists())
+        self.assertIn("failed", (tmp / "app" / "validation.json").read_text())
+
+    def test_app_failure_restores_previous(self):
+        tmp, out = self.run_step("failure", 0, writes_json=True)
+        self.assertIn("valid=false", out)
+        self.assertEqual((tmp / "app" / "informe.md").read_text(), "VIEJO")
+        self.assertIn("app_outcome:failure", (tmp / "app" / "validation.json").read_text())
+
+    def test_validation_failure_keeps_reason(self):
+        tmp, out = self.run_step("success", 1, writes_json=True)
+        self.assertEqual((tmp / "app" / "informe.md").read_text(), "VIEJO")
+        self.assertIn('"x"', (tmp / "app" / "validation.json").read_text())
+
+    def test_success_publishes_new(self):
+        tmp, out = self.run_step("success", 0, writes_json=False)
+        self.assertIn("valid=true", out)
+        self.assertEqual((tmp / "app" / "informe.md").read_text(), "NUEVO")

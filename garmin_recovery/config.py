@@ -16,7 +16,7 @@ DEFAULTS: dict = {
     "baseline_days": 60,          # línea base personal (excluye el día evaluado)
     "rolling_days": 7,            # media móvil de HRV (enfoque ln rMSSD 7 días)
     "min_baseline_n": 7,          # por debajo: no hay puntuación
-    "mature_baseline_n": 21,      # desde aquí: confianza alta
+    "provisional_below_n": 14,    # por debajo: evaluación "provisional" (nunca verde)
     "min_rolling_n": 4,           # noches mínimas para la media móvil de 7 días
     "swc_factor": 0.5,            # cambio mínimo relevante = 0.5 · DE de la base
     # Sueño
@@ -50,7 +50,6 @@ DEFAULTS: dict = {
     # Rutas
     "history_dir": "history",
     "output_dir": "app",
-    "history_retention_days": 3650,
 }
 
 

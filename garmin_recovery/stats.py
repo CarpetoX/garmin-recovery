@@ -77,10 +77,13 @@ def clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
 
 
-def ewma(series: Sequence[float], days: int) -> list[float]:
-    """Media exponencial al estilo ATL/CTL (constante de tiempo ``days``)."""
+def ewma(series: Sequence[float], days: int, seed: float | None = None) -> list[float]:
+    """Media exponencial al estilo ATL/CTL (constante de tiempo ``days``).
+
+    ``seed`` evita el sesgo de arranque desde cero (sin él, una carga constante
+    tarda ~3 constantes de tiempo en reflejarse)."""
     k = 1 - math.exp(-1.0 / days)
-    out, acc = [], 0.0
+    out, acc = [], (seed or 0.0)
     for v in series:
         acc = acc + k * ((v or 0.0) - acc)
         out.append(acc)

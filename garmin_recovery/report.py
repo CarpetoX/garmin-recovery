@@ -616,7 +616,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         "rhr.svg": chart_rhr(trend, card.get("baseline_resting_hr")),
         "sleep.svg": chart_sleep(trend, slp.get("need_hours")),
         "load.svg": chart_load(trend, bool(load.get("form_interpretable"))),
-        "sessions.svg": chart_sessions(sessions, today),
+        "sessions.svg": chart_sessions(result.get("sessions_28d") or sessions, today),
     }
     strength_svg = chart_strength(strength)
     if strength_svg:

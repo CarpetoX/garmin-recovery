@@ -31,6 +31,7 @@ DAILY_FIELDS = [
 SESSION_FIELDS = [
     "id", "date", "start_local", "type", "name", "label",
     "duration_min", "load", "trimp", "avg_hr", "max_hr", "rpe", "srpe",
+    "removed",  # 1 = ya no existe en Garmin/Intervals dentro de su ventana (no cuenta en carga ni RPE)
 ]
 
 TEXT_FIELDS = {"date", "sleep_context", "sleep_start_local", "sleep_end_local",
