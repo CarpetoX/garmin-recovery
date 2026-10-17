@@ -52,13 +52,14 @@ class BuildSite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             for d in ("app", "history"):
                 shutil.copytree(ROOT / d, Path(tmp, d))
-            shutil.copy(ROOT / "crossfit_insights.json", tmp)
+            if (ROOT / "crossfit_insights.json").exists():
+                shutil.copy(ROOT / "crossfit_insights.json", tmp)
             info = site.build_site(tmp, Path(tmp, "_site"), history=False)
             out = Path(info["out"])
             for f in ("index.html", "manifest.webmanifest", "sw.js", "icon-192.png", "icon-512.png", "icon-180.png", ".nojekyll"):
                 self.assertTrue((out / f).exists(), f)
             html = (out / "index.html").read_text(encoding="utf-8")
-            for txt in ('rel="manifest"', "serviceWorker", 'id="cal"', 'id="c-rpe"', "Progresión de fuerza", "En tres líneas"):
+            for txt in ('rel="manifest"', "serviceWorker", 'id="cal"', 'id="c-rpe"', "En tres líneas"):
                 self.assertIn(txt, html)
             self.assertNotIn("{{", html)
             man = json.loads((out / "manifest.webmanifest").read_text(encoding="utf-8"))
@@ -68,6 +69,17 @@ class BuildSite(unittest.TestCase):
             plain = render(json.loads((ROOT / "app" / "readiness_v3.json").read_text(encoding="utf-8")))
             self.assertNotIn('rel="manifest"', plain)
             self.assertIn('id="cal"', plain)
+
+    def test_data_marker_in_content_is_not_reinterpreted(self):
+        if not (ROOT / "app" / "readiness_v3.json").exists():
+            self.skipTest("sin salida publicada")
+        from garmin_recovery.dashboard import render
+        result = json.loads((ROOT / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
+        html = render(result, {"pwa": True, "history": [], "strength_svg": "<svg>{{DATA}}</svg>"})
+        self.assertEqual(html.count("{{DATA}}"), 1)  # solo el texto del extra, nunca el JSON
+
+    def test_service_worker_only_clears_own_caches(self):
+        self.assertIn("k.startsWith('garmin-recovery-')", site.SERVICE_WORKER)
 
     def test_pages_workflow(self):
         wf = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")

@@ -87,7 +87,8 @@ def source_problems(root: Path, now: datetime) -> list[dict]:
     limit = (now - timedelta(days=1)).date().isoformat()
     gs = _read(root / "garmin_status.json")
     last = max((str(gs.get(k) or "") for k in ("latest_heart_rate_date", "latest_stress_date", "latest_extended_date")), default="")
-    if gs and (gs.get("status") == "error" or (last and last < limit)):
+    # un error aislado (p. ej. 429) vale solo si los datos publicados ya están atrasados
+    if gs and last and last < limit:
         err = str(gs.get("error") or "")[:160]
         hint = (" Parece un problema de acceso: renueva el secreto `GARMIN_TOKENS_B64` en GitHub."
                 if any(w in err.lower() for w in ("token", "auth", "401", "403", "login", "garmin_tokens")) else "")
@@ -95,7 +96,9 @@ def source_problems(root: Path, now: datetime) -> list[dict]:
                     + (f"; error: {err}" if err else "") + ")." + hint})
     try:
         wellness = json.loads((root / "wellness.json").read_text(encoding="utf-8"))
-        newest = max((str(x.get("id") or "") for x in wellness if isinstance(x, dict)), default="")
+        # solo cuentan filas con datos de Garmin (HRV, FC en reposo o sueño), no las que traen solo carga
+        newest = max((str(x.get("id") or "") for x in wellness if isinstance(x, dict)
+                      and any(x.get(k) not in (None, "", 0) for k in ("hrv", "restingHR", "sleepSecs"))), default="")
     except (OSError, ValueError, TypeError):
         newest = None
     if newest is not None and newest < limit:

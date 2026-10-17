@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 
 ZONE_UI = {
     "green": ("good", "✓"), "yellow": ("warning", "!"),
@@ -31,12 +32,10 @@ def render(result: dict, extras: dict | None = None) -> str:
     title = "Rendimiento y recuperación"
     extra = _extra_sections(result, extras)
     head = PWA_HEAD if extras.get("pwa") else ""
-    return TEMPLATE.replace("{{TITLE}}", title) \
-        .replace("{{HEAD}}", head) \
-        .replace("{{EXTRA}}", extra) \
-        .replace("{{DATE}}", _esc(result["date"])) \
-        .replace("{{TONE}}", tone).replace("{{ICON}}", icon) \
-        .replace("{{DATA}}", payload)
+    values = {"TITLE": title, "HEAD": head, "EXTRA": extra, "DATE": _esc(result["date"]),
+              "TONE": tone, "ICON": icon, "DATA": payload}
+    # una sola pasada: el contenido sustituido nunca se vuelve a interpretar como marcador
+    return re.sub(r"\{\{(TITLE|HEAD|EXTRA|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
 
 
 PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
@@ -454,7 +453,7 @@ function chart(el, opt){
       const i = Math.max(0, Math.min(n - 1, Math.floor((px - m.l) / bw)));
       const d = T[i];
       xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('opacity', .5);
-      tip.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'short', day:'numeric', month:'short'})}</b>` + (d.shift ? ` · turno ${d.shift}` : '') + '<br>' + opt.tip(d);
+      tip.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'short', day:'numeric', month:'short'})}</b>` + (d.shift ? ` · turno ${esc(d.shift)}` : '') + '<br>' + opt.tip(d);
       tip.style.opacity = 1;
       const tw = tip.offsetWidth, th = tip.offsetHeight;
       let left = rect.left + window.scrollX + x(i) + 12; if (left + tw > window.scrollX + document.documentElement.clientWidth - 8) left = rect.left + window.scrollX + x(i) - tw - 12;
@@ -534,7 +533,7 @@ if (cal && T.length) {
   let html = ''; for (let k = 0; k < lead; k++) html += '<button class="empty-day" tabindex="-1" aria-hidden="true"></button>';
   T.forEach((d, i) => {
     const z = d.decision_zone || d.zone || 'unavailable', r = RPE[d.date] || {};
-    const cls = `z-${z}${d.decision_zone ? '' : ' v3'}${r.over ? ' over' : ''}`;
+    const cls = `z-${String(z).replace(/[^a-z_]/g, '')}${d.decision_zone ? '' : ' v3'}${r.over ? ' over' : ''}`;
     html += `<button class="${cls}" data-i="${i}" aria-label="${esc(d.date)}"><span class="dn">${+d.date.slice(8)}</span>${r.rpe != null ? `<b>${fmt(r.rpe)}</b>` : (d.sessions ? '•' : '')}</button>`;
   });
   cal.innerHTML = html;

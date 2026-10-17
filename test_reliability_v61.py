@@ -17,7 +17,7 @@ def ws(garmin=None, wellness_last=None):
     if garmin is not None:
         (tmp / "garmin_status.json").write_text(json.dumps(garmin))
     if wellness_last is not None:
-        (tmp / "wellness.json").write_text(json.dumps([{"id": "2026-10-01"}, {"id": wellness_last}]))
+        (tmp / "wellness.json").write_text(json.dumps([{"id": "2026-10-01", "hrv": 60}, {"id": wellness_last, "hrv": 60}]))
     return tmp
 
 
@@ -41,6 +41,17 @@ class Sources(unittest.TestCase):
         p = source_problems(ws(None, "2026-10-14"), NOW)
         self.assertEqual([x["key"] for x in p], ["intervals"])
         self.assertIn("INTERVALS_API_KEY", p[0]["text"])
+
+    def test_intervals_rows_with_only_load_do_not_count(self):
+        root = ws(None, "2026-10-14")
+        (root / "wellness.json").write_text(json.dumps([{"id": "2026-10-14", "hrv": 60}, {"id": "2026-10-18", "ctl": 40, "atl": 50}]))
+        self.assertEqual([x["key"] for x in source_problems(root, NOW)], ["intervals"])
+
+    def test_isolated_garmin_error_with_fresh_data_is_not_an_alert(self):
+        root = ws({"status": "error", "error": "429", "latest_heart_rate_date": None}, "2026-10-18")
+        self.assertEqual(source_problems(root, NOW), [])
+        root = ws({"status": "error", "error": "429", "latest_heart_rate_date": "2026-10-17"}, "2026-10-18")
+        self.assertEqual(source_problems(root, NOW), [])
 
     def test_watchdog_scope_reports_sources(self):
         root = ws({"status": "error", "error": "401", "latest_heart_rate_date": "2026-10-10"}, "2026-10-18")
