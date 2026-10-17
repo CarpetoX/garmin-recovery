@@ -58,7 +58,7 @@ Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `histor
 - **Plan:** entiende `80 % 1RM`, `2x20` (kg por implemento), `150,160`, `167,5` y `RPE 7-8`; en ámbar quita al menos una serie (2 × → 1 ×).
 - **Historial:** las sesiones borradas en Intervals se marcan `removed=1` (no se borra ninguna fila) y dejan de contar en la carga; `--now` con otra zona horaria usa la fecha de Madrid.
 
-**V5.5, plan ajustado:** la app lee la pestaña `Planificados` de la hoja RPE CrossFit (secreto `PLANNED_CSV_URL`, con la pestaña publicada como CSV; también vale un `planned_sessions.csv` en la raíz) y ajusta cada sesión de hoy a la decisión del día:
+**V5.5, plan ajustado (opcional, no activado):** sin `PLANNED_CSV_URL` el informe muestra la tabla de reglas por tipo de sesión según la zona del día. Si se activase, la app leería la pestaña `Planificados` de la hoja RPE CrossFit (secreto `PLANNED_CSV_URL`, con la pestaña publicada como CSV; también vale un `planned_sessions.csv` en la raíz) y ajustaría cada sesión de hoy a la decisión del día:
 - **Verde:** se mantiene.
 - **Ámbar:** 75 % de las series; fuerza al 90 % y halterofilia al 80 % de la carga prevista, redondeadas a 2,5 kg; WOD al 75 % del tiempo.
 - **Rojo o pendiente:** técnica con PVC o barra vacía, o zona 2.

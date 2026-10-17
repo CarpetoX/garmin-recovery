@@ -147,5 +147,6 @@ class SameDayRulesTests(unittest.TestCase):
                "training_integrity": {}, "planned": {"source": "no_configurado", "today": []},
                "decision": {"zone": "yellow", "guidance": GUIDANCE["yellow"], "registry": [], "crossfit": ["x"]}}
         md, _ = rp.build_report(res, report_id="GR-t")
-        self.assertIn("## Cómo ajustar lo que planifiques hoy", md)
+        self.assertIn("## Cómo ajustar tu sesión de hoy", md)
+        self.assertNotIn("Planificados", md)
         self.assertIn("| Fuerza |", md)
