@@ -50,6 +50,12 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 
 Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `history/` anteriores, de modo que nunca se publica un informe roto, y guarda el motivo en `app/validation.json`.
 
+**V5.9, informes más claros:**
+- **Arriba del todo, tres líneas:** la decisión con su RPE máximo, por qué se ha tomado (qué modelos la marcan y las dos señales que más pesan) y qué hacer.
+- **Una sola decisión visible.** La comparación entre v2, híbrido y v3 queda en un desplegable "Cómo se decide".
+- **Secciones repetidas plegadas** (`<details>`): tendencias de 28 días (abiertas solo por la mañana), reglas por tipo de sesión, fuerza y detalle del certificado.
+- **Nuevo `app/informe_semanal.md`:** los últimos 7 días frente a los 7 anteriores, con sesiones, minutos, carga y sRPE; días por encima del RPE máximo; HRV, FC y sueño; fuerza de la semana; calidad de los datos; y validación. Se regenera en cada ciclo, y el del domingo por la noche es el cierre de la semana.
+
 **V5.8, validación de modelos** (`garmin_recovery/backtest.py`): cada día se guarda en `history/model_predictions.csv` lo que dijo cada modelo (v2, híbrido, v3 y decisión) **antes de la primera sesión**. La fila se actualiza mientras no entrenes y se congela en cuanto aparece una sesión, y no se reconstruye nada hacia atrás. Después se compara con tu **esfuerzo relativo**: ln(sRPE / carga de FC), estandarizado dentro de cada tipo de sesión con tu propio historial. Si el mismo trabajo cardiaco te cuesta más de lo habitual, sale positivo, así que un modelo útil tiene correlación negativa. También se comparan las sensaciones de la mañana siguiente, si las registras en Intervals, y los días entrenados por encima del RPE máximo. Se usa Spearman con IC 90 % y no hay veredicto hasta tener 20 días con entrenamiento, RPE y predicción (`min_validation_days`). El resultado está en `model_validation` de `readiness_v3.json` y en el informe de la noche. Promover el v3 sigue siendo una decisión manual (`model_validated`).
 
 **V5.7, correcciones de la auditoría de calidad** (un test por corrección en `test_audit_fixes_v57.py`):
