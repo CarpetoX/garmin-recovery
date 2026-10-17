@@ -117,6 +117,9 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
         "mode_note": ("Modelo v3 en paralelo: no sustituye recovery_assessment.json. La recomendación del día es "
                       "decision.guidance (la más conservadora entre modelos), no readiness.guidance."),
     }
+    from .backtest import update as update_validation
+    from .report import slot_for
+    result["model_validation"] = update_validation(root, result, slot_for(result), daily, sessions, cfg, write)
     if write:
         out = root / cfg["output_dir"]
         _write_json(out / "readiness_v3.json", result)
