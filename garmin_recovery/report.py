@@ -239,6 +239,14 @@ def chart_hrv(trend):
     return c.render()
 
 
+def rolling(values, n=7, min_n=4):
+    out = []
+    for i in range(len(values)):
+        win = [v for v in values[max(0, i - n + 1):i + 1] if v is not None]
+        out.append(sum(win) / len(win) if len(win) >= min_n else None)
+    return out
+
+
 def chart_rhr(trend, baseline):
     d = [t["date"] for t in trend]
     c = Chart(d, [t.get("resting_hr") for t in trend] + [t.get("night_hr") for t in trend] + [baseline],
@@ -248,6 +256,7 @@ def chart_rhr(trend, baseline):
         c.ref(baseline, f"mediana reposo {fmt(baseline)}")
         c.line([t.get("resting_hr") for t in trend], S1, "Reposo (lpm)", markers=True)
         c.line([t.get("night_hr") for t in trend], S2, "Nocturna (lpm)")
+        c.line(rolling([t.get("resting_hr") for t in trend]), "#1baf7a", "Reposo, media 7 d")
     return c.render()
 
 
@@ -262,6 +271,7 @@ def chart_sleep(trend, need):
         if any(day_sleep):
             c.bars(day_sleep, "#eda100", "Sueño diurno / post-TN (h)")
         c.ref(need, f"necesidad {fmt(need, 1)} h")
+        c.line(rolling([t.get("sleep_hours") for t in trend]), S2, "Media 7 días")
     return c.render()
 
 
@@ -409,15 +419,63 @@ def sessions_table(sessions, day=None, limit=8) -> str:
     return "\n".join(out) + "\n"
 
 
+EQUIP_ES = {"barbell": "barra", "dumbbell_pair": "mancuernas (par)", "dumbbell": "mancuerna",
+            "machine_stack": "máquina de placas", "plate_loaded_machine": "máquina de discos",
+            "bodyweight": "peso corporal", "kettlebell": "kettlebell", "unspecified": "sin especificar"}
+
+
+def format_load(r) -> str:
+    """Carga máxima con su unidad real: nunca una cifra ambigua."""
+    v, unit = r.get("peak_declared_load_kg"), r.get("load_unit")
+    if unit == "peso_corporal" or r.get("equipment") == "bodyweight":
+        return "peso corporal"
+    if v is None:
+        return "—"
+    txt = {
+        "kg_total_dos_mancuernas": f"{fmt(v, 1)} kg total (2 × {fmt(v / 2, 1)} kg)",
+        "kg_total_barra": f"{fmt(v, 1)} kg con barra",
+        "kg_indicado_maquina": f"{fmt(v, 1)} kg indicados en máquina",
+        "kg_total_dos_lados": f"{fmt(v, 1)} kg total (dos lados)",
+    }.get(unit, f"{fmt(v, 1)} kg (unidad sin especificar)")
+    if r.get("laterality_unconfirmed"):
+        txt += " · lateralidad sin confirmar"
+    return txt
+
+
 def strength_table(rows) -> str:
     if not rows:
         return "_Sin series de fuerza verificadas en la ventana._\n"
-    out = ["| Fecha | Ejercicio | Patrón | Carga máx. | Volumen | Series | RPE |", "|---|---|---|--:|--:|--:|--:|"]
-    for r in rows[:10]:
-        out.append(f"| {dshort(r['date'])} | {r.get('exercise')} | {r.get('movement_pattern') or '—'} | "
-                   f"{fmt(r.get('peak_declared_load_kg'), 1, ' kg')} | {fmt(r.get('verified_volume_kg'), 0, ' kg')} | "
-                   f"{r.get('known_sets') or '—'} | {fmt(r.get('rpe'), 1)} |")
+    out = ["| Fecha | Ejercicio | Implemento | Carga máx. | Volumen verificado | Series | RPE sesión |",
+           "|---|---|---|---|--:|--:|--:|"]
+    for r in rows[:12]:
+        bodyweight = r.get("equipment") == "bodyweight"
+        vol = "—" if bodyweight else fmt(r.get("verified_volume_kg"), 0, " kg") + ("" if r.get("volume_complete") else " (parcial)")
+        out.append(f"| {dshort(r['date'])} | {r.get('exercise')} | {EQUIP_ES.get(r.get('equipment'), r.get('equipment') or '—')} | "
+                   f"{format_load(r)} | {vol} | {r.get('known_sets') or '—'}/{r.get('total_sets') or '—'} | {fmt(r.get('rpe'), 1)} |")
+    out.append("")
+    out.append("_Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos "
+               "(barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._")
     return "\n".join(out) + "\n"
+
+
+def pending_actions(result, strength=None) -> list[str]:
+    ti = result.get("training_integrity") or {}
+    out = []
+    unclear = sorted({r.get("exercise") for r in strength or []
+                      if r.get("peak_declared_load_kg") and not r.get("load_unit") and r.get("equipment") in (None, "unspecified")})
+    for ex in unclear:
+        out.append(f"Indica el implemento y la unidad de carga de **{ex}** (barra, mancuernas por unidad o par, máquina) "
+                   "para que su carga sea comparable.")
+    for x in ti.get("without_rpe") or []:
+        when = f"{dshort(x['start_local'][:10])} {x['start_local'][11:16]}" if x.get("start_local") else "—"
+        out.append(f"Añade el RPE de la actividad **{x['id']}** ({when}, {categorize(x)}, {fmt(x.get('duration_min'))} min, "
+                   f"carga {fmt(x.get('load'))}) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento "
+                   "registrado aparte, anótalo así. No se estima.")
+    for k in ti.get("rpe_without_activity") or []:
+        out.append(f"La fila de RPE con ID **{k}** no coincide con ninguna actividad: revisa el ID.")
+    if not (_component(result, "subjective").get("values")):
+        out.append("Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).")
+    return out
 
 
 def certificate_block(result) -> list[str]:
@@ -452,8 +510,90 @@ def certificate_block(result) -> list[str]:
     ]
 
 
+# ---------------------------------------------------------------- snapshots
+SNAPSHOT_FIELDS = ["report_id", "generated_at", "date", "slot", "decision_zone", "v2_score", "hybrid_score",
+                   "v3_score", "hrv_ms", "resting_hr", "sleep_hours", "week_load", "week_sessions",
+                   "sessions_today", "load_today", "rpe_with", "data_synced_at"]
+
+
+def snapshot(result: dict, report_id: str) -> dict:
+    dec = result.get("decision") or {}
+    reg = {m["id"]: m for m in dec.get("registry") or []}
+    today = result.get("date")
+    today_s = [s for s in result.get("recent_sessions") or [] if s.get("date") == today]
+    return {
+        "report_id": report_id, "generated_at": result.get("generated_at"), "date": today, "slot": slot_for(result),
+        "decision_zone": dec.get("zone"),
+        "v2_score": (reg.get("recovery_assessment_v2") or {}).get("score"),
+        "hybrid_score": (reg.get("readiness_hybrid") or {}).get("score"),
+        "v3_score": (result.get("readiness") or {}).get("score"),
+        "hrv_ms": _component(result, "hrv").get("today_ms"),
+        "resting_hr": _component(result, "cardiac").get("resting_hr"),
+        "sleep_hours": _component(result, "sleep").get("hours"),
+        "week_load": (result.get("load") or {}).get("week_load"),
+        "week_sessions": (result.get("load") or {}).get("week_sessions"),
+        "sessions_today": len(today_s), "load_today": round(sum(s.get("load") or 0 for s in today_s), 1),
+        "rpe_with": (result.get("training_integrity") or {}).get("with_rpe"),
+        "data_synced_at": ((result.get("certificate") or {}).get("cycle") or {}).get("data_synced_at"),
+    }
+
+
+def report_id_for(result: dict) -> str:
+    import hashlib
+    core = json.dumps({"decision": (result.get("decision") or {}).get("zone"),
+                       "scores": [m.get("score") for m in (result.get("decision") or {}).get("registry") or []],
+                       "generated_at": result.get("generated_at")}, sort_keys=True)
+    try:
+        hhmm = datetime.fromisoformat(result.get("generated_at")).strftime("%H%M")
+    except (TypeError, ValueError):
+        hhmm = "0000"
+    return f"GR-{result.get('date')}-{hhmm}-{hashlib.sha256(core.encode()).hexdigest()[:6]}"
+
+
+def _num(v):
+    try:
+        return None if v in (None, "") else float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def changes_since(prev: dict | None, cur: dict) -> list[str]:
+    if not prev:
+        return ["Primer informe con registro de ciclos: la comparación aparecerá desde el siguiente."]
+    when = prev.get("generated_at") or ""
+    try:
+        when_txt = datetime.fromisoformat(when).strftime("%d/%m %H:%M")
+    except ValueError:
+        when_txt = when
+    out = []
+    if (prev.get("decision_zone") or None) != (cur.get("decision_zone") or None):
+        out.append(f"**Decisión:** {ZONE_ES.get(prev.get('decision_zone'), '—')} → **{ZONE_ES.get(cur.get('decision_zone'), '—')}**.")
+    for key, label, d in (("v2_score", "Oficial v2", 0), ("hybrid_score", "Híbrido", 0), ("v3_score", "v3", 0)):
+        a, b = _num(prev.get(key)), _num(cur.get(key))
+        if a is not None and b is not None and abs(a - b) >= 1:
+            out.append(f"{label}: {fmt(a, d)} → {fmt(b, d)} ({signed(b - a, d)}).")
+    new_night = prev.get("date") != cur.get("date") or any(
+        _num(prev.get(k)) != _num(cur.get(k)) for k in ("hrv_ms", "sleep_hours"))
+    if new_night:
+        out.append(f"Nueva noche registrada: HRV {fmt(_num(prev.get('hrv_ms')))} → {fmt(_num(cur.get('hrv_ms')))} ms, "
+                   f"sueño {fmt(_num(prev.get('sleep_hours')), 2)} → {fmt(_num(cur.get('sleep_hours')), 2)} h, "
+                   f"FC reposo {fmt(_num(prev.get('resting_hr')))} → {fmt(_num(cur.get('resting_hr')))} lpm.")
+    if prev.get("date") == cur.get("date"):
+        ds = int(_num(cur.get("sessions_today")) or 0) - int(_num(prev.get("sessions_today")) or 0)
+        dl = (_num(cur.get("load_today")) or 0) - (_num(prev.get("load_today")) or 0)
+        if ds > 0:
+            out.append(f"Sesiones nuevas desde entonces: **{ds}** (carga +{fmt(dl)}).")
+    a, b = _num(prev.get("rpe_with")), _num(cur.get("rpe_with"))
+    if a is not None and b is not None and b != a:
+        out.append(f"Sesiones con RPE: {fmt(a)} → {fmt(b)}.")
+    if not out:
+        out.append("Sin cambios en los datos.")
+    return [f"Frente al informe {prev.get('report_id') or ''} ({when_txt}):"] + out
+
+
 # ---------------------------------------------------------------- informe
-def build_report(result: dict, crossfit: dict | None = None) -> tuple[str, dict[str, str]]:
+def build_report(result: dict, crossfit: dict | None = None, previous: dict | None = None,
+                 report_id: str | None = None) -> tuple[str, dict[str, str]]:
     trend = result.get("trend_28d") or []
     dec = result.get("decision") or {}
     from .readiness import GUIDANCE
@@ -487,7 +627,8 @@ def build_report(result: dict, crossfit: dict | None = None) -> tuple[str, dict[
     except (TypeError, ValueError):
         day_txt = str(today)
     titles = {"mañana": "Informe matutino", "tarde": "Informe de seguimiento", "noche": "Cierre diario"}
-    md = [f"# {titles[slot]} · {day_txt}", ""]
+    report_id = report_id or report_id_for(result)
+    md = [f"# {titles[slot]} · {day_txt}", "", f"`{report_id}` · cita este identificador al reenviar el informe.", ""]
     ce = result.get("certificate") or {}
     if ce.get("status") != "ok" and ce.get("issues"):
         md += [f"> ⚠️ Certificado con avisos: {'; '.join(ce['issues'])}.", ""]
@@ -507,6 +648,11 @@ def build_report(result: dict, crossfit: dict | None = None) -> tuple[str, dict[
             for m in dec.get("registry") or []) + ". " + (dec.get("rule") or ""),
         "",
     ]
+    box = dec.get("crossfit") or []
+    if box:
+        md += ["## En el box hoy", ""] + [f"- {x}" for x in box] + [""]
+    md += ["## Qué ha cambiado desde el informe anterior", ""] + [f"- {x}" if i else x for i, x in
+                                                                  enumerate(changes_since(previous, snapshot(result, report_id)))] + [""]
 
     if slot == "mañana":
         md += ["## Qué ha cambiado respecto a tu línea base", ""] + ([f"- {x}" for x in what_changed(result)] or ["_Sin datos de hoy todavía._"]) + [""]
@@ -515,8 +661,7 @@ def build_report(result: dict, crossfit: dict | None = None) -> tuple[str, dict[
         plan = shift_notes(result, trend)
         md += ["## Plan del día", "", f"- {g.get('text', '')} RPE ≤ {g.get('rpe_max', '—')}, volumen {g.get('volume', '—')}."]
         md += [f"- {n}" for n in plan] + [""]
-        md += ["## Tendencias", "", "![Disponibilidad](charts/readiness.svg)", "", "![HRV](charts/hrv.svg)", "",
-               "![FC](charts/rhr.svg)", "", "![Sueño](charts/sleep.svg)", ""]
+        md += ["## Tendencias", "", "![Disponibilidad](charts/readiness.svg)", ""]
     elif slot == "tarde":
         today_sessions = [s for s in sessions if s.get("date") == today]
         md += ["## Actividad de hoy", "", sessions_table(sessions, day=today)]
@@ -548,9 +693,13 @@ def build_report(result: dict, crossfit: dict | None = None) -> tuple[str, dict[
         if shift_tomorrow:
             md += [f"- Mañana turno **{shift_tomorrow}**" + (": si entrenas, antes del turno, corto y sin máximos." if shift_tomorrow == "TN" else ".")]
         md += ["- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.", ""]
-        md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Sueño](charts/sleep.svg)", "",
-               "![Disponibilidad](charts/readiness.svg)", ""]
+        md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Disponibilidad](charts/readiness.svg)", ""]
 
+    md += ["## Recuperación: tendencias de 28 días", "", "![HRV](charts/hrv.svg)", "", "![FC](charts/rhr.svg)", "",
+           "![Sueño](charts/sleep.svg)", ""]
+    actions = pending_actions(result, strength)
+    if actions:
+        md += ["## Acciones pendientes", ""] + [f"- {x}" for x in actions] + [""]
     md += ["## Fuerza (últimos 28 días)", "", strength_table(strength)]
     if strength_svg:
         md += ["![Progresión](charts/strength.svg)", "",
@@ -558,7 +707,7 @@ def build_report(result: dict, crossfit: dict | None = None) -> tuple[str, dict[
                "(p. ej. series pesadas cortas frente a series de volumen)._", ""]
     else:
         md += ["_Progresión: hacen falta ≥ 2 sesiones del mismo ejercicio con barra para trazarla._", ""]
-    md += ["## Certificado", ""] + [f"- {x}" for x in certificate_block(result)] + [""]
+    md += ["## Certificado", "", f"- **Identificador del informe:** `{report_id}`"] + [f"- {x}" for x in certificate_block(result)] + [""]
     md += [f"_{(result.get('readiness') or {}).get('disclaimer') or 'No es un diagnóstico médico.'} Generado {result.get('generated_at', '')[:16].replace('T', ' ')} · "
            f"app {result.get('app_version')} · modelo {result.get('model_version')}. Fuente única: `app/readiness_v3.json`._", ""]
     return "\n".join(md), charts
@@ -574,7 +723,22 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     except (OSError, ValueError):
         shifts = {}
     crossfit = dict(crossfit, _shifts=shifts)
-    md, charts = build_report(result, crossfit)
+    import csv
+    reports_csv = Path(root) / "history" / "reports.csv"
+    previous = None
+    if reports_csv.exists():
+        with reports_csv.open(encoding="utf-8", newline="") as fh:
+            rows = [r for r in csv.DictReader(fh) if (r.get("generated_at") or "") < (result.get("generated_at") or "")]
+        previous = rows[-1] if rows else None
+    rid = report_id_for(result)
+    md, charts = build_report(result, crossfit, previous, rid)
+    reports_csv.parent.mkdir(parents=True, exist_ok=True)
+    new = not reports_csv.exists()
+    with reports_csv.open("a", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=SNAPSHOT_FIELDS, lineterminator="\n")
+        if new:
+            w.writeheader()
+        w.writerow({k: ("" if v is None else v) for k, v in snapshot(result, rid).items()})
     cdir = out_dir / "charts"
     cdir.mkdir(parents=True, exist_ok=True)
     for name, svg in charts.items():

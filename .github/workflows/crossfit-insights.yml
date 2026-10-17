@@ -143,7 +143,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add crossfit_insights.json report_history.json
-          for f in app/readiness_v3.json app/dashboard.html app/informe.md history/daily.csv history/sessions.csv; do
+          for f in app/readiness_v3.json app/dashboard.html app/informe.md history/daily.csv history/sessions.csv history/reports.csv; do
             [ ! -f "$f" ] || git add "$f"
           done
           [ ! -d app/charts ] || git add app/charts

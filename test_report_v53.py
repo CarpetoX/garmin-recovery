@@ -108,3 +108,63 @@ class RealDataTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class V54Tests(unittest.TestCase):
+    def test_load_units_are_explicit(self):
+        self.assertEqual(rp.format_load({"peak_declared_load_kg": 80.0, "load_unit": "kg_total_dos_mancuernas"}),
+                         "80,0 kg total (2 × 40,0 kg)")
+        self.assertIn("máquina", rp.format_load({"peak_declared_load_kg": 120.0, "load_unit": "kg_indicado_maquina"}))
+        self.assertIn("sin especificar", rp.format_load({"peak_declared_load_kg": 68.0, "load_unit": None}))
+        self.assertEqual(rp.format_load({"equipment": "bodyweight", "load_unit": "peso_corporal"}), "peso corporal")
+        self.assertIn("lateralidad", rp.format_load({"peak_declared_load_kg": 40.0, "load_unit": "kg_total_barra",
+                                                     "laterality_unconfirmed": True}))
+
+    def test_changes_since_previous(self):
+        prev = {"report_id": "GR-a", "generated_at": "2026-10-17T08:45:00+02:00", "date": "2026-10-17",
+                "decision_zone": "red", "v2_score": "45", "hrv_ms": "46", "sleep_hours": "7.84", "resting_hr": "60",
+                "sessions_today": "0", "load_today": "0", "rpe_with": "15"}
+        cur = dict(prev, report_id="GR-b", decision_zone="yellow", v2_score=60, sessions_today=1, load_today=20.0,
+                   hrv_ms=46.0, sleep_hours=7.84, rpe_with=16)
+        txt = " ".join(rp.changes_since(prev, cur))
+        self.assertIn("rojo → **ámbar**", txt)
+        self.assertIn("45 → 60", txt)
+        self.assertIn("Sesiones nuevas desde entonces: **1**", txt)
+        self.assertIn("15 → 16", txt)
+        self.assertNotIn("Nueva noche", txt)
+        self.assertIn("Primer informe", rp.changes_since(None, cur)[0])
+        self.assertIn("Sin cambios", " ".join(rp.changes_since(prev, dict(prev))))
+
+    def test_pending_actions_list_ids(self):
+        res = minimal_result(training_integrity={"without_rpe": [
+            {"id": "i1", "start_local": "2026-10-14T20:40:27", "type": "HIIT", "duration_min": 7.9, "load": 5}]})
+        acts = rp.pending_actions(res, [{"exercise": "X", "peak_declared_load_kg": 60, "load_unit": None, "equipment": "unspecified"}])
+        self.assertTrue(any("i1" in a and "No se estima" in a for a in acts))
+        self.assertTrue(any("**X**" in a for a in acts))
+
+    def test_crossfit_guidance_matches_zone(self):
+        from garmin_recovery.decision import CROSSFIT
+        self.assertTrue(all("WOD" in t or "Sin WOD" in t or "zona 2" in t for t in CROSSFIT["red"]))
+        self.assertFalse(any("intensidad alta si" in t for t in CROSSFIT["red"] + CROSSFIT["yellow"]))
+
+    def test_report_id_in_header_and_certificate(self):
+        res = minimal_result()
+        md, _ = rp.build_report(res, report_id="GR-test")
+        self.assertIn("`GR-test`", md.splitlines()[2])
+        self.assertIn("**Identificador del informe:** `GR-test`", md)
+
+
+class SnapshotLedgerTests(unittest.TestCase):
+    def test_one_snapshot_per_run_and_previous_is_used(self):
+        from garmin_recovery.pipeline import run
+        if not (ROOT / "garmin_hrv_timeline.json").exists():
+            self.skipTest("sin datos")
+        with tempfile.TemporaryDirectory() as tmp:
+            for p in list(ROOT.glob("*.json")) + list(ROOT.glob("*.csv")):
+                Path(tmp, p.name).write_bytes(p.read_bytes())
+            run(tmp, now=datetime(2026, 10, 17, 8, 50, tzinfo=TZ))
+            run(tmp, now=datetime(2026, 10, 17, 16, 55, tzinfo=TZ))
+            rows = Path(tmp, "history", "reports.csv").read_text(encoding="utf-8").strip().splitlines()
+            self.assertEqual(len(rows), 3)  # cabecera + 2 informes
+            md = Path(tmp, "app", "informe.md").read_text(encoding="utf-8")
+            self.assertIn("Frente al informe GR-2026-10-17-0850", md)
