@@ -212,5 +212,48 @@ class MinorFixes(unittest.TestCase):
         self.assertNotIn("mature_baseline_n", DEFAULTS)
 
 
+class ReviewFixes(unittest.TestCase):
+    """Hallazgos de la revisión independiente del PR."""
+
+    def test_acwr_needs_rpe_history_not_just_sessions(self):
+        from garmin_recovery.load import compute_load
+        daily, sessions = {}, {}
+        for i in range(35):
+            d = (TODAY - timedelta(days=i)).isoformat()
+            has_rpe = i < 7
+            daily[d] = {"date": d, "load": 20.0, "srpe": 300.0 if has_rpe else 0.0, "sessions": 1}
+            sessions[f"s{i}"] = {"id": f"s{i}", "date": d, "rpe": 6.0 if has_rpe else None}
+        load = compute_load(daily, sessions, TODAY.isoformat(), DEFAULTS)
+        self.assertIsNone(load["acwr"])
+        self.assertNotEqual(load["component_basis"], "acwr")
+
+    def test_monotony_needs_rpe_coverage(self):
+        from garmin_recovery.load import compute_load
+        daily, sessions = {}, {}
+        for i in range(7):
+            d = (TODAY - timedelta(days=i)).isoformat()
+            has_rpe = i < 3
+            daily[d] = {"date": d, "load": 20.0, "srpe": (200.0 + 50 * i) if has_rpe else 0.0, "sessions": 1}
+            sessions[f"s{i}"] = {"id": f"s{i}", "date": d, "rpe": 6.0 if has_rpe else None}
+        self.assertIsNone(compute_load(daily, sessions, TODAY.isoformat(), DEFAULTS)["monotony"])
+
+    def test_percent_ignores_sets_and_reps(self):
+        from garmin_recovery.planned import parse_load_spec
+        self.assertEqual(parse_load_spec("80% x3")["values"], [80.0])
+        self.assertEqual(parse_load_spec("3x2 @ 85 %")["values"], [85.0])
+        self.assertEqual(parse_load_spec("75-80 %")["values"], [75.0, 80.0])
+
+    def test_stale_model_score_not_recorded_as_today(self):
+        d = decide("green", "green", "green", v2_date="2026-10-16")
+        v2 = next(m for m in d["registry"] if m["id"] == "recovery_assessment_v2")
+        self.assertIsNone(v2["score"])
+        self.assertEqual(v2["stale_score"], 45)
+
+    def test_stale_red_still_caps(self):
+        d = decide("red", "green", "green", v2_date="2026-10-16")
+        self.assertEqual(d["zone"], "red")
+        self.assertEqual(d["guidance"]["rpe_max"], 4)
+
+
 if __name__ == "__main__":
     unittest.main()

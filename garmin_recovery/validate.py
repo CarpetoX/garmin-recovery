@@ -117,10 +117,15 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
         _check(errors, all(i and GR_RE.match(i) for i in ids), "historial: identificador GR inválido en reports.csv")
         _check(errors, len(ids) == len(set(ids)), "historial: identificadores GR duplicados")
         _check(errors, not report_id or (ids and ids[-1] == report_id), "historial: el último registro no es el informe publicado")
-        if rows:
-            checks += 1
+        checks += 1
+        if not rows:
+            errors.append("historial: reports.csv vacío")
+        else:
             _check(errors, rows[-1].get("generated_at") == data.get("generated_at"),
                    "historial: el último registro no corresponde a este JSON")
+    else:
+        checks += 1
+        errors.append("historial: falta history/reports.csv")
     daily = hist / "daily.csv"
     if daily.exists():
         dd = [r.get("date") for r in csv.DictReader(daily.open(encoding="utf-8"))]

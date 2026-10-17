@@ -26,7 +26,8 @@ DEFAULTS: dict = {
     "atl_days": 7,
     "ctl_days": 42,
     "min_ctl_for_form": 15.0,     # con CTL menor, la "forma" (TSB %) no es interpretable
-    "min_load_coverage_days": 28, # días de historial de sesiones para ACWR propio
+    "min_load_coverage_days": 28, # días de historial con RPE para ACWR propio
+    "min_srpe_coverage_pct": 75,  # % de sesiones con RPE para monotonía, strain y ACWR
     # Composición de la puntuación (se renormaliza con los componentes disponibles)
     "weights": {
         "hrv": 0.30,

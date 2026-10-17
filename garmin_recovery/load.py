@@ -71,20 +71,28 @@ def compute_load(daily: dict, sessions: dict, today: str, cfg: dict) -> dict:
     srpe28 = _series(daily, end - timedelta(days=27), end, "srpe")
     # Carga interna (sRPE de Foster) para monotonía, strain y ACWR: la carga de FC de
     # Intervals infravalora la fuerza (p. ej. 10×2 pesado a RPE 9 = carga 4, sRPE 138).
-    week_sessions_ids = [s_ for s_ in sessions.values()
-                         if (end - timedelta(days=6)).isoformat() <= (s_.get("date") or "") <= today]
-    rpe_known = sum(1 for s_ in week_sessions_ids if s_.get("rpe") is not None)
-    srpe_cov = 100.0 * rpe_known / len(week_sessions_ids) if week_sessions_ids else None
+    # Un día con sesiones sin RPE cuenta como sRPE 0: solo se calcula con cobertura de RPE suficiente.
+    def rpe_coverage(days):
+        start = (end - timedelta(days=days - 1)).isoformat()
+        win = [s_ for s_ in sessions.values() if start <= (s_.get("date") or "") <= today]
+        known = sum(1 for s_ in win if s_.get("rpe") is not None)
+        return 100.0 * known / len(win) if win else None
+    min_cov = cfg.get("min_srpe_coverage_pct", 75)
+    srpe_cov, srpe_cov28 = rpe_coverage(7), rpe_coverage(28)
     m7, s7 = mean(srpe7), sd(srpe7)
-    monotony = m7 / s7 if any(srpe7) and s7 and s7 > 0 else None
+    monotony = (m7 / s7 if any(srpe7) and s7 and s7 > 0 and srpe_cov is not None and srpe_cov >= min_cov
+                else None)
     week_load = sum(last7)
     prev_week = sum(prev7) if coverage_days >= 14 else None
     change_pct = 100 * (week_load - prev_week) / prev_week if prev_week else None
 
     # ACWR por medias móviles 7/28 días de sRPE: sin sesgo de arranque y solo con 28 días de historial.
     acwr = None
+    rpe_dates = sorted(s_["date"] for s_ in sessions.values() if s_.get("date") and s_.get("rpe") is not None)
+    rpe_days = (end - date.fromisoformat(rpe_dates[0])).days + 1 if rpe_dates else 0
     chronic = sum(srpe28) / 28 if srpe28 else 0
-    if coverage_days >= cfg["min_load_coverage_days"] and chronic > 0:
+    if (rpe_days >= cfg["min_load_coverage_days"] and chronic > 0
+            and srpe_cov28 is not None and srpe_cov28 >= min_cov):
         acwr = (sum(srpe7) / 7) / chronic
 
     # Componente de readiness: solo con forma interpretable o ACWR propio.
@@ -113,7 +121,7 @@ def compute_load(daily: dict, sessions: dict, today: str, cfg: dict) -> dict:
         "week_srpe": r(sum(srpe7)) if any(srpe7) else None,
         "week_sessions": sum(int((daily.get((end - timedelta(days=i)).isoformat()) or {}).get("sessions") or 0) for i in range(7)),
         "monotony": r(monotony, 2), "strain": r(sum(srpe7) * monotony) if monotony else None,
-        "internal_load_basis": "srpe_foster", "srpe_coverage_7d_pct": r(srpe_cov, 0),
+        "internal_load_basis": "srpe_foster", "srpe_coverage_7d_pct": r(srpe_cov, 0), "srpe_coverage_28d_pct": r(srpe_cov28, 0),
         "acwr": r(acwr, 2), "acwr_basis": "srpe_media_7_vs_28",
         "consecutive_training_days": days_since_rest,
         "component_z": r(z, 2), "component_basis": basis,

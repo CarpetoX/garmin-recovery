@@ -85,8 +85,11 @@ def parse_load_spec(text: str) -> dict:
     """
     t = text or ""
     nums = [float(x.replace(",", ".")) for x in re.findall(r"\d+(?:[.,]\d{1,2})?(?!\d)", t)]
-    if "%" in t:
-        return {"kind": "percent", "values": [n for n in nums if n <= 100 and n != 1]}
+    if "%" in t:  # solo cuentan los números unidos a "%" (o rangos "75-80 %"), no series ni repeticiones
+        pcts = []
+        for a, b in re.findall(r"(\d+(?:[.,]\d+)?)\s*(?:[-–]\s*(\d+(?:[.,]\d+)?)\s*)?%", t):
+            pcts += [float(x.replace(",", ".")) for x in (a, b) if x]
+        return {"kind": "percent", "values": [n for n in pcts if 0 < n <= 100]}
     m = re.fullmatch(r"\s*(\d+)\s*[×xX]\s*(\d+(?:[.,]\d{1,2})?)\s*(kg)?\s*", t)
     if m:
         return {"kind": "per_implement", "count": int(m.group(1)), "values": [float(m.group(2).replace(",", "."))]}

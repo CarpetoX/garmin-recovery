@@ -77,10 +77,12 @@ def model_registry(readiness_v3: dict, legacy: dict, daily_summary: dict, garmin
          "score": garmin_readiness, "zone": None, "state": None, "confidence": None,
          "rule": "Métrica propietaria (ya incluida en el híbrido); escala distinta, solo contexto."},
     ]
-    # Un modelo de otro día no puede decidir hoy: cuenta como sin datos (→ pendiente, salvo rojo).
+    # Un modelo de otro día no autoriza nada hoy: cuenta como sin datos (→ pendiente). Su puntuación
+    # no se registra como de hoy; un rojo de ayer sí sigue limitando (criterio prudente).
     for m, stale, d in ((registry[0], v2_stale, v2_date), (registry[1], ds_stale, ds_date), (registry[3], ds_stale, ds_date)):
         if stale:
-            m.update(zone=None, state="desactualizado", stale_date=d)
+            m.update(stale_score=m["score"], stale_zone=m["zone"], score=None,
+                     zone="red" if m["zone"] == "red" else None, state="desactualizado", stale_date=d)
     return registry
 
 
@@ -111,7 +113,8 @@ def operative_decision(readiness_v3: dict, legacy: dict, daily_summary: dict,
         "zone": zone, "zone_es": ZONE_ES[zone], "guidance": guidance, "crossfit": CROSSFIT[zone],
         "official_model": "recovery_assessment_v2" if not model_validated else "readiness_v3",
         "rule": ("Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3. Un rojo prevalece "
-                 "siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente."),
+                 "siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. "
+                 "Un rojo de otro día sigue limitando hasta que llegue el dato de hoy."),
         "decided_by": deciding, "missing_models": missing,
         "agreement": agreement, "divergence": divergence,
         "registry": registry,

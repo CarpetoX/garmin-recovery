@@ -51,9 +51,9 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `history/` anteriores, de modo que nunca se publica un informe roto, y guarda el motivo en `app/validation.json`.
 
 **V5.7, correcciones de la auditoría de calidad** (un test por corrección en `test_audit_fixes_v57.py`):
-- **Decisión:** un rojo prevalece sobre un modelo pendiente (antes daba "pendiente" con RPE 6); v2 e híbrido de otro día cuentan como desactualizados y no deciden.
+- **Decisión:** un rojo prevalece sobre un modelo pendiente (antes daba "pendiente" con RPE 6); v2 e híbrido de otro día cuentan como desactualizados: no autorizan nada y su puntuación no se guarda como de hoy, pero un rojo de ayer sigue limitando hasta que llegue el dato de hoy.
 - **Publicación segura:** el paso de validación ya no puede saltarse la restauración si la app falla; el aviso a la rutina solo sale si la validación pasa. El validador comprueba además que la pauta corresponda a la zona, que el JSON, el Markdown y `reports.csv` sean del mismo ciclo y que la salida tenga menos de 60 min.
-- **Modelo:** línea base de HRV robusta (mediana/MAD); monotonía, strain y ACWR sobre sRPE (Foster), con ACWR por medias 7/28 días solo con 28 días de historial; EWMA propia sin sesgo de arranque.
+- **Modelo:** línea base de HRV robusta (mediana/MAD); monotonía, strain y ACWR sobre sRPE (Foster), solo con ≥ 75 % de sesiones con RPE (`min_srpe_coverage_pct`) y, el ACWR, por medias 7/28 días con 28 días de historial de RPE; EWMA propia sin sesgo de arranque.
 - **Informe:** la gráfica de sesiones usa los 14 días completos (antes, como mucho 12 sesiones); halterofilia en ámbar al ≤ 80 % en todo el informe.
 - **Plan:** entiende `80 % 1RM`, `2x20` (kg por implemento), `150,160`, `167,5` y `RPE 7-8`; en ámbar quita al menos una serie (2 × → 1 ×).
 - **Historial:** las sesiones borradas en Intervals se marcan `removed=1` (no se borra ninguna fila) y dejan de contar en la carga; `--now` con otra zona horaria usa la fecha de Madrid.
