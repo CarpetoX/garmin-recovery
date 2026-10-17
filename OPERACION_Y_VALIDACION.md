@@ -1,18 +1,20 @@
 # Garmin Recovery — Operación, trazabilidad y control de cambios
 
-**Revisión:** 2.6 · Europe/Madrid
+**Revisión:** 5.7 (17/10/2026) · Europe/Madrid
 **Ámbito:** documentación operativa; no altera automatizaciones, credenciales ni datos deportivos.
 
 ## 1. Arquitectura vigente
 
-Workflows permanentes (solo seis):
+Workflows permanentes (ocho; detalle en `MAINTENIMIENTO.md`):
 
-1. `.github/workflows/sync.yml`: recibe `schedule`, `repository_dispatch` (`garmin-sync`) y `workflow_dispatch`; procesa Intervals.icu.
+1. `.github/workflows/sync.yml`: recibe `repository_dispatch` (`garmin-sync`, Apps Script firmado), `schedule` de respaldo y `workflow_dispatch`; procesa Intervals.icu.
 2. `.github/workflows/garmin-heart-rate.yml`: obtiene Garmin FC, HRV y sueño después de Sync.
 3. `.github/workflows/advanced-analytics-rpe.yml`: recuperación, calidad de datos y RPE.
-4. `.github/workflows/crossfit-insights.yml`: fuerza, WODs y certificado de datos preparados.
+4. `.github/workflows/crossfit-insights.yml`: fuerza, WODs, certificado de datos preparados y app V5 (informe validado).
 5. `.github/workflows/monitor-monthly.yml`: salud de cadena, diagnóstico y resumen mensual.
 6. `.github/workflows/garmin-ci.yml`: pruebas de código y workflows, independiente de la cadena de datos.
+7. `.github/workflows/garmin-shadow-publish-v296.yml`: copia verificada en la rama espejo, lanzada por el monitor.
+8. `.github/workflows/garmin-certified-reports.yml`: verificación manual de informes certificados.
 
 Conservar scripts históricos (`monitor_v231.py`, `recovery_v231.py`, `test_quality_v248.py`, etc.) mientras estén importados; el número de versión del nombre no implica que sobren.
 
@@ -56,11 +58,11 @@ Para certificar el respaldo comparar la hora de ejecución en Apps Script y GitH
 
 ## 6. Política de actualizaciones
 
-1. Cambiar un archivo y conservar la posibilidad de revertirlo por commit.
-2. Esperar la CI verde antes de modificar otro archivo.
+1. Cada cambio en una rama + PR, revertible por commit.
+2. Esperar la CI verde antes de fusionar.
 3. Después de los cambios de analítica, ejecutar un único Sync manual y verificar toda la cadena.
 4. Contrastar JSON publicados, fechas de muestras, RPE y ausencia de duplicados.
-5. Borrar solo workflows temporales ya ejecutados y certificados. No borrar los seis permanentes.
+5. Borrar solo workflows temporales ya ejecutados y certificados. No borrar los ocho permanentes.
 6. Medir al menos 3 ciclos automáticos consecutivos antes de certificar un comportamiento autónomo; medir 30 días para evaluar la fiabilidad sostenida.
 
 ## 7. Criterios objetivos de aceptación sugeridos
