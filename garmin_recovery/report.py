@@ -661,13 +661,13 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         from .planned import rules_for_today
         if box:
             md += ["## En el box hoy", ""] + [f"- {x}" for x in box] + [""]
-        md += ["## Cómo ajustar lo que planifiques hoy", "",
+        md += ["## Cómo ajustar tu sesión de hoy", "",
                "Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):", "",
                "| Tipo | Ajuste de hoy | RPE máx. |", "|---|---|--:|"]
         for r_ in rules_for_today(dec if dec else {"zone": "unavailable", "guidance": g}):
             md.append(f"| {r_['type']} | **{r_['action'].capitalize()}:** {r_['rule']} | {r_['rpe_max']} |")
         md += ["", "_Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg. "
-               "Para el ajuste exacto de una sesión concreta, escríbela en `Planificados` o pregunta con este informe._", ""]
+               "Para ajustar una sesión concreta, pregunta con este informe._", ""]
     for d in plan.get("done_check") or []:
         md += [f"- **Plan frente a lo hecho:** {d['planned']} → RPE real {fmt(d.get('rpe'), 1)}"
                + (f" ⚠️ por encima del máximo de hoy ({d['rpe_cap']})" if d.get("exceeded") else " ✓ dentro del límite") + "."]
