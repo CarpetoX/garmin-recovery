@@ -68,7 +68,7 @@ Hoy conviven la cadena antigua (≈ 40 scripts ejecutados por los workflows, má
 |---|---|---|
 | 0 | `sync.yml` sin código en línea; scripts sin efectos al importarlos | Hecho (V5.9) |
 | 1 | Retirar del monitor los informes previos que solo generaban artefactos (V3.9.2.2 enriquecido, V4.0.2 visual) | Hecho (V5.9); sus 9 módulos y 8 tests, borrados en V6.0 |
-| 2 | Calcular el v2 dentro del paquete, con pruebas *golden*; el archivo se sigue publicando igual | En curso: 2a hecho (V6.2) — `advanced_analytics.py` vive en `garmin_recovery/advanced.py` (el nombre antiguo es un alias del mismo módulo) con prueba de salida idéntica sobre el día congelado; pendiente 2b: `recovery_v23.py` / `recovery_reliability.py` |
+| 2 | Calcular el v2 dentro del paquete, con pruebas *golden*; el archivo se sigue publicando igual | Hecho (V6.2): `advanced.py`, `reliability.py`, `recovery_v23.py`, `recovery_v231.py` y `convergence_domains.py` viven en `garmin_recovery/`; los nombres antiguos son alias del mismo módulo. Pruebas de salida idéntica sobre el día congelado |
 | 3 | Pasar al paquete la extracción de fuerza y WOD de `crossfit_insights.py` (mismas reglas de unidades e implementos) | Pendiente |
 | 4 | Unificar certificados y monitor (`report_cycles.json`, `report_ready.json`) en un módulo del paquete, conservando el historial con SHA-256 | Pendiente |
 | 5 | Borrar los módulos que ya no ejecute ningún workflow ni importe ningún módulo en uso, con sus tests | En curso: 15 módulos borrados hasta V6.0; se repite tras cada paso |
