@@ -885,7 +885,10 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     from .weekly import build_weekly
     strength = ((crossfit or {}).get("muscle_load") or {}).get("strength_exercises") or []
     try:
-        weekly_md = build_weekly(result, strength, rid)
+        with reports_csv.open(encoding="utf-8", newline="") as fh:
+            all_reports = list(csv.DictReader(fh))
+        weekly_md = build_weekly(result, strength, rid, all_reports,
+                                 datetime.fromisoformat(result["generated_at"]) if result.get("generated_at") else None)
     except Exception as exc:  # noqa: BLE001 — el resumen semanal nunca debe bloquear el informe del ciclo
         weekly_md = (f"# Resumen semanal\n\n_No se pudo generar en este ciclo (`{rid}`): {type(exc).__name__}. "
                      "El informe del día no se ve afectado._\n")

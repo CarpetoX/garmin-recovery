@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   actions: read
+  issues: write
 
 concurrency:
   group: garmin-crossfit-insights
@@ -219,6 +220,14 @@ jobs:
           path: .lineage_current/pipeline_lineage_v29.json
           retention-days: 14
           if-no-files-found: error
+
+      - name: V6.0 - Aviso en GitHub si el informe no se publicó o se perdió una franja
+        if: always() && github.event_name == 'workflow_run'
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m garmin_recovery alert
 
       - name: Disparar monitor final V2.4.1
         if: success()

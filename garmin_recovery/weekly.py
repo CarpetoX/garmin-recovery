@@ -7,7 +7,8 @@ falta se muestra como «—» o como cobertura incompleta.
 """
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from .readiness import GUIDANCE
 
@@ -93,12 +94,49 @@ def weekly_summary(result: dict, strength: list | None = None) -> dict:
     return week
 
 
+SLOT_TARGETS = (("08:30", "09:05"), ("16:45", "17:10"), ("22:45", "23:10"))
+
+
+def punctuality(reports: list[dict], today: date, now: datetime | None = None, tz: str = "Europe/Madrid") -> dict:
+    """Por franja de los últimos 7 días: hora del Sync, hora del informe y si llegó antes de que ChatGPT lo lea."""
+    zone = ZoneInfo(tz)
+    now = (now or datetime.now(zone)).astimezone(zone)
+
+    def t(v):
+        try:
+            return datetime.fromisoformat(v).astimezone(zone) if v else None
+        except (TypeError, ValueError):
+            return None
+    rows = [(t(r.get("data_synced_at")) or t(r.get("generated_at")), t(r.get("generated_at"))) for r in reports or []]
+    rows = sorted((s_, g) for s_, g in rows if s_ and g)
+    first_record = rows[0][1] if rows else None
+    out = []
+    for back in range(6, -1, -1):
+        day = today - timedelta(days=back)
+        for k, (slot_txt, target_txt) in enumerate(SLOT_TARGETS):
+            slot = datetime.combine(day, datetime.strptime(slot_txt, "%H:%M").time(), zone)
+            target = datetime.combine(day, datetime.strptime(target_txt, "%H:%M").time(), zone)
+            if target > now or first_record is None or target < first_record - timedelta(hours=1):
+                continue  # aún no toca, o anterior al registro de informes
+            nxt = (datetime.combine(day, datetime.strptime(SLOT_TARGETS[k + 1][0], "%H:%M").time(), zone)
+                   if k + 1 < len(SLOT_TARGETS) else slot + timedelta(hours=9, minutes=45))
+            hit = [(s_, g) for s_, g in rows if slot - timedelta(minutes=5) <= s_ < nxt]
+            s_, g = min(hit, key=lambda x: x[1]) if hit else (None, None)
+            out.append({"date": day.isoformat(), "slot": slot_txt, "target": target_txt,
+                        "sync": s_.strftime("%H:%M") if s_ else None, "ready": g.strftime("%H:%M") if g else None,
+                        "on_time": bool(g and g <= target),
+                        "minutes_margin": round((target - g).total_seconds() / 60) if g else None})
+    return {"slots": out, "on_time": sum(1 for x in out if x["on_time"]), "total": len(out)}
+
+
 def week_start(today: date) -> str:
     return (today - timedelta(days=6)).isoformat()
 
 
-def build_weekly(result: dict, strength: list | None = None, report_id: str | None = None) -> str:
+def build_weekly(result: dict, strength: list | None = None, report_id: str | None = None,
+                 reports: list | None = None, now: datetime | None = None) -> str:
     w = weekly_summary(result, strength)
+    pun = punctuality(reports or [], date.fromisoformat(result["date"]), now)
     d = lambda s: f"{s[8:10]}/{s[5:7]}"  # noqa: E731
     load = w["load_state"]
     z = w["zones"]
@@ -161,6 +199,18 @@ def build_weekly(result: dict, strength: list | None = None, report_id: str | No
     else:
         md += ["_Sin series de fuerza con carga registradas esta semana._", ""]
 
+    md += ["## Puntualidad de los informes", ""]
+    if pun["total"]:
+        md += [f"**{pun['on_time']} de {pun['total']}** franjas con el informe listo antes de que ChatGPT lo lea "
+               "(09:05, 17:10 y 23:10).", "",
+               "| Fecha | Franja | Sync | Informe listo | Margen |", "|---|---|--:|--:|--:|"]
+        for x in pun["slots"]:
+            margin = ("—" if x["minutes_margin"] is None else
+                      f"{x['minutes_margin']} min" + (" ✓" if x["on_time"] else " ⚠️ tarde"))
+            md.append(f"| {d(x['date'])} | {x['slot']} | {x['sync'] or '—'} | {x['ready'] or 'sin informe'} | {margin} |")
+        md += [""]
+    else:
+        md += ["_Aún no hay franjas registradas esta semana (el registro empezó el 17/10)._", ""]
     md += ["## Calidad de los datos", "",
            f"- Noches con HRV: {w['nights_hrv']}/7 · con sueño: {w['nights_sleep']}/7.",
            f"- Sesiones con RPE: {rk}/{rn}.", ""]
