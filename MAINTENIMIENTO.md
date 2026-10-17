@@ -6,7 +6,7 @@ Revisión: 17/10/2026 · Europe/Madrid. Complementa `README.md` (qué hace la ap
 
 | Workflow | Disparo | Función |
 |---|---|---|
-| `sync.yml` (Garmin Recovery Sync) | Apps Script firmado (`repository_dispatch`), cron de respaldo 08:30/16:45/22:45, manual | Intervals.icu y RPE; inicia la cadena |
+| `sync.yml` (Garmin Recovery Sync) | Apps Script firmado (`repository_dispatch`), cron de respaldo diario (08:30, llega ~13:00), manual | Intervals.icu y RPE; inicia la cadena |
 | `garmin-heart-rate.yml` | tras Sync | Garmin: FC, HRV, sueño, estrés, Body Battery |
 | `advanced-analytics-rpe.yml` | tras Heart Rate | Recuperación v2, calidad de datos, instantánea de RPE |
 | `crossfit-insights.yml` | tras Advanced | Fuerza/WOD, certificado del ciclo, **app V5** (`garmin_recovery`), validación y publicación |
@@ -15,7 +15,7 @@ Revisión: 17/10/2026 · Europe/Madrid. Complementa `README.md` (qué hace la ap
 | `garmin-shadow-publish-v296.yml` | dispatch del monitor, manual | Copia verificada en la rama `garmin-v296-shadow` |
 | `garmin-certified-reports.yml` | manual | Verificación de informes certificados |
 
-Los cron usan `timezone: Europe/Madrid`. GitHub puede retrasarlos horas: Apps Script es el disparador principal y el cron, el respaldo.
+Los cron usan `timezone: Europe/Madrid`. GitHub los retrasa 2–5 h: Apps Script es el disparador de las tres franjas (código en `apps_script/`) y el cron de Sync queda como un único respaldo diario.
 
 ## Invariantes
 

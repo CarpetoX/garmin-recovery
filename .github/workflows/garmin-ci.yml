@@ -87,10 +87,8 @@ jobs:
           assert 'workflow_dispatch' in sync
           assert 'garmin-sync' in sync['repository_dispatch']['types']
           schedules = sync['schedule']
-          assert len(schedules) == 3
-          assert [entry['cron'] for entry in schedules] == [
-              '30 8 * * *', '45 16 * * *', '45 22 * * *',
-          ], 'Sync slots were unexpectedly changed'
+          # V5.9: Apps Script dispara las tres franjas; el cron es un único respaldo diario.
+          assert [entry['cron'] for entry in schedules] == ['30 8 * * *'], 'Sync fallback cron unexpectedly changed'
           assert all(entry.get('timezone') == 'Europe/Madrid' for entry in schedules)
           monitor = workflows['monitor-monthly.yml']['on']
           assert 'garmin-monitor' in monitor['repository_dispatch']['types']
