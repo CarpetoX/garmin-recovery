@@ -85,7 +85,7 @@ Umbrales en `garmin_recovery/config.py`; para personalizarlos crear `app_config.
 
 El modelo v3 **no sustituye** `recovery_assessment.json` ni los informes: corre en paralelo para compararlo con el v2 antes de promoverlo.
 
-**Privacidad:** este repositorio es público y contiene datos fisiológicos, calendario de turnos e identificadores de Intervals y de la hoja de Google. Se recomienda hacerlo privado (GitHub Actions sigue funcionando igual).
+**Visibilidad (decisión del propietario, 17/10/2026):** el repositorio es **público a propósito**, porque ChatGPT lo lee para elaborar los informes. Contiene datos fisiológicos, el calendario de turnos e identificadores, pero ningún secreto: tokens y claves solo están en GitHub Secrets y en las Propiedades de Apps Script. Que sea público **no se considera un defecto de calidad** y no se penaliza en auditorías ni revisiones.
 
 **Sync:** 08:30, 16:45, 22:45. **Objetivos de informe:** 09:05, 17:10, 23:10. **Watchdog:** 11:05, 19:20, 01:20. Los cron no prueban por sí solos que GitHub haya iniciado una ejecución. Los horarios deben evaluarse en Europe/Madrid y con marcas de tiempo reales.
 

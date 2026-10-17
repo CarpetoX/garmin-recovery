@@ -29,6 +29,7 @@ Los cron usan `timezone: Europe/Madrid`. GitHub los retrasa 2–5 h: Apps Script
 8. La decisión del día es siempre `decision.guidance` (la más conservadora de v2, híbrido y v3); `readiness.guidance` es solo del v3 en pruebas. Un rojo prevalece; si falta un modelo o es de otro día, queda pendiente.
 9. La app nunca publica salidas sin validar: si `python -m garmin_recovery validate` falla, se restauran `app/` e `history/` anteriores y el motivo queda en `app/validation.json`.
 10. Los archivos generados (`app/`, `history/`) solo los escribe la cadena; no se suben a mano.
+11. El repositorio es público por decisión del propietario (ChatGPT lo lee). No es un hallazgo de calidad; lo obligatorio es que no haya secretos en el código ni en los datos.
 
 ## Código obsoleto
 
