@@ -45,18 +45,20 @@ def weekly_summary(result: dict, strength: list | None = None) -> dict:
     sessions = [s for s in result.get("sessions_28d") or [] if not s.get("removed")]
     cur, prev = _window(trend, today, 7), _window(trend, today, 7, 7)
     s_cur, s_prev = _window(sessions, today, 7), _window(sessions, today, 7, 7)
-    need = ((result.get("readiness") or {}).get("components") or {}).get("sleep", {}).get("need_hours") or 7.5
+    need = (((result.get("readiness") or {}).get("components") or {}).get("sleep") or {}).get("need_hours") or 7.5
 
     zones = {}
     for r in cur:
         z = r.get("decision_zone")
         if z:
             zones[z] = zones.get(z, 0) + 1
-    over = []
+    over, checked = [], 0
     for r in cur:
         z = r.get("decision_zone")
         cap = (GUIDANCE.get(z) or {}).get("rpe_max") if z else None
         rpes = [s.get("rpe") for s in s_cur if s.get("date") == r["date"] and s.get("rpe") is not None]
+        if cap is not None and rpes:
+            checked += 1
         if cap is not None and rpes and max(rpes) > cap:
             over.append({"date": r["date"], "rpe": max(rpes), "cap": cap})
 
@@ -66,7 +68,8 @@ def weekly_summary(result: dict, strength: list | None = None) -> dict:
 
     week = {
         "start": (today - timedelta(days=6)).isoformat(), "end": today.isoformat(),
-        "zones": zones, "days_with_decision": sum(zones.values()), "over_cap": over,
+        "zones": zones, "days_with_decision": sum(zones.values()), "over_cap": over, "cap_checked_days": checked,
+        "trained_days": len({s.get("date") for s in s_cur}),
         "sessions": len(s_cur), "sessions_prev": len(s_prev),
         "minutes": load_sum(s_cur, "duration_min"), "minutes_prev": load_sum(s_prev, "duration_min"),
         "load": load_sum(s_cur, "load"), "load_prev": load_sum(s_prev, "load"),
@@ -107,12 +110,20 @@ def build_weekly(result: dict, strength: list | None = None, report_id: str | No
           "## En una frase", ""]
     hard = len(w["over_cap"])
     sentence = [f"{w['sessions']} sesiones" + (f" ({'+' if w['sessions'] >= w['sessions_prev'] else '−'}{abs(w['sessions'] - w['sessions_prev'])})" if w['sessions_prev'] else "")]
-    if w["hrv_rolling_end"] is not None and w["hrv_range"][0] is not None:
+    if w["hrv_rolling_end"] is not None and None not in w["hrv_range"]:
         lo, hi = w["hrv_range"]
         band = "por debajo de" if w["hrv_rolling_end"] < lo else "por encima de" if w["hrv_rolling_end"] > hi else "dentro de"
         sentence.append(f"HRV de 7 días {band} tu rango normal")
-    sentence.append(f"{w['short_nights']} noches por debajo de {_f(w['need'])} h de sueño")
-    sentence.append("ningún día por encima del RPE máximo" if not hard else f"{hard} día(s) por encima del RPE máximo")
+    if w["nights_sleep"]:
+        sentence.append(f"{w['short_nights']} de {w['nights_sleep']} noches con datos por debajo de {_f(w['need'])} h de sueño")
+    else:
+        sentence.append("sin datos de sueño esta semana")
+    if not w["cap_checked_days"]:
+        sentence.append("RPE máximo aún sin comprobar (no hay decisiones registradas en días entrenados)")
+    elif hard:
+        sentence.append(f"{hard} de {w['cap_checked_days']} días comprobados por encima del RPE máximo")
+    else:
+        sentence.append(f"ningún día por encima del RPE máximo ({w['cap_checked_days']} de {w['trained_days']} días entrenados comprobados)")
     md += ["- " + "; ".join(sentence) + ".", f"- Decisión registrada en {w['days_with_decision']}/7 días: {zones_txt}.", ""]
 
     md += ["## Entrenamiento", "", "| | Esta semana | Semana previa |", "|---|--:|--:|",
@@ -131,7 +142,7 @@ def build_weekly(result: dict, strength: list | None = None, report_id: str | No
            f"| FC en reposo media | {_f(w['rhr'], 1, ' lpm')} | {_f(w['rhr_prev'], 1, ' lpm')} |",
            f"| Sueño medio | {_f(w['sleep'], 2, ' h')} | {_f(w['sleep_prev'], 2, ' h')} |", ""]
     lo, hi = w["hrv_range"]
-    if w["hrv_rolling_end"] is not None:
+    if w["hrv_rolling_end"] is not None and None not in (lo, hi):
         md += [f"HRV de 7 días hoy: {_f(w['hrv_rolling_end'], 1, ' ms')} (rango normal {_f(lo, 1)}–{_f(hi, 1)} ms)."
                + (f" Turnos: {', '.join(w['shifts'])}." if w["shifts"] else ""), ""]
 
@@ -139,7 +150,7 @@ def build_weekly(result: dict, strength: list | None = None, report_id: str | No
     if w["strength"]:
         md += ["| Fecha | Ejercicio | Carga máx. declarada | Series |", "|---|---|--:|--:|"]
         for x in w["strength"]:
-            md.append(f"| {d(x['date'])} | {x.get('exercise')} | {_f(x.get('peak_declared_load_kg'), 1, ' kg')} | "
+            md.append(f"| {d(x['date'])} | {x.get('exercise') or '—'} | {_f(x.get('peak_declared_load_kg'), 1, ' kg')} | "
                       f"{x.get('known_sets') or '—'}/{x.get('total_sets') or '—'} |")
         md += ["", "_Carga máxima declarada, no 1RM; solo es comparable con el mismo ejercicio e implemento._", ""]
     else:

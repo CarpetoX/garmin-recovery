@@ -85,8 +85,35 @@ class Weekly(unittest.TestCase):
         self.assertTrue(md.startswith("# Resumen semanal · 11/10–17/10"))
         self.assertIn("GR-2026-10-17-2250-abcdef", md)
         self.assertIn("| 16/10 | Sentadilla | 150,0 kg | 5/5 |", md)
-        self.assertIn("2 día(s) por encima del RPE máximo", md)
+        self.assertIn("2 de 2 días comprobados por encima del RPE máximo", md)
         self.assertNotIn("None", md)
+
+
+class WeeklyReview(unittest.TestCase):
+    def test_unchecked_days_not_reported_as_clean(self):
+        r = fake_result()
+        for row in r["trend_28d"]:
+            row["decision_zone"] = None
+            row["sleep_hours"] = None
+        md = build_weekly(r, [], "GR-2026-10-17-2250-abcdef")
+        self.assertIn("RPE máximo aún sin comprobar", md)
+        self.assertIn("sin datos de sueño esta semana", md)
+        self.assertNotIn("ningún día por encima", md)
+
+    def test_weekly_failure_never_blocks_daily_report(self):
+        import tempfile
+        from unittest import mock
+        from garmin_recovery import report as rep
+        if not (ROOT / "app" / "readiness_v3.json").exists():
+            self.skipTest("sin salida publicada")
+        result = json.loads((ROOT / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp, mock.patch("garmin_recovery.weekly.build_weekly", side_effect=KeyError("x")):
+            Path(tmp, "history").mkdir()
+            rep.write_report(tmp, Path(tmp) / "app", result)
+            weekly = (Path(tmp) / "app" / "informe_semanal.md").read_text(encoding="utf-8")
+            self.assertTrue(weekly.startswith("# Resumen semanal"))
+            self.assertIn("No se pudo generar", weekly)
+            self.assertTrue((Path(tmp) / "app" / "informe.md").exists())
 
 
 if __name__ == "__main__":

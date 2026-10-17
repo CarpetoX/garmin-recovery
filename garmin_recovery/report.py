@@ -831,4 +831,9 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     (out_dir / "informe.md").write_text(md, encoding="utf-8")
     from .weekly import build_weekly
     strength = ((crossfit or {}).get("muscle_load") or {}).get("strength_exercises") or []
-    (out_dir / "informe_semanal.md").write_text(build_weekly(result, strength, rid), encoding="utf-8")
+    try:
+        weekly_md = build_weekly(result, strength, rid)
+    except Exception as exc:  # noqa: BLE001 — el resumen semanal nunca debe bloquear el informe del ciclo
+        weekly_md = (f"# Resumen semanal\n\n_No se pudo generar en este ciclo (`{rid}`): {type(exc).__name__}. "
+                     "El informe del día no se ve afectado._\n")
+    (out_dir / "informe_semanal.md").write_text(weekly_md, encoding="utf-8")
