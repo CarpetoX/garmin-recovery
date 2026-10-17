@@ -2,7 +2,6 @@
 import copy
 import html
 import json
-import re
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -10,7 +9,7 @@ import unittest
 from cycle_snapshot_report_v38 import SnapshotError, digest
 from garmin_report_v40 import latest_id
 from test_garmin_report_v40 import fixture
-from report_visual_v401 import render, publish, srpe_svg
+from report_visual_v401 import render, publish
 
 
 class VisualTests(unittest.TestCase):

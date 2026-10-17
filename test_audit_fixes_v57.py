@@ -1,6 +1,5 @@
 """Tests de las correcciones de la auditoría (V5.7): un test por hallazgo."""
 import json
-import math
 import shutil
 import tempfile
 import unittest

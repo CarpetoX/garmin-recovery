@@ -2,14 +2,13 @@
 import copy
 import json
 from pathlib import Path
-from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from cycle_snapshot_report_v38 import digest, SnapshotError
+from cycle_snapshot_report_v38 import SnapshotError
 from garmin_report_v40 import render
 from test_garmin_report_v40 import fixture
-from report_quality_compare_v401 import compare_texts, evaluate, main
+from report_quality_compare_v401 import compare_texts, evaluate
 
 LEGACY = '''# V3.9
 | HRV nocturna | 66 ms | 58 ms | n=17 |

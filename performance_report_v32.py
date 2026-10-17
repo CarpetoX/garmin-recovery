@@ -8,7 +8,7 @@ No modifica otras fuentes ni realiza peticiones externas.
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 import math
 from statistics import fmean
 from zoneinfo import ZoneInfo

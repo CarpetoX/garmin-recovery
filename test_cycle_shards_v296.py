@@ -1,10 +1,8 @@
 """Regresión de V2.9.6: fragmentación reversible sin mutar producción."""
 import copy
-import hashlib
 import json
 import tempfile
 import unittest
-from datetime import date
 from pathlib import Path
 from cycle_shards_v296 import (ShardError, audit, canonical_hash, prepare,
                               restore, verify_archive)

@@ -2,7 +2,6 @@
 import copy
 import unittest
 from datetime import date
-from pathlib import Path
 
 from cycle_snapshot_report_v38 import digest
 from test_garmin_report_v40 import fixture

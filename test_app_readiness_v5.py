@@ -1,6 +1,5 @@
 """Tests del paquete garmin_recovery (app v5, modelo readiness v3)."""
 import json
-import math
 import tempfile
 import unittest
 from datetime import date, datetime, timedelta
@@ -8,7 +7,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from garmin_recovery.config import DEFAULTS, load_config
-from garmin_recovery.history import merge, read_table, update_history, write_table
+from garmin_recovery.history import merge, read_table, update_history
 from garmin_recovery.load import compute_load, form_zone
 from garmin_recovery.readiness import assess, component_score
 from garmin_recovery.records import DAILY_FIELDS, SESSION_FIELDS, aggregate_sessions

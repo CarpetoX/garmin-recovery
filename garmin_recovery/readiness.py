@@ -20,7 +20,7 @@ import math
 from datetime import date, timedelta
 
 from . import MODEL_VERSION
-from .stats import clamp, cv_pct, mad_sigma, mean, median, r, robust_z, sd
+from .stats import clamp, cv_pct, mad_sigma, mean, median, r, robust_z
 
 COMPONENT_LABELS = {
     "hrv": "Variabilidad cardiaca (HRV)",

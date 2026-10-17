@@ -1,5 +1,4 @@
 """V2.9.6: preview compacta sin recortar certificados ni alterar producción."""
-import copy
 import json
 import tempfile
 import unittest

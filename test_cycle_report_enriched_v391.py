@@ -1,4 +1,3 @@
-import copy
 import unittest
 from unittest.mock import patch
 from cycle_snapshot_report_v38 import SnapshotError

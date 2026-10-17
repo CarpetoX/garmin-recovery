@@ -4,7 +4,7 @@ import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from cycle_snapshot_report_v38 import SnapshotError,digest
+from cycle_snapshot_report_v38 import SnapshotError
 from test_garmin_report_v40 import fixture
 from test_report_visual_data_v402 import add_day,resign
 from report_visual_v402 import render,publish, spark
