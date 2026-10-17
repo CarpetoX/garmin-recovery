@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre nocturno
 
-Domingo, 18 de octubre de 2026 · 01:39 · `GR-2026-10-18-0139-f82779`
+Domingo, 18 de octubre de 2026 · 01:47 · `GR-2026-10-18-0147-00c66e`
 
 ```cards
 Decisión|Pendiente de datos|RPE máx. 6|unavailable
@@ -33,7 +33,7 @@ Carga 7 días|8 sesiones|sRPE 1203|unavailable
 | Confianza de recuperación | low |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 08:30, 10-17 16:45.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 08:30, 10-17 16:45, 10-17 22:45.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -242,4 +242,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ 
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-10-17-2245 · generado 18/10/2026 01:39 Europe/Madrid · certificado READY · sync_run_id 39068162128.
+Traza: cierre nocturno · ciclo 2026-10-17-2245 · generado 18/10/2026 01:47 Europe/Madrid · certificado READY · sync_run_id 39068162128.
