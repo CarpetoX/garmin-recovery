@@ -25,7 +25,8 @@ from zoneinfo import ZoneInfo
 TITLE = "⚠️ Garmin Recovery: atención necesaria"
 TZ = ZoneInfo("Europe/Madrid")
 KEYS_RE = re.compile(r"<!-- garmin-keys:([^>]*) -->")
-SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:"), "watchdog": ("stale", "missed:")}
+SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:", "garmin", "intervals"),
+          "watchdog": ("stale", "missed:", "garmin", "intervals")}
 
 
 def _in_scope(key: str, scope: str) -> bool:
@@ -67,6 +68,7 @@ def problems(root: Path, now: datetime, scope: str = "chain", job_status: str = 
         when = gen.astimezone(TZ).strftime("%d/%m %H:%M") if gen else "desconocido"
         out.append({"key": "stale", "text": f"No hay informe nuevo desde {when}. Revisa los activadores de Apps Script "
                     "y las ejecuciones de *Garmin Recovery Sync*."})
+    out += source_problems(root, now)
     missed = set((((data.get("certificate") or {}).get("execution_health") or {}).get("missed_slots")) or [])
     for alert in _read(root / "workflow_health.json").get("alerts") or []:
         if isinstance(alert, dict) and alert.get("code") == "sync_slot_not_recovered":
@@ -76,6 +78,29 @@ def problems(root: Path, now: datetime, scope: str = "chain", job_status: str = 
     for t in recent:
         out.append({"key": "missed:" + t.strftime("%Y-%m-%dT%H:%M"),
                     "text": f"Franja de Sync perdida: {t.strftime('%d/%m %H:%M')} (Apps Script no lanzó el Sync o la cadena no terminó)."})
+    return out
+
+
+def source_problems(root: Path, now: datetime) -> list[dict]:
+    """Garmin o Intervals.icu desconectados: sus datos publicados dejan de avanzar."""
+    out = []
+    limit = (now - timedelta(days=1)).date().isoformat()
+    gs = _read(root / "garmin_status.json")
+    last = max((str(gs.get(k) or "") for k in ("latest_heart_rate_date", "latest_stress_date", "latest_extended_date")), default="")
+    if gs and (gs.get("status") == "error" or (last and last < limit)):
+        err = str(gs.get("error") or "")[:160]
+        hint = (" Parece un problema de acceso: renueva el secreto `GARMIN_TOKENS_B64` en GitHub."
+                if any(w in err.lower() for w in ("token", "auth", "401", "403", "login", "garmin_tokens")) else "")
+        out.append({"key": "garmin", "text": f"Garmin no aporta datos nuevos (último día {last or '—'}"
+                    + (f"; error: {err}" if err else "") + ")." + hint})
+    try:
+        wellness = json.loads((root / "wellness.json").read_text(encoding="utf-8"))
+        newest = max((str(x.get("id") or "") for x in wellness if isinstance(x, dict)), default="")
+    except (OSError, ValueError, TypeError):
+        newest = None
+    if newest is not None and newest < limit:
+        out.append({"key": "intervals", "text": f"Intervals.icu no aporta datos nuevos (último día {newest or '—'}). "
+                    "Revisa el secreto `INTERVALS_API_KEY` y la sincronización Garmin → Intervals."})
     return out
 
 
