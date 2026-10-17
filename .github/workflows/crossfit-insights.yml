@@ -230,6 +230,14 @@ jobs:
           CHAIN_STATUS: ${{ job.status }}
         run: python -m garmin_recovery alert --scope chain
 
+      - name: V6.3 - Aviso al móvil (ntfy) del informe nuevo
+        if: always() && github.event_name == 'workflow_run'
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python -m garmin_recovery notify
+
       - name: Disparar monitor final V2.4.1
         if: success()
         env:
