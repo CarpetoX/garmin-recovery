@@ -141,6 +141,10 @@ jobs:
           for wf_name, job in (('sync.yml', 'sync'), ('garmin-heart-rate.yml', 'heart-rate'),
                                ('advanced-analytics-rpe.yml', 'advanced-analytics'), ('crossfit-insights.yml', 'crossfit')):
               assert workflows[wf_name]['jobs'][job].get('timeout-minutes'), f'{wf_name}: missing job timeout'
+          # V5.1: el aviso a la rutina de Claude es opcional y va al final de la cadena.
+          notify = [x for x in crossfit_steps if 'notify_claude_routine.py' in x.get('run', '')]
+          assert len(notify) == 1 and notify[0].get('continue-on-error') == 'true', 'Routine notify must be non-blocking'
+          assert crossfit_steps.index(notify[0]) == len(crossfit_steps) - 1, 'Routine notify must be the last step'
           print(f'OK: {len(workflows)} workflows parse correctly; triggers and chain validated.')
           PY
 

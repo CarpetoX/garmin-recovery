@@ -216,3 +216,12 @@ jobs:
 
           print("Monitor dispatch sent for CrossFit run", run_id)
           PY
+
+      - name: V5.1 - Avisar a la rutina de Claude para el informe del ciclo
+        if: success() && github.event_name == 'workflow_run'
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          CLAUDE_ROUTINE_URL: ${{ secrets.CLAUDE_ROUTINE_URL }}
+          CLAUDE_ROUTINE_TOKEN: ${{ secrets.CLAUDE_ROUTINE_TOKEN }}
+        run: python notify_claude_routine.py
