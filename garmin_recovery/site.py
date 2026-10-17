@@ -155,6 +155,12 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     if full.exists():
         from .mdhtml import page
         from .ai_analysis import section
-        (out / "informe_completo.html").write_text(page(full.read_text(encoding="utf-8") + section(root)), encoding="utf-8")
+        full_md = full.read_text(encoding="utf-8") + section(root)
+        try:
+            from .webreport import build as build_interactive
+            html_full = build_interactive(full_md, result)
+        except Exception:  # noqa: BLE001 — si falla la versión interactiva se publica la sencilla
+            html_full = page(full_md)
+        (out / "informe_completo.html").write_text(html_full, encoding="utf-8")
     return {"out": str(out), "history": len(extras["history"]), "date": result["date"],
             "generated_at": result.get("generated_at")}

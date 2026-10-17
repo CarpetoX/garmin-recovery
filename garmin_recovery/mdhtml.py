@@ -26,7 +26,7 @@ def _cells(line: str) -> list[str]:
     return [c.strip() for c in line.strip().strip("|").split("|")]
 
 
-def render(md: str) -> str:
+def render(md: str, interactive=None) -> str:
     out, lines, i = [], md.splitlines(), 0
     while i < len(lines):
         ln = lines[i]
@@ -42,12 +42,31 @@ def render(md: str) -> str:
                              f'<small>{html.escape(parts[2])}</small></div>')
             out.append('<div class="kpis">' + "".join(cards) + "</div>")
             i = j + 1
-        elif ln.startswith("```"):
+        elif ln.startswith("```") and not ln.startswith("```weights"):
             j = i + 1
             while j < len(lines) and not lines[j].startswith("```"):
                 j += 1
             out.append("<pre>" + html.escape("\n".join(lines[i + 1:j])) + "</pre>")
             i = j + 1
+        elif ln.startswith("```weights"):
+            j = i + 1
+            while j < len(lines) and not lines[j].startswith("```"):
+                j += 1
+            rows = []
+            for row in lines[i + 1:j]:
+                lab, sc, wt = (row.split("|") + ["", "", ""])[:3]
+                col = "var(--s4)" if not sc else "var(--good)" if int(sc) >= 70 else "var(--warn)" if int(sc) >= 50 else "var(--crit)"
+                val = "<small>sin datos hoy</small>" if not sc else html.escape(sc)
+                rows.append(f'<div class="row"><span>{html.escape(lab)} <small>({html.escape(wt)} %)</small></span>'
+                            f'<div class="m"><i style="width:{sc or 0}%;background:{col}"></i></div><span>{val}</span></div>')
+            out.append('<div class="wts"><p class="t">Qué componentes suman en la decisión de hoy</p>' + "".join(rows) + "</div>")
+            i = j + 1
+        elif IMG.match(ln) and interactive and IMG.match(ln).group(2).split("/")[1] in interactive:
+            m = IMG.match(ln)
+            out.append(f'<figure class="fig"><p class="cap">{html.escape(m.group(1))}</p><div class="leg"></div>'
+                       f'<div class="ichart" data-chart="{interactive[m.group(2).split("/")[1]]}"></div>'
+                       f'<noscript><img src="{m.group(2)}" alt="{html.escape(m.group(1), quote=True)}"></noscript></figure>')
+            i += 1
         elif IMG.match(ln):
             m = IMG.match(ln)
             out.append(f'<figure><img src="{m.group(2)}" alt="{html.escape(m.group(1), quote=True)}" loading="lazy"></figure>')
