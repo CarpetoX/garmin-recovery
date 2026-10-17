@@ -20,6 +20,18 @@ ORDER = {"unavailable": 0, "red": 1, "yellow": 2, "green": 3}
 ZONE_ES = {"unavailable": "pendiente", "red": "rojo", "yellow": "ámbar", "green": "verde"}
 
 
+CROSSFIT = {
+    "green": ["Sesión planificada completa: halterofilia pesada, fuerza y WOD a intensidad alta si el calentamiento responde.",
+              "Calentamiento progresivo; si la barra va lenta en las aproximaciones, baja a la pauta ámbar."],
+    "yellow": ["Halterofilia solo técnica (≤ 70 % de tus cargas habituales), sin singles pesados.",
+               "Fuerza submáxima: deja 2–3 repeticiones en reserva, sin series al fallo.",
+               "WOD a ritmo controlado (sin all-out ni lucha contra el cap); recorta un 20–30 % de volumen."],
+    "red": ["Sin WOD ni cargas pesadas: movilidad, técnica con PVC o barra vacía.",
+            "Si te mueves, zona 2 suave en remo, bici o caminata (30–40 min, poder hablar)."],
+    "unavailable": ["Hasta tener datos: solo técnica ligera y movilidad; nada de intensidad alta."],
+}
+
+
 def _zone(status, state=None) -> str | None:
     if state == "pending":
         return "unavailable"
@@ -79,7 +91,7 @@ def operative_decision(readiness_v3: dict, legacy: dict, daily_summary: dict,
     agreement = "total" if len(set(spread)) == 1 and not missing else "parcial"
     guidance = dict(guidance_table[zone])
     return {
-        "zone": zone, "zone_es": ZONE_ES[zone], "guidance": guidance,
+        "zone": zone, "zone_es": ZONE_ES[zone], "guidance": guidance, "crossfit": CROSSFIT[zone],
         "official_model": "recovery_assessment_v2" if not model_validated else "readiness_v3",
         "rule": ("Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3; "
                  "si alguno está pendiente o sin datos, la decisión queda pendiente."),
