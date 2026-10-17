@@ -78,3 +78,7 @@ Regla: si una salida pública cambia, aunque sea un campo, el PR lo declara y se
 ## V6.5 — Informe completo
 
 `fullreport.py` genera `app/informe_completo.md` desde `report.write_report`; `site.build_site` lo publica como HTML (`mdhtml.py`); `validate.py` exige su estructura. Si cambia un campo de los JSON de origen, ajustar `fullreport.py` y `test_fullreport_v65.py`.
+
+## Registro de entrenamientos
+
+`REGISTRO_ENTRENAMIENTOS.md` fija cómo Claude apunta en la hoja (pestaña `RPE`, columnas A–H) lo que el atleta cuenta. El pipeline solo lee filas con fecha, ID de actividad y RPE válidos; el resto se ignora, así que cambiar el esquema de la hoja exige cambiar `rpe_enrichment.py`.
