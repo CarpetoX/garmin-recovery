@@ -118,6 +118,15 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
         checks += 1
         errors.append("md: falta app/informe.md")
 
+    weekly = app / "informe_semanal.md"
+    checks += 1
+    if weekly.exists():
+        wtxt = weekly.read_text(encoding="utf-8")
+        _check(errors, wtxt.startswith("# Resumen semanal") and "None" not in wtxt and "NaN" not in wtxt
+               and (not report_id or report_id in wtxt), "semanal: informe_semanal.md incompleto o de otro ciclo")
+    else:
+        errors.append("semanal: falta app/informe_semanal.md")
+
     # 4) Historial
     reports = hist / "reports.csv"
     if reports.exists():

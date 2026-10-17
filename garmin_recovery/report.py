@@ -54,6 +54,43 @@ def slot_for(result: dict) -> str:
     return "mañana" if hour < 12.5 else "tarde" if hour < 20 else "noche"
 
 
+def _open(expanded: bool, summary: str) -> list[str]:
+    """Bloque plegable de GitHub; las líneas en blanco permiten Markdown dentro."""
+    return [f"<details{' open' if expanded else ''}><summary>{summary}</summary>", ""]
+
+
+def summary_block(result: dict, dec: dict, g: dict, zone: str) -> list[str]:
+    """Tres líneas arriba del todo: qué, por qué y qué hacer."""
+    reg = {m["id"]: m for m in dec.get("registry") or []}
+    head = (f"> **Hoy: {ZONE_ICON.get(zone, '')} {ZONE_ES.get(zone, zone)} — {g.get('label', '')}.** "
+            f"RPE ≤ {g.get('rpe_max', '—')} · volumen {g.get('volume', '—')}.")
+    if zone == "unavailable":
+        missing = dec.get("missing_models") or []
+        reasons = (result.get("readiness") or {}).get("missing_today") or []
+        why = "faltan datos de hoy" + (f" ({', '.join(str(x) for x in reasons[:3])})" if reasons else "") + (
+            f"; modelos pendientes: {', '.join(reg.get(m, {}).get('label', m) for m in missing)}" if missing else "")
+    else:
+        deciding = [reg[m] for m in dec.get("decided_by") or [] if m in reg]
+        by = " y ".join(f"{m['label']} ({fmt(m.get('score'))})" for m in deciding) or "los modelos"
+        drivers = [d_["text"] for d_ in (result.get("readiness") or {}).get("drivers") or [] if (d_.get("z") or 0) < 0][:2]
+        why = f"lo marca{'n' if len(deciding) > 1 else ''} {by}" + (f"; señales: {' · '.join(drivers)}" if drivers else "")
+    return [head, ">", f"> **Por qué:** {why}.", ">", f"> **Qué hacer:** {g.get('text', '')}", ""]
+
+
+def models_details(dec: dict) -> list[str]:
+    """La comparación entre modelos queda plegada: la decisión es solo una."""
+    reg = dec.get("registry") or []
+    if not reg:
+        return ["_Sin registro de modelos en este ciclo._", ""]
+    out = _open(False, "Cómo se decide (modelos)") + [
+        "| Modelo | Puntuación | Zona | Papel |", "|---|--:|---|---|"]
+    for m in reg:
+        zone_txt = ZONE_ES.get(m["zone"], "—") if m.get("zone") else ("desactualizado" if m.get("state") == "desactualizado" else "—")
+        out.append(f"| {m['label']} | {fmt(m.get('score'))} | {zone_txt} | {m.get('role') or '—'} |")
+    out += ["", f"_Las puntuaciones no son equivalentes entre sí. {dec.get('rule') or ''}_", "", "</details>", ""]
+    return out
+
+
 def validation_block(mv: dict | None) -> list[str]:
     """Sección nocturna: ¿qué modelo anticipa mejor cómo te sienta el entrenamiento?"""
     if not mv:
@@ -655,22 +692,18 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
     ce = result.get("certificate") or {}
     if ce.get("status") != "ok" and ce.get("issues"):
         md += [f"> ⚠️ Certificado con avisos: {'; '.join(ce['issues'])}.", ""]
+    md += summary_block(result, dec, g, zone)
     md += [
         f"## {ZONE_ICON.get(zone, '')} Decisión: {ZONE_ES.get(zone, zone)} — {g.get('label', '')}",
         "",
-        "| Oficial v2 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |",
-        "|--:|--:|--:|--:|--:|--:|--:|",
-        f"| {fmt((reg.get('recovery_assessment_v2') or {}).get('score'))}/100 | {g.get('rpe_max', '—')} | {g.get('volume', '—')} | "
+        "| RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |",
+        "|--:|--:|--:|--:|--:|--:|",
+        f"| {g.get('rpe_max', '—')} | {g.get('volume', '—')} | "
         f"{fmt(_component(result, 'hrv').get('today_ms'))} ms | {fmt(card.get('resting_hr'))} lpm | {fmt(slp.get('hours'), 2)} h | "
         f"{fmt((reg.get('garmin_training_readiness') or {}).get('score'))}/100 |",
         "",
-        f"**Recomendación:** {g.get('text', '')}",
-        "",
-        ("Puntuaciones (no equivalentes entre sí): " if dec.get("registry") else "_Sin registro de modelos en este ciclo._") + " · ".join(
-            f"{m['label']} **{fmt(m.get('score'))}**" + (f" ({ZONE_ES.get(m['zone'], '—')})" if m.get("zone") else "")
-            for m in dec.get("registry") or []) + ". " + (dec.get("rule") or ""),
-        "",
     ]
+    md += models_details(dec)
     box = dec.get("crossfit") or []
     plan = result.get("planned") or {}
     if plan.get("today"):
@@ -683,13 +716,13 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         from .planned import rules_for_today
         if box:
             md += ["## En el box hoy", ""] + [f"- {x}" for x in box] + [""]
-        md += ["## Cómo ajustar tu sesión de hoy", "",
+        md += ["## Cómo ajustar tu sesión de hoy", ""] + _open(slot == "mañana", "Reglas por tipo de sesión") + [
                "Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):", "",
                "| Tipo | Ajuste de hoy | RPE máx. |", "|---|---|--:|"]
         for r_ in rules_for_today(dec if dec else {"zone": "unavailable", "guidance": g}):
             md.append(f"| {r_['type']} | **{r_['action'].capitalize()}:** {r_['rule']} | {r_['rpe_max']} |")
         md += ["", "_Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg. "
-               "Para ajustar una sesión concreta, pregunta con este informe._", ""]
+               "Para ajustar una sesión concreta, pregunta con este informe._", "", "</details>", ""]
     for d in plan.get("done_check") or []:
         md += [f"- **Plan frente a lo hecho:** {d['planned']} → RPE real {fmt(d.get('rpe'), 1)}"
                + (f" ⚠️ por encima del máximo de hoy ({d['rpe_cap']})" if d.get("exceeded") else " ✓ dentro del límite") + "."]
@@ -742,19 +775,21 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Disponibilidad](charts/readiness.svg)", ""]
         md += validation_block(result.get("model_validation"))
 
-    md += ["## Recuperación: tendencias de 28 días", "", "![HRV](charts/hrv.svg)", "", "![FC](charts/rhr.svg)", "",
-           "![Sueño](charts/sleep.svg)", ""]
+    md += ["## Recuperación: tendencias de 28 días", ""] + _open(slot == "mañana", "HRV, FC y sueño") + [
+           "![HRV](charts/hrv.svg)", "", "![FC](charts/rhr.svg)", "", "![Sueño](charts/sleep.svg)", "", "</details>", ""]
     actions = pending_actions(result, strength)
     if actions:
         md += ["## Acciones pendientes", ""] + [f"- {x}" for x in actions] + [""]
-    md += ["## Fuerza (últimos 28 días)", "", strength_table(strength)]
+    md += ["## Fuerza (últimos 28 días)", ""] + _open(False, "Tabla y progresión") + [strength_table(strength)]
     if strength_svg:
         md += ["![Progresión](charts/strength.svg)", "",
                "_Carga máxima declarada por sesión con barra: no es un 1RM y depende del esquema "
                "(p. ej. series pesadas cortas frente a series de volumen)._", ""]
     else:
         md += ["_Progresión: hacen falta ≥ 2 sesiones del mismo ejercicio con barra para trazarla._", ""]
-    md += ["## Certificado", "", f"- **Identificador del informe:** `{report_id}`"] + [f"- {x}" for x in certificate_block(result)] + [""]
+    md += ["</details>", ""]
+    md += ["## Certificado", "", f"- **Identificador del informe:** `{report_id}`", ""] + _open(False, "Detalle del certificado") + [
+           f"- {x}" for x in certificate_block(result)] + ["", "</details>", ""]
     md += [f"_{(result.get('readiness') or {}).get('disclaimer') or 'No es un diagnóstico médico.'} Generado {result.get('generated_at', '')[:16].replace('T', ' ')} · "
            f"app {result.get('app_version')} · modelo {result.get('model_version')}. Fuente única: `app/readiness_v3.json`._", ""]
     return "\n".join(md), charts
@@ -794,3 +829,11 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     if "strength.svg" not in charts and stale.exists():
         stale.unlink()
     (out_dir / "informe.md").write_text(md, encoding="utf-8")
+    from .weekly import build_weekly
+    strength = ((crossfit or {}).get("muscle_load") or {}).get("strength_exercises") or []
+    try:
+        weekly_md = build_weekly(result, strength, rid)
+    except Exception as exc:  # noqa: BLE001 — el resumen semanal nunca debe bloquear el informe del ciclo
+        weekly_md = (f"# Resumen semanal\n\n_No se pudo generar en este ciclo (`{rid}`): {type(exc).__name__}. "
+                     "El informe del día no se ve afectado._\n")
+    (out_dir / "informe_semanal.md").write_text(weekly_md, encoding="utf-8")

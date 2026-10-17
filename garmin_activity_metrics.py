@@ -280,228 +280,234 @@ def update_status(success, error=None, days_present=0, set_errors=None):
     save_json(STATUS_PATH, status)
 
 
-try:
-    token_b64 = os.environ.get("GARMIN_TOKENS_B64", "").strip()
-    if not token_b64:
-        raise RuntimeError("GARMIN_TOKENS_B64 no está disponible")
-
-    token_dir = Path.home() / ".garminconnect"
-    token_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
-
-    token_file = token_dir / "garmin_tokens.json"
-    token_file.write_bytes(base64.b64decode(token_b64))
-    token_file.chmod(0o600)
-
-    from garminconnect import Garmin
-
-    api = Garmin()
-    api.login(str(token_dir))
-
-    start_date = TODAY - timedelta(days=6)
-    start_str = start_date.isoformat()
-    today_str = TODAY.isoformat()
-
-    activities_raw = api.get_activities_by_date(
-        start_str,
-        today_str,
-        sortorder="asc",
-    )
-
+def main():
+    """Enriquece actividades con datos de Garmin (solo al ejecutarse como script, no al importarlo)."""
     try:
-        training_load_raw = api.get_training_load_activities(
+        token_b64 = os.environ.get("GARMIN_TOKENS_B64", "").strip()
+        if not token_b64:
+            raise RuntimeError("GARMIN_TOKENS_B64 no está disponible")
+
+        token_dir = Path.home() / ".garminconnect"
+        token_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+
+        token_file = token_dir / "garmin_tokens.json"
+        token_file.write_bytes(base64.b64decode(token_b64))
+        token_file.chmod(0o600)
+
+        from garminconnect import Garmin
+
+        api = Garmin()
+        api.login(str(token_dir))
+
+        start_date = TODAY - timedelta(days=6)
+        start_str = start_date.isoformat()
+        today_str = TODAY.isoformat()
+
+        activities_raw = api.get_activities_by_date(
             start_str,
             today_str,
+            sortorder="asc",
         )
-    except Exception:
-        training_load_raw = []
 
-    load_by_id = {}
-    load_by_start = {}
+        try:
+            training_load_raw = api.get_training_load_activities(
+                start_str,
+                today_str,
+            )
+        except Exception:
+            training_load_raw = []
 
-    if isinstance(training_load_raw, list):
-        for item in training_load_raw:
-            if not isinstance(item, dict):
+        load_by_id = {}
+        load_by_start = {}
+
+        if isinstance(training_load_raw, list):
+            for item in training_load_raw:
+                if not isinstance(item, dict):
+                    continue
+
+                item_id = activity_id_of(item)
+                if item_id is not None:
+                    load_by_id[str(item_id)] = item
+
+                start_value = item.get("startTimeLocal") or item.get("startTimeGMT")
+                if isinstance(start_value, str):
+                    load_by_start[start_value] = item
+
+        activity_days = {}
+        strength_set_errors = {}
+        strength_set_calls = 0
+
+        if not isinstance(activities_raw, list):
+            activities_raw = []
+
+        for activity in activities_raw:
+            if not isinstance(activity, dict):
                 continue
 
-            item_id = activity_id_of(item)
-            if item_id is not None:
-                load_by_id[str(item_id)] = item
+            activity_id = activity_id_of(activity)
+            start_value = activity.get("startTimeLocal") or activity.get("startTimeGMT")
 
-            start_value = item.get("startTimeLocal") or item.get("startTimeGMT")
-            if isinstance(start_value, str):
-                load_by_start[start_value] = item
+            load_item = None
+            if activity_id is not None:
+                load_item = load_by_id.get(str(activity_id))
+            if load_item is None and isinstance(start_value, str):
+                load_item = load_by_start.get(start_value)
 
-    activity_days = {}
-    strength_set_errors = {}
-    strength_set_calls = 0
+            merged = merge_activity_load(activity, load_item)
 
-    if not isinstance(activities_raw, list):
-        activities_raw = []
+            exercise_sets_summary = None
 
-    for activity in activities_raw:
-        if not isinstance(activity, dict):
-            continue
+            if (
+                activity_id is not None
+                and looks_like_strength_activity(merged)
+                and strength_set_calls < 12
+            ):
+                strength_set_calls += 1
+                try:
+                    sets_raw = api.get_activity_exercise_sets(activity_id)
+                    exercise_sets_summary = summarize_exercise_sets(sets_raw)
+                except Exception as exc:
+                    strength_set_errors[str(activity_id)] = (
+                        f"{type(exc).__name__}: {exc}"
+                    )
 
-        activity_id = activity_id_of(activity)
-        start_value = activity.get("startTimeLocal") or activity.get("startTimeGMT")
+            summary = summarize_activity(merged, exercise_sets_summary)
+            date_str = activity_date_of(merged)
 
-        load_item = None
-        if activity_id is not None:
-            load_item = load_by_id.get(str(activity_id))
-        if load_item is None and isinstance(start_value, str):
-            load_item = load_by_start.get(start_value)
+            if summary is not None and date_str:
+                activity_days.setdefault(date_str, []).append(summary)
 
-        merged = merge_activity_load(activity, load_item)
-
-        exercise_sets_summary = None
-
-        if (
-            activity_id is not None
-            and looks_like_strength_activity(merged)
-            and strength_set_calls < 12
-        ):
-            strength_set_calls += 1
-            try:
-                sets_raw = api.get_activity_exercise_sets(activity_id)
-                exercise_sets_summary = summarize_exercise_sets(sets_raw)
-            except Exception as exc:
-                strength_set_errors[str(activity_id)] = (
-                    f"{type(exc).__name__}: {exc}"
-                )
-
-        summary = summarize_activity(merged, exercise_sets_summary)
-        date_str = activity_date_of(merged)
-
-        if summary is not None and date_str:
-            activity_days.setdefault(date_str, []).append(summary)
-
-    extended = load_json(
-        EXTENDED_PATH,
-        {"timezone": "Europe/Madrid", "days": {}},
-    )
-    if not isinstance(extended, dict):
-        extended = {"timezone": "Europe/Madrid", "days": {}}
-    extended.setdefault("days", {})
-
-    for i in range(7):
-        date_str = (start_date + timedelta(days=i)).isoformat()
-
-        day_entry = extended["days"].get(date_str)
-        if not isinstance(day_entry, dict):
-            day_entry = {
-                "generated_at": NOW.isoformat(),
-                "availability": {},
-            }
-
-        day_entry["activity_metrics"] = summarize_activity_day(
-            activity_days.get(date_str, [])
+        extended = load_json(
+            EXTENDED_PATH,
+            {"timezone": "Europe/Madrid", "days": {}},
         )
-
-        availability = day_entry.get("availability")
-        if not isinstance(availability, dict):
-            availability = {}
-        availability["activity_metrics"] = True
-
-        day_entry["availability"] = availability
-        extended["days"][date_str] = day_entry
-
-    extended["generated_at"] = NOW.isoformat()
-    save_json(EXTENDED_PATH, extended)
-
-    today_activity_metrics = summarize_activity_day(
-        activity_days.get(today_str, [])
-    )
-    today_activity_metrics["strength_set_fetch_errors"] = strength_set_errors
-
-    daily = load_json(DAILY_PATH, {})
-    if isinstance(daily, dict):
-        garmin_metrics = daily.get("garmin_metrics")
-        if not isinstance(garmin_metrics, dict):
-            garmin_metrics = {}
-
-        garmin_metrics["activity_metrics"] = today_activity_metrics
-
-        availability = garmin_metrics.get("extended_availability")
-        if not isinstance(availability, dict):
-            availability = {}
-        availability["activity_metrics"] = True
-
-        garmin_metrics["extended_availability"] = availability
-        garmin_metrics["activity_metrics_generated_at"] = NOW.isoformat()
-
-        daily["garmin_metrics"] = garmin_metrics
-        save_json(DAILY_PATH, daily)
-
-    weekly = load_json(WEEKLY_PATH, {})
-    if isinstance(weekly, dict):
-        garmin = weekly.get("garmin")
-        if not isinstance(garmin, dict):
-            garmin = {}
-
-        days = garmin.get("days")
-        if not isinstance(days, dict):
-            days = {}
+        if not isinstance(extended, dict):
+            extended = {"timezone": "Europe/Madrid", "days": {}}
+        extended.setdefault("days", {})
 
         for i in range(7):
             date_str = (start_date + timedelta(days=i)).isoformat()
-            day = days.get(date_str)
-            if not isinstance(day, dict):
-                day = {}
-            day["extended"] = extended["days"].get(date_str)
-            days[date_str] = day
 
-        garmin["days"] = days
-        garmin["activity_metrics_generated_at"] = NOW.isoformat()
-        garmin["activity_metrics_days_present"] = sum(
-            1
-            for date_str in days
-            if isinstance(days.get(date_str), dict)
-            and isinstance(days[date_str].get("extended"), dict)
-            and isinstance(
-                days[date_str]["extended"].get("activity_metrics"),
-                dict,
+            day_entry = extended["days"].get(date_str)
+            if not isinstance(day_entry, dict):
+                day_entry = {
+                    "generated_at": NOW.isoformat(),
+                    "availability": {},
+                }
+
+            day_entry["activity_metrics"] = summarize_activity_day(
+                activity_days.get(date_str, [])
+            )
+
+            availability = day_entry.get("availability")
+            if not isinstance(availability, dict):
+                availability = {}
+            availability["activity_metrics"] = True
+
+            day_entry["availability"] = availability
+            extended["days"][date_str] = day_entry
+
+        extended["generated_at"] = NOW.isoformat()
+        save_json(EXTENDED_PATH, extended)
+
+        today_activity_metrics = summarize_activity_day(
+            activity_days.get(today_str, [])
+        )
+        today_activity_metrics["strength_set_fetch_errors"] = strength_set_errors
+
+        daily = load_json(DAILY_PATH, {})
+        if isinstance(daily, dict):
+            garmin_metrics = daily.get("garmin_metrics")
+            if not isinstance(garmin_metrics, dict):
+                garmin_metrics = {}
+
+            garmin_metrics["activity_metrics"] = today_activity_metrics
+
+            availability = garmin_metrics.get("extended_availability")
+            if not isinstance(availability, dict):
+                availability = {}
+            availability["activity_metrics"] = True
+
+            garmin_metrics["extended_availability"] = availability
+            garmin_metrics["activity_metrics_generated_at"] = NOW.isoformat()
+
+            daily["garmin_metrics"] = garmin_metrics
+            save_json(DAILY_PATH, daily)
+
+        weekly = load_json(WEEKLY_PATH, {})
+        if isinstance(weekly, dict):
+            garmin = weekly.get("garmin")
+            if not isinstance(garmin, dict):
+                garmin = {}
+
+            days = garmin.get("days")
+            if not isinstance(days, dict):
+                days = {}
+
+            for i in range(7):
+                date_str = (start_date + timedelta(days=i)).isoformat()
+                day = days.get(date_str)
+                if not isinstance(day, dict):
+                    day = {}
+                day["extended"] = extended["days"].get(date_str)
+                days[date_str] = day
+
+            garmin["days"] = days
+            garmin["activity_metrics_generated_at"] = NOW.isoformat()
+            garmin["activity_metrics_days_present"] = sum(
+                1
+                for date_str in days
+                if isinstance(days.get(date_str), dict)
+                and isinstance(days[date_str].get("extended"), dict)
+                and isinstance(
+                    days[date_str]["extended"].get("activity_metrics"),
+                    dict,
+                )
+            )
+
+            weekly["garmin"] = garmin
+            save_json(WEEKLY_PATH, weekly)
+
+        update_status(
+            True,
+            error=None,
+            days_present=len(activity_days),
+            set_errors=strength_set_errors,
+        )
+
+        print(
+            json.dumps(
+                {
+                    "status": "success",
+                    "generated_at": NOW.isoformat(),
+                    "days_present": len(activity_days),
+                    "today": today_activity_metrics,
+                    "strength_set_fetch_errors": strength_set_errors,
+                },
+                ensure_ascii=False,
             )
         )
 
-        weekly["garmin"] = garmin
-        save_json(WEEKLY_PATH, weekly)
-
-    update_status(
-        True,
-        error=None,
-        days_present=len(activity_days),
-        set_errors=strength_set_errors,
-    )
-
-    print(
-        json.dumps(
-            {
-                "status": "success",
-                "generated_at": NOW.isoformat(),
-                "days_present": len(activity_days),
-                "today": today_activity_metrics,
-                "strength_set_fetch_errors": strength_set_errors,
-            },
-            ensure_ascii=False,
+    except Exception as exc:
+        error_text = f"{type(exc).__name__}: {exc}"
+        update_status(
+            False,
+            error=error_text,
+            days_present=0,
+            set_errors={},
         )
-    )
-
-except Exception as exc:
-    error_text = f"{type(exc).__name__}: {exc}"
-    update_status(
-        False,
-        error=error_text,
-        days_present=0,
-        set_errors={},
-    )
-    print(
-        json.dumps(
-            {
-                "status": "error",
-                "generated_at": NOW.isoformat(),
-                "error": error_text,
-            },
-            ensure_ascii=False,
+        print(
+            json.dumps(
+                {
+                    "status": "error",
+                    "generated_at": NOW.isoformat(),
+                    "error": error_text,
+                },
+                ensure_ascii=False,
+            )
         )
-    )
-    raise SystemExit(1)
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()
