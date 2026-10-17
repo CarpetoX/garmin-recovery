@@ -18,7 +18,7 @@ class QualityTestsV248(unittest.TestCase):
         self.assertIn('  repository_dispatch:\n    types: [garmin-sync]', sync)
         self.assertIn('  workflow_dispatch:', sync)
         self.assertIn('timezone: "Europe/Madrid"', sync)
-        self.assertEqual(sync.count('    - cron:'), 3)
+        self.assertEqual(sync.count('    - cron:'), 1)  # V5.9: respaldo diario; Apps Script dispara las franjas
 
     def test_report_targets_aligned(self):
         self.assertEqual(
