@@ -1,17 +1,18 @@
 <!-- cycle_id: 2026-10-17-2245 -->
-**Hoy: rojo, prioriza recuperar** (RPE ≤ 4, volumen 0–50 %). Lo deciden v2 oficial (45) e híbrido (36); el v3 (52, ámbar) es más permisivo y se aplica la decisión más conservadora. Garmin Training Readiness marca 5.
+**Hoy (domingo 18/10, turno de noche): ⚪ pendiente de datos.** RPE ≤ 6, volumen según sensaciones; no se autoriza intensidad alta. v2 oficial y v3 están pendientes (sin puntuación); el híbrido marca 74 (ámbar).
 
 **Qué explica la puntuación**
-- ↓ Estrés Garmin de ayer: 72 de media frente a tu mediana de 38.
-- ↓ FC en reposo 60 lpm (+5 vs. mediana); nocturna 68,1 lpm (+6,1).
-- ↓ HRV 46 ms hoy; media de 7 días 51,8 ms, por debajo del rango normal (54,7–61,5 ms).
-- ↓ Sueño 7,84 h con puntuación 62 y deuda de 4,0 h en 3 noches.
+- Faltan HRV, sueño y FC en reposo de hoy; el sueño no está confirmado. Confianza de datos y de recomendación: baja.
+- Deuda de sueño: 4,0 h en 2 noches (necesidad 7,5 h). HRV media 7 días 53,1 ms frente a mediana 57,0 ms (↓).
+- Estrés Garmin de ayer: 38 de media (mediana 39) → neutro.
 
-**Carga reciente:** 9 sesiones y carga 136 en 7 días; sRPE 1.451, monotonía 0,83. Las últimas sesiones fueron el 15/10 (WOD RPE 8, técnica RPE 4) y el 14/10 (WODs RPE 9). CTL 3,9: la forma aún no se interpreta. Las 17 sesiones tienen RPE.
+**Carga reciente (7 días)**
+- 8 sesiones, carga 118, sRPE 1.202,8, monotonía 0,66; RPE registrado en 17/17 sesiones.
+- Últimas sesiones con RPE alto: WOD parejas 15/10 (RPE 8) y WODs del 14/10 (RPE 9). CTL 3,8: la forma (TSB) aún no se interpreta.
 
 **Recomendaciones**
-1. Hoy sin WOD ni cargas pesadas: movilidad o zona 2 suave de 30–40 min.
-2. Mañana es turno TN: si entrenas, antes del turno, corto y sin máximos.
-3. Apunta a 8,5 h de sueño esta noche para reducir la deuda de 4,0 h.
+1. Si entrenas antes del turno de noche: técnica ligera o Zona 2 suave ≤ 40 min, sin máximos.
+2. Reevalúa cuando se sincronice el sueño; hasta entonces no subas intensidad.
+3. Registra fatiga, agujetas, estrés, ánimo y motivación en Intervals.icu para afinar el modelo.
 
-Faltan las sensaciones de hoy en Intervals.icu. Certificado con avisos: 2 franjas de Sync perdidas (08:30 y 16:45). No es un diagnóstico médico.
+_Aviso: certificado con avisos (2 franjas de Sync perdidas el 17/10). No es un diagnóstico médico._
