@@ -24,10 +24,50 @@ def render(result: dict) -> str:
     zone = (result.get("decision") or {}).get("zone") or rd["zone"]
     tone, icon = ZONE_UI.get(zone, ZONE_UI["unavailable"])
     title = "Rendimiento y recuperación"
+    extra = _extra_sections(result)
     return TEMPLATE.replace("{{TITLE}}", title) \
+        .replace("{{EXTRA}}", extra) \
         .replace("{{DATE}}", _esc(result["date"])) \
         .replace("{{TONE}}", tone).replace("{{ICON}}", icon) \
         .replace("{{DATA}}", payload)
+
+
+def _extra_sections(result: dict) -> str:
+    """Resumen de tres líneas, RPE frente al máximo del día y la semana (mismo contenido que el informe)."""
+    import re
+    from .readiness import GUIDANCE
+    from .report import chart_rpe, summary_block
+    from .weekly import weekly_summary
+    dec = result.get("decision") or {}
+    zone = dec.get("zone") or "unavailable"
+    g = dec.get("guidance") or GUIDANCE.get(zone) or GUIDANCE["unavailable"]
+    lines = [x[2:] for x in summary_block(result, dec, g, zone) if x.startswith("> **")]
+
+    def md_inline(t):
+        return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", _esc(t))
+    summary = "".join(f"<p style='margin:4px 0'>{md_inline(x)}</p>" for x in lines)
+    rpe_svg = chart_rpe(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"])
+    rpe_svg = rpe_svg.replace('width="640" height="230"', 'width="100%" preserveAspectRatio="xMidYMid meet"')
+    try:
+        w = weekly_summary(result)
+    except Exception:  # noqa: BLE001 — la tarjeta semanal nunca rompe el panel
+        w = None
+    week = ""
+    if w:
+        def f(v, dg=0):
+            return "—" if v is None else (f"{v:.{dg}f}".replace(".", ","))
+        rows = [("Sesiones", w["sessions"], w["sessions_prev"], 0), ("Minutos", w["minutes"], w["minutes_prev"], 0),
+                ("sRPE", w["srpe"], w["srpe_prev"], 0), ("HRV media (ms)", w["hrv"], w["hrv_prev"], 1),
+                ("FC reposo (lpm)", w["rhr"], w["rhr_prev"], 1), ("Sueño medio (h)", w["sleep"], w["sleep_prev"], 2)]
+        week = ("<table><thead><tr><th></th><th class='num'>Esta semana</th><th class='num'>Semana previa</th></tr></thead><tbody>"
+                + "".join(f"<tr><td>{_esc(n)}</td><td class='num'>{f(a, d)}</td><td class='num'>{f(b, d)}</td></tr>"
+                          for n, a, b, d in rows) + "</tbody></table>")
+    return (f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
+            f'<section class="grid cols-2"><div class="card"><h2>RPE frente al máximo del día</h2>'
+            f'<p class="h2sub">barras: sesión más dura por tipo · raya: máximo de la decisión · punto rojo: por encima</p>'
+            f'<div style="width:100%">{rpe_svg}</div></div>'
+            f'<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
+            f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
 
 
 TEMPLATE = r"""<!doctype html>
@@ -153,6 +193,8 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
         <ul class="clean notes" id="notes" style="margin-top:10px"></ul>
       </div>
     </section>
+
+    {{EXTRA}}
 
     <section class="grid tiles" id="tiles" aria-label="Indicadores clave"></section>
 

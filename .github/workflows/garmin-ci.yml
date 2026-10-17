@@ -43,6 +43,12 @@ jobs:
       - name: Install pinned YAML parser for workflow validation
         run: python -m pip install --disable-pip-version-check 'PyYAML==6.0.3'
 
+      - name: V6.0 - Revisión de estilo (ruff) del paquete de la app y sus tests
+        run: |
+          python -m pip install --disable-pip-version-check 'ruff==0.16.8'
+          ruff check garmin_recovery test_app_readiness_v5.py test_audit_fixes_v57.py test_backtest_v58.py \
+            test_reports_v59.py test_structure_v59.py test_alerts_v60.py test_strength_dashboard_v60.py
+
       - name: Validate workflow YAML, triggers and pipeline topology
         run: |
           python - <<'PY'

@@ -85,6 +85,33 @@ def strength_estimate(sets, equipment):
     return (round(best, 1) if best is not None else None), status
 
 
+def epley_lower_bound(sets, equipment):
+    """1RM MÍNIMO por Epley con la mejor serie (kg y repeticiones), sin RIR.
+
+    Si la serie no llegó al fallo, el 1RM real es igual o mayor: por eso es un límite
+    inferior y no sustituye a ``estimated_1rm_kg`` (que exige RIR explícito). Nunca usa
+    el RPE de la sesión. Solo barra o par de mancuernas y series de 1–10 repeticiones.
+    """
+    if equipment not in ('barbell', 'dumbbell_pair'):
+        return None, None, None
+    best = None
+    for item in sets or []:
+        if not isinstance(item, dict):
+            continue
+        reps = num(item.get('reps'))
+        kg = num(item.get('load_kg'))
+        if kg is None:
+            kg = num(item.get('weight_kg'))
+        if reps is None or kg is None or reps < 1 or reps > 10 or kg <= 0:
+            continue
+        estimate = kg * (1 + reps / 30) if reps > 1 else kg
+        if best is None or estimate > best[0]:
+            best = (estimate, kg, int(reps) if float(reps).is_integer() else reps)
+    if best is None:
+        return None, None, None
+    return round(best[0], 1), best[1], best[2]
+
+
 def pain(obj):
     """Only accept explicit numeric 0-10 pain entries; no inference from notes."""
     if not isinstance(obj, dict): return None
@@ -115,6 +142,7 @@ def analyze(activities, as_of):
                 known_volume = 0.0
                 known_sets = total_sets = 0
                 best_e1rm, estimate_status = strength_estimate(exercise.get('sets', []), equipment)
+                e1rm_min, top_kg, top_reps = epley_lower_bound(exercise.get('sets', []), equipment)
                 peak_load = None
                 for item in exercise.get('sets', []):
                     if not isinstance(item, dict): continue
@@ -143,6 +171,8 @@ def analyze(activities, as_of):
                         'estimated_1rm_kg':best_e1rm,
                         'estimated_1rm_status':estimate_status,
                         'estimated_1rm_method':('Epley using explicit set RIR (0-2); approximate' if best_e1rm is not None else None),
+                        'top_set_kg':top_kg, 'top_set_reps':top_reps, 'e1rm_min_kg':e1rm_min,
+                        'e1rm_min_method':('Epley sin RIR: limite inferior' if e1rm_min is not None else None),
                         'rpe':block.get('rpe'), 'pain':pain(obj)})
     windows = {}
     equipment_windows = {}

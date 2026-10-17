@@ -193,11 +193,11 @@ class Chart:
                 self.parts.append(f'<text x="{self.x(i):.1f}" y="{self.h - 7}" text-anchor="middle">{dshort(d)}</text>')
 
     def band(self, lows, highs, color=S1):
-        pts = [(i, l, h) for i, (l, h) in enumerate(zip(lows, highs)) if l is not None and h is not None]
+        pts = [(i, lo_, hi_) for i, (lo_, hi_) in enumerate(zip(lows, highs, strict=False)) if lo_ is not None and hi_ is not None]
         if len(pts) < 2:
             return
         top = " L".join(f"{self.x(i):.1f},{self.y(h):.1f}" for i, _, h in pts)
-        bot = " L".join(f"{self.x(i):.1f},{self.y(l):.1f}" for i, l, _ in reversed(pts))
+        bot = " L".join(f"{self.x(i):.1f},{self.y(lo_):.1f}" for i, lo_, _ in reversed(pts))
         self.parts.append(f'<path d="M{top} L{bot} Z" fill="{color}" fill-opacity="0.12"/>')
 
     def ref(self, value, text=None):
@@ -439,20 +439,30 @@ def chart_readiness(trend):
 
 
 def chart_strength(rows):
-    """Carga máxima declarada por ejercicio con barra y ≥ 2 sesiones."""
-    series = {}
+    """Progresión por ejercicio con barra y ≥ 2 sesiones: 1RM mínimo estimado si hay
+    repeticiones en ≥ 2 sesiones; si no, carga máxima declarada (se indica en la leyenda)."""
+    e1rm, peak = {}, {}
     for r in rows:
-        if r.get("equipment") == "barbell" and r.get("peak_declared_load_kg"):
-            series.setdefault(r["exercise"], {})[r["date"]] = r["peak_declared_load_kg"]
-    series = {k: v for k, v in series.items() if len(v) >= 2}
+        if r.get("equipment") != "barbell":
+            continue
+        if r.get("e1rm_min_kg"):
+            e1rm.setdefault(r["exercise"], {})[r["date"]] = r["e1rm_min_kg"]
+        if r.get("peak_declared_load_kg"):
+            peak.setdefault(r["exercise"], {})[r["date"]] = r["peak_declared_load_kg"]
+    series = {}
+    for name in set(e1rm) | set(peak):
+        if len(e1rm.get(name, {})) >= 2:
+            series[f"{name} (1RM mín.)"] = e1rm[name]
+        elif len(peak.get(name, {})) >= 2:
+            series[f"{name} (carga máx.)"] = peak[name]
     if not series:
         return None
     dates = sorted({d for v in series.values() for d in v})
     colors = [S1, S2, "#1baf7a"]
     allv = [x for v in series.values() for x in v.values()]
-    c = Chart(dates, allv, label="Progresión de carga máxima")
+    c = Chart(dates, allv, label="Progresión de fuerza")
     c.axes()
-    for (name, pts), col in zip(sorted(series.items())[:3], colors):
+    for (name, pts), col in zip(sorted(series.items())[:3], colors, strict=False):
         c.line([pts.get(d) for d in dates], col, name, markers=True)
     return c.render()
 
@@ -551,17 +561,26 @@ def format_load(r) -> str:
     return txt
 
 
+def best_set(r) -> str:
+    if not r.get("top_set_kg"):
+        return "—"
+    return f"{float(r['top_set_kg']):g}".replace(".", ",") + f" × {r.get('top_set_reps')}"
+
+
 def strength_table(rows) -> str:
     if not rows:
         return "_Sin series de fuerza verificadas en la ventana._\n"
-    out = ["| Fecha | Ejercicio | Implemento | Carga máx. | Volumen verificado | Series | RPE sesión |",
-           "|---|---|---|---|--:|--:|--:|"]
+    out = ["| Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |",
+           "|---|---|---|---|--:|--:|--:|--:|--:|"]
     for r in rows[:12]:
         bodyweight = r.get("equipment") == "bodyweight"
         vol = "—" if bodyweight else fmt(r.get("verified_volume_kg"), 0, " kg") + ("" if r.get("volume_complete") else " (parcial)")
         out.append(f"| {dshort(r['date'])} | {r.get('exercise')} | {EQUIP_ES.get(r.get('equipment'), r.get('equipment') or '—')} | "
-                   f"{format_load(r)} | {vol} | {r.get('known_sets') or '—'}/{r.get('total_sets') or '—'} | {fmt(r.get('rpe'), 1)} |")
+                   f"{format_load(r)} | {best_set(r)} | {fmt(r.get('e1rm_min_kg'), 1, ' kg')} | {vol} | "
+                   f"{r.get('known_sets') or '—'}/{r.get('total_sets') or '—'} | {fmt(r.get('rpe'), 1)} |")
     out.append("")
+    out.append("_1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real "
+               "es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._")
     out.append("_Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos "
                "(barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._")
     return "\n".join(out) + "\n"
@@ -836,8 +855,8 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
     md += ["## Fuerza (últimos 28 días)", ""] + _open(False, "Tabla y progresión") + [strength_table(strength)]
     if strength_svg:
         md += ["![Progresión](charts/strength.svg)", "",
-               "_Carga máxima declarada por sesión con barra: no es un 1RM y depende del esquema "
-               "(p. ej. series pesadas cortas frente a series de volumen)._", ""]
+               "_Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando hay repeticiones; si no, "
+               "carga máxima declarada. Una sesión de volumen da un mínimo más bajo que una de series pesadas cortas._", ""]
     else:
         md += ["_Progresión: hacen falta ≥ 2 sesiones del mismo ejercicio con barra para trazarla._", ""]
     md += ["</details>", ""]

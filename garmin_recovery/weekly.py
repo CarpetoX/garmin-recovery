@@ -191,11 +191,13 @@ def build_weekly(result: dict, strength: list | None = None, report_id: str | No
 
     md += ["## Fuerza de la semana", ""]
     if w["strength"]:
-        md += ["| Fecha | Ejercicio | Carga máx. declarada | Series |", "|---|---|--:|--:|"]
+        md += ["| Fecha | Ejercicio | Carga máx. declarada | Mejor serie | 1RM mín. | Series |", "|---|---|--:|--:|--:|--:|"]
         for x in w["strength"]:
+            best = (f"{float(x['top_set_kg']):g}".replace(".", ",") + f" × {x.get('top_set_reps')}") if x.get("top_set_kg") else "—"
             md.append(f"| {d(x['date'])} | {x.get('exercise') or '—'} | {_f(x.get('peak_declared_load_kg'), 1, ' kg')} | "
-                      f"{x.get('known_sets') or '—'}/{x.get('total_sets') or '—'} |")
-        md += ["", "_Carga máxima declarada, no 1RM; solo es comparable con el mismo ejercicio e implemento._", ""]
+                      f"{best} | {_f(x.get('e1rm_min_kg'), 1, ' kg')} | {x.get('known_sets') or '—'}/{x.get('total_sets') or '—'} |")
+        md += ["", "_1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. "
+               "Solo es comparable con el mismo ejercicio e implemento._", ""]
     else:
         md += ["_Sin series de fuerza con carga registradas esta semana._", ""]
 

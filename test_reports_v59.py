@@ -84,7 +84,7 @@ class Weekly(unittest.TestCase):
                                            "known_sets": 5, "total_sets": 5}], "GR-2026-10-17-2250-abcdef")
         self.assertTrue(md.startswith("# Resumen semanal · 11/10–17/10"))
         self.assertIn("GR-2026-10-17-2250-abcdef", md)
-        self.assertIn("| 16/10 | Sentadilla | 150,0 kg | 5/5 |", md)
+        self.assertIn("| 16/10 | Sentadilla | 150,0 kg | — | — | 5/5 |", md)
         self.assertIn("2 de 2 días comprobados por encima del RPE máximo", md)
         self.assertNotIn("None", md)
 

@@ -124,7 +124,8 @@ class F6RobustHrv(unittest.TestCase):
         dirty_vals = list(base)
         dirty_vals[5] = 20
         dirty = assess(daily_with(dirty_vals), TODAY.isoformat(), DEFAULTS)["components"]["hrv"]
-        width = lambda h: h["normal_high_ms"] - h["normal_low_ms"]
+        def width(h):
+            return h["normal_high_ms"] - h["normal_low_ms"]
         self.assertLess(abs(width(dirty) - width(clean)), 0.2 * width(clean))
 
 

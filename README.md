@@ -50,6 +50,13 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 
 Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `history/` anteriores, de modo que nunca se publica un informe roto, y guarda el motivo en `app/validation.json`.
 
+**V6.0, avisos y seguimiento:**
+- **Aviso en GitHub** (issue «⚠️ Garmin Recovery: atención necesaria», con mención al propietario). Se abre si el informe no se publicó por no pasar la validación, si se perdió una franja de Sync en las últimas 12 h o si no hay informe en 11 h. Solo comenta cuando cambia el problema y se cierra solo cuando todo vuelve a ir bien (`python -m garmin_recovery alert`, en CrossFit Insights y en el monitor programado). Nunca bloquea la cadena.
+- **Puntualidad en el resumen semanal:** hora del Sync y hora del informe de cada franja, frente a las 09:05, 17:10 y 23:10.
+- **Fuerza:** mejor serie y **1RM mínimo** (Epley con kg × repeticiones, hasta 10 repeticiones) en el informe, en el semanal y en la gráfica de progresión. Si la serie no fue al fallo, el 1RM real es igual o mayor. No usa el RPE de la sesión, y el 1RM con RIR explícito sigue siendo `estimated_1rm_kg`.
+- **Panel (`app/dashboard.html`):** el resumen de tres líneas, la gráfica de RPE frente al máximo y la semana frente a la anterior.
+- **CI:** revisión de estilo con `ruff` del paquete de la app y sus tests.
+
 **V5.9, informes más claros:**
 - **Arriba del todo, tres líneas:** la decisión con su RPE máximo, por qué se ha tomado (qué modelos la marcan y las dos señales que más pesan) y qué hacer.
 - **Una sola decisión visible.** La comparación entre v2, híbrido y v3 queda en un desplegable "Cómo se decide".
