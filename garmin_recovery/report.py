@@ -501,7 +501,8 @@ def certificate_block(result) -> list[str]:
         "**Antigüedad:** " + (" · ".join(f"{lbl.get(k, k)} {age(a)} {'✓' if a.get('state') == 'reciente' else '!'}"
                                           for k, a in ages.items()) or "sin marcas temporales"),
         f"**Integridad:** coherencia v3/v2 {'✓' if cons == 'ok' else '! ' + (cons or 'sin comparar')} · sesiones con RPE "
-        f"{ti.get('with_rpe', '—')}/{ti.get('sessions', '—')}"
+        f"{ti.get('with_rpe', '—')}/{ti.get('sessions', 0) - len(ti.get('rpe_not_applicable') or [])}"
+        + (f" (+{len(ti['rpe_not_applicable'])} sin RPE por diseño: calentamiento/técnica)" if ti.get("rpe_not_applicable") else "")
         + (f" (sin RPE: {', '.join(dshort(x['start_local'][:10]) + ' ' + x['start_local'][11:16] for x in ti.get('without_rpe') or [] if x.get('start_local'))})"
            if ti.get("without_rpe") else ""),
         f"**Ejecución:** {len(missed)} franja(s) de Sync perdidas" + (f" ({', '.join(dshort(s) + ' ' + s[11:16] for s in missed)})" if missed else ""),
@@ -649,8 +650,22 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         "",
     ]
     box = dec.get("crossfit") or []
-    if box:
-        md += ["## En el box hoy", ""] + [f"- {x}" for x in box] + [""]
+    plan = result.get("planned") or {}
+    if plan.get("today"):
+        md += ["## Tu sesión planificada, ajustada", "", "| Hora | Tipo | Planificado | Ajuste de hoy | RPE máx. |", "|---|---|---|---|--:|"]
+        for p_ in plan["today"]:
+            md.append(f"| {p_.get('time') or '—'} | {p_['type']} | {p_['planned'].replace('|', '/')} | "
+                      f"**{p_['action'].capitalize()}:** {p_['adjusted']} | {p_['rpe_max']} |")
+        md += ["", f"_{plan['today'][0].get('rule', '')} El ajuste nunca supera el RPE máximo de la decisión._", ""]
+    elif box:
+        md += ["## En el box hoy", ""] + [f"- {x}" for x in box]
+        md += ["", "_No hay sesión planificada para hoy en `Planificados`"
+               + ("" if plan.get("source") not in (None, "no_configurado") else " (pestaña aún no conectada)") + "._", ""]
+    for d in plan.get("done_check") or []:
+        md += [f"- **Plan frente a lo hecho:** {d['planned']} → RPE real {fmt(d.get('rpe'), 1)}"
+               + (f" ⚠️ por encima del máximo de hoy ({d['rpe_cap']})" if d.get("exceeded") else " ✓ dentro del límite") + "."]
+    if plan.get("done_check"):
+        md += [""]
     md += ["## Qué ha cambiado desde el informe anterior", ""] + [f"- {x}" if i else x for i, x in
                                                                   enumerate(changes_since(previous, snapshot(result, report_id)))] + [""]
 
@@ -692,6 +707,8 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         md += [f"- Objetivo de sueño esta noche: **{fmt(target, 1)} h** (necesidad + parte de la deuda de {fmt(slp.get('debt_hours'), 1)} h)."]
         if shift_tomorrow:
             md += [f"- Mañana turno **{shift_tomorrow}**" + (": si entrenas, antes del turno, corto y sin máximos." if shift_tomorrow == "TN" else ".")]
+        for t in (result.get("planned") or {}).get("tomorrow") or []:
+            md += [f"- Planificado para mañana {t.get('time') or ''}: **{t['planned']}** ({t['type']}). Se ajustará con el sueño y la HRV de esta noche."]
         md += ["- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.", ""]
         md += ["## Gráficas", "", "![Carga](charts/load.svg)", "", "![Disponibilidad](charts/readiness.svg)", ""]
 

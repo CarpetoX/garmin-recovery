@@ -132,6 +132,8 @@ jobs:
       - name: V5.3 - App de seguimiento e informe del ciclo (no bloqueante)
         continue-on-error: true
         timeout-minutes: 5
+        env:
+          PLANNED_CSV_URL: ${{ secrets.PLANNED_CSV_URL }}
         run: python -m garmin_recovery run
 
       - name: Pruebas de regresión V2.4

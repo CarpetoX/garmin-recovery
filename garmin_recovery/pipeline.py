@@ -86,6 +86,10 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
     if write:
         write_table(root / cfg["history_dir"] / "daily.csv", daily, DAILY_FIELDS, "date")
     integrity = training_integrity(sessions, inputs.get("feedback") or {}, today)
+    from .planned import load_planned, plan_block
+    plan_rows, plan_source = load_planned(root)
+    tomorrow = (date.fromisoformat(today) + timedelta(days=1)).isoformat()
+    planned = plan_block(plan_rows, today, tomorrow, decision, list(sessions.values()), plan_source)
     cert = certificate(root, inputs, readiness, now, tz, cfg)
 
     dates = sorted(daily)
@@ -93,7 +97,7 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
         "schema_version": 1, "app_version": APP_VERSION, "model_version": MODEL_VERSION,
         "generated_at": now.isoformat(), "timezone": cfg["timezone"], "date": today,
         "decision": decision, "readiness": readiness, "load": load,
-        "certificate": cert, "training_integrity": integrity,
+        "certificate": cert, "training_integrity": integrity, "planned": planned,
         "legacy_v2": {"score": legacy.get("score"), "status": legacy.get("status"),
                       "state": legacy.get("state"), "date": (legacy.get("current") or {}).get("date")},
         "history": {"days": len(daily), "first_date": dates[0] if dates else None,
