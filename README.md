@@ -39,6 +39,17 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 
 **Informe del ciclo** (V5.3, `app/informe.md` + `app/charts/*.svg`): GitHub lo muestra con sus gráficas, también en el móvil, y ChatGPT o Claude lo pueden leer y citar. Tiene tres variantes según la hora del Sync: *mañana* (qué cambió frente a tu línea base, señales coincidentes, incertidumbre y plan), *tarde* (actividad de hoy y si encaja con la decisión) y *noche* (balance del día y la semana y previsión orientativa). Lleva hasta 7 gráficas: disponibilidad oficial frente a v3 con franja de decisión, HRV con rango normal, FC en reposo y nocturna, sueño (nocturno frente a diurno/post-TN), carga con ATL/CTL, carga por sesión y tipo (WOD, fuerza, halterofilia, técnica) y progresión de fuerza. Termina con el certificado. La app se ejecuta al final de *CrossFit Insights*, tras el certificado del ciclo, y guarda cada día en `history/daily.csv` las puntuaciones de v2, el híbrido y v3 y la zona de decisión.
 
+**V5.6, validación antes de publicar:** después de generar el informe, `python -m garmin_recovery validate` comprueba 30 puntos, entre ellos:
+- el contrato de `readiness_v3.json`;
+- que la decisión sea la más conservadora de los modelos;
+- que ningún ajuste del plan supere el RPE máximo;
+- que las fechas estén ordenadas y lleguen hasta hoy;
+- que el identificador GR sea correcto en la cabecera, el certificado y `reports.csv`, sin duplicados;
+- que la recomendación del Markdown coincida con `decision.guidance`;
+- que las gráficas enlazadas existan y sean SVG válidos, y que el historial no tenga duplicados.
+
+Si alguna comprobación falla, CrossFit Insights restaura el `app/` y el `history/` anteriores, de modo que nunca se publica un informe roto, y guarda el motivo en `app/validation.json`.
+
 **V5.5, plan ajustado:** la app lee la pestaña `Planificados` de la hoja RPE CrossFit (secreto `PLANNED_CSV_URL`, con la pestaña publicada como CSV; también vale un `planned_sessions.csv` en la raíz) y ajusta cada sesión de hoy a la decisión del día:
 - **Verde:** se mantiene.
 - **Ámbar:** 75 % de las series; fuerza al 90 % y halterofilia al 80 % de la carga prevista, redondeadas a 2,5 kg; WOD al 75 % del tiempo.
