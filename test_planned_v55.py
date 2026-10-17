@@ -127,3 +127,25 @@ class ReportIntegrationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SameDayRulesTests(unittest.TestCase):
+    def test_rules_cover_all_types_and_respect_cap(self):
+        for zone, cap in (("green", 9), ("yellow", 7), ("red", 4), ("unavailable", 6)):
+            rules = pl.rules_for_today({"zone": zone, "guidance": {"rpe_max": cap}})
+            self.assertEqual([r["type"] for r in rules], list(pl.GENERIC_TYPES))
+            self.assertTrue(all(r["rpe_max"] <= cap for r in rules))
+        yellow = {r["type"]: r for r in pl.rules_for_today({"zone": "yellow", "guidance": {"rpe_max": 7}})}
+        self.assertIn("90 %", yellow["Fuerza"]["rule"])
+        self.assertIn("80 %", yellow["Halterofilia"]["rule"])
+
+    def test_report_shows_rules_without_plan(self):
+        from garmin_recovery import report as rp
+        from garmin_recovery.readiness import GUIDANCE
+        res = {"date": "2026-10-17", "generated_at": "2026-10-17T08:45:00+02:00", "trend_28d": [],
+               "recent_sessions": [], "load": {}, "readiness": {"components": {}}, "certificate": {},
+               "training_integrity": {}, "planned": {"source": "no_configurado", "today": []},
+               "decision": {"zone": "yellow", "guidance": GUIDANCE["yellow"], "registry": [], "crossfit": ["x"]}}
+        md, _ = rp.build_report(res, report_id="GR-t")
+        self.assertIn("## Cómo ajustar lo que planifiques hoy", md)
+        self.assertIn("| Fuerza |", md)

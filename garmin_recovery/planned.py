@@ -118,7 +118,8 @@ def adjust(row: dict, zone: str, rpe_cap: int | None) -> dict:
         }[kind]
         if zone == "unavailable" and kind in ("Técnica", "Movilidad", "Aeróbico"):
             substitute += " Revisa de nuevo cuando se confirme el sueño."
-        out.update(action="sustituir" if kind not in ("Movilidad",) else "mantener", adjusted=substitute,
+        action = "mantener" if kind == "Movilidad" else "reducir" if kind in ("Técnica", "Aeróbico") else "sustituir"
+        out.update(action=action, adjusted=substitute,
                    rpe_max=min(rpe, 4 if zone == "red" else 6),
                    rule="Decisión roja: sin cargas pesadas ni WOD." if zone == "red"
                    else "Datos de hoy pendientes: no se autoriza intensidad alta.")
@@ -171,3 +172,17 @@ def plan_block(rows: list[dict], day: str, tomorrow: str, decision: dict, sessio
                          "load": s.get("load"), "rpe_cap": cap, "exceeded": exceeded})
     return {"source": source, "today": today, "tomorrow": tomorrow_rows, "done_check": done,
             "rows_loaded": len(rows)}
+
+
+GENERIC_TYPES = ("Fuerza", "Halterofilia", "WOD", "Técnica", "Aeróbico", "Movilidad")
+
+
+def rules_for_today(decision: dict) -> list[dict]:
+    """Reglas de ajuste por tipo de sesión para quien planifica el mismo día."""
+    zone = decision.get("zone", "unavailable")
+    cap = (decision.get("guidance") or {}).get("rpe_max")
+    out = []
+    for kind in GENERIC_TYPES:
+        a = adjust({"type": kind, "activity": kind}, zone, cap)
+        out.append({"type": kind, "action": a["action"], "rule": a["adjusted"], "rpe_max": a["rpe_max"]})
+    return out
