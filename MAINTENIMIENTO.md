@@ -74,3 +74,7 @@ Hoy conviven la cadena antigua (≈ 40 scripts ejecutados por los workflows, má
 | 5 | Borrar los módulos que ya no ejecute ningún workflow ni importe ningún módulo en uso, con sus tests | En curso: 15 módulos borrados en V6.0 y 7 alias (`ops_metrics_v28`, `origin_monitor_v292`, `report_cycle_guard_v37`, `report_cycle_integration_v371`, `recovery_v23`, `recovery_v231`, `report_audit`) en V6.4. Los demás alias siguen porque un workflow o un módulo antiguo los usa; caerán cuando se migre ese módulo |
 
 Regla: si una salida pública cambia, aunque sea un campo, el PR lo declara y se valida antes con un Sync real.
+
+## V6.5 — Informe completo
+
+`fullreport.py` genera `app/informe_completo.md` desde `report.write_report`; `site.build_site` lo publica como HTML (`mdhtml.py`); `validate.py` exige su estructura. Si cambia un campo de los JSON de origen, ajustar `fullreport.py` y `test_fullreport_v65.py`.

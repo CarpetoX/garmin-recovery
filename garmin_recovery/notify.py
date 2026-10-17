@@ -46,7 +46,7 @@ def build_message(root: Path, now: datetime | None = None, max_age_min: float = 
     rpe = (dec.get("guidance") or {}).get("rpe_max")
     body = label + (f" · RPE máx. {rpe}" if rpe is not None else "")
     return {"title": "Informe nuevo · " + now.strftime("%H:%M"), "message": body,
-            "priority": priority, "tags": [tag], "click": SITE_URL}
+            "priority": priority, "tags": [tag], "click": SITE_URL + "informe_completo.html"}
 
 
 def send(msg: dict, topic: str, server: str = "https://ntfy.sh", opener=urllib.request.urlopen) -> int:
