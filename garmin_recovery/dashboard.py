@@ -107,7 +107,9 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
                      '<section class="card"><h2>Progresión de fuerza</h2><p class="h2sub">1RM mínimo estimado (Epley con '
                      'tu mejor serie) cuando hay repeticiones; si no, carga máxima declarada</p>'
                      f'<div class="svgwrap">{strength}</div></section>')
-    return (f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
+    full_html = ('<section class="card"><p><a href="informe_completo.html"><strong>📄 Abrir el informe completo</strong></a> '
+                 '· resumen, 7 secciones y recomendaciones</p></section>' if extras.get("full_report") else "")
+    return (full_html + f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
             '<section class="card" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o v3 atenuado si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'

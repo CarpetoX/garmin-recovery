@@ -143,3 +143,11 @@ Ver [MAINTENIMIENTO.md](MAINTENIMIENTO.md) y [OPERACION_Y_VALIDACION.md](OPERACI
 Cada ciclo que publica un informe válido envía una notificación al móvil («Informe nuevo · HH:MM», la decisión del día y el RPE máximo, con enlace al panel). No lleva datos fisiológicos.
 
 Configuración (una vez): instala la app **ntfy** (Android/iOS), suscríbete a un tema con un nombre largo y difícil de adivinar (quien lo conozca puede leer los avisos) y guárdalo en GitHub → Settings → Secrets and variables → Actions → secreto `NTFY_TOPIC`. Sin ese secreto no se envía nada. Opcional: `NTFY_SERVER` si usas un servidor propio. Un fallo del aviso nunca bloquea la cadena.
+
+## V6.5 — Informe completo en la app
+
+Cada ciclo escribe además `app/informe_completo.md` (`garmin_recovery/fullreport.py`): resumen ejecutivo, siete secciones
+(certificación, recuperación, sueño, FC y tendencias, CrossFit, fuerza y metcons, balance) y conclusión con traza. Sale solo de
+los archivos de datos ya publicados, sin IA ni estimaciones nuevas; si falta un dato, la línea muestra «—». Se publica en la web como
+`informe_completo.html` (renderizador propio en `mdhtml.py`), se enlaza desde el panel, lo comprueba `validate` y la notificación
+ntfy lo abre al tocarla. `test_fullreport_v65.py` verifica estructura, cifras frente a los datos y que no se inventen fases de sueño.

@@ -136,7 +136,7 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     except (OSError, ValueError):
         strength = None
     gen = datetime.fromisoformat(result["generated_at"]) if result.get("generated_at") else None
-    extras = {"pwa": True, "strength_svg": strength,
+    extras = {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(), "strength_svg": strength,
               "punctuality": punctuality(reports, date.fromisoformat(result["date"]), gen),
               "history": report_history(root) if history else []}
     out.mkdir(parents=True, exist_ok=True)
@@ -148,8 +148,12 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     (out / ".nojekyll").write_text("", encoding="utf-8")
     if (root / "app" / "charts").is_dir():
         shutil.copytree(root / "app" / "charts", out / "charts", dirs_exist_ok=True)
-    for name in ("informe.md", "informe_semanal.md"):
+    for name in ("informe.md", "informe_semanal.md", "informe_completo.md"):
         if (root / "app" / name).exists():
             shutil.copy(root / "app" / name, out / name)
+    full = root / "app" / "informe_completo.md"
+    if full.exists():
+        from .mdhtml import page
+        (out / "informe_completo.html").write_text(page(full.read_text(encoding="utf-8")), encoding="utf-8")
     return {"out": str(out), "history": len(extras["history"]), "date": result["date"],
             "generated_at": result.get("generated_at")}

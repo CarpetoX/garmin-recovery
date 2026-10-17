@@ -923,3 +923,10 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
         weekly_md = (f"# Resumen semanal\n\n_No se pudo generar en este ciclo (`{rid}`): {type(exc).__name__}. "
                      "El informe del día no se ve afectado._\n")
     (out_dir / "informe_semanal.md").write_text(weekly_md, encoding="utf-8")
+    from .fullreport import build_full_report
+    try:
+        full_md = build_full_report(root, result, rid)
+    except Exception as exc:  # noqa: BLE001 — el informe completo nunca debe bloquear el informe del ciclo
+        full_md = (f"# Informe completo\n\n_No se pudo generar en este ciclo (`{rid}`): {type(exc).__name__}. "
+                   "El informe del día no se ve afectado._\n")
+    (out_dir / "informe_completo.md").write_text(full_md, encoding="utf-8")

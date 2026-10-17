@@ -130,6 +130,15 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
     else:
         errors.append("semanal: falta app/informe_semanal.md")
 
+    full = app / "informe_completo.md"
+    checks += 1
+    if full.exists():
+        ftxt = full.read_text(encoding="utf-8")
+        _check(errors, ftxt.startswith("# Garmin Recovery") and "None" not in ftxt and "NaN" not in ftxt
+               and "## 7." in ftxt and (not report_id or report_id in ftxt), "completo: informe_completo.md incompleto o de otro ciclo")
+    else:
+        errors.append("completo: falta app/informe_completo.md")
+
     # 4) Historial
     reports = hist / "reports.csv"
     if reports.exists():
