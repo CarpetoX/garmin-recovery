@@ -90,45 +90,6 @@ jobs:
           ADVANCED_RUN_ID: ${{ github.event.workflow_run.id }}
         run: python report_sleep_integration.py
 
-      # V3.6.1: el informe opcional valida fuentes/antiguedad y deja un estado
-      # auditable incluso al fallar. Nunca bloquea el certificado ni el espejo.
-      - name: V3.6.1 - Generar informe opcional con estado verificable
-        id: crossfit_v361
-        continue-on-error: true
-        run: python crossfit_report_guard_v361.py
-
-      # Si incluso el proceso de estado ha fallado, registrar el fallo en el
-      # commit en vez de dejar una copia antigua que parezca el ultimo informe.
-      - name: V3.6.1 - Respaldo de diagnostico para fallo inesperado
-        if: always() && steps.crossfit_v361.outcome == 'failure'
-        shell: bash
-        run: |
-          python - <<'PY_FALLBACK'
-          from datetime import datetime
-          from pathlib import Path
-          from zoneinfo import ZoneInfo
-          import json
-          import os
-          from crossfit_report_v36 import atomic_write
-          path = Path('crossfit_report_status_v361.json')
-          try:
-              old = json.loads(path.read_text(encoding='utf-8'))
-          except (OSError, UnicodeError, ValueError):
-              old = {}
-          # Un marcador exitoso de un run anterior NUNCA encubre este fallo.
-          run_id = int(os.environ['GITHUB_RUN_ID'])
-          if old.get('github_run_id') != run_id or old.get('state') != 'generation_failed_previous_retained':
-              status = {'schema_version': 1, 'version': '3.6.1',
-                        'github_run_id': run_id,
-                        'checked_at': datetime.now(ZoneInfo('Europe/Madrid')).isoformat(),
-                        'state': 'generation_failed_previous_retained',
-                        'report_current': False,
-                        'failure_kind': 'unexpected_step_failure',
-                        'diagnostic': 'V3.6.1 failed before publishing a marker; inspect GitHub Actions logs',
-                        'chatgpt_delivery': 'unverified_no_receipt'}
-              atomic_write(path, json.dumps(status, ensure_ascii=False, indent=2) + '\n')
-          PY_FALLBACK
-
       # V5.3: la app corre al final, con el certificado del ciclo y los datos de fuerza ya generados.
       - name: V5.3 - App de seguimiento e informe del ciclo (no bloqueante)
         id: app_v5
@@ -185,13 +146,6 @@ jobs:
           [ ! -f report_ready.json ] || git add report_ready.json
           # V3.3: informe requerido tras validacion, no es opcional.
           git add training_trends_v31.json
-          # V3.6.1: siempre registrar el estado. Un informe anterior se mantiene
-          # solo como historico cuando el generador de esta ejecucion falla.
-          [ ! -f crossfit_report_status_v361.json ] || git add crossfit_report_status_v361.json
-          if [ -f crossfit_report_status_v361.json ] && \
-             python -c "import json; d=json.load(open('crossfit_report_status_v361.json')); assert d['state']=='current_validated' and d['report_current'] is True"; then
-            git add crossfit_report_v36.json crossfit_report_v36.md crossfit_chart_v36.svg
-          fi
           [ ! -f schema_health_v30.json ] || git add schema_health_v30.json
           [ ! -f pipeline_lineage_v29.json ] || git add pipeline_lineage_v29.json
           if ! git diff --cached --quiet; then

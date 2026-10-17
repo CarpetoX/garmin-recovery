@@ -23,19 +23,15 @@ def digest(value):
     return hashlib.sha256(raw).hexdigest()
 
 
-def evaluate(cert, ledger, report_status, *, now, actions=None, source_data=None):
-    """Fail closed; report_status describes a standalone CrossFit report, not a certificate."""
-    result = {'state': 'not_eligible', 'cycle_id': None,
-              'standalone_report': 'not_checked', 'reason': None,
+def evaluate(cert, ledger, *, now, actions=None, source_data=None):
+    """Fail closed: solo el certificado, el libro de ciclos y la evidencia de Actions deciden."""
+    result = {'state': 'not_eligible', 'cycle_id': None, 'reason': None,
               'chatgpt_delivery': 'unverified_no_receipt'}
     if now.tzinfo is None:
         raise ValueError('now must be timezone-aware')
     now = now.astimezone(TZ)
     cycle_id = now.strftime('%Y-%m-%d-1645')
     result['cycle_id'] = cycle_id
-    status = report_status if isinstance(report_status, dict) else {}
-    result['standalone_report'] = ('validated_independent' if status.get('state') == 'current_validated'
-                                    and status.get('report_current') is True else 'not_current')
     try:
         gate = validate_certificate(cert, cycle_id=cycle_id, now=now, source_data=source_data)
         if not isinstance(actions, dict):
@@ -62,15 +58,8 @@ def evaluate(cert, ledger, report_status, *, now, actions=None, source_data=None
             raise CycleNotReady('Snapshot run IDs do not match certificate')
         if entry.get('source_generated_at') != cert.get('source_generated_at'):
             raise CycleNotReady('Snapshot source timestamps do not match certificate')
-        # Optional V3.6 report is never silently treated as belonging to this cycle.
-        report_matches = (result['standalone_report'] == 'validated_independent'
-                          and status.get('cycle_certificate') == 'same_certified_cycle'
-                          and status.get('github_run_id') == cert['chain']['crossfit']['id']
-                          and status.get('source_generated_at') == cert['source_generated_at']['crossfit_insights.json'])
         result.update(state='eligible_certified_snapshot', reason=None,
-                      sync_run_id=gate['sync_run_id'],
-                      report_v36_link='same_cycle' if report_matches else 'independent_not_certified',
-                      snapshot_verified=True)
+                      sync_run_id=gate['sync_run_id'], snapshot_verified=True)
     except (CycleNotReady, KeyError, TypeError, ValueError) as exc:
         result['reason'] = str(exc)[:200]
     return result
@@ -90,7 +79,7 @@ def main(argv=None):
     now = datetime.fromisoformat(a.now) if a.now else datetime.now(TZ)
     try:
         result = evaluate(load(a.root/'report_ready.json'), load(a.root/'report_cycles.json'),
-                          load(a.root/'crossfit_report_status_v361.json'), now=now,
+                          now=now,
                           actions=load(a.actions_evidence))
     except (OSError, ValueError, TypeError) as exc:
         result = {'state': 'not_eligible', 'reason': str(exc)[:200],

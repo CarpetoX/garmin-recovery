@@ -22,18 +22,12 @@ def sample():
 class IntegrationTests(unittest.TestCase):
     def check(self, parts, **kwargs):
         c, l, r, a = parts
-        return evaluate(c, l, r, now=kwargs.get('now', NOW), actions=kwargs.get('actions', a))
+        return evaluate(c, l, now=kwargs.get('now', NOW), actions=kwargs.get('actions', a))
 
-    def test_valid_snapshot_with_independent_report(self):
+    def test_valid_snapshot_is_eligible(self):
         x = self.check(sample())
         self.assertEqual(x['state'], 'eligible_certified_snapshot')
-        self.assertEqual(x['report_v36_link'], 'independent_not_certified')
-
-    def test_report_can_be_same_cycle(self):
-        parts = sample()
-        parts[2].update(cycle_certificate='same_certified_cycle', github_run_id=4,
-                        source_generated_at=parts[0]['source_generated_at']['crossfit_insights.json'])
-        self.assertEqual(self.check(parts)['report_v36_link'], 'same_cycle')
+        self.assertNotIn('report_v36_link', x)
 
     def test_missing_actions_blocks(self):
         self.assertEqual(self.check(sample(), actions=None)['state'], 'not_eligible')
