@@ -37,6 +37,8 @@ Paquete `garmin_recovery/` que se ejecuta dentro de *Advanced Analytics* (paso n
 - Avisos según turno (TN y post-TN) desde `shift_calendar.json`.
 - **Dos confianzas separadas** (V5.1): *datos* (completos y cubiertos 7 días) y *recomendación* (histórico mínimo: media ≥ 14 noches, alta ≥ 28; nunca alta mientras `model_validated` sea `false`).
 
+**Decisión operativa y registro de modelos** (`decision`, V5.2): conviven varias puntuaciones (v2 oficial, híbrido Garmin + local, v3 en pruebas, compatibilidad V2.2 y Garmin Training Readiness). `decision.registry` declara versión, rol, escala y regla de cada una, y la **zona operativa es la más conservadora entre v2, híbrido y v3**; si alguno está pendiente o sin datos, la decisión queda pendiente. La recomendación del día es `decision.guidance`, nunca `readiness.guidance`. El v3 incluye desde V5.2 el estrés de Garmin del día anterior (completo) frente a tu línea base.
+
 **Certificado del informe** (`certificate` en `app/readiness_v3.json`, V5.1): ciclo y runs de la cadena, hora real de sincronización (detecta Sync fuera de franja), antigüedad de cada medición por su marca temporal, huellas SHA-256 de las fuentes, coherencia v3/v2 de los valores de hoy y estado de entrega declarado como no verificable desde los datos. **Integridad del entrenamiento** (`training_integrity`): sesiones ↔ RPE emparejadas por ID exacto, RPE sin actividad, fechas discrepantes y sesiones sin RPE (no se rellenan ni estiman).
 
 Uso local:

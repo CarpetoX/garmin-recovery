@@ -21,7 +21,8 @@ def _esc(value) -> str:
 def render(result: dict) -> str:
     payload = json.dumps(result, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
-    tone, icon = ZONE_UI.get(rd["zone"], ZONE_UI["unavailable"])
+    zone = (result.get("decision") or {}).get("zone") or rd["zone"]
+    tone, icon = ZONE_UI.get(zone, ZONE_UI["unavailable"])
     title = "Rendimiento y recuperación"
     return TEMPLATE.replace("{{TITLE}}", title) \
         .replace("{{DATE}}", _esc(result["date"])) \
@@ -140,7 +141,7 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
   <div class="grid">
     <section class="card hero tone-{{TONE}}" aria-label="Disponibilidad de hoy">
       <div>
-        <div class="h2sub">Disponibilidad hoy</div>
+        <div class="h2sub">Decisión de hoy · puntuación oficial (v2)</div>
         <div class="score" id="score">—</div>
         <div class="pill"><span class="dot" aria-hidden="true">{{ICON}}</span><span class="pill-text" id="zone-label"></span></div>
         <div class="meta" id="confidence"></div>
@@ -157,8 +158,8 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
 
     <section class="grid cols-2">
       <div class="card">
-        <h2>Componentes de la puntuación</h2>
-        <p class="h2sub">0–100 · 75 = tu normalidad · peso entre paréntesis</p>
+        <h2 id="v3-title">Modelo v3 (en pruebas)</h2>
+        <p class="h2sub">Componentes 0–100 · 75 = tu normalidad · peso entre paréntesis</p>
         <div id="meters"></div>
       </div>
       <div class="card">
@@ -208,8 +209,8 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
     </section>
 
     <section class="card">
-      <h2>Otras señales y comparación</h2>
-      <p class="h2sub">El modelo v3 corre en paralelo; no sustituye todavía los informes existentes</p>
+      <h2>Modelos y regla de decisión</h2>
+      <p class="h2sub" id="rule"></p>
       <div class="scroll"><table id="compare"></table></div>
       <details style="margin-top:14px"><summary>Ver datos diarios (28 días)</summary><div class="scroll" style="margin-top:8px"><table id="daily"></table></div></details>
     </section>
@@ -230,24 +231,29 @@ const sign = (v, d=0) => v == null ? '—' : (v > 0 ? '+' : '') + fmt(v, d);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dshort = iso => { const [y,m,d] = iso.split('-'); return `${+d}/${+m}`; };
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const zoneTxt = {green:'verde', yellow:'ámbar', red:'rojo', unavailable:'pendiente'};
 
 // ---------- Cabecera y héroe ----------
 const gen = new Date(D.generated_at);
 $('sub').textContent = `${new Date(D.date+'T12:00').toLocaleDateString('es-ES',{weekday:'long', day:'numeric', month:'long'})} · actualizado ${gen.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}`;
 $('badge').textContent = `Modelo ${D.model_version} · ${D.mode === 'shadow' ? 'en paralelo' : 'activo'}`;
-$('score').innerHTML = R.score == null ? '—' : `${fmt(R.score)}<small>/100</small>`;
-$('zone-label').textContent = R.guidance.label + (R.state === 'provisional' ? ' · provisional' : '');
+const DEC = D.decision || {zone: R.zone, guidance: R.guidance, registry: [], divergence: []};
+const official = (DEC.registry || []).find(m => m.role === 'oficial') || {};
+$('score').innerHTML = official.score == null ? '—' : `${fmt(official.score)}<small>/100</small>`;
+$('zone-label').textContent = DEC.guidance.label + (DEC.agreement === 'total' ? ' · modelos de acuerdo' : ' · regla conservadora');
 const reasons = (R.reasons || []).map(r => r.split(':')[0].replace(/_/g,' '));
 const DC = R.data_confidence || {}, RC = R.recommendation_confidence || {};
 $('confidence').textContent = `Datos: confianza ${DC.level || '—'} · Recomendación: confianza ${RC.level || R.confidence}` + (reasons.length ? ` · ${reasons.join(', ')}` : '') + ` · historial ${D.history.days} días`;
-$('guidance').textContent = R.guidance.text;
-$('rx').innerHTML = `<span>RPE máx. <b>${R.guidance.rpe_max}</b></span><span>Volumen <b>${esc(R.guidance.volume)}</b></span>`;
+$('guidance').textContent = DEC.guidance.text;
+$('rx').innerHTML = `<span>RPE máx. <b>${DEC.guidance.rpe_max}</b></span><span>Volumen <b>${esc(DEC.guidance.volume)}</b></span>` +
+  (DEC.registry || []).filter(m => m.used_in_decision).map(m => `<span>${esc(m.label.replace(' (oficial)','').replace(' (en pruebas)',''))} <b>${fmt(m.score)}</b></span>`).join('');
+$('v3-title').textContent = `Modelo v3 (en pruebas) · ${R.score == null ? 'sin puntuación' : fmt(R.score) + '/100 · ' + zoneTxt[R.zone]}`;
 $('drivers').innerHTML = (R.drivers || []).map(d => {
   const cls = d.z <= -0.5 ? 'neg' : d.z >= 0.5 ? 'pos' : 'neu';
   const ar = d.z <= -0.5 ? '↓' : d.z >= 0.5 ? '↑' : '→';
   return `<li><span class="arrow ${cls}" aria-hidden="true">${ar}</span><span>${esc(d.text)}</span></li>`;
 }).join('') || '<li><span class="arrow neu">→</span><span>Sin factores calculables hoy.</span></li>';
-$('notes').innerHTML = (R.notes || []).map(n => `<li>${esc(n)}</li>`).join('');
+$('notes').innerHTML = (DEC.divergence || []).concat(R.notes || []).map(n => `<li>${esc(n)}</li>`).join('');
 
 // ---------- KPI ----------
 const C = R.components, H = C.hrv, K = C.cardiac, S = C.sleep;
@@ -336,7 +342,6 @@ function chart(el, opt){
   draw(); new ResizeObserver(draw).observe(el);
 }
 function niceStep(raw){ const p = Math.pow(10, Math.floor(Math.log10(raw || 1))), f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p; }
-const zoneTxt = {green:'verde', yellow:'ámbar', red:'rojo', unavailable:'pendiente'};
 
 chart($('c-score'), {label:'Disponibilidad 28 días', min:0, max:100, refs:[{y:70},{y:50}],
   series:[{key:'score', markers:true}], tip: d => d.score == null ? 'Sin puntuación (datos incompletos)' : `Puntuación <b>${fmt(d.score)}</b> · ${zoneTxt[d.zone]}` + (d.garmin_readiness != null ? `<br>Garmin Training Readiness ${fmt(d.garmin_readiness)}` : '')});
@@ -359,13 +364,14 @@ $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 const today = T[T.length - 1] || {};
 const legacy = D.legacy_v2 || {};
-$('compare').innerHTML = `<thead><tr><th>Señal</th><th class="num">Valor</th><th>Lectura</th></tr></thead><tbody>
-  <tr><td>Modelo v3 (este panel)</td><td class="num">${fmt(R.score)}</td><td>${zoneTxt[R.zone]} · ${esc(R.state)}</td></tr>
-  <tr><td>Modelo v2 actual (recovery_assessment)</td><td class="num">${fmt(legacy.score)}</td><td>${esc(zoneTxt[{green:'green',yellow:'yellow',red:'red'}[legacy.status]] || legacy.status || '—')} · ${esc(legacy.state || '—')}</td></tr>
-  <tr><td>Garmin Training Readiness</td><td class="num">${fmt(today.garmin_readiness)}</td><td>métrica propietaria, contexto</td></tr>
-  <tr><td>Estrés medio Garmin (día)</td><td class="num">${fmt(today.stress_avg)}</td><td>día en curso, parcial</td></tr>
-  <tr><td>Monotonía / strain 7 días</td><td class="num">${fmt(L.monotony,2)} / ${fmt(L.strain)}</td><td>monotonía &gt; 2 = carga poco variada</td></tr>
-  <tr><td>Días seguidos entrenando</td><td class="num">${L.consecutive_training_days}</td><td>—</td></tr></tbody>`;
+$('rule').textContent = DEC.rule || '';
+const roleEs = {oficial:'oficial', salvaguarda:'salvaguarda', sombra:'en pruebas', compatibilidad:'compatibilidad', contexto:'contexto'};
+$('compare').innerHTML = `<thead><tr><th>Modelo</th><th>Rol</th><th class="num">Puntuación</th><th>Zona</th><th>Decide</th></tr></thead><tbody>` +
+  (DEC.registry || []).map(m => `<tr><td title="${esc(m.rule)}">${esc(m.label)} <span class="weight">${esc(m.version || '')}</span></td><td>${roleEs[m.role] || esc(m.role)}</td><td class="num">${fmt(m.score)}</td><td>${m.zone ? zoneTxt[m.zone] : '—'}</td><td>${m.used_in_decision ? ((DEC.decided_by || []).includes(m.id) ? '<b>sí · fija la zona</b>' : 'sí') : 'no'}</td></tr>`).join('') +
+  `<tr><td colspan="5" class="weight">Otras señales</td></tr>
+  <tr><td>Estrés medio Garmin (día)</td><td></td><td class="num">${fmt(today.stress_avg)}</td><td colspan="2">día en curso, parcial</td></tr>
+  <tr><td>Monotonía / strain 7 días</td><td></td><td class="num">${fmt(L.monotony,2)} / ${fmt(L.strain)}</td><td colspan="2">monotonía &gt; 2 = carga poco variada</td></tr>
+  <tr><td>Días seguidos entrenando</td><td></td><td class="num">${L.consecutive_training_days}</td><td colspan="2">—</td></tr></tbody>`;
 $('daily').innerHTML = `<thead><tr><th>Fecha</th><th>Turno</th><th class="num">Punt.</th><th class="num">HRV</th><th class="num">HRV 7d</th><th class="num">FC rep.</th><th class="num">Sueño h</th><th class="num">Carga</th></tr></thead><tbody>` +
   T.slice().reverse().map(d => `<tr><td>${dshort(d.date)}</td><td>${esc(d.shift || '')}</td><td class="num">${fmt(d.score)}</td><td class="num">${fmt(d.hrv_ms)}</td><td class="num">${fmt(d.hrv_rolling_ms,1)}</td><td class="num">${fmt(d.resting_hr)}</td><td class="num">${fmt(d.sleep_hours,1)}</td><td class="num">${fmt(d.load)}</td></tr>`).join('') + '</tbody>';
 

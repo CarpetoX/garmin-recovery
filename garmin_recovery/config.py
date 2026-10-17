@@ -29,10 +29,11 @@ DEFAULTS: dict = {
     "min_load_coverage_days": 28, # días de historial de sesiones para ACWR propio
     # Composición de la puntuación (se renormaliza con los componentes disponibles)
     "weights": {
-        "hrv": 0.35,
+        "hrv": 0.30,
         "cardiac": 0.15,
         "sleep": 0.25,
-        "load": 0.15,
+        "stress": 0.10,
+        "load": 0.10,
         "subjective": 0.10,
     },
     "zones": {"green": 70, "red": 50},

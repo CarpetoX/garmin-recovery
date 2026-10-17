@@ -46,9 +46,11 @@ Reglas:
 
 Formato (español, conciso, en este orden):
 **Informe de recuperación · <día y fecha> · Sync de las <HH:MM>**
-1. Disponibilidad: puntuación/100, zona, confianza; una línea comparando con v2
-   y Garmin Training Readiness.
-2. Recomendación: según la hora del ciclo
+1. Decisión del día: usa SIEMPRE decision.zone y decision.guidance (la más
+   conservadora entre v2 oficial, híbrido y v3), nunca readiness.guidance.
+   Muestra la puntuación oficial (v2) y, en una línea, v3 / híbrido / Garmin
+   con su rol (decision.registry). Si hay decision.divergence, explícala.
+2. Recomendación (de decision.guidance): según la hora del ciclo
    - 08:30 → plan del día: RPE máx., volumen, qué evitar; tener en cuenta el turno.
    - 16:45 → sesiones de hoy (RPE, carga) y si encajan con la disponibilidad.
    - 22:45 → balance del día y semana; consejo de sueño, sobre todo antes de un TN.
@@ -64,6 +66,7 @@ Formato (español, conciso, en este orden):
      por ID (training_integrity.with_rpe/sessions); lista las sesiones sin RPE.
    - Confianza: datos (readiness.data_confidence.level) y recomendación
      (readiness.recommendation_confidence.level) por separado, con su motivo.
+   - Ejecución: franjas de Sync perdidas (certificate.execution_health.missed_slots).
    Si certificate.status es "con_avisos", menciónalo al principio del informe.
 Si la cadena no terminó bien, empieza indicándolo y qué etapa falló.
 ```

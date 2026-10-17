@@ -10,8 +10,9 @@ from . import APP_VERSION, MODEL_VERSION
 from .config import load_config
 from .history import recompute_daily_load, update_history
 from .load import compute_load
+from .decision import operative_decision
 from .quality import certificate, training_integrity
-from .readiness import assess
+from .readiness import GUIDANCE, assess
 from .records import build_day_records, build_sessions
 from .sources import load_inputs
 
@@ -66,6 +67,9 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
     legacy = inputs.get("legacy_recovery") or {}
     recent_sessions = sorted(sessions.values(), key=lambda s: (s["date"], s.get("start_local") or ""), reverse=True)[:12]
 
+    garmin_today = (daily.get(today) or {}).get("garmin_readiness")
+    decision = operative_decision(readiness, legacy, inputs.get("daily_summary") or {}, garmin_today,
+                                  GUIDANCE, bool(cfg.get("model_validated")))
     integrity = training_integrity(sessions, inputs.get("feedback") or {}, today)
     cert = certificate(root, inputs, readiness, now, tz, cfg)
 
@@ -73,7 +77,7 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
     result = {
         "schema_version": 1, "app_version": APP_VERSION, "model_version": MODEL_VERSION,
         "generated_at": now.isoformat(), "timezone": cfg["timezone"], "date": today,
-        "readiness": readiness, "load": load,
+        "decision": decision, "readiness": readiness, "load": load,
         "certificate": cert, "training_integrity": integrity,
         "legacy_v2": {"score": legacy.get("score"), "status": legacy.get("status"),
                       "state": legacy.get("state"), "date": (legacy.get("current") or {}).get("date")},
@@ -81,7 +85,8 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
                     "last_date": dates[-1] if dates else None, "sessions": len(sessions)},
         "trend_28d": series, "recent_sessions": recent_sessions,
         "mode": "shadow",
-        "mode_note": "Modelo v3 en paralelo: no sustituye recovery_assessment.json ni los informes existentes.",
+        "mode_note": ("Modelo v3 en paralelo: no sustituye recovery_assessment.json. La recomendación del día es "
+                      "decision.guidance (la más conservadora entre modelos), no readiness.guidance."),
     }
     if write:
         out = root / cfg["output_dir"]

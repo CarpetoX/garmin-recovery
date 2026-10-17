@@ -114,6 +114,11 @@ def certificate(root: Path, inputs: dict, readiness: dict, now: datetime, tz, cf
         issues.append("los modelos v3 y v2 leen valores distintos de hoy")
     if ready.get("status") != "ready":
         issues.append("la cadena no certificó datos preparados para este ciclo")
+    health = inputs.get("workflow_health") or {}
+    alerts = [a for a in health.get("alerts") or [] if isinstance(a, dict)]
+    missed = sorted({sl for a in alerts for sl in (a.get("slots") or []) if isinstance(sl, str)})
+    if missed:
+        issues.append(f"{len(missed)} franja(s) de Sync sin ejecutar ni recuperar")
     return {
         "generated_at": now.isoformat(),
         "cycle": {
@@ -134,6 +139,10 @@ def certificate(root: Path, inputs: dict, readiness: dict, now: datetime, tz, cf
                        "advanced_run_id": fb.get("advanced_run_id")},
         "source_sha256": hashes,
         "consistency_v3_v2": cons,
+        "execution_health": {"status": health.get("status"), "checked_at": health.get("checked_at"),
+                             "alerts": [{"code": a.get("code"), "severity": a.get("severity"),
+                                         "slots": a.get("slots")} for a in alerts],
+                             "missed_slots": missed},
         "delivery": {
             "status": "no_verificable_en_etapa_de_datos",
             "detail": ("Este certificado acredita datos preparados, no la recepción del informe. "

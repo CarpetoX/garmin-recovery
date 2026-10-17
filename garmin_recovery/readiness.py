@@ -25,6 +25,7 @@ COMPONENT_LABELS = {
     "hrv": "Variabilidad cardiaca (HRV)",
     "cardiac": "FC en reposo y nocturna",
     "sleep": "Sueño",
+    "stress": "Estrés del día anterior (Garmin)",
     "load": "Carga de entrenamiento",
     "subjective": "Sensaciones (Intervals)",
 }
@@ -128,6 +129,19 @@ def sleep_component(daily: dict, today: date, cfg: dict) -> dict:
             "context": row.get("sleep_context")}
 
 
+def stress_component(daily: dict, today: date, cfg: dict) -> dict:
+    """Estrés medio de Garmin del día ANTERIOR (completo) frente a tu línea base.
+
+    El de hoy está incompleto por la mañana; el de ayer sí es comparable."""
+    yesterday = today - timedelta(days=1)
+    value = (daily.get(yesterday.isoformat()) or {}).get("stress_avg")
+    base_rows = _window(daily, yesterday, cfg["baseline_days"], include_end=False)
+    base = _values(base_rows, "stress_avg")
+    z = robust_z(value, base) if len(base) >= cfg["min_baseline_n"] else None
+    return {"z": clamp(-z, -4.0, 1.0) if z is not None else None, "yesterday_avg": value,
+            "baseline_median": r(median(base)), "n_baseline": len(base)}
+
+
 def subjective_component(daily: dict, today: date) -> dict:
     row = daily.get(today.isoformat()) or {}
     fields = ("soreness", "fatigue", "stress_subjective", "mood", "motivation")
@@ -222,6 +236,10 @@ def _drivers(components: dict) -> list[dict]:
         score = f", puntuación {slp['sleep_score']:.0f}" if slp.get("sleep_score") is not None else ""
         texts.append({"component": "sleep", "z": slp["z"],
                       "text": f"Sueño {slp['hours']:.1f} h{score}{extra}"})
+    st = components.get("stress") or {}
+    if st.get("z") is not None and st.get("yesterday_avg") is not None:
+        texts.append({"component": "stress", "z": st["z"],
+                      "text": f"Estrés Garmin ayer {st['yesterday_avg']:.0f} de media (tu mediana {st['baseline_median']:.0f})"})
     if load.get("z") is not None:
         texts.append({"component": "load", "z": load["z"],
                       "text": f"Forma {load.get('form_pct'):+.0f} % ({load.get('form_zone')})" if load.get("form_pct") is not None
@@ -237,6 +255,7 @@ def assess(daily: dict, today_str: str, cfg: dict, load: dict | None = None,
         "hrv": hrv_component(daily, today, cfg),
         "cardiac": cardiac_component(daily, today, cfg),
         "sleep": sleep_component(daily, today, cfg),
+        "stress": stress_component(daily, today, cfg),
         "load": (load or {}) | {"z": (load or {}).get("component_z")},
         "subjective": subjective_component(daily, today),
     }
