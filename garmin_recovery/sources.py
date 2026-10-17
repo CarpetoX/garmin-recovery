@@ -22,6 +22,8 @@ SOURCE_FILES = {
     "legacy_recovery": ("recovery_assessment.json", dict),
     "report_ready": ("report_ready.json", dict),
     "hr_timeline": ("garmin_hr_timeline.json", dict),
+    "daily_summary": ("daily_summary.json", dict),
+    "workflow_health": ("workflow_health.json", dict),
     "recovery_csv": ("recovery.csv", list),
 }
 

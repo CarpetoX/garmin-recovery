@@ -278,3 +278,65 @@ class QualityTests(unittest.TestCase):
         self.assertEqual(ages["confirmed_sleep"]["age_minutes"], 90)
         self.assertEqual(ages["heart_rate_live"]["state"], "antigua")
         self.assertEqual(ages["sleep_hrv"]["state"], "sin_marca_temporal")
+
+
+class DecisionTests(unittest.TestCase):
+    from garmin_recovery.readiness import GUIDANCE as G
+
+    def decide(self, v2, hybrid, v3, v2_state="assessed", v3_state="assessed", validated=False):
+        from garmin_recovery.decision import operative_decision
+        from garmin_recovery.readiness import GUIDANCE
+        return operative_decision({"zone": v3, "state": v3_state, "score": 60, "model_version": "v3"},
+                                  {"status": v2, "state": v2_state, "score": 45},
+                                  {"readiness_hybrid": {"status": hybrid, "score": 36},
+                                   "readiness_model": {"status": "red", "score": 49}},
+                                  5, GUIDANCE, validated)
+
+    def test_most_conservative_zone_wins(self):
+        d = self.decide("red", "red", "yellow")
+        self.assertEqual(d["zone"], "red")
+        self.assertLessEqual(d["guidance"]["rpe_max"], 4)
+        self.assertEqual(d["decided_by"], ["recovery_assessment_v2", "readiness_hybrid"])
+        self.assertTrue(d["divergence"])
+
+    def test_v3_can_only_make_it_stricter(self):
+        d = self.decide("green", "green", "red")
+        self.assertEqual(d["zone"], "red")
+        self.assertEqual(d["decided_by"], ["readiness_v3"])
+
+    def test_pending_model_makes_decision_pending(self):
+        d = self.decide("green", "green", "green", v2_state="pending")
+        self.assertEqual(d["zone"], "unavailable")
+
+    def test_missing_model_makes_decision_pending(self):
+        d = self.decide("green", None, "green")
+        self.assertEqual(d["zone"], "unavailable")
+        self.assertIn("readiness_hybrid", d["missing_models"])
+
+    def test_registry_declares_roles(self):
+        d = self.decide("green", "green", "green")
+        roles = {m["id"]: (m["role"], m["used_in_decision"]) for m in d["registry"]}
+        self.assertEqual(roles["recovery_assessment_v2"], ("oficial", True))
+        self.assertEqual(roles["readiness_model"], ("compatibilidad", False))
+        self.assertEqual(roles["garmin_training_readiness"], ("contexto", False))
+        self.assertEqual(d["agreement"], "total")
+        self.assertEqual(d["official_model"], "recovery_assessment_v2")
+
+
+class StressComponentTests(unittest.TestCase):
+    def test_high_stress_yesterday_lowers_score(self):
+        calm = make_daily()
+        tense = make_daily()
+        for daily, last in ((calm, 30.0), (tense, 75.0)):
+            for i in range(2, 40):
+                daily[(TODAY - timedelta(days=i)).isoformat()]["stress_avg"] = 30.0 + (i % 3)
+            daily[(TODAY - timedelta(days=1)).isoformat()]["stress_avg"] = last
+        s_calm = assess(calm, TODAY.isoformat(), DEFAULTS)
+        s_tense = assess(tense, TODAY.isoformat(), DEFAULTS)
+        self.assertLess(s_tense["components"]["stress"]["score"], s_calm["components"]["stress"]["score"])
+        self.assertLess(s_tense["score"], s_calm["score"])
+
+    def test_today_partial_stress_is_ignored(self):
+        daily = make_daily(today={"stress_avg": 99.0})
+        res = assess(daily, TODAY.isoformat(), DEFAULTS)
+        self.assertIsNone(res["components"]["stress"]["z"])
