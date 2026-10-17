@@ -20,6 +20,8 @@ SOURCE_FILES = {
     "shifts": ("shift_calendar.json", dict),
     "morning": ("morning_sleep_status.json", dict),
     "legacy_recovery": ("recovery_assessment.json", dict),
+    "report_ready": ("report_ready.json", dict),
+    "hr_timeline": ("garmin_hr_timeline.json", dict),
     "recovery_csv": ("recovery.csv", list),
 }
 

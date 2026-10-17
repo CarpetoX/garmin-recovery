@@ -10,6 +10,7 @@ from . import APP_VERSION, MODEL_VERSION
 from .config import load_config
 from .history import recompute_daily_load, update_history
 from .load import compute_load
+from .quality import certificate, training_integrity
 from .readiness import assess
 from .records import build_day_records, build_sessions
 from .sources import load_inputs
@@ -65,11 +66,15 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
     legacy = inputs.get("legacy_recovery") or {}
     recent_sessions = sorted(sessions.values(), key=lambda s: (s["date"], s.get("start_local") or ""), reverse=True)[:12]
 
+    integrity = training_integrity(sessions, inputs.get("feedback") or {}, today)
+    cert = certificate(root, inputs, readiness, now, tz, cfg)
+
     dates = sorted(daily)
     result = {
         "schema_version": 1, "app_version": APP_VERSION, "model_version": MODEL_VERSION,
         "generated_at": now.isoformat(), "timezone": cfg["timezone"], "date": today,
         "readiness": readiness, "load": load,
+        "certificate": cert, "training_integrity": integrity,
         "legacy_v2": {"score": legacy.get("score"), "status": legacy.get("status"),
                       "state": legacy.get("state"), "date": (legacy.get("current") or {}).get("date")},
         "history": {"days": len(daily), "first_date": dates[0] if dates else None,

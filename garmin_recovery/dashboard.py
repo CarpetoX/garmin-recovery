@@ -192,6 +192,15 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
       </div>
     </section>
 
+    <section class="card" aria-label="Calidad y trazabilidad del informe">
+      <h2>Calidad y trazabilidad del informe</h2>
+      <p class="h2sub" id="cert-sub"></p>
+      <div class="grid cols-2" style="gap:12px 24px">
+        <div><div class="scroll"><table id="cert"></table></div></div>
+        <div><div class="scroll"><table id="integrity"></table></div></div>
+      </div>
+    </section>
+
     <section class="card">
       <h2>Sesiones recientes</h2>
       <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
@@ -229,7 +238,8 @@ $('badge').textContent = `Modelo ${D.model_version} · ${D.mode === 'shadow' ? '
 $('score').innerHTML = R.score == null ? '—' : `${fmt(R.score)}<small>/100</small>`;
 $('zone-label').textContent = R.guidance.label + (R.state === 'provisional' ? ' · provisional' : '');
 const reasons = (R.reasons || []).map(r => r.split(':')[0].replace(/_/g,' '));
-$('confidence').textContent = `Confianza ${R.confidence}` + (reasons.length ? ` · ${reasons.join(', ')}` : '') + ` · historial ${D.history.days} días`;
+const DC = R.data_confidence || {}, RC = R.recommendation_confidence || {};
+$('confidence').textContent = `Datos: confianza ${DC.level || '—'} · Recomendación: confianza ${RC.level || R.confidence}` + (reasons.length ? ` · ${reasons.join(', ')}` : '') + ` · historial ${D.history.days} días`;
 $('guidance').textContent = R.guidance.text;
 $('rx').innerHTML = `<span>RPE máx. <b>${R.guidance.rpe_max}</b></span><span>Volumen <b>${esc(R.guidance.volume)}</b></span>`;
 $('drivers').innerHTML = (R.drivers || []).map(d => {
@@ -358,6 +368,26 @@ $('compare').innerHTML = `<thead><tr><th>Señal</th><th class="num">Valor</th><t
   <tr><td>Días seguidos entrenando</td><td class="num">${L.consecutive_training_days}</td><td>—</td></tr></tbody>`;
 $('daily').innerHTML = `<thead><tr><th>Fecha</th><th>Turno</th><th class="num">Punt.</th><th class="num">HRV</th><th class="num">HRV 7d</th><th class="num">FC rep.</th><th class="num">Sueño h</th><th class="num">Carga</th></tr></thead><tbody>` +
   T.slice().reverse().map(d => `<tr><td>${dshort(d.date)}</td><td>${esc(d.shift || '')}</td><td class="num">${fmt(d.score)}</td><td class="num">${fmt(d.hrv_ms)}</td><td class="num">${fmt(d.hrv_rolling_ms,1)}</td><td class="num">${fmt(d.resting_hr)}</td><td class="num">${fmt(d.sleep_hours,1)}</td><td class="num">${fmt(d.load)}</td></tr>`).join('') + '</tbody>';
+
+const CE = D.certificate || {}, TI = D.training_integrity || {}, CY = CE.cycle || {};
+const okTxt = ok => ok ? '<span class="pos">✓</span>' : '<span class="neg">!</span>';
+const ageTxt = a => a.age_minutes == null ? 'sin marca temporal' : (a.age_minutes < 90 ? `hace ${fmt(a.age_minutes)} min` : `hace ${fmt(a.age_minutes/60,1)} h`);
+const ageLbl = {confirmed_sleep:'Fin del sueño', sleep_hrv:'Última muestra HRV', heart_rate_live:'Última FC', body_battery_live:'Último Body Battery'};
+$('cert-sub').textContent = `Estado: ${CE.status === 'ok' ? 'sin avisos' : 'con avisos'}` + ((CE.issues || []).length ? ` · ${CE.issues.join(' · ')}` : '');
+const cons = (CE.consistency_v3_v2 || {});
+$('cert').innerHTML = `<thead><tr><th>Comprobación</th><th>Resultado</th></tr></thead><tbody>
+  <tr><td>Ciclo certificado</td><td>${esc(CY.cycle_id || '—')} ${okTxt(CY.status === 'ready')}</td></tr>
+  <tr><td>Sincronización de los datos</td><td>${CY.data_synced_at ? new Date(CY.data_synced_at).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : '—'}${CY.data_newer_than_certified_cycle ? ' · Sync fuera de franja' : ''}</td></tr>
+  ${Object.entries(CE.data_age || {}).map(([k,a]) => `<tr><td>${ageLbl[k] || k}</td><td>${ageTxt(a)} ${okTxt(a.state === 'reciente')}</td></tr>`).join('')}
+  <tr><td>Coherencia v3 / v2 (HRV, FC, sueño)</td><td>${cons.status === 'ok' ? 'idénticos' : esc(cons.status || '—')} ${okTxt(cons.status === 'ok')}</td></tr>
+  <tr><td>Huellas SHA-256</td><td>${Object.keys(CE.source_sha256 || {}).length} fuentes</td></tr>
+  <tr><td>Entrega del informe</td><td>no verificable desde los datos</td></tr></tbody>`;
+$('integrity').innerHTML = `<thead><tr><th>Integridad del entrenamiento (${TI.window_days || 14} días)</th><th class="num"></th></tr></thead><tbody>
+  <tr><td>Sesiones con RPE (por ID)</td><td class="num">${TI.with_rpe ?? '—'} / ${TI.sessions ?? '—'} (${fmt(TI.rpe_coverage_pct)} %)</td></tr>
+  <tr><td>RPE sin actividad asociada</td><td class="num">${(TI.rpe_without_activity || []).length} ${okTxt(!(TI.rpe_without_activity || []).length)}</td></tr>
+  <tr><td>Fechas RPE ≠ actividad</td><td class="num">${(TI.date_mismatch || []).length} ${okTxt(!(TI.date_mismatch || []).length)}</td></tr>
+  ${(TI.without_rpe || []).map(x => `<tr><td colspan="2" class="weight">Sin RPE: ${x.start_local ? dshort(x.start_local.slice(0,10)) + ' ' + x.start_local.slice(11,16) : ''} · ${esc(typeEs(x.type))} · ${fmt(x.duration_min)} min · carga ${fmt(x.load)}</td></tr>`).join('')}
+  <tr><td colspan="2" class="weight">Datos: ${esc(DC.level || '—')}${(DC.why || []).length ? ' (' + esc(DC.why.join('; ')) + ')' : ''} · Recomendación: ${esc(RC.level || '—')}${(RC.why || []).length ? ' (' + esc(RC.why.join('; ')) + ')' : ''}</td></tr></tbody>`;
 
 $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días frente a tu línea base de hasta 60 días con banda de cambio mínimo relevante (±0,5 DE). FC en reposo y nocturna en desviaciones robustas (mediana/MAD). Sueño frente a ${fmt(S.need_hours,1)} h de necesidad y deuda de ${'3'} noches. La carga solo puntúa cuando la carga crónica (CTL) permite interpretar la forma. Sin datos de hoy o con sueño sin confirmar no se autoriza intensidad alta.<br>${esc(R.disclaimer)} · App ${esc(D.app_version)} · Historial desde ${esc(D.history.first_date || '—')} (${D.history.sessions} sesiones).`;
 })();

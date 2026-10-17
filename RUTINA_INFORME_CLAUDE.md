@@ -56,5 +56,14 @@ Formato (español, conciso, en este orden):
    normal, FC reposo/nocturna vs. mediana, sueño y deuda, estrés de Garmin.
 4. Carga 7 días: sesiones, carga, sRPE, monotonía; últimas sesiones con RPE.
 5. Si faltan sensaciones en Intervals, recuérdalo en una línea.
+6. Certificado (bloque final, 4 líneas, desde app/readiness_v3.json):
+   - Ciclo: certificate.cycle.cycle_id y hora de sincronización (data_synced_at);
+     si data_newer_than_certified_cycle, indica "Sync fuera de franja".
+   - Antigüedad: fin del sueño y última HRV/FC (certificate.data_age), con ✓/!.
+   - Integridad: coherencia v3/v2 (consistency_v3_v2.status) y sesiones con RPE
+     por ID (training_integrity.with_rpe/sessions); lista las sesiones sin RPE.
+   - Confianza: datos (readiness.data_confidence.level) y recomendación
+     (readiness.recommendation_confidence.level) por separado, con su motivo.
+   Si certificate.status es "con_avisos", menciónalo al principio del informe.
 Si la cadena no terminó bien, empieza indicándolo y qué etapa falló.
 ```

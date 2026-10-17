@@ -136,6 +136,55 @@ def subjective_component(daily: dict, today: date) -> dict:
     return {"z": clamp(2.0 - m, -2.0, 1.0) if m is not None else None, "values": values}
 
 
+ESSENTIAL = ("hrv_ms", "sleep_hours", "resting_hr")
+
+
+def data_confidence(daily: dict, today: date, missing: list, reasons: list) -> dict:
+    """¿Son completos y actuales los DATOS de hoy? (independiente del modelo)."""
+    week = [(daily.get((today - timedelta(days=i)).isoformat()) or {}) for i in range(7)]
+    coverage = {k: sum(1 for row in week if row.get(k) is not None) for k in ESSENTIAL}
+    worst = min(coverage.values())
+    unconfirmed = any(r.startswith("sueno_no_confirmado") for r in reasons)
+    if missing or unconfirmed:
+        level = "baja"
+    elif worst >= 6:
+        level = "alta"
+    elif worst >= 4:
+        level = "media"
+    else:
+        level = "baja"
+    why = []
+    if missing:
+        why.append("faltan datos de hoy: " + ", ".join(missing))
+    if unconfirmed:
+        why.append("sueño de hoy sin confirmar")
+    if worst < 6:
+        why.append(f"cobertura 7 días: {worst}/7 noches en la métrica más incompleta")
+    return {"level": level, "coverage_7d": coverage, "why": why}
+
+
+def recommendation_confidence(state: str, n_base: int, n_rolling: int, cfg: dict) -> dict:
+    """¿Cuánto fiarse de la RECOMENDACIÓN? Depende del histórico y de la validación del modelo."""
+    t = cfg["recommendation_thresholds"]
+    why = []
+    if state == "pending":
+        level = "baja"
+        why.append("sin evaluación completa hoy")
+    elif n_base >= t["alta_baseline_n"] and n_rolling >= t["alta_rolling_n"]:
+        level = "alta"
+    elif n_base >= t["media_baseline_n"]:
+        level = "media"
+        why.append(f"línea base de {n_base} noches (alta desde {t['alta_baseline_n']})")
+    else:
+        level = "baja"
+        why.append(f"línea base de {n_base} noches (mínimo {t['media_baseline_n']} para media)")
+    if level == "alta" and not cfg.get("model_validated"):
+        level = "media"
+        why.append("modelo v3 aún sin validar frente a tu rendimiento real (modo sombra)")
+    return {"level": level, "baseline_nights": n_base, "rolling_nights": n_rolling,
+            "model_validated": bool(cfg.get("model_validated")), "why": why}
+
+
 def zone_for(score: float | None, cfg: dict) -> str:
     if score is None:
         return "unavailable"
@@ -223,8 +272,9 @@ def assess(daily: dict, today_str: str, cfg: dict, load: dict | None = None,
     if hrv.get("band") == "suprimida" and (components["cardiac"].get("z") or 0) <= -1.5 and zone == "green":
         zone, caps = "yellow", caps + ["hrv_suprimida_y_fc_alta"]
 
-    confidence = ("baja" if state != "assessed" else
-                  "alta" if n_base >= cfg["mature_baseline_n"] and hrv.get("n_rolling", 0) >= 5 else "media")
+    data_conf = data_confidence(daily, today, missing, reasons)
+    rec_conf = recommendation_confidence(state, n_base, hrv.get("n_rolling", 0), cfg)
+    confidence = rec_conf["level"]
     guidance = dict(GUIDANCE[zone])
     notes = []
     if state == "provisional":
@@ -241,7 +291,9 @@ def assess(daily: dict, today_str: str, cfg: dict, load: dict | None = None,
     return {
         "model_version": MODEL_VERSION, "date": today_str,
         "state": state, "zone": zone, "score": r(score, 0) if score is not None else None,
-        "confidence": confidence, "reasons": reasons, "safety_caps": caps,
+        "confidence": confidence,
+        "data_confidence": data_conf, "recommendation_confidence": rec_conf,
+        "reasons": reasons, "safety_caps": caps,
         "guidance": guidance, "notes": notes, "drivers": _drivers(components),
         "components": components, "missing_today": missing,
         "disclaimer": "Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico.",
