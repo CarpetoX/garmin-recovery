@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 09:49 · `GR-2026-10-18-0949-28801f`
+Domingo, 18 de octubre de 2026 · 10:35 · `GR-2026-10-18-1035-6c67d2`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -93,7 +93,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 68,5 lpm | 61,2 lpm |
+| Hoy* | 71,3 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -113,7 +113,7 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 17, máximo 77.
+- Estrés medio: 19, máximo 77.
 - Body Battery: último valor 76/100, medido a las 09:12.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
@@ -230,6 +230,22 @@ _«—»: semanas anteriores al inicio del historial de sesiones._
 
 _La semana en curso está incompleta; compara solo semanas completas._
 
+### Semana a semana
+
+Última semana completa (lunes 05/10) frente a la anterior (lunes 28/09). La semana en curso (7 de 7 días, hoy incluido) se muestra aparte y no se compara. Son diferencias descriptivas, no explican causas.
+
+| Métrica | Sem. 28/09 | Sem. 05/10 | Cambio | En curso | 4 semanas |
+|---|---|---|---|---|---|
+| HRV nocturna | 58 (7 d) | 51 (7 d) | ⚠️ −6 ms (−11 %) | 58 (6 d) | `·▇▁█` |
+| FC en reposo | 55,0 (7 d) | 57,1 (7 d) | ⚠️ +2,1 lpm | 56,6 (7 d) | `·▁█▆` |
+| Sueño | 6,8 (7 d) | 7,1 (7 d) | ≈ +0,3 h | 6,6 (7 d) | `·▄█▁` |
+| Puntuación de sueño | 66 (7 d) | 73 (7 d) | ✅ +8 | 76 (5 d) | `·▁▆█` |
+| Carga (sesiones, sRPE) | — | — | no comparable | — | — |
+
+_Carga sin comparar: una de las semanas es anterior al inicio del historial de sesiones. Una sesión sin registro no demuestra un día de descanso._
+
+_Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» sin datos suficientes._
+
 ### Reglas para los próximos 7 días
 
 1. **Hoy:** respeta la decisión del día (Listo para entrenar, RPE máx. 9).
@@ -246,4 +262,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 09:49 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 10:35 Europe/Madrid · certificado READY · sync_run_id 39109018293.

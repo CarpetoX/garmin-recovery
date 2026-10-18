@@ -1,6 +1,6 @@
 # Informe matutino · 18/10/2026
 
-`GR-2026-10-18-0949-28801f` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-1035-6c67d2` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -56,8 +56,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-0921-8939f8 (18/10 09:21):
-- **Decisión:** pendiente → **verde**.
+Frente al informe GR-2026-10-18-0949-28801f (18/10 09:49):
+- Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -128,16 +128,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-0949-28801f`
+- **Identificador del informe:** `GR-2026-10-18-1035-6c67d2`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 09:48
-- **Antigüedad:** fin del sueño hace 48 min ✓ · última HRV hace 53 min ✓ · última FC hace 21 min ✓ · último Body Battery hace 37 min ✓
+- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 10:34 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 1,6 h ✓ · última HRV hace 1,6 h ✓ · última FC hace 17 min ✓ · último Body Battery hace 83 min ✓
 - **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 17/17
 - **Ejecución:** 3 franja(s) de Sync perdidas (17/10 08:30, 17/10 16:45, 17/10 22:45)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 09:49 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 10:35 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
