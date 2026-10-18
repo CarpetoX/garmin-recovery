@@ -147,27 +147,51 @@ def _plan_html(plan: list | None) -> str:
             f'máx. 3 sesiones con RPE ≥ 8 por semana</p><ol class="clean plan">{items}</ol></section>')
 
 
-def _changes_html(c: dict | None, official: tuple | None = None) -> str:
-    """Tarjetas pequeñas «frente a ayer» (dentro del héroe): recuperación oficial y cada indicador que cambia."""
+def _spark(values: list, ok: bool) -> str:
+    vals = [v for v in values if isinstance(v, (int, float))]
+    if len(vals) < 3:
+        return ""
+    lo, hi = min(vals), max(vals)
+    r = (hi - lo) or 1
+    n = len(values)
+    pts = [(i / (n - 1) * 80, 4 + (1 - (v - lo) / r) * 20) for i, v in enumerate(values) if isinstance(v, (int, float))]
+    d = "M" + "L".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    x, y = pts[-1]
+    return (f"<svg class='chg-sp' viewBox='0 0 80 28' aria-hidden='true'><path d='{d}' fill='none' stroke-width='2' stroke-linecap='round' "
+            f"stroke-linejoin='round'/><circle cx='{x:.1f}' cy='{y:.1f}' r='3'/></svg>")
+
+
+def _changes_html(c: dict | None, official: tuple | None = None, trend: list | None = None) -> str:
+    """Apartado «Cambios recientes»: una tarjeta por indicador que cambia frente a ayer, con valor de hoy, diferencia,
+    flecha de color (favorable / desfavorable) y la curva de los últimos 7 días. Diferencias observadas, sin causas."""
     if not c or not c.get("available"):
         return ""
+    from .why_changed import FIELDS
     f = lambda v, d: f"{v:.{d}f}".replace(".", ",")  # noqa: E731
+    keys = {label: key for key, label, *_ in FIELDS}
+    rows = [t for t in (trend or []) if isinstance(t, dict)]
+    last7 = lambda k: [t.get(k) for t in rows[-7:]]  # noqa: E731
     cards = []
     if official:
-        up = official[1] >= official[0]
-        cards.append(("Recuperación", f"{f(official[0], 0)} → {f(official[1], 0)}", "", up))
+        cards.append(("Recuperación", f(official[1], 0), "", f"{official[1] - official[0]:+.0f}".replace("-", "−"), official[1] >= official[0],
+                      _spark(last7("v2_score"), True), official[1] >= official[0]))
     for i in c["items"]:
-        cards.append((i["label"], f"{f(i['from'], i['dec'])} → {f(i['to'], i['dec'])}", i["unit"].strip(), i["favorable"]))
+        delta = i.get("delta") if i.get("delta") is not None else i["to"] - i["from"]
+        chip = "" if delta is None else (f"{delta:+.{i['dec']}f}".replace(".", ",").replace("-", "−") + (i["unit"] or ""))
+        cards.append((i["label"], f(i["to"], i["dec"]), i["unit"].strip(), chip, i["favorable"], _spark(last7(keys.get(i["label"], "")), i["favorable"]),
+                      (delta or 0) >= 0))
     if not cards:
-        return ("<div class='chg-wrap'><div class='chg-title'>Desde ayer</div>"
-                "<p class='h2sub'>Ningún indicador cambió lo bastante como para destacarlo.</p></div>")
+        return ('<section class="card chg" id="cambios" aria-label="Cambios recientes"><h2>Cambios recientes</h2>'
+                '<p class="h2sub">Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p></section>')
     body = "".join(
-        f"<div class='chg-card {'pos' if ok else 'neg'}'><span class='chg-l'>{_esc(lab)}</span>"
-        f"<b>{_esc(val)}</b><small>{_esc(unit)}</small><i aria-hidden='true'>{'↑' if ok else '↓'}</i></div>"
-        for lab, val, unit, ok in cards)
-    return ("<div class='chg-wrap' aria-label='Qué ha cambiado desde ayer'><div class='chg-title'>Desde ayer "
-            "<span>· diferencias observadas, no causas</span></div>"
-            f"<div class='chg-cards'>{body}</div></div>")
+        f"<div class='chg-card {'pos' if ok else 'neg'}'><div class='chg-top'><span class='chg-l'>{_esc(lab)}</span>"
+        f"<i class='chg-ar' aria-hidden='true'>{'↑' if up else '↓'}</i></div>"
+        f"<div class='chg-val'><b>{_esc(val)}</b><small>{_esc(unit)}</small></div>"
+        f"<div class='chg-bot'><span class='chg-chip'>{_esc(chip)}</span>{sp}</div></div>"
+        for lab, val, unit, chip, ok, sp, up in cards)
+    return ('<section class="card chg" id="cambios" aria-label="Cambios recientes"><h2>Cambios recientes</h2>'
+            '<p class="h2sub">hoy frente a ayer · verde = favorable, rojo = desfavorable · curva = últimos 7 días · diferencias observadas, no causas</p>'
+            f'<div class="chg-grid">{body}</div></section>')
 
 
 def _extra_sections(result: dict, extras: dict | None = None) -> dict:
@@ -207,7 +231,8 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
                  '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     from .brief import official_change
-    changes = _changes_html(extras.get("changes"), official_change(result.get("trend_28d") or [], result.get("date") or ""))
+    changes = _changes_html(extras.get("changes"), official_change(result.get("trend_28d") or [], result.get("date") or ""),
+                           result.get("trend_28d") or [])
     try:
         from . import brief
         sents = brief.compose(result, extras.get("tonight"))
@@ -221,7 +246,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Análisis de Claude</h2>'
                f"<p>{md_inline(ai)}</p>"
                '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai else ""
-    top_block = ai_html + brief_html + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = changes + ai_html + brief_html + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
@@ -500,12 +525,17 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .heroring .score{font-size:34px}.heroring .score small{font-size:11px}
 .hero-txt{min-width:0}.hero-txt .pill{margin-top:4px}.hero-txt .h2sub{margin-bottom:2px}
 .guidance{font-size:16px}
-.chg-wrap{margin-top:12px}.chg-title{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:6px}.chg-title span{font-weight:400;color:var(--text-3)}
-.chg-cards{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:4px;scrollbar-width:none;margin:0 -2px}.chg-cards::-webkit-scrollbar{display:none}
-.chg-card{position:relative;flex:0 0 auto;min-width:104px;scroll-snap-align:start;padding:9px 12px 9px 12px;border-radius:14px;background:var(--glass-chip,var(--surface-2));display:grid;gap:1px}
-.chg-l{font-size:11px;color:var(--text-3)}.chg-card b{font-size:15px;font-variant-numeric:tabular-nums;font-weight:620}.chg-card small{font-size:11px;color:var(--text-3);min-height:1em}
-.chg-card i{position:absolute;right:10px;bottom:8px;font-style:normal;font-weight:700;font-size:14px}
-.chg-card.pos i{color:var(--good-ink)}.chg-card.neg i{color:var(--critical-ink)}
+.chg h2{margin-bottom:2px}
+.chg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.chg-card{position:relative;padding:12px 14px;border-radius:18px;display:grid;gap:4px;background:var(--glass-chip,var(--surface-2));overflow:hidden}
+.chg-card::before{content:"";position:absolute;inset:0;opacity:.14;background:linear-gradient(135deg,var(--chg-c,transparent),transparent 70%);pointer-events:none}
+.chg-card.pos{--chg-c:var(--good)}.chg-card.neg{--chg-c:var(--critical)}
+.chg-top{display:flex;justify-content:space-between;align-items:center}.chg-l{font-size:12px;color:var(--text-2)}
+.chg-ar{font-style:normal;font-weight:800;font-size:15px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;background:var(--chg-c,var(--muted))}
+.chg-val b{font-size:26px;letter-spacing:-.01em;font-variant-numeric:tabular-nums;font-weight:650}.chg-val small{font-size:12px;color:var(--text-3);margin-left:3px}
+.chg-bot{display:flex;justify-content:space-between;align-items:flex-end;gap:6px;min-height:28px}
+.chg-chip{font-size:11.5px;font-weight:600;color:var(--chg-ink,var(--text-2))}.chg-card.pos .chg-chip{color:var(--good-ink)}.chg-card.neg .chg-chip{color:var(--critical-ink)}
+.chg-sp{width:64px;height:24px;flex:0 0 64px}.chg-sp path{stroke:var(--chg-c,var(--series-1))}.chg-sp circle{fill:var(--chg-c,var(--series-1))}
 .read{font-size:12.5px;margin:2px 0 6px;color:var(--text-2)}.read b{font-weight:640}.read.pos b{color:var(--good-ink)}.read.neg b{color:var(--critical-ink)}
 .wl{margin:10px 0 6px}.wl-track{position:relative;height:14px;border-radius:7px;background:var(--glass-chip,var(--surface-2))}
 .wl-band{position:absolute;top:0;bottom:0;border-radius:7px;background:var(--series-1-wash);box-shadow:inset 0 0 0 1.5px var(--series-1)}
@@ -551,7 +581,6 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
       <div class="hero-side">
         <p class="guidance" id="guidance"></p>
         <div class="rx" id="rx"></div>
-        {{CAMBIOS}}
       </div>
     </section>
 

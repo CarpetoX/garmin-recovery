@@ -211,3 +211,6 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - Tendencias: «Mapa de 28 días» (recuperación y sueño por color, carga por intensidad; vacío = sin dato, nunca 0 inventado).
 - Informe completo: las celdas de estado (Correcto, READY, Disponible, high…, y las que empiezan por 🟢/🟡/🔴) se muestran como insignias de color (`webreport.badges`); el texto no cambia.
 - Detalle de sesión: anillo con el reparto del tiempo por zonas de FC junto a la lista.
+
+### V7.11 · Apartado «Cambios recientes»
+- Los cambios frente a ayer salen de la cabecera y tienen su propio apartado, justo debajo: una tarjeta por indicador (recuperación oficial y cada uno que cambia) con valor de hoy, diferencia con signo, flecha según el sentido real del cambio (↑ sube / ↓ baja), color según sea favorable o no, y la curva de 7 días. Diferencias observadas, sin causas.
