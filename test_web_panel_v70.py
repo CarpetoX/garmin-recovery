@@ -84,8 +84,12 @@ class Delivery(unittest.TestCase):
     def test_chips_and_title(self):
         html = dashboard._delivery_html(self.D)
         self.assertIn("Ciclo completo", html)
-        self.assertIn("✓ Sync", html)
-        self.assertIn("… Web", html)
-        self.assertIn("✗ Aviso", html)
+        self.assertIn("✓</span>Sync", html)
+        self.assertIn("…</span>Web", html)
+        self.assertIn("✗</span>Aviso", html)
         self.assertIn("aceptada por ntfy", html)
+        self.assertIn("class='ok'", html)
+        self.assertIn("class='bad'", html)
         self.assertEqual(dashboard._delivery_html(None), "")
+        d = {**self.D, "stages": {"web": {"state": "ok", "at": "2026-10-18T17:20:25Z"}}}
+        self.assertIn("19:20", dashboard._delivery_html(d))  # hora local de Madrid
