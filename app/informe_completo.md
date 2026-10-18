@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 10:45 · `GR-2026-10-18-1045-04a041`
+Domingo, 18 de octubre de 2026 · 11:07 · `GR-2026-10-18-1107-1b582e`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -37,6 +37,20 @@ Carga 7 días|8 sesiones|sRPE 1203|unavailable
 ⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 08:30, 10-17 16:45, 10-17 22:45.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+
+### Fuentes de datos
+
+| Fuente | Último dato | Estado |
+|---|---|---|
+| Intervals.icu · bienestar (HRV, FC reposo, sueño) | 2026-10-18 | 🟢 al día |
+| Intervals.icu · actividades | 2026-10-15 | 🟢 descarga correcta (2026-10-18) |
+| Garmin · FC diurna y nocturna | 2026-10-18 | 🟢 al día |
+| Garmin · estrés | 2026-10-18 | 🟢 al día |
+| Garmin · Body Battery | 2026-10-18 | 🟢 al día |
+| Garmin · Training Readiness y tiempo de recuperación | 2026-10-18 | 🟢 al día |
+| Garmin · sueño | 2026-10-18 | 🟢 al día |
+
+_Un retraso de un día es normal a primera hora; se avisa por GitHub si Intervals falla tres veces seguidas._
 
 ## 2. Recuperación fisiológica
 
@@ -114,7 +128,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 19, máximo 77.
-- Body Battery: último valor 76/100, medido a las 09:12 (hace 1 h 33 min: no es una medición nueva).
+- Body Battery: último valor 76/100, medido a las 09:12 (hace 1 h 55 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 ## 5. Rendimiento CrossFit
@@ -262,4 +276,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 10:45 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:07 Europe/Madrid · certificado READY · sync_run_id 39109018293.

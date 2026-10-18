@@ -1,6 +1,6 @@
 # Informe matutino · 18/10/2026
 
-`GR-2026-10-18-1045-04a041` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-1107-1b582e` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -56,7 +56,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-1041-30dd76 (18/10 10:41):
+Frente al informe GR-2026-10-18-1045-04a041 (18/10 10:45):
 - Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
@@ -128,16 +128,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-1045-04a041`
+- **Identificador del informe:** `GR-2026-10-18-1107-1b582e`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 10:44 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 1,8 h ✓ · última HRV hace 1,8 h ✓ · última FC hace 27 min ✓ · último Body Battery hace 1,6 h ✓
+- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 11:06 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 2,1 h ✓ · última HRV hace 2,2 h ✓ · última FC hace 49 min ✓ · último Body Battery hace 1,9 h ✓
 - **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 17/17
 - **Ejecución:** 3 franja(s) de Sync perdidas (17/10 08:30, 17/10 16:45, 17/10 22:45)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 10:45 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 11:07 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
