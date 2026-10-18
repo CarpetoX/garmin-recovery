@@ -66,3 +66,22 @@ class Days(unittest.TestCase):
         out = site.day_snapshots(Path("."), "2026-10-18", run=fake)
         self.assertEqual([(o["date"], o["decision"]["zone"]) for o in out],
                          [("2026-10-17", "red"), ("2026-10-16", "green")])  # el más reciente de cada día, sin hoy
+
+
+class RpeForm(unittest.TestCase):
+    RES = {"date": "2026-10-18", "sessions_28d": [
+        {"id": "i1", "date": "2026-10-18", "start_local": "2026-10-18T10:45:00", "label": "Fuerza <x>", "rpe": 7.5},
+        {"id": "i2", "date": "2026-10-17", "start_local": "2026-10-17T09:00:00", "name": "HIIT", "rpe": None},
+        {"id": "i0", "date": "2026-10-01", "start_local": "2026-10-01T09:00:00", "name": "Viejo", "rpe": None}]}
+
+    def test_form_only_on_published_web(self):
+        self.assertEqual(dashboard._rpe_form_html(self.RES, {}), "")
+        html = dashboard._rpe_form_html(self.RES, {"pwa": True})
+        self.assertIn("value='i1'", html)
+        self.assertNotIn("i0'", html)  # fuera de los últimos 4 días
+        self.assertIn("&lt;x&gt;", html)
+        self.assertLess(html.index("value='i2'"), html.index("value='i1'"))  # pendientes primero
+        self.assertIn('data-rpe="7,5"', html)
+
+    def test_no_sessions_no_form(self):
+        self.assertEqual(dashboard._rpe_form_html({"date": "2026-10-18", "sessions_28d": []}, {"pwa": True}), "")
