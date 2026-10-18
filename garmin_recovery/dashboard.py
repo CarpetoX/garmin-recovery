@@ -206,7 +206,11 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
         sents = []
     brief_html = ('<section class="card brief" aria-label="Hoy en breve"><h2>Hoy en breve</h2>'
                   + "".join(f"<p>{md_inline(x)}</p>" for x in sents) + "</section>") if sents else ""
-    top_block = changes + brief_html + ('' if changes else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    ai = extras.get("ai_lead")
+    ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Análisis de Claude</h2>'
+               f"<p>{md_inline(ai)}</p>"
+               '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai else ""
+    top_block = changes + ai_html + brief_html + ('' if changes else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'

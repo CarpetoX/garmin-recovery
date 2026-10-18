@@ -77,3 +77,15 @@ def section(root) -> str:
     out.append(r["body"] + "\n")
     out.append("\n_Texto redactado por un modelo de IA a partir de los datos del ciclo; no es un diagnóstico médico._\n")
     return "\n".join(out)
+
+
+LEAD = re.compile(r"^\*\*En breve:?\*\*:?\s*(.+)$", re.M)
+
+
+def lead(root) -> str | None:
+    """Párrafo «**En breve:** …» del análisis, solo si es del ciclo vigente (para mostrarlo en el panel)."""
+    r = check(root)
+    if r.get("state") != "ok":
+        return None
+    m = LEAD.search(r["body"])
+    return m.group(1).strip() if m else None

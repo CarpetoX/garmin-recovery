@@ -49,14 +49,14 @@ def _weights(result: dict) -> str:
 SUBTITLES = {"Resumen": "lo esencial en 5 líneas", "1.": "estado del ciclo y calidad de los datos",
              "2.": "HRV, FC y modelos frente a tu normalidad", "3.": "duración, puntuación y fases",
              "4.": "FC, estrés y Body Battery", "5.": "carga y sesiones recientes", "6.": "series, cargas y metcons",
-             "7.": "turnos, señales y recomendaciones", "8.": "plan de mejora y de 7 días", "Conclusión": "cierre y traza del ciclo"}
-SHORT = {"Resumen": "Resumen", "1.": "Calidad", "2.": "Recuperación", "3.": "Sueño", "4.": "FC", "5.": "CrossFit",
+             "7.": "turnos, señales y recomendaciones", "8.": "plan de mejora y de 7 días", "Conclusión": "cierre y traza del ciclo", "Análisis de Claude": "explicación en llano y plan de 7 días"}
+SHORT = {"Resumen": "Resumen", "Análisis de Claude": "Claude", "1.": "Calidad", "2.": "Recuperación", "3.": "Sueño", "4.": "FC", "5.": "CrossFit",
          "6.": "Fuerza", "7.": "Balance", "8.": "Mejora", "Conclusión": "Conclusión"}
 
 
 # Lo que más se consulta primero: qué hacer hoy, cómo estás, sueño y carga; el detalle técnico y la certificación al final.
-ORDER = ("7.", "2.", "3.", "5.", "8.", "4.", "6.", "Resumen", "1.", "Conclusión")
-OPEN = ("7.", "2.")
+ORDER = ("7.", "Análisis de Claude", "2.", "3.", "5.", "8.", "4.", "6.", "Resumen", "1.", "Conclusión")
+OPEN = ("7.", "Análisis de Claude")
 
 
 def _rank(title: str) -> int:
@@ -64,6 +64,8 @@ def _rank(title: str) -> int:
 
 
 ICONS = {'7.': '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>', '2.': '<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>', '3.': '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>', '5.': '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>', '8.': '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>', '4.': '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>', '6.': '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', 'Resumen': '<path d="M4 6h16M4 12h16M4 18h10"/>', '1.': '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>', 'Conclusión': '<path d="M5 12l5 5L20 7"/>'}
+ICONS["Análisis de Claude"] = ('<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/>'
+                               '<path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>')
 
 
 def _lookup(table: dict, title: str) -> str:

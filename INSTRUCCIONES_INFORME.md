@@ -54,3 +54,8 @@ Enlaza el panel https://carpetox.github.io/garmin-recovery/ y el informe base ht
 ## Sección 8 — Análisis de mejora
 
 `app/informe_completo.md` incluye al final de las siete secciones un «Análisis de mejora física y recuperación» calculado por reglas (`garmin_recovery/improvement.py`): prioridades, detalle por área, constancia semanal y reglas para 7 días. Al redactar tu análisis, parte de esa sección, no la contradigas y no añadas cifras que no estén en los datos. Aporta lo que las reglas no hacen: interpretar el conjunto, priorizar según el turno y el momento, y proponer un plan concreto de 7 días (sesiones suaves y duras, sueño) respetando `decision.guidance`.
+
+
+## Análisis publicado en la app — apertura «En breve»
+
+El primer párrafo de `app/analisis_ia.md` (justo debajo de la línea `<!-- cycle_id: … -->`) debe empezar por `**En breve:**` y explicar, en 3–4 frases de lenguaje llano y sin jerga (di «oficial» y «experimental», no v2/v3): cómo está hoy la persona, qué ha cambiado frente a ayer (diferencia observada, sin causas), qué conviene hacer hoy y por qué. Solo cifras presentes en los datos. La pestaña Hoy de la app muestra ese párrafo; el resto del análisis (qué explica la puntuación, carga reciente, 3 prioridades, plan de 7 días; máx. 300 palabras en total) va en el informe completo.
