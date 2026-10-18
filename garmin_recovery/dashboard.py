@@ -172,8 +172,9 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
                      '<section class="card"><h2>Progresión de fuerza</h2><p class="h2sub">1RM mínimo estimado (Epley con '
                      'tu mejor serie) cuando hay repeticiones; si no, carga máxima declarada</p>'
                      f'<div class="svgwrap">{strength}</div></section>')
-    full_html = ('<section class="card"><p><a href="informe_completo.html"><strong>📄 Abrir el informe completo</strong></a> '
-                 '· resumen, 7 secciones y recomendaciones</p></section>' if extras.get("full_report") else "")
+    full_html = ('<a class="cta" href="informe_completo.html"><span class="cta-ico">📄</span>'
+                 '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
+                 '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     changes = _changes_html(extras.get("changes"))
     today_block = changes or f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
     return (full_html + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan"))
@@ -353,13 +354,20 @@ section[id],details[id]{scroll-margin-top:56px}
     -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-radius:999px;padding:6px 8px;margin:0 0 14px;top:8px}
   .nav a{background:transparent}
   .nav a:hover,.nav a:focus-visible{background:var(--glass-chip);outline:0}
+  .cta{background:linear-gradient(135deg,var(--series-1-wash),var(--glass));border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
+    -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
   .badge,.rx span,.plan li,.tip-line,.cal-day,.hist a{background:var(--glass-chip)}
   .meter{background:var(--glass-chip)}
 }
 @media (prefers-reduced-transparency: reduce){
   body{background:var(--bg)!important}
-  .card,.nav{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .card,.nav,.cta{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 }
+.cta{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:22px;text-decoration:none;color:var(--text);
+  background:var(--surface);border:1px solid var(--line);margin-bottom:16px}
+.cta strong{display:block;font-size:16px} .cta small{display:block;font-size:12px;color:var(--text-2);margin-top:2px}
+.cta-ico{font-size:24px} .cta-go{margin-left:auto;font-size:28px;color:var(--series-1);line-height:1}
+.cta:active{transform:scale(.985)} .cta:focus-visible{outline:2px solid var(--series-1)}
 </style>
 </head>
 <body>
