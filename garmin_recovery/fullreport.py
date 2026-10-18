@@ -10,6 +10,8 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from .config import DEFAULTS
+
 TZ = ZoneInfo("Europe/Madrid")
 ZONE_ICON = {"green": "🟢", "yellow": "🟡", "red": "🔴", "unavailable": "⚪"}
 DAYS = ("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo")
@@ -245,6 +247,13 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         add("No consta un episodio de sueño confirmado en los datos de este ciclo.")
     img("sleep.svg", "Sueño por noche frente a tu necesidad")
     img("sleep_stages.svg", "Sueño por fases")
+    try:
+        from . import sleep_need
+        add("\n**Necesidad y deuda de sueño**\n\n" + sleep_need.to_markdown(
+            sleep_need.compute(result.get("trend_28d") or [], ext.get("days") or {}, today,
+                               DEFAULTS["sleep_need_hours"])))
+    except Exception:  # noqa: BLE001 — el informe no depende de este bloque
+        pass
     add("\nNo se incorporan siestas no confirmadas.")
 
     # 4 ------------------------------------------------------------------
