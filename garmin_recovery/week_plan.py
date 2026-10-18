@@ -20,7 +20,7 @@ def _num(v):
     return v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
 
 
-def plan(today: str, shifts: dict, sessions: list, zone: str | None, rpe_max) -> list[dict]:
+def plan(today: str, shifts: dict, sessions: list, zone: str | None, rpe_max, legs: dict | None = None) -> list[dict]:
     t0 = date.fromisoformat(today)
     hard_days = sorted({date.fromisoformat(s["date"]) for s in sessions
                         if isinstance(s, dict) and _num(s.get("rpe")) is not None and s["rpe"] >= HARD_RPE
@@ -49,7 +49,10 @@ def plan(today: str, shifts: dict, sessions: list, zone: str | None, rpe_max) ->
             gap_ok = last_hard is None or (d - last_hard).days >= MIN_GAP_DAYS
             in_window = sum(1 for h in hard_days if d - timedelta(days=6) <= h < d)
             next_info = shifts.get((d + timedelta(days=1)).isoformat()) or {}
-            if in_window < MAX_HARD_PER_WEEK and gap_ok:
+            legs_blocked = bool(legs) and d.isoformat() < legs["until"]
+            if legs_blocked:
+                kind, why = "moderate", "día libre; tren superior o aeróbico tras la serie dura reciente de piernas"
+            elif in_window < MAX_HARD_PER_WEEK and gap_ok:
                 kind, why = "hard", "día libre con margen para una sesión exigente"
                 hard_days.append(d)
                 last_hard = d
@@ -57,6 +60,9 @@ def plan(today: str, shifts: dict, sessions: list, zone: str | None, rpe_max) ->
                 kind, why = "moderate", "día libre; sesión moderada para respetar el espaciado" if not gap_ok else "día libre; ya hay 3 sesiones duras en los últimos 7 días"
             if next_info.get("shift") == "TN" and kind == "hard":
                 why += " (mañana TN: acuéstate pronto)"
+        if legs and d.isoformat() < legs["until"]:
+            u = legs["until"]
+            why += f" · sin piernas pesadas hasta el {u[8:]}/{u[5:7]}"
         out.append({"date": d.isoformat(), "dow": DAYS[d.weekday()], "shift": label, "kind": kind, "why": why})
     return out
 
