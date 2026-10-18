@@ -1,5 +1,5 @@
 <!-- cycle_id: 2026-10-18-0830-post-sleep -->
-**Certificado con avisos:** 3 franjas de Sync perdidas ayer (17/10 08:30, 16:45, 22:45). Este ciclo sí cerró bien (Sync 09:48, datos recientes ✓).
+**Certificado con avisos:** 3 franjas de Sync perdidas ayer (17/10 08:30, 16:45, 22:45). Datos de un Sync fuera de franja (10:34): válidos, sin certificado de franja propio.
 
 **Decisión: 🟢 verde** · RPE ≤ 9, volumen 100 %. v2 oficial 88, híbrido 77, v3 77 (sombra), Garmin Training Readiness 59 (solo contexto). Concordancia total, sin divergencias.
 
@@ -16,6 +16,10 @@
 2. Calentamiento progresivo; si la barra va lenta, baja a la pauta ámbar.
 3. Prioriza dormir bien antes/después del TN para reducir la deuda de 4,0 h. Registra las sensaciones en Intervals.icu (hoy sin datos).
 
-**Confianza:** datos alta; recomendación media (línea base de 17 noches, alta desde 28).
+**Certificado**
+- Ciclo: 2026-10-18-0830-post-sleep · Sync 10:34 (fuera de franja).
+- Antigüedad ✓: sueño confirmado 09:00 (94 min), HRV 08:56 (99 min), FC 10:18 (17 min).
+- Integridad ✓: coherencia v3/v2 ok; 17/17 sesiones con RPE por ID, ninguna sin RPE.
+- Confianza: datos alta; recomendación media (línea base de 17 noches, alta desde 28).
 
 _Herramienta de entrenamiento, no un diagnóstico médico._
