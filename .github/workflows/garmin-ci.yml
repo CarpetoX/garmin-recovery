@@ -165,6 +165,17 @@ jobs:
           python -m coverage run -m unittest discover -v -s . -p 'test_*.py'
           python -m coverage report --skip-empty | tee coverage.txt
           echo "::notice title=Cobertura total::$(grep '^TOTAL' coverage.txt)"
+          # los 12 módulos con peor cobertura y más líneas sin cubrir, legibles desde la API de anotaciones
+          python - <<'PY'
+          import re
+          rows = []
+          for line in open("coverage.txt"):
+              m = re.match(r"(garmin_recovery/\S+)\s+(\d+)\s+(\d+)\s+(\d+)%", line)
+              if m:
+                  rows.append((int(m.group(3)), int(m.group(4)), m.group(1), int(m.group(2))))
+          rows.sort(reverse=True)
+          print("::notice title=Menos cubiertos (líneas sin cubrir)::" + " | ".join(f"{n} {miss}/{tot} ({pc}%)" for miss, pc, n, tot in rows[:12]))
+          PY
           { echo '### Cobertura de tests'; echo '```'; cat coverage.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Validate real historical V3.8.2 report against pinned cycle snapshot
