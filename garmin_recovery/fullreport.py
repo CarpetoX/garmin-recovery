@@ -378,6 +378,9 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         from . import strength_patterns
         add("\n**Carga de fuerza por patrón**\n\n" + strength_patterns.to_markdown(strength_patterns.compute(
             (_d(cf, "muscle_load", "strength_exercises") or []), today)))
+        from . import strength_progress
+        add("\n**Progresión por ejercicio (barra)**\n\n" + strength_progress.to_markdown(strength_progress.compute(
+            (_d(cf, "muscle_load", "strength_exercises") or []), today)))
     except Exception:  # noqa: BLE001 — bloque opcional
         pass
     add("\nNo se atribuyen desgloses no confirmados ni se comparan récords no equivalentes; se conserva la diferencia entre cronómetro oficial y reloj.")
