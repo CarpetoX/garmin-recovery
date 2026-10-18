@@ -30,6 +30,13 @@ class Cards(unittest.TestCase):
         html = dashboard._changes_html(c)
         self.assertNotIn("70 → 77", html)  # la cabecera con el modelo experimental ya no se muestra
         self.assertIn("HRV", html)
+        self.assertIn("Cambios recientes", html)
+        self.assertIn("+8 ms", html)  # diferencia con signo y unidad
+        c2 = {"available": True, "items": [{"label": "FC en reposo", "from": 60, "to": 56, "delta": -4, "dec": 0, "unit": " lpm", "favorable": True}]}
+        h2 = dashboard._changes_html(c2, (45, 88), [{"date": "2026-10-1%d" % d, "resting_hr": 60 - d, "v2_score": 40 + d} for d in range(7)])
+        self.assertIn("chg-card pos", h2)
+        self.assertIn("↓", h2)  # baja, pero es favorable: la flecha sigue el sentido real y el color el juicio
+        self.assertIn("chg-sp", h2)  # curva de 7 días
         self.assertEqual(dashboard._changes_html({"available": False}), "")
         self.assertIn("Ningún indicador", dashboard._changes_html({"available": True, "items": []}))
 
