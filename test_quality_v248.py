@@ -5,7 +5,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from morning_sleep_gate import classify
-from muscle_load import analyze, classify as classify_movement
+from garmin_recovery.muscle_load import analyze, classify as classify_movement
 from garmin_recovery import monitor_v231 as monitor
 from garmin_recovery import sleep_integration as integration
 
@@ -122,7 +122,7 @@ class QualityTestsV248(unittest.TestCase):
         self.assertIsNone(exercise['estimated_1rm_kg'])
 
     def test_matching_feedback_by_id_not_just_date(self):
-        from crossfit_insights import match_feedback
+        from garmin_recovery.crossfit import match_feedback
         activity = {'id': 'i196047961', 'start_date_local': '2026-10-11T11:12:57'}
         rows = [{'ID actividad': 'another-id', 'Fecha': '2026-10-11'},
                 {'ID actividad': 'i196047961', 'Fecha': '2026-10-11'}]

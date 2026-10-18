@@ -450,7 +450,7 @@ def main():
 
 
     # V2.2: no publicar informes con colores/textos de recuperacion contradictorios.
-    from recovery_reliability import validate_report_consistency
+    from garmin_recovery.reliability import validate_report_consistency
     try:
         recovery_v22 = load_required(Path('recovery_assessment.json'))
         if recovery_v22 is not None:
