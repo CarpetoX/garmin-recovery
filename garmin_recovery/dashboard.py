@@ -73,6 +73,22 @@ def _history_html(items: list | None) -> str:
             f'publicó, con sus gráficas, en GitHub</p><ul class="clean hist">{lis}</ul></section>')
 
 
+def _delivery_html(d: dict | None) -> str:
+    """Estado final del ciclo: etapas con ✓ / … / ✗ y el alcance de «notificación enviada»."""
+    if not d or not d.get("stages"):
+        return ""
+    icon = {"ok": "✓", "pending": "…", "failed": "✗", "skipped": "–", "unknown": "?"}
+    cls = {"ok": "pos", "pending": "neu", "failed": "neg", "skipped": "neu", "unknown": "neu"}
+    names = {"sync": "Sync", "heart": "FC", "advanced": "Analítica", "crossfit": "CrossFit", "web": "Web", "notification": "Aviso"}
+    title = {"complete": "Ciclo completo", "complete_without_notification": "Ciclo completo (sin aviso)",
+             "pending": "Ciclo en curso", "failed": "Ciclo con fallos", "unconfirmed": "Ciclo sin confirmar del todo"}.get(d.get("state"), "Estado del ciclo")
+    chips = "".join(f"<span class='rx-chip {cls.get(v.get('state'), 'neu')}' title='{_esc(v.get('note') or '')}'>"
+                    f"{icon.get(v.get('state'), '?')} {names.get(k, k)}</span>" for k, v in d["stages"].items())
+    return ('<section class="card" id="ciclo" aria-label="Estado final del ciclo"><h2>' + _esc(title) + '</h2>'
+            f'<p class="h2sub">ciclo {_esc(d.get("cycle_id") or "—")} · {_esc(d.get("scope") or "")}</p>'
+            f'<div class="chips">{chips}</div></section>')
+
+
 def _days_html(days: list | None) -> str:
     if not days:
         return ""
@@ -179,7 +195,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     changes = _changes_html(extras.get("changes"))
     today_block = changes or f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
-    return (full_html + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan"))
+    return (full_html + _delivery_html(extras.get("delivery")) + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan"))
             + '<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o v3 atenuado si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
@@ -358,6 +374,7 @@ section[id],details[id]{scroll-margin-top:56px}
   .nav a:hover,.nav a:focus-visible{background:var(--glass-chip);outline:0}
   .cta{background:linear-gradient(135deg,var(--series-1-wash),var(--glass));border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
     -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+  .rx-chip{background:var(--glass-chip)}
   .badge,.rx span,.plan li,.tip-line,.cal-day,.hist a{background:var(--glass-chip)}
   .meter{background:var(--glass-chip)}
 }
@@ -370,6 +387,7 @@ section[id],details[id]{scroll-margin-top:56px}
 .cta strong{display:block;font-size:16px} .cta small{display:block;font-size:12px;color:var(--text-2);margin-top:2px}
 .cta-ico{font-size:24px} .cta-go{margin-left:auto;font-size:28px;color:var(--series-1);line-height:1}
 .cta:active{transform:scale(.985)} .cta:focus-visible{outline:2px solid var(--series-1)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.rx-chip{font-size:13px;padding:3px 10px;border-radius:999px;background:var(--surface-2)}
 </style>
 </head>
 <body>

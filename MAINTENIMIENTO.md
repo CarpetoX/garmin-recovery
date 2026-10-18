@@ -153,3 +153,10 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - **Certificación:** un Sync lanzado a mano fuera de franja marca el ciclo con «Sync fuera de franja». No se lanzan Sync de verificación salvo que un cambio de producción lo exija (probar con la suite y simulaciones).
 - **Acciones de GitHub:** versiones mezcladas (`checkout`/`setup-python` v4–v5 y v7 en `sync.yml` y `advanced-analytics-rpe.yml`) y sin fijar por hash: no se unifican sin poder verificar los hashes desde el entorno de desarrollo; `dependabot.yml` propone las actualizaciones semanalmente. Los permisos ya son mínimos (escritura solo donde se hace commit o se abren avisos).
 - **Pendiente:** relleno histórico de 60–90 días de sueño/HRV desde Garmin (cobertura de 28 días: HRV 46 %, sueño 43 %, puntuación 36 %).
+
+## V7.2 — Estado final del ciclo
+- `garmin_recovery/cycle_delivery.py` (paso «V7.2» del monitor, solo con `repository_dispatch`, `continue-on-error`) escribe `delivery_status.json`: etapas del certificado (Sync, FC, analítica, CrossFit) + **web publicada** (primer despliegue de `pages.yml` posterior al inicio de CrossFit, esperando hasta 5 min) + **notificación** (lee la línea `{"notify": …}` del registro del paso ntfy del job de CrossFit).
+- Estados: `complete`, `complete_without_notification` (sin tema o sin informe nuevo que avisar), `pending`, `failed`, `unconfirmed`.
+- **Alcance:** «notificación enviada» = ntfy aceptó el mensaje (HTTP 2xx); no hay acuse de lectura. El registro del paso se descarga sin enviar el token a la URL firmada; si no se puede leer, la etapa queda `unknown` (→ `unconfirmed`), nunca «ok».
+- La web lo muestra en la tarjeta «Ciclo …» (chips ✓ … ✗). `delivery_status.json` está en los `paths` de `pages.yml`: el commit del monitor republica la web con el estado ya calculado.
+- Primer ciclo real con esta función: verificar `delivery_status.json` y, si la descarga del registro falla, ajustar `api_text`.
