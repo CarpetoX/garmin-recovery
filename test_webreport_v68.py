@@ -54,9 +54,9 @@ class WebReport(unittest.TestCase):
         self.assertIn('data-n="7"', self.html)
         self.assertIn("1. Certificación", self.html)
 
-    def test_cert_section_collapsed_others_open(self):
+    def test_only_summary_open(self):
         opens = re.findall(r'<details class="sec" id="s\d"( open)?>', self.html)
-        self.assertEqual(opens, [" open", "", " open", ""])
+        self.assertEqual(opens, [" open", "", "", ""])  # solo el resumen abierto; el resto se despliega al tocar
 
     def test_interactive_chart_and_fallback(self):
         self.assertIn('data-chart="hrv"', self.html)
