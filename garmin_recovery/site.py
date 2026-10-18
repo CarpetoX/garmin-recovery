@@ -199,6 +199,13 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         strength = None
     gen = datetime.fromisoformat(result["generated_at"]) if result.get("generated_at") else None
     extras = _live_extras(root, result)
+    try:
+        hc = json.loads((root / "activity_hr_curves.json").read_text(encoding="utf-8"))
+        if isinstance(hc, dict) and hc.get("activities"):
+            extras["hr_curves"] = {"step_s": hc.get("step_s"), "activities": {
+                k: v for k, v in hc["activities"].items() if isinstance(v, dict) and v.get("available")}}
+    except (OSError, ValueError):
+        pass  # aún sin curvas: la tabla de sesiones funciona igual
     extras |= {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(), "strength_svg": strength,
               "punctuality": punctuality(reports, date.fromisoformat(result["date"]), gen),
               "history": report_history(root) if history else []}

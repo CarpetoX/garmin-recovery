@@ -24,6 +24,8 @@ def render(result: dict, extras: dict | None = None) -> str:
     from .report import rpe_by_day
     extras = extras or {}
     data = dict(result)
+    if extras.get("hr_curves"):
+        data["hr_curves"] = extras["hr_curves"]
     data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
     payload = json.dumps(data, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
@@ -418,6 +420,9 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .ring-card:last-child .ring-num{margin-top:6px;font-size:20px}
 .ring-card:last-child .ring-label{margin-top:2px}
 .warn-chip{background:var(--warning)!important;color:#1a1a19!important}
+tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--glass-chip, var(--surface-2))}.hrmark{color:var(--critical);font-size:11px}
+.hrwrap{position:relative}.hrtip{position:absolute;left:8px;top:2px;font-size:12px;background:var(--glass, var(--surface));border:1px solid var(--line);border-radius:8px;padding:2px 8px;opacity:0;pointer-events:none}
+.zh{font-size:13px;margin:12px 0 4px}.zrow{display:grid;grid-template-columns:96px 1fr 54px;gap:8px;align-items:center;font-size:12.5px;padding:2px 0}.zrow i{display:block;height:8px;border-radius:4px}.zrow b{text-align:right}
 </style>
 </head>
 <body>
@@ -499,6 +504,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
       <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
       <div class="scroll"><table id="sessions"></table></div>
     </section>
+    <section class="card" id="hrdetail" hidden aria-live="polite"></section>
     {{ENT}}
   </div>
 
@@ -695,9 +701,47 @@ chart($('c-load'), {label:'Carga diaria', zero:true,
 // ---------- Tablas ----------
 const typeEs = t => ({HighIntensityIntervalTraining:'HIIT', WeightTraining:'Fuerza', Run:'Carrera', Ride:'Bici', Walk:'Caminar', Swim:'Natación'})[t] || t || '—';
 const sess = D.recent_sessions || [];
+const HRC = (D.hr_curves && D.hr_curves.activities) || {};
+const hasCurve = s => !!(HRC[s.id] && HRC[s.id].available);
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${esc(s.label || s.name || '')}</td><td class="num">${fmt(s.duration_min)}</td><td class="num">${fmt(s.load)}</td><td class="num">${fmt(s.avg_hr)}</td><td class="num">${fmt(s.rpe,1)}</td><td class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? '<span class="hrmark" aria-hidden="true">♥</span> ' : ''}${esc(s.label || s.name || '')}</td><td class="num">${fmt(s.duration_min)}</td><td class="num">${fmt(s.load)}</td><td class="num">${fmt(s.avg_hr)}</td><td class="num">${fmt(s.rpe,1)}</td><td class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
+
+// ---------- Detalle de FC de una sesión ----------
+function showHr(id) {
+  const c = HRC[id], s = sess.find(x => x.id === id), box = $('hrdetail');
+  if (!c || !c.available) { box.hidden = true; return; }
+  const pts = c.points, W = 340, H = 190, m = {t: 10, r: 8, b: 24, l: 34}, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const tmax = Math.max(pts[pts.length - 1][0], c.duration_s || 0), ys = pts.map(p => p[1]);
+  const lo = Math.floor((Math.min(...ys) - 8) / 10) * 10, hi = Math.ceil((Math.max(...ys) + 6) / 10) * 10;
+  const x = t => m.l + t / tmax * iw, y = v => m.t + ih - (v - lo) / (hi - lo) * ih;
+  const zb = c.zone_bounds || [], zc = ['#9a9990', '#3987e5', '#1baf7a', '#fab219', '#d95926', '#d03b3b', '#d03b3b'];
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Frecuencia cardíaca durante la sesión" style="width:100%;height:auto;display:block;touch-action:pan-y">`;
+  zb.forEach((b, i) => { const bot = Math.max(lo, i === 0 ? lo : zb[i - 1]), top = Math.min(hi, b);  // icu_hr_zones = límite superior de cada zona
+    if (top > bot) svg += `<rect x="${m.l}" y="${y(top)}" width="${iw}" height="${y(bot) - y(top)}" fill="${zc[i] || zc[6]}" opacity=".10"/>`; });
+  for (let v = lo; v <= hi; v += 20) svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${m.l - 5}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="var(--text-3)">${v}</text>`;
+  const step = tmax > 5400 ? 1200 : tmax > 2400 ? 600 : 300;
+  for (let t = 0; t <= tmax; t += step) svg += `<text x="${x(t)}" y="${H - 7}" text-anchor="middle" font-size="10" fill="var(--text-3)">${Math.round(t / 60)}′</text>`;
+  svg += `<path d="M${pts.map(p => x(p[0]).toFixed(1) + ',' + y(p[1]).toFixed(1)).join('L')}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"/>` +
+    `<line id="hrx" y1="${m.t}" y2="${m.t + ih}" stroke="var(--text-3)" opacity="0"/><rect id="hrhit" x="${m.l}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
+  const zs = c.zone_seconds || [], ztot = zs.reduce((a, b) => a + (b || 0), 0);
+  const zrows = ztot > 0 ? zs.map((sec, i) => sec > 0 ? `<div class="zrow"><span>Z${i + 1}${zb[i] != null ? ` · hasta ${zb[i]}` : ''}</span><i style="width:${Math.max(2, Math.round(sec / ztot * 100))}%;background:${zc[i] || zc[6]}"></i><b>${Math.round(sec / 60)} min</b></div>` : '').join('') : '';
+  box.innerHTML = `<h2>${esc((s && (s.label || s.name)) || c.name || 'Sesión')}</h2><p class="h2sub">${dshort(c.date)} ${c.start_local ? c.start_local.slice(11,16) : ''} · FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm · ${fmt((c.duration_s || 0) / 60)} min${s && s.rpe != null ? ' · RPE ' + fmt(s.rpe, 1) : ''}</p>` +
+    `<div class="hrwrap">${svg}<div class="hrtip" id="hrtip"></div></div>` +
+    (zrows ? `<h3 class="zh">Tiempo por zona de FC</h3>${zrows}` : '') +
+    `<p class="h2sub" style="margin-top:8px">Un punto cada ${c.step_s} s (Intervals.icu). Las zonas son las de tu perfil. Es una vista de la sesión: no cambia la decisión del día.</p>`;
+  box.hidden = false;
+  const svgEl = box.querySelector('svg'), xh = $('hrx'), tp = $('hrtip');
+  const mv = ev => { const r = svgEl.getBoundingClientRect(), t = Math.max(0, Math.min(tmax, ((ev.clientX - r.left) / r.width * W - m.l) / iw * tmax));
+    let b = pts[0]; pts.forEach(p => { if (Math.abs(p[0] - t) < Math.abs(b[0] - t)) b = p; });
+    xh.setAttribute('x1', x(b[0])); xh.setAttribute('x2', x(b[0])); xh.setAttribute('opacity', .5);
+    tp.innerHTML = `<b>${b[1]} lpm</b> · min ${Math.floor(b[0] / 60)}:${String(b[0] % 60).padStart(2, '0')}`; tp.style.opacity = 1; };
+  const hit = $('hrhit'); hit.addEventListener('pointermove', mv); hit.addEventListener('pointerdown', mv);
+  hit.addEventListener('pointerleave', () => { tp.style.opacity = 0; xh.setAttribute('opacity', 0); });
+  box.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+$('sessions').addEventListener('click', e => { const tr = e.target.closest('tr.clk'); if (tr) showHr(tr.dataset.id); });
+$('sessions').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { const tr = e.target.closest('tr.clk'); if (tr) { e.preventDefault(); showHr(tr.dataset.id); } } });
 const today = T[T.length - 1] || {};
 const legacy = D.legacy_v2 || {};
 $('rule').textContent = DEC.rule || '';

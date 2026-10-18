@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import json
 import statistics
 from datetime import datetime, timedelta
@@ -903,6 +904,16 @@ def main():
     hrr_cache = update_hrr_cache(
         activities
     )
+
+    try:  # solo visualización (curva de FC por sesión): un fallo no debe tocar la analítica
+        from . import hr_curves
+        from .advanced_hrr import stream_request
+        curves = hr_curves.refresh(
+            activities, load_json(Path("activity_hr_curves.json"), {}),
+            os.environ.get("INTERVALS_API_KEY", "").strip(), stream_request, TODAY.isoformat())
+        save_json(Path("activity_hr_curves.json"), curves)
+    except Exception as exc:  # noqa: BLE001
+        print(f"::warning::Curvas de FC no actualizadas: {type(exc).__name__}: {exc}")
 
     session_rows = activity_analysis(
         activities,
