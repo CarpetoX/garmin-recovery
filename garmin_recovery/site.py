@@ -117,6 +117,37 @@ def report_history(root: Path, days: int = 30, limit: int = 60, run=subprocess.r
     return items
 
 
+def _live_extras(root: Path, result: dict) -> dict:
+    """Tarjetas «Qué ha cambiado», «Esta noche» y «Próximos 7 días»; cada una es opcional."""
+    from . import improvement, sleep_need, why_changed
+    from .config import DEFAULTS
+    out: dict = {}
+    today = result.get("date")
+    trend = [t for t in result.get("trend_28d") or [] if isinstance(t, dict)]
+    try:
+        out["changes"] = why_changed.compute(trend, today)
+    except Exception:  # noqa: BLE001 — opcional
+        pass
+    try:
+        ext = improvement._ext_days(root)
+        need = sleep_need.compute(trend, ext, today, DEFAULTS["sleep_need_hours"])
+        tip = None
+        try:
+            from .notify import night_shift_tip
+            tip = night_shift_tip(root, result, datetime.fromisoformat(result["generated_at"]))
+        except Exception:  # noqa: BLE001
+            pass
+        out["tonight"] = {"need": need if need.get("available") else None, "tip": tip}
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
+        out["plan"] = improvement._plan(root, result, today, sessions)
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
 def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool = True) -> dict:
     from .dashboard import render
     from .report import chart_strength
@@ -136,7 +167,8 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     except (OSError, ValueError):
         strength = None
     gen = datetime.fromisoformat(result["generated_at"]) if result.get("generated_at") else None
-    extras = {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(), "strength_svg": strength,
+    extras = _live_extras(root, result)
+    extras |= {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(), "strength_svg": strength,
               "punctuality": punctuality(reports, date.fromisoformat(result["date"]), gen),
               "history": report_history(root) if history else []}
     out.mkdir(parents=True, exist_ok=True)

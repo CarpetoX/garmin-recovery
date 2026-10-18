@@ -69,8 +69,58 @@ def _history_html(items: list | None) -> str:
         f"<li><a href='{_esc(x['url'])}' rel='noopener'><span class='hz z-{_esc(x.get('zone') or 'unavailable')}'></span>"
         f"{_esc(x['label'])}</a> <span class='weight'>{_esc(zone_es.get(x.get('zone'), '—'))}"
         f"{' · ' + _esc(x['report_id']) if x.get('report_id') else ''}</span></li>" for x in items)
-    return ('<section class="card"><h2>Informes anteriores</h2><p class="h2sub">cada enlace abre el informe tal como se '
+    return ('<section class="card" id="informes"><h2>Informes anteriores</h2><p class="h2sub">cada enlace abre el informe tal como se '
             f'publicó, con sus gráficas, en GitHub</p><ul class="clean hist">{lis}</ul></section>')
+
+
+def _tonight_html(t: dict | None) -> str:
+    """Tarjeta «Esta noche»: necesidad de sueño estimada, componentes y consejo de turno."""
+    if not t or not t.get("need"):
+        return ""
+    n = t["need"]
+    f = lambda v: f"{v:.1f}".replace(".", ",")  # noqa: E731
+    rows = [("Base", f(n["base_h"])), ("Carga de ayer", "+" + f(n["load_add_h"])),
+            ("Deuda reciente (3 noches)", "+" + f(n["debt_add_h"])),
+            ("Siesta de hoy", ("−" + f(n["nap_today_h"])) if n.get("naps_known") else "sin dato")]
+    lis = "".join(f"<li><span>{_esc(a)}</span><b>{_esc(b)} h</b></li>" if b != "sin dato" else f"<li><span>{_esc(a)}</span><b>sin dato</b></li>"
+                  for a, b in rows)
+    tip = f"<p class='tip-line'>{_esc(t['tip'])}</p>" if t.get("tip") else ""
+    return ('<section class="card" id="noche" aria-label="Esta noche"><h2>Esta noche</h2>'
+            '<p class="h2sub">necesidad de sueño estimada (heurística sin validar)</p>'
+            f'<div class="big">{f(n["need_tonight_h"])} <small>h</small></div>'
+            f'<p class="h2sub">deuda de 7 noches: {f(n["debt_7n_h"])} h · incluye el sueño diurno tras turno y descuenta siestas</p>'
+            f'<ul class="clean parts">{lis}</ul>{tip}</section>')
+
+
+def _plan_html(plan: list | None) -> str:
+    if not plan:
+        return ""
+    kind = {"hard": ("Exigente", "k-hard"), "moderate": ("Moderada", "k-mod"), "light": ("Suave", "k-light"), "rest": ("Descanso", "k-rest")}
+    items = "".join(
+        f"<li class='{kind[r['kind']][1]}'><div class='pd'>{_esc(r['dow'])}<br><b>{_esc(r['date'][8:10])}</b></div>"
+        f"<div><b>{kind[r['kind']][0]}</b> · <span class='weight'>{_esc(r['shift'])}</span><br>"
+        f"<span class='why'>{_esc(r['why'])}</span></div></li>" for r in plan)
+    return ('<section class="card" id="plan" aria-label="Próximos 7 días"><h2>Próximos 7 días</h2>'
+            '<p class="h2sub">plan orientativo por reglas: turnos, sesiones duras recientes y la decisión de hoy · '
+            f'máx. 3 sesiones con RPE ≥ 8 por semana</p><ol class="clean plan">{items}</ol></section>')
+
+
+def _changes_html(c: dict | None) -> str:
+    if not c or not c.get("available"):
+        return ""
+    f = lambda v, d: f"{v:.{d}f}".replace(".", ",")  # noqa: E731
+    head = ""
+    if c.get("score_from") is not None and c.get("score_to") is not None:
+        head = f"<p><b>Disponibilidad v3:</b> {f(c['score_from'], 0)} → {f(c['score_to'], 0)}</p>"
+    if not c["items"]:
+        body = "<p class='h2sub'>Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p>"
+    else:
+        body = "<ul class='clean chg'>" + "".join(
+            f"<li class='{'pos' if i['favorable'] else 'neg'}'><span class='arrow'>{'↑' if i['favorable'] else '↓'}</span>"
+            f"<span>{_esc(i['label'])}: {f(i['from'], i['dec'])} → {f(i['to'], i['dec'])}{_esc(i['unit'])}</span></li>"
+            for i in c["items"]) + "</ul>"
+    return ('<section class="card" aria-label="Qué ha cambiado desde ayer"><h2>Qué ha cambiado desde ayer</h2>'
+            f'{head}{body}<p class="h2sub" style="margin-top:8px">diferencias observadas, no causas</p></section>')
 
 
 def _extra_sections(result: dict, extras: dict | None = None) -> str:
@@ -109,13 +159,15 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
                      f'<div class="svgwrap">{strength}</div></section>')
     full_html = ('<section class="card"><p><a href="informe_completo.html"><strong>📄 Abrir el informe completo</strong></a> '
                  '· resumen, 7 secciones y recomendaciones</p></section>' if extras.get("full_report") else "")
-    return (full_html + f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
-            '<section class="card" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
+    changes = _changes_html(extras.get("changes"))
+    today_block = changes or f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
+    return (full_html + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan"))
+            + '<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o v3 atenuado si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
             '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
             '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>'
-            '<section class="grid cols-2"><div class="card"><h2>RPE frente al máximo del día</h2>'
+            '<section class="grid cols-2" id="semana"><div class="card"><h2>RPE frente al máximo del día</h2>'
             '<p class="h2sub">barra = sesión más dura · raya = máximo que permitía la decisión · rojo = por encima</p>'
             '<div class="legend"><span><i class="key-dot"></i>Dentro</span><span><i class="key-dot" style="background:var(--critical)"></i>Por encima</span>'
             '<span><i class="key-ref" style="border-top:3px solid var(--text-2)"></i>Máximo del día</span></div>'
@@ -245,6 +297,24 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
 .hist a{color:var(--text);text-decoration:none} .hist a:hover{text-decoration:underline}
 .hz{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;background:var(--muted)}
 .hz.z-green{background:var(--good)} .hz.z-yellow{background:var(--warning)} .hz.z-red{background:var(--critical)}
+.nav{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:-8px 0 12px;background:var(--bg);-webkit-overflow-scrolling:touch}
+.nav a{flex:0 0 auto;font-size:13px;color:var(--text-2);text-decoration:none;background:var(--surface-2);border-radius:999px;padding:6px 14px}
+.nav a:hover,.nav a:focus-visible{color:var(--text);outline:2px solid var(--series-1)}
+section[id],details[id]{scroll-margin-top:56px}
+.fold>summary{list-style:none;cursor:pointer;color:inherit;font-size:inherit} .fold>summary::-webkit-details-marker{display:none}
+.fold>summary h2{display:inline} .fold>summary::after{content:" ▾";color:var(--text-3)} .fold[open]>summary::after{content:" ▴"}
+.big{font-size:40px;font-weight:650;letter-spacing:-.02em;line-height:1.1;margin:4px 0}
+.big small{font-size:16px;color:var(--text-3);font-weight:500}
+.parts li{display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--line);font-size:14px}
+.parts li:first-child{border-top:0}
+.tip-line{margin:10px 0 0;font-size:14px;background:var(--surface-2);border-radius:8px;padding:8px 10px}
+.plan{display:grid;gap:8px}
+.plan li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--surface-2);border-left:4px solid var(--muted)}
+.plan .pd{text-align:center;font-size:11px;color:var(--text-3);line-height:1.2} .plan .pd b{font-size:18px;color:var(--text)}
+.plan .why{font-size:12px;color:var(--text-2)}
+.plan li.k-hard{border-left-color:var(--critical)} .plan li.k-mod{border-left-color:var(--warning)}
+.plan li.k-light{border-left-color:var(--good)} .plan li.k-rest{border-left-color:var(--series-1)}
+.chg li{display:flex;gap:10px;padding:4px 0;font-size:14px}
 </style>
 </head>
 <body>
@@ -257,8 +327,11 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
     <span class="badge" id="badge">Modelo v3</span>
   </header>
 
+  <nav class="nav" aria-label="Secciones"><a href="#hoy">Hoy</a><a href="#noche">Noche</a><a href="#plan">Plan</a>
+    <a href="#calendario">Calendario</a><a href="#graficas">Gráficas</a><a href="#calidad">Calidad</a><a href="#informes">Informes</a></nav>
+
   <div class="grid">
-    <section class="card hero tone-{{TONE}}" aria-label="Disponibilidad de hoy">
+    <section class="card hero tone-{{TONE}}" id="hoy" aria-label="Disponibilidad de hoy">
       <div>
         <div class="h2sub">Decisión de hoy · puntuación oficial (v2)</div>
         <div class="score" id="score">—</div>
@@ -290,7 +363,7 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
       </div>
     </section>
 
-    <section class="grid cols-2">
+    <section class="grid cols-2" id="graficas">
       <div class="card">
         <h2>HRV nocturna</h2>
         <p class="h2sub">ms · banda = tu rango normal (línea base ± cambio mínimo relevante)</p>
@@ -314,14 +387,14 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
       </div>
     </section>
 
-    <section class="card" aria-label="Calidad y trazabilidad del informe">
-      <h2>Calidad y trazabilidad del informe</h2>
+    <details class="card fold" id="calidad" aria-label="Calidad y trazabilidad del informe">
+      <summary><h2>Calidad y trazabilidad del informe</h2></summary>
       <p class="h2sub" id="cert-sub"></p>
       <div class="grid cols-2" style="gap:12px 24px">
         <div><div class="scroll"><table id="cert"></table></div></div>
         <div><div class="scroll"><table id="integrity"></table></div></div>
       </div>
-    </section>
+    </details>
 
     <section class="card">
       <h2>Sesiones recientes</h2>
@@ -329,12 +402,12 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
       <div class="scroll"><table id="sessions"></table></div>
     </section>
 
-    <section class="card">
-      <h2>Modelos y regla de decisión</h2>
+    <details class="card fold">
+      <summary><h2>Modelos y regla de decisión</h2></summary>
       <p class="h2sub" id="rule"></p>
       <div class="scroll"><table id="compare"></table></div>
       <details style="margin-top:14px"><summary>Ver datos diarios (28 días)</summary><div class="scroll" style="margin-top:8px"><table id="daily"></table></div></details>
-    </section>
+    </details>
   </div>
 
   <footer id="footer"></footer>
