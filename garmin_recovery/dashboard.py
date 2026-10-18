@@ -243,10 +243,12 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     brief_html = ('<section class="card brief" aria-label="Hoy en breve"><h2>Hoy en breve</h2>'
                   + "".join(f"<p>{md_inline(x)}</p>" for x in sents) + "</section>") if sents else ""
     ai = extras.get("ai_lead")
-    ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Análisis de Claude</h2>'
-               f"<p>{md_inline(ai)}</p>"
-               '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai else ""
-    top_block = changes + ai_html + brief_html + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    ai_lines = [ai] if isinstance(ai, str) else [x for x in (ai or []) if isinstance(x, str) and x.strip()]
+    ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Resumen de hoy · Claude</h2>'
+               + "".join(f"<p>{md_inline(x)}</p>" for x in ai_lines)
+               + '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai_lines else ""
+    # el resumen de reglas solo es el respaldo cuando no hay resumen de Claude del ciclo vigente
+    top_block = changes + (ai_html or brief_html) + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'

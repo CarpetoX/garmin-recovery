@@ -51,7 +51,10 @@ class AiLead(unittest.TestCase):
     def test_lead_only_for_current_cycle(self):
         from garmin_recovery import ai_analysis
         body = "**En breve:** Estás listo; ayer 45, hoy 88.\n\n**Plan**\n- algo"
-        self.assertEqual(ai_analysis.lead(self._root(body)), "Estás listo; ayer 45, hoy 88.")
+        self.assertEqual(ai_analysis.lead(self._root(body)), ["Estás listo; ayer 45, hoy 88."])
+        multi = "**En breve:**\n🟢 Recuperación: 88/100\n🌙 Sueño: 7 h 50\nOrientación: ve suave.\n\n**Plan**\n- algo"
+        self.assertEqual(ai_analysis.lead(self._root(multi)),
+                         ["🟢 Recuperación: 88/100", "🌙 Sueño: 7 h 50", "Orientación: ve suave."])
         self.assertIsNone(ai_analysis.lead(self._root(body, cycle="2026-10-17-2245")))  # desactualizado: no se muestra
         self.assertIsNone(ai_analysis.lead(self._root("sin párrafo")))
 
@@ -63,6 +66,8 @@ class AiLead(unittest.TestCase):
         res = json.loads((Path(__file__).resolve().parent / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
         html = dashboard.render(res, {"ai_lead": "Estás **listo** <b>x</b>"})
         self.assertIn('aria-label="Análisis de Claude"', html)
+        self.assertNotIn('aria-label="Hoy en breve"', html)  # el de Claude sustituye al de reglas
+        self.assertIn('aria-label="Hoy en breve"', dashboard.render(res, {}))
         self.assertIn("<strong>listo</strong>", html)
         self.assertIn("&lt;b&gt;", html)  # el texto se escapa
         self.assertNotIn('aria-label="Análisis de Claude"', dashboard.render(res, {}))

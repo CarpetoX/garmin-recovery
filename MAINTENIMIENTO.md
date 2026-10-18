@@ -214,3 +214,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 
 ### V7.11 · Apartado «Cambios recientes»
 - Los cambios frente a ayer salen de la cabecera y tienen su propio apartado, justo debajo: una tarjeta por indicador (recuperación oficial y cada uno que cambia) con valor de hoy, diferencia con signo, flecha según el sentido real del cambio (↑ sube / ↓ baja), color según sea favorable o no, y la curva de 7 días. Diferencias observadas, sin causas.
+
+## V7.12 — Resumen de hoy redactado por Claude
+
+`ai_analysis.lead` devuelve ahora el bloque «**En breve:**» completo (líneas hasta la primera en blanco, máx. 8). En Hoy, la tarjeta «Resumen de hoy · Claude» sustituye a «Hoy en breve» (reglas) cuando el análisis es del ciclo vigente; sin él, se muestra el resumen por reglas. La rutina debe escribir el formato con emojis y «Orientación:» (ver INSTRUCCIONES_INFORME.md).
