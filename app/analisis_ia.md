@@ -1,5 +1,5 @@
 <!-- cycle_id: 2026-10-18-0830-post-sleep -->
-**Análisis · domingo 18/10/2026 · Sync de las 12:53** (certificado con avisos: Sync fuera de franja y 3 franjas perdidas)
+**Análisis · domingo 18/10/2026 · Sync de las 13:09** (certificado con avisos: Sync fuera de franja y 3 franjas perdidas)
 
 **Decisión: 🟢 verde.** v2 oficial 88, híbrido 77, v3 77 (en pruebas); Garmin Readiness 59 solo como contexto. RPE máx. 9, volumen 100 %, con calentamiento progresivo.
 
