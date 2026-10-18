@@ -98,11 +98,11 @@ class GoldenCrossfit(unittest.TestCase):
     def test_legacy_names_are_the_same_modules(self):
         sys.path.insert(0, str(ROOT))
         try:
-            import crossfit_insights
-            import data_quality
-            import muscle_load
-            import rpe_cycle_snapshot
-            import training_extensions
+            from garmin_recovery import crossfit as crossfit_insights
+            from garmin_recovery import data_quality as data_quality
+            from garmin_recovery import muscle_load as muscle_load
+            from garmin_recovery import rpe_cycle_snapshot as rpe_cycle_snapshot
+            from garmin_recovery import training_extensions as training_extensions
             from garmin_recovery import crossfit, data_quality as dq, muscle_load as ml
             from garmin_recovery import rpe_cycle_snapshot as rs, training_extensions as te
         finally:

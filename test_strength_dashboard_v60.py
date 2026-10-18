@@ -3,7 +3,7 @@ import json
 import unittest
 from pathlib import Path
 
-from muscle_load import epley_lower_bound
+from garmin_recovery.muscle_load import epley_lower_bound
 
 ROOT = Path(__file__).resolve().parent
 

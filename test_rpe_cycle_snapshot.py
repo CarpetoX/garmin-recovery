@@ -2,7 +2,7 @@
 import copy
 import unittest
 from datetime import datetime, timedelta, timezone
-from rpe_cycle_snapshot import (COLUMNS, SnapshotError, canonical_digest,
+from garmin_recovery.rpe_cycle_snapshot import (COLUMNS, SnapshotError, canonical_digest,
                                 validate_rows, verified_snapshot)
 
 
@@ -91,7 +91,7 @@ class SnapshotTests(unittest.TestCase):
         from pathlib import Path
         from tempfile import TemporaryDirectory
         import json
-        from rpe_cycle_snapshot import parent_run_id_from_event
+        from garmin_recovery.rpe_cycle_snapshot import parent_run_id_from_event
         with TemporaryDirectory() as d:
             p = Path(d) / 'event.json'
             p.write_text(json.dumps({'workflow_run': {
@@ -103,7 +103,7 @@ class SnapshotTests(unittest.TestCase):
         from pathlib import Path
         from tempfile import TemporaryDirectory
         import json
-        from rpe_cycle_snapshot import parent_run_id_from_event
+        from garmin_recovery.rpe_cycle_snapshot import parent_run_id_from_event
         with TemporaryDirectory() as d:
             p = Path(d) / 'event.json'
             p.write_text(json.dumps({'workflow_run': {
@@ -116,7 +116,7 @@ class SnapshotTests(unittest.TestCase):
         from pathlib import Path
         from tempfile import TemporaryDirectory
         import json
-        from rpe_cycle_snapshot import parent_run_id_from_event
+        from garmin_recovery.rpe_cycle_snapshot import parent_run_id_from_event
         with TemporaryDirectory() as d:
             p = Path(d) / 'event.json'
             p.write_text(json.dumps({'workflow_run': {

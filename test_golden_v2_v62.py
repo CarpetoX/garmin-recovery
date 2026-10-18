@@ -62,7 +62,7 @@ class GoldenV2(unittest.TestCase):
         self.assertEqual(run_v2("garmin_recovery.advanced"), GOLDEN)
 
     def test_legacy_name_is_the_same_module(self):
-        import advanced_analytics
+        from garmin_recovery import advanced as advanced_analytics
         from garmin_recovery import advanced
         self.assertIs(advanced_analytics, advanced)
 

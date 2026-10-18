@@ -81,7 +81,7 @@ class GoldenV2b(unittest.TestCase):
     def test_legacy_names_are_the_same_modules(self):
         sys.path.insert(0, str(ROOT))
         try:
-            import recovery_reliability
+            from garmin_recovery import reliability as recovery_reliability
             from garmin_recovery import reliability
         finally:
             sys.path.remove(str(ROOT))

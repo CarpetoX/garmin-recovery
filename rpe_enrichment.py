@@ -1,6 +1,6 @@
 import csv
 from datetime import datetime, timezone
-from rpe_cycle_snapshot import validate_rows, canonical_digest
+from garmin_recovery.rpe_cycle_snapshot import validate_rows, canonical_digest
 import io
 import json
 import os
@@ -248,7 +248,7 @@ def main():
     try:
         save_json(ACTIVITIES_PATH, activities)
 
-        import advanced_analytics
+        from garmin_recovery import advanced as advanced_analytics
         advanced_analytics.main()
 
     finally:

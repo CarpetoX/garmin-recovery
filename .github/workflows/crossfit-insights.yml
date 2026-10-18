@@ -29,7 +29,7 @@ jobs:
           python-version: '3.12'
 
       - name: Validar sintaxis V2.4.6
-        run: python -m py_compile crossfit_insights.py test_sleep_integration.py pipeline_regression_tests.py
+        run: python -m py_compile garmin_recovery/crossfit.py test_sleep_integration.py pipeline_regression_tests.py
 
       - name: Pruebas integración sueño V2.4.6
         run: python -m unittest -v test_sleep_integration
@@ -48,7 +48,7 @@ jobs:
       - name: Generate CrossFit analysis
         env:
           RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
-        run: python crossfit_insights.py
+        run: python -m garmin_recovery.crossfit
 
       - name: V2.9 - Capturar filiacion por IDs reales
         continue-on-error: true

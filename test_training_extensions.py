@@ -1,6 +1,6 @@
 """Permanent regression tests for real performed CrossFit work (v2.4.11)."""
 import unittest
-from training_extensions import analyze
+from garmin_recovery.training_extensions import analyze
 
 
 def activity(detail, date='2026-10-09', activity_id='a'):
