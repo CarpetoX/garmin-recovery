@@ -294,6 +294,12 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
             + (" (insuficientes para una tendencia robusta)." if hrr.get("n", 0) < 5 else "."))
 
     # 5 ------------------------------------------------------------------
+    try:
+        from . import correlations
+        add("\n**Diario de correlaciones (HRV del día siguiente)**\n\n"
+            + correlations.to_markdown(correlations.compute(correlations.load(root), today)))
+    except Exception:  # noqa: BLE001 — bloque opcional
+        pass
     add("\n## 5. Rendimiento CrossFit\n")
     wr = cf.get("weekly_report") or {}
     sess7 = [s for s in result.get("sessions_28d") or [] if isinstance(s, dict) and (s.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=6)).isoformat()]
