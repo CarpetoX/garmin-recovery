@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 18 de octubre de 2026 · 12:41 · `GR-2026-10-18-1241-c401f3`
+Domingo, 18 de octubre de 2026 · 12:47 · `GR-2026-10-18-1247-ea5dab`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -34,7 +34,7 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 84/100 (usable) |
 
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 08:30, 10-17 16:45, 10-17 22:45, 10-18 08:30.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 16:45, 10-17 22:45, 10-18 08:30.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -338,6 +338,20 @@ _Carga sin comparar: una de las semanas es anterior al inicio del historial de s
 
 _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» sin datos suficientes._
 
+### Plan orientativo de 7 días
+
+| Día | Turno | Sesión sugerida | Motivo |
+|---|---|---|---|
+| dom 18/10 | TN | 🟢 Suave / movilidad | ya has entrenado hoy |
+| lun 19/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
+| mar 20/10 | free | 🔥 Exigente | día libre con margen para una sesión exigente |
+| mié 21/10 | free | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
+| jue 22/10 | MT | 🟢 Suave / movilidad | turno largo: movilidad o descanso |
+| vie 23/10 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
+| sáb 24/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
+
+Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separadas ≥ 48 h, solo en días libres). Se recalcula en cada informe y la decisión del día manda sobre él.
+
 ### Reglas para los próximos 7 días
 
 1. **Hoy:** respeta la decisión del día (Listo para entrenar, RPE máx. 9).
@@ -354,4 +368,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 12:41 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 12:47 Europe/Madrid · certificado READY · sync_run_id 39109018293.
