@@ -88,7 +88,8 @@ class ValidatorFixes(unittest.TestCase):
         d = self.copy()
         p = d / "app" / "readiness_v3.json"
         data = json.loads(p.read_text(encoding="utf-8"))
-        data["decision"]["guidance"] = dict(GUIDANCE["green"])
+        other = "red" if data["decision"].get("zone") != "red" else "green"
+        data["decision"]["guidance"] = dict(GUIDANCE[other])  # pauta de otra zona, sea cual sea la de hoy
         p.write_text(json.dumps(data), encoding="utf-8")
         self.assertIn("json: la pauta no corresponde a la zona de la decisión", validate(d)["errors"])
 

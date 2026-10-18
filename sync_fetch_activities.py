@@ -4,7 +4,11 @@
 Extraído sin cambios del paso inline "Obtener actividades de Intervals.icu" de .github/workflows/sync.yml (V5.9).
 Necesita INTERVALS_API_KEY en el entorno.
 """
-import os, json, csv, base64, urllib.request
+import os
+import json
+import csv
+import base64
+import urllib.request
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 

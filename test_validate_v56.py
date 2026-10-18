@@ -103,7 +103,8 @@ class RollbackStepTests(unittest.TestCase):
         self.assertEqual(step["shell"], "bash {0}")
         tmp = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, tmp)
-        sh = lambda *a: subprocess.run(a, cwd=tmp, check=True, capture_output=True)
+        def sh(*a):
+            return subprocess.run(a, cwd=tmp, check=True, capture_output=True)
         sh("git", "init", "-q"); sh("git", "config", "user.email", "t@t"); sh("git", "config", "user.name", "t")
         (tmp / "app").mkdir(); (tmp / "history").mkdir()
         (tmp / "app" / "informe.md").write_text("VIEJO"); (tmp / "app" / "validation.json").write_text('{"status":"ok"}')

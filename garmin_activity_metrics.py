@@ -506,7 +506,7 @@ def main():
                 ensure_ascii=False,
             )
         )
-        raise SystemExit(1)
+        raise SystemExit(1) from exc
 
 
 if __name__ == "__main__":

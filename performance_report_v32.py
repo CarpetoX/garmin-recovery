@@ -94,7 +94,7 @@ def _wellness_rows(items, today):
             dup += 1
             # Conserva el registro con más señales válidas, no suma mediciones.
             fields = ('hrv', 'restingHR', 'sleepSecs', 'sleepScore', 'avgSleepingHR')
-            def score(x):
+            def score(x, fields=fields):
                 return sum(positive(x.get(f)) is not None for f in fields)
             if score(raw) <= score(result[d]):
                 continue
@@ -210,7 +210,7 @@ def _strength(exercises, today):
         previous_peak = max((o['observed_peak_kg'] for o in earlier if o['observed_peak_kg'] is not None),default=None)
         delta = (round(current_peak - previous_peak, 2) if current_peak is not None and previous_peak is not None else None)
 
-        def volume_period(begin, end):
+        def volume_period(begin, end, obs=obs):
             points = [o for o in obs if begin <= date.fromisoformat(o['date']) <= end]
             complete = bool(points) and all(o['volume_complete'] and o['verified_volume_kg'] is not None for o in points)
             return {'observations': len(points), 'complete': complete,
@@ -285,7 +285,7 @@ def build_report(crossfit, wellness, daily, today):
                 values.append(x)
         trimp = [numeric((a.get('internal_load_not_additive') or {}).get('trimp')) for a in acts]
         trimp = [x for x in trimp if x is not None and x >= 0]
-        def from_well(field):
+        def from_well(field, sample=sample):
             return positive(sample.get(field)) if isinstance(sample, dict) else None
         sec = from_well('sleepSecs')
         chart.append({

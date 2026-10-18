@@ -59,7 +59,7 @@ def build(source, archive_dir):
     index, index_bytes = _read_index(archive_dir)
     refs = _safe_refs(index, len(original['cycles']))
     summaries = []
-    for i, (row, ref) in enumerate(zip(original['cycles'], refs)):
+    for i, (row, ref) in enumerate(zip(original['cycles'], refs, strict=False)):
         meta = {k: v for k, v in row.items() if k != 'snapshot'}
         summaries.append({'record_index': i,
                           'cycle_id': row['cycle_id'],
@@ -112,7 +112,7 @@ def verify(source, archive_dir, preview):
     summaries = preview.get('cycles')
     if not isinstance(summaries, list) or len(summaries) != len(original['cycles']):
         raise ShardError('Falta algun ciclo en indice compacto')
-    for i, (entry, row, ref) in enumerate(zip(summaries, restored['cycles'], expected_refs)):
+    for i, (entry, row, ref) in enumerate(zip(summaries, restored['cycles'], expected_refs, strict=False)):
         if not isinstance(entry, dict) or set(entry) != {'record_index','cycle_id','shard_ref','metadata'}:
             raise ShardError('Registro compacto mal formado')
         if (type(entry.get('record_index')) is not int or entry['record_index'] != i or

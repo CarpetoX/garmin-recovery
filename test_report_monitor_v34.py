@@ -19,7 +19,7 @@ def sample():
     run_ids = [38168979917, 38168999815, 38169035188, 38169050930]
     stages = {name: dict(run_id=ident, status='completed', conclusion='success',
                          created_at=start, updated_at=end)
-              for name, ident, (start, end) in zip(('sync','heart','advanced','crossfit'), run_ids, times)}
+              for name, ident, (start, end) in zip(('sync','heart','advanced','crossfit'), run_ids, times, strict=False)}
     health = {'status':'attention', 'checked_at':'2026-10-11T21:42:00+02:00',
               'schedule_v231':{'state':'recovered','due':3,'matched':0,
                                'recovered_by_unattributed':['2026-10-11T16:45:00+02:00']},
@@ -30,7 +30,7 @@ def sample():
                'root':{'run_id':run_ids[0], 'event':'workflow_dispatch',
                        'origin_v291':{'source_verified':False,
                                      'origin_source':'workflow_dispatch_unattributed'}},
-               'stages':{name:{'run_id':rid} for name,rid in zip(stages,run_ids)}}
+               'stages':{name:{'run_id':rid} for name,rid in zip(stages,run_ids, strict=False)}}
     cert = {'status':'ready','cycle_id':'2026-10-11-1645',
             'verified_at':'2026-10-11T17:00:17+02:00',
             'chain':{'sync':{'id':38149393086},'crossfit':{'id':38149449854}}}
@@ -232,11 +232,11 @@ class MonitorV34Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             d=Path(tmp)
             names=['health.json','ledger.json','cert.json','lineage.json','trends.json','crossfit.json']
-            for name, content in zip(names,parts):
+            for name, content in zip(names,parts, strict=False):
                 (d/name).write_text(json.dumps(content),encoding='utf-8')
             inputs=[(d/name).read_bytes() for name in names[1:]]
             args=[]
-            for label, name in zip(['health','ledger','certificate','lineage','trends','crossfit'],names):
+            for label, name in zip(['health','ledger','certificate','lineage','trends','crossfit'],names, strict=False):
                 args.extend(['--'+label, str(d/name)])
             self.assertEqual(main(args),0)
             health=json.loads((d/'health.json').read_text(encoding='utf-8'))

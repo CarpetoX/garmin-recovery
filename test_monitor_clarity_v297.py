@@ -22,7 +22,7 @@ def fixtures():
             'heart':{'id':ids[1]},'advanced':{'id':ids[2]},'crossfit':{'id':ids[3]}}
     }
     stages = {name:{'run_id':rid,'status':'completed','conclusion':'success'}
-              for name,rid in zip(('sync','heart','advanced','crossfit'), ids)}
+              for name,rid in zip(('sync','heart','advanced','crossfit'), ids, strict=False)}
     health = {'status':'attention','alerts':[{'code':'cron_missed_dispatch_recovered',
                     'slots':['2026-10-11T22:45:00+02:00']}],
               'schedule_v231':{'state':'recovered'},
