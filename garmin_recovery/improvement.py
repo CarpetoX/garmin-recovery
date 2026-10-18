@@ -242,7 +242,14 @@ def _plan(root, result, today, sessions):
         shifts = {(start + timedelta(days=i)).isoformat(): shift_calendar.resolve_day((start + timedelta(days=i)).isoformat(), cal)
                   for i in range(8)}
         dec = result.get("decision") or {}
-        return week_plan.plan(today, shifts, sessions, dec.get("zone"), (dec.get("guidance") or {}).get("rpe_max"))
+        legs = None
+        try:
+            from . import muscle_recovery
+            cf = json.loads((Path(root) / "crossfit_insights.json").read_text(encoding="utf-8"))
+            legs = muscle_recovery.compute(cf, today).get("legs")
+        except (OSError, ValueError, KeyError, TypeError):
+            legs = None  # sin detalle de ejercicios: el plan sigue siendo válido sin este margen
+        return week_plan.plan(today, shifts, sessions, dec.get("zone"), (dec.get("guidance") or {}).get("rpe_max"), legs)
     except (OSError, ValueError, KeyError):
         return []
 

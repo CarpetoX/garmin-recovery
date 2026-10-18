@@ -414,6 +414,13 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         recs.append("Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.")
     else:
         recs.append("Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).")
+    try:
+        from . import muscle_recovery
+        legs_note = muscle_recovery.note(muscle_recovery.compute(cf, today).get("legs"))
+        if legs_note:
+            recs.insert(1, "**Piernas.** " + legs_note)
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("muscle_recovery", exc)
     recs.append("Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.")
     for i, r in enumerate(recs, 1):
         add(f"{i}. {r}")
