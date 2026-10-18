@@ -103,3 +103,10 @@ Si ayer fue TN y el sueño de hoy acaba antes de las 10:00 con menos de 5 h (`sl
 (cada 60 min) por si Garmin añade el descanso principal. Si no hay `sleep_hours`, no bloquea. Un episodio que acaba antes de
 las 07:00 ya se trataba así (`post_night_shift_early_sleep_pending`). Los umbrales (5 h, 10:00) están en el propio archivo.
 Aún no está comprobado cómo registra Garmin un segundo sueño del mismo día: cuando ocurra, conviene revisar los datos reales.
+
+## V6.12 — Limpieza de estructura
+
+- Ya no queda ningún script en la raíz: todo vive en `garmin_recovery/` y los workflows ejecutan `python -m garmin_recovery.<módulo>`. Los alias antiguos (`advanced_analytics.py`, `crossfit_insights.py`…) se han borrado.
+- `advanced.py` (antes 2.519 líneas) conserva lo que depende de la hora (`NOW`, `TODAY`) y `main`; las funciones puras están en `advanced_core` (constantes y estadística), `advanced_context`, `advanced_hrr` y `advanced_models`, y `advanced` las reexporta, así que `advanced.<nombre>` sigue funcionando. Los tests dorados sustituyen `advanced.NOW/TODAY`, por eso esos módulos no pueden leer el reloj (lo comprueba `test_advanced_split_v69.py`).
+- Cobertura de tests medida en CI: 70 %; mínimo exigido 68 % (`pyproject.toml`).
+- Las comprobaciones de estructura del CI buscan el nombre del módulo en el `run` de cada paso (`garmin_recovery.<módulo>`): si renombras un módulo, actualiza también `garmin-ci.yml`.
