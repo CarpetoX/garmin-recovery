@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 18 de octubre de 2026 · 13:32 · `GR-2026-10-18-1332-ff9c5e`
+Domingo, 18 de octubre de 2026 · 14:35 · `GR-2026-10-18-1435-5171b7`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -90,7 +90,7 @@ Puntuación v3: 52 → 77 (yellow → green). Cambios notables frente a ayer:
 - FC en reposo: 60 → 56 lpm (favorable)
 - FC nocturna: 68,1 → 61,2 lpm (favorable)
 - Puntuación de sueño: 62 → 87 (favorable)
-- Estrés medio: 38 → 19 (favorable)
+- Estrés medio: 38 → 20 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -122,9 +122,10 @@ El REM representa un 24 % y el sueño profundo un 11 % del episodio.
 | Recargo por deuda de las últimas 3 noches | +1,0 |
 | Siesta de hoy | −0,0 |
 | **Necesidad estimada esta noche** | **8,5 h** |
+| Deuda de las últimas 3 noches (siestas descontadas) | 3,1 h |
 | Deuda de 7 noches (siestas descontadas) | 6,3 h |
 
-Es una estimación heurística, no validada; los recargos tienen tope y no sustituyen tu percepción. Solo cuentan siestas registradas por Garmin.
+Es una estimación heurística, no validada; los recargos tienen tope y no sustituyen tu percepción. Solo cuentan siestas registradas por Garmin. El modelo de disponibilidad (v3) usa solo las últimas 3 noches y no descuenta siestas: por eso su deuda (4,0 h) puede ser mayor que la de 3 noches de esta tabla.
 
 No se incorporan siestas no confirmadas.
 
@@ -132,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 84,9 lpm | 61,2 lpm |
+| Hoy* | 81,9 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -152,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 19, máximo 97.
-- Body Battery: último valor 55/100, medido a las 12:39.
+- Estrés medio: 20, máximo 97.
+- Body Battery: último valor 53/100, medido a las 14:18.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -369,4 +370,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 13:32 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 14:35 Europe/Madrid · certificado READY · sync_run_id 39109018293.
