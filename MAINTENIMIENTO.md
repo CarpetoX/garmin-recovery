@@ -117,3 +117,18 @@ Aún no está comprobado cómo registra Garmin un segundo sueño del mismo día:
 - Tras 3 fallos seguidos de una fuente de Intervals se abre/actualiza el aviso de GitHub («intervals»).
 - El informe completo tiene en la sección 1 una tabla «Fuentes de datos» con el último dato y el estado de cada fuente (la fecha de la última actividad no cuenta como salud de la fuente: puede no haber entrenado).
 - Pendiente (no hecho): importar desde archivos FIT/CSV de Garmin como respaldo si Intervals dejara de recibir datos de Garmin. Hoy el sueño y la FC se leen de Garmin Connect directamente (`GARMIN_TOKENS_B64`), así que solo dependen de Intervals el bienestar (HRV, FC en reposo) y las actividades.
+
+## V6.14 — Mejoras de análisis y robustez
+
+Bloques nuevos del informe completo (todos opcionales: si fallan, el informe sigue):
+
+- **Necesidad y deuda de sueño** (`sleep_need.py`, sección 3): base 7,5 h + recargo por la carga de ayer (≤ 0,5 h) + recargo por la deuda de las últimas 3 noches (≤ 1 h) − siesta de hoy. Heurística sin validar. Las siestas salen de `garmin_extended.json → sleep_detail.nap_minutes`. La deuda de 7 noches también alimenta `improvement._sleep`.
+- **Qué ha cambiado desde ayer** (`why_changed.py`, sección 2): diferencias observadas de HRV, FC en reposo, FC nocturna, sueño, puntuación de sueño y estrés; sin causalidad.
+- **Diario de correlaciones** (`correlations.py`, sección 4): HRV de la noche siguiente según sesión, TN o noche corta del día anterior; exige ≥ 5 días con y ≥ 5 sin en 90 días.
+- **Calibración de la zona** (`zone_calibration.py`, sección 4): HRV posterior por zona de decisión; solo descriptivo, no cambia umbrales.
+- **Carga de fuerza por patrón** (`strength_patterns.py`, sección 6): bloques, series y volumen de barra (solo barra con carga total y volumen completo).
+- **Contraste Garmin ↔ Intervals** (`activity_crosscheck.py`, sección 5): actividades de Garmin (±2 min de inicio) que aún no constan en Intervals. Es el respaldo de visibilidad si Intervals falla; no crea actividades.
+
+Aviso al móvil: `notify.night_shift_tip` añade una línea de consejo de sueño/siesta los días de TN antes de las 15:00, sin cifras fisiológicas.
+
+Calidad: la cobertura medida en CI es del 75 % y `fail_under` es 72.
