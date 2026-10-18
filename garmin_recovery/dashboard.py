@@ -100,7 +100,9 @@ def _tonight_html(t: dict | None) -> str:
     return ('<section class="card" id="noche" aria-label="Esta noche"><h2>Esta noche</h2>'
             '<p class="h2sub">necesidad de sueño estimada (heurística sin validar)</p>'
             f'<div class="big">{f(n["need_tonight_h"])} <small>h</small></div>'
-            f'<p class="h2sub">deuda de 7 noches: {f(n["debt_7n_h"])} h · incluye el sueño diurno tras turno y descuenta siestas</p>'
+            f'<p class="h2sub">deuda de las últimas 3 noches: {f(n["debt_3n_h"])} h · de 7 noches: {f(n["debt_7n_h"])} h '
+            '(incluyen el sueño diurno tras turno y descuentan siestas)</p>'
+            f'<p class="h2sub">el modelo de disponibilidad (v3) cuenta solo 3 noches y no descuenta siestas: {f(n["debt_3n_model_h"])} h</p>'
             f'<ul class="clean parts">{lis}</ul>{tip}</section>')
 
 

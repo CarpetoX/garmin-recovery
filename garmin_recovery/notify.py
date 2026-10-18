@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import os
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -49,6 +49,20 @@ def night_shift_tip(root: Path, result: dict, now: datetime) -> str | None:
     return "Hoy TN: si entrenas, que sea antes del mediodía y deja margen para descansar antes del turno."
 
 
+def rpe_pending_tip(result: dict, now: datetime) -> str | None:
+    """Aviso de sesiones sin RPE: las de hoy a partir de las 12:00; antes, las de ayer. Sin cifras fisiológicas."""
+    today = result.get("date") or now.date().isoformat()
+    day = today if now.hour >= 12 else (datetime.fromisoformat(today) - timedelta(days=1)).date().isoformat()
+    pending = [x for x in result.get("sessions_28d") or []
+               if isinstance(x, dict) and x.get("date") == day and x.get("rpe") is None and not x.get("removed")]
+    if not pending:
+        return None
+    n = len(pending)
+    when = "de hoy" if day == today else "de ayer"
+    cierre = "antes del cierre de las 22:45" if day == today else "para que entre en el informe"
+    return f"{n} {'sesiones' if n > 1 else 'sesión'} {when} sin RPE: cuéntamelo {cierre}."
+
+
 def build_message(root: Path, now: datetime | None = None, max_age_min: float = 90) -> dict | None:
     """Mensaje a enviar o ``None`` si no hay informe nuevo y válido."""
     root, now = Path(root), (now or datetime.now(TZ)).astimezone(TZ)
@@ -73,6 +87,12 @@ def build_message(root: Path, now: datetime | None = None, max_age_min: float = 
         tip = None
     if tip:
         body += "\n" + tip
+    try:
+        pend = rpe_pending_tip(result, now)
+    except Exception:  # noqa: BLE001 — opcional
+        pend = None
+    if pend:
+        body += "\n" + pend
     return {"title": "Informe nuevo · " + now.strftime("%H:%M"), "message": body,
             "priority": priority, "tags": [tag], "click": SITE_URL + "informe_completo.html"}
 

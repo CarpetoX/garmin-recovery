@@ -54,3 +54,29 @@ class TnTip(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RpePending(unittest.TestCase):
+    def res(self, sessions):
+        return {"date": "2026-10-18", "sessions_28d": sessions}
+
+    def test_today_pending_after_noon(self):
+        s = [{"date": "2026-10-18", "rpe": None}, {"date": "2026-10-18", "rpe": 7.5}, {"date": "2026-10-17", "rpe": None}]
+        tip = notify.rpe_pending_tip(self.res(s), datetime(2026, 10, 18, 17, 10, tzinfo=TZ))
+        self.assertEqual(tip, "1 sesión de hoy sin RPE: cuéntamelo antes del cierre de las 22:45.")
+
+    def test_yesterday_pending_in_the_morning_and_plural(self):
+        s = [{"date": "2026-10-17", "rpe": None}, {"date": "2026-10-17", "rpe": None}, {"date": "2026-10-18", "rpe": None}]
+        tip = notify.rpe_pending_tip(self.res(s), datetime(2026, 10, 18, 9, 0, tzinfo=TZ))
+        self.assertTrue(tip.startswith("2 sesiones de ayer sin RPE"))
+
+    def test_none_when_all_logged_or_removed(self):
+        s = [{"date": "2026-10-18", "rpe": 6.0}, {"date": "2026-10-18", "rpe": None, "removed": 1}]
+        self.assertIsNone(notify.rpe_pending_tip(self.res(s), datetime(2026, 10, 18, 17, 10, tzinfo=TZ)))
+
+    def test_appended_to_message(self):
+        root = ws()
+        data = json.loads((root / "app" / "readiness_v3.json").read_text())
+        data["sessions_28d"] = [{"date": "2026-10-18", "rpe": None}]
+        (root / "app" / "readiness_v3.json").write_text(json.dumps(data))
+        self.assertIn("sin RPE", msg(root, hour=17))

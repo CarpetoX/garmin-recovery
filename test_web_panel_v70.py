@@ -7,10 +7,12 @@ from garmin_recovery import dashboard
 class Cards(unittest.TestCase):
     def test_tonight(self):
         need = {"base_h": 7.5, "load_add_h": 0.3, "debt_add_h": 1.0, "nap_today_h": 0.0, "need_tonight_h": 8.8,
-                "debt_7n_h": 6.3, "naps_known": False}
+                "debt_7n_h": 6.3, "debt_3n_h": 3.1, "debt_3n_model_h": 4.0, "naps_known": False}
         html = dashboard._tonight_html({"need": need, "tip": "Duerme pronto <b>"})
         self.assertIn("8,8", html)
         self.assertIn("sin dato", html)
+        self.assertIn("3 noches: 3,1 h", html)
+        self.assertIn("v3) cuenta solo 3 noches y no descuenta siestas: 4,0 h", html)
         self.assertIn("&lt;b&gt;", html)  # el texto se escapa
         self.assertEqual(dashboard._tonight_html({"need": None}), "")
         self.assertEqual(dashboard._tonight_html(None), "")
