@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 18 de octubre de 2026 · 12:53 · `GR-2026-10-18-1253-6aa88f`
+Domingo, 18 de octubre de 2026 · 13:09 · `GR-2026-10-18-1309-494317`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -119,10 +119,10 @@ El REM representa un 24 % y el sueño profundo un 11 % del episodio.
 |---|---|
 | Base configurada | 7,5 |
 | Recargo por carga de ayer | +0,0 |
-| Recargo por deuda de las últimas 3 noches | +0,0 |
+| Recargo por deuda de las últimas 3 noches | +1,0 |
 | Siesta de hoy | −0,0 |
-| **Necesidad estimada esta noche** | **7,5 h** |
-| Deuda de 7 noches (siestas descontadas) | 0,7 h |
+| **Necesidad estimada esta noche** | **8,5 h** |
+| Deuda de 7 noches (siestas descontadas) | 6,3 h |
 
 Es una estimación heurística, no validada; los recargos tienen tope y no sustituyen tu percepción. Solo cuentan siestas registradas por Garmin.
 
@@ -132,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 87,8 lpm | 61,2 lpm |
+| Hoy* | 87,3 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -152,8 +152,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 19, máximo 95.
-- Body Battery: último valor 58/100, medido a las 12:09.
+- Estrés medio: 19, máximo 97.
+- Body Battery: último valor 55/100, medido a las 12:39.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -295,14 +295,15 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 
 | # | Área | Qué muestran tus datos | Qué hacer |
 |---|---|---|---|
-| 1 | Distribución de la intensidad | 9 de 18 sesiones con RPE registrado fueron de RPE ≥ 8 (50 %); 3 veces hubo dos días duros seguidos. | Intercala sesiones de RPE 5–6 entre las duras y deja ≥ 48 h entre dos esfuerzos máximos. |
-| 2 | Registro de sensaciones | Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en 0 de los últimos 14 días. | Apunta cada mañana en Intervals 1–5 de fatiga, agujetas y ánimo (20 segundos). |
+| 1 | Sueño | Media de 7 noches: 7,8 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 6,3 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). | Adelanta la hora de acostarte 30–45 min esta semana, sobre todo antes de un turno. |
+| 2 | Distribución de la intensidad | 9 de 18 sesiones con RPE registrado fueron de RPE ≥ 8 (50 %); 3 veces hubo dos días duros seguidos. | Intercala sesiones de RPE 5–6 entre las duras y deja ≥ 48 h entre dos esfuerzos máximos. |
+| 3 | Registro de sensaciones | Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en 0 de los últimos 14 días. | Apunta cada mañana en Intervals 1–5 de fatiga, agujetas y ánimo (20 segundos). |
 
 ### Detalle por área
 
 - ✅ **HRV.** HRV media de los últimos 7 días: 55 ms frente a una referencia de 58 ms (-4 %). Estable respecto a tu referencia.
 - ✅ **FC en reposo.** FC en reposo de los últimos 7 días: 56,6 lpm frente a 55,5 de referencia (+1,1 lpm). En línea con tu referencia.
-- ✅ **Sueño.** Media de 7 noches: 7,8 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 0,7 h (siestas registradas descontadas). El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
+- ⚠️ **Sueño.** Media de 7 noches: 7,8 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 6,3 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
 - ✅ **Regularidad del sueño.** Hora de acostarte (mediana 00:14) con una variación típica de ±41 min en 14 noches; 3 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
 - ⚠️ **Distribución de la intensidad.** 9 de 18 sesiones con RPE registrado fueron de RPE ≥ 8 (50 %); 3 veces hubo dos días duros seguidos. Una parte alta de sesiones muy duras, sobre todo en días consecutivos, deja poco margen de recuperación y limita la mejora.
 - ℹ️ **Respuesta a las sesiones duras.** Datos insuficientes: 5 días tras sesión dura y 2 tras otras (hacen falta 3 de cada). Sin más días no se puede ver cómo responde tu HRV.
@@ -368,4 +369,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 12:53 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 13:09 Europe/Madrid · certificado READY · sync_run_id 39109018293.
