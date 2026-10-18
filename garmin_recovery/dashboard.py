@@ -34,11 +34,11 @@ def render(result: dict, extras: dict | None = None) -> str:
     title = "Rendimiento y recuperación"
     extra = _extra_sections(result, extras)
     head = PWA_HEAD if extras.get("pwa") else ""
-    values = {"TITLE": title, "HEAD": head, "BANNER": extra["banner"], "HOY": extra["hoy"], "TEND": extra["tendencias"],
+    values = {"TITLE": title, "HEAD": head, "BANNER": extra["banner"], "HOYTOP": extra["hoytop"], "HOY": extra["hoy"], "TEND": extra["tendencias"],
               "ENT": extra["entrenos"], "SIS": extra["sistema"], "DATE": _esc(result["date"]),
               "TONE": tone, "ICON": icon, "DATA": payload}
     # una sola pasada: el contenido sustituido nunca se vuelve a interpretar como marcador
-    return re.sub(r"\{\{(TITLE|HEAD|BANNER|HOY|TEND|ENT|SIS|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
+    return re.sub(r"\{\{(TITLE|HEAD|BANNER|HOYTOP|HOY|TEND|ENT|SIS|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
 
 
 PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
@@ -138,13 +138,11 @@ def _plan_html(plan: list | None) -> str:
             f'máx. 3 sesiones con RPE ≥ 8 por semana</p><ol class="clean plan">{items}</ol></section>')
 
 
-def _changes_html(c: dict | None) -> str:
+def _changes_html(c: dict | None, official: tuple | None = None) -> str:
     if not c or not c.get("available"):
         return ""
     f = lambda v, d: f"{v:.{d}f}".replace(".", ",")  # noqa: E731
-    head = ""
-    if c.get("score_from") is not None and c.get("score_to") is not None:
-        head = f"<p><b>Modelo experimental:</b> {f(c['score_from'], 0)} → {f(c['score_to'], 0)}</p>"
+    head = (f"<p><b>Recuperación oficial:</b> {f(official[0], 0)} → {f(official[1], 0)}</p>" if official else "")
     if not c["items"]:
         body = "<p class='h2sub'>Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p>"
     else:
@@ -163,7 +161,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     if (extras or {}).get("snapshot"):
         return {"banner": (f'<section class="card" style="margin-bottom:16px"><b>Instantánea del {_esc(extras["snapshot"])}</b> · '
                            '<a href="../index.html">← Volver al panel actual</a></section>'),
-                "hoy": "", "tendencias": "", "entrenos": "", "sistema": ""}
+                "hoytop": "", "hoy": "", "tendencias": "", "entrenos": "", "sistema": ""}
     from .report import summary_block
     from .weekly import weekly_summary
     dec = result.get("decision") or {}
@@ -197,8 +195,18 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     full_html = ('<a class="cta" href="informe_completo.html"><span class="cta-ico">📄</span>'
                  '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
-    changes = _changes_html(extras.get("changes"))
-    today_block = changes or f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
+    from .brief import official_change
+    changes = _changes_html(extras.get("changes"), official_change(result.get("trend_28d") or [], result.get("date") or ""))
+    try:
+        from . import brief
+        sents = brief.compose(result, extras.get("tonight"))
+    except Exception as exc:  # noqa: BLE001 — opcional
+        from . import optional_blocks
+        optional_blocks.failed("web:brief", exc)
+        sents = []
+    brief_html = ('<section class="card brief" aria-label="Hoy en breve"><h2>Hoy en breve</h2>'
+                  + "".join(f"<p>{md_inline(x)}</p>" for x in sents) + "</section>") if sents else ""
+    top_block = changes + brief_html + ('' if changes else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
@@ -213,7 +221,8 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
     # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
     return {"banner": "",
-            "hoy": full_html + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
+            "hoytop": top_block,
+            "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": calendar_html + week_html,
             "entrenos": strength_html,
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
@@ -467,6 +476,7 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
  #sessions td.num::before{content:attr(data-l);display:block;font-size:10.5px;font-weight:500;color:var(--text-3)}
  #sessions td.empty{grid-column:1/-1}
 }
+.brief p{margin:8px 0;font-size:14.5px;line-height:1.55}.brief h2{margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -497,7 +507,9 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
       </div>
     </section>
 
-    <section class="rings" id="rings" aria-label="Recuperación, sueño y carga"></section>
+    {{HOYTOP}}
+
+    <section class="rings" id="rings" aria-label="Sueño, HRV y carga"></section>
 
     <section class="card" id="porque" aria-label="Por qué esta puntuación">
       <h2>Por qué esta puntuación</h2>
@@ -652,13 +664,12 @@ $('meters').innerHTML = Object.entries(C).map(([k, c]) => `
   const ring = (pct, color) => { const r = 27, c = 2 * Math.PI * r, v = pct == null ? 0 : Math.max(0, Math.min(100, pct));
     return `<svg viewBox="0 0 64 64" width="68" height="68" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--glass-chip, var(--surface-2))" stroke-width="7"/>` +
       `<circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * v / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 32 32)"/></svg>`; };
-  const zoneColor = {green:'var(--good)', yellow:'var(--warning)', red:'var(--critical)'}[DEC.zone] || 'var(--muted)';
-  const rec = official.score, sl = S.sleep_score;
+    const hv = H.score, sl = S.sleep_score;
   const last7 = T.slice(-7), mx = Math.max(1, ...last7.map(t => t.srpe || 0));
   const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : 'sin registro'}"></i>`).join('');
   $('rings').innerHTML =
-    `<div class="card ring-card"><div class="rw">${ring(rec, zoneColor)}<div class="ring-num">${fmt(rec)}</div></div><div class="ring-label">Recuperación</div><div class="ring-sub">puntuación oficial</div></div>` +
     `<div class="card ring-card"><div class="rw">${ring(sl, tone(sl))}<div class="ring-num">${fmt(sl)}</div></div><div class="ring-label">Sueño</div><div class="ring-sub">${fmt(S.hours, 1)} h · puntuación</div></div>` +
+    `<div class="card ring-card"><div class="rw">${ring(hv, tone(hv))}<div class="ring-num">${fmt(hv)}</div></div><div class="ring-label">HRV</div><div class="ring-sub">${fmt(H.today_ms)} ms hoy</div></div>` +
     `<div class="card ring-card"><div class="bars7" role="img" aria-label="sRPE de los últimos 7 días">${bars}</div><div class="ring-num">${fmt(L.week_srpe)}</div><div class="ring-label">Carga 7 días</div><div class="ring-sub">sRPE · ${L.week_sessions} sesiones</div></div>`;
 })();
 

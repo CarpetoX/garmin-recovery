@@ -28,7 +28,7 @@ class Cards(unittest.TestCase):
         c = {"available": True, "score_from": 70, "score_to": 77,
              "items": [{"label": "HRV", "from": 50, "to": 58, "dec": 0, "unit": " ms", "favorable": True}]}
         html = dashboard._changes_html(c)
-        self.assertIn("70 → 77", html)
+        self.assertNotIn("70 → 77", html)  # la cabecera con el modelo experimental ya no se muestra
         self.assertIn("HRV", html)
         self.assertEqual(dashboard._changes_html({"available": False}), "")
         self.assertIn("Ningún indicador", dashboard._changes_html({"available": True, "items": []}))
