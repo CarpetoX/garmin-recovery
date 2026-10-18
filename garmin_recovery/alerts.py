@@ -25,8 +25,9 @@ from zoneinfo import ZoneInfo
 TITLE = "⚠️ Garmin Recovery: atención necesaria"
 TZ = ZoneInfo("Europe/Madrid")
 KEYS_RE = re.compile(r"<!-- garmin-keys:([^>]*) -->")
-SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:", "garmin", "intervals"),
-          "watchdog": ("stale", "missed:", "garmin", "intervals")}
+SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:", "garmin", "garmin_token", "intervals"),
+          "watchdog": ("stale", "missed:", "garmin", "garmin_token", "intervals")}
+TOKEN_WARN_DAYS = 14
 
 
 def _in_scope(key: str, scope: str) -> bool:
@@ -94,6 +95,11 @@ def source_problems(root: Path, now: datetime) -> list[dict]:
                 if any(w in err.lower() for w in ("token", "auth", "401", "403", "login", "garmin_tokens")) else "")
         out.append({"key": "garmin", "text": f"Garmin no aporta datos nuevos (último día {last or '—'}"
                     + (f"; error: {err}" if err else "") + ")." + hint})
+    exp = gs.get("token_expiry") if isinstance(gs.get("token_expiry"), dict) else {}
+    days = exp.get("days_left")
+    if exp.get("state") == "ok" and isinstance(days, (int, float)) and 0 <= days <= TOKEN_WARN_DAYS:
+        out.append({"key": "garmin_token", "text": f"El acceso a Garmin caduca el {exp.get('latest_expiry')} (en {days:g} días). "
+                    "Renueva el secreto `GARMIN_TOKENS_B64` en GitHub antes de esa fecha."})
     try:
         wellness = json.loads((root / "wellness.json").read_text(encoding="utf-8"))
         # solo cuentan filas con datos de Garmin (HRV, FC en reposo o sueño), no las que traen solo carga
