@@ -59,7 +59,7 @@ class BuildSite(unittest.TestCase):
             for f in ("index.html", "manifest.webmanifest", "sw.js", "icon-192.png", "icon-512.png", "icon-180.png", ".nojekyll"):
                 self.assertTrue((out / f).exists(), f)
             html = (out / "index.html").read_text(encoding="utf-8")
-            for txt in ('rel="manifest"', "serviceWorker", 'id="cal"', 'id="c-rpe"', 'class="nav"'):
+            for txt in ('rel="manifest"', "serviceWorker", 'id="cal"', 'id="c-rpe"', 'class="tabbar"'):
                 self.assertIn(txt, html)
             self.assertNotIn("{{", html)
             man = json.loads((out / "manifest.webmanifest").read_text(encoding="utf-8"))
