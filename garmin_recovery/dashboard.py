@@ -32,10 +32,11 @@ def render(result: dict, extras: dict | None = None) -> str:
     title = "Rendimiento y recuperación"
     extra = _extra_sections(result, extras)
     head = PWA_HEAD if extras.get("pwa") else ""
-    values = {"TITLE": title, "HEAD": head, "EXTRA": extra, "DATE": _esc(result["date"]),
+    values = {"TITLE": title, "HEAD": head, "BANNER": extra["banner"], "HOY": extra["hoy"], "TEND": extra["tendencias"],
+              "ENT": extra["entrenos"], "SIS": extra["sistema"], "DATE": _esc(result["date"]),
               "TONE": tone, "ICON": icon, "DATA": payload}
     # una sola pasada: el contenido sustituido nunca se vuelve a interpretar como marcador
-    return re.sub(r"\{\{(TITLE|HEAD|EXTRA|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
+    return re.sub(r"\{\{(TITLE|HEAD|BANNER|HOY|TEND|ENT|SIS|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
 
 
 PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
@@ -153,13 +154,14 @@ def _changes_html(c: dict | None) -> str:
             f'{head}{body}<p class="h2sub" style="margin-top:8px">diferencias observadas, no causas</p></section>')
 
 
-def _extra_sections(result: dict, extras: dict | None = None) -> str:
+def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     """Resumen de tres líneas, RPE frente al máximo del día y la semana (mismo contenido que el informe)."""
     import re
     from .readiness import GUIDANCE
     if (extras or {}).get("snapshot"):
-        return (f'<section class="card"><b>Instantánea del {_esc(extras["snapshot"])}</b> · '
-                '<a href="../index.html">← Volver al panel actual</a></section>')
+        return {"banner": (f'<section class="card" style="margin-bottom:16px"><b>Instantánea del {_esc(extras["snapshot"])}</b> · '
+                           '<a href="../index.html">← Volver al panel actual</a></section>'),
+                "hoy": "", "tendencias": "", "entrenos": "", "sistema": ""}
     from .report import summary_block
     from .weekly import weekly_summary
     dec = result.get("decision") or {}
@@ -195,20 +197,25 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     changes = _changes_html(extras.get("changes"))
     today_block = changes or f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
-    return (full_html + _delivery_html(extras.get("delivery")) + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan"))
-            + '<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
+    calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o v3 atenuado si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
             '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
-            '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>'
-            '<section class="grid cols-2" id="semana"><div class="card"><h2>RPE frente al máximo del día</h2>'
+            '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>')
+    week_html = ('<section class="grid cols-2" id="semana"><div class="card"><h2>RPE frente al máximo del día</h2>'
             '<p class="h2sub">barra = sesión más dura · raya = máximo que permitía la decisión · rojo = por encima</p>'
             '<div class="legend"><span><i class="key-dot"></i>Dentro</span><span><i class="key-dot" style="background:var(--critical)"></i>Por encima</span>'
             '<span><i class="key-ref" style="border-top:3px solid var(--text-2)"></i>Máximo del día</span></div>'
             '<div class="chart" id="c-rpe"></div></div>'
             '<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
-            f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>'
-            + strength_html + _punctuality_html(extras.get("punctuality")) + _days_html(extras.get("days")) + _history_html(extras.get("history")))
+            f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
+    # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
+    return {"banner": "",
+            "hoy": full_html + today_block + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
+            "tendencias": calendar_html + week_html,
+            "entrenos": strength_html,
+            "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
+                       + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 
 
 TEMPLATE = r"""<!doctype html>
@@ -368,6 +375,8 @@ section[id],details[id]{scroll-margin-top:56px}
     var(--bg);background-attachment:fixed}
   .card{background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
     -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-radius:22px}
+  .tabbar{background:var(--glass);border-color:var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
+    -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
   .nav{background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
     -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-radius:999px;padding:6px 8px;margin:0 0 14px;top:8px}
   .nav a{background:transparent}
@@ -380,7 +389,7 @@ section[id],details[id]{scroll-margin-top:56px}
 }
 @media (prefers-reduced-transparency: reduce){
   body{background:var(--bg)!important}
-  .card,.nav,.cta{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .card,.nav,.cta,.tabbar{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 }
 .cta{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:22px;text-decoration:none;color:var(--text);
   background:var(--surface);border:1px solid var(--line);margin-bottom:16px}
@@ -388,9 +397,19 @@ section[id],details[id]{scroll-margin-top:56px}
 .cta-ico{font-size:24px} .cta-go{margin-left:auto;font-size:28px;color:var(--series-1);line-height:1}
 .cta:active{transform:scale(.985)} .cta:focus-visible{outline:2px solid var(--series-1)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}.rx-chip{font-size:13px;padding:3px 10px;border-radius:999px;background:var(--surface-2)}
+.js .tab{display:none} .js .tab.on{display:grid}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));z-index:20;display:flex;gap:2px;
+  width:min(440px,calc(100% - 24px));padding:6px;border-radius:26px;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 4px;border-radius:20px;text-decoration:none;font-size:11px;color:var(--text-2)}
+.tabbar a span{font-size:18px;line-height:1.2}
+.tabbar a.on{background:var(--series-1-wash);color:var(--text);font-weight:600}
+.tabbar a:focus-visible{outline:2px solid var(--series-1)}
+@media (min-width:900px){.tabbar{bottom:16px}}
 </style>
 </head>
 <body>
+<script>document.documentElement.classList.add('js')</script>
 <div class="wrap">
   <header>
     <div>
@@ -400,10 +419,9 @@ section[id],details[id]{scroll-margin-top:56px}
     <span class="badge" id="badge">Modelo v3</span>
   </header>
 
-  <nav class="nav" aria-label="Secciones"><a href="#hoy">Hoy</a><a href="#noche">Noche</a><a href="#plan">Plan</a>
-    <a href="#calendario">Calendario</a><a href="#graficas">Gráficas</a><a href="#calidad">Calidad</a><a href="#dias">Días</a><a href="#informes">Informes</a></nav>
+  {{BANNER}}
 
-  <div class="grid">
+  <div class="grid tab on" id="tab-hoy" data-tab="hoy">
     <section class="card hero tone-{{TONE}}" id="hoy" aria-label="Disponibilidad de hoy">
       <div>
         <div class="h2sub">Decisión de hoy · puntuación oficial (v2)</div>
@@ -419,21 +437,23 @@ section[id],details[id]{scroll-margin-top:56px}
       </div>
     </section>
 
-    {{EXTRA}}
+    {{HOY}}
 
     <section class="grid tiles" id="tiles" aria-label="Indicadores clave"></section>
 
-    <section class="grid cols-2">
-      <div class="card">
-        <h2 id="v3-title">Modelo v3 (en pruebas)</h2>
-        <p class="h2sub">Componentes 0–100 · 75 = tu normalidad · peso entre paréntesis</p>
-        <div id="meters"></div>
-      </div>
-      <div class="card">
-        <h2>Disponibilidad · 28 días</h2>
-        <p class="h2sub">Recalculada con el modelo v3; líneas en 50 y 70 (rojo / verde)</p>
-        <div class="chart" id="c-score"></div>
-      </div>
+    <section class="card">
+      <h2 id="v3-title">Modelo v3 (en pruebas)</h2>
+      <p class="h2sub">Componentes 0–100 · 75 = tu normalidad · peso entre paréntesis</p>
+      <div id="meters"></div>
+    </section>
+  </div>
+
+  <div class="grid tab" id="tab-tendencias" data-tab="tendencias">
+    {{TEND}}
+    <section class="card">
+      <h2>Disponibilidad · 28 días</h2>
+      <p class="h2sub">Recalculada con el modelo v3; líneas en 50 y 70 (rojo / verde)</p>
+      <div class="chart" id="c-score"></div>
     </section>
 
     <section class="grid cols-2" id="graficas">
@@ -459,7 +479,19 @@ section[id],details[id]{scroll-margin-top:56px}
         <div class="chart" id="c-load"></div>
       </div>
     </section>
+  </div>
 
+  <div class="grid tab" id="tab-entrenos" data-tab="entrenos">
+    <section class="card">
+      <h2>Sesiones recientes</h2>
+      <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
+      <div class="scroll"><table id="sessions"></table></div>
+    </section>
+    {{ENT}}
+  </div>
+
+  <div class="grid tab" id="tab-sistema" data-tab="sistema">
+    {{SIS}}
     <details class="card fold" id="calidad" aria-label="Calidad y trazabilidad del informe">
       <summary><h2>Calidad y trazabilidad del informe</h2></summary>
       <p class="h2sub" id="cert-sub"></p>
@@ -468,12 +500,6 @@ section[id],details[id]{scroll-margin-top:56px}
         <div><div class="scroll"><table id="integrity"></table></div></div>
       </div>
     </details>
-
-    <section class="card">
-      <h2>Sesiones recientes</h2>
-      <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
-      <div class="scroll"><table id="sessions"></table></div>
-    </section>
 
     <details class="card fold">
       <summary><h2>Modelos y regla de decisión</h2></summary>
@@ -485,6 +511,12 @@ section[id],details[id]{scroll-margin-top:56px}
 
   <footer id="footer"></footer>
 </div>
+<nav class="tabbar" aria-label="Secciones">
+  <a href="#hoy" data-tab="hoy" class="on"><span aria-hidden="true">◉</span>Hoy</a>
+  <a href="#tendencias" data-tab="tendencias"><span aria-hidden="true">📈</span>Tendencias</a>
+  <a href="#entrenos" data-tab="entrenos"><span aria-hidden="true">🏋️</span>Entrenos</a>
+  <a href="#sistema" data-tab="sistema"><span aria-hidden="true">⚙️</span>Sistema</a>
+</nav>
 <div class="tip" id="tip" role="tooltip"></div>
 
 <script id="data" type="application/json">{{DATA}}</script>
@@ -701,6 +733,26 @@ if (cal && T.length) {
 }
 
 $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días frente a tu línea base de hasta 60 días con banda de cambio mínimo relevante (±0,5 DE). FC en reposo y nocturna en desviaciones robustas (mediana/MAD). Sueño frente a ${fmt(S.need_hours,1)} h de necesidad y deuda de ${'3'} noches. La carga solo puntúa cuando la carga crónica (CTL) permite interpretar la forma. Sin datos de hoy o con sueño sin confirmar no se autoriza intensidad alta.<br>${esc(R.disclaimer)} · App ${esc(D.app_version)} · Historial desde ${esc(D.history.first_date || '—')} (${D.history.sessions} sesiones).`;
+})();
+
+// Pestañas: Hoy · Tendencias · Entrenos · Sistema (los enlaces antiguos como #plan o #calidad siguen funcionando)
+(function(){
+  const tabs = ['hoy','tendencias','entrenos','sistema'];
+  function show(raw){
+    const h = (raw || '').replace('#','');
+    let t = tabs.includes(h) ? h : null, target = null;
+    if (!t && h){ target = document.getElementById(h); const p = target && target.closest('.tab'); t = p ? p.dataset.tab : null; }
+    t = t || 'hoy';
+    tabs.forEach(n => {
+      document.getElementById('tab-' + n).classList.toggle('on', n === t);
+      const a = document.querySelector('.tabbar [data-tab="' + n + '"]');
+      a.classList.toggle('on', n === t); a.setAttribute('aria-current', n === t ? 'page' : 'false');
+    });
+    if (target && target.tagName === 'DETAILS') target.open = true;
+    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+  }
+  addEventListener('hashchange', () => show(location.hash));
+  show(location.hash);
 })();
 </script>
 </body>
