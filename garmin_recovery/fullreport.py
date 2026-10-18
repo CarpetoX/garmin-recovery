@@ -365,6 +365,12 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         if top:
             add("\n1RM mínimo estimado (Epley, ≤ 10 repeticiones, sin RIR): " + "; ".join(
                 f"{k} {n(_num(v.get('e1rm_min_kg')) or _num(v.get('kg')), 0, ' kg')}" for k, v in top) + ".")
+    try:
+        from . import strength_patterns
+        add("\n**Carga de fuerza por patrón**\n\n" + strength_patterns.to_markdown(strength_patterns.compute(
+            (_d(cf, "muscle_load", "strength_exercises") or []), today)))
+    except Exception:  # noqa: BLE001 — bloque opcional
+        pass
     add("\nNo se atribuyen desgloses no confirmados ni se comparan récords no equivalentes; se conserva la diferencia entre cronómetro oficial y reloj.")
 
     # 7 ------------------------------------------------------------------
