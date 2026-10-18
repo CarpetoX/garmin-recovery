@@ -73,6 +73,18 @@ def _history_html(items: list | None) -> str:
             f'publicó, con sus gráficas, en GitHub</p><ul class="clean hist">{lis}</ul></section>')
 
 
+def _days_html(days: list | None) -> str:
+    if not days:
+        return ""
+    zone_es = {"green": "verde", "yellow": "ámbar", "red": "rojo", "unavailable": "pendiente"}
+    lis = "".join(
+        f"<li><a href='dia/{_esc(x['date'])}.html'><span class='hz z-{_esc(x.get('zone') or 'unavailable')}'></span>"
+        f"{_esc(x['date'][8:10] + '/' + x['date'][5:7])}</a> <span class='weight'>{_esc(zone_es.get(x.get('zone'), '—'))}"
+        f"{' · ' + str(round(x['score'])) if isinstance(x.get('score'), (int, float)) else ''}</span></li>" for x in days)
+    return ('<section class="card" id="dias"><h2>Panel de días anteriores</h2><p class="h2sub">abre el panel tal como quedó el último '
+            f'informe de cada día (últimos {len(days)} días)</p><ul class="clean hist">{lis}</ul></section>')
+
+
 def _tonight_html(t: dict | None) -> str:
     """Tarjeta «Esta noche»: necesidad de sueño estimada, componentes y consejo de turno."""
     if not t or not t.get("need"):
@@ -127,6 +139,9 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
     """Resumen de tres líneas, RPE frente al máximo del día y la semana (mismo contenido que el informe)."""
     import re
     from .readiness import GUIDANCE
+    if (extras or {}).get("snapshot"):
+        return (f'<section class="card"><b>Instantánea del {_esc(extras["snapshot"])}</b> · '
+                '<a href="../index.html">← Volver al panel actual</a></section>')
     from .report import summary_block
     from .weekly import weekly_summary
     dec = result.get("decision") or {}
@@ -174,7 +189,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
             '<div class="chart" id="c-rpe"></div></div>'
             '<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
             f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>'
-            + strength_html + _punctuality_html(extras.get("punctuality")) + _history_html(extras.get("history")))
+            + strength_html + _punctuality_html(extras.get("punctuality")) + _days_html(extras.get("days")) + _history_html(extras.get("history")))
 
 
 TEMPLATE = r"""<!doctype html>
@@ -328,7 +343,7 @@ section[id],details[id]{scroll-margin-top:56px}
   </header>
 
   <nav class="nav" aria-label="Secciones"><a href="#hoy">Hoy</a><a href="#noche">Noche</a><a href="#plan">Plan</a>
-    <a href="#calendario">Calendario</a><a href="#graficas">Gráficas</a><a href="#calidad">Calidad</a><a href="#informes">Informes</a></nav>
+    <a href="#calendario">Calendario</a><a href="#graficas">Gráficas</a><a href="#calidad">Calidad</a><a href="#dias">Días</a><a href="#informes">Informes</a></nav>
 
   <div class="grid">
     <section class="card hero tone-{{TONE}}" id="hoy" aria-label="Disponibilidad de hoy">
