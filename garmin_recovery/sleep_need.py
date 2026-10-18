@@ -81,5 +81,5 @@ def to_markdown(r: dict) -> str:
             ("Deuda de 7 noches (siestas descontadas)", f(r["debt_7n_h"]) + " h")]
     out = ["| Componente | Horas |", "|---|---|"] + [f"| {a} | {b} |" for a, b in rows]
     return ("\n".join(out) + "\n\nEs una estimación heurística, no validada; los recargos tienen tope y no sustituyen "
-            "tu percepción. Solo cuentan siestas registradas por Garmin. El modelo de disponibilidad (v3) usa solo las últimas 3 noches y "
+            "tu percepción. Solo cuentan siestas registradas por Garmin. El modelo experimental usa solo las últimas 3 noches y "
             f"no descuenta siestas: por eso su deuda ({f(r['debt_3n_model_h'])} h) puede ser mayor que la de 3 noches de esta tabla.")

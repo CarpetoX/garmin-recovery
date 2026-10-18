@@ -35,7 +35,7 @@ def to_markdown(r: dict) -> str:
     f = lambda v, d: f"{v:.{d}f}".replace(".", ",")  # noqa: E731
     head = ""
     if r["score_from"] is not None and r["score_to"] is not None:
-        head = f"Puntuación v3: {f(r['score_from'], 0)} → {f(r['score_to'], 0)} ({r['zone_from']} → {r['zone_to']}). "
+        head = f"Modelo experimental: {f(r['score_from'], 0)} → {f(r['score_to'], 0)} ({r['zone_from']} → {r['zone_to']}). "
     if not r["items"]:
         return head + "Ningún indicador cambió lo bastante frente a ayer como para destacarlo."
     lines = [f"- {i['label']}: {f(i['from'], i['dec'])} → {f(i['to'], i['dec'])}{i['unit']} "

@@ -177,3 +177,6 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - Solo «Resumen ejecutivo» abierto; el resto de secciones plegadas, con un subtítulo de una línea (`webreport.SUBTITLES`). Botón «Expandir todo» y chips cortos (`SHORT`). El Markdown sigue siendo la fuente de verdad: no cambia ninguna cifra.
 - Altura en móvil: de ~18 200 px a ~1 950 px al abrir.
 - Orden de lectura (`webreport.ORDER`): Balance y orientación (qué hacer), Recuperación, Sueño, CrossFit, Mejora, FC, Fuerza, Resumen, Calidad y Conclusión; abiertas por defecto Balance y Recuperación (`OPEN`). Los títulos se muestran sin número porque el orden ya no es el del Markdown, que no cambia.
+
+### V7.3 fase 4 · Vocabulario sin v2/v3
+- En panel, informe y avisos: v2 → «oficial», v3 → «experimental» (híbrido se mantiene). Solo cambian los textos mostrados; nombres de archivo, claves JSON (`v2_score`, `readiness_v3`…) y el motor no cambian.

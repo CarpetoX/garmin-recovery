@@ -52,7 +52,7 @@ def model_registry(readiness_v3: dict, legacy: dict, daily_summary: dict, garmin
     v2_stale = bool(today and v2_date and v2_date != today)
     ds_stale = bool(today and ds_date and ds_date != today)
     registry = [
-        {"id": "recovery_assessment_v2", "label": "Recuperación v2 (oficial)",
+        {"id": "recovery_assessment_v2", "label": "Recuperación oficial",
          "version": legacy.get("methodology_version"), "role": "oficial", "used_in_decision": True,
          "score": legacy.get("score"), "zone": _zone(legacy.get("status"), legacy.get("state")),
          "state": legacy.get("state"), "confidence": legacy.get("confidence"),
@@ -62,7 +62,7 @@ def model_registry(readiness_v3: dict, legacy: dict, daily_summary: dict, garmin
          "score": hybrid.get("score"), "zone": _zone(hybrid.get("status")),
          "state": None, "confidence": hybrid.get("local_confidence"),
          "rule": "55 % Garmin Training Readiness + 45 % local; Garmin < 35 fuerza rojo."},
-        {"id": "readiness_v3", "label": "Disponibilidad v3 (en pruebas)",
+        {"id": "readiness_v3", "label": "Modelo experimental",
          "version": readiness_v3.get("model_version"), "role": "sombra", "used_in_decision": True,
          "score": readiness_v3.get("score"), "zone": readiness_v3.get("zone"),
          "state": readiness_v3.get("state"), "confidence": readiness_v3.get("confidence"),
@@ -112,7 +112,7 @@ def operative_decision(readiness_v3: dict, legacy: dict, daily_summary: dict,
     return {
         "zone": zone, "zone_es": ZONE_ES[zone], "guidance": guidance, "crossfit": CROSSFIT[zone],
         "official_model": "recovery_assessment_v2" if not model_validated else "readiness_v3",
-        "rule": ("Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3. Un rojo prevalece "
+        "rule": ("Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece "
                  "siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. "
                  "Un rojo de otro día sigue limitando hasta que llegue el dato de hoy."),
         "decided_by": deciding, "missing_models": missing,
