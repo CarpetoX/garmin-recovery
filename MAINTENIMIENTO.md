@@ -201,3 +201,8 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 
 ### V7.8 · Sin gráfica de 1RM
 - Retirada la gráfica «Progresión de fuerza» (1RM mínimo estimado) del panel, del informe completo y del informe base; ya no se genera `charts/strength.svg`. Se conserva la tabla de fuerza y `report.chart_strength` por si se quisiera recuperar. Foto e2e actualizada (`--update`) porque desaparece ese archivo.
+
+### V7.9 · Tendencias y Sistema más legibles
+- Cada gráfica de Tendencias (HRV, FC en reposo, sueño, carga) lleva una línea de lectura: media de los últimos 7 días frente a la de 28 (sube / baja / estable, con ↑↓ y color según si es favorable; umbrales de «estable»: HRV 1,5 ms, FC 0,8 lpm, sueño 0,25 h, carga 4). Solo con ≥ 4 días recientes y ≥ 10 en 28.
+- Nueva gráfica «Sueño por fases» (barras apiladas profundo/REM/resto, línea de necesidad; noches sin fases, vacías) y tarjeta «Carga semanal»: semana actual frente al rango de las anteriores completas (≥ 6 de 7 días con dato y alguna carga; una semana sin registro no prueba descanso). Con menos de 2 semanas previas completas se dice que aún no hay datos; nunca se calculan porcentajes entre semanas.
+- Sistema: el estado del ciclo es una línea de semáforos (✓ / … / ✗) con la hora local cuando consta.

@@ -77,19 +77,28 @@ def _history_html(items: list | None) -> str:
 
 
 def _delivery_html(d: dict | None) -> str:
-    """Estado final del ciclo: etapas con ✓ / … / ✗ y el alcance de «notificación enviada»."""
+    """Estado final del ciclo: una línea de semáforos (✓ / … / ✗) con la hora cuando consta, y el alcance de «notificación enviada»."""
     if not d or not d.get("stages"):
         return ""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
     icon = {"ok": "✓", "pending": "…", "failed": "✗", "skipped": "–", "unknown": "?"}
-    cls = {"ok": "pos", "pending": "neu", "failed": "neg", "skipped": "neu", "unknown": "neu"}
+    cls = {"ok": "ok", "pending": "wait", "failed": "bad", "skipped": "", "unknown": ""}
     names = {"sync": "Sync", "heart": "FC", "advanced": "Analítica", "crossfit": "CrossFit", "web": "Web", "notification": "Aviso"}
     title = {"complete": "Ciclo completo", "complete_without_notification": "Ciclo completo (sin aviso)",
              "pending": "Ciclo en curso", "failed": "Ciclo con fallos", "unconfirmed": "Ciclo sin confirmar del todo"}.get(d.get("state"), "Estado del ciclo")
-    chips = "".join(f"<span class='rx-chip {cls.get(v.get('state'), 'neu')}' title='{_esc(v.get('note') or '')}'>"
-                    f"{icon.get(v.get('state'), '?')} {names.get(k, k)}</span>" for k, v in d["stages"].items())
+
+    def hour(v):
+        try:
+            return datetime.fromisoformat(str(v).replace("Z", "+00:00")).astimezone(ZoneInfo("Europe/Madrid")).strftime("%H:%M")
+        except (ValueError, TypeError):
+            return ""
+    steps = "".join(
+        f"<li class='{cls.get(v.get('state'), '')}' title='{_esc(v.get('note') or '')}'><span class='sd' aria-hidden='true'>{icon.get(v.get('state'), '?')}</span>"
+        f"{names.get(k, k)}<small>{hour(v.get('at')) or '&nbsp;'}</small></li>" for k, v in d["stages"].items())
     return ('<section class="card" id="ciclo" aria-label="Estado final del ciclo"><h2>' + _esc(title) + '</h2>'
             f'<p class="h2sub">ciclo {_esc(d.get("cycle_id") or "—")} · {_esc(d.get("scope") or "")}</p>'
-            f'<div class="chips">{chips}</div></section>')
+            f'<ol class="steps">{steps}</ol></section>')
 
 
 def _days_html(days: list | None) -> str:
@@ -497,6 +506,18 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .chg-l{font-size:11px;color:var(--text-3)}.chg-card b{font-size:15px;font-variant-numeric:tabular-nums;font-weight:620}.chg-card small{font-size:11px;color:var(--text-3);min-height:1em}
 .chg-card i{position:absolute;right:10px;bottom:8px;font-style:normal;font-weight:700;font-size:14px}
 .chg-card.pos i{color:var(--good-ink)}.chg-card.neg i{color:var(--critical-ink)}
+.read{font-size:12.5px;margin:2px 0 6px;color:var(--text-2)}.read b{font-weight:640}.read.pos b{color:var(--good-ink)}.read.neg b{color:var(--critical-ink)}
+.wl{margin:10px 0 6px}.wl-track{position:relative;height:14px;border-radius:7px;background:var(--glass-chip,var(--surface-2))}
+.wl-band{position:absolute;top:0;bottom:0;border-radius:7px;background:var(--series-1-wash);box-shadow:inset 0 0 0 1.5px var(--series-1)}
+.wl-mark{position:absolute;top:-4px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:var(--series-2);border:3px solid var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.wl-mark.pos{background:var(--good)}.wl-mark.neg{background:var(--critical)}
+.wl-axis{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-top:6px}
+.steps{display:flex;gap:0;list-style:none;padding:0;margin:12px 0 4px}.steps li{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;font-size:11.5px;color:var(--text-2);min-width:0}
+.steps li::before{content:"";position:absolute;top:11px;left:-50%;right:50%;height:3px;background:var(--glass-chip,var(--surface-2))}.steps li:first-child::before{display:none}
+.steps li.ok::before{background:var(--good)}.steps li.bad::before{background:var(--critical)}
+.steps .sd{position:relative;z-index:1;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;background:var(--muted)}
+.steps .ok .sd{background:var(--good)}.steps .bad .sd{background:var(--critical)}.steps .wait .sd{background:var(--warning);color:#1a1a19}
+.steps small{color:var(--text-3);font-size:10.5px}
 </style>
 </head>
 <body>
@@ -553,27 +574,39 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
       <div class="chart" id="c-score"></div>
     </section>
 
+    <section class="card" id="weekload" aria-label="Carga semanal"></section>
+
     <section class="grid cols-2" id="graficas">
       <div class="card">
         <h2>HRV nocturna</h2>
         <p class="h2sub">ms · banda = tu rango normal (línea base ± cambio mínimo relevante)</p>
+        <div class="read" id="r-hrv"></div>
         <div class="legend"><span><i class="key-dot"></i>Noche</span><span><i class="key-line"></i>Media 7 días</span><span><i class="key-band"></i>Rango normal</span></div>
         <div class="chart" id="c-hrv"></div>
       </div>
       <div class="card">
         <h2>FC en reposo</h2>
         <p class="h2sub">lpm · más baja suele indicar mejor recuperación</p>
+        <div class="read" id="r-rhr"></div>
         <div class="chart" id="c-rhr"></div>
       </div>
       <div class="card">
         <h2>Sueño</h2>
         <p class="h2sub" id="sleep-sub">horas por noche</p>
+        <div class="read" id="r-sleep"></div>
         <div class="chart" id="c-sleep"></div>
       </div>
       <div class="card">
         <h2>Carga diaria</h2>
         <p class="h2sub">carga de entrenamiento (Intervals.icu) por día</p>
+        <div class="read" id="r-load"></div>
         <div class="chart" id="c-load"></div>
+      </div>
+      <div class="card" style="grid-column:1/-1">
+        <h2>Sueño por fases</h2>
+        <p class="h2sub">horas por noche · línea = necesidad · las noches sin fases registradas quedan vacías</p>
+        <div class="legend"><span><i class="key-dot" style="background:var(--series-1)"></i>Profundo</span><span><i class="key-dot" style="background:#1baf7a"></i>REM</span><span><i class="key-dot" style="background:var(--muted)"></i>Resto (ligero y vigilia)</span></div>
+        <div class="chart" id="c-stages"></div>
       </div>
     </section>
   </div>
@@ -705,7 +738,8 @@ function chart(el, opt){
     const iw = W - m.l - m.r, ih = Hh - m.t - m.b, n = T.length;
     if (!n || W < 50) { el.innerHTML = '<div class="empty">Sin datos</div>'; return; }
     const vals = [];
-    opt.series.forEach(s => T.forEach(d => { if (d[s.key] != null) vals.push(d[s.key]); }));
+    (opt.series || []).forEach(s => T.forEach(d => { if (d[s.key] != null) vals.push(d[s.key]); }));
+    if (opt.stack) T.forEach(d => { const t = opt.stack.reduce((a, se) => a + (d[se.key] || 0), 0); if (t > 0) vals.push(t); });
     if (opt.band) T.forEach(d => { if (d[opt.band[0]] != null) vals.push(d[opt.band[0]], d[opt.band[1]]); });
     (opt.refs || []).forEach(r => vals.push(r.y));
     if (!vals.length) { el.innerHTML = '<div class="empty">Sin datos todavía</div>'; return; }
@@ -730,7 +764,10 @@ function chart(el, opt){
       s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(r.y)}" y2="${y(r.y)}" stroke="var(--text-3)" stroke-width="1"/>`;
       if (r.label) s += `<text x="${W - m.r}" y="${y(r.y) - 4}" text-anchor="end" font-size="11" fill="var(--text-2)">${esc(r.label)}</text>`;
     });
-    opt.series.forEach(se => {
+    if (opt.stack) { const w = Math.min(24, bw * .62);
+      T.forEach((d, i) => { let acc = 0; opt.stack.forEach(se => { const v = d[se.key]; if (!v || v <= 0) return;
+        const top = y(acc + v), base = y(acc); s += `<rect x="${x(i) - w/2}" y="${top}" width="${w}" height="${Math.max(1, base - top)}" fill="${se.color}" rx="2"/>`; acc += v; }); }); }
+    (opt.series || []).forEach(se => {
       const col = `var(${se.color || '--series-1'})`;
       if (se.kind === 'tick') {
         const w = Math.min(24, bw * .62) + 10;
@@ -789,6 +826,45 @@ chart($('c-rhr'), {label:'FC en reposo', refs: rhrBase != null ? [{y: rhrBase, l
 $('sleep-sub').textContent = `horas por noche · línea = necesidad configurada (${fmt(S.need_hours,1)} h)`;
 chart($('c-sleep'), {label:'Sueño', zero:true, refs:[{y:S.need_hours, label:`${fmt(S.need_hours,1)} h`}],
   series:[{key:'sleep_hours', kind:'bar'}], tip: d => `Sueño <b>${fmt(d.sleep_hours,1)} h</b>` + (d.sleep_score != null ? `<br>Puntuación ${fmt(d.sleep_score)}` : '')});
+T.forEach(d => { d.deep_h = d.deep_min != null ? d.deep_min / 60 : null; d.rem_h = d.rem_min != null ? d.rem_min / 60 : null;
+  d.rest_h = (d.deep_min != null && d.rem_min != null && d.sleep_hours != null) ? Math.max(0, d.sleep_hours - d.deep_min / 60 - d.rem_min / 60) : null; });
+chart($('c-stages'), {label:'Sueño por fases', zero:true, refs:[{y:S.need_hours, label:`${fmt(S.need_hours,1)} h`}],
+  stack:[{key:'deep_h', color:'var(--series-1)'}, {key:'rem_h', color:'#1baf7a'}, {key:'rest_h', color:'var(--muted)'}],
+  tip: d => d.deep_h == null ? 'Sin fases registradas esa noche' : `Profundo <b>${fmt(d.deep_h,1)} h</b><br>REM <b>${fmt(d.rem_h,1)} h</b><br>Resto ${fmt(d.rest_h,1)} h<br>Total ${fmt(d.sleep_hours,1)} h`});
+
+// ---------- Lectura de cada gráfica: últimos 7 días frente a los 28 ----------
+(function(){
+  const avg = (arr, k) => { const v = arr.map(d => d[k]).filter(x => x != null); return v.length ? {m: v.reduce((a, b) => a + b, 0) / v.length, n: v.length} : null; };
+  const read = (id, key, o) => { const el = $(id); if (!el) return;
+    const a = avg(T.slice(-7), key), b = avg(T, key);
+    if (!a || !b || a.n < 4 || b.n < 10) { el.hidden = true; return; }
+    const diff = a.m - b.m, dir = Math.abs(diff) < o.eps ? 0 : diff > 0 ? 1 : -1, good = dir === 0 ? null : (o.better === 0 ? null : dir === o.better);
+    const cls = dir === 0 ? 'neu' : good === null ? 'neu' : good ? 'pos' : 'neg', arrow = dir === 0 ? '→' : dir > 0 ? '↑' : '↓';
+    const word = dir === 0 ? 'estable' : dir > 0 ? 'sube' : 'baja';
+    el.className = 'read ' + cls;
+    el.innerHTML = `<b>${arrow} ${word}</b> · últimos 7 días ${fmt(a.m, o.dec)} ${o.unit} · media 28 días ${fmt(b.m, o.dec)} ${o.unit}`; };
+  read('r-hrv', 'hrv_ms', {eps: 1.5, dec: 0, unit: 'ms', better: 1});
+  read('r-rhr', 'resting_hr', {eps: 0.8, dec: 1, unit: 'lpm', better: -1});
+  read('r-sleep', 'sleep_hours', {eps: 0.25, dec: 1, unit: 'h', better: 1});
+  read('r-load', 'load', {eps: 4, dec: 0, unit: '', better: 0});
+})();
+
+// ---------- Carga semanal frente a tu rango de las 3 semanas previas ----------
+(function(){
+  const el = $('weekload'); if (!el) return;
+  const win = o => { const r = T.slice(T.length - 7 * (o + 1), T.length - 7 * o), n = r.filter(d => d.load != null).length;
+    const sum = r.reduce((x, d) => x + (d.load || 0), 0); return {sum, full: n >= 6 && sum > 0}; };  // completa = ≥ 6 de 7 días con dato y alguna carga (una semana sin registro no prueba descanso)
+  const w0 = win(0), prevAll = [win(1), win(2), win(3)].filter(w => w.full).map(w => w.sum);
+  if (T.length < 14 || !w0.full || prevAll.length < 2) { el.innerHTML = '<h2>Carga semanal</h2><p class="h2sub">Aún no hay suficientes semanas completas para comparar (hacen falta la actual y al menos 2 anteriores con datos).</p>'; return; }
+  const cur = w0.sum, lo = Math.min(...prevAll), hi = Math.max(...prevAll), top = Math.max(cur, hi) * 1.2 || 1;
+  const pos = v => Math.max(0, Math.min(100, v / top * 100)).toFixed(1);
+  const state = cur > hi * 1.1 ? ['por encima de tu rango reciente', 'neg'] : cur < lo * 0.9 ? ['por debajo de tu rango reciente', 'neu'] : ['dentro de tu rango reciente', 'pos'];
+  el.innerHTML = `<h2>Carga semanal</h2><p class="h2sub">suma de carga de los últimos 7 días frente al rango de tus semanas anteriores completas (hasta 3) · según las sesiones registradas</p>
+    <div class="wl"><div class="wl-track"><i class="wl-band" style="left:${pos(lo)}%;width:${(pos(hi) - pos(lo)).toFixed(1)}%"></i><b class="wl-mark ${state[1]}" style="left:${pos(cur)}%"></b></div>
+    <div class="wl-axis"><span>0</span><span>rango previo ${fmt(lo)}–${fmt(hi)}</span><span>${fmt(top)}</span></div></div>
+    <p class="read ${state[1]}"><b>${fmt(cur)}</b> esta semana · ${state[0]}</p>`;
+})();
+
 chart($('c-load'), {label:'Carga diaria', zero:true,
   series:[{key:'load', kind:'bar', color:'--series-2'}], tip: d => `Carga <b>${fmt(d.load)}</b> · ${d.sessions} sesión(es)` + (d.srpe ? `<br>sRPE ${fmt(d.srpe)}` : '')});
 
