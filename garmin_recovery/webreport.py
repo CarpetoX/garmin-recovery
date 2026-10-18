@@ -54,6 +54,15 @@ SHORT = {"Resumen": "Resumen", "1.": "Calidad", "2.": "Recuperación", "3.": "Su
          "6.": "Fuerza", "7.": "Balance", "8.": "Mejora", "Conclusión": "Conclusión"}
 
 
+# Lo que más se consulta primero: qué hacer hoy, cómo estás, sueño y carga; el detalle técnico y la certificación al final.
+ORDER = ("7.", "2.", "3.", "5.", "8.", "4.", "6.", "Resumen", "1.", "Conclusión")
+OPEN = ("7.", "2.")
+
+
+def _rank(title: str) -> int:
+    return next((i for i, k in enumerate(ORDER) if title.startswith(k)), len(ORDER))
+
+
 def _lookup(table: dict, title: str) -> str:
     return next((v for k, v in table.items() if title.startswith(k)), "")
 
@@ -72,15 +81,18 @@ def build(md: str, result: dict) -> str:
     charts = INTERACTIVE
     weights = _weights(result)
     chips, sections = [], []
-    for i, (title, body) in enumerate(zip(titles, bodies, strict=True)):
+    order = sorted(range(len(titles)), key=lambda j: (_rank(titles[j]), j))
+    for i in order:
+        title, body = titles[i], bodies[i]
         if title.startswith("2.") and weights:
             body = "\n```weights\n" + weights + "\n```\n" + body
         sid = f"s{i}"
         chips.append(f'<a href="#{sid}">{html.escape(_slug_label(title))}</a>')
-        opened = " open" if title.startswith("Resumen") else ""
+        opened = " open" if title.startswith(OPEN) else ""
+        shown = re.sub(r"^\d+\.\s*", "", title)
         sub = _lookup(SUBTITLES, title)
         sub_html = f"<small>{html.escape(sub)}</small>" if sub else ""
-        sections.append(f'<details class="sec" id="{sid}"{opened}><summary><span><h2>{mdhtml.inline(title)}</h2>{sub_html}</span></summary>'
+        sections.append(f'<details class="sec" id="{sid}"{opened}><summary><span><h2>{mdhtml.inline(shown)}</h2>{sub_html}</span></summary>'
                         f'<div class="body">{mdhtml.render(body, interactive=charts)}</div></details>')
     data = json.dumps(_data(result), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return PAGE.replace("{{HEAD}}", mdhtml.render(head, interactive=charts)).replace("{{CHIPS}}", "".join(chips)) \
