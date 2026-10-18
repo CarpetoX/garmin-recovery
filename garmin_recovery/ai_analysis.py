@@ -1,6 +1,6 @@
 """Análisis de Claude (``app/analisis_ia.md``): lo escribe la rutina de Claude; la app solo lo comprueba y lo muestra.
 
-El archivo empieza por ``<!-- cycle_id: AAAA-MM-DD-HHMM -->``. Se publica solo si es del ciclo vigente
+El archivo empieza por ``<!-- cycle_id: AAAA-MM-DD-HHMM[-sufijo] -->`` (el sufijo, p. ej. ``-post-sleep``, forma parte del ID). Se publica solo si es del ciclo vigente
 (``report_ready.json``); si es de otro, se marca como desactualizado. Además se avisan las cifras del texto
 que no aparecen en los datos del ciclo (aviso visible, no bloqueo).
 """
@@ -10,7 +10,7 @@ import json
 import re
 from pathlib import Path
 
-HEADER = re.compile(r"\A\s*<!--\s*cycle_id:\s*([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{4})\s*-->\s*")
+HEADER = re.compile(r"\A\s*<!--\s*cycle_id:\s*([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{4}(?:-[A-Za-z0-9_]+)*)\s*-->\s*")
 NUM = re.compile(r"(?<![\w.,])\d+(?:[.,]\d+)?")
 SOURCES = ("app/informe_completo.md", "app/informe.md", "app/readiness_v3.json", "recovery_assessment.json",
            "garmin_extended.json", "garmin_stress.json", "garmin_heart_rate.json", "garmin_sleep_history.json",
