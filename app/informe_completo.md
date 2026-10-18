@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Domingo, 18 de octubre de 2026 · 19:19 · `GR-2026-10-18-1919-5a4005`
+Domingo, 18 de octubre de 2026 · 22:48 · `GR-2026-10-18-2248-4d44bf`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-18-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-18-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🟢 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 77/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 7 h 50 min, puntuación 87/100.
 - ❤️ **Principal alerta:** HRV 69 ms, 21,1 % por encima de tu mediana de 28 días.
@@ -23,18 +23,18 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-18-1645 |
+| Ciclo | 2026-10-18-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:58:08 |
+| Certificado generado | 22:48:02 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 84/100 (usable) |
 
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 16:45, 10-17 22:45, 10-18 08:30.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 22:45, 10-18 08:30, 10-18 16:45.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -80,7 +80,7 @@ La HRV está 21 % por encima de su mediana; la FC en reposo coincide con su medi
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 59/100 | contexto |
 | Tiempo de recuperación Garmin | 9,6 h | contexto |
-| Índice personal experimental | 85/100 | provisional |
+| Índice personal experimental | 81/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -90,7 +90,7 @@ Modelo experimental: 52 → 77 (yellow → green). Cambios notables frente a aye
 - FC en reposo: 60 → 56 lpm (favorable)
 - FC nocturna: 68,1 → 61,2 lpm (favorable)
 - Puntuación de sueño: 62 → 87 (favorable)
-- Estrés medio: 38 → 26 (favorable)
+- Estrés medio: 38 → 29 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -133,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 80,2 lpm | 61,2 lpm |
+| Hoy* | 79,5 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -153,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 26, máximo 97.
-- Body Battery: último valor 32/100, medido a las 19:03.
+- Estrés medio: 29, máximo 97.
+- Body Battery: último valor 22/100, medido a las 22:39.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -279,15 +279,14 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 
 Turno: hoy TN, mañana sin dato.
 - Señales favorables: duración del sueño igual o superior a tu referencia; HRV en rango respecto a tu historial.
+- Señales adversas: Body Battery bajo (22/100).
 
 ### Recomendaciones
 
 1. **Listo para entrenar** — Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 2. **Piernas.** Sentadilla trasera a RPE 9,5 el 18/10: evita otra sesión pesada de piernas hasta el 20/10 (margen orientativo de 48 h, sin validar). Tren superior, técnica o aeróbico suave sí encajan.
-3. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+3. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 4. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
-
-![Progresión de fuerza](charts/strength.svg)
 
 ## 8. Análisis de mejora física y recuperación
 
@@ -371,4 +370,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-1645 · generado 18/10/2026 19:19 Europe/Madrid · certificado READY · sync_run_id 39137522756.
+Traza: cierre nocturno · ciclo 2026-10-18-2245 · generado 18/10/2026 22:48 Europe/Madrid · certificado READY · sync_run_id 39164867185.

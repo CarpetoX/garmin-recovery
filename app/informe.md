@@ -1,6 +1,6 @@
-# Informe de seguimiento · 18/10/2026
+# Cierre diario · 18/10/2026
 
-`GR-2026-10-18-1919-5a4005` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-2248-4d44bf` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -56,28 +56,41 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-1658-ddf370 (18/10 16:58):
+Frente al informe GR-2026-10-18-1919-5a4005 (18/10 19:19):
 - Sin cambios en los datos.
 
-## Actividad de hoy
+## Balance del día
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
 | 18/10 10:45 | Fuerza | Fuerza - pierna: sentadilla trasera, péndulo y femorales | 66 | 24 | 113 | 7,5 | 491 |
 
-**¿Encaja con la decisión?** La actividad de hoy (carga 24, RPE máx. 7,5) encaja con la decisión.
+## Balance de la semana
 
-**Carga 7 días:** 142 en 9 sesiones · sRPE 1.694 · monotonía 0,89.
+- Carga 7 días: **142** en 9 sesiones.
+- sRPE 7 días 1.694 · monotonía 0,89 · strain 1.506.
+- Fatiga acumulada: ATL 16,2, CTL 3,8, TSB -12,4 (CTL insuficiente: la forma no se interpreta todavía).
+
+## Previsión orientativa para mañana
+
+- Objetivo de sueño esta noche: **8,5 h** (necesidad + parte de la deuda de 4,0 h).
+- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.
 
 ## Gráficas
 
 ![RPE frente al máximo del día](charts/rpe.svg)
 
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+
 ![Carga](charts/load.svg)
 
-![Sesiones](charts/sessions.svg)
+![Disponibilidad](charts/readiness.svg)
 
-_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+## Validación de modelos
+
+_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
+
+**Acumulando datos: 0/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
 
 ## Recuperación: tendencias de 28 días
 
@@ -117,24 +130,20 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
 
-![Progresión](charts/strength.svg)
-
-_Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando hay repeticiones; si no, carga máxima declarada. Una sesión de volumen da un mínimo más bajo que una de series pesadas cortas._
-
 </details>
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-1919-5a4005`
+- **Identificador del informe:** `GR-2026-10-18-2248-4d44bf`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-1645 · datos sincronizados a las 19:19 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 10,3 h ✓ · última HRV hace 10,4 h ✓ · última FC hace 14 min ✓ · último Body Battery hace 17 min ✓
+- **Ciclo:** 2026-10-18-2245 · datos sincronizados a las 22:47
+- **Antigüedad:** fin del sueño hace 13,8 h ✓ · última HRV hace 13,9 h ✓ · última FC hace 4 min ✓ · último Body Battery hace 9 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 18/18
-- **Ejecución:** 3 franja(s) de Sync perdidas (17/10 16:45, 17/10 22:45, 18/10 08:30)
+- **Ejecución:** 3 franja(s) de Sync perdidas (17/10 22:45, 18/10 08:30, 18/10 16:45)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 19:19 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 22:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
