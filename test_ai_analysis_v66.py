@@ -21,6 +21,13 @@ class Analysis(unittest.TestCase):
         self.assertEqual(ai.check(ws())["state"], "absent")
         self.assertEqual(ai.section(ws()), "")
 
+    def test_cycle_id_with_suffix(self):
+        # los ciclos tras el sueño llevan sufijo («2026-10-18-0830-post-sleep») y deben leerse completos
+        text = "<!-- cycle_id: 2026-10-18-0830-post-sleep -->\nHRV 46 ms"
+        r = ai.check(ws(text, current="2026-10-18-0830-post-sleep"))
+        self.assertEqual((r["state"], r["cycle_id"]), ("ok", "2026-10-18-0830-post-sleep"))
+        self.assertEqual(ai.check(ws(text))["state"], "stale")
+
     def test_ok_and_numbers(self):
         r = ai.check(ws("<!-- cycle_id: 2026-10-18-0830 -->\nHRV 46 ms y 45/100, RPE máx. 4, FC 68,1."))
         self.assertEqual((r["state"], r["unverified"]), ("ok", []))
