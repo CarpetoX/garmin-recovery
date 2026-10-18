@@ -871,6 +871,12 @@ def main():
     except Exception as exc:
         status["error"] = f"{type(exc).__name__}: {exc}"
 
+    exp = status.get("token_expiry")
+    if isinstance(exp, dict) and exp.get("state") == "expired" and status.get("status") in ("success", "partial"):
+        # la descarga funcionó: la fecha hallada es solo la de un token de acceso que se renueva solo
+        exp["state"] = "access_token_only"
+        exp["note"] = "Solo se encontró la caducidad de un token de acceso corto; la sesión se renueva sola y no consta fecha límite."
+
     save_json(STATUS_PATH, status)
     print(json.dumps(status, ensure_ascii=False))
 
