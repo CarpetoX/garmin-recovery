@@ -34,11 +34,11 @@ def render(result: dict, extras: dict | None = None) -> str:
     title = "Rendimiento y recuperación"
     extra = _extra_sections(result, extras)
     head = PWA_HEAD if extras.get("pwa") else ""
-    values = {"TITLE": title, "HEAD": head, "BANNER": extra["banner"], "HOYTOP": extra["hoytop"], "HOY": extra["hoy"], "TEND": extra["tendencias"],
+    values = {"TITLE": title, "HEAD": head, "BANNER": extra["banner"], "HOYTOP": extra["hoytop"], "CAMBIOS": extra["cambios"], "HOY": extra["hoy"], "TEND": extra["tendencias"],
               "ENT": extra["entrenos"], "SIS": extra["sistema"], "DATE": _esc(result["date"]),
               "TONE": tone, "ICON": icon, "DATA": payload}
     # una sola pasada: el contenido sustituido nunca se vuelve a interpretar como marcador
-    return re.sub(r"\{\{(TITLE|HEAD|BANNER|HOYTOP|HOY|TEND|ENT|SIS|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
+    return re.sub(r"\{\{(TITLE|HEAD|BANNER|HOYTOP|CAMBIOS|HOY|TEND|ENT|SIS|DATE|TONE|ICON|DATA)\}\}", lambda m: values[m.group(1)], TEMPLATE)
 
 
 PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
@@ -139,19 +139,26 @@ def _plan_html(plan: list | None) -> str:
 
 
 def _changes_html(c: dict | None, official: tuple | None = None) -> str:
+    """Tarjetas pequeñas «frente a ayer» (dentro del héroe): recuperación oficial y cada indicador que cambia."""
     if not c or not c.get("available"):
         return ""
     f = lambda v, d: f"{v:.{d}f}".replace(".", ",")  # noqa: E731
-    head = (f"<p><b>Recuperación oficial:</b> {f(official[0], 0)} → {f(official[1], 0)}</p>" if official else "")
-    if not c["items"]:
-        body = "<p class='h2sub'>Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p>"
-    else:
-        body = "<ul class='clean chg'>" + "".join(
-            f"<li class='{'pos' if i['favorable'] else 'neg'}'><span class='arrow'>{'↑' if i['favorable'] else '↓'}</span>"
-            f"<span>{_esc(i['label'])}: {f(i['from'], i['dec'])} → {f(i['to'], i['dec'])}{_esc(i['unit'])}</span></li>"
-            for i in c["items"]) + "</ul>"
-    return ('<section class="card" aria-label="Qué ha cambiado desde ayer"><h2>Qué ha cambiado desde ayer</h2>'
-            f'{head}{body}<p class="h2sub" style="margin-top:8px">diferencias observadas, no causas</p></section>')
+    cards = []
+    if official:
+        up = official[1] >= official[0]
+        cards.append(("Recuperación", f"{f(official[0], 0)} → {f(official[1], 0)}", "", up))
+    for i in c["items"]:
+        cards.append((i["label"], f"{f(i['from'], i['dec'])} → {f(i['to'], i['dec'])}", i["unit"].strip(), i["favorable"]))
+    if not cards:
+        return ("<div class='chg-wrap'><div class='chg-title'>Desde ayer</div>"
+                "<p class='h2sub'>Ningún indicador cambió lo bastante como para destacarlo.</p></div>")
+    body = "".join(
+        f"<div class='chg-card {'pos' if ok else 'neg'}'><span class='chg-l'>{_esc(lab)}</span>"
+        f"<b>{_esc(val)}</b><small>{_esc(unit)}</small><i aria-hidden='true'>{'↑' if ok else '↓'}</i></div>"
+        for lab, val, unit, ok in cards)
+    return ("<div class='chg-wrap' aria-label='Qué ha cambiado desde ayer'><div class='chg-title'>Desde ayer "
+            "<span>· diferencias observadas, no causas</span></div>"
+            f"<div class='chg-cards'>{body}</div></div>")
 
 
 def _extra_sections(result: dict, extras: dict | None = None) -> dict:
@@ -161,7 +168,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     if (extras or {}).get("snapshot"):
         return {"banner": (f'<section class="card" style="margin-bottom:16px"><b>Instantánea del {_esc(extras["snapshot"])}</b> · '
                            '<a href="../index.html">← Volver al panel actual</a></section>'),
-                "hoytop": "", "hoy": "", "tendencias": "", "entrenos": "", "sistema": ""}
+                "hoytop": "", "cambios": "", "hoy": "", "tendencias": "", "entrenos": "", "sistema": ""}
     from .report import summary_block
     from .weekly import weekly_summary
     dec = result.get("decision") or {}
@@ -210,7 +217,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Análisis de Claude</h2>'
                f"<p>{md_inline(ai)}</p>"
                '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai else ""
-    top_block = changes + ai_html + brief_html + ('' if changes else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = ai_html + brief_html + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
@@ -225,7 +232,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
     # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
     return {"banner": "",
-            "hoytop": top_block,
+            "hoytop": top_block, "cambios": changes,
             "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": calendar_html + week_html,
             "entrenos": strength_html,
@@ -481,6 +488,20 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
  #sessions td.empty{grid-column:1/-1}
 }
 .brief p{margin:8px 0;font-size:14.5px;line-height:1.55}.brief h2{margin-bottom:4px}
+.hero{grid-template-columns:minmax(0,1fr)!important;gap:14px}
+@media (min-width:721px){.hero{grid-template-columns:minmax(260px,320px) 1fr!important}}
+.hero-main{display:flex;align-items:center;gap:14px}
+.heroring{width:104px;height:104px;flex:0 0 104px;margin:0}
+.heroring .arc,.heroring .trk{stroke-width:10}
+.heroring .score{font-size:34px}.heroring .score small{font-size:11px}
+.hero-txt{min-width:0}.hero-txt .pill{margin-top:4px}.hero-txt .h2sub{margin-bottom:2px}
+.guidance{font-size:16px}
+.chg-wrap{margin-top:12px}.chg-title{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:6px}.chg-title span{font-weight:400;color:var(--text-3)}
+.chg-cards{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:4px;scrollbar-width:none;margin:0 -2px}.chg-cards::-webkit-scrollbar{display:none}
+.chg-card{position:relative;flex:0 0 auto;min-width:104px;scroll-snap-align:start;padding:9px 12px 9px 12px;border-radius:14px;background:var(--glass-chip,var(--surface-2));display:grid;gap:1px}
+.chg-l{font-size:11px;color:var(--text-3)}.chg-card b{font-size:15px;font-variant-numeric:tabular-nums;font-weight:620}.chg-card small{font-size:11px;color:var(--text-3);min-height:1em}
+.chg-card i{position:absolute;right:10px;bottom:8px;font-style:normal;font-weight:700;font-size:14px}
+.chg-card.pos i{color:var(--good-ink)}.chg-card.neg i{color:var(--critical-ink)}
 </style>
 </head>
 <body>
@@ -498,16 +519,19 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 
   <div class="grid tab on" id="tab-hoy" data-tab="hoy">
     <section class="card hero tone-{{TONE}}" id="hoy" aria-label="Disponibilidad de hoy">
-      <div>
-        <div class="h2sub">Decisión de hoy · puntuación oficial</div>
+      <div class="hero-main">
         <div class="heroring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="52"/><circle class="arc" id="heroarc" cx="60" cy="60" r="52" transform="rotate(-90 60 60)"/></svg>
         <div class="score" id="score">—</div></div>
-        <div class="pill"><span class="dot" aria-hidden="true">{{ICON}}</span><span class="pill-text" id="zone-label"></span></div>
-        <div class="meta" id="confidence"></div>
+        <div class="hero-txt">
+          <div class="h2sub">Decisión de hoy · puntuación oficial</div>
+          <div class="pill"><span class="dot" aria-hidden="true">{{ICON}}</span><span class="pill-text" id="zone-label"></span></div>
+          <div class="meta" id="confidence"></div>
+        </div>
       </div>
-      <div>
+      <div class="hero-side">
         <p class="guidance" id="guidance"></p>
         <div class="rx" id="rx"></div>
+        {{CAMBIOS}}
       </div>
     </section>
 

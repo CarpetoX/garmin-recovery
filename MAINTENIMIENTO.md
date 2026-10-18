@@ -195,3 +195,6 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 
 ### V7.6 · «En breve» de Claude en Hoy
 - `ai_analysis.lead` extrae el párrafo `**En breve:** …` del análisis (solo ciclo vigente); el panel lo muestra en Hoy («Análisis de Claude») y en el informe completo la sección «Análisis de Claude» sube tras «Balance y orientación» y se abre por defecto. Instrucciones actualizadas en `INSTRUCCIONES_INFORME.md` y `RUTINA_INFORME_CLAUDE.md`.
+
+### V7.7 · Héroe compacto
+- La puntuación oficial es un anillo más pequeño junto a la decisión; los cambios frente a ayer pasan a tarjetas pequeñas dentro del héroe (recuperación oficial primero, luego cada indicador que cambia; ↑ favorable / ↓ desfavorable). Sin cambios de cifras ni de reglas.
