@@ -179,6 +179,11 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     if missed:
         add(f"\n⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: {', '.join(str(m)[5:16].replace('T', ' ') for m in missed)}.")
     add("\nLa calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.")
+    try:
+        from . import source_health
+        add(source_health.to_markdown(source_health.collect(root)).rstrip())
+    except Exception as exc:  # noqa: BLE001 - el estado de fuentes nunca debe impedir el informe
+        add(f"\n_Estado de las fuentes no disponible en este ciclo ({type(exc).__name__})._")
 
     # 2 ------------------------------------------------------------------
     add("\n## 2. Recuperación fisiológica\n")

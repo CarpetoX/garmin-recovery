@@ -104,6 +104,19 @@ def source_problems(root: Path, now: datetime) -> list[dict]:
     if newest is not None and newest < limit:
         out.append({"key": "intervals", "text": f"Intervals.icu no aporta datos nuevos (último día {newest or '—'}). "
                     "Revisa el secreto `INTERVALS_API_KEY` y la sincronización Garmin → Intervals."})
+    status = _read(root / "intervals_status.json")
+    failing = [f"{name} ({e.get('kind') or '?'}{', HTTP ' + str(e['http']) if e.get('http') else ''}, "
+               f"{e.get('consecutive_failures')} seguidos)"
+               for name, e in status.items()
+               if isinstance(e, dict) and e.get("status") == "error" and int(e.get("consecutive_failures") or 0) >= 3]
+    if failing:
+        text = ("Intervals.icu falla de forma repetida: " + "; ".join(failing)
+                + ". Se están usando los últimos datos descargados.")
+        hit = next((p for p in out if p["key"] == "intervals"), None)
+        if hit:
+            hit["text"] += " " + text
+        else:
+            out.append({"key": "intervals", "text": text})
     return out
 
 
