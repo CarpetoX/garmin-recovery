@@ -1,10 +1,10 @@
 # Resumen semanal · 12/10–18/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-18-1158-5bdf6d`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-18-1241-c401f3`)._
 
 ## En una frase
 
-- 9 sesiones (+0); HRV de 7 días dentro de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; RPE máximo aún sin comprobar (no hay decisiones registradas en días entrenados).
+- 9 sesiones (+0); HRV de 7 días dentro de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (1 de 4 días entrenados comprobados).
 - Decisión registrada en 2/7 días: verde 1 · rojo 1.
 
 ## Gráficas de la semana
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 9 | 9 |
 | Minutos | 236 | 262 |
 | Carga (Intervals) | 142 | 121 |
-| sRPE (RPE × min) | 1203 | 1458 |
+| sRPE (RPE × min) | 1694 | 1458 |
 
-Monotonía 0,66 · strain 794 · ACWR — · RPE registrado en 8/9 sesiones.
+Monotonía 0,89 · strain 1506 · ACWR — · RPE registrado en 9/9 sesiones.
 
 ## Recuperación
 
@@ -47,6 +47,10 @@ HRV de 7 días hoy: 57,0 ms (rango normal 54,3–62,0 ms). Turnos: MT, TN, MT, T
 | Fecha | Ejercicio | Carga máx. declarada | Mejor serie | 1RM mín. | Series |
 |---|---|--:|--:|--:|--:|
 | 13/10 | Fuerza - Squat snatch EMOM 8 min | 68,0 kg | 68 × 1 | 68,0 kg | 8/8 |
+| 18/10 | sentadilla trasera | 185,0 kg | 185 × 1 | 185,0 kg | 15/15 |
+| 18/10 | sentadilla péndulo | 60,0 kg | — | — | 4/4 |
+| 18/10 | curl femoral tumbado | 67,0 kg | — | — | 4/4 |
+| 18/10 | curl femoral de pie unilateral | 42,5 kg | — | — | 8/8 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
@@ -63,7 +67,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 6/7 · con sueño: 7/7.
-- Sesiones con RPE: 8/9.
+- Sesiones con RPE: 9/9.
 
 ## Validación de modelos
 

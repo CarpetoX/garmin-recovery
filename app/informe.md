@@ -1,6 +1,6 @@
-# Informe matutino · 18/10/2026
+# Informe de seguimiento · 18/10/2026
 
-`GR-2026-10-18-1158-5bdf6d` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-1241-c401f3` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 4 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -37,7 +37,7 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## Cómo ajustar tu sesión de hoy
 
-<details open><summary>Reglas por tipo de sesión</summary>
+<details><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
@@ -56,35 +56,32 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-1153-fa8c12 (18/10 11:53):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-18-1158-5bdf6d (18/10 11:58):
+- Sesiones con RPE: 17 → 18.
 
-## Qué ha cambiado respecto a tu línea base
+## Actividad de hoy
 
-- **HRV:** 69 ms esta noche (+19 % vs. base 58 ms); media de 7 días 57,0 ms, dentro de tu rango normal (54–62 ms).
-- **FC:** reposo 56 lpm (+0 vs. mediana 56); nocturna 61,2 lpm (-1,3).
-- **Sueño:** 7,83 h, puntuación 87; deuda 4,0 h en 3 noches frente a 7,5 h de necesidad.
-- **Estrés Garmin ayer:** 38 de media (tu mediana 39).
+| Fecha | Tipo | Sesión | Min | Carga | FC media | RPE | sRPE |
+|---|---|---|--:|--:|--:|--:|--:|
+| 18/10 10:45 | Fuerza | Fuerza - pierna: sentadilla trasera, péndulo y femorales | 66 | 24 | 113 | 7,5 | 491 |
 
-**Señales coincidentes:** 0 de 4 señales en contra; a favor: Variabilidad cardiaca (HRV). Sin datos: Carga de entrenamiento, Sensaciones (Intervals).
+**¿Encaja con la decisión?** La actividad de hoy (carga 24, RPE máx. 7,5) encaja con la decisión.
 
-## Incertidumbre
+**Carga 7 días:** 142 en 9 sesiones · sRPE 1.694 · monotonía 0,89.
 
-- Confianza de los datos: **alta**
-- Confianza de la recomendación: **media** (línea base de 17 noches (alta desde 28))
+## Gráficas
 
-## Plan del día
+![RPE frente al máximo del día](charts/rpe.svg)
 
-- Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien. RPE ≤ 9, volumen 100 %.
-- Hoy turno de noche: si entrenas, que sea antes del turno, corto y sin máximos.
+![Carga](charts/load.svg)
 
-## Tendencias
+![Sesiones](charts/sessions.svg)
 
-![Disponibilidad](charts/readiness.svg)
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
 
 ## Recuperación: tendencias de 28 días
 
-<details open><summary>HRV, FC y sueño</summary>
+<details><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -96,7 +93,6 @@ Frente al informe GR-2026-10-18-1153-fa8c12 (18/10 11:53):
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i198584544** (18/10 10:45, Sin detalle, 66 min, carga 24) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -105,6 +101,10 @@ Frente al informe GR-2026-10-18-1153-fa8c12 (18/10 11:53):
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 18/10 | sentadilla trasera | barra | 185,0 kg con barra | 185 × 1 | 185,0 kg | 5.415 kg | 15/15 | 7,5 |
+| 18/10 | sentadilla péndulo | máquina de placas | 60,0 kg indicados en máquina | — | — | 1.920 kg | 4/4 | 7,5 |
+| 18/10 | curl femoral tumbado | máquina de placas | 67,0 kg indicados en máquina | — | — | 2.208 kg | 4/4 | 7,5 |
+| 18/10 | curl femoral de pie unilateral | máquina de placas | 42,5 kg indicados en máquina | — | — | 3.400 kg | 8/8 | 7,5 |
 | 13/10 | Fuerza - Squat snatch EMOM 8 min | barra | 68,0 kg con barra | 68 × 1 | 68,0 kg | 578 kg | 8/8 | 6,0 |
 | 11/10 | sentadilla trasera | barra | 150,0 kg con barra | 120 × 8 | 152,0 kg | 4.260 kg | 9/9 | 6,0 |
 | 11/10 | prensa horizontal | máquina de placas | 120,0 kg indicados en máquina | — | — | 4.320 kg | 4/4 | 6,0 |
@@ -113,10 +113,6 @@ Frente al informe GR-2026-10-18-1153-fa8c12 (18/10 11:53):
 | 10/10 | press de pecho inclinado con mancuernas | mancuernas (par) | 80,0 kg total (2 × 40,0 kg) | 80 × 4 | 90,7 kg | 3.488 kg | 7/7 | 6,0 |
 | 10/10 | press banca en máquina sentado | máquina de placas | 65,0 kg indicados en máquina | — | — | 2.080 kg | 4/4 | 6,0 |
 | 10/10 | press superinclinado iso lateral | máquina de discos | 60,0 kg total (dos lados) | — | — | 2.400 kg | 5/5 | 6,0 |
-| 10/10 | aperturas de pecho en máquina sentado | máquina de placas | 50,5 kg indicados en máquina | — | — | 2.020 kg | 4/4 | 6,0 |
-| 10/10 | tríceps en polea | máquina de placas | 60,0 kg indicados en máquina | — | — | 2.880 kg | 4/4 | 6,0 |
-| 10/10 | fondos de pecho | peso corporal | peso corporal | — | — | — | —/4 | 6,0 |
-| 10/10 | sit-ups | peso corporal | peso corporal | — | — | — | —/4 | 6,0 |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -129,16 +125,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-1158-5bdf6d`
+- **Identificador del informe:** `GR-2026-10-18-1241-c401f3`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 11:58 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 3,0 h ✓ · última HRV hace 3,0 h ✓ · última FC hace 7 min ✓ · último Body Battery hace 11 min ✓
-- **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 17/18 (sin RPE: 18/10 10:45)
+- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 12:40 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 3,7 h ✓ · última HRV hace 3,8 h ✓ · última FC hace 21 min ✓ · último Body Battery hace 32 min ✓
+- **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 18/18
 - **Ejecución:** 4 franja(s) de Sync perdidas (17/10 08:30, 17/10 16:45, 17/10 22:45, 18/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 11:58 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 12:41 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
