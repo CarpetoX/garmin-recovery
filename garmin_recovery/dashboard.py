@@ -188,7 +188,7 @@ TEMPLATE = r"""<!doctype html>
 :root{
   color-scheme: light;
   --bg:#f6f6f4; --surface:#fcfcfb; --surface-2:#f0efec; --line:#e4e3df;
-  --text:#0b0b0b; --text-2:#52514e; --text-3:#77766f;
+  --text:#0b0b0b; --text-2:#52514e; --text-3:#63625c;
   --series-1:#2a78d6; --series-1-wash:rgba(42,120,214,.12); --series-2:#eb6834;
   --good:#0ca30c; --warning:#fab219; --critical:#d03b3b; --muted:#9a9990;
   --good-ink:#006300; --warning-ink:#7a5200; --critical-ink:#a32727;
@@ -198,7 +198,7 @@ TEMPLATE = r"""<!doctype html>
   :root:not([data-theme="light"]){
     color-scheme: dark;
     --bg:#121211; --surface:#1a1a19; --surface-2:#242422; --line:#30302d;
-    --text:#f0efec; --text-2:#c3c2b7; --text-3:#9a998f;
+    --text:#f0efec; --text-2:#c3c2b7; --text-3:#aeada3;
     --series-1:#3987e5; --series-1-wash:rgba(57,135,229,.16); --series-2:#d95926;
     --good-ink:#5fd35f; --warning-ink:#fab219; --critical-ink:#f08080;
   }
@@ -206,7 +206,7 @@ TEMPLATE = r"""<!doctype html>
 :root[data-theme="dark"]{
   color-scheme: dark;
   --bg:#121211; --surface:#1a1a19; --surface-2:#242422; --line:#30302d;
-  --text:#f0efec; --text-2:#c3c2b7; --text-3:#9a998f;
+  --text:#f0efec; --text-2:#c3c2b7; --text-3:#aeada3;
   --series-1:#3987e5; --series-1-wash:rgba(57,135,229,.16); --series-2:#d95926;
   --good-ink:#5fd35f; --warning-ink:#fab219; --critical-ink:#f08080;
 }
