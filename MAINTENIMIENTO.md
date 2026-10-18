@@ -184,3 +184,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 ### V7.3 fase 5 · FC por sesión
 - `hr_curves.py` (puro, sin red ni reloj): `refresh` guarda en `activity_hr_curves.json` la curva de FC de cada sesión de los últimos 28 días (stream de Intervals.icu, un punto cada 10 s, máx. 10 descargas por ejecución, más recientes primero; sin FC → `available: false`; fallo de red → se reintenta). Se ejecuta en Advanced (envuelto en try/except con `::warning::`) y el workflow lo versiona.
 - Web: en Entrenos, las filas con curva llevan ♥ y se abren con detalle (gráfica con zonas, valores al tocar, tiempo por zona). `icu_hr_zones` son límites superiores de zona. Solo visualización: no entra en ninguna puntuación ni en la decisión.
+
+### V7.4 · Retoque visual
+- Hoy: anillo grande de la puntuación con tinte de zona; mini-curvas de 14 días en los indicadores clave; líneas suavizadas y área bajo la puntuación; iconos SVG propios en la barra inferior; plan de 7 días como tira horizontal; sesiones como tarjetas en móvil (≤640 px, `data-l` en las celdas); animación de entrada y del anillo (desactivada con `prefers-reduced-motion`).
+- Informe completo: icono por sección (`webreport.ICONS`), KPI más grandes y filas alternas en tablas. Solo presentación: no cambia ninguna cifra ni la decisión.

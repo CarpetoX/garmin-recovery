@@ -404,7 +404,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));z-index:20;display:flex;gap:2px;
   width:min(440px,calc(100% - 24px));padding:6px;border-radius:26px;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 30px rgba(0,0,0,.18)}
 .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 4px;border-radius:20px;text-decoration:none;font-size:11px;color:var(--text-2)}
-.tabbar a span{font-size:18px;line-height:1.2}
+.tabbar a span{display:flex;line-height:1;opacity:.8}.tabbar a.on span{opacity:1;color:var(--series-1)}
 .tabbar a.on{background:var(--series-1-wash);color:var(--text);font-weight:600}
 .tabbar a:focus-visible{outline:2px solid var(--series-1)}
 @media (min-width:900px){.tabbar{bottom:16px}}
@@ -423,6 +423,50 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--glass-chip, var(--surface-2))}.hrmark{color:var(--critical);font-size:11px}
 .hrwrap{position:relative}.hrtip{position:absolute;left:8px;top:2px;font-size:12px;background:var(--glass, var(--surface));border:1px solid var(--line);border-radius:8px;padding:2px 8px;opacity:0;pointer-events:none}
 .zh{font-size:13px;margin:12px 0 4px}.zrow{display:grid;grid-template-columns:96px 1fr 54px;gap:8px;align-items:center;font-size:12.5px;padding:2px 0}.zrow i{display:block;height:8px;border-radius:4px}.zrow b{text-align:right}
+
+/* ---- V7.4 · retoque visual ---- */
+:root{--tone-tint:transparent}
+.tone-good{--tone-tint:rgba(12,163,12,.14)}.tone-warning{--tone-tint:rgba(250,178,25,.18)}.tone-critical{--tone-tint:rgba(208,59,59,.16)}
+.hero{background-image:radial-gradient(120% 140% at 0% 0%,var(--tone-tint),transparent 62%)}
+.heroring{position:relative;width:152px;height:152px;margin:6px 0 4px}
+.heroring svg{position:absolute;inset:0;width:100%;height:100%}
+.heroring .trk{fill:none;stroke:var(--glass-chip,var(--surface-2));stroke-width:9}
+.heroring .arc{fill:none;stroke:var(--good);stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1.1s cubic-bezier(.22,.8,.24,1)}
+.tone-warning .heroring .arc{stroke:var(--warning)}.tone-critical .heroring .arc{stroke:var(--critical)}.tone-muted .heroring .arc{stroke:var(--muted)}
+.heroring .score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:46px;font-variant-numeric:tabular-nums}
+.heroring .score small{font-size:12px;margin:2px 0 0}
+.tile .value,.ring-num,.score,.kpi strong{font-variant-numeric:tabular-nums}
+.tile .value{display:flex;align-items:baseline;gap:2px}.spark{margin-left:auto;width:72px;height:26px;align-self:center;opacity:.9}
+.drivers li{border-top:0;padding:7px 0}
+.card{border-color:transparent}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card{border-color:var(--line)}}
+/* plan de 7 días: tira horizontal */
+.plan{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 8px;margin:0 -4px;scrollbar-width:none}.plan::-webkit-scrollbar{display:none}
+.plan li{flex:0 0 138px;scroll-snap-align:start;display:flex;flex-direction:column;gap:6px;align-items:flex-start;padding:12px;border-radius:16px;border-left:0;border-top:4px solid var(--muted)}
+.plan li>div:last-child{min-width:0}
+.plan .pd{display:flex;gap:6px;align-items:baseline;text-align:left;font-size:12px}.plan .pd br{display:none}.plan .pd b{font-size:22px}
+.plan li.k-hard{border-top-color:var(--critical);background-image:linear-gradient(180deg,rgba(208,59,59,.12),transparent 70%)}
+.plan li.k-mod{border-top-color:var(--warning);background-image:linear-gradient(180deg,rgba(250,178,25,.14),transparent 70%)}
+.plan li.k-light{border-top-color:var(--good);background-image:linear-gradient(180deg,rgba(12,163,12,.12),transparent 70%)}
+.plan li.k-rest{border-top-color:var(--series-1);background-image:linear-gradient(180deg,rgba(57,135,229,.14),transparent 70%)}
+/* movimiento sutil */
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.js .tab.on>*{animation:rise .42s cubic-bezier(.22,.8,.24,1) both}
+.js .tab.on>*:nth-child(2){animation-delay:.05s}.js .tab.on>*:nth-child(3){animation-delay:.1s}.js .tab.on>*:nth-child(4){animation-delay:.15s}.js .tab.on>*:nth-child(n+5){animation-delay:.2s}
+@media (prefers-reduced-transparency:reduce){.card{border-color:var(--line)}}
+@media (prefers-reduced-motion:reduce){.js .tab.on>*{animation:none}.heroring .arc{transition:none}}
+/* sesiones como tarjetas en móvil */
+@media (max-width:640px){
+ #sessions,#sessions tbody{display:block}#sessions thead{display:none}
+ #sessions tr{display:grid;grid-template-columns:repeat(5,1fr);gap:4px 6px;padding:12px;margin-bottom:8px;border-radius:16px;background:var(--glass-chip,var(--surface-2))}
+ #sessions td{border:0;padding:0;white-space:normal;text-align:left}
+ #sessions td:nth-child(3){grid-column:1/-1;order:-2;font-weight:600;font-size:14px}
+ #sessions td:nth-child(1){grid-column:1/4;order:-1;color:var(--text-3);font-size:12px}
+ #sessions td:nth-child(2){grid-column:4/6;order:-1;color:var(--text-3);font-size:12px;text-align:right}
+ #sessions td.num{text-align:left;font-size:15px;font-weight:600;padding-top:6px}
+ #sessions td.num::before{content:attr(data-l);display:block;font-size:10.5px;font-weight:500;color:var(--text-3)}
+ #sessions td.empty{grid-column:1/-1}
+}
 </style>
 </head>
 <body>
@@ -442,7 +486,8 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
     <section class="card hero tone-{{TONE}}" id="hoy" aria-label="Disponibilidad de hoy">
       <div>
         <div class="h2sub">Decisión de hoy · puntuación oficial</div>
-        <div class="score" id="score">—</div>
+        <div class="heroring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="52"/><circle class="arc" id="heroarc" cx="60" cy="60" r="52" transform="rotate(-90 60 60)"/></svg>
+        <div class="score" id="score">—</div></div>
         <div class="pill"><span class="dot" aria-hidden="true">{{ICON}}</span><span class="pill-text" id="zone-label"></span></div>
         <div class="meta" id="confidence"></div>
       </div>
@@ -535,10 +580,10 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
   <footer id="footer"></footer>
 </div>
 <nav class="tabbar" aria-label="Secciones">
-  <a href="#hoy" data-tab="hoy" class="on"><span aria-hidden="true">◉</span>Hoy</a>
-  <a href="#tendencias" data-tab="tendencias"><span aria-hidden="true">📈</span>Tendencias</a>
-  <a href="#entrenos" data-tab="entrenos"><span aria-hidden="true">🏋️</span>Entrenos</a>
-  <a href="#sistema" data-tab="sistema"><span aria-hidden="true">⚙️</span>Sistema</a>
+  <a href="#hoy" data-tab="hoy" class="on"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg></span>Hoy</a>
+  <a href="#tendencias" data-tab="tendencias"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span>Tendencias</a>
+  <a href="#entrenos" data-tab="entrenos"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span>Entrenos</a>
+  <a href="#sistema" data-tab="sistema"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span>Sistema</a>
 </nav>
 <div class="tip" id="tip" role="tooltip"></div>
 
@@ -562,6 +607,9 @@ $('badge').textContent = `Modelo ${D.model_version} · ${D.mode === 'shadow' ? '
 const DEC = D.decision || {zone: R.zone, guidance: R.guidance, registry: [], divergence: []};
 const official = (DEC.registry || []).find(m => m.role === 'oficial') || {};
 $('score').innerHTML = official.score == null ? '—' : `${fmt(official.score)}<small>/100</small>`;
+(function(){ const a = $('heroarc'); if (!a) return; const c = 2 * Math.PI * 52, v = official.score == null ? 0 : Math.max(0, Math.min(100, official.score));
+  a.style.strokeDasharray = c.toFixed(1); a.style.strokeDashoffset = c.toFixed(1);
+  requestAnimationFrame(() => requestAnimationFrame(() => { a.style.strokeDashoffset = (c * (1 - v / 100)).toFixed(1); })); })();
 $('zone-label').textContent = DEC.guidance.label + (DEC.agreement === 'total' ? ' · modelos de acuerdo' : ' · regla conservadora');
 const reasons = (R.reasons || []).map(r => r.split(':')[0].replace(/_/g,' '));
 const DC = R.data_confidence || {}, RC = R.recommendation_confidence || {};
@@ -586,7 +634,11 @@ const tiles = [
   {label:'Carga 7 días (Intervals)', value: fmt(L.week_load), unit:'', delta: `${L.week_sessions} sesiones` + (L.week_change_pct != null ? ` · ${sign(L.week_change_pct)} % vs. semana previa` : '')},
   {label:'Forma (carga reciente vs. habitual)', value: L.form_interpretable ? sign(L.form_pct) : sign(L.tsb, 1), unit: L.form_interpretable ? '%' : '', delta: L.form_interpretable ? `zona ${L.form_zone} · CTL ${fmt(L.ctl,1)}` : `CTL ${fmt(L.ctl,1)} · aún sin carga crónica suficiente`},
 ];
-$('tiles').innerHTML = tiles.map(t => `<div class="card tile"><div class="label">${t.label}</div><div class="value">${t.value}<small>${t.unit}</small></div><div class="delta">${esc(t.delta)}</div></div>`).join('');
+const spark = key => { const v = T.slice(-14).map(d => d[key]).filter(x => x != null); if (v.length < 3) return '';
+  const lo = Math.min(...v), hi = Math.max(...v), r = hi - lo || 1, pts = v.map((a, i) => [i / (v.length - 1) * 80, 4 + (1 - (a - lo) / r) * 20]);
+  return `<svg class="spark" viewBox="0 0 80 28" aria-hidden="true"><path d="${smooth(pts)}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linecap="round"/><circle cx="${pts[pts.length-1][0]}" cy="${pts[pts.length-1][1].toFixed(1)}" r="2.6" fill="var(--series-1)"/></svg>`; };
+const sparkKeys = ['hrv_rolling_ms', 'resting_hr', 'sleep_hours', 'load', null];
+$('tiles').innerHTML = tiles.map((t, i) => `<div class="card tile"><div class="label">${t.label}</div><div class="value">${t.value}<small>${t.unit}</small>${sparkKeys[i] ? spark(sparkKeys[i]) : ''}</div><div class="delta">${esc(t.delta)}</div></div>`).join('');
 
 // ---------- Medidores ----------
 const tone = s => s == null ? 'var(--muted)' : s >= 70 ? 'var(--good)' : s >= 50 ? 'var(--warning)' : 'var(--critical)';
@@ -659,7 +711,9 @@ function chart(el, opt){
         const segs = []; let cur = [];
         T.forEach((d, i) => { const v = d[se.key]; if (v == null) { if (cur.length) segs.push(cur); cur = []; } else cur.push([x(i), y(v)]); });
         if (cur.length) segs.push(cur);
-        if (se.kind !== 'dots') segs.forEach(g => { if (g.length > 1) s += `<path d="M${g.map(p => p.join(',')).join('L')}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`; });
+        if (se.kind !== 'dots') segs.forEach(g => { if (g.length > 1) { const d = smooth(g);
+          if (se.area) s += `<path d="${d}L${g[g.length-1][0]},${y(lo)}L${g[0][0]},${y(lo)}Z" fill="${col}" fill-opacity=".13"/>`;
+          s += `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>`; } });
         if (se.kind === 'dots' || se.markers) T.forEach((d, i) => { const v = d[se.key]; if (v != null) s += `<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`; });
       }
     });
@@ -683,10 +737,16 @@ function chart(el, opt){
   };
   draw(); new ResizeObserver(draw).observe(el);
 }
+function smooth(g){ // curva suave (Catmull-Rom → Bézier) que no se sale de los puntos
+  if (g.length < 3) return 'M' + g.map(p => p.join(',')).join('L');
+  let d = `M${g[0][0]},${g[0][1]}`;
+  for (let i = 0; i < g.length - 1; i++) { const p0 = g[i - 1] || g[i], p1 = g[i], p2 = g[i + 1], p3 = g[i + 2] || p2, k = 0.18;
+    d += `C${(p1[0] + (p2[0] - p0[0]) * k).toFixed(1)},${(p1[1] + (p2[1] - p0[1]) * k).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) * k).toFixed(1)},${(p2[1] - (p3[1] - p1[1]) * k).toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`; }
+  return d; }
 function niceStep(raw){ const p = Math.pow(10, Math.floor(Math.log10(raw || 1))), f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p; }
 
 chart($('c-score'), {label:'Disponibilidad 28 días', min:0, max:100, refs:[{y:70},{y:50}],
-  series:[{key:'score', markers:true}], tip: d => d.score == null ? 'Sin puntuación (datos incompletos)' : `Puntuación <b>${fmt(d.score)}</b> · ${zoneTxt[d.zone]}` + (d.garmin_readiness != null ? `<br>Garmin Training Readiness ${fmt(d.garmin_readiness)}` : '')});
+  series:[{key:'score', markers:true, area:true}], tip: d => d.score == null ? 'Sin puntuación (datos incompletos)' : `Puntuación <b>${fmt(d.score)}</b> · ${zoneTxt[d.zone]}` + (d.garmin_readiness != null ? `<br>Garmin Training Readiness ${fmt(d.garmin_readiness)}` : '')});
 chart($('c-hrv'), {label:'HRV nocturna', band:['hrv_low_ms','hrv_high_ms'],
   series:[{key:'hrv_rolling_ms'}, {key:'hrv_ms', kind:'dots'}], tip: d => `Noche <b>${fmt(d.hrv_ms)} ms</b><br>Media 7 días ${fmt(d.hrv_rolling_ms,1)} ms` + (d.hrv_low_ms != null ? `<br>Rango normal ${fmt(d.hrv_low_ms)}–${fmt(d.hrv_high_ms)} ms` : '')});
 const rhrBase = K.baseline_resting_hr;
@@ -704,7 +764,7 @@ const sess = D.recent_sessions || [];
 const HRC = (D.hr_curves && D.hr_curves.activities) || {};
 const hasCurve = s => !!(HRC[s.id] && HRC[s.id].available);
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? '<span class="hrmark" aria-hidden="true">♥</span> ' : ''}${esc(s.label || s.name || '')}</td><td class="num">${fmt(s.duration_min)}</td><td class="num">${fmt(s.load)}</td><td class="num">${fmt(s.avg_hr)}</td><td class="num">${fmt(s.rpe,1)}</td><td class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? '<span class="hrmark" aria-hidden="true">♥</span> ' : ''}${esc(s.label || s.name || '')}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 
 // ---------- Detalle de FC de una sesión ----------
