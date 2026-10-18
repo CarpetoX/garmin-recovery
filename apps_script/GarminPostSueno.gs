@@ -8,7 +8,7 @@
  *       cuanto se cumple (antes esperaba hasta la siguiente hora fija: con un
  *       despertar a las 09:00 el informe definitivo salía a las 10:00);
  *     · sueño confirmado pero recuperación sin sincronizar -> reintento a los 15 min.
- * - Tope de 8 solicitudes al día para no llenar el historial de commits.
+ * - Tope de 10 solicitudes al día para no llenar el historial de commits.
  * - La decisión es una función pura (_postSuenoPlan_) comprobada con tests.
  *
  * Cambios v2.9.4 (17-10-2026, puntualidad del informe de las 09:05):
@@ -50,7 +50,7 @@ const POSTSUENO_GARMIN = Object.freeze({
   pendingEveryMinutes: 30,     // sueño sin confirmar, día normal
   pendingEveryMinutesPostNight: 60,
   recentSyncMinutes: 15,
-  maxPerDay: 8,
+  maxPerDay: 10,
   propsPrefix: 'GARMIN_POSTSUENO_V2413_', // Conserva los bloqueos históricos
   signingKeyProperty: 'GARMIN_ORIGIN_KEY_V291'
 });

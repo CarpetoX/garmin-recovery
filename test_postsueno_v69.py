@@ -30,8 +30,8 @@ def case(hhmm, sleep=None, last_min=None, status="completed", post_night=False, 
     h, m = hhmm.split(":")
     latest = None
     if last_min is not None:
-        latest = {"status": status, "id": 1, "created_at": __import__("datetime").datetime.utcfromtimestamp(
-            (ms(hhmm) - last_min * 60000) / 1000).strftime("%Y-%m-%dT%H:%M:%SZ")}
+        latest = {"status": status, "id": 1, "created_at": __import__("datetime").datetime.fromtimestamp(
+            (ms(hhmm) - last_min * 60000) / 1000, __import__("datetime").timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
     return {"localMinutes": int(h) * 60 + int(m), "nowMs": ms(hhmm), "postNight": post_night,
             "sleep": sleep or {}, "today": DAY, "latest": latest, "dispatchesToday": n}
 
@@ -81,9 +81,18 @@ class PostSueno(unittest.TestCase):
         self.assertEqual(r["state"], "sueno_ya_confirmado")
 
     def test_running_sync_and_daily_cap(self):
-        run, cap = self.run_cases(case("10:00", None, 5, status="in_progress"), case("12:00", None, 60, n=8))
+        run, cap = self.run_cases(case("10:00", None, 5, status="in_progress"), case("12:00", None, 60, n=10))
         self.assertEqual(run["state"], "sync_en_ejecucion")
         self.assertEqual(cap["state"], "limite_diario")
+
+    def test_post_night_sleep_08_to_14(self):
+        # TN: acuesta 08:00, despierta 14:00 -> consultas horarias y Sync al cumplirse el margen (14:30)
+        wait = {"date": DAY, "state": "confirmed_wait_30m", "earliest_definitive_at": "2026-10-18T14:30:12"}
+        pending = [case(h, None, 60, post_night=True, n=i) for i, h in enumerate(["10:00", "11:00", "12:00", "13:00"])]
+        out = self.run_cases(*pending, case("14:20", wait, 20, post_night=True, n=4),
+                             case("14:32", wait, 32, post_night=True, n=4))
+        self.assertEqual([o["action"] for o in out], ["dispatch"] * 4 + ["skip", "dispatch"])
+        self.assertEqual(out[-1]["state"], "margen_cumplido")
 
     def test_recovery_pending_retries(self):
         s = {"date": DAY, "state": "confirmed_recovery_sync_pending"}

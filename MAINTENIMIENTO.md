@@ -90,7 +90,7 @@ Si te levantas tarde, el informe definitivo ya no espera a una hora fija. Entre 
 - Sueño sin confirmar: un Sync cada 30 min (cada 60 min tras un TN).
 - Despertar confirmado: se pide el Sync en cuanto se cumple el margen de 30 min (`earliest_definitive_at`), a más tardar en el siguiente paso del activador de 5 min.
 - Sueño confirmado pero recuperación sin sincronizar: reintento a los 15 min.
-- Tope de 8 solicitudes al día.
+- Tope de 10 solicitudes al día.
 
 Para activarlo hay que pegar `apps_script/GarminPostSueno.gs` en el archivo del proyecto de Apps Script que ya define `vigilarPostSuenoGarmin` (sustituyendo su contenido; no crear un segundo archivo ni tocar los activadores). Después, ejecutar una vez `diagnosticarPostSuenoGarmin` para ver la decisión sin lanzar nada. La lógica de decisión (`_postSuenoPlan_`) se comprueba en `test_postsueno_v69.py` (requiere Node).
 
