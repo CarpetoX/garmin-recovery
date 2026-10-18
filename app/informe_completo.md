@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 11:12 · `GR-2026-10-18-1112-61b02d`
+Domingo, 18 de octubre de 2026 · 11:19 · `GR-2026-10-18-1119-4b8637`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -82,6 +82,18 @@ La HRV está 21 % por encima de su mediana; la FC en reposo coincide con su medi
 | Tiempo de recuperación Garmin | 9,6 h | contexto |
 | Índice personal experimental | 86/100 | provisional |
 
+**Qué ha cambiado desde ayer**
+
+Puntuación v3: 52 → 77 (yellow → green). Cambios notables frente a ayer:
+
+- HRV: 46 → 69 ms (favorable)
+- FC en reposo: 60 → 56 lpm (favorable)
+- FC nocturna: 68,1 → 61,2 lpm (favorable)
+- Puntuación de sueño: 62 → 87 (favorable)
+- Estrés medio: 38 → 19 (favorable)
+
+Son diferencias observadas, no causas.
+
 Las puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre v2 (oficial), híbrido y v3; un rojo prevalece. El índice personal es provisional y no es una medida clínica.
 
 ## 3. Sueño y recuperación nocturna
@@ -141,7 +153,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 19, máximo 77.
-- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 00 min: no es una medición nueva).
+- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 07 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 ## 5. Rendimiento CrossFit
@@ -289,4 +301,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:12 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:19 Europe/Madrid · certificado READY · sync_run_id 39109018293.
