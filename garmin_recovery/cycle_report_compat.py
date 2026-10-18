@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """V3.8.6: full available metrics on SHA-verified historical snapshots."""
 import re
-from cycle_snapshot_report_v38 import build, SnapshotError
-from cycle_visual_report_v382 import make, mapping, fmt
+from .cycle_snapshot_report import build, SnapshotError
+from .cycle_visual_report import make, mapping, fmt
 
 SAFE_ID = re.compile(r'\A\d{4}-\d{2}-\d{2}-\d{4}(?:-post-sleep)?\Z', re.ASCII)
 

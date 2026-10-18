@@ -37,9 +37,9 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -n "${CYCLE_ID:-}" ]]; then
-            python cycle_report_batch_v386.py --ledger report_cycles.json --outdir certified_cycle_reports_v386 --cycle-id "$CYCLE_ID"
+            python -m garmin_recovery.cycle_report_batch --ledger report_cycles.json --outdir certified_cycle_reports_v386 --cycle-id "$CYCLE_ID"
           else
-            python cycle_report_batch_v386.py --ledger report_cycles.json --outdir certified_cycle_reports_v386
+            python -m garmin_recovery.cycle_report_batch --ledger report_cycles.json --outdir certified_cycle_reports_v386
           fi
       - name: Upload reports and quarantine manifest
         uses: actions/upload-artifact@v4

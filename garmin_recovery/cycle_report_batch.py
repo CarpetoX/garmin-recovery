@@ -3,8 +3,8 @@
 import argparse
 import json
 from pathlib import Path
-from cycle_report_publisher_v386 import publish
-from cycle_snapshot_report_v38 import SnapshotError
+from .cycle_report_publisher import publish
+from .cycle_snapshot_report import SnapshotError
 
 
 def run(ledger, outdir, cycle_id=None):
