@@ -48,6 +48,8 @@ def compute(trend: list, ext_days: dict, today: str, base: float = 7.5) -> dict:
                       "shortfall_h": round(max(0.0, base - total), 2)})
     debt = round(sum(i["shortfall_h"] for i in items), 2)
     debt3 = sum(i["shortfall_h"] for i in items[-3:])
+    # la misma ventana de 3 noches sin descontar siestas: es la deuda que cuenta el modelo de disponibilidad (v3)
+    debt3_raw = round(sum(max(0.0, base - i["night_h"]) for i in items[-3:]), 2)
     debt_add = round(min(DEBT_ADD_MAX, DEBT_SHARE * debt3), 2)
     # carga de ayer frente al p90 de los sRPE de 28 días
     sr = [_num(t.get("srpe")) for t in rows[-28:]]
@@ -62,7 +64,8 @@ def compute(trend: list, ext_days: dict, today: str, base: float = 7.5) -> dict:
     nap_h = round((nap_today or 0) / 60, 2)
     need = round(max(base - 1.0, base + load_add + debt_add - nap_h), 2)
     return {"available": True, "base_h": base, "load_add_h": load_add, "debt_add_h": debt_add,
-            "nap_today_h": nap_h, "need_tonight_h": need, "debt_7n_h": debt, "nights": items,
+            "nap_today_h": nap_h, "need_tonight_h": need, "debt_7n_h": debt, "debt_3n_h": round(debt3, 2),
+            "debt_3n_model_h": debt3_raw, "nights": items,
             "naps_known": nap_today is not None}
 
 
@@ -74,7 +77,9 @@ def to_markdown(r: dict) -> str:
             ("Recargo por deuda de las últimas 3 noches", "+" + f(r["debt_add_h"])),
             ("Siesta de hoy", "−" + f(r["nap_today_h"]) if r["naps_known"] else "sin dato"),
             ("**Necesidad estimada esta noche**", f"**{f(r['need_tonight_h'])} h**"),
+            ("Deuda de las últimas 3 noches (siestas descontadas)", f(r["debt_3n_h"]) + " h"),
             ("Deuda de 7 noches (siestas descontadas)", f(r["debt_7n_h"]) + " h")]
     out = ["| Componente | Horas |", "|---|---|"] + [f"| {a} | {b} |" for a, b in rows]
     return ("\n".join(out) + "\n\nEs una estimación heurística, no validada; los recargos tienen tope y no sustituyen "
-            "tu percepción. Solo cuentan siestas registradas por Garmin.")
+            "tu percepción. Solo cuentan siestas registradas por Garmin. El modelo de disponibilidad (v3) usa solo las últimas 3 noches y "
+            f"no descuenta siestas: por eso su deuda ({f(r['debt_3n_model_h'])} h) puede ser mayor que la de 3 noches de esta tabla.")
