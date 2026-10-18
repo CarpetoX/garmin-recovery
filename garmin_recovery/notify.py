@@ -27,6 +27,28 @@ def _read(path: Path) -> dict:
         return {}
 
 
+def night_shift_tip(root: Path, result: dict, now: datetime) -> str | None:
+    """Consejo de sueño antes de un turno de noche (TN), sin cifras fisiológicas en el aviso.
+
+    Solo si hoy hay TN y aún no ha empezado (15:00). La condición usa internamente la deuda de sueño
+    reciente; el texto no la expone.
+    """
+    trend = result.get("trend_28d") or []
+    today = result.get("date") or now.date().isoformat()
+    row = next((t for t in reversed(trend) if isinstance(t, dict) and t.get("date") == today), None)
+    if not row or row.get("shift") != "TN" or now.hour >= 15:
+        return None
+    from . import sleep_need
+    from .config import DEFAULTS
+    ext = _read(root / "garmin_extended.json").get("days")
+    need = sleep_need.compute(trend, ext if isinstance(ext, dict) else {}, today, DEFAULTS["sleep_need_hours"])
+    debt = need.get("debt_7n_h") if need.get("available") else None
+    short = (row.get("sleep_hours") or 99) < DEFAULTS["sleep_need_hours"] - 1
+    if short or (debt is not None and debt >= 3):
+        return "Hoy TN: valora una siesta de 20–90 min antes de las 15:00 y evita cargas altas antes del turno."
+    return "Hoy TN: si entrenas, que sea antes del mediodía y deja margen para descansar antes del turno."
+
+
 def build_message(root: Path, now: datetime | None = None, max_age_min: float = 90) -> dict | None:
     """Mensaje a enviar o ``None`` si no hay informe nuevo y válido."""
     root, now = Path(root), (now or datetime.now(TZ)).astimezone(TZ)
@@ -45,6 +67,12 @@ def build_message(root: Path, now: datetime | None = None, max_age_min: float = 
     label = (dec.get("guidance") or {}).get("label") or dec.get("zone_es") or "Informe disponible"
     rpe = (dec.get("guidance") or {}).get("rpe_max")
     body = label + (f" · RPE máx. {rpe}" if rpe is not None else "")
+    try:
+        tip = night_shift_tip(root, result, now)
+    except Exception:  # noqa: BLE001 — el consejo es opcional
+        tip = None
+    if tip:
+        body += "\n" + tip
     return {"title": "Informe nuevo · " + now.strftime("%H:%M"), "message": body,
             "priority": priority, "tags": [tag], "click": SITE_URL + "informe_completo.html"}
 
