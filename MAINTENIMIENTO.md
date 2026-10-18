@@ -206,3 +206,8 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - Cada gráfica de Tendencias (HRV, FC en reposo, sueño, carga) lleva una línea de lectura: media de los últimos 7 días frente a la de 28 (sube / baja / estable, con ↑↓ y color según si es favorable; umbrales de «estable»: HRV 1,5 ms, FC 0,8 lpm, sueño 0,25 h, carga 4). Solo con ≥ 4 días recientes y ≥ 10 en 28.
 - Nueva gráfica «Sueño por fases» (barras apiladas profundo/REM/resto, línea de necesidad; noches sin fases, vacías) y tarjeta «Carga semanal»: semana actual frente al rango de las anteriores completas (≥ 6 de 7 días con dato y alguna carga; una semana sin registro no prueba descanso). Con menos de 2 semanas previas completas se dice que aún no hay datos; nunca se calculan porcentajes entre semanas.
 - Sistema: el estado del ciclo es una línea de semáforos (✓ / … / ✗) con la hora local cuando consta.
+
+### V7.10 · Mapa de calor, insignias y zonas de FC
+- Tendencias: «Mapa de 28 días» (recuperación y sueño por color, carga por intensidad; vacío = sin dato, nunca 0 inventado).
+- Informe completo: las celdas de estado (Correcto, READY, Disponible, high…, y las que empiezan por 🟢/🟡/🔴) se muestran como insignias de color (`webreport.badges`); el texto no cambia.
+- Detalle de sesión: anillo con el reparto del tiempo por zonas de FC junto a la lista.

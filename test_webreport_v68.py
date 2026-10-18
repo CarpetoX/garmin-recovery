@@ -61,6 +61,14 @@ class WebReport(unittest.TestCase):
         ids = re.findall(r'<details class="sec" id="(s\d)"( open)?>', webreport.build(md, RESULT))
         self.assertEqual([i[1] for i in ids[:2]], [" open", " open"])  # balance y análisis de Claude abiertos y primeros
 
+    def test_status_badges(self):
+        md = MD.replace("| 1 | 2 |", "| Sync | Correcto |\n| Estado | READY |\n| Fuente | 🟡 con retraso |\n| Ciclo | 2026 |")
+        html = webreport.build(md, RESULT)
+        self.assertIn('<span class="bdg ok">Correcto</span>', html)
+        self.assertIn('<span class="bdg ok">READY</span>', html)
+        self.assertIn('<span class="bdg warn">con retraso</span>', html)
+        self.assertNotIn('class="bdg', webreport.badges("<td>2026</td><td>Ciclo</td>"))  # el resto de celdas no cambia
+
     def test_section_icons(self):
         self.assertEqual(self.html.count('class="ico"'), 4)
 

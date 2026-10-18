@@ -72,6 +72,24 @@ def _lookup(table: dict, title: str) -> str:
     return next((v for k, v in table.items() if title.startswith(k)), "")
 
 
+BADGE_WORDS = {"ok": ("Correcto", "READY", "Disponible", "high", "alta", "Validado"),
+               "warn": ("con avisos", "medium", "media", "Pendiente", "pendiente"), "bad": ("Fallo", "failed", "low", "baja", "No disponible")}
+EMOJI_CLS = {"🟢": "ok", "🟡": "warn", "🔴": "bad", "⚪": "neu"}
+CELL = re.compile(r"<td>(?:(🟢|🟡|🔴|⚪)\s*)?([^<]*)</td>")
+
+
+def badges(body_html: str) -> str:
+    """Convierte las celdas de estado (✓ Correcto, READY, 🟢 al día…) en insignias de color; el texto no cambia."""
+    def sub(m):
+        emoji, text = m.group(1), m.group(2).strip()
+        cls = EMOJI_CLS.get(emoji) if emoji else next((c for c, words in BADGE_WORDS.items()
+                                                       if any(text == w or text.startswith(w + " ") for w in words)), None)
+        if not cls or not text:
+            return m.group(0)
+        return f'<td><span class="bdg {cls}">{text}</span></td>'
+    return CELL.sub(sub, body_html)
+
+
 def _slug_label(title: str) -> str:
     short = _lookup(SHORT, title)
     if short:
@@ -101,7 +119,7 @@ def build(md: str, result: dict) -> str:
                      f'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{ic}</svg></i>' if ic else "")
         sub_html = f"<small>{html.escape(sub)}</small>" if sub else ""
         sections.append(f'<details class="sec" id="{sid}"{opened}><summary>{icon_html}<span><h2>{mdhtml.inline(shown)}</h2>{sub_html}</span></summary>'
-                        f'<div class="body">{mdhtml.render(body, interactive=charts)}</div></details>')
+                        f'<div class="body">{badges(mdhtml.render(body, interactive=charts))}</div></details>')
     data = json.dumps(_data(result), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return PAGE.replace("{{HEAD}}", mdhtml.render(head, interactive=charts)).replace("{{CHIPS}}", "".join(chips)) \
         .replace("{{SECTIONS}}", "\n".join(sections)).replace("{{DATA}}", data).replace("{{CSS}}", CSS).replace("{{JS}}", JS)
@@ -123,7 +141,8 @@ nav.bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 9
 details.sec{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin:12px 0;scroll-margin-top:96px}
 details.sec>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;gap:12px}details.sec>summary>span{flex:1;min-width:0}.ico{display:grid;place-items:center;flex:0 0 36px;height:36px;border-radius:12px;background:var(--glass-chip,var(--surface-2));color:var(--s1)}
 details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::after{content:"▾";color:var(--text-3);transition:transform .15s}
-details.sec:not([open])>summary::after{transform:rotate(-90deg)}.body tbody tr:nth-child(even){background:var(--glass-chip,var(--surface-2))}.body tbody tr:nth-child(even) td{border-bottom-color:transparent}.body td:first-child,.body th:first-child{border-radius:8px 0 0 8px}.body td:last-child,.body th:last-child{border-radius:0 8px 8px 0}
+details.sec:not([open])>summary::after{transform:rotate(-90deg)}.body tbody tr:nth-child(even){background:var(--glass-chip,var(--surface-2))}.body tbody tr:nth-child(even) td{border-bottom-color:transparent}.bdg{display:inline-block;padding:1px 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:var(--glass-chip,var(--surface-2));white-space:nowrap}.bdg::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--s4)}.bdg.ok::before{background:var(--good)}.bdg.warn::before{background:var(--warn)}.bdg.bad::before{background:var(--crit)}
+.body td:first-child,.body th:first-child{border-radius:8px 0 0 8px}.body td:last-child,.body th:last-child{border-radius:0 8px 8px 0}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}details.sec,.kpi{animation:rise .4s cubic-bezier(.22,.8,.24,1) both}@media(prefers-reduced-motion:reduce){details.sec,.kpi{animation:none}}details.sec h2{font-size:16px;margin:0;font-weight:640}details.sec summary small{display:block;font-size:12.5px;color:var(--text-3);margin-top:1px}.body{padding:0 16px 16px}.body h3{font-size:14.5px;margin:18px 0 6px}
 .body p{margin:.5em 0}.body ul,.body ol{padding-left:20px}.body li{margin:.3em 0}
 .scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
