@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 11:48 · `GR-2026-10-18-1148-e79e36`
+Domingo, 18 de octubre de 2026 · 11:53 · `GR-2026-10-18-1153-fa8c12`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -8,7 +8,7 @@ Recuperación v2|88/100|confianza high|green
 HRV|69 ms|+21 % vs mediana|green
 Sueño|7 h 50 min|puntuación 87|unavailable
 FC en reposo|56 lpm|mediana 56|unavailable
-Carga 7 días|8 sesiones|sRPE 1203|unavailable
+Carga 7 días|9 sesiones|sRPE 1203|unavailable
 ```
 
 ## Resumen ejecutivo
@@ -43,7 +43,7 @@ La calidad describe los datos disponibles, no el software. No se han incorporado
 | Fuente | Último dato | Estado |
 |---|---|---|
 | Intervals.icu · bienestar (HRV, FC reposo, sueño) | 2026-10-18 | 🟢 al día |
-| Intervals.icu · actividades | 2026-10-15 | 🟢 descarga correcta (2026-10-18) |
+| Intervals.icu · actividades | 2026-10-18 | 🟢 descarga correcta (2026-10-18) |
 | Garmin · FC diurna y nocturna | 2026-10-18 | 🟢 al día |
 | Garmin · estrés | 2026-10-18 | 🟢 al día |
 | Garmin · Body Battery | 2026-10-18 | 🟢 al día |
@@ -132,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 71,3 lpm | 61,2 lpm |
+| Hoy* | 82,2 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -152,8 +152,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 19, máximo 77.
-- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 36 min: no es una medición nueva).
+- Estrés medio: 19, máximo 81.
+- Body Battery: último valor 62/100, medido a las 11:27.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -166,11 +166,23 @@ Cobertura histórica fusionada (días con dato de 28):
 
 Son asociaciones en tus propios datos de los últimos 90 días, sin causalidad ni prueba estadística; con pocos días pueden ser casualidad.
 
+**Calibración de la zona del día**
+
+HRV de la noche siguiente frente a tu mediana de 90 días (58,0 ms):
+
+| Zona del día | Días | HRV siguiente noche vs mediana |
+|---|---|---|
+| 🟢 Verde | 0 | datos insuficientes (mín. 5) |
+| 🟡 Amarillo | 0 | datos insuficientes (mín. 5) |
+| 🔴 Rojo | 1 | datos insuficientes (mín. 5) |
+
+Solo descriptivo: sirve para ver si la zona se corresponde con tu recuperación posterior; no cambia umbrales.
+
 ## 5. Rendimiento CrossFit
 
-Última actividad registrada: 15 oct. Un día sin registro no demuestra que fuera de descanso.
+Última actividad registrada: 18 oct. Un día sin registro no demuestra que fuera de descanso.
 
-Contraste Garmin ↔ Intervals: las 8 actividades de Garmin de los últimos 7 días constan también en Intervals.
+Contraste Garmin ↔ Intervals: las 9 actividades de Garmin de los últimos 7 días constan también en Intervals.
 
 ![Sesiones de los últimos 14 días](charts/sessions.svg)
 
@@ -182,19 +194,19 @@ Contraste Garmin ↔ Intervals: las 8 actividades de Garmin de los últimos 7 d�
 
 | Métrica | Resultado |
 |---|---|
-| Sesiones registradas | 8 |
+| Sesiones registradas | 9 |
 | Días con actividad | 3 |
 | RPE medio | 7,19 |
 | Sesiones de RPE ≥ 8 | 5 |
-| Minutos grabados (Garmin) | 171,0 min |
+| Minutos grabados (Garmin) | 236,5 min |
 | sRPE por duración registrada | 1203 |
-| TRIMP | 188,3 |
-| Carga de actividades (Intervals) | 118 |
+| TRIMP | 226,6 |
+| Carga de actividades (Intervals) | 142 |
 | Volumen externo mínimo verificado | 578 kg |
 
 El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, mancuernas y máquinas.
 
-Últimos 28 días: 17 sesiones, RPE medio 6,76, TRIMP 384,2 y 433,3 minutos grabados.
+Últimos 28 días: 18 sesiones, RPE medio 6,76, TRIMP 422,5 y 498,8 minutos grabados.
 
 ### sRPE diario registrado
 
@@ -280,7 +292,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 - ⚠️ **Distribución de la intensidad.** 9 de 17 sesiones con RPE registrado fueron de RPE ≥ 8 (53 %); 3 veces hubo dos días duros seguidos. Una parte alta de sesiones muy duras, sobre todo en días consecutivos, deja poco margen de recuperación y limita la mejora.
 - ℹ️ **Respuesta a las sesiones duras.** Datos insuficientes: 5 días tras sesión dura y 2 tras otras (hacen falta 3 de cada). Sin más días no se puede ver cómo responde tu HRV.
 - ✅ **Fuerza.** Mejor valor registrado en 28 días: peso muerto 198 kg; sentadilla trasera 181 kg; Fuerza - Squat snatch EMOM 8 min 68 kg. Es un mínimo estimado (Epley sin RIR) o la carga máxima declarada: solo se comparan series con las mismas repeticiones.
-- ⚠️ **Registro de sensaciones.** Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en 0 de los últimos 14 días. Las sensaciones son el contraste más barato frente a los números del reloj: sin ellas, la app solo ve la parte objetiva. Además: 0 sesiones de 28 días sin RPE y HRV con dato en 13 de 14 días.
+- ⚠️ **Registro de sensaciones.** Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en 0 de los últimos 14 días. Las sensaciones son el contraste más barato frente a los números del reloj: sin ellas, la app solo ve la parte objetiva. Además: 1 sesiones de 28 días sin RPE y HRV con dato en 13 de 14 días.
 
 ### Constancia semanal (últimas 4 semanas)
 
@@ -289,7 +301,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 | 21/09 | — | — | — |
 | 28/09 | — | — | — |
 | 05/10 | 9 | 5 | 1458 |
-| 12/10 | 8 | 3 | 1203 |
+| 12/10 | 9 | 4 | 1203 |
 
 _«—»: semanas anteriores al inicio del historial de sesiones._
 
@@ -327,4 +339,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:48 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:53 Europe/Madrid · certificado READY · sync_run_id 39109018293.

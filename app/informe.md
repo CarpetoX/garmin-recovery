@@ -1,6 +1,6 @@
 # Informe matutino · 18/10/2026
 
-`GR-2026-10-18-1148-e79e36` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-1153-fa8c12` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 4 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -56,8 +56,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-1135-b535b7 (18/10 11:35):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-18-1148-e79e36 (18/10 11:48):
+- Sesiones nuevas desde entonces: **1** (carga +24).
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -96,6 +96,7 @@ Frente al informe GR-2026-10-18-1135-b535b7 (18/10 11:35):
 
 ## Acciones pendientes
 
+- Añade el RPE de la actividad **i198584544** (18/10 10:45, Sin detalle, 66 min, carga 24) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -128,16 +129,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-1148-e79e36`
+- **Identificador del informe:** `GR-2026-10-18-1153-fa8c12`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 11:47 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 2,8 h ✓ · última HRV hace 2,9 h ✓ · última FC hace 1,5 h ✓ · último Body Battery hace 2,6 h ✓
-- **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 17/17
+- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 11:52 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 2,9 h ✓ · última HRV hace 3,0 h ✓ · última FC hace 24 min ✓ · último Body Battery hace 27 min ✓
+- **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 17/18 (sin RPE: 18/10 10:45)
 - **Ejecución:** 4 franja(s) de Sync perdidas (17/10 08:30, 17/10 16:45, 17/10 22:45, 18/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 11:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 11:53 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
