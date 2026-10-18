@@ -221,6 +221,11 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     if dec.get("divergence"):
         dv = dec["divergence"]
         add("\n_Divergencia entre modelos:_ " + _clean(dv if isinstance(dv, str) else " ".join(str(x) for x in (dv if isinstance(dv, list) else [dv])), 300))
+    try:
+        from . import why_changed
+        add("\n**Qué ha cambiado desde ayer**\n\n" + why_changed.to_markdown(why_changed.compute(result.get("trend_28d") or [], today)))
+    except Exception:  # noqa: BLE001 — bloque opcional
+        pass
     add("\nLas puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre v2 (oficial), híbrido y v3; "
         "un rojo prevalece. El índice personal es provisional y no es una medida clínica.")
 
