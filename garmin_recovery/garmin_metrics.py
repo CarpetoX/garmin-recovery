@@ -530,6 +530,12 @@ def main():
         if not token_b64:
             raise RuntimeError("GARMIN_TOKENS_B64 no está disponible")
 
+        try:
+            from garmin_recovery import token_health
+            status["token_expiry"] = token_health.inspect(token_b64)
+        except Exception as exc:  # noqa: BLE001 — informativo, nunca bloquea la descarga
+            status["token_expiry"] = {"state": "error", "detail": type(exc).__name__}
+
         token_dir = Path.home() / ".garminconnect"
         token_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
         token_file = token_dir / "garmin_tokens.json"
