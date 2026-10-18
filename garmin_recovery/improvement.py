@@ -13,7 +13,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from statistics import mean, median, pstdev
 
-from . import sleep_need, weekly_compare
+from . import shift_calendar, sleep_need, week_plan, weekly_compare
 from .config import DEFAULTS
 
 NEED = DEFAULTS["sleep_need_hours"]
@@ -232,6 +232,21 @@ def _logging(root, trend, sessions, today):
     return f
 
 
+def _plan(root, result, today, sessions):
+    """Plan de 7 días; vacío si no hay calendario de turnos o falla algo (nunca rompe el análisis)."""
+    try:
+        cal = shift_calendar.load_calendar(Path(root) / "shift_calendar.json")
+        if not cal.get("source_available"):
+            return []
+        start = datetime.fromisoformat(today).date() if isinstance(today, str) else today
+        shifts = {(start + timedelta(days=i)).isoformat(): shift_calendar.resolve_day((start + timedelta(days=i)).isoformat(), cal)
+                  for i in range(8)}
+        dec = result.get("decision") or {}
+        return week_plan.plan(today, shifts, sessions, dec.get("zone"), (dec.get("guidance") or {}).get("rpe_max"))
+    except (OSError, ValueError, KeyError):
+        return []
+
+
 def analyze(root, result: dict, crossfit: dict | None = None) -> dict:
     root = Path(root)
     today = result.get("date") or datetime.now().date().isoformat()
@@ -248,6 +263,7 @@ def analyze(root, result: dict, crossfit: dict | None = None) -> dict:
     guidance = ((result.get("decision") or {}).get("guidance") or {})
     return {"findings": findings, "priorities": priorities, "good": good, "weekly": _weekly(sessions, today),
             "compare": weekly_compare.compare(trend, sessions, today, coverage),
+            "plan": _plan(root, result, today, sessions),
             "rpe_max": guidance.get("rpe_max"), "label": guidance.get("label"),
             "coverage_pct": coverage}
 
@@ -284,6 +300,9 @@ def to_markdown(a: dict) -> str:
             L.append("\n_La semana en curso está incompleta; compara solo semanas completas._")
     if a.get("compare"):
         L.append(weekly_compare.to_markdown(a["compare"]).rstrip())
+    if a.get("plan"):
+        L.append("\n### Plan orientativo de 7 días\n")
+        L.append(week_plan.to_markdown(a["plan"]))
     rpe = a.get("rpe_max")
     L.append("\n### Reglas para los próximos 7 días\n")
     L.append(f"1. **Hoy:** respeta la decisión del día ({a.get('label') or '—'}, RPE máx. {_f(rpe)}).")
