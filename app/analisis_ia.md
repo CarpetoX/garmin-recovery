@@ -1,5 +1,7 @@
 <!-- cycle_id: 2026-10-18-0830-post-sleep -->
-**Certificado con avisos:** 4 franjas de Sync perdidas (17/10 08:30, 16:45, 22:45 y 18/10 08:30); los datos vienen de un Sync fuera de franja (11:18).
+**Informe de recuperación · domingo 18/10/2026 · Sync de las 11:34 (ciclo 08:30)**
+
+**Certificado con avisos:** 4 franjas de Sync perdidas (17/10 08:30, 16:45, 22:45 y 18/10 08:30); los datos vienen de un Sync fuera de franja (sincronizados a las 11:34).
 
 **Qué explica la puntuación (v2 oficial 88, híbrido 77, v3 77; todos verde)**
 - ↑ HRV de anoche 69 ms; media de 7 días 57,0 ms, dentro del rango normal (54–62 ms).
