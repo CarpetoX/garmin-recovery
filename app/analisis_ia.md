@@ -13,6 +13,6 @@
 2. Reevalúa cuando se sincronice el sueño; hasta entonces nada de WOD máximos ni series al fallo.
 3. Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación.
 
-**Certificado con avisos:** 3 franjas de Sync perdidas ayer; Body Battery de hace 7,8 h. Informe completo: https://github.com/CarpetoX/garmin-recovery/blob/main/app/informe.md
+**Certificado con avisos:** 3 franjas de Sync perdidas ayer; Body Battery de hace 8,2 h; sync de las 08:55 fuera de franja. Informe completo: https://github.com/CarpetoX/garmin-recovery/blob/main/app/informe.md
 
 _Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
