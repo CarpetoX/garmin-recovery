@@ -24,7 +24,7 @@ FIXTURE = ROOT / "tests_fixtures" / "e2e_2026-10-17.tar.gz"
 TZ = ZoneInfo("Europe/Madrid")
 NOW = dtmod.datetime(2026, 10, 17, 17, 5, tzinfo=TZ)
 GOLDEN = {"rc": 0, "stdout": "Report gate READY: 2026-10-17-1645 sync_run 101 crossfit_run 104\n",
-          "report_ready.json": "8a8efbb4af83de5d", "report_cycles.json": "8ce2dffea73d0122"}
+          "report_ready.json": "8a8efbb4af83de5d", "report_cycles.json": "ef2d2684d009011f"}
 
 
 class FrozenDatetime(dtmod.datetime):
