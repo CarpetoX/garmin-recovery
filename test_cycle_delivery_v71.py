@@ -66,6 +66,18 @@ class Main(unittest.TestCase):
         rc, st = self.run_main(fj, lambda url, token: SENT)
         self.assertEqual((rc, st["state"]), (0, "complete"))
 
+    def test_trigger_run_time_wins_over_old_certificate(self):
+        # certificado de las 09:48, CrossFit disparador de las 14:34: el despliegue de las 11:31Z (13:31) no vale
+        def fj(url, token):
+            if url.endswith("/jobs"):
+                return {"jobs": []}
+            if "/actions/runs/" in url:
+                return {"run_started_at": "2026-10-18T12:34:50Z"}
+            return {"workflow_runs": [{"id": 1, "created_at": "2026-10-18T11:31:00Z", "status": "completed", "conclusion": "success"}]}
+        with mock.patch.dict("os.environ", {"TRIGGER_RUN_ID": "42"}):
+            rc, st = self.run_main(fj, lambda url, token: SENT)
+        self.assertEqual(st["stages"]["web"]["state"], "unknown")
+
     def test_network_failure_never_blocks(self):
         def boom(*a, **k):
             raise OSError("sin red")
