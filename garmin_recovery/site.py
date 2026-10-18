@@ -23,6 +23,8 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from . import optional_blocks
+
 TZ = ZoneInfo("Europe/Madrid")
 REPO_URL = "https://github.com/CarpetoX/garmin-recovery"
 
@@ -150,8 +152,8 @@ def _live_extras(root: Path, result: dict) -> dict:
     trend = [t for t in result.get("trend_28d") or [] if isinstance(t, dict)]
     try:
         out["changes"] = why_changed.compute(trend, today)
-    except Exception:  # noqa: BLE001 — opcional
-        pass
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:why_changed", exc)
     try:
         ext = improvement._ext_days(root)
         need = sleep_need.compute(trend, ext, today, DEFAULTS["sleep_need_hours"])
@@ -159,16 +161,16 @@ def _live_extras(root: Path, result: dict) -> dict:
         try:
             from .notify import night_shift_tip
             tip = night_shift_tip(root, result, datetime.fromisoformat(result["generated_at"]))
-        except Exception:  # noqa: BLE001
-            pass
+        except Exception as exc:  # noqa: BLE001
+            optional_blocks.failed("web:night_shift_tip", exc)
         out["tonight"] = {"need": need if need.get("available") else None, "tip": tip}
-    except Exception:  # noqa: BLE001
-        pass
+    except Exception as exc:  # noqa: BLE001
+        optional_blocks.failed("web:sleep_need", exc)
     try:
         sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
         out["plan"] = improvement._plan(root, result, today, sessions)
-    except Exception:  # noqa: BLE001
-        pass
+    except Exception as exc:  # noqa: BLE001
+        optional_blocks.failed("web:week_plan", exc)
     return out
 
 
@@ -204,7 +206,8 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     for o in snaps:
         try:
             (out / "dia" / f"{o['date']}.html").write_text(render(o, {"snapshot": o["date"]}), encoding="utf-8")
-        except Exception:  # noqa: BLE001 — un día con datos raros no debe romper la web
+        except Exception as exc:  # noqa: BLE001 — un día con datos raros no debe romper la web
+            optional_blocks.failed(f"web:dia {o['date']}", exc)
             extras["days"] = [x for x in extras["days"] if x["date"] != o["date"]]
     (out / "index.html").write_text(render(result, extras), encoding="utf-8")
     (out / "manifest.webmanifest").write_text(json.dumps(MANIFEST, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -225,7 +228,8 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         try:
             from .webreport import build as build_interactive
             html_full = build_interactive(full_md, result)
-        except Exception:  # noqa: BLE001 — si falla la versión interactiva se publica la sencilla
+        except Exception as exc:  # noqa: BLE001 — si falla la versión interactiva se publica la sencilla
+            optional_blocks.failed("web:informe_interactivo", exc)
             html_full = page(full_md)
         (out / "informe_completo.html").write_text(html_full, encoding="utf-8")
     return {"out": str(out), "history": len(extras["history"]), "date": result["date"],

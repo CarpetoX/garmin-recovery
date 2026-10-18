@@ -147,3 +147,9 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - El registro de RPE sigue haciéndose por el chat (ver `REGISTRO_ENTRENAMIENTOS.md`); se descartó el formulario web con endpoint de Apps Script.
 - **Deuda de sueño (etiquetas):** la tarjeta «Esta noche» y el informe muestran la deuda de 3 y de 7 noches (con sueño diurno y siestas) y aclaran que el modelo v3 cuenta solo 3 noches sin descontar siestas (`debt_3n_model_h`). Las definiciones siguen siendo dos, pero ya no se contradicen a la vista.
 - **Aviso de RPE pendiente:** `notify.rpe_pending_tip` añade a la notificación de cada ciclo las sesiones de hoy sin RPE (a partir de las 12:00) o las de ayer (por la mañana). No hay disparador propio a las 21:00 porque Apps Script solo lanza las tres franjas de Sync; el aviso viaja en la notificación de las 17:10 y de las 09:05.
+
+## V7.1 — Auditoría (18-10-2026)
+- **Bloques opcionales:** `optional_blocks.failed(bloque, exc)` sustituye a los `except … pass` del informe completo y de la web: anota el fallo en Actions (`::warning::`) y el informe añade «Bloques opcionales no disponibles en este ciclo: …». Todo bloque opcional nuevo debe registrar así su fallo.
+- **Certificación:** un Sync lanzado a mano fuera de franja marca el ciclo con «Sync fuera de franja». No se lanzan Sync de verificación salvo que un cambio de producción lo exija (probar con la suite y simulaciones).
+- **Acciones de GitHub:** versiones mezcladas (`checkout`/`setup-python` v4–v5 y v7 en `sync.yml` y `advanced-analytics-rpe.yml`) y sin fijar por hash: no se unifican sin poder verificar los hashes desde el entorno de desarrollo; `dependabot.yml` propone las actualizaciones semanalmente. Los permisos ya son mínimos (escritura solo donde se hace commit o se abren avisos).
+- **Pendiente:** relleno histórico de 60–90 días de sueño/HRV desde Garmin (cobertura de 28 días: HRV 46 %, sueño 43 %, puntuación 36 %).
