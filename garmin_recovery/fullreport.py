@@ -424,7 +424,6 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     recs.append("Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.")
     for i, r in enumerate(recs, 1):
         add(f"{i}. {r}")
-    img("strength.svg", "Progresión de fuerza")
     from . import improvement
     try:
         add("\n" + improvement.run(root, result).rstrip())

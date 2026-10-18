@@ -181,7 +181,6 @@ def _live_extras(root: Path, result: dict) -> dict:
 
 def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool = True) -> dict:
     from .dashboard import render
-    from .report import chart_strength
     from .weekly import punctuality
     root, out = Path(root), Path(out)
     result = json.loads((root / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
@@ -190,13 +189,6 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
             reports = list(csv.DictReader(fh))
     except OSError:
         reports = []
-    try:
-        crossfit = json.loads((root / "crossfit_insights.json").read_text(encoding="utf-8"))
-        rows = ((crossfit.get("muscle_load") or {}).get("strength_exercises")) or []
-        cutoff = (date.fromisoformat(result["date"]) - timedelta(days=55)).isoformat()
-        strength = chart_strength([r for r in rows if (r.get("date") or "") >= cutoff])
-    except (OSError, ValueError):
-        strength = None
     gen = datetime.fromisoformat(result["generated_at"]) if result.get("generated_at") else None
     extras = _live_extras(root, result)
     try:
@@ -211,7 +203,7 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
                 k: v for k, v in hc["activities"].items() if isinstance(v, dict) and v.get("available")}}
     except (OSError, ValueError):
         pass  # aún sin curvas: la tabla de sesiones funciona igual
-    extras |= {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(), "strength_svg": strength,
+    extras |= {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(),
               "punctuality": punctuality(reports, date.fromisoformat(result["date"]), gen),
               "history": report_history(root) if history else []}
     snaps = day_snapshots(root, result["date"]) if history else []

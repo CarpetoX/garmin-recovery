@@ -784,9 +784,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
     stages_svg = chart_sleep_stages(trend)
     if stages_svg:
         charts["sleep_stages.svg"] = stages_svg
-    strength_svg = chart_strength(strength)
-    if strength_svg:
-        charts["strength.svg"] = strength_svg
+    # La gráfica de 1RM estimado se retiró del informe y del panel (no aportaba); chart_strength sigue disponible.
 
     zone = dec.get("zone", "unavailable")
     try:
@@ -890,12 +888,6 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
     if actions:
         md += ["## Acciones pendientes", ""] + [f"- {x}" for x in actions] + [""]
     md += ["## Fuerza (últimos 28 días)", ""] + _open(False, "Tabla y progresión") + [strength_table(strength)]
-    if strength_svg:
-        md += ["![Progresión](charts/strength.svg)", "",
-               "_Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando hay repeticiones; si no, "
-               "carga máxima declarada. Una sesión de volumen da un mínimo más bajo que una de series pesadas cortas._", ""]
-    else:
-        md += ["_Progresión: hacen falta ≥ 2 sesiones del mismo ejercicio con barra para trazarla._", ""]
     md += ["</details>", ""]
     md += ["## Certificado", "", f"- **Identificador del informe:** `{report_id}`", ""] + _open(False, "Detalle del certificado") + [
            f"- {x}" for x in certificate_block(result)] + ["", "</details>", ""]

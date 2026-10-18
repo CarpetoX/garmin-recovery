@@ -194,11 +194,6 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
         week = ("<table><thead><tr><th></th><th class='num'>Esta semana</th><th class='num'>Semana previa</th></tr></thead><tbody>"
                 + "".join(f"<tr><td>{_esc(n)}</td><td class='num'>{f(a, d)}</td><td class='num'>{f(b, d)}</td></tr>"
                           for n, a, b, d in rows) + "</tbody></table>")
-    strength = extras.get("strength_svg")
-    strength_html = ("" if not strength else
-                     '<section class="card"><h2>Progresión de fuerza</h2><p class="h2sub">1RM mínimo estimado (Epley con '
-                     'tu mejor serie) cuando hay repeticiones; si no, carga máxima declarada</p>'
-                     f'<div class="svgwrap">{strength}</div></section>')
     full_html = ('<a class="cta" href="informe_completo.html"><span class="cta-ico">📄</span>'
                  '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
@@ -235,7 +230,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             "hoytop": top_block, "cambios": changes,
             "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": calendar_html + week_html,
-            "entrenos": strength_html,
+            "entrenos": "",
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 

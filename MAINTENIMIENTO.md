@@ -198,3 +198,6 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 
 ### V7.7 · Héroe compacto
 - La puntuación oficial es un anillo más pequeño junto a la decisión; los cambios frente a ayer pasan a tarjetas pequeñas dentro del héroe (recuperación oficial primero, luego cada indicador que cambia; ↑ favorable / ↓ desfavorable). Sin cambios de cifras ni de reglas.
+
+### V7.8 · Sin gráfica de 1RM
+- Retirada la gráfica «Progresión de fuerza» (1RM mínimo estimado) del panel, del informe completo y del informe base; ya no se genera `charts/strength.svg`. Se conserva la tabla de fuerza y `report.chart_strength` por si se quisiera recuperar. Foto e2e actualizada (`--update`) porque desaparece ese archivo.

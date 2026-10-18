@@ -75,7 +75,7 @@ class BuildSite(unittest.TestCase):
             self.skipTest("sin salida publicada")
         from garmin_recovery.dashboard import render
         result = json.loads((ROOT / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
-        html = render(result, {"pwa": True, "history": [], "strength_svg": "<svg>{{DATA}}</svg>"})
+        html = render(result, {"pwa": True, "history": [], "ai_lead": "{{DATA}}"})
         self.assertEqual(html.count("{{DATA}}"), 1)  # solo el texto del extra, nunca el JSON
 
     def test_service_worker_only_clears_own_caches(self):
