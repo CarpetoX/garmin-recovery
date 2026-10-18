@@ -305,6 +305,12 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     sess7 = [s for s in result.get("sessions_28d") or [] if isinstance(s, dict) and (s.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=6)).isoformat()]
     add(f"Última actividad registrada: {short_date(cf['latest_activity_date']) if cf.get('latest_activity_date') else '—'}. "
         "Un día sin registro no demuestra que fuera de descanso.")
+    try:
+        from . import activity_crosscheck
+        add("\n" + activity_crosscheck.to_markdown(activity_crosscheck.compute(
+            ext.get("days") or {}, _read(root, "activities.json") or [], today)))
+    except Exception:  # noqa: BLE001 — bloque opcional
+        pass
     rows = [["Sesiones registradas", n(wr.get("activities", len(sess7)))],
             ["Días con actividad", n(_d(adv, "weekly_load", "active_days"))],
             ["RPE medio", n(wr.get("mean_rpe"), 2)],
