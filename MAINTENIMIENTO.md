@@ -172,3 +172,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - Hoy: puntuación única, tres indicadores (Recuperación y Sueño en anillo; Carga 7 días con barras de sRPE, sin comparar semanas), «Por qué esta puntuación» (drivers y notas), luego tarjetas de cambios, esta noche y plan.
 - Etiqueta «Los modelos discrepan» solo si `decision.agreement != 'total'`. Los chips por modelo y los medidores v3 pasan a Sistema; los indicadores clave (tiles) pasan a Tendencias.
 - Sin cambios en decisión, reglas de seguridad ni cifras; TSB/CTL se muestran como «carga reciente vs. habitual».
+
+### V7.3 fase 3 · Informe completo ordenado
+- Solo «Resumen ejecutivo» abierto; el resto de secciones plegadas, con un subtítulo de una línea (`webreport.SUBTITLES`). Botón «Expandir todo» y chips cortos (`SHORT`). El Markdown sigue siendo la fuente de verdad: no cambia ninguna cifra.
+- Altura en móvil: de ~18 200 px a ~1 950 px al abrir.

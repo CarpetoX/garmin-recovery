@@ -46,7 +46,22 @@ def _weights(result: dict) -> str:
     return "\n".join(rows)
 
 
+SUBTITLES = {"Resumen": "lo esencial en 5 líneas", "1.": "estado del ciclo y calidad de los datos",
+             "2.": "HRV, FC y modelos frente a tu normalidad", "3.": "duración, puntuación y fases",
+             "4.": "FC, estrés y Body Battery", "5.": "carga y sesiones recientes", "6.": "series, cargas y metcons",
+             "7.": "turnos, señales y recomendaciones", "8.": "plan de mejora y de 7 días", "Conclusión": "cierre y traza del ciclo"}
+SHORT = {"Resumen": "Resumen", "1.": "Calidad", "2.": "Recuperación", "3.": "Sueño", "4.": "FC", "5.": "CrossFit",
+         "6.": "Fuerza", "7.": "Balance", "8.": "Mejora", "Conclusión": "Conclusión"}
+
+
+def _lookup(table: dict, title: str) -> str:
+    return next((v for k, v in table.items() if title.startswith(k)), "")
+
+
 def _slug_label(title: str) -> str:
+    short = _lookup(SHORT, title)
+    if short:
+        return short
     t = re.sub(r"^\d+\.\s*", "", title).strip()
     return t if len(t) <= 22 else t[:21].rstrip() + "…"
 
@@ -62,8 +77,10 @@ def build(md: str, result: dict) -> str:
             body = "\n```weights\n" + weights + "\n```\n" + body
         sid = f"s{i}"
         chips.append(f'<a href="#{sid}">{html.escape(_slug_label(title))}</a>')
-        opened = "" if title.startswith(("1.", "Conclusión")) else " open"
-        sections.append(f'<details class="sec" id="{sid}"{opened}><summary><h2>{mdhtml.inline(title)}</h2></summary>'
+        opened = " open" if title.startswith("Resumen") else ""
+        sub = _lookup(SUBTITLES, title)
+        sub_html = f"<small>{html.escape(sub)}</small>" if sub else ""
+        sections.append(f'<details class="sec" id="{sid}"{opened}><summary><span><h2>{mdhtml.inline(title)}</h2>{sub_html}</span></summary>'
                         f'<div class="body">{mdhtml.render(body, interactive=charts)}</div></details>')
     data = json.dumps(_data(result), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return PAGE.replace("{{HEAD}}", mdhtml.render(head, interactive=charts)).replace("{{CHIPS}}", "".join(chips)) \
@@ -87,7 +104,7 @@ details.sec{background:var(--surface);border:1px solid var(--line);border-radius
 details.sec>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::after{content:"▾";color:var(--text-3);transition:transform .15s}
 details.sec:not([open])>summary::after{transform:rotate(-90deg)}
-details.sec h2{font-size:16px;margin:0;font-weight:640}.body{padding:0 16px 16px}.body h3{font-size:14.5px;margin:18px 0 6px}
+details.sec h2{font-size:16px;margin:0;font-weight:640}details.sec summary small{display:block;font-size:12.5px;color:var(--text-3);margin-top:1px}.body{padding:0 16px 16px}.body h3{font-size:14.5px;margin:18px 0 6px}
 .body p{margin:.5em 0}.body ul,.body ol{padding-left:20px}.body li{margin:.3em 0}
 .scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
 th{color:var(--text-2);font-weight:600;font-size:12.5px}code{background:var(--surface-2);padding:1px 5px;border-radius:4px;font-size:.9em}
@@ -220,7 +237,7 @@ PAGE = """<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name=
 {{HEAD}}
 <nav class="bar" aria-label="Secciones"><div class="chips">{{CHIPS}}</div>
 <div class="tools"><div class="seg" role="group" aria-label="Periodo de las gráficas"><button data-n="7" aria-pressed="false">7 d</button><button data-n="14" aria-pressed="false">14 d</button><button data-n="28" aria-pressed="true">28 d</button></div>
-<button id="toggle" type="button">Contraer todo</button></div></nav>
+<button id="toggle" type="button">Expandir todo</button></div></nav>
 <main>{{SECTIONS}}</main></div><div class="tip" id="tip" role="tooltip"></div>
 <script type="application/json" id="d">{{DATA}}</script><script>{{JS}}</script></body></html>
 """
