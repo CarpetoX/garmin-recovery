@@ -10,6 +10,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from . import optional_blocks
 from .config import DEFAULTS
 
 TZ = ZoneInfo("Europe/Madrid")
@@ -99,6 +100,7 @@ def _clean(text, limit=420):
 
 def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) -> str:
     root = Path(root)
+    optional_blocks.reset()
     charts_ok = {p.name for p in Path(charts_dir).glob("*.svg")} if charts_dir and Path(charts_dir).is_dir() else set()
     now = datetime.fromisoformat(result["generated_at"]).astimezone(TZ) if result.get("generated_at") else datetime.now(TZ)
     today = result.get("date") or now.date().isoformat()
@@ -185,6 +187,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         from . import source_health
         add(source_health.to_markdown(source_health.collect(root)).rstrip())
     except Exception as exc:  # noqa: BLE001 - el estado de fuentes nunca debe impedir el informe
+        optional_blocks.failed("source_health", exc)
         add(f"\n_Estado de las fuentes no disponible en este ciclo ({type(exc).__name__})._")
 
     # 2 ------------------------------------------------------------------
@@ -224,8 +227,8 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     try:
         from . import why_changed
         add("\n**Qué ha cambiado desde ayer**\n\n" + why_changed.to_markdown(why_changed.compute(result.get("trend_28d") or [], today)))
-    except Exception:  # noqa: BLE001 — bloque opcional
-        pass
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("why_changed", exc)
     add("\nLas puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre v2 (oficial), híbrido y v3; "
         "un rojo prevalece. El índice personal es provisional y no es una medida clínica.")
 
@@ -257,8 +260,8 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         add("\n**Necesidad y deuda de sueño**\n\n" + sleep_need.to_markdown(
             sleep_need.compute(result.get("trend_28d") or [], ext.get("days") or {}, today,
                                DEFAULTS["sleep_need_hours"])))
-    except Exception:  # noqa: BLE001 — el informe no depende de este bloque
-        pass
+    except Exception as exc:  # noqa: BLE001 — el informe no depende de este bloque
+        optional_blocks.failed("sleep_need", exc)
     add("\nNo se incorporan siestas no confirmadas.")
 
     # 4 ------------------------------------------------------------------
@@ -301,8 +304,8 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         from . import zone_calibration
         add("\n**Calibración de la zona del día**\n\n"
             + zone_calibration.to_markdown(zone_calibration.compute(correlations.load(root), today)))
-    except Exception:  # noqa: BLE001 — bloque opcional
-        pass
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("zone_calibration", exc)
     add("\n## 5. Rendimiento CrossFit\n")
     wr = cf.get("weekly_report") or {}
     sess7 = [s for s in result.get("sessions_28d") or [] if isinstance(s, dict) and (s.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=6)).isoformat()]
@@ -312,8 +315,8 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         from . import activity_crosscheck
         add("\n" + activity_crosscheck.to_markdown(activity_crosscheck.compute(
             ext.get("days") or {}, _read(root, "activities.json") or [], today)))
-    except Exception:  # noqa: BLE001 — bloque opcional
-        pass
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("activity_crosscheck", exc)
     rows = [["Sesiones registradas", n(wr.get("activities", len(sess7)))],
             ["Días con actividad", n(_d(adv, "weekly_load", "active_days"))],
             ["RPE medio", n(wr.get("mean_rpe"), 2)],
@@ -381,8 +384,8 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         from . import strength_progress
         add("\n**Progresión por ejercicio (barra)**\n\n" + strength_progress.to_markdown(strength_progress.compute(
             (_d(cf, "muscle_load", "strength_exercises") or []), today)))
-    except Exception:  # noqa: BLE001 — bloque opcional
-        pass
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("strength_progress", exc)
     add("\nNo se atribuyen desgloses no confirmados ni se comparan récords no equivalentes; se conserva la diferencia entre cronómetro oficial y reloj.")
 
     # 7 ------------------------------------------------------------------
@@ -419,11 +422,14 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     try:
         add("\n" + improvement.run(root, result).rstrip())
     except Exception as exc:  # noqa: BLE001 — el análisis de mejora nunca debe bloquear el informe
+        optional_blocks.failed("improvement", exc)
         add(f"\n## 8. Análisis de mejora física y recuperación\n\n_No se pudo calcular en este ciclo ({type(exc).__name__})._")
     add("\n## Conclusión\n")
     add(f"Datos {'suficientes' if v2.get('state') in ('assessed', None) and zone != 'unavailable' else 'insuficientes'} para evaluar la recuperación de hoy: "
         f"la decisión es **{ZONE_ICON.get(zone, '')} {guidance.get('label') or dec.get('zone_es') or '—'}**. "
         "No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.")
+    if optional_blocks.failures():
+        add(optional_blocks.to_markdown())
     add("\n---\n")
     add(f"Traza: {slot_title(now, slot_id).lower()} · ciclo {cyc_id or '—'} · generado {now.strftime('%d/%m/%Y %H:%M')} Europe/Madrid · "
         f"certificado {str(ready.get('status') or '—').upper()} · sync_run_id {_d(chain, 'sync', 'run_id') or '—'}.")
