@@ -1,0 +1,41 @@
+name: Garmin Recovery Backup (mensual)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 3 1 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Crear y verificar la copia
+        run: python -m garmin_recovery.backup --out dist | tee backup.json
+
+      - name: Publicar como Release y conservar las últimas 12
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="backup-$(date +%Y-%m)"
+          archive="$(ls dist/*.tar.gz | head -1)"
+          gh release delete "$tag" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$tag" "$archive" --title "Copia de seguridad $tag" \
+            --notes "Copia mensual de los datos del historial (sin secretos ni código). Generada automáticamente."
+          gh release list --limit 100 --json tagName --jq '.[].tagName' | python -m garmin_recovery.backup --prune | while read -r old; do
+            [ -n "$old" ] && gh release delete "$old" --yes --cleanup-tag
+          done
