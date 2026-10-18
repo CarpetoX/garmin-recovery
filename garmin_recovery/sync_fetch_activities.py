@@ -7,10 +7,10 @@ Necesita INTERVALS_API_KEY en el entorno.
 import os
 import json
 import csv
-import base64
-import urllib.request
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+
+from garmin_recovery import ingest
 
 key = os.environ["INTERVALS_API_KEY"]
 today = datetime.now(ZoneInfo("Europe/Madrid")).date()
@@ -23,19 +23,9 @@ url = (
     f"&newest={newest.isoformat()}"
 )
 
-auth = base64.b64encode(f"API_KEY:{key}".encode()).decode()
-req = urllib.request.Request(
-    url,
-    headers={
-        "Authorization": "Basic " + auth,
-        "Accept": "application/json",
-        "User-Agent": "Garmin-Recovery-Sync/3.1"
-    }
-)
-
-with urllib.request.urlopen(req, timeout=30) as r:
-    body = r.read().decode()
-    activities = json.loads(body) if body else []
+activities = ingest.fetch_or_keep("activities", url, key, "activities.json")
+if activities is None:
+    raise SystemExit(0)  # fallo pasajero: se siguen usando los datos previos
 
 if not isinstance(activities, list):
     raise RuntimeError("Respuesta de actividades no válida")
@@ -93,3 +83,5 @@ with open("activities.csv", "w", newline="", encoding="utf-8") as f:
             "created": x.get("created", ""),
             "icu_sync_date": x.get("icu_sync_date", "")
         })
+
+ingest.write_status("activities", True, newest=ingest.newest_date(activities, "start_date_local"))

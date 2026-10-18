@@ -110,3 +110,10 @@ Aún no está comprobado cómo registra Garmin un segundo sueño del mismo día:
 - `advanced.py` (antes 2.519 líneas) conserva lo que depende de la hora (`NOW`, `TODAY`) y `main`; las funciones puras están en `advanced_core` (constantes y estadística), `advanced_context`, `advanced_hrr` y `advanced_models`, y `advanced` las reexporta, así que `advanced.<nombre>` sigue funcionando. Los tests dorados sustituyen `advanced.NOW/TODAY`, por eso esos módulos no pueden leer el reloj (lo comprueba `test_advanced_split_v69.py`).
 - Cobertura de tests medida en CI: 70 %; mínimo exigido 68 % (`pyproject.toml`).
 - Las comprobaciones de estructura del CI buscan el nombre del módulo en el `run` de cada paso (`garmin_recovery.<módulo>`): si renombras un módulo, actualiza también `garmin-ci.yml`.
+
+## V6.13 — Ingesta resistente y estado de fuentes
+
+- `garmin_recovery/ingest.py`: Intervals.icu se descarga con hasta 3 intentos (esperas de 2 y 6 s) ante 429, 5xx o fallo de red. Si sigue fallando y ya hay datos previos, el Sync continúa con ellos y lo anota en `intervals_status.json` (tipo de fallo, HTTP, fallos seguidos). Los fallos de acceso (401/403) o de petición no se toleran: el Sync falla como antes y salta el aviso enseguida.
+- Tras 3 fallos seguidos de una fuente de Intervals se abre/actualiza el aviso de GitHub («intervals»).
+- El informe completo tiene en la sección 1 una tabla «Fuentes de datos» con el último dato y el estado de cada fuente (la fecha de la última actividad no cuenta como salud de la fuente: puede no haber entrenado).
+- Pendiente (no hecho): importar desde archivos FIT/CSV de Garmin como respaldo si Intervals dejara de recibir datos de Garmin. Hoy el sueño y la FC se leen de Garmin Connect directamente (`GARMIN_TOKENS_B64`), así que solo dependen de Intervals el bienestar (HRV, FC en reposo) y las actividades.

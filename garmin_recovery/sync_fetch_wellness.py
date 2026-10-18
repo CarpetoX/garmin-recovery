@@ -7,10 +7,10 @@ Necesita INTERVALS_API_KEY en el entorno.
 import os
 import json
 import csv
-import base64
-import urllib.request
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+
+from garmin_recovery import ingest
 
 key = os.environ["INTERVALS_API_KEY"]
 today = datetime.now(ZoneInfo("Europe/Madrid")).date()
@@ -23,19 +23,9 @@ url = (
     f"&newest={newest.isoformat()}"
 )
 
-auth = base64.b64encode(f"API_KEY:{key}".encode()).decode()
-req = urllib.request.Request(
-    url,
-    headers={
-        "Authorization": "Basic " + auth,
-        "Accept": "application/json",
-        "User-Agent": "Garmin-Recovery-Sync/3.1"
-    }
-)
-
-with urllib.request.urlopen(req, timeout=30) as r:
-    body = r.read().decode()
-    data = json.loads(body) if body else []
+data = ingest.fetch_or_keep("wellness", url, key, "wellness.json")
+if data is None:
+    raise SystemExit(0)  # fallo pasajero: se siguen usando los datos previos
 
 if not isinstance(data, list) or not data:
     raise RuntimeError("Intervals.icu devolvió wellness vacío; no se sobrescriben los datos previos")
@@ -90,3 +80,5 @@ with open("recovery.csv", "w", newline="", encoding="utf-8") as f:
             "hydrationVolume": x.get("hydrationVolume", ""),
             "updated": x.get("updated", "")
         })
+
+ingest.write_status("wellness", True, newest=ingest.newest_date(data, "id"))

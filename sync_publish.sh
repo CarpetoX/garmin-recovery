@@ -6,7 +6,7 @@ set -euo pipefail
 git config user.name "Garmin Recovery Bot"
 git config user.email "actions@github.com"
 
-git add recovery.csv wellness.json activities.csv activities.json daily_summary.json weekly_summary.json
+git add recovery.csv wellness.json activities.csv activities.json daily_summary.json weekly_summary.json intervals_status.json
 
 if git diff --cached --quiet; then
   echo "Sin cambios de Intervals que publicar."
