@@ -10,7 +10,7 @@ class SnapshotTests(unittest.TestCase):
     def setUp(self):
         self.now = datetime(2026, 10, 11, 13, 7, tzinfo=timezone.utc)
         self.rows = [dict(zip(COLUMNS, ['2026-10-11', 'i196047961', 'Fuerza', '6',
-                                        '', 'Sentadilla', '2026-10-11', '{}']))]
+                                        '', 'Sentadilla', '2026-10-11', '{}'], strict=False))]
         self.snapshot = {'advanced_run_id': '12345', 'source_rows_AH': self.rows,
                          'source_rows_sha256': canonical_digest(self.rows),
                          'source_fetched_at': (self.now - timedelta(minutes=1)).isoformat(),

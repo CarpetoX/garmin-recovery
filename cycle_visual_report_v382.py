@@ -21,7 +21,7 @@ def bars(points, key, width=22):
     vals = [p.get(key) if type(p.get(key)) in (int, float) and p[key] >= 0 else None for p in points]
     ceiling = max((v for v in vals if v is not None), default=0)
     output = []
-    for p, v in zip(points, vals):
+    for p, v in zip(points, vals, strict=False):
         n = round(width * v / ceiling) if ceiling and v is not None else 0
         output.append(f"{p['date']} | {'█' * n}{'░' * (width-n)} | {fmt(v)}")
     return output

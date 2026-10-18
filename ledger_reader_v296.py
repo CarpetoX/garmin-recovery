@@ -54,7 +54,7 @@ def reconstruct(preview_path, archive_dir, original_path=None):
     entries = preview.get('cycles')
     if not isinstance(entries, list) or len(entries) != len(records):
         raise ShardError('Faltan registros en el índice compacto')
-    for i, (entry, row, ref) in enumerate(zip(entries, records, refs)):
+    for i, (entry, row, ref) in enumerate(zip(entries, records, refs, strict=False)):
         if (not isinstance(entry, dict)
                 or set(entry) != {'record_index', 'cycle_id', 'shard_ref', 'metadata'}
                 or type(entry.get('record_index')) is not int

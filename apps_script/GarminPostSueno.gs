@@ -1,5 +1,15 @@
 /**
- * Garmin Recovery - vigilancia post-sueño v2.9.4 (dispatch firmado V2.9.1).
+ * Garmin Recovery - vigilancia post-sueño v2.9.5 (dispatch firmado V2.9.1).
+ *
+ * Cambios v2.9.5 (18-10-2026, despertar tardío):
+ * - Ya no hay horas fijas de sondeo. Entre las 08:50 y las 18:29:
+ *     · sueño sin confirmar  -> un Sync cada 30 min (cada 60 min tras un TN);
+ *     · despertar confirmado -> espera el margen de 30 min y pide el Sync en
+ *       cuanto se cumple (antes esperaba hasta la siguiente hora fija: con un
+ *       despertar a las 09:00 el informe definitivo salía a las 10:00);
+ *     · sueño confirmado pero recuperación sin sincronizar -> reintento a los 15 min.
+ * - Tope de 8 solicitudes al día para no llenar el historial de commits.
+ * - La decisión es una función pura (_postSuenoPlan_) comprobada con tests.
  *
  * Cambios v2.9.4 (17-10-2026, puntualidad del informe de las 09:05):
  * - Nuevo sondeo a las 08:50 en días normales: si a las 08:30 el sueño aún no
@@ -35,10 +45,12 @@ const POSTSUENO_GARMIN = Object.freeze({
   workflow: 'sync.yml',
   zone: 'Europe/Madrid',
   triggerFunction: 'vigilarPostSuenoGarmin',
-  regularSlots: ['08:50', '09:15', '10:00', '10:45', '11:30', '12:15'],
-  postNightSlots: ['09:00', '10:00', '11:00', '12:00', '13:00',
-                   '14:00', '15:00', '16:00', '17:00', '18:00'],
+  startMinutes: 8 * 60 + 50,   // 08:50
+  endMinutes: 18 * 60 + 29,    // 18:29
+  pendingEveryMinutes: 30,     // sueño sin confirmar, día normal
+  pendingEveryMinutesPostNight: 60,
   recentSyncMinutes: 15,
+  maxPerDay: 8,
   propsPrefix: 'GARMIN_POSTSUENO_V2413_', // Conserva los bloqueos históricos
   signingKeyProperty: 'GARMIN_ORIGIN_KEY_V291'
 });
@@ -53,7 +65,7 @@ function _postSuenoGitHub_(path, options) {
       Authorization: 'Bearer ' + token,
       Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
-      'User-Agent': 'Garmin-PostSueno/2.9.4'
+      'User-Agent': 'Garmin-PostSueno/2.9.5'
     }
   }, options || {});
   const url = 'https://api.github.com/repos/' + POSTSUENO_GARMIN.repo + path;
@@ -83,16 +95,6 @@ function _postSuenoFecha_(when, pattern) {
 function _postSuenoMinutos_(str) {
   const parts = String(str).split(':');
   return Number(parts[0]) * 60 + Number(parts[1]);
-}
-
-function _postSuenoElegirTurno_(now, nightShift) {
-  const hours = _postSuenoMinutos_(_postSuenoFecha_(now, 'HH:mm'));
-  const slots = nightShift ? POSTSUENO_GARMIN.postNightSlots : POSTSUENO_GARMIN.regularSlots;
-  const due = slots.filter(t => _postSuenoMinutos_(t) <= hours);
-  if (!due.length) return null;
-  const last = due[due.length - 1];
-  const maxLag = 29; // Mantener la ventana original, sin recuperar sondeos antiguos
-  return hours - _postSuenoMinutos_(last) <= maxLag ? last : null;
 }
 
 function _postSuenoUltimoSync_() {
@@ -143,60 +145,79 @@ function _postSuenoFirmaV291_(now) {
   };
 }
 
+/**
+ * Decisión pura (sin red ni propiedades): devuelve {action, state}.
+ * ctx: {localMinutes, nowMs, postNight, sleep, today, latest, dispatchesToday}
+ *   latest = {status, created_at} del último Sync o null.
+ */
+function _postSuenoPlan_(ctx) {
+  const cfg = POSTSUENO_GARMIN;
+  if (ctx.localMinutes < cfg.startMinutes || ctx.localMinutes > cfg.endMinutes) {
+    return {action: 'skip', state: 'fuera_de_sondeo'};
+  }
+  const sleep = ctx.sleep || {};
+  const sameDay = sleep.date === ctx.today;
+  if (sameDay && sleep.state === 'confirmed_ready' &&
+      sleep.is_definitive === true && sleep.wake_confirmed === true) {
+    return {action: 'skip', state: 'sueno_ya_confirmado', sleep_end: sleep.sleep_end_local};
+  }
+  const waiting = sameDay && sleep.state === 'confirmed_wait_30m' && sleep.earliest_definitive_at;
+  if (waiting && ctx.nowMs < Date.parse(sleep.earliest_definitive_at)) {
+    return {action: 'skip', state: 'esperando_30_minutos', earliest: sleep.earliest_definitive_at};
+  }
+  if (ctx.latest) {
+    if (['queued', 'in_progress', 'waiting', 'requested', 'pending'].includes(ctx.latest.status)) {
+      return {action: 'skip', state: 'sync_en_ejecucion', run_id: ctx.latest.id};
+    }
+  }
+  const ageMin = ctx.latest ? (ctx.nowMs - Date.parse(ctx.latest.created_at || '')) / 60000 : Infinity;
+  const hasAge = Number.isFinite(ageMin) && ageMin >= 0;
+  if (hasAge && ageMin < cfg.recentSyncMinutes) {
+    return {action: 'skip', state: 'sync_reciente', age_minutes: Math.round(ageMin)};
+  }
+  if (ctx.dispatchesToday >= cfg.maxPerDay) {
+    return {action: 'skip', state: 'limite_diario'};
+  }
+  if (waiting) return {action: 'dispatch', state: 'margen_cumplido'};
+  if (sameDay && sleep.state === 'confirmed_recovery_sync_pending') {
+    return {action: 'dispatch', state: 'recuperacion_pendiente'};
+  }
+  const every = ctx.postNight ? cfg.pendingEveryMinutesPostNight : cfg.pendingEveryMinutes;
+  if (!hasAge || ageMin >= every) {
+    return {action: 'dispatch', state: 'sueno_sin_confirmar'};
+  }
+  return {action: 'skip', state: 'esperando_intervalo', age_minutes: Math.round(ageMin)};
+}
+
 function _postSuenoDecidir_(dryRun) {
   const now = new Date();
   const today = _postSuenoFecha_(now, 'yyyy-MM-dd');
   const localMinutes = _postSuenoMinutos_(_postSuenoFecha_(now, 'HH:mm'));
-  if (localMinutes < 8 * 60 + 50 || localMinutes > 18 * 60 + 29) {
+  if (localMinutes < POSTSUENO_GARMIN.startMinutes || localMinutes > POSTSUENO_GARMIN.endMinutes) {
     return {state: 'fuera_de_sondeo', today: today};
   }
 
   const yesterday = _postSuenoFecha_(new Date(now.getTime() - 86400000), 'yyyy-MM-dd');
   const shifts = _postSuenoJSON_('shift_calendar.json');
   const postNight = Boolean(shifts && shifts.days && shifts.days[yesterday] === 'TN');
-  const slot = _postSuenoElegirTurno_(now, postNight);
-  if (!slot) return {state: 'fuera_de_sondeo', today: today, postNight: postNight};
+  const sleep = _postSuenoJSON_('morning_sleep_status.json');
 
   const props = PropertiesService.getScriptProperties();
-  const key = POSTSUENO_GARMIN.propsPrefix + today + '_' + slot.replace(':', '');
-  if (props.getProperty(key)) {
-    return {state: 'turno_ya_comprobado', today: today, slot: slot, postNight: postNight};
-  }
+  const countKey = POSTSUENO_GARMIN.propsPrefix + today + '_n';
+  const dispatchesToday = Number(props.getProperty(countKey) || 0);
 
-  const sleep = _postSuenoJSON_('morning_sleep_status.json');
-  if (sleep.date === today && sleep.state === 'confirmed_ready' &&
-      sleep.is_definitive === true && sleep.wake_confirmed === true) {
-    return {state: 'sueno_ya_confirmado', today: today, slot: slot,
-            sleep_end: sleep.sleep_end_local, postNight: postNight};
-  }
-  if (sleep.date === today && sleep.state === 'confirmed_wait_30m' &&
-      sleep.earliest_definitive_at) {
-    const due = new Date(sleep.earliest_definitive_at).getTime();
-    if (Number.isFinite(due) && now.getTime() < due) {
-      return {state: 'esperando_30_minutos', today: today, slot: slot,
-              earliest: sleep.earliest_definitive_at, postNight: postNight};
-    }
-  }
-
-  const latest = _postSuenoUltimoSync_();
-  if (latest) {
-    if (['queued', 'in_progress', 'waiting', 'requested', 'pending'].includes(latest.status)) {
-      return {state: 'sync_en_ejecucion', today: today, slot: slot,
-              run_id: latest.id, postNight: postNight};
-    }
-    const started = Date.parse(latest.created_at || '');
-    const minutes = (now.getTime() - started) / 60000;
-    if (Number.isFinite(minutes) && minutes >= 0 &&
-        minutes < POSTSUENO_GARMIN.recentSyncMinutes) {
-      return {state: 'sync_reciente', today: today, slot: slot,
-              run_id: latest.id, age_minutes: Math.round(minutes), postNight: postNight};
-    }
+  const plan = _postSuenoPlan_({
+    localMinutes: localMinutes, nowMs: now.getTime(), postNight: postNight, sleep: sleep,
+    today: today, latest: _postSuenoUltimoSync_(), dispatchesToday: dispatchesToday
+  });
+  if (plan.action !== 'dispatch') {
+    return Object.assign({today: today, postNight: postNight}, plan);
   }
 
   if (dryRun) {
-    return {state: 'listo_para_solicitar_sync', today: today,
-            slot: slot, postNight: postNight, no_dispatch: true,
-            signed_workflow_dispatch: true, cycle_id: _postSuenoCycleId_(now)};
+    return {state: 'listo_para_solicitar_sync', motivo: plan.state, today: today,
+            postNight: postNight, no_dispatch: true, signed_workflow_dispatch: true,
+            cycle_id: _postSuenoCycleId_(now)};
   }
 
   // Se evita repository_dispatch sin firma; V2.9.1 valida workflow_dispatch firmado.
@@ -211,10 +232,10 @@ function _postSuenoDecidir_(dryRun) {
   }
 
   // HTTP 204 no certifica Sync, FC, Advanced ni CrossFit.
-  props.setProperty(key, new Date().toISOString());
+  props.setProperty(countKey, String(dispatchesToday + 1));
   console.log('Post-sueño: solicitud firmada aceptada para ciclo ' + signed.inputs.cycle_id +
-              ' sondeo=' + slot + ' (sin afirmar ejecución ni entrega)');
-  return {state: 'sync_solicitado_no_certificado', today: today, slot: slot,
+              ' motivo=' + plan.state + ' (sin afirmar ejecución ni entrega)');
+  return {state: 'sync_solicitado_no_certificado', motivo: plan.state, today: today,
           postNight: postNight, event_type: 'workflow_dispatch',
           signed: true, cycle_id: signed.inputs.cycle_id};
 }
@@ -252,7 +273,7 @@ function comprobarFirmaPostSuenoGarmin() {
               /^[0-9a-f]{64}$/.test(inputs.origin_proof));
   if (!ok) throw new Error('Formato local de la firma no válido.');
   const result = {
-    version: '2.9.4-post-sleep',
+    version: '2.9.5-post-sleep',
     signing_configured: true,
     local_signature_format_valid: true,
     cycle_id: inputs.cycle_id,

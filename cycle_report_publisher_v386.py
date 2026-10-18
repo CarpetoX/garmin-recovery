@@ -38,7 +38,7 @@ def publish(ledger, cycle_id, outdir, write=False):
                 os.link(tmp, destination)
             except FileExistsError:
                 if destination.is_symlink() or destination.read_bytes() != data:
-                    raise SnapshotError('Concurrent report differs; refusing overwrite')
+                    raise SnapshotError('Concurrent report differs; refusing overwrite') from None
                 state = 'already_present'
             else:
                 state = 'published_local'
