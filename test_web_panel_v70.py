@@ -74,3 +74,18 @@ class ReportFigures(unittest.TestCase):
     def test_plain_figure_images_fit_the_column(self):
         from garmin_recovery import webreport
         self.assertIn("figure>img{display:block;width:100%", webreport.CSS)  # sessions.svg mide 640 px: no debe desbordar el móvil
+
+
+class Delivery(unittest.TestCase):
+    D = {"cycle_id": "2026-10-18-1645", "state": "complete", "scope": "Notificación enviada = aceptada por ntfy.",
+         "stages": {"sync": {"state": "ok"}, "web": {"state": "pending", "note": "despliegue en curso"},
+                    "notification": {"state": "failed"}}}
+
+    def test_chips_and_title(self):
+        html = dashboard._delivery_html(self.D)
+        self.assertIn("Ciclo completo", html)
+        self.assertIn("✓ Sync", html)
+        self.assertIn("… Web", html)
+        self.assertIn("✗ Aviso", html)
+        self.assertIn("aceptada por ntfy", html)
+        self.assertEqual(dashboard._delivery_html(None), "")

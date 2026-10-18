@@ -151,6 +151,11 @@ def _live_extras(root: Path, result: dict) -> dict:
     today = result.get("date")
     trend = [t for t in result.get("trend_28d") or [] if isinstance(t, dict)]
     try:
+        d = json.loads((root / "delivery_status.json").read_text(encoding="utf-8"))
+        out["delivery"] = d if isinstance(d, dict) else None
+    except (OSError, ValueError):
+        pass  # aún no hay estado de entrega: es normal antes del primer ciclo con esta función
+    try:
         out["changes"] = why_changed.compute(trend, today)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:why_changed", exc)
