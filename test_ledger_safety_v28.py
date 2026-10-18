@@ -3,8 +3,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from archive_report_cycles import digest, audit
-from ledger_safety_v28 import LedgerSafetyError, atomic_write_ledger
+from garmin_recovery.archive_report_cycles import digest, audit
+from garmin_recovery.ledger_safety import LedgerSafetyError, atomic_write_ledger
 
 def cycle(i):
     snap = {'value': i}

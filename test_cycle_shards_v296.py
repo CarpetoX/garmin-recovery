@@ -4,7 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from cycle_shards_v296 import (ShardError, audit, canonical_hash, prepare,
+from garmin_recovery.cycle_shards import (ShardError, audit, canonical_hash, prepare,
                               restore, verify_archive)
 
 

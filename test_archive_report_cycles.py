@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from datetime import date
 from pathlib import Path
-from archive_report_cycles import ArchiveError, audit, digest, prepare
+from garmin_recovery.archive_report_cycles import ArchiveError, audit, digest, prepare
 
 
 def cycle(cid, month):

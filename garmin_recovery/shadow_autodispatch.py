@@ -17,7 +17,7 @@ from pathlib import Path
 import re
 from urllib import error, parse, request
 
-from cycle_shards_v296 import load_source
+from .cycle_shards import load_source
 
 BRANCH = 'garmin-v296-shadow'
 EVENT = 'garmin-shadow-publish'

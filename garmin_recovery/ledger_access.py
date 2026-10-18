@@ -13,8 +13,8 @@ import argparse
 import json
 from pathlib import Path
 
-from cycle_shards_v296 import ShardError, canonical_hash, load_source
-from ledger_reader_v296 import reconstruct
+from .cycle_shards import ShardError, canonical_hash, load_source
+from .ledger_reader import reconstruct
 
 VERSION = '2.9.6'
 MODES = frozenset({'legacy_only', 'shadow_compare', 'shards_only'})

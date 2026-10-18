@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from archive_report_cycles import ArchiveError, digest, inspect, validate_cycle
+from .archive_report_cycles import ArchiveError, digest, inspect, validate_cycle
 
 class LedgerSafetyError(RuntimeError):
     pass

@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from urllib.error import HTTPError
 
-from shadow_autodispatch_v296 import (
+from garmin_recovery.shadow_autodispatch import (
     AutoShadowError, dispatch_if_needed, fetch_mirror_state, validate_state,
 )
 
