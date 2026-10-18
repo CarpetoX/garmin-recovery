@@ -63,6 +63,9 @@ def _rank(title: str) -> int:
     return next((i for i, k in enumerate(ORDER) if title.startswith(k)), len(ORDER))
 
 
+ICONS = {'7.': '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>', '2.': '<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>', '3.': '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>', '5.': '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>', '8.': '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>', '4.': '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>', '6.': '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', 'Resumen': '<path d="M4 6h16M4 12h16M4 18h10"/>', '1.': '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>', 'Conclusión': '<path d="M5 12l5 5L20 7"/>'}
+
+
 def _lookup(table: dict, title: str) -> str:
     return next((v for k, v in table.items() if title.startswith(k)), "")
 
@@ -91,8 +94,11 @@ def build(md: str, result: dict) -> str:
         opened = " open" if title.startswith(OPEN) else ""
         shown = re.sub(r"^\d+\.\s*", "", title)
         sub = _lookup(SUBTITLES, title)
+        ic = _lookup(ICONS, title)
+        icon_html = (f'<i class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" '
+                     f'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{ic}</svg></i>' if ic else "")
         sub_html = f"<small>{html.escape(sub)}</small>" if sub else ""
-        sections.append(f'<details class="sec" id="{sid}"{opened}><summary><span><h2>{mdhtml.inline(shown)}</h2>{sub_html}</span></summary>'
+        sections.append(f'<details class="sec" id="{sid}"{opened}><summary>{icon_html}<span><h2>{mdhtml.inline(shown)}</h2>{sub_html}</span></summary>'
                         f'<div class="body">{mdhtml.render(body, interactive=charts)}</div></details>')
     data = json.dumps(_data(result), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return PAGE.replace("{{HEAD}}", mdhtml.render(head, interactive=charts)).replace("{{CHIPS}}", "".join(chips)) \
@@ -113,17 +119,17 @@ nav.bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 9
 .tools{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.seg{display:flex;gap:4px}
 .seg button[aria-pressed=true]{background:var(--s1);border-color:var(--s1);color:#fff}
 details.sec{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin:12px 0;scroll-margin-top:96px}
-details.sec>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+details.sec>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;gap:12px}details.sec>summary>span{flex:1;min-width:0}.ico{display:grid;place-items:center;flex:0 0 36px;height:36px;border-radius:12px;background:var(--glass-chip,var(--surface-2));color:var(--s1)}
 details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::after{content:"▾";color:var(--text-3);transition:transform .15s}
-details.sec:not([open])>summary::after{transform:rotate(-90deg)}
-details.sec h2{font-size:16px;margin:0;font-weight:640}details.sec summary small{display:block;font-size:12.5px;color:var(--text-3);margin-top:1px}.body{padding:0 16px 16px}.body h3{font-size:14.5px;margin:18px 0 6px}
+details.sec:not([open])>summary::after{transform:rotate(-90deg)}.body tbody tr:nth-child(even){background:var(--glass-chip,var(--surface-2))}.body tbody tr:nth-child(even) td{border-bottom-color:transparent}.body td:first-child,.body th:first-child{border-radius:8px 0 0 8px}.body td:last-child,.body th:last-child{border-radius:0 8px 8px 0}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}details.sec,.kpi{animation:rise .4s cubic-bezier(.22,.8,.24,1) both}@media(prefers-reduced-motion:reduce){details.sec,.kpi{animation:none}}details.sec h2{font-size:16px;margin:0;font-weight:640}details.sec summary small{display:block;font-size:12.5px;color:var(--text-3);margin-top:1px}.body{padding:0 16px 16px}.body h3{font-size:14.5px;margin:18px 0 6px}
 .body p{margin:.5em 0}.body ul,.body ol{padding-left:20px}.body li{margin:.3em 0}
 .scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
 th{color:var(--text-2);font-weight:600;font-size:12.5px}code{background:var(--surface-2);padding:1px 5px;border-radius:4px;font-size:.9em}
 pre{background:var(--surface-2);padding:10px;overflow-x:auto;border-radius:8px;font-size:12.5px}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}
-.kpi{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--s4);border-radius:10px;padding:9px 12px;display:flex;flex-direction:column}
-.kpi span{font-size:12px;color:var(--text-3)}.kpi strong{font-size:1.15rem;line-height:1.25}.kpi small{color:var(--text-3);font-size:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--s4);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:1px}
+.kpi span{font-size:12px;color:var(--text-3)}.kpi strong{font-size:1.4rem;line-height:1.2;font-variant-numeric:tabular-nums;letter-spacing:-.01em}.kpi small{color:var(--text-3);font-size:12px}
 .kpi.green{border-left-color:var(--good)}.kpi.yellow{border-left-color:var(--warn)}.kpi.red{border-left-color:var(--crit)}
 .fig{margin:14px 0}.fig .cap{font-size:13px;color:var(--text-2);margin:0 0 4px;font-weight:600}.fig .leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text-2);margin:2px 0 4px}
 .fig .leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}

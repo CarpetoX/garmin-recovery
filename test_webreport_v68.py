@@ -58,6 +58,9 @@ class WebReport(unittest.TestCase):
         ids = re.findall(r'<details class="sec" id="(s\d)"( open)?>', self.html)
         self.assertEqual(ids, [("s2", " open"), ("s0", ""), ("s1", ""), ("s3", "")])  # recuperación primero; resumen, calidad y conclusión al final
 
+    def test_section_icons(self):
+        self.assertEqual(self.html.count('class="ico"'), 4)
+
     def test_interactive_chart_and_fallback(self):
         self.assertIn('data-chart="hrv"', self.html)
         self.assertIn('<noscript><img src="charts/hrv.svg"', self.html)
