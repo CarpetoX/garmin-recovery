@@ -1,6 +1,6 @@
 import unittest
-from cycle_snapshot_report_v38 import digest, SnapshotError
-from cycle_visual_report_v382 import make
+from garmin_recovery.cycle_snapshot_report import digest, SnapshotError
+from garmin_recovery.cycle_visual_report import make
 
 CID='2026-10-12-1645'
 

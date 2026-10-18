@@ -1,6 +1,6 @@
 import copy
 import unittest
-from cycle_snapshot_report_v38 import build, SnapshotError, digest
+from garmin_recovery.cycle_snapshot_report import build, SnapshotError, digest
 
 CID = '2026-10-12-1645'
 SNAP = {'date':'2026-10-12', 'source_generated_at':{'crossfit_insights.json':'2026-10-12T17:00:33+02:00'}, 'crossfit':{'activities':[{'rpe':6}]}, 'recovery_assessment':{'score':70}}

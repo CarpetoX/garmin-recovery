@@ -177,7 +177,7 @@ jobs:
       - name: Validate certified report regression
         run: python -m unittest -v test_cycle_report_v386 test_cycle_real_integration_v382
       - name: Generate certified reports (artifact only)
-        run: python cycle_report_batch_v386.py --ledger report_cycles.json --outdir certified_cycle_reports_v386
+        run: python -m garmin_recovery.cycle_report_batch --ledger report_cycles.json --outdir certified_cycle_reports_v386
       - name: Upload reports and quarantine manifest
         uses: actions/upload-artifact@v4
         with:

@@ -3,9 +3,9 @@ import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from cycle_snapshot_report_v38 import digest, SnapshotError
-from cycle_report_compat_v386 import render
-from cycle_report_batch_v386 import run
+from garmin_recovery.cycle_snapshot_report import digest, SnapshotError
+from garmin_recovery.cycle_report_compat import render
+from garmin_recovery.cycle_report_batch import run
 
 
 LEGACY_CYCLE = '2026-10-09-1645'

@@ -6,8 +6,8 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from cycle_report_compat_v386 import render
-from cycle_snapshot_report_v38 import build, SnapshotError
+from .cycle_report_compat import render
+from .cycle_snapshot_report import build, SnapshotError
 
 
 def publish(ledger, cycle_id, outdir, write=False):

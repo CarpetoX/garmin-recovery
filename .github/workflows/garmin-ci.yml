@@ -123,7 +123,7 @@ jobs:
           assert certified.get('if') == ("$" + "{{ needs.monitor.result == 'success' }}")
           assert certified.get('permissions', {}).get('contents') == 'read'
           report_steps = certified.get('steps', [])
-          assert any('cycle_report_batch_v386.py' in x.get('run', '') for x in report_steps)
+          assert any('garmin_recovery.cycle_report_batch' in x.get('run', '') for x in report_steps)
           assert any(x.get('uses', '').startswith('actions/upload-artifact@') for x in report_steps)
           manual = workflows['garmin-certified-reports.yml']['on']
           assert 'workflow_dispatch' in manual

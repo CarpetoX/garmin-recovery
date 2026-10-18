@@ -6,7 +6,7 @@ No network, Garmin live files, commits, or delivery assertions. Rejects altered 
 import argparse
 import json
 from pathlib import Path
-from cycle_snapshot_report_v38 import build, SnapshotError
+from .cycle_snapshot_report import build, SnapshotError
 
 
 def mapping(v):

@@ -6,8 +6,8 @@ import copy
 import json
 import unittest
 from pathlib import Path
-from cycle_snapshot_report_v38 import digest, SnapshotError
-from cycle_visual_report_v382 import make
+from garmin_recovery.cycle_snapshot_report import digest, SnapshotError
+from garmin_recovery.cycle_visual_report import make
 
 CYCLE = '2026-10-12-1645'
 SHA = 'f3343c8527b36cbec089f6cefd0e8e7ca56604969c84c7a2c8105589d4dddbbe'
