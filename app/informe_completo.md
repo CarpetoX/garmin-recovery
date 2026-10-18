@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 11:29 · `GR-2026-10-18-1129-99ca7a`
+Domingo, 18 de octubre de 2026 · 11:35 · `GR-2026-10-18-1135-b535b7`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -153,7 +153,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 19, máximo 77.
-- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 18 min: no es una medición nueva).
+- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 24 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -228,6 +228,20 @@ Monotonía 0,7 · strain 854 (descriptores de contexto, sin umbral médico).
   AMRAP 10': 5 hang power snatch 45 kg, 10 butterfly pull-ups, 15 wall balls 9 kg. 5 rondas + 5 snatch = 155 reps. RPE 9. Garmin 12:14.
 - **13 oct — Fuerza - Squat snatch EMOM 8 min** · RPE 6 · volumen de barra cuantificado 578 kg
   EMOM 8': 2x30, 2x40, 2x45, 2x50, 1x55, 1x60, 1x65, 1x68 kg. 12 repeticiones, volumen 578 kg. RPE 6. Garmin 29:10.
+
+**Carga de fuerza por patrón**
+
+| Patrón | 7 d: bloques · series | 7 d: barra (kg) | 28 d: bloques · series | 28 d: barra (kg) |
+|---|---|---|---|---|
+| Pecho (aislamiento) | — | — | 1 · 4 | — |
+| Core | — | — | 1 · 0 | — |
+| Bisagra de cadera | — | — | 1 · 2 | 0 (parcial) |
+| Empuje horizontal | — | — | 4 · 16 | — |
+| Flexión de rodilla | — | — | 2 · 12 | — |
+| Sentadilla | 1 · 8 | 578 | 4 · 31 | 7.553 |
+| Tríceps (aislamiento) | — | — | 1 · 4 | — |
+
+Solo series declaradas; «+» indica bloques sin número de series. El volumen en kg cuenta únicamente barra con carga total y volumen completo; no se suma entre equipos. Un patrón sin registros no demuestra que no se entrenara.
 
 No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes; se conserva la diferencia entre cronómetro oficial y reloj.
 
@@ -311,4 +325,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:29 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:35 Europe/Madrid · certificado READY · sync_run_id 39109018293.
