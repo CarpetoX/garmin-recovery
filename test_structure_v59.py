@@ -18,7 +18,7 @@ class SyncSteps(unittest.TestCase):
         wf = (ROOT / ".github/workflows/sync.yml").read_text(encoding="utf-8")
         self.assertNotIn("python - <<'PY'", wf)
         for script in ("sync_fetch_wellness.py", "sync_fetch_activities.py", "sync_daily_analysis.py"):
-            self.assertIn(f"run: python {script}", wf)
+            self.assertIn(f"run: python -m garmin_recovery.{script[:-3]}", wf)
         self.assertEqual(wf.count("INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}"), 2)
 
     def _run_with_fake_api(self, script):
@@ -41,7 +41,7 @@ class SyncSteps(unittest.TestCase):
             cwd = os.getcwd()
             os.chdir(tmp)
             try:
-                code = compile((ROOT / script).read_text(encoding="utf-8"), script, "exec")
+                code = compile((ROOT / "garmin_recovery" / script).read_text(encoding="utf-8"), script, "exec")
                 exec(code, {"__name__": "__main__"})
                 return {p.name: p.read_bytes() for p in Path(tmp).iterdir()}
             finally:
@@ -66,8 +66,8 @@ class ImportWithoutSideEffects(unittest.TestCase):
             sys.path.insert(0, str(ROOT))
             try:
                 for name in ("garmin_metrics", "garmin_activity_metrics", "validate_pipeline"):
-                    sys.modules.pop(name, None)
-                    mod = importlib.import_module(name)
+                    sys.modules.pop("garmin_recovery." + name, None)
+                    mod = importlib.import_module("garmin_recovery." + name)
                     self.assertTrue(callable(getattr(mod, "main", None)), name)
                 self.assertEqual(list(Path(tmp).iterdir()), [])  # nada escrito al importar
             finally:

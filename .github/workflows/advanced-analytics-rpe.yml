@@ -44,7 +44,7 @@ jobs:
 
       - name: Validar sintaxis
         run: |
-          python -m py_compile garmin_recovery/advanced.py rpe_enrichment.py validate_pipeline.py garmin_recovery/reliability.py pipeline_regression_tests.py morning_sleep_gate.py
+          python -m py_compile garmin_recovery/advanced.py garmin_recovery/rpe_enrichment.py garmin_recovery/validate_pipeline.py garmin_recovery/reliability.py garmin_recovery/pipeline_regression_tests.py garmin_recovery/morning_sleep_gate.py
 
       - name: Calcular analítica avanzada + RPE
         env:
@@ -52,7 +52,7 @@ jobs:
           DAY_CONTEXT_B64: ${{ secrets.DAY_CONTEXT_B64 }}
           RPE_CSV_URL: ${{ secrets.RPE_CSV_URL }}
         run: |
-          python rpe_enrichment.py
+          python -m garmin_recovery.rpe_enrichment
 
       - name: Fusionar recuperación, sueño y VFC con guardrails
         run: |
@@ -60,21 +60,21 @@ jobs:
 
       - name: Clasificar sueño matinal sin alterar el modelo de recuperación
         run: |
-          python morning_sleep_gate.py
+          python -m garmin_recovery.morning_sleep_gate
 
       - name: Validar integridad del pipeline
         run: |
-          python validate_pipeline.py
+          python -m garmin_recovery.validate_pipeline
 
       - name: Pruebas de regresión V2.4
         run: |
-          python pipeline_regression_tests.py --stage advanced
+          python -m garmin_recovery.pipeline_regression_tests --stage advanced
 
       - name: V2.9 - Capturar origen y padre por ID real
         continue-on-error: true
         run: |
           mkdir -p .lineage_current
-          python pipeline_lineage_v29.py --stage advanced --out .lineage_current/pipeline_lineage_v29.json
+          python -m garmin_recovery.pipeline_lineage --stage advanced --out .lineage_current/pipeline_lineage_v29.json
 
       - name: Guardar analítica avanzada con reintentos
         shell: bash

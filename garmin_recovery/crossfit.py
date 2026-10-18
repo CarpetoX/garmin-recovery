@@ -157,7 +157,7 @@ def sets_volume(obj):
     return volume, complete, known_sets, total_sets
 
 def shift(day):
-    from shift_calendar import resolve_day
+    from .shift_calendar import resolve_day
     try:
         return resolve_day(day)['label']
     except (ValueError, TypeError):

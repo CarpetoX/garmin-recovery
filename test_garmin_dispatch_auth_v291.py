@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from garmin_dispatch_auth_v291 import (InvalidOrigin, canonical_message,
+from garmin_recovery.dispatch_auth import (InvalidOrigin, canonical_message,
     classify, attach_lineage)
 
 KEY = 'some-long-local-test-signing-key-1234567890'

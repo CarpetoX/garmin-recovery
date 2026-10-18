@@ -33,9 +33,9 @@ Los cron usan `timezone: Europe/Madrid`. GitHub los retrasa 2–5 h: Apps Script
 
 ## Código obsoleto
 
-`sync.yml` ya no tiene código Python en línea: `sync_fetch_wellness.py`, `sync_fetch_activities.py` y `sync_daily_analysis.py` (salida idéntica comprobada byte a byte; tests `test_sync_daily_analysis.py` y `test_structure_v59.py`).
+`sync.yml` ya no tiene código Python en línea: `garmin_recovery/sync_fetch_wellness.py`, `garmin_recovery/sync_fetch_activities.py` y `garmin_recovery/sync_daily_analysis.py` (salida idéntica comprobada byte a byte; tests `test_garmin_recovery/sync_daily_analysis.py` y `test_structure_v59.py`).
 
-`garmin_metrics.py`, `garmin_activity_metrics.py` y `validate_pipeline.py` ya no se ejecutan al importarlos (`main()` + `if __name__ == "__main__"`); misma salida al ejecutarlos.
+`garmin_recovery/garmin_metrics.py`, `garmin_recovery/garmin_activity_metrics.py` y `garmin_recovery/validate_pipeline.py` ya no se ejecutan al importarlos (`main()` + `if __name__ == "__main__"`); misma salida al ejecutarlos.
 
 Un número de versión en el nombre (`recovery_v231.py`, `monitor_v231.py`…) no significa que sobre: muchos siguen importados. Antes de borrar un módulo, comprobar que ningún workflow lo ejecuta y que ningún módulo en uso lo importa (análisis de imports desde los scripts que ejecutan los workflows), y quitar sus tests y referencias en los YAML en el mismo PR.
 
@@ -81,7 +81,7 @@ Regla: si una salida pública cambia, aunque sea un campo, el PR lo declara y se
 
 ## Registro de entrenamientos
 
-`REGISTRO_ENTRENAMIENTOS.md` fija cómo Claude apunta en la hoja (pestaña `RPE`, columnas A–H) lo que el atleta cuenta. El pipeline solo lee filas con fecha, ID de actividad y RPE válidos; el resto se ignora, así que cambiar el esquema de la hoja exige cambiar `rpe_enrichment.py`.
+`REGISTRO_ENTRENAMIENTOS.md` fija cómo Claude apunta en la hoja (pestaña `RPE`, columnas A–H) lo que el atleta cuenta. El pipeline solo lee filas con fecha, ID de actividad y RPE válidos; el resto se ignora, así que cambiar el esquema de la hoja exige cambiar `garmin_recovery/rpe_enrichment.py`.
 
 ## V6.10 — Vigilante del despertar (Apps Script v2.9.5)
 
@@ -98,7 +98,7 @@ El cron de GitHub llega horas tarde (el de las 08:30 de ayer arrancó a las 13:0
 
 ### Sueño provisional tras un turno de noche
 
-Si ayer fue TN y el sueño de hoy acaba antes de las 10:00 con menos de 5 h (`sleep_hours`), `morning_sleep_gate.py` lo marca
+Si ayer fue TN y el sueño de hoy acaba antes de las 10:00 con menos de 5 h (`sleep_hours`), `garmin_recovery/morning_sleep_gate.py` lo marca
 `post_night_shift_short_sleep_pending`: no es definitivo, no autoriza intensidad alta y el vigilante sigue consultando
 (cada 60 min) por si Garmin añade el descanso principal. Si no hay `sleep_hours`, no bloquea. Un episodio que acaba antes de
 las 07:00 ya se trataba así (`post_night_shift_early_sleep_pending`). Los umbrales (5 h, 10:00) están en el propio archivo.

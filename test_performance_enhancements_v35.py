@@ -7,10 +7,10 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from performance_report_v32 import build_report
-from performance_enhancements_v35 import build, validate, main
-from training_trends_v31 import main as trends_main
-from validate_performance_v33 import audit as validate_v33
+from garmin_recovery.performance_report import build_report
+from garmin_recovery.performance_enhancements import build, validate, main
+from garmin_recovery.training_trends import main as trends_main
+from garmin_recovery.validate_performance import audit as validate_v33
 
 TODAY = date(2026, 10, 11)
 

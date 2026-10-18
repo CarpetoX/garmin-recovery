@@ -1,5 +1,5 @@
 import unittest
-from pipeline_lineage_v29 import create, parse_event
+from garmin_recovery.pipeline_lineage import create, parse_event
 
 
 def event(name, run_id, conclusion='success'):

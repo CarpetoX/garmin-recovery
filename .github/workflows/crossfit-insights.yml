@@ -29,7 +29,7 @@ jobs:
           python-version: '3.12'
 
       - name: Validar sintaxis V2.4.6
-        run: python -m py_compile garmin_recovery/crossfit.py test_sleep_integration.py pipeline_regression_tests.py
+        run: python -m py_compile garmin_recovery/crossfit.py test_sleep_integration.py garmin_recovery/pipeline_regression_tests.py
 
       - name: Pruebas integración sueño V2.4.6
         run: python -m unittest -v test_sleep_integration
@@ -54,14 +54,14 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p .lineage_current
-          python pipeline_lineage_v29.py --stage crossfit --out .lineage_current/pipeline_lineage_v29.json
+          python -m garmin_recovery.pipeline_lineage --stage crossfit --out .lineage_current/pipeline_lineage_v29.json
           cp .lineage_current/pipeline_lineage_v29.json pipeline_lineage_v29.json
 
       - name: V3.0 - Auditar contratos JSON sin alterar las fuentes
         continue-on-error: true
         run: |
           mkdir -p .diagnostics_current
-          python json_contracts_v30.py --out .diagnostics_current/schema_health_v30.json
+          python -m garmin_recovery.json_contracts --out .diagnostics_current/schema_health_v30.json
           cp .diagnostics_current/schema_health_v30.json schema_health_v30.json
 
       # V3.3: no permitir 'verde' si falla el informe de tendencias/rendimiento.
@@ -72,12 +72,12 @@ jobs:
           set -euo pipefail
           mkdir -p .diagnostics_current
           rm -f .diagnostics_current/training_trends_v31.json
-          python training_trends_v31.py --out .diagnostics_current/training_trends_v31.json
-          python validate_performance_v33.py \
+          python -m garmin_recovery.training_trends --out .diagnostics_current/training_trends_v31.json
+          python -m garmin_recovery.validate_performance \
             --candidate .diagnostics_current/training_trends_v31.json \
             --crossfit crossfit_insights.json
           # V3.5: validar el complemento antes de publicar el candidato.
-          python performance_enhancements_v35.py \
+          python -m garmin_recovery.performance_enhancements \
             --candidate .diagnostics_current/training_trends_v31.json \
             --crossfit crossfit_insights.json
           cp .diagnostics_current/training_trends_v31.json training_trends_v31.json
@@ -130,7 +130,7 @@ jobs:
           exit 0
 
       - name: Pruebas de regresión V2.4
-        run: python pipeline_regression_tests.py --stage crossfit
+        run: python -m garmin_recovery.pipeline_regression_tests --stage crossfit
 
       - name: Commit CrossFit insights and ready certificate
         run: |
@@ -239,4 +239,4 @@ jobs:
         env:
           CLAUDE_ROUTINE_URL: ${{ secrets.CLAUDE_ROUTINE_URL }}
           CLAUDE_ROUTINE_TOKEN: ${{ secrets.CLAUDE_ROUTINE_TOKEN }}
-        run: python notify_claude_routine.py
+        run: python -m garmin_recovery.notify_claude_routine

@@ -164,7 +164,7 @@ def decode_context_map():
         except Exception:
             pass
 
-    from shift_calendar import context_map as shift_context_map
+    from .shift_calendar import context_map as shift_context_map
     return shift_context_map({
         str(k): str(v) for k, v in merged.items() if isinstance(v, str)
     })
@@ -1731,7 +1731,7 @@ def data_quality(
     # La ausencia de sueno posterior a TN no prueba un fallo de Garmin.
     # Mantener una ventana mas amplia SOLO en dia post-TN.
     # El modelo principal de recuperacion conserva sus bloqueos.
-    from shift_calendar import resolve_day
+    from .shift_calendar import resolve_day
     post_tn = bool(resolve_day(TODAY.isoformat()).get("post_tn"))
     pending_limit_hour = 18 if post_tn else 10
     day_start_pending = NOW.hour < pending_limit_hour and (
@@ -2288,7 +2288,7 @@ def main():
     if not isinstance(wellness, list):
         wellness = []
 
-    from shift_calendar import resolve_day
+    from .shift_calendar import resolve_day
     context_map = decode_context_map()
 
     records = build_day_records(

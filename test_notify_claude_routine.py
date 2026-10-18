@@ -5,7 +5,7 @@ import unittest
 import urllib.error
 from pathlib import Path
 
-import notify_claude_routine as n
+from garmin_recovery import notify_claude_routine as n
 
 URL = "https://api.anthropic.com/v1/claude_code/routines/trig_TEST/fire"
 

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from morning_sleep_gate import classify
+from garmin_recovery.morning_sleep_gate import classify
 from garmin_recovery.muscle_load import analyze, classify as classify_movement
 from garmin_recovery import monitor_v231 as monitor
 from garmin_recovery import sleep_integration as integration

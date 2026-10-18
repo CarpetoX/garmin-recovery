@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from morning_sleep_gate import classify
+from garmin_recovery.morning_sleep_gate import classify
 TZ=ZoneInfo('Europe/Madrid')
 NOW=datetime(2026,10,10,9,40,tzinfo=TZ)
 def row(end):
