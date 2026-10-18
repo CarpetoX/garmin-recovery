@@ -122,7 +122,7 @@ def extract(row):
             'detail':detail(row.get('detail_json') or row.get('detail'))}
 
 def sets_volume(obj):
-    """Calculate only verifiable strength tonnage, including nested exercises."""
+    """Calculate only verifiable barbell tonnage (kg_total_barra), including nested exercises."""
     if not isinstance(obj, dict):
         return None, False, 0, 0
 
@@ -134,6 +134,10 @@ def sets_volume(obj):
 
     for exercise in groups:
         if not isinstance(exercise, dict):
+            continue
+        # tonelaje solo de barra con carga total: máquinas (kg indicado), mancuernas, peso corporal o cargas por lado
+        # no son comparables y no se suman (REGISTRO_ENTRENAMIENTOS.md). Sin unidad (registros antiguos) se mantiene.
+        if exercise.get('load_unit') not in (None, 'kg_total_barra'):
             continue
         sets = exercise.get('sets', [])
         if not isinstance(sets, list):
