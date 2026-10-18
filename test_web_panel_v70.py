@@ -34,3 +34,35 @@ class Cards(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Days(unittest.TestCase):
+    def test_days_card_and_snapshot_banner(self):
+        html = dashboard._days_html([{"date": "2026-10-17", "zone": "red", "score": 52.4}])
+        self.assertIn("dia/2026-10-17.html", html)
+        self.assertIn("52", html)
+        self.assertEqual(dashboard._days_html([]), "")
+
+    def test_day_snapshots_from_git(self):
+        import json
+        from pathlib import Path
+
+        from garmin_recovery import site
+
+        class R:
+            def __init__(self, out):
+                self.stdout = out
+
+        objs = {"a": {"date": "2026-10-17", "decision": {"zone": "red"}, "readiness": {}},
+                "b": {"date": "2026-10-17", "decision": {"zone": "green"}, "readiness": {}},
+                "c": {"date": "2026-10-16", "decision": {"zone": "green"}, "readiness": {}},
+                "d": {"date": "2026-10-18", "decision": {"zone": "green"}, "readiness": {}}}
+
+        def fake(cmd, **kw):
+            if "log" in cmd:
+                return R("d\na\nb\nc\nzz\n")
+            sha = cmd[-1].split(":")[0]
+            return R(json.dumps(objs[sha]) if sha in objs else "no json")
+        out = site.day_snapshots(Path("."), "2026-10-18", run=fake)
+        self.assertEqual([(o["date"], o["decision"]["zone"]) for o in out],
+                         [("2026-10-17", "red"), ("2026-10-16", "green")])  # el más reciente de cada día, sin hoy

@@ -117,6 +117,30 @@ def report_history(root: Path, days: int = 30, limit: int = 60, run=subprocess.r
     return items
 
 
+def day_snapshots(root: Path, today: str, days: int = 14, run=subprocess.run) -> list[dict]:
+    """Último ``readiness_v3.json`` publicado de cada uno de los ``days`` días anteriores (desde Git)."""
+    since = (datetime.now(TZ) - timedelta(days=days + 2)).strftime("%Y-%m-%d")
+    try:
+        out = run(["git", "-C", str(root), "log", f"--since={since}", "--format=%H", "--", "app/readiness_v3.json"],
+                  capture_output=True, text=True, timeout=60).stdout
+    except (OSError, subprocess.SubprocessError):
+        return []
+    seen: dict[str, dict] = {}
+    for sha in out.split()[:200]:
+        try:
+            raw = run(["git", "-C", str(root), "show", f"{sha}:app/readiness_v3.json"],
+                      capture_output=True, text=True, timeout=30).stdout
+            obj = json.loads(raw)
+            d = str(obj["date"])
+            date.fromisoformat(d)
+            obj["decision"]["zone"], obj["readiness"]  # noqa: B018 — estructura mínima
+        except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+            continue
+        if d < today and d not in seen:  # el log va del más reciente al más antiguo
+            seen[d] = obj
+    return [seen[d] for d in sorted(seen, reverse=True)[:days]]
+
+
 def _live_extras(root: Path, result: dict) -> dict:
     """Tarjetas «Qué ha cambiado», «Esta noche» y «Próximos 7 días»; cada una es opcional."""
     from . import improvement, sleep_need, why_changed
@@ -171,7 +195,17 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     extras |= {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(), "strength_svg": strength,
               "punctuality": punctuality(reports, date.fromisoformat(result["date"]), gen),
               "history": report_history(root) if history else []}
+    snaps = day_snapshots(root, result["date"]) if history else []
+    extras["days"] = [{"date": o["date"], "zone": (o.get("decision") or {}).get("zone"),
+                       "score": (o.get("readiness") or {}).get("score")} for o in snaps]
     out.mkdir(parents=True, exist_ok=True)
+    if snaps:
+        (out / "dia").mkdir(exist_ok=True)
+    for o in snaps:
+        try:
+            (out / "dia" / f"{o['date']}.html").write_text(render(o, {"snapshot": o["date"]}), encoding="utf-8")
+        except Exception:  # noqa: BLE001 — un día con datos raros no debe romper la web
+            extras["days"] = [x for x in extras["days"] if x["date"] != o["date"]]
     (out / "index.html").write_text(render(result, extras), encoding="utf-8")
     (out / "manifest.webmanifest").write_text(json.dumps(MANIFEST, ensure_ascii=False, indent=1), encoding="utf-8")
     (out / "sw.js").write_text(SERVICE_WORKER, encoding="utf-8")
