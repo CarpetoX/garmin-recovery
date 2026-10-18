@@ -13,7 +13,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from statistics import mean, median, pstdev
 
-from . import weekly_compare
+from . import sleep_need, weekly_compare
 from .config import DEFAULTS
 
 NEED = DEFAULTS["sleep_need_hours"]
@@ -27,6 +27,14 @@ def _num(v):
 
 def _f(v, d=0):
     return "—" if v is None else f"{v:.{d}f}".replace(".", ",")
+
+
+def _ext_days(root) -> dict:
+    try:
+        d = json.loads((Path(root) / "garmin_extended.json").read_text(encoding="utf-8")).get("days")
+        return d if isinstance(d, dict) else {}
+    except (OSError, ValueError, AttributeError):
+        return {}
 
 
 def _csv(root: Path, name: str) -> list[dict]:
@@ -77,15 +85,16 @@ def _rhr(trend, today):
     return _finding("rhr", "FC en reposo", 0, obs, "En línea con tu referencia.", "Sin cambios necesarios.", obs)
 
 
-def _sleep(trend, today):
+def _sleep(trend, today, ext_days=None):
     nights = [t for t in trend if t["date"] <= today and _num(t.get("sleep_hours")) is not None and t.get("sleep_context") != "day_sleep"][-7:]
     if len(nights) < 4:
         return _finding("sleep", "Sueño", 0, "Datos insuficientes de la última semana.", "Hacen falta al menos 4 noches.", "Duerme con el reloj puesto.")
     hs = [t["sleep_hours"] for t in nights]
-    debt = sum(max(0.0, NEED - h) for h in hs)
+    sn = sleep_need.compute(trend, ext_days or {}, today, NEED)
+    debt = sn["debt_7n_h"] if sn.get("available") else sum(max(0.0, NEED - h) for h in hs)
     short = sum(1 for h in hs if h < NEED - 0.5)
     obs = (f"Media de {len(hs)} noches: {_f(mean(hs), 1)} h (necesidad configurada {_f(NEED, 1)} h); "
-           f"{short} de {len(hs)} noches más de media hora por debajo; deuda acumulada {_f(debt, 1)} h.")
+           f"{short} de {len(hs)} noches más de media hora por debajo; deuda acumulada {_f(debt, 1)} h (siestas registradas descontadas).")
     why = "El sueño es el principal factor de recuperación y de adaptación al entrenamiento."
     if debt >= 7:
         return _finding("sleep", "Sueño", 3, obs, why, "Recupera la deuda poco a poco: 30–45 min más cada noche, no una sola noche larga.", obs)
@@ -229,7 +238,7 @@ def analyze(root, result: dict, crossfit: dict | None = None) -> dict:
     trend = [t for t in result.get("trend_28d") or [] if isinstance(t, dict)]
     sessions = [s for s in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(s, dict)]
     coverage = _num((result.get("load") or {}).get("srpe_coverage_28d_pct"))
-    items = [_hrv(trend, today), _rhr(trend, today), _sleep(trend, today), _regularity(root, today),
+    items = [_hrv(trend, today), _rhr(trend, today), _sleep(trend, today, _ext_days(root)), _regularity(root, today),
              _intensity(sessions, today, coverage), _response(trend, sessions, today), _strength(crossfit),
              _logging(root, trend, sessions, today)]
     findings = [f for f in items if f]
