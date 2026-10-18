@@ -107,7 +107,7 @@ jobs:
           assert shadow['repository_dispatch']['types'] == ['garmin-shadow-publish']
           assert 'workflow_run' not in shadow and 'schedule' not in shadow
           steps = workflows['monitor-monthly.yml']['jobs']['monitor']['steps']
-          dispatcher = [x for x in steps if 'shadow_autodispatch_v296.py' in x.get('run', '')]
+          dispatcher = [x for x in steps if 'garmin_recovery.shadow_autodispatch' in x.get('run', '')]
           assert len(dispatcher) == 1 and dispatcher[0].get('if') == 'success()'
 
           # V2.9.7: nueva telemetria opcional, nunca bloquea el espejo.
@@ -174,7 +174,7 @@ jobs:
         run: python -m unittest -v test_cycle_report_v386 test_cycle_real_integration_v382
 
       - name: Audit certificate ledger hashes without modifying records
-        run: python archive_report_cycles.py
+        run: python -m garmin_recovery.archive_report_cycles
 
       - name: Verify midnight and partial-day regression scenarios
         run: |

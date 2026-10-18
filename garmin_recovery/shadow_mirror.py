@@ -23,12 +23,12 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from cycle_shards_v296 import (
+from .cycle_shards import (
     DEFAULT_LIMIT_BYTES, ShardError, canonical_hash, encoded,
     load_source, prepare as shard_prepare, sha_bytes, verify_archive,
 )
-from ledger_access_v296 import read_compatible
-from ledger_compact_preview_v296 import write_preview
+from .ledger_access import read_compatible
+from .ledger_compact_preview import write_preview
 
 VERSION = '2.9.6'
 FORMAT = 'shadow_persist_candidate_v1'

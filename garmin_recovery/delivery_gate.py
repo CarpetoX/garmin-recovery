@@ -379,12 +379,12 @@ def _mark_legacy_cycles(items):
 
 def _write_ledger(path, items):
     # V2.8: fail closed on corruption, retain every old cycle and write atomically.
-    from ledger_safety_v28 import atomic_write_ledger
+    from .ledger_safety import atomic_write_ledger
     return atomic_write_ledger(path, items)
 
 def append_ready_cycle(cert, path=Path('report_cycles.json'), max_entries=120):
     """Persist completed-data cycles. A readiness ledger is NOT a delivery receipt."""
-    from ledger_safety_v28 import read_ledger
+    from .ledger_safety import read_ledger
     data, source_schema_version = read_ledger(path)
     items = data.get('cycles', []) if data else []
 

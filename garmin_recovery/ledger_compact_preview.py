@@ -11,7 +11,7 @@ import argparse
 import json
 from pathlib import Path
 
-from cycle_shards_v296 import (
+from .cycle_shards import (
     ShardError, RE_SHARD, canonical_hash, encoded, load_source,
     sha_bytes, verify_archive,
 )

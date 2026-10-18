@@ -5,9 +5,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from cycle_shards_v296 import ShardError, canonical_hash
-from ledger_access_v296 import read_compatible
-from shadow_mirror_v296 import plan, prepare_candidate, verify_candidate
+from garmin_recovery.cycle_shards import ShardError, canonical_hash
+from garmin_recovery.ledger_access import read_compatible
+from garmin_recovery.shadow_mirror import plan, prepare_candidate, verify_candidate
 
 
 def cycle(day, suffix, legacy=False, size=1200):

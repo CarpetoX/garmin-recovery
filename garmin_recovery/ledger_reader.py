@@ -9,10 +9,10 @@ import argparse
 import json
 from pathlib import Path
 
-from cycle_shards_v296 import (
+from .cycle_shards import (
     ShardError, canonical_hash, load_source, sha_bytes, verify_archive,
 )
-from ledger_compact_preview_v296 import FORMAT, VERSION, _read_index, _safe_refs
+from .ledger_compact_preview import FORMAT, VERSION, _read_index, _safe_refs
 
 PREVIEW_STATE = 'READ_ONLY_PREVIEW_DO_NOT_REPLACE_REPORT_CYCLES'
 

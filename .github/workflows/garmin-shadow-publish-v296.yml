@@ -51,9 +51,9 @@ jobs:
           import subprocess
           from pathlib import Path
 
-          from cycle_shards_v296 import ShardError, load_source
-          from ledger_access_v296 import read_compatible
-          from shadow_mirror_v296 import prepare_candidate, verify_candidate
+          from garmin_recovery.cycle_shards import ShardError, load_source
+          from garmin_recovery.ledger_access import read_compatible
+          from garmin_recovery.shadow_mirror import prepare_candidate, verify_candidate
 
           root = Path.cwd()
           original_path = root / 'report_cycles.json'

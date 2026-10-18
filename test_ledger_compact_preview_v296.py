@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from cycle_shards_v296 import ShardError, canonical_hash, prepare
-from ledger_compact_preview_v296 import build, verify, write_preview
+from garmin_recovery.cycle_shards import ShardError, canonical_hash, prepare
+from garmin_recovery.ledger_compact_preview import build, verify, write_preview
 
 
 def sample(day, slot, size=2500):

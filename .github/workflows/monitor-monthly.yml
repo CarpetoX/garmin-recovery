@@ -155,7 +155,7 @@ jobs:
         if: success()
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python shadow_autodispatch_v296.py --source report_cycles.json
+        run: python -m garmin_recovery.shadow_autodispatch --source report_cycles.json
   certified-reports-after-monitor:
     name: V3.8.8 - Certified reports after successful monitor
     needs: monitor
