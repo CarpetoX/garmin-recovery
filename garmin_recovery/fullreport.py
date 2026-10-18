@@ -137,7 +137,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     add(f"# Garmin Recovery · {slot_title(now, slot_id)}")
     add(f"\n{long_date(today)} · {now.strftime('%H:%M')}" + (f" · `{report_id}`" if report_id else ""))
     cards = [("Decisión", guidance.get("label") or dec.get("zone_es") or "—", f"RPE máx. {n(guidance.get('rpe_max'))}", zone),
-             ("Recuperación v2", f"{n(v2.get('score'))}/100", f"confianza {v2.get('confidence') or '—'}", v2.get("zone") or "unavailable"),
+             ("Recuperación oficial", f"{n(v2.get('score'))}/100", f"confianza {v2.get('confidence') or '—'}", v2.get("zone") or "unavailable"),
              ("HRV", f"{n(cur.get('hrv_ms'))} ms", (f"{'+' if hrv_pct > 0 else ''}{n(hrv_pct)} % vs mediana" if hrv_pct is not None else "sin dato hoy"),
               "red" if hrv_pct is not None and hrv_pct <= -10 else "yellow" if hrv_pct is not None and hrv_pct <= -5 else "green" if hrv_pct is not None else "unavailable"),
              ("Sueño", hm(_num(cur.get("sleep_hours")) * 60 if _num(cur.get("sleep_hours")) is not None else None), f"puntuación {n(cur.get('sleep_score'))}", "unavailable"),
@@ -150,7 +150,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     cert_ok = cert.get("status") == "ready"
     add(f"- {'🟢' if cert_ok else '🟠'} **Certificación:** ciclo {cert.get('cycle_id') or '—'} "
         f"{'validado' if cert_ok else 'sin certificar'}; {ok_stages} de {len(chain) or 4} procesos finalizados correctamente.")
-    add(f"- {ZONE_ICON.get(zone, '⚪')} **Recuperación:** {n(v2.get('score'))}/100 (v2, confianza {v2.get('confidence') or '—'}). "
+    add(f"- {ZONE_ICON.get(zone, '⚪')} **Recuperación:** {n(v2.get('score'))}/100 (oficial, confianza {v2.get('confidence') or '—'}). "
         f"Híbrido: {n(hyb.get('score'))}/100. **Decisión: {guidance.get('label') or dec.get('zone_es') or '—'}**, RPE máx. {n(guidance.get('rpe_max'))}.")
     add(f"- 🌙 **Sueño:** {hm(_num(cur.get('sleep_hours')) * 60 if _num(cur.get('sleep_hours')) is not None else None)}, "
         f"puntuación {n(cur.get('sleep_score'))}/100.")
@@ -211,7 +211,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     if notes:
         add("\n" + "; ".join(notes) + ".")
     img("hrv.svg", "HRV nocturna con tu rango normal")
-    img("readiness.svg", "Disponibilidad: oficial frente a v3")
+    img("readiness.svg", "Disponibilidad: oficial frente a experimental")
     add("\n### Modelos de recuperación\n")
     rows = [[m.get("label"), f"{ZONE_ICON.get(m.get('zone'), '⚪')} {n(m.get('score'))}/100" if m.get("score") is not None else "—", m.get("role") or "—"]
             for m in dec.get("registry") or [] if isinstance(m, dict)]
@@ -229,7 +229,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         add("\n**Qué ha cambiado desde ayer**\n\n" + why_changed.to_markdown(why_changed.compute(result.get("trend_28d") or [], today)))
     except Exception as exc:  # noqa: BLE001 — bloque opcional
         optional_blocks.failed("why_changed", exc)
-    add("\nLas puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre v2 (oficial), híbrido y v3; "
+    add("\nLas puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre el modelo oficial, el híbrido y el experimental; "
         "un rojo prevalece. El índice personal es provisional y no es una medida clínica.")
 
     # 3 ------------------------------------------------------------------

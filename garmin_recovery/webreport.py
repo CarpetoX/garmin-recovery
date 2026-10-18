@@ -171,8 +171,8 @@ const tip=document.getElementById('tip');
 const ZN={green:'verde',yellow:'ámbar',red:'rojo',unavailable:'pendiente'};
 const CH={
  recovery:{label:'Recuperación',min:0,max:100,refs:[{y:70,t:'verde'},{y:50,t:'rojo'}],
-  series:[{k:'v2_score',c:'--s2',n:'v2 oficial',m:1},{k:'hybrid_score',c:'--s3',n:'Híbrido',m:1},{k:'score',c:'--s1',n:'v3 en pruebas',m:1}],
-  tip:d=>`v2 oficial <b>${fmt(d.v2_score)}</b><br>Híbrido <b>${fmt(d.hybrid_score)}</b><br>v3 (pruebas) <b>${fmt(d.score)}</b><br>Decisión: ${ZN[d.decision_zone]||'—'}`},
+  series:[{k:'v2_score',c:'--s2',n:'Oficial',m:1},{k:'hybrid_score',c:'--s3',n:'Híbrido',m:1},{k:'score',c:'--s1',n:'Experimental',m:1}],
+  tip:d=>`Oficial <b>${fmt(d.v2_score)}</b><br>Híbrido <b>${fmt(d.hybrid_score)}</b><br>Experimental <b>${fmt(d.score)}</b><br>Decisión: ${ZN[d.decision_zone]||'—'}`},
  hrv:{label:'HRV nocturna',band:['hrv_low_ms','hrv_high_ms'],series:[{k:'hrv_rolling_ms',c:'--s1',n:'Media 7 días'},{k:'hrv_ms',c:'--s1',n:'Noche (ms)',dots:1}],band_n:'Rango normal',
   tip:d=>`Noche <b>${fmt(d.hrv_ms)} ms</b><br>Media 7 días ${fmt(d.hrv_rolling_ms,1)} ms`+(d.hrv_low_ms!=null?`<br>Rango normal ${fmt(d.hrv_low_ms)}–${fmt(d.hrv_high_ms)} ms`:'')},
  rhr:{label:'FC en reposo y nocturna',series:[{k:'resting_hr',c:'--s1',n:'Reposo (lpm)',m:1},{k:'night_hr',c:'--s2',n:'Nocturna (lpm)'}],

@@ -455,8 +455,8 @@ def chart_readiness(trend):
     c.strip([t.get("decision_zone") for t in trend])
     c.ref(70)
     c.ref(50)
-    c.line([t.get("score") for t in trend], S1, "v3 en pruebas", markers=True)
-    c.line([t.get("v2_score") for t in trend], S2, "v2 oficial", markers=True)
+    c.line([t.get("score") for t in trend], S1, "experimental", markers=True)
+    c.line([t.get("v2_score") for t in trend], S2, "oficial", markers=True)
     c.legend.append(("bar", STATUS_HEX["red"], "Decisión del día (franja)"))
     return c.render()
 
@@ -662,7 +662,7 @@ def certificate_block(result) -> list[str]:
         + (" · Sync fuera de franja" if cy.get("data_newer_than_certified_cycle") else ""),
         "**Antigüedad:** " + (" · ".join(f"{lbl.get(k, k)} {age(a)} {'✓' if a.get('state') == 'reciente' else '!'}"
                                           for k, a in ages.items()) or "sin marcas temporales"),
-        f"**Integridad:** coherencia v3/v2 {'✓' if cons == 'ok' else '! ' + (cons or 'sin comparar')} · sesiones con RPE "
+        f"**Integridad:** coherencia experimental/oficial {'✓' if cons == 'ok' else '! ' + (cons or 'sin comparar')} · sesiones con RPE "
         f"{ti.get('with_rpe', '—')}/{ti.get('sessions', 0) - len(ti.get('rpe_not_applicable') or [])}"
         + (f" (+{len(ti['rpe_not_applicable'])} sin RPE por diseño: calentamiento/técnica)" if ti.get("rpe_not_applicable") else "")
         + (f" (sin RPE: {', '.join(dshort(x['start_local'][:10]) + ' ' + x['start_local'][11:16] for x in ti.get('without_rpe') or [] if x.get('start_local'))})"

@@ -115,7 +115,7 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
                                key=lambda s_: (s_["date"], s_.get("start_local") or "")),
         "today_sources": dict(x.split(":", 1) for x in ((daily.get(today) or {}).get("sources") or "").split("|") if ":" in x),
         "mode": "shadow",
-        "mode_note": ("Modelo v3 en paralelo: no sustituye recovery_assessment.json. La recomendación del día es "
+        "mode_note": ("Modelo experimental en paralelo: no sustituye recovery_assessment.json. La recomendación del día es "
                       "decision.guidance (la más conservadora entre modelos), no readiness.guidance."),
     }
     from .backtest import update as update_validation

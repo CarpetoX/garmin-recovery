@@ -196,7 +196,7 @@ def recommendation_confidence(state: str, n_base: int, n_rolling: int, cfg: dict
         why.append(f"línea base de {n_base} noches (mínimo {t['media_baseline_n']} para media)")
     if level == "alta" and not cfg.get("model_validated"):
         level = "media"
-        why.append("modelo v3 aún sin validar frente a tu rendimiento real (modo sombra)")
+        why.append("modelo experimental aún sin validar frente a tu rendimiento real (modo sombra)")
     return {"level": level, "baseline_nights": n_base, "rolling_nights": n_rolling,
             "model_validated": bool(cfg.get("model_validated")), "why": why}
 

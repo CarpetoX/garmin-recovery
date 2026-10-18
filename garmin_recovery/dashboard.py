@@ -119,7 +119,7 @@ def _tonight_html(t: dict | None) -> str:
             f'<div class="big">{f(n["need_tonight_h"])} <small>h</small></div>'
             f'<p class="h2sub">deuda de las últimas 3 noches: {f(n["debt_3n_h"])} h · de 7 noches: {f(n["debt_7n_h"])} h '
             '(incluyen el sueño diurno tras turno y descuentan siestas)</p>'
-            f'<p class="h2sub">el modelo de disponibilidad (v3) cuenta solo 3 noches y no descuenta siestas: {f(n["debt_3n_model_h"])} h</p>'
+            f'<p class="h2sub">el modelo experimental cuenta solo 3 noches y no descuenta siestas: {f(n["debt_3n_model_h"])} h</p>'
             f'<ul class="clean parts">{lis}</ul>{tip}</section>')
 
 
@@ -142,7 +142,7 @@ def _changes_html(c: dict | None) -> str:
     f = lambda v, d: f"{v:.{d}f}".replace(".", ",")  # noqa: E731
     head = ""
     if c.get("score_from") is not None and c.get("score_to") is not None:
-        head = f"<p><b>Disponibilidad v3:</b> {f(c['score_from'], 0)} → {f(c['score_to'], 0)}</p>"
+        head = f"<p><b>Modelo experimental:</b> {f(c['score_from'], 0)} → {f(c['score_to'], 0)}</p>"
     if not c["items"]:
         body = "<p class='h2sub'>Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p>"
     else:
@@ -198,7 +198,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     changes = _changes_html(extras.get("changes"))
     today_block = changes or f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>'
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
-            '<p class="h2sub">color = decisión del día (o v3 atenuado si no se guardó) · número = RPE máximo · '
+            '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
             '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
             '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>')
@@ -428,7 +428,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
       <h1>{{TITLE}}</h1>
       <div class="sub" id="sub">{{DATE}}</div>
     </div>
-    <span class="badge" id="badge">Modelo v3</span>
+    <span class="badge" id="badge">Modelo experimental</span>
   </header>
 
   {{BANNER}}
@@ -436,7 +436,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
   <div class="grid tab on" id="tab-hoy" data-tab="hoy">
     <section class="card hero tone-{{TONE}}" id="hoy" aria-label="Disponibilidad de hoy">
       <div>
-        <div class="h2sub">Decisión de hoy · puntuación oficial (v2)</div>
+        <div class="h2sub">Decisión de hoy · puntuación oficial</div>
         <div class="score" id="score">—</div>
         <div class="pill"><span class="dot" aria-hidden="true">{{ICON}}</span><span class="pill-text" id="zone-label"></span></div>
         <div class="meta" id="confidence"></div>
@@ -464,7 +464,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
     {{TEND}}
     <section class="card">
       <h2>Disponibilidad · 28 días</h2>
-      <p class="h2sub">Recalculada con el modelo v3; líneas en 50 y 70 (rojo / verde)</p>
+      <p class="h2sub">Recalculada con el modelo experimental; líneas en 50 y 70 (rojo / verde)</p>
       <div class="chart" id="c-score"></div>
     </section>
 
@@ -505,7 +505,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
   <div class="grid tab" id="tab-sistema" data-tab="sistema">
     {{SIS}}
     <section class="card">
-      <h2 id="v3-title">Modelo v3 (en pruebas)</h2>
+      <h2 id="v3-title">Modelo experimental (en pruebas)</h2>
       <p class="h2sub">Componentes 0–100 · 75 = tu normalidad · peso entre paréntesis</p>
       <div id="meters"></div>
     </section>
@@ -563,7 +563,7 @@ $('confidence').textContent = `Datos: confianza ${DC.level || '—'} · Recomend
 $('guidance').textContent = DEC.guidance.text;
 $('rx').innerHTML = `<span>RPE máx. <b>${DEC.guidance.rpe_max}</b></span><span>Volumen <b>${esc(DEC.guidance.volume)}</b></span>` +
   (DEC.agreement === 'total' ? '' : '<span class="warn-chip">⚠ Los modelos discrepan: se aplica el más prudente</span>');
-$('v3-title').textContent = `Modelo v3 (en pruebas) · ${R.score == null ? 'sin puntuación' : fmt(R.score) + '/100 · ' + zoneTxt[R.zone]}`;
+$('v3-title').textContent = `Modelo experimental (en pruebas) · ${R.score == null ? 'sin puntuación' : fmt(R.score) + '/100 · ' + zoneTxt[R.zone]}`;
 $('drivers').innerHTML = (R.drivers || []).map(d => {
   const cls = d.z <= -0.5 ? 'neg' : d.z >= 0.5 ? 'pos' : 'neu';
   const ar = d.z <= -0.5 ? '↓' : d.z >= 0.5 ? '↑' : '→';
@@ -721,7 +721,7 @@ $('cert').innerHTML = `<thead><tr><th>Comprobación</th><th>Resultado</th></tr><
   <tr><td>Ciclo certificado</td><td>${esc(CY.cycle_id || '—')} ${okTxt(CY.status === 'ready')}</td></tr>
   <tr><td>Sincronización de los datos</td><td>${CY.data_synced_at ? new Date(CY.data_synced_at).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : '—'}${CY.data_newer_than_certified_cycle ? ' · Sync fuera de franja' : ''}</td></tr>
   ${Object.entries(CE.data_age || {}).map(([k,a]) => `<tr><td>${ageLbl[k] || k}</td><td>${ageTxt(a)} ${okTxt(a.state === 'reciente')}</td></tr>`).join('')}
-  <tr><td>Coherencia v3 / v2 (HRV, FC, sueño)</td><td>${cons.status === 'ok' ? 'idénticos' : esc(cons.status || '—')} ${okTxt(cons.status === 'ok')}</td></tr>
+  <tr><td>Coherencia experimental / oficial (HRV, FC, sueño)</td><td>${cons.status === 'ok' ? 'idénticos' : esc(cons.status || '—')} ${okTxt(cons.status === 'ok')}</td></tr>
   <tr><td>Huellas SHA-256</td><td>${Object.keys(CE.source_sha256 || {}).length} fuentes</td></tr>
   <tr><td>Entrega del informe</td><td>no verificable desde los datos</td></tr></tbody>`;
 $('integrity').innerHTML = `<thead><tr><th>Integridad del entrenamiento (${TI.window_days || 14} días)</th><th class="num"></th></tr></thead><tbody>
@@ -755,7 +755,7 @@ if (cal && T.length) {
     cal.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.i == i));
     const ss = SESS.filter(x => x.date === d.date);
     det.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'long', day:'numeric', month:'long'})}</b>` +
-      (d.shift ? ` · turno ${esc(d.shift)}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (v3; decisión no guardada ese día)'}` +
+      (d.shift ? ` · turno ${esc(d.shift)}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
       (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
       (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
         ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td>${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'

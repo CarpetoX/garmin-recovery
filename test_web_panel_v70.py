@@ -12,7 +12,7 @@ class Cards(unittest.TestCase):
         self.assertIn("8,8", html)
         self.assertIn("sin dato", html)
         self.assertIn("3 noches: 3,1 h", html)
-        self.assertIn("v3) cuenta solo 3 noches y no descuenta siestas: 4,0 h", html)
+        self.assertIn("experimental cuenta solo 3 noches y no descuenta siestas: 4,0 h", html)
         self.assertIn("&lt;b&gt;", html)  # el texto se escapa
         self.assertEqual(dashboard._tonight_html({"need": None}), "")
         self.assertEqual(dashboard._tonight_html(None), "")
