@@ -5,7 +5,6 @@ con SVG a la anchura real del contenedor (legibles también en el móvil).
 """
 from __future__ import annotations
 
-import datetime
 import html
 import json
 import re
@@ -72,66 +71,6 @@ def _history_html(items: list | None) -> str:
         f"{' · ' + _esc(x['report_id']) if x.get('report_id') else ''}</span></li>" for x in items)
     return ('<section class="card" id="informes"><h2>Informes anteriores</h2><p class="h2sub">cada enlace abre el informe tal como se '
             f'publicó, con sus gráficas, en GitHub</p><ul class="clean hist">{lis}</ul></section>')
-
-
-RPE_FORM_JS = """<script>
-(function(){
-  var K='rpeWeb', box=document.getElementById('rpe-form'); if(!box) return;
-  function cfg(){try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(e){return {}}}
-  function save(o){try{localStorage.setItem(K,JSON.stringify(o))}catch(e){}}
-  var msg=document.getElementById('rpe-msg'), sel=document.getElementById('rpe-act');
-  function say(t,bad){msg.textContent=t;msg.className='h2sub '+(bad?'neg':'pos')}
-  document.getElementById('rpe-cfg').onclick=function(){
-    var c=cfg(), u=prompt('URL de la aplicación web (termina en /exec):',c.url||''); if(u===null) return;
-    var t=prompt('Clave (RPE_WEB_TOKEN):',c.token||''); if(t===null) return;
-    save({url:u.trim(),token:t.trim()}); say('Configuración guardada en este dispositivo.');
-  };
-  document.getElementById('rpe-send').onclick=function(){
-    var c=cfg(); if(!c.url||!c.token){say('Primero pulsa Configurar.',true);return}
-    var o=sel.options[sel.selectedIndex]; if(!o||!o.value){say('Elige una actividad.',true);return}
-    var rpe=document.getElementById('rpe-val').value.replace(',','.');
-    if(rpe===''||isNaN(+rpe)||+rpe<0||+rpe>10){say('RPE de 0 a 10.',true);return}
-    var ow=false; if(o.dataset.rpe){ if(!confirm('Esta actividad ya tiene RPE '+o.dataset.rpe+'. ¿Sustituirlo?')) return; ow=true }
-    say('Enviando…');
-    fetch(c.url,{method:'POST',body:JSON.stringify({token:c.token,activity_id:o.value,date:o.dataset.date,name:o.dataset.name,
-      rpe:rpe,feelings:document.getElementById('rpe-feel').value,notes:document.getElementById('rpe-notes').value,overwrite:ow})})
-    .then(function(r){return r.json()}).then(function(j){
-      if(j.ok) say('Guardado en la hoja (fila '+j.row+'): RPE '+j.saved.rpe+'. Entra en el informe del siguiente ciclo.');
-      else say(j.error||'No se pudo guardar.',true)
-    }).catch(function(){say('No he podido confirmar el envío. Revisa la hoja antes de repetirlo.',true)});
-  };
-})();
-</script>"""
-
-
-def _rpe_form_html(result: dict, extras: dict) -> str:
-    """Formulario para apuntar el RPE desde la web (solo web publicada; necesita RegistroRPEWeb.gs)."""
-    if not extras.get("pwa"):
-        return ""
-    today = result.get("date") or ""
-    try:
-        floor = (datetime.date.fromisoformat(today) - datetime.timedelta(days=3)).isoformat()
-    except ValueError:
-        return ""
-    sess = [x for x in result.get("sessions_28d") or [] if isinstance(x, dict) and x.get("id") and (x.get("date") or "") >= floor]
-    if not sess:
-        return ""
-    sess.sort(key=lambda x: (x.get("rpe") is not None, x.get("start_local") or ""), reverse=False)
-    opts = "".join(
-        f"<option value='{_esc(x['id'])}' data-date='{_esc(x.get('date'))}' data-name='{_esc(x.get('label') or x.get('name') or 'Actividad')}'"
-        f"{' data-rpe=' + chr(34) + str(x['rpe']).replace('.', ',') + chr(34) if x.get('rpe') is not None else ''}>"
-        f"{_esc(x['date'][8:10] + '/' + x['date'][5:7])} {_esc((x.get('start_local') or '')[11:16])} · "
-        f"{_esc(x.get('label') or x.get('name') or 'Actividad')}{'' if x.get('rpe') is None else ' (RPE ' + str(x['rpe']).replace('.', ',') + ')'}</option>"
-        for x in sess)
-    return ('<section class="card" id="rpe-form"><h2>Registrar RPE</h2>'
-            '<p class="h2sub">se apunta en la hoja RPE por ID de actividad; solo sesiones de los últimos 4 días. '
-            'Pendientes primero.</p>'
-            f'<label class="lbl">Actividad<select id="rpe-act" class="inp">{opts}</select></label>'
-            '<label class="lbl">RPE (0–10, admite 8,5)<input id="rpe-val" class="inp" inputmode="decimal" maxlength="4"></label>'
-            '<label class="lbl">Sensaciones previas (opcional)<input id="rpe-feel" class="inp" maxlength="200"></label>'
-            '<label class="lbl">Notas (cargas, resultado…)<input id="rpe-notes" class="inp" maxlength="400"></label>'
-            '<p><button id="rpe-send" class="btn">Guardar</button> <button id="rpe-cfg" class="btn ghost" type="button">Configurar</button></p>'
-            '<p id="rpe-msg" class="h2sub" aria-live="polite"></p></section>' + RPE_FORM_JS)
 
 
 def _days_html(days: list | None) -> str:
@@ -250,7 +189,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> str:
             '<div class="chart" id="c-rpe"></div></div>'
             '<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
             f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>'
-            + strength_html + _punctuality_html(extras.get("punctuality")) + _rpe_form_html(result, extras) + _days_html(extras.get("days")) + _history_html(extras.get("history")))
+            + strength_html + _punctuality_html(extras.get("punctuality")) + _days_html(extras.get("days")) + _history_html(extras.get("history")))
 
 
 TEMPLATE = r"""<!doctype html>
@@ -391,10 +330,6 @@ section[id],details[id]{scroll-margin-top:56px}
 .plan li.k-hard{border-left-color:var(--critical)} .plan li.k-mod{border-left-color:var(--warning)}
 .plan li.k-light{border-left-color:var(--good)} .plan li.k-rest{border-left-color:var(--series-1)}
 .chg li{display:flex;gap:10px;padding:4px 0;font-size:14px}
-.lbl{display:block;font-size:13px;color:var(--text-2);margin:8px 0}
-.inp{display:block;width:100%;margin-top:4px;padding:9px 10px;font:inherit;font-size:16px;color:var(--text);background:var(--surface-2);border:1px solid var(--line);border-radius:8px}
-.btn{font:inherit;padding:9px 18px;border:0;border-radius:8px;background:var(--series-1);color:#fff;cursor:pointer}
-.btn.ghost{background:var(--surface-2);color:var(--text-2)}
 </style>
 </head>
 <body>
