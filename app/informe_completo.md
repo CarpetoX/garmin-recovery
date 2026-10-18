@@ -1,10 +1,10 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 18 de octubre de 2026 · 16:58 · `GR-2026-10-18-1658-ddf370`
+Domingo, 18 de octubre de 2026 · 19:19 · `GR-2026-10-18-1919-5a4005`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
-Recuperación v2|88/100|confianza high|green
+Recuperación oficial|88/100|confianza high|green
 HRV|69 ms|+21 % vs mediana|green
 Sueño|7 h 50 min|puntuación 87|unavailable
 FC en reposo|56 lpm|mediana 56|unavailable
@@ -14,7 +14,7 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 ## Resumen ejecutivo
 
 - 🟢 **Certificación:** ciclo 2026-10-18-1645 validado; 4 de 4 procesos finalizados correctamente.
-- 🟢 **Recuperación:** 88/100 (v2, confianza high). Híbrido: 77/100. **Decisión: Listo para entrenar**, RPE máx. 9.
+- 🟢 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 77/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 7 h 50 min, puntuación 87/100.
 - ❤️ **Principal alerta:** HRV 69 ms, 21,1 % por encima de tu mediana de 28 días.
 - 🏋️ **Qué hacer:** Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
@@ -68,33 +68,33 @@ La HRV está 21 % por encima de su mediana; la FC en reposo coincide con su medi
 
 ![HRV nocturna con tu rango normal](charts/hrv.svg)
 
-![Disponibilidad: oficial frente a v3](charts/readiness.svg)
+![Disponibilidad: oficial frente a experimental](charts/readiness.svg)
 
 ### Modelos de recuperación
 
 | Modelo | Resultado | Papel |
 |---|---|---|
-| Recuperación v2 (oficial) | 🟢 88/100 | oficial |
+| Recuperación oficial | 🟢 88/100 | oficial |
 | Híbrido Garmin + local | 🟢 77/100 | salvaguarda |
-| Disponibilidad v3 (en pruebas) | 🟢 77/100 | sombra |
+| Modelo experimental | 🟢 77/100 | sombra |
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 59/100 | contexto |
 | Tiempo de recuperación Garmin | 9,6 h | contexto |
-| Índice personal experimental | 86/100 | provisional |
+| Índice personal experimental | 85/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
-Puntuación v3: 52 → 77 (yellow → green). Cambios notables frente a ayer:
+Modelo experimental: 52 → 77 (yellow → green). Cambios notables frente a ayer:
 
 - HRV: 46 → 69 ms (favorable)
 - FC en reposo: 60 → 56 lpm (favorable)
 - FC nocturna: 68,1 → 61,2 lpm (favorable)
 - Puntuación de sueño: 62 → 87 (favorable)
-- Estrés medio: 38 → 20 (favorable)
+- Estrés medio: 38 → 26 (favorable)
 
 Son diferencias observadas, no causas.
 
-Las puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre v2 (oficial), híbrido y v3; un rojo prevalece. El índice personal es provisional y no es una medida clínica.
+Las puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre el modelo oficial, el híbrido y el experimental; un rojo prevalece. El índice personal es provisional y no es una medida clínica.
 
 ## 3. Sueño y recuperación nocturna
 
@@ -125,7 +125,7 @@ El REM representa un 24 % y el sueño profundo un 11 % del episodio.
 | Deuda de las últimas 3 noches (siestas descontadas) | 3,1 h |
 | Deuda de 7 noches (siestas descontadas) | 6,3 h |
 
-Es una estimación heurística, no validada; los recargos tienen tope y no sustituyen tu percepción. Solo cuentan siestas registradas por Garmin. El modelo de disponibilidad (v3) usa solo las últimas 3 noches y no descuenta siestas: por eso su deuda (4,0 h) puede ser mayor que la de 3 noches de esta tabla.
+Es una estimación heurística, no validada; los recargos tienen tope y no sustituyen tu percepción. Solo cuentan siestas registradas por Garmin. El modelo experimental usa solo las últimas 3 noches y no descuenta siestas: por eso su deuda (4,0 h) puede ser mayor que la de 3 noches de esta tabla.
 
 No se incorporan siestas no confirmadas.
 
@@ -133,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 81,9 lpm | 61,2 lpm |
+| Hoy* | 80,2 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -153,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 20, máximo 97.
-- Body Battery: último valor 53/100, medido a las 14:18 (hace 2 h 40 min: no es una medición nueva).
+- Estrés medio: 26, máximo 97.
+- Body Battery: último valor 32/100, medido a las 19:03.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -203,7 +203,7 @@ Contraste Garmin ↔ Intervals: las 9 actividades de Garmin de los últimos 7 d�
 | sRPE por duración registrada | 1694 |
 | TRIMP | 226,6 |
 | Carga de actividades (Intervals) | 142 |
-| Volumen externo mínimo verificado | 13.521 kg |
+| Volumen externo mínimo verificado | 5993 kg |
 
 El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, mancuernas y máquinas.
 
@@ -227,7 +227,7 @@ Monotonía 1,0 · strain 1626 (descriptores de contexto, sin umbral médico).
 
 ## 6. Fuerza, halterofilia y metcons
 
-- **18 oct — Fuerza - pierna: sentadilla trasera, péndulo y femorales** · RPE 7,5 · volumen de barra cuantificado 12.943 kg
+- **18 oct — Fuerza - pierna: sentadilla trasera, péndulo y femorales** · RPE 7,5 · volumen de barra cuantificado 5415 kg
   Sentadilla trasera: 2x10 barra vacía (20 kg), 8x40, 8x70, 5x90, 3x110, 1x130, 1x150, 1x160, 1x170, 1x180, 1x185, 3x150, 8x110, 15x70 kg; volumen verificado 5.415 kg; RPE 9,5 de la repetición más pesada (185 kg), no de la sesión completa. Sentadilla péndulo 4x8 60 kg, RPE 7. Curl femoral tumbado 1x10 60 kg y 3x8 67 kg, RPE 6. Curl femoral unilateral de pie 4x10 con 42,5 kg en cada pierna, RPE 6. Cargas de máquina no…
 - **15 oct — WOD parejas - 3 Rounds For Time** · RPE 8
   WOD parejas 3 RFT, 13:28 (cap 18:00; 4:32 antes). 3 rondas: 40 cal compartidas en SkiErg, remo y Assault Bike respectivamente; en cada ronda 20 burpees no jump no clap sincronizados + 20 dumbbell snatch sincronizados con 25 kg. Total por equipo: 120 cal compartidas, 60 burpees sync y 60 snatches sync. RPE 8. Garmin 10:03, 13:15, FC 144/176 lpm y 192 kcal; diferencia con tiempo oficial -13 s.
@@ -283,8 +283,9 @@ Turno: hoy TN, mañana sin dato.
 ### Recomendaciones
 
 1. **Listo para entrenar** — Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
-3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
+2. **Piernas.** Sentadilla trasera a RPE 9,5 el 18/10: evita otra sesión pesada de piernas hasta el 20/10 (margen orientativo de 48 h, sin validar). Tren superior, técnica o aeróbico suave sí encajan.
+3. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+4. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ![Progresión de fuerza](charts/strength.svg)
 
@@ -344,8 +345,8 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| dom 18/10 | TN | 🟢 Suave / movilidad | ya has entrenado hoy |
-| lun 19/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
+| dom 18/10 | TN | 🟢 Suave / movilidad | ya has entrenado hoy · sin piernas pesadas hasta el 20/10 |
+| lun 19/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir · sin piernas pesadas hasta el 20/10 |
 | mar 20/10 | free | 🔥 Exigente | día libre con margen para una sesión exigente |
 | mié 21/10 | free | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
 | jue 22/10 | MT | 🟢 Suave / movilidad | turno largo: movilidad o descanso |
@@ -370,4 +371,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-1645 · generado 18/10/2026 16:58 Europe/Madrid · certificado READY · sync_run_id 39137522756.
+Traza: informe de tarde · ciclo 2026-10-18-1645 · generado 18/10/2026 19:19 Europe/Madrid · certificado READY · sync_run_id 39137522756.

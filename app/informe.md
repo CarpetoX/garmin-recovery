@@ -1,12 +1,12 @@
 # Informe de seguimiento · 18/10/2026
 
-`GR-2026-10-18-1658-ddf370` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-1919-5a4005` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
-> **Por qué:** lo marcan Recuperación v2 (oficial) (88) y Híbrido Garmin + local (77) y Disponibilidad v3 (en pruebas) (77); señales: Sueño 7.8 h, puntuación 87, deuda 4.0 h en 3 noches.
+> **Por qué:** lo marcan Recuperación oficial (88) y Híbrido Garmin + local (77) y Modelo experimental (77); señales: Sueño 7.8 h, puntuación 87, deuda 4.0 h en 3 noches.
 >
 > **Qué hacer:** Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 
@@ -20,13 +20,13 @@
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
-| Recuperación v2 (oficial) | 88 | verde | oficial |
+| Recuperación oficial | 88 | verde | oficial |
 | Híbrido Garmin + local | 77 | verde | salvaguarda |
-| Disponibilidad v3 (en pruebas) | 77 | verde | sombra |
+| Modelo experimental | 77 | verde | sombra |
 | Modelo de compatibilidad | 100 | verde | compatibilidad |
 | Garmin Training Readiness | 59 | — | contexto |
 
-_Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre v2 (oficial), híbrido y v3. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
+_Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
 
 </details>
 
@@ -56,7 +56,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-1435-5171b7 (18/10 14:35):
+Frente al informe GR-2026-10-18-1658-ddf370 (18/10 16:58):
 - Sin cambios en los datos.
 
 ## Actividad de hoy
@@ -125,16 +125,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-1658-ddf370`
+- **Identificador del informe:** `GR-2026-10-18-1919-5a4005`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-1645 · datos sincronizados a las 16:57
-- **Antigüedad:** fin del sueño hace 8,0 h ✓ · última HRV hace 8,0 h ✓ · última FC hace 2,7 h ✓ · último Body Battery hace 2,7 h ✓
-- **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 18/18
+- **Ciclo:** 2026-10-18-1645 · datos sincronizados a las 19:19 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 10,3 h ✓ · última HRV hace 10,4 h ✓ · última FC hace 14 min ✓ · último Body Battery hace 17 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 18/18
 - **Ejecución:** 3 franja(s) de Sync perdidas (17/10 16:45, 17/10 22:45, 18/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 16:58 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 19:19 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
