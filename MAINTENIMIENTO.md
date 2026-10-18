@@ -140,3 +140,8 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - **Caducidad del acceso a Garmin** (`token_health.py`): `garmin_status.json → token_expiry` guarda solo la fecha hallada (nunca el token); si queda ≤ 14 días abre el aviso `garmin_token`. Con el token actual solo consta la caducidad de un token de acceso corto (`access_token_only`), así que hoy no avisa.
 - **Copia de seguridad mensual** (`backup.py` + `.github/workflows/backup-monthly.yml`, día 1 a las 03:20 UTC): `tar.gz` con manifiesto SHA-256 de una lista cerrada de archivos de datos (sin secretos ni código), publicada como Release `backup-AAAA-MM`; se conservan las últimas 12. Como el repositorio es público, los Releases también lo son.
 - CI: el paso de cobertura anota los 12 módulos menos cubiertos.
+
+## V7.0 — Panel web
+- Tarjetas «Qué ha cambiado», «Esta noche» y «Próximos 7 días» (`site._live_extras`: `why_changed`, `sleep_need`, `improvement._plan`), navegación fija y secciones plegables.
+- **Días anteriores:** `site.day_snapshots` toma de Git el último `readiness_v3.json` de cada uno de los 14 días previos y `build_site` genera `dia/AAAA-MM-DD.html` (no se guardan en el repositorio, solo en la web). Requiere `fetch-depth: 0` en `pages.yml`.
+- **Registrar RPE desde la web:** tarjeta «Registrar RPE» (solo web publicada) que envía a `apps_script/RegistroRPEWeb.gs`, una aplicación web propia con clave (`RPE_WEB_TOKEN`, propiedad del script; la URL y la clave se guardan solo en el `localStorage` del móvil). Valida ID/RPE/fecha, neutraliza fórmulas, no borra filas y pide confirmación para sustituir un RPE existente. Instalación: ver la cabecera del archivo.
