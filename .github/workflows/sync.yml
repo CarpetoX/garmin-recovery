@@ -55,20 +55,20 @@ jobs:
       - name: V2.9.1 - Verificar origen antes de sincronizar
         env:
           GARMIN_ORIGIN_KEY_V291: ${{ secrets.GARMIN_ORIGIN_KEY_V291 }}
-        run: python garmin_dispatch_auth_v291.py --out .garmin_origin_v291.json
+        run: python -m garmin_recovery.dispatch_auth --out .garmin_origin_v291.json
 
       - name: Obtener wellness de Intervals.icu
         env:
           INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
-        run: python sync_fetch_wellness.py
+        run: python -m garmin_recovery.sync_fetch_wellness
 
       - name: Obtener actividades de Intervals.icu
         env:
           INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
-        run: python sync_fetch_activities.py
+        run: python -m garmin_recovery.sync_fetch_activities
 
       - name: Crear análisis profesional diario y semanal
-        run: python sync_daily_analysis.py
+        run: python -m garmin_recovery.sync_daily_analysis
 
       - name: Guardar datos de Intervals con reintentos
         shell: bash
@@ -78,8 +78,8 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p .lineage_current
-          python pipeline_lineage_v29.py --stage sync --out .lineage_current/pipeline_lineage_v29.json
-          python garmin_dispatch_auth_v291.py --attach-lineage .lineage_current/pipeline_lineage_v29.json --origin-file .garmin_origin_v291.json
+          python -m garmin_recovery.pipeline_lineage --stage sync --out .lineage_current/pipeline_lineage_v29.json
+          python -m garmin_recovery.dispatch_auth --attach-lineage .lineage_current/pipeline_lineage_v29.json --origin-file .garmin_origin_v291.json
 
       - name: V2.9 - Conservar filiacion del run Sync por 14 dias
         continue-on-error: true

@@ -1,7 +1,7 @@
 # Rutina de Claude: informe tras cada sincronización
 
 Al terminar la cadena Sync → Heart → Advanced → CrossFit en verde, el último paso de
-`crossfit-insights.yml` (`notify_claude_routine.py`) llama al endpoint `/fire` de una
+`crossfit-insights.yml` (`garmin_recovery/notify_claude_routine.py`) llama al endpoint `/fire` de una
 rutina de Claude Code. La rutina redacta el informe y aparece como una sesión nueva
 en Claude. El paso es opcional y no bloqueante: sin los secretos no hace nada.
 

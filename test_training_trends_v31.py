@@ -1,6 +1,6 @@
 import unittest
 from datetime import date
-from training_trends_v31 import trend
+from garmin_recovery.training_trends import trend
 
 
 class TrendsV31Tests(unittest.TestCase):
@@ -70,7 +70,7 @@ class TrendsV31Tests(unittest.TestCase):
 
 # V3.2 tests are hosted here so the EXISTING Garmin CI test invocation
 # (python -m unittest ... test_training_trends_v31 ...) runs them automatically.
-from performance_report_v32 import build_report
+from garmin_recovery.performance_report import build_report
 
 
 class PerformanceReportV32Tests(unittest.TestCase):
@@ -232,7 +232,7 @@ import tempfile
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from validate_performance_v33 import audit, main
+from garmin_recovery.validate_performance import audit, main
 
 
 class PerformanceContractV33Tests(unittest.TestCase):

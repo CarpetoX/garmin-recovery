@@ -32,7 +32,7 @@
  *   ejecución en curso y protección contra repetir un mismo sondeo.
  *
  * Cambio v2.9.3: solicita Sync mediante workflow_dispatch con los cinco
- * campos firmados que ya verifica garmin_dispatch_auth_v291.py de GitHub.
+ * campos firmados que ya verifica garmin_recovery/dispatch_auth.py de GitHub.
  * El protocolo V2.9.1 denomina al remitente verificado 'apps_script_backup'
  * para TODOS los disparos de Apps Script firmados, incluidos post-sueño.
  * El subtipo 'post-sueño' se registra en el log local, no se atribuye en GitHub.

@@ -43,7 +43,7 @@ jobs:
           path: .lineage_parent
 
       - name: Validar sintaxis Garmin
-        run: python -m py_compile garmin_metrics.py garmin_activity_metrics.py garmin_hr_timeline.py garmin_hrv_timeline.py garmin_sleep_history.py
+        run: python -m py_compile garmin_recovery/garmin_metrics.py garmin_recovery/garmin_activity_metrics.py garmin_recovery/garmin_hr_timeline.py garmin_recovery/garmin_hrv_timeline.py garmin_recovery/garmin_sleep_history.py
 
       - name: Instalar Garmin Connect
         run: python -m pip install --disable-pip-version-check 'garminconnect==0.3.17'
@@ -52,11 +52,11 @@ jobs:
         env:
           GARMIN_TOKENS_B64: ${{ secrets.GARMIN_TOKENS_B64 }}
         run: |
-          python garmin_metrics.py
-          python garmin_activity_metrics.py
-          python garmin_hr_timeline.py
-          python garmin_hrv_timeline.py
-          python garmin_sleep_history.py
+          python -m garmin_recovery.garmin_metrics
+          python -m garmin_recovery.garmin_activity_metrics
+          python -m garmin_recovery.garmin_hr_timeline
+          python -m garmin_recovery.garmin_hrv_timeline
+          python -m garmin_recovery.garmin_sleep_history
 
       - name: Guardar métricas Garmin con reintentos
         shell: bash
@@ -97,7 +97,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p .lineage_current
-          python pipeline_lineage_v29.py --stage heart --out .lineage_current/pipeline_lineage_v29.json
+          python -m garmin_recovery.pipeline_lineage --stage heart --out .lineage_current/pipeline_lineage_v29.json
 
       - name: V2.9 - Conservar filiacion por 14 dias
         continue-on-error: true

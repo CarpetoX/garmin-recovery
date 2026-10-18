@@ -12,8 +12,8 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from performance_report_v32 import build_report
-from performance_enhancements_v35 import build as build_v35
+from .performance_report import build_report
+from .performance_enhancements import build as build_v35
 
 TZ = ZoneInfo('Europe/Madrid')
 WINDOWS = (3, 7, 28)

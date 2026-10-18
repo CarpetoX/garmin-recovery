@@ -1,5 +1,5 @@
 import unittest
-from json_contracts_v30 import audit
+from garmin_recovery.json_contracts import audit
 
 
 def fixtures():
