@@ -13,6 +13,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from statistics import mean, median, pstdev
 
+from . import weekly_compare
 from .config import DEFAULTS
 
 NEED = DEFAULTS["sleep_need_hours"]
@@ -237,6 +238,7 @@ def analyze(root, result: dict, crossfit: dict | None = None) -> dict:
             and not f["observed"].startswith("Datos insuf") and not f["observed"].startswith("Pocas")]
     guidance = ((result.get("decision") or {}).get("guidance") or {})
     return {"findings": findings, "priorities": priorities, "good": good, "weekly": _weekly(sessions, today),
+            "compare": weekly_compare.compare(trend, sessions, today, coverage),
             "rpe_max": guidance.get("rpe_max"), "label": guidance.get("label"),
             "coverage_pct": coverage}
 
@@ -271,6 +273,8 @@ def to_markdown(a: dict) -> str:
             L.append(f"\n_Cobertura de RPE {_f(cov)} %: no se interpretan variaciones entre semanas._")
         else:
             L.append("\n_La semana en curso está incompleta; compara solo semanas completas._")
+    if a.get("compare"):
+        L.append(weekly_compare.to_markdown(a["compare"]).rstrip())
     rpe = a.get("rpe_max")
     L.append("\n### Reglas para los próximos 7 días\n")
     L.append(f"1. **Hoy:** respeta la decisión del día ({a.get('label') or '—'}, RPE máx. {_f(rpe)}).")
