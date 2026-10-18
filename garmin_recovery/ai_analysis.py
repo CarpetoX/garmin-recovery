@@ -79,13 +79,28 @@ def section(root) -> str:
     return "\n".join(out)
 
 
-LEAD = re.compile(r"^\*\*En breve:?\*\*:?\s*(.+)$", re.M)
+LEAD = re.compile(r"^\*\*En breve:?\*\*:?[ \t]*(.*)$", re.M)
+MAX_LEAD_LINES = 8
 
 
-def lead(root) -> str | None:
-    """Párrafo «**En breve:** …» del análisis, solo si es del ciclo vigente (para mostrarlo en el panel)."""
+def lead_lines(body: str) -> list[str]:
+    """Resumen «**En breve:**»: el texto de la misma línea (si lo hay) y las líneas siguientes hasta la primera en blanco."""
+    m = LEAD.search(body)
+    if not m:
+        return []
+    lines = [m.group(1).strip()] if m.group(1).strip() else []
+    rest = body[m.end():]
+    rest = rest[1:] if rest.startswith("\n") else rest  # fin de la línea del encabezado
+    for ln in rest.split("\n"):
+        if not ln.strip():
+            break
+        lines.append(ln.strip())
+    return lines[:MAX_LEAD_LINES]
+
+
+def lead(root) -> list[str] | None:
+    """Líneas del resumen «En breve» del análisis, solo si es del ciclo vigente (para mostrarlas en el panel)."""
     r = check(root)
     if r.get("state") != "ok":
         return None
-    m = LEAD.search(r["body"])
-    return m.group(1).strip() if m else None
+    return lead_lines(r["body"]) or None

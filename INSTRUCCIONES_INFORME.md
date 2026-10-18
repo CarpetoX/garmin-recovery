@@ -58,4 +58,15 @@ Enlaza el panel https://carpetox.github.io/garmin-recovery/ y el informe base ht
 
 ## Análisis publicado en la app — apertura «En breve»
 
-El primer párrafo de `app/analisis_ia.md` (justo debajo de la línea `<!-- cycle_id: … -->`) debe empezar por `**En breve:**` y explicar, en 3–4 frases de lenguaje llano y sin jerga (di «oficial» y «experimental», no v2/v3): cómo está hoy la persona, qué ha cambiado frente a ayer (diferencia observada, sin causas), qué conviene hacer hoy y por qué. Solo cifras presentes en los datos. La pestaña Hoy de la app muestra ese párrafo; el resto del análisis (qué explica la puntuación, carga reciente, 3 prioridades, plan de 7 días; máx. 300 palabras en total) va en el informe completo.
+El primer bloque de `app/analisis_ia.md` (justo debajo de la línea `<!-- cycle_id: … -->`, hasta la primera línea en blanco) es un **resumen breve del estado general**, al estilo del resumen ejecutivo del informe, y debe tener este formato (máx. 7 líneas):
+
+```
+**En breve:**
+🟢 Recuperación: <puntuación oficial>/100, confianza <…>; <diferencia frente a ayer si consta>
+🌙 Sueño: <duración> · puntuación <…>
+🏋️ Carga: <última sesión o carga de 7 días con sus cifras>
+❤️ Señal destacada: <la señal favorable o la alerta principal, con su cifra>
+Orientación: <una frase: qué conviene hoy y por qué, teniendo en cuenta el turno>
+```
+
+Lenguaje llano; di «oficial» y «experimental» (no v2/v3); solo cifras presentes en los datos; sin causas ni comparaciones porcentuales entre semanas sin cobertura completa; sin diagnóstico. Si falta un dato, omite esa línea. La pestaña Hoy de la app muestra este bloque como «Resumen de hoy · Claude» (y solo usa el resumen por reglas si no hay uno del ciclo vigente). Después va el resto del análisis (qué explica la puntuación, carga reciente, 3 prioridades, plan de 7 días; máx. 300 palabras en total).
