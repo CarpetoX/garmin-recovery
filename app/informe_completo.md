@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 11:07 · `GR-2026-10-18-1107-1b582e`
+Domingo, 18 de octubre de 2026 · 11:12 · `GR-2026-10-18-1112-61b02d`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -34,7 +34,7 @@ Carga 7 días|8 sesiones|sRPE 1203|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 84/100 (usable) |
 
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 08:30, 10-17 16:45, 10-17 22:45.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-17 08:30, 10-17 16:45, 10-17 22:45, 10-18 08:30.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -101,6 +101,19 @@ El REM representa un 24 % y el sueño profundo un 11 % del episodio.
 
 ![Sueño por fases](charts/sleep_stages.svg)
 
+**Necesidad y deuda de sueño**
+
+| Componente | Horas |
+|---|---|
+| Base configurada | 7,5 |
+| Recargo por carga de ayer | +0,0 |
+| Recargo por deuda de las últimas 3 noches | +0,0 |
+| Siesta de hoy | −0,0 |
+| **Necesidad estimada esta noche** | **7,5 h** |
+| Deuda de 7 noches (siestas descontadas) | 0,7 h |
+
+Es una estimación heurística, no validada; los recargos tienen tope y no sustituyen tu percepción. Solo cuentan siestas registradas por Garmin.
+
 No se incorporan siestas no confirmadas.
 
 ## 4. Frecuencia cardíaca y tendencias
@@ -128,7 +141,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 19, máximo 77.
-- Body Battery: último valor 76/100, medido a las 09:12 (hace 1 h 55 min: no es una medición nueva).
+- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 00 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 ## 5. Rendimiento CrossFit
@@ -224,7 +237,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 
 - ✅ **HRV.** HRV media de los últimos 7 días: 55 ms frente a una referencia de 58 ms (-4 %). Estable respecto a tu referencia.
 - ✅ **FC en reposo.** FC en reposo de los últimos 7 días: 56,6 lpm frente a 55,5 de referencia (+1,1 lpm). En línea con tu referencia.
-- ✅ **Sueño.** Media de 7 noches: 7,8 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 0,7 h. El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
+- ✅ **Sueño.** Media de 7 noches: 7,8 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 0,7 h (siestas registradas descontadas). El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
 - ✅ **Regularidad del sueño.** Hora de acostarte (mediana 00:14) con una variación típica de ±41 min en 14 noches; 3 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
 - ⚠️ **Distribución de la intensidad.** 9 de 17 sesiones con RPE registrado fueron de RPE ≥ 8 (53 %); 3 veces hubo dos días duros seguidos. Una parte alta de sesiones muy duras, sobre todo en días consecutivos, deja poco margen de recuperación y limita la mejora.
 - ℹ️ **Respuesta a las sesiones duras.** Datos insuficientes: 5 días tras sesión dura y 2 tras otras (hacen falta 3 de cada). Sin más días no se puede ver cómo responde tu HRV.
@@ -276,4 +289,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:07 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:12 Europe/Madrid · certificado READY · sync_run_id 39109018293.
