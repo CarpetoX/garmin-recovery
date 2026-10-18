@@ -330,6 +330,36 @@ section[id],details[id]{scroll-margin-top:56px}
 .plan li.k-hard{border-left-color:var(--critical)} .plan li.k-mod{border-left-color:var(--warning)}
 .plan li.k-light{border-left-color:var(--good)} .plan li.k-rest{border-left-color:var(--series-1)}
 .chg li{display:flex;gap:10px;padding:4px 0;font-size:14px}
+/* ---- Liquid glass: fondo con color + tarjetas translúcidas con desenfoque; opaco si el navegador no lo soporta ---- */
+:root{--glass:rgba(255,255,255,.58); --glass-edge:rgba(255,255,255,.75); --glass-shadow:0 8px 30px rgba(20,30,60,.10);
+  --glass-hi:inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(255,255,255,.25);
+  --glass-chip:rgba(90,100,120,.12);
+  --blob-a:rgba(66,133,244,.30); --blob-b:rgba(255,140,90,.22); --blob-c:rgba(60,200,150,.20)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--glass:rgba(34,36,44,.55); --glass-edge:rgba(255,255,255,.14);
+  --glass-shadow:0 10px 34px rgba(0,0,0,.40); --glass-hi:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(255,255,255,.04);
+  --glass-chip:rgba(255,255,255,.09); --blob-a:rgba(57,135,229,.34); --blob-b:rgba(217,89,38,.22); --blob-c:rgba(40,170,120,.20)}}
+:root[data-theme="dark"]{--glass:rgba(34,36,44,.55); --glass-edge:rgba(255,255,255,.14); --glass-shadow:0 10px 34px rgba(0,0,0,.40);
+  --glass-hi:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(255,255,255,.04); --glass-chip:rgba(255,255,255,.09);
+  --blob-a:rgba(57,135,229,.34); --blob-b:rgba(217,89,38,.22); --blob-c:rgba(40,170,120,.20)}
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+  body{background:
+    radial-gradient(60vmax 50vmax at 8% -5%,var(--blob-a),transparent 60%),
+    radial-gradient(55vmax 45vmax at 100% 12%,var(--blob-b),transparent 60%),
+    radial-gradient(60vmax 50vmax at 30% 105%,var(--blob-c),transparent 60%),
+    var(--bg);background-attachment:fixed}
+  .card{background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
+    -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-radius:22px}
+  .nav{background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--glass-hi),var(--glass-shadow);
+    -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-radius:999px;padding:6px 8px;margin:0 0 14px;top:8px}
+  .nav a{background:transparent}
+  .nav a:hover,.nav a:focus-visible{background:var(--glass-chip);outline:0}
+  .badge,.rx span,.plan li,.tip-line,.cal-day,.hist a{background:var(--glass-chip)}
+  .meter{background:var(--glass-chip)}
+}
+@media (prefers-reduced-transparency: reduce){
+  body{background:var(--bg)!important}
+  .card,.nav{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+}
 </style>
 </head>
 <body>
