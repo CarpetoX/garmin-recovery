@@ -406,6 +406,18 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .tabbar a.on{background:var(--series-1-wash);color:var(--text);font-weight:600}
 .tabbar a:focus-visible{outline:2px solid var(--series-1)}
 @media (min-width:900px){.tabbar{bottom:16px}}
+.rings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ring-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px 6px;min-width:0}
+.rw{position:relative;width:68px;height:68px;display:flex;align-items:center;justify-content:center}
+.rw svg{position:absolute;inset:0}
+.ring-num{position:relative;font-size:22px;font-weight:650;letter-spacing:-.01em;line-height:1}
+.ring-label{margin-top:8px;font-size:13px;font-weight:600}
+.ring-sub{font-size:11px;color:var(--text-3);margin-top:1px}
+.bars7{display:flex;align-items:flex-end;gap:3px;justify-content:center;width:68px;height:34px}
+.bars7 i{display:block;width:6px;border-radius:2px;background:var(--series-2)}
+.ring-card:last-child .ring-num{margin-top:6px;font-size:20px}
+.ring-card:last-child .ring-label{margin-top:2px}
+.warn-chip{background:var(--warning)!important;color:#1a1a19!important}
 </style>
 </head>
 <body>
@@ -432,23 +444,23 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
       <div>
         <p class="guidance" id="guidance"></p>
         <div class="rx" id="rx"></div>
-        <ul class="clean drivers" id="drivers"></ul>
-        <ul class="clean notes" id="notes" style="margin-top:10px"></ul>
       </div>
     </section>
 
-    {{HOY}}
+    <section class="rings" id="rings" aria-label="Recuperación, sueño y carga"></section>
 
-    <section class="grid tiles" id="tiles" aria-label="Indicadores clave"></section>
-
-    <section class="card">
-      <h2 id="v3-title">Modelo v3 (en pruebas)</h2>
-      <p class="h2sub">Componentes 0–100 · 75 = tu normalidad · peso entre paréntesis</p>
-      <div id="meters"></div>
+    <section class="card" id="porque" aria-label="Por qué esta puntuación">
+      <h2>Por qué esta puntuación</h2>
+      <p class="h2sub">lo que más ha pesado hoy frente a tu normalidad</p>
+      <ul class="clean drivers" id="drivers"></ul>
+      <ul class="clean notes" id="notes" style="margin-top:10px"></ul>
     </section>
+
+    {{HOY}}
   </div>
 
   <div class="grid tab" id="tab-tendencias" data-tab="tendencias">
+    <section class="grid tiles" id="tiles" aria-label="Indicadores clave"></section>
     {{TEND}}
     <section class="card">
       <h2>Disponibilidad · 28 días</h2>
@@ -492,6 +504,11 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 
   <div class="grid tab" id="tab-sistema" data-tab="sistema">
     {{SIS}}
+    <section class="card">
+      <h2 id="v3-title">Modelo v3 (en pruebas)</h2>
+      <p class="h2sub">Componentes 0–100 · 75 = tu normalidad · peso entre paréntesis</p>
+      <div id="meters"></div>
+    </section>
     <details class="card fold" id="calidad" aria-label="Calidad y trazabilidad del informe">
       <summary><h2>Calidad y trazabilidad del informe</h2></summary>
       <p class="h2sub" id="cert-sub"></p>
@@ -545,7 +562,7 @@ const DC = R.data_confidence || {}, RC = R.recommendation_confidence || {};
 $('confidence').textContent = `Datos: confianza ${DC.level || '—'} · Recomendación: confianza ${RC.level || R.confidence}` + (reasons.length ? ` · ${reasons.join(', ')}` : '') + ` · historial ${D.history.days} días`;
 $('guidance').textContent = DEC.guidance.text;
 $('rx').innerHTML = `<span>RPE máx. <b>${DEC.guidance.rpe_max}</b></span><span>Volumen <b>${esc(DEC.guidance.volume)}</b></span>` +
-  (DEC.registry || []).filter(m => m.used_in_decision).map(m => `<span>${esc(m.label.replace(' (oficial)','').replace(' (en pruebas)',''))} <b>${fmt(m.score)}</b></span>`).join('');
+  (DEC.agreement === 'total' ? '' : '<span class="warn-chip">⚠ Los modelos discrepan: se aplica el más prudente</span>');
 $('v3-title').textContent = `Modelo v3 (en pruebas) · ${R.score == null ? 'sin puntuación' : fmt(R.score) + '/100 · ' + zoneTxt[R.zone]}`;
 $('drivers').innerHTML = (R.drivers || []).map(d => {
   const cls = d.z <= -0.5 ? 'neg' : d.z >= 0.5 ? 'pos' : 'neu';
@@ -560,8 +577,8 @@ const tiles = [
   {label:'HRV media 7 días', value: fmt(H.rolling_ms ?? H.today_ms), unit:'ms', delta: H.rolling_vs_baseline_pct != null ? `${sign(H.rolling_vs_baseline_pct)} % vs. base ${fmt(H.baseline_ms)} ms` : 'base en construcción'},
   {label:'FC en reposo', value: fmt(K.resting_hr), unit:'lpm', delta: K.resting_delta_bpm != null ? `${sign(K.resting_delta_bpm)} vs. mediana ${fmt(K.baseline_resting_hr)}` : '—'},
   {label:'Sueño', value: fmt(S.hours, 1), unit:'h', delta: `puntuación ${fmt(S.sleep_score)} · deuda ${fmt(S.debt_hours,1)} h`},
-  {label:'Carga 7 días', value: fmt(L.week_load), unit:'', delta: `${L.week_sessions} sesiones` + (L.week_change_pct != null ? ` · ${sign(L.week_change_pct)} % vs. semana previa` : '')},
-  {label:'Forma (TSB)', value: L.form_interpretable ? sign(L.form_pct) : sign(L.tsb, 1), unit: L.form_interpretable ? '%' : '', delta: L.form_interpretable ? `zona ${L.form_zone} · CTL ${fmt(L.ctl,1)}` : `CTL ${fmt(L.ctl,1)} · aún sin carga crónica suficiente`},
+  {label:'Carga 7 días (Intervals)', value: fmt(L.week_load), unit:'', delta: `${L.week_sessions} sesiones` + (L.week_change_pct != null ? ` · ${sign(L.week_change_pct)} % vs. semana previa` : '')},
+  {label:'Forma (carga reciente vs. habitual)', value: L.form_interpretable ? sign(L.form_pct) : sign(L.tsb, 1), unit: L.form_interpretable ? '%' : '', delta: L.form_interpretable ? `zona ${L.form_zone} · CTL ${fmt(L.ctl,1)}` : `CTL ${fmt(L.ctl,1)} · aún sin carga crónica suficiente`},
 ];
 $('tiles').innerHTML = tiles.map(t => `<div class="card tile"><div class="label">${t.label}</div><div class="value">${t.value}<small>${t.unit}</small></div><div class="delta">${esc(t.delta)}</div></div>`).join('');
 
@@ -571,6 +588,22 @@ $('meters').innerHTML = Object.entries(C).map(([k, c]) => `
   <div class="meter-row"><div class="name">${esc(c.label)} <span class="weight">(${Math.round(c.weight*100)} %)</span></div>
   <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.score ?? ''}" aria-label="${esc(c.label)}"><i style="width:${c.score ?? 0}%;background:${tone(c.score)}"></i></div>
   <div class="val">${c.score == null ? '<span class="weight">sin datos</span>' : fmt(c.score)}</div></div>`).join('');
+
+// ---------- Tres indicadores: Recuperación · Sueño · Carga ----------
+(function(){
+  const ring = (pct, color) => { const r = 27, c = 2 * Math.PI * r, v = pct == null ? 0 : Math.max(0, Math.min(100, pct));
+    return `<svg viewBox="0 0 64 64" width="68" height="68" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--glass-chip, var(--surface-2))" stroke-width="7"/>` +
+      `<circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * v / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 32 32)"/></svg>`; };
+  const zoneColor = {green:'var(--good)', yellow:'var(--warning)', red:'var(--critical)'}[DEC.zone] || 'var(--muted)';
+  const rec = official.score, sl = S.sleep_score;
+  const last7 = T.slice(-7), mx = Math.max(1, ...last7.map(t => t.srpe || 0));
+  const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : 'sin registro'}"></i>`).join('');
+  $('rings').innerHTML =
+    `<div class="card ring-card"><div class="rw">${ring(rec, zoneColor)}<div class="ring-num">${fmt(rec)}</div></div><div class="ring-label">Recuperación</div><div class="ring-sub">puntuación oficial</div></div>` +
+    `<div class="card ring-card"><div class="rw">${ring(sl, tone(sl))}<div class="ring-num">${fmt(sl)}</div></div><div class="ring-label">Sueño</div><div class="ring-sub">${fmt(S.hours, 1)} h · puntuación</div></div>` +
+    `<div class="card ring-card"><div class="bars7" role="img" aria-label="sRPE de los últimos 7 días">${bars}</div><div class="ring-num">${fmt(L.week_srpe)}</div><div class="ring-label">Carga 7 días</div><div class="ring-sub">sRPE · ${L.week_sessions} sesiones</div></div>`;
+})();
+
 
 // ---------- Motor de gráficos ----------
 const tip = $('tip');

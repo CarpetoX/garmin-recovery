@@ -167,3 +167,8 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - El panel se organiza en cuatro pestañas con barra inferior: **Hoy** (decisión, qué ha cambiado, esta noche, próximos 7 días, indicadores y factores), **Tendencias** (calendario, semana, gráficas), **Entrenos** (sesiones, fuerza) y **Sistema** (estado del ciclo, puntualidad, días e informes anteriores, calidad, modelos). `dashboard._extra_sections` devuelve un diccionario con las partes de cada pestaña y la plantilla las coloca con `{{HOY}}`, `{{TEND}}`, `{{ENT}}`, `{{SIS}}` y `{{BANNER}}`.
 - Sin JavaScript se ven todas las secciones seguidas (la clase `js` solo se añade con JS). Los enlaces antiguos (`#plan`, `#noche`, `#calidad`…) activan su pestaña. Las gráficas se dibujan al mostrarse la pestaña (ResizeObserver).
 - Fase 2 pendiente: tres indicadores (Recuperación, Sueño, Carga), una sola puntuación arriba y vocabulario simplificado.
+
+### V7.3 fase 2 · Hoy en dos pantallas
+- Hoy: puntuación única, tres indicadores (Recuperación y Sueño en anillo; Carga 7 días con barras de sRPE, sin comparar semanas), «Por qué esta puntuación» (drivers y notas), luego tarjetas de cambios, esta noche y plan.
+- Etiqueta «Los modelos discrepan» solo si `decision.agreement != 'total'`. Los chips por modelo y los medidores v3 pasan a Sistema; los indicadores clave (tiles) pasan a Tendencias.
+- Sin cambios en decisión, reglas de seguridad ni cifras; TSB/CTL se muestran como «carga reciente vs. habitual».
