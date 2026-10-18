@@ -1,9 +1,9 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 09:21 · `GR-2026-10-18-0921-8939f8`
+Domingo, 18 de octubre de 2026 · 09:49 · `GR-2026-10-18-0949-28801f`
 
 ```cards
-Decisión|Pendiente de datos|RPE máx. 6|unavailable
+Decisión|Listo para entrenar|RPE máx. 9|green
 Recuperación v2|88/100|confianza high|green
 HRV|69 ms|+21 % vs mediana|green
 Sueño|7 h 50 min|puntuación 87|unavailable
@@ -13,23 +13,23 @@ Carga 7 días|8 sesiones|sRPE 1203|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-18-0830 validado; 4 de 4 procesos finalizados correctamente.
-- ⚪ **Recuperación:** 88/100 (v2, confianza high). Híbrido: 77/100. **Decisión: Pendiente de datos**, RPE máx. 6.
+- 🟢 **Certificación:** ciclo 2026-10-18-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Recuperación:** 88/100 (v2, confianza high). Híbrido: 77/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 7 h 50 min, puntuación 87/100.
 - ❤️ **Principal alerta:** HRV 69 ms, 21,1 % por encima de tu mediana de 28 días.
-- 🏋️ **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+- 🏋️ **Qué hacer:** Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 
 ## 1. Certificación y calidad
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-18-0830 |
+| Ciclo | 2026-10-18-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:01 |
+| Certificado generado | 09:49:05 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 84/100 (usable) |
@@ -62,7 +62,7 @@ La HRV está 21 % por encima de su mediana; la FC en reposo coincide con su medi
 |---|---|---|
 | Recuperación v2 (oficial) | 🟢 88/100 | oficial |
 | Híbrido Garmin + local | 🟢 77/100 | salvaguarda |
-| Disponibilidad v3 (en pruebas) | — | sombra |
+| Disponibilidad v3 (en pruebas) | 🟢 77/100 | sombra |
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 59/100 | contexto |
 | Tiempo de recuperación Garmin | 9,6 h | contexto |
@@ -93,7 +93,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 77,4 lpm | 61,2 lpm |
+| Hoy* | 68,5 lpm | 61,2 lpm |
 | 3 días | 85,5 lpm | 66,3 lpm |
 | 7 días | 85,2 lpm | 62,7 lpm |
 | 28 días | 83,3 lpm | 63,2 lpm |
@@ -114,7 +114,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 17, máximo 77.
-- Body Battery: último valor 75/100, medido a las 08:57.
+- Body Battery: último valor 76/100, medido a las 09:12.
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 ## 5. Rendimiento CrossFit
@@ -189,7 +189,7 @@ Turno: hoy TN, mañana sin dato.
 
 ### Recomendaciones
 
-1. **Pendiente de datos** — Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+1. **Listo para entrenar** — Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
@@ -232,7 +232,7 @@ _La semana en curso está incompleta; compara solo semanas completas._
 
 ### Reglas para los próximos 7 días
 
-1. **Hoy:** respeta la decisión del día (Pendiente de datos, RPE máx. 6).
+1. **Hoy:** respeta la decisión del día (Listo para entrenar, RPE máx. 9).
 2. **Esfuerzos máximos:** como mucho 2–3 sesiones de RPE ≥ 8 en la semana y separadas ≥ 48 h.
 3. **Sueño:** suma 30–45 min cada noche en lugar de una sola noche larga; antes de un turno de noche, siesta corta.
 4. **Registro:** fatiga, agujetas y ánimo cada mañana en Intervals; RPE de cada sesión el mismo día.
@@ -242,8 +242,8 @@ _Los puntos 2 y 3 son criterios generales de entrenamiento y descanso, no una pr
 
 ## Conclusión
 
-Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ Pendiente de datos**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
+Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 Listo para entrenar**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830 · generado 18/10/2026 09:21 Europe/Madrid · certificado READY · sync_run_id 39104369400.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 09:49 Europe/Madrid · certificado READY · sync_run_id 39109018293.
