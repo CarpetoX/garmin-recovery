@@ -1,6 +1,6 @@
 # Informe de seguimiento · 18/10/2026
 
-`GR-2026-10-18-1435-5171b7` · cita este identificador al reenviar el informe.
+`GR-2026-10-18-1658-ddf370` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -56,7 +56,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-18-1332-ff9c5e (18/10 13:32):
+Frente al informe GR-2026-10-18-1435-5171b7 (18/10 14:35):
 - Sin cambios en los datos.
 
 ## Actividad de hoy
@@ -125,16 +125,16 @@ _Por ejercicio con barra: 1RM mínimo estimado (Epley con la mejor serie) cuando
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-18-1435-5171b7`
+- **Identificador del informe:** `GR-2026-10-18-1658-ddf370`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-18-0830-post-sleep · datos sincronizados a las 14:34 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 5,6 h ✓ · última HRV hace 5,7 h ✓ · última FC hace 18 min ✓ · último Body Battery hace 18 min ✓
+- **Ciclo:** 2026-10-18-1645 · datos sincronizados a las 16:57
+- **Antigüedad:** fin del sueño hace 8,0 h ✓ · última HRV hace 8,0 h ✓ · última FC hace 2,7 h ✓ · último Body Battery hace 2,7 h ✓
 - **Integridad:** coherencia v3/v2 ✓ · sesiones con RPE 18/18
 - **Ejecución:** 3 franja(s) de Sync perdidas (17/10 16:45, 17/10 22:45, 18/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 14:35 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-18 16:58 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

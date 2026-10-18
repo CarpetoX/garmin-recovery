@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 18 de octubre de 2026 · 14:35 · `GR-2026-10-18-1435-5171b7`
+Domingo, 18 de octubre de 2026 · 16:58 · `GR-2026-10-18-1658-ddf370`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-18-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-18-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🟢 **Recuperación:** 88/100 (v2, confianza high). Híbrido: 77/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 7 h 50 min, puntuación 87/100.
 - ❤️ **Principal alerta:** HRV 69 ms, 21,1 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-18-0830-post-sleep |
+| Ciclo | 2026-10-18-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 09:49:05 |
+| Certificado generado | 16:58:08 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 84/100 (usable) |
@@ -154,7 +154,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 20, máximo 97.
-- Body Battery: último valor 53/100, medido a las 14:18.
+- Body Battery: último valor 53/100, medido a las 14:18 (hace 2 h 40 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -370,4 +370,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 14:35 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: informe de tarde · ciclo 2026-10-18-1645 · generado 18/10/2026 16:58 Europe/Madrid · certificado READY · sync_run_id 39137522756.
