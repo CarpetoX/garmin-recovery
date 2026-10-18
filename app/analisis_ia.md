@@ -1,19 +1,21 @@
 <!-- cycle_id: 2026-10-18-0830-post-sleep -->
-**Análisis · domingo 18/10/2026 · Sync de las 11:58** (certificado con avisos: Sync fuera de franja y 4 franjas perdidas)
+**Análisis · domingo 18/10/2026 · Sync de las 12:40** (certificado con avisos: Sync fuera de franja y 4 franjas perdidas)
 
-**Decisión: 🟢 verde** (v2 oficial 88; híbrido 77, v3 77, Garmin Readiness 59 solo contexto). Acuerdo total, RPE ≤ 9, volumen 100 %. Sueño confirmado y datos recientes (sueño y HRV hace ~3 h).
+**Decisión: 🟢 verde** (v2 oficial 88; híbrido 77, v3 77; Garmin Readiness 59 solo contexto). Acuerdo total, RPE ≤ 9, volumen 100 %. Sueño confirmado; fin del sueño y HRV con ~3,7 h de antigüedad.
 
 **Qué explica la puntuación**
-- ↑ HRV 69 ms (+19 % vs. base 58 ms); media 7 días 57,0 ms, dentro del rango normal (54,3–62,0 ms).
-- → FC reposo 56 lpm (mediana 55,5); nocturna 61,2 lpm (−1,3).
+- ↑ HRV 69 ms hoy; media 7 días 57 ms, dentro del rango normal (54,3–62,0).
+- → FC reposo 56 lpm (+0,5 vs. mediana); nocturna 61,2 lpm (−1,3).
 - → Sueño 7,83 h, puntuación 87, pero deuda de 4,0 h en 3 noches.
-- → Estrés Garmin de ayer 38 (mediana 39).
+- → Estrés de ayer 38 vs. mediana 39.
 
-**Carga 7 días:** 9 sesiones, carga 142, sRPE 1.202,8, monotonía 0,66. CTL 3,8: la carga aún no penaliza la puntuación. Sesiones con RPE: 17/18; falta la de hoy (i198584544, Fuerza, 10:45, 66 min, carga 24). Últimas con RPE: WOD parejas RPE 8 y técnica HSPU RPE 4 (15/10); WOD 2 RPE 9,5 y WOD 1 RPE 9 (14/10).
+**Carga 7 días:** 9 sesiones, carga 142, sRPE 1.694, monotonía 0,89. Hoy ya hay fuerza de pierna a las 10:45 (RPE 7,5, carga 24): encaja con la decisión.
 
 **Recomendaciones**
-1. Hoy es turno de noche (TN): si vuelves a entrenar, antes del turno, corto y sin máximos; calentamiento progresivo y, si la barra va lenta, baja a pauta ámbar.
-2. La deuda de sueño de 4,0 h sigue abierta: protege el descanso antes y después del turno.
-3. Anota el RPE de i198584544 y las sensaciones (fatiga, agujetas, estrés, ánimo, motivación) en Intervals.icu. Confianza de datos alta; de la recomendación media (línea base de 17 noches).
+1. Hoy hay turno de noche (TN, desde las 15:00): no sumes más intensidad; si haces algo más, que sea corto y sin máximos.
+2. Prioriza dormir antes y después del TN para reducir la deuda de 4,0 h.
+3. Registra fatiga, agujetas, estrés, ánimo y motivación en Intervals.icu: faltan hoy y el modelo los necesita.
 
-_Herramienta de entrenamiento; no es un diagnóstico médico._
+**Certificado:** confianza de datos alta; de la recomendación media (17 noches de línea base, alta desde 28). Sesiones con RPE 18/18.
+
+_No es un diagnóstico médico._
