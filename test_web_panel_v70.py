@@ -66,3 +66,9 @@ class Days(unittest.TestCase):
         out = site.day_snapshots(Path("."), "2026-10-18", run=fake)
         self.assertEqual([(o["date"], o["decision"]["zone"]) for o in out],
                          [("2026-10-17", "red"), ("2026-10-16", "green")])  # el más reciente de cada día, sin hoy
+
+
+class ReportFigures(unittest.TestCase):
+    def test_plain_figure_images_fit_the_column(self):
+        from garmin_recovery import webreport
+        self.assertIn("figure>img{display:block;width:100%", webreport.CSS)  # sessions.svg mide 640 px: no debe desbordar el móvil

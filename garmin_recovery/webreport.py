@@ -99,6 +99,8 @@ pre{background:var(--surface-2);padding:10px;overflow-x:auto;border-radius:8px;f
 .fig{margin:14px 0}.fig .cap{font-size:13px;color:var(--text-2);margin:0 0 4px;font-weight:600}.fig .leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text-2);margin:2px 0 4px}
 .fig .leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 .fig img{width:100%;height:auto;background:#fff;border-radius:8px}
+figure{margin:12px 0}figure>img{display:block;width:100%;max-width:100%;height:auto;border-radius:12px}
+.body img,.body svg{max-width:100%}
 .ichart{position:relative;width:100%;height:200px}.ichart svg{display:block;width:100%;height:100%;overflow:visible}
 .empty{display:grid;place-items:center;height:100%;color:var(--text-3);font-size:13px}
 .tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.15);white-space:nowrap;opacity:0;transition:opacity .08s;z-index:6}
