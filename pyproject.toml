@@ -16,3 +16,11 @@ ignore = ["E501", "E701", "E702"]
 [tool.ruff.lint.per-file-ignores]
 # Tests: nombres cortos (l), imports tras preparar sys.path y lambdas de apoyo son intencionados.
 "test_*.py" = ["E741", "E402", "E731", "B905"]
+
+[tool.coverage.run]
+source = ["."]
+omit = ["test_*.py", "*/__pycache__/*", "tests_fixtures/*", "apps_script/*"]
+
+[tool.coverage.report]
+# Mínimo de cobertura total: medido en CI: 70 % (18/10/2026); sube el mínimo cuando suba la cobertura.
+fail_under = 68
