@@ -42,10 +42,18 @@ def classify(now=None, sleep=None, recovery=None, shifts=None):
     # After a night shift, a 03:00-05:00 episode can precede the main sleep.
     # Do not declare a definitive morning report from an episode ending before 07:00.
     early_post_shift_episode=bool(post_night_shift and confirmed and end.hour<7)
+    # Tras un TN, un sueño corto que acaba antes de las 10:00 puede ser solo el primer tramo
+    # (acostarse, despertarse y volver a dormir): se trata como provisional hasta ver el descanso principal.
+    hours=row.get('sleep_hours')
+    short_post_shift_episode=bool(post_night_shift and confirmed and not early_post_shift_episode
+                                  and end.hour<10 and isinstance(hours,(int,float)) and not isinstance(hours,bool)
+                                  and 0<hours<5)
     fresh_sleep=(recovery.get('input_freshness') or {}).get('sleep') is True
     if confirmed:
         if early_post_shift_episode:
             state='post_night_shift_early_sleep_pending'
+        elif short_post_shift_episode:
+            state='post_night_shift_short_sleep_pending'
         elif age_minutes<30:
             state='confirmed_wait_30m'
         elif not rec_matches or not fresh_sleep:
@@ -57,11 +65,12 @@ def classify(now=None, sleep=None, recovery=None, shifts=None):
     return {
         'schema_version':1,'generated_at':now.isoformat(),'date':today,
         'state':state,'is_definitive':state=='confirmed_ready',
-        'possible_sleep_in_progress':not confirmed or early_post_shift_episode,
-        'wake_confirmed':confirmed and not early_post_shift_episode,
+        'possible_sleep_in_progress':not confirmed or early_post_shift_episode or short_post_shift_episode,
+        'wake_confirmed':confirmed and not early_post_shift_episode and not short_post_shift_episode,
         'episode_end_confirmed':confirmed,
         'post_night_shift':post_night_shift,
         'early_post_shift_episode':early_post_shift_episode,
+        'short_post_shift_episode':short_post_shift_episode,
         'sleep_end_local':end.isoformat() if confirmed else None,
         'minutes_since_sleep_end':age_minutes,
         'recovery_matches_sleep_episode':rec_matches if confirmed else None,
@@ -73,6 +82,7 @@ def classify(now=None, sleep=None, recovery=None, shifts=None):
           'confirmed_recovery_sync_pending':'Sueño confirmado; falta sincronizar el análisis de recuperación del mismo episodio.',
           'post_night_shift_sleep_pending':'Posible sueño diurno o fragmentado tras turno de noche; no asumir despertar.',
           'post_night_shift_early_sleep_pending':'Episodio temprano tras TN confirmado; puede faltar el descanso principal.',
+          'post_night_shift_short_sleep_pending':'Sueño corto tras TN (menos de 5 h, antes de las 10:00); provisional, puede faltar el descanso principal.',
           'sleep_or_sync_pending':'Sueño posiblemente en curso o despertar pendiente de sincronizar; no se puede distinguir con certeza.'
         }[state],
         'policy':'No usar sueño anterior como actual ni inferir vigilia sin episodio confirmado.',

@@ -95,3 +95,11 @@ Si te levantas tarde, el informe definitivo ya no espera a una hora fija. Entre 
 Para activarlo hay que pegar `apps_script/GarminPostSueno.gs` en el archivo del proyecto de Apps Script que ya define `vigilarPostSuenoGarmin` (sustituyendo su contenido; no crear un segundo archivo ni tocar los activadores). Después, ejecutar una vez `diagnosticarPostSuenoGarmin` para ver la decisión sin lanzar nada. La lógica de decisión (`_postSuenoPlan_`) se comprueba en `test_postsueno_v69.py` (requiere Node).
 
 El cron de GitHub llega horas tarde (el de las 08:30 de ayer arrancó a las 13:01), por eso no sirve como respaldo de las franjas: el respaldo es Apps Script.
+
+### Sueño provisional tras un turno de noche
+
+Si ayer fue TN y el sueño de hoy acaba antes de las 10:00 con menos de 5 h (`sleep_hours`), `morning_sleep_gate.py` lo marca
+`post_night_shift_short_sleep_pending`: no es definitivo, no autoriza intensidad alta y el vigilante sigue consultando
+(cada 60 min) por si Garmin añade el descanso principal. Si no hay `sleep_hours`, no bloquea. Un episodio que acaba antes de
+las 07:00 ya se trataba así (`post_night_shift_early_sleep_pending`). Los umbrales (5 h, 10:00) están en el propio archivo.
+Aún no está comprobado cómo registra Garmin un segundo sueño del mismo día: cuando ocurra, conviene revisar los datos reales.
