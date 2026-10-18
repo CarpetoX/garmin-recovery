@@ -1,5 +1,5 @@
 <!-- cycle_id: 2026-10-18-0830-post-sleep -->
-**Análisis · domingo 18/10/2026 · Sync de las 13:09** (certificado con avisos: Sync fuera de franja y 3 franjas perdidas)
+**Análisis · domingo 18/10/2026 · Sync de las 13:29** (certificado con avisos: Sync fuera de franja y 3 franjas perdidas)
 
 **Decisión: 🟢 verde.** v2 oficial 88, híbrido 77, v3 77 (en pruebas); Garmin Readiness 59 solo como contexto. RPE máx. 9, volumen 100 %, con calentamiento progresivo.
 
@@ -16,6 +16,7 @@
 2. Prioriza dormir bien antes/después del TN para ir recortando la deuda de sueño.
 3. Anota en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación; faltan hoy y afinarían el modelo.
 
+Frescura: fin de sueño 09:00, FC 13:24 ✓. Coherencia v3/v2 ok.
 Confianza: datos alta; recomendación media (línea base de 17 noches, v3 aún sin validar).
 
 _Herramienta de entrenamiento; no es un diagnóstico médico._
