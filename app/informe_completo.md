@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre nocturno
+# Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 01:47 · `GR-2026-10-18-0147-00c66e`
+Domingo, 18 de octubre de 2026 · 08:33 · `GR-2026-10-18-0833-79acea`
 
 ```cards
 Decisión|Pendiente de datos|RPE máx. 6|unavailable
@@ -13,7 +13,7 @@ Carga 7 días|8 sesiones|sRPE 1203|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-17-2245 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-18-0830 validado; 4 de 4 procesos finalizados correctamente.
 - ⚪ **Recuperación:** —/100 (v2, confianza low). Híbrido: 65/100. **Decisión: Pendiente de datos**, RPE máx. 6.
 - 🌙 **Sueño:** —, puntuación —/100.
 - 🏋️ **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
@@ -22,13 +22,13 @@ Carga 7 días|8 sesiones|sRPE 1203|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-17-2245 |
+| Ciclo | 2026-10-18-0830 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 22:48:02 |
+| Certificado generado | 08:33:01 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | low |
 | Calidad fisiológica de los datos | 74/100 (usable) |
@@ -242,4 +242,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ 
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-10-17-2245 · generado 18/10/2026 01:47 Europe/Madrid · certificado READY · sync_run_id 39068162128.
+Traza: cierre matinal · ciclo 2026-10-18-0830 · generado 18/10/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 39104369400.
