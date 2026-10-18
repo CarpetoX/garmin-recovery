@@ -131,4 +131,12 @@ Bloques nuevos del informe completo (todos opcionales: si fallan, el informe sig
 
 Aviso al móvil: `notify.night_shift_tip` añade una línea de consejo de sueño/siesta los días de TN antes de las 15:00, sin cifras fisiológicas.
 
-Calidad: la cobertura medida en CI es del 75 % y `fail_under` es 72.
+Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
+
+### Plan de 7 días, progresión de fuerza, aviso de token y copia de seguridad
+
+- **Plan orientativo de 7 días** (`week_plan.py`, dentro del apartado 8): reglas explícitas con turnos (`shift_calendar.json`), sesiones duras recientes (RPE ≥ 8) y la decisión del día.
+- **Progresión por ejercicio** (`strength_progress.py`, sección 6): mejor serie y 1RM mínimo por semana ISO, solo barra con carga total.
+- **Caducidad del acceso a Garmin** (`token_health.py`): `garmin_status.json → token_expiry` guarda solo la fecha hallada (nunca el token); si queda ≤ 14 días abre el aviso `garmin_token`. Con el token actual solo consta la caducidad de un token de acceso corto (`access_token_only`), así que hoy no avisa.
+- **Copia de seguridad mensual** (`backup.py` + `.github/workflows/backup-monthly.yml`, día 1 a las 03:20 UTC): `tar.gz` con manifiesto SHA-256 de una lista cerrada de archivos de datos (sin secretos ni código), publicada como Release `backup-AAAA-MM`; se conservan las últimas 12. Como el repositorio es público, los Releases también lo son.
+- CI: el paso de cobertura anota los 12 módulos menos cubiertos.
