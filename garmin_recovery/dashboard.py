@@ -518,6 +518,10 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .steps .sd{position:relative;z-index:1;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;background:var(--muted)}
 .steps .ok .sd{background:var(--good)}.steps .bad .sd{background:var(--critical)}.steps .wait .sd{background:var(--warning);color:#1a1a19}
 .steps small{color:var(--text-3);font-size:10.5px}
+.heat{display:grid;gap:6px}.hrow{display:grid;grid-template-columns:84px 1fr;gap:8px;align-items:center}.hl{font-size:12px;color:var(--text-2)}
+.hcells{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px}.hcells i{display:block;height:22px;border-radius:4px;background:var(--glass-chip,var(--surface-2))}
+.hax{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3)}
+.zdonut{display:flex;gap:14px;align-items:center;margin:6px 0 2px}.zdonut svg{flex:0 0 104px}.zdonut .zrows{flex:1;min-width:0}.zdonut .zrow{grid-template-columns:1fr 12px 52px}.zdonut .zrow i{width:10px!important;height:10px;border-radius:50%}
 </style>
 </head>
 <body>
@@ -575,6 +579,8 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
     </section>
 
     <section class="card" id="weekload" aria-label="Carga semanal"></section>
+
+    <section class="card" id="heat" aria-label="Mapa de calor de 28 días"></section>
 
     <section class="grid cols-2" id="graficas">
       <div class="card">
@@ -849,6 +855,22 @@ chart($('c-stages'), {label:'Sueño por fases', zero:true, refs:[{y:S.need_hours
   read('r-load', 'load', {eps: 4, dec: 0, unit: '', better: 0});
 })();
 
+// ---------- Mapa de calor de 28 días ----------
+(function(){
+  const el = $('heat'); if (!el || !T.length) return;
+  const maxLoad = Math.max(1, ...T.map(d => d.load || 0)), need = S.need_hours || 7.5;
+  const zc = v => v == null ? null : v >= 70 ? 'var(--good)' : v >= 50 ? 'var(--warning)' : 'var(--critical)';
+  const sc = h => h == null ? null : h >= need ? 'var(--good)' : h >= need - 1 ? 'var(--warning)' : 'var(--critical)';
+  const rows = [
+    ['Recuperación', d => ({c: zc(d.score), t: d.score == null ? 'sin puntuación' : fmt(d.score) + '/100'})],
+    ['Sueño', d => ({c: sc(d.sleep_hours), t: d.sleep_hours == null ? 'sin dato' : fmt(d.sleep_hours, 1) + ' h'})],
+    ['Carga', d => ({c: d.load ? 'var(--series-2)' : null, o: d.load ? (0.25 + 0.75 * d.load / maxLoad) : 1, t: d.load ? 'carga ' + fmt(d.load) : 'sin carga registrada'})]];
+  el.innerHTML = '<h2>Mapa de 28 días</h2><p class="h2sub">cada columna es un día · recuperación y sueño por color (verde / ámbar / rojo), carga por intensidad · vacío = sin dato</p><div class="heat">' +
+    rows.map(([name, f]) => `<div class="hrow"><span class="hl">${name}</span><div class="hcells">` + T.map(d => { const r = f(d);
+      return `<i style="${r.c ? `background:${r.c};opacity:${r.o ?? 1}` : ''}" title="${dshort(d.date)} · ${r.t}"></i>`; }).join('') + '</div></div>').join('') +
+    `<div class="hrow"><span class="hl"></span><div class="hax"><span>${dshort(T[0].date)}</span><span>${dshort(T[T.length - 1].date)}</span></div></div></div>`;
+})();
+
 // ---------- Carga semanal frente a tu rango de las 3 semanas previas ----------
 (function(){
   const el = $('weekload'); if (!el) return;
@@ -895,10 +917,15 @@ function showHr(id) {
   svg += `<path d="M${pts.map(p => x(p[0]).toFixed(1) + ',' + y(p[1]).toFixed(1)).join('L')}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"/>` +
     `<line id="hrx" y1="${m.t}" y2="${m.t + ih}" stroke="var(--text-3)" opacity="0"/><rect id="hrhit" x="${m.l}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
   const zs = c.zone_seconds || [], ztot = zs.reduce((a, b) => a + (b || 0), 0);
+  const zdon = (() => { if (!(ztot > 0)) return ''; const r = 38, cc = 2 * Math.PI * r; let off = 0, arcs = '';
+    zs.forEach((sec, i) => { if (!(sec > 0)) return; const len = sec / ztot * cc;
+      arcs += `<circle cx="50" cy="50" r="${r}" fill="none" stroke="${zc[i] || zc[6]}" stroke-width="14" stroke-dasharray="${len.toFixed(2)} ${(cc - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 50 50)"/>`; off += len; });
+    const top = zs.reduce((b, v, i) => v > zs[b] ? i : b, 0);
+    return `<svg viewBox="0 0 100 100" width="104" height="104" role="img" aria-label="Reparto del tiempo por zonas de FC">${arcs}<text x="50" y="48" text-anchor="middle" font-size="15" font-weight="650" fill="var(--text)">Z${top + 1}</text><text x="50" y="62" text-anchor="middle" font-size="8" fill="var(--text-3)">${Math.round(zs[top] / ztot * 100)} %</text></svg>`; })();
   const zrows = ztot > 0 ? zs.map((sec, i) => sec > 0 ? `<div class="zrow"><span>Z${i + 1}${zb[i] != null ? ` · hasta ${zb[i]}` : ''}</span><i style="width:${Math.max(2, Math.round(sec / ztot * 100))}%;background:${zc[i] || zc[6]}"></i><b>${Math.round(sec / 60)} min</b></div>` : '').join('') : '';
   box.innerHTML = `<h2>${esc((s && (s.label || s.name)) || c.name || 'Sesión')}</h2><p class="h2sub">${dshort(c.date)} ${c.start_local ? c.start_local.slice(11,16) : ''} · FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm · ${fmt((c.duration_s || 0) / 60)} min${s && s.rpe != null ? ' · RPE ' + fmt(s.rpe, 1) : ''}</p>` +
     `<div class="hrwrap">${svg}<div class="hrtip" id="hrtip"></div></div>` +
-    (zrows ? `<h3 class="zh">Tiempo por zona de FC</h3>${zrows}` : '') +
+    (zrows ? `<h3 class="zh">Tiempo por zona de FC</h3><div class="zdonut">${zdon}<div class="zrows">${zrows}</div></div>` : '') +
     `<p class="h2sub" style="margin-top:8px">Un punto cada ${c.step_s} s (Intervals.icu). Las zonas son las de tu perfil. Es una vista de la sesión: no cambia la decisión del día.</p>`;
   box.hidden = false;
   const svgEl = box.querySelector('svg'), xh = $('hrx'), tp = $('hrtip');
