@@ -94,7 +94,7 @@ def _sleep(trend, today, ext_days=None):
     debt = sn["debt_7n_h"] if sn.get("available") else sum(max(0.0, NEED - h) for h in hs)
     short = sum(1 for h in hs if h < NEED - 0.5)
     obs = (f"Media de {len(hs)} noches: {_f(mean(hs), 1)} h (necesidad configurada {_f(NEED, 1)} h); "
-           f"{short} de {len(hs)} noches más de media hora por debajo; deuda acumulada {_f(debt, 1)} h (siestas registradas descontadas).")
+           f"{short} de {len(hs)} noches más de media hora por debajo; deuda acumulada {_f(debt, 1)} h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas).")
     why = "El sueño es el principal factor de recuperación y de adaptación al entrenamiento."
     if debt >= 7:
         return _finding("sleep", "Sueño", 3, obs, why, "Recupera la deuda poco a poco: 30–45 min más cada noche, no una sola noche larga.", obs)

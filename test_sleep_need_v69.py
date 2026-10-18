@@ -31,11 +31,12 @@ class SleepNeed(unittest.TestCase):
         r2 = sn.compute(t, {"2026-10-16": {"sleep_detail": {"nap_minutes": 60.0}}}, "2026-10-16")
         self.assertEqual(r2["need_tonight_h"], r["need_tonight_h"] - 1.0)
 
-    def test_day_sleep_excluded_and_markdown(self):
-        t = trend([7, 7, 7, 7, 7])
+    def test_day_sleep_counts_and_markdown(self):
+        t = trend([7.5, 7.5, 3.5, 7.5, 7.5])
         t[2]["sleep_context"] = "day_sleep"
         r = sn.compute(t, {}, "2026-10-14")
-        self.assertEqual(len(r["nights"]), 4)
+        self.assertEqual(len(r["nights"]), 5)
+        self.assertEqual(r["debt_7n_h"], 4.0)
         self.assertIn("heurística", sn.to_markdown(r))
 
 

@@ -1,5 +1,8 @@
 """Necesidad y deuda de sueño con siestas (heurística transparente, no validada).
 
+El sueño principal de cada día cuenta aunque sea diurno (tras una TN). Si ese día hubo dos episodios, solo consta
+el principal de Garmin y la deuda puede sobrestimarse; las siestas registradas se descuentan.
+
 necesidad de esta noche = base + recargo por carga de ayer + recargo por deuda reciente − siesta de hoy
 Funciones puras: no leen la fecha del sistema.
 """
@@ -33,7 +36,8 @@ def _percentile(values, q):
 
 def compute(trend: list, ext_days: dict, today: str, base: float = 7.5) -> dict:
     rows = [t for t in trend if isinstance(t, dict) and t.get("date", "") <= today]
-    nights = [t for t in rows if _num(t.get("sleep_hours")) is not None and t.get("sleep_context") != "day_sleep"][-NIGHT_WINDOW:]
+    # Cuenta el sueño principal de cada día, también el diurno tras un turno de noche: es el único de ese ciclo.
+    nights = [t for t in rows if _num(t.get("sleep_hours")) is not None][-NIGHT_WINDOW:]
     if len(nights) < 4:
         return {"available": False, "reason": "Hacen falta al menos 4 noches con sueño medido."}
     items = []
