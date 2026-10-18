@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Domingo, 18 de octubre de 2026 · 11:35 · `GR-2026-10-18-1135-b535b7`
+Domingo, 18 de octubre de 2026 · 11:48 · `GR-2026-10-18-1148-e79e36`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -153,7 +153,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 19, máximo 77.
-- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 24 min: no es una medición nueva).
+- Body Battery: último valor 76/100, medido a las 09:12 (hace 2 h 36 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 2 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -169,6 +169,8 @@ Son asociaciones en tus propios datos de los últimos 90 días, sin causalidad n
 ## 5. Rendimiento CrossFit
 
 Última actividad registrada: 15 oct. Un día sin registro no demuestra que fuera de descanso.
+
+Contraste Garmin ↔ Intervals: las 8 actividades de Garmin de los últimos 7 días constan también en Intervals.
 
 ![Sesiones de los últimos 14 días](charts/sessions.svg)
 
@@ -325,4 +327,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:35 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: cierre matinal · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 11:48 Europe/Madrid · certificado READY · sync_run_id 39109018293.
