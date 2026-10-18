@@ -298,6 +298,9 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         from . import correlations
         add("\n**Diario de correlaciones (HRV del día siguiente)**\n\n"
             + correlations.to_markdown(correlations.compute(correlations.load(root), today)))
+        from . import zone_calibration
+        add("\n**Calibración de la zona del día**\n\n"
+            + zone_calibration.to_markdown(zone_calibration.compute(correlations.load(root), today)))
     except Exception:  # noqa: BLE001 — bloque opcional
         pass
     add("\n## 5. Rendimiento CrossFit\n")
