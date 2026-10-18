@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 18 de octubre de 2026 · 13:30 · `GR-2026-10-18-1330-93020e`
+Domingo, 18 de octubre de 2026 · 13:32 · `GR-2026-10-18-1332-ff9c5e`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -369,4 +369,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 13:30 Europe/Madrid · certificado READY · sync_run_id 39109018293.
+Traza: informe de tarde · ciclo 2026-10-18-0830-post-sleep · generado 18/10/2026 13:32 Europe/Madrid · certificado READY · sync_run_id 39109018293.
