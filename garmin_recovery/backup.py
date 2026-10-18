@@ -79,7 +79,8 @@ def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     out = argv[argv.index("--out") + 1] if "--out" in argv else "dist"
     if "--prune" in argv:   # lee etiquetas por stdin, imprime las que hay que borrar
-        print("\n".join(tags_to_prune(sys.stdin.read().split())))
+        for tag in tags_to_prune(sys.stdin.read().split()):
+            print(tag)
         return 0
     res = build(".", out, datetime.now().astimezone())
     problems = verify(res["archive"])

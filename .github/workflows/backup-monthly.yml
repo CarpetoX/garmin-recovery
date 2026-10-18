@@ -37,5 +37,5 @@ jobs:
           gh release create "$tag" "$archive" --title "Copia de seguridad $tag" \
             --notes "Copia mensual de los datos del historial (sin secretos ni código). Generada automáticamente."
           gh release list --limit 100 --json tagName --jq '.[].tagName' | python -m garmin_recovery.backup --prune | while read -r old; do
-            [ -n "$old" ] && gh release delete "$old" --yes --cleanup-tag
+            if [ -n "$old" ]; then gh release delete "$old" --yes --cleanup-tag; fi
           done
