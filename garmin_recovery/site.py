@@ -200,6 +200,11 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     gen = datetime.fromisoformat(result["generated_at"]) if result.get("generated_at") else None
     extras = _live_extras(root, result)
     try:
+        from .ai_analysis import lead
+        extras["ai_lead"] = lead(root)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:ai_lead", exc)
+    try:
         hc = json.loads((root / "activity_hr_curves.json").read_text(encoding="utf-8"))
         if isinstance(hc, dict) and hc.get("activities"):
             extras["hr_curves"] = {"step_s": hc.get("step_s"), "activities": {

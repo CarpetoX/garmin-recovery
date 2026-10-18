@@ -192,3 +192,6 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 ### V7.5 · Hoy: cambios arriba y explicación breve
 - Orden de Hoy: puntuación → «Qué ha cambiado desde ayer» (recuperación oficial y lista de indicadores) → «Hoy en breve» → anillos (Sueño, HRV, Carga) → «Por qué» → informe → esta noche → plan. La recuperación ya no se repite en los anillos.
 - `brief.py` (puro): redacta por reglas 2-3 frases con veredicto, lo que conviene vigilar (peor factor y nota del día) y la recomendación de esta noche; solo cifras de los datos, sin IA ni causalidad.
+
+### V7.6 · «En breve» de Claude en Hoy
+- `ai_analysis.lead` extrae el párrafo `**En breve:** …` del análisis (solo ciclo vigente); el panel lo muestra en Hoy («Análisis de Claude») y en el informe completo la sección «Análisis de Claude» sube tras «Balance y orientación» y se abre por defecto. Instrucciones actualizadas en `INSTRUCCIONES_INFORME.md` y `RUTINA_INFORME_CLAUDE.md`.

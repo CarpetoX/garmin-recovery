@@ -35,3 +35,34 @@ class Brief(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AiLead(unittest.TestCase):
+    def _root(self, body, cycle="2026-10-18-1645", current="2026-10-18-1645"):
+        import json
+        import tempfile
+        from pathlib import Path
+        d = Path(tempfile.mkdtemp())
+        (d / "app").mkdir()
+        (d / "app" / "analisis_ia.md").write_text(f"<!-- cycle_id: {cycle} -->\n{body}", encoding="utf-8")
+        (d / "report_ready.json").write_text(json.dumps({"cycle_id": current}), encoding="utf-8")
+        return d
+
+    def test_lead_only_for_current_cycle(self):
+        from garmin_recovery import ai_analysis
+        body = "**En breve:** Estás listo; ayer 45, hoy 88.\n\n**Plan**\n- algo"
+        self.assertEqual(ai_analysis.lead(self._root(body)), "Estás listo; ayer 45, hoy 88.")
+        self.assertIsNone(ai_analysis.lead(self._root(body, cycle="2026-10-17-2245")))  # desactualizado: no se muestra
+        self.assertIsNone(ai_analysis.lead(self._root("sin párrafo")))
+
+    def test_card_in_dashboard(self):
+        import json
+        from pathlib import Path
+
+        from garmin_recovery import dashboard
+        res = json.loads((Path(__file__).resolve().parent / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
+        html = dashboard.render(res, {"ai_lead": "Estás **listo** <b>x</b>"})
+        self.assertIn('aria-label="Análisis de Claude"', html)
+        self.assertIn("<strong>listo</strong>", html)
+        self.assertIn("&lt;b&gt;", html)  # el texto se escapa
+        self.assertNotIn('aria-label="Análisis de Claude"', dashboard.render(res, {}))

@@ -56,7 +56,10 @@ class WebReport(unittest.TestCase):
 
     def test_priority_order_and_open(self):
         ids = re.findall(r'<details class="sec" id="(s\d)"( open)?>', self.html)
-        self.assertEqual(ids, [("s2", " open"), ("s0", ""), ("s1", ""), ("s3", "")])  # recuperación primero; resumen, calidad y conclusión al final
+        self.assertEqual(ids, [("s2", ""), ("s0", ""), ("s1", ""), ("s3", "")])  # recuperación primero; resumen, calidad y conclusión al final
+        md = MD.replace("## Conclusión", "## 7. Balance\n\nx\n\n## Análisis de Claude\n\n**En breve:** y\n\n## Conclusión")
+        ids = re.findall(r'<details class="sec" id="(s\d)"( open)?>', webreport.build(md, RESULT))
+        self.assertEqual([i[1] for i in ids[:2]], [" open", " open"])  # balance y análisis de Claude abiertos y primeros
 
     def test_section_icons(self):
         self.assertEqual(self.html.count('class="ico"'), 4)

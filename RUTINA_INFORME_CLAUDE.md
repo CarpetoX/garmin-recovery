@@ -87,8 +87,14 @@ avisa de las cifras que no consten en los datos.
 Además del informe en esta sesión, escribe un análisis breve (máx. 300 palabras: qué explica la
 puntuación, carga reciente, 3 prioridades de mejora física y de recuperación, plan de 7 días) en app/analisis_ia.md. La primera línea debe ser exactamente
 <!-- cycle_id: <cycle_id del bloque routine-fire-payload> -->
-seguida del texto en Markdown, español, solo con cifras presentes en app/informe_completo.md y los datos. Parte de su sección 8 (análisis de mejora por reglas): no la contradigas; interpreta el conjunto y propón un plan concreto de 7 días (sesiones suaves y duras, sueño) respetando decision.guidance.
+seguida del texto en Markdown, español. El primer párrafo debe empezar por «**En breve:**» y explicar en 3–4 frases, en lenguaje llano y sin jerga (nada de v2/v3: di «oficial» y «experimental»), cómo está hoy la persona, qué ha cambiado frente a ayer (como diferencia observada, sin causas), qué conviene hacer hoy y por qué; el panel muestra ese párrafo en la pestaña Hoy. Después, solo con cifras presentes en app/informe_completo.md y los datos. Parte de su sección 8 (análisis de mejora por reglas): no la contradigas; interpreta el conjunto y propón un plan concreto de 7 días (sesiones suaves y duras, sueño) respetando decision.guidance.
 Sin información personal más allá de la que ya publica el informe. Después:
 git pull --rebase origin main && git add app/analisis_ia.md && git commit -m "analisis IA <cycle_id>" && git push origin HEAD:main
 Si el push falla, no reintentes más de una vez y dilo en la sesión.
 ```
+
+## V7.5 — Párrafo «En breve»
+
+El panel muestra en Hoy el primer párrafo del análisis si empieza por `**En breve:**` y el análisis es del ciclo vigente.
+El texto completo sigue en el informe completo (sección «Análisis de Claude», abierta por defecto tras «Balance y orientación»).
+Si falta el párrafo, la tarjeta de Hoy no aparece y no se muestra nada inventado.
