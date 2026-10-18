@@ -131,6 +131,14 @@ def main(root: str = ".", fetch_json=api_json, fetch_text=api_text, sleep=time.s
         cf_id = os.environ.get("TRIGGER_RUN_ID") or str(cf.get("id") or "")
         base = f"https://api.github.com/repos/{repo}"
         after = datetime.fromisoformat(cf.get("started_at") or ready["verified_at"])
+        if os.environ.get("TRIGGER_RUN_ID"):
+            # el certificado puede ser de un ciclo anterior (Sync fuera de franja): el despliegue que cuenta es el
+            # posterior a la ejecución de CrossFit que disparó este monitor
+            try:
+                run = fetch_json(f"{base}/actions/runs/{cf_id}", token)
+                after = datetime.fromisoformat((run.get("run_started_at") or run["created_at"]).replace("Z", "+00:00"))
+            except (OSError, ValueError, KeyError):
+                pass
         notify_log = None
         try:
             jobs = fetch_json(f"{base}/actions/runs/{cf_id}/jobs", token).get("jobs") or []
