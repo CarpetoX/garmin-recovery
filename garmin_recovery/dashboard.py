@@ -15,6 +15,38 @@ ZONE_UI = {
 }
 
 
+def _hhmm(h: float) -> str:
+    m = round(h * 60)
+    return "24:00" if m >= 1440 else f"{m // 60:02d}:{m % 60:02d}"
+
+
+def _shift_strip_html(s: dict | None) -> str:
+    """Franja de 24 h de hoy y mañana: los turnos como bloques y, en hoy, la hora de los datos."""
+    if not isinstance(s, dict) or not s.get("available"):
+        return ""
+    names = {"MT": "turno de mañana y tarde", "TN": "turno de noche"}
+    rows = []
+    for r in s["rows"]:
+        if not r.get("known"):
+            rows.append(f'<div class="ss-row"><span class="ss-day">{_esc(r["label"])}</span>'
+                        '<span class="ss-txt">turno sin registrar en el calendario</span></div>')
+            continue
+        blocks = "".join(
+            f'<i class="ss-b {b["code"]}" style="left:{b["start"] / 24 * 100:.2f}%;width:{(b["end"] - b["start"]) / 24 * 100:.2f}%"></i>'
+            for b in r["blocks"])
+        now = f'<i class="ss-now" style="left:{r["now"] / 24 * 100:.2f}%"></i>' if r.get("now") is not None else ""
+        txt = (" y ".join(f'{names.get(b["code"], b["code"])} {_hhmm(b["start"])}–{_hhmm(b["end"])}' for b in r["blocks"])
+               if r["blocks"] else "sin turno")
+        free = [f for f in r["free"] if f[1] - f[0] >= 2]
+        ftxt = ("; libre " + ", ".join(f"{_hhmm(a)}–{_hhmm(b)}" for a, b in free)) if free and r["blocks"] else ""
+        rows.append(f'<div class="ss-row"><span class="ss-day">{_esc(r["label"])}</span>'
+                    f'<div class="ss-track" role="img" aria-label="{_esc(r["label"])}: {_esc(txt)}">{blocks}{now}</div>'
+                    f'<span class="ss-txt">{_esc(txt)}{_esc(ftxt)}</span></div>')
+    ticks = '<div class="ss-ticks" aria-hidden="true"><span>0</span><span>6</span><span>12</span><span>18</span><span>24 h</span></div>'
+    return ('<section class="card shiftstrip" aria-label="Turnos de hoy y mañana"><h2>Hoy y mañana en el reloj</h2>'
+            + ticks + "".join(rows) + "</section>")
+
+
 def _esc(value) -> str:
     return html.escape("" if value is None else str(value))
 
@@ -247,8 +279,9 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Resumen de hoy · Claude</h2>'
                + "".join(f"<p>{md_inline(x)}</p>" for x in ai_lines)
                + '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai_lines else ""
+    shift_html = _shift_strip_html(extras.get("shifts"))
     # el resumen de reglas solo es el respaldo cuando no hay resumen de Claude del ciclo vigente
-    top_block = changes + (ai_html or brief_html) + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = shift_html + changes + (ai_html or brief_html) + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
@@ -505,6 +538,17 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .js .tab.on>*{animation:rise .42s cubic-bezier(.22,.8,.24,1) both}
 .js .tab.on>*:nth-child(2){animation-delay:.05s}.js .tab.on>*:nth-child(3){animation-delay:.1s}.js .tab.on>*:nth-child(4){animation-delay:.15s}.js .tab.on>*:nth-child(n+5){animation-delay:.2s}
 @media (prefers-reduced-transparency:reduce){.card{border-color:var(--line)}}
+/* ---- V7.13: franja de turnos ---- */
+.shiftstrip h2{margin-bottom:10px}
+.ss-ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);font-variant-numeric:tabular-nums;margin:0 0 4px}
+.ss-row{display:grid;grid-template-columns:1fr;gap:3px;margin-bottom:12px}
+.ss-day{font-size:13px;font-weight:650}
+.ss-track{position:relative;height:14px;border-radius:7px;background:var(--glass-chip,var(--surface-2));overflow:hidden}
+.ss-b{position:absolute;top:0;bottom:0;display:block}
+.ss-b.MT{background:var(--series-1)}.ss-b.TN{background:repeating-linear-gradient(135deg,var(--series-2) 0 5px,color-mix(in srgb,var(--series-2) 62%,transparent) 5px 10px)}
+.ss-now{position:absolute;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:var(--text);border-radius:1px}
+.ss-txt{font-size:12px;color:var(--text-2)}
+.ss-row:last-child{margin-bottom:0}
 @media (prefers-reduced-motion:reduce){.js .tab.on>*{animation:none}.heroring .arc{transition:none}}
 /* sesiones como tarjetas en móvil */
 @media (max-width:640px){
