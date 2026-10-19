@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-10-19T12:50:45.218243+02:00",
+  "generated_at": "2026-10-19T13:12:10.307673+02:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-19",
   "decision": {
@@ -37,7 +37,7 @@
         "version": "recovery-reliability-v2.3.1",
         "role": "oficial",
         "used_in_decision": true,
-        "score": 70,
+        "score": 64,
         "zone": "yellow",
         "state": "assessed",
         "confidence": "high",
@@ -61,7 +61,7 @@
         "version": "readiness-v3.2",
         "role": "sombra",
         "used_in_decision": true,
-        "score": 73.0,
+        "score": 72.0,
         "zone": "green",
         "state": "assessed",
         "confidence": "media",
@@ -98,7 +98,7 @@
     "date": "2026-10-19",
     "state": "assessed",
     "zone": "green",
-    "score": 73.0,
+    "score": 72.0,
     "confidence": "media",
     "data_confidence": {
       "level": "alta",
@@ -133,8 +133,8 @@
     "drivers": [
       {
         "component": "sleep",
-        "z": -1.4025,
-        "text": "Sueño 5.6 h, deuda 1.9 h en 3 noches"
+        "z": -1.4955555555555555,
+        "text": "Sueño 5.1 h, puntuación 64, deuda 2.4 h en 3 noches"
       },
       {
         "component": "hrv",
@@ -184,14 +184,14 @@
         "label": "FC en reposo y nocturna"
       },
       "sleep": {
-        "z": -1.4025,
-        "hours": 5.63,
-        "sleep_score": null,
+        "z": -1.4955555555555555,
+        "hours": 5.12,
+        "sleep_score": 64.0,
         "need_hours": 7.5,
-        "debt_hours": 1.87,
+        "debt_hours": 2.38,
         "debt_nights": 3,
         "context": "day_sleep",
-        "score": 57.5,
+        "score": 56.3,
         "weight": 0.25,
         "label": "Sueño"
       },
@@ -276,16 +276,16 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-10-19T12:50:45.218243+02:00",
+    "generated_at": "2026-10-19T13:12:10.307673+02:00",
     "cycle": {
       "cycle_id": "2026-10-19-0830-post-sleep",
       "slot_at": "2026-10-19T08:30:00+02:00",
       "status": "ready",
       "verified_at": "2026-10-19T12:50:44.750235+02:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-10-19T12:49:56.261611+02:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-10-19T13:11:19.597661+02:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 39240211739,
@@ -312,52 +312,52 @@
     "data_age": {
       "confirmed_sleep": {
         "measured_at": "2026-10-19T12:19:00+02:00",
-        "age_minutes": 32.0,
+        "age_minutes": 53.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-10-19T12:16:16+02:00",
-        "age_minutes": 34.0,
+        "age_minutes": 56.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-10-19T12:34:00+02:00",
-        "age_minutes": 17.0,
+        "measured_at": "2026-10-19T13:10:00+02:00",
+        "age_minutes": 2.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-10-19T12:15:00+02:00",
-        "age_minutes": 36.0,
+        "age_minutes": 57.0,
         "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-10-19T10:50:20.503993+00:00",
+      "fetched_at": "2026-10-19T11:11:46.226283+00:00",
       "latest_date": "2026-10-18",
       "rows_sha256": "5e11678637fb0190",
-      "advanced_run_id": "39240285238"
+      "advanced_run_id": "39242851979"
     },
     "source_sha256": {
       "wellness.json": "eb54505a7d84a3fa",
-      "garmin_hrv_timeline.json": "ea53111ee22d207c",
-      "garmin_sleep_history.json": "9a5137972647e28f",
-      "garmin_extended.json": "48a1c8040b55dcf2",
-      "garmin_heart_rate.json": "9a51ad8f558511d6",
-      "garmin_stress.json": "7fd1fdfb9b8e1403",
-      "garmin_body_battery.json": "8ff5b9c40c71f239",
+      "garmin_hrv_timeline.json": "32d3d43dc4beb66c",
+      "garmin_sleep_history.json": "e5b1287f9421b38d",
+      "garmin_extended.json": "6a19cc34006a3b37",
+      "garmin_heart_rate.json": "1d8fc40122949cf9",
+      "garmin_stress.json": "4caa2d4703920934",
+      "garmin_body_battery.json": "1dec28163a6d84fc",
       "activities.json": "d1de86b8977a3310",
-      "training_feedback.json": "5f021633becf0065",
+      "training_feedback.json": "395f7b736cea4211",
       "shift_calendar.json": "55ba856114d2b41a",
-      "morning_sleep_status.json": "f64d09734e37e1f7",
-      "recovery_assessment.json": "b2765068830133b2",
+      "morning_sleep_status.json": "0cb9a88907e3658d",
+      "recovery_assessment.json": "697e2d04f587bbd8",
       "report_ready.json": "3b58a4d8073997a2",
-      "garmin_hr_timeline.json": "dea28691537551f6",
-      "daily_summary.json": "44030e63f8bc0c52",
-      "workflow_health.json": "6fdc897a63355f14",
+      "garmin_hr_timeline.json": "d0e0714a11ce4387",
+      "daily_summary.json": "4a44642d935222ce",
+      "workflow_health.json": "334c24e3ae9c7418",
       "recovery.csv": "3c15691c59a49023"
     },
     "consistency_v3_v2": {
@@ -374,15 +374,15 @@
           "ok": true
         },
         "sleep_hours": {
-          "v3": 5.63,
-          "v2": 5.63,
+          "v3": 5.12,
+          "v2": 5.12,
           "ok": true
         }
       }
     },
     "execution_health": {
       "status": "attention",
-      "checked_at": "2026-10-19T12:47:40.408457+02:00",
+      "checked_at": "2026-10-19T12:50:58.262622+02:00",
       "alerts": [
         {
           "code": "cron_missed_dispatch_recovered",
@@ -431,7 +431,7 @@
     "rows_loaded": 0
   },
   "legacy_v2": {
-    "score": 70,
+    "score": 64,
     "status": "yellow",
     "state": "assessed",
     "date": "2026-10-19"
@@ -1228,7 +1228,7 @@
     },
     {
       "date": "2026-10-19",
-      "score": 73.0,
+      "score": 72.0,
       "zone": "green",
       "state": "assessed",
       "hrv_ms": 60.0,
@@ -1237,8 +1237,8 @@
       "hrv_high_ms": 62.0,
       "resting_hr": 53.0,
       "night_hr": 59.6,
-      "sleep_hours": 5.63,
-      "sleep_score": null,
+      "sleep_hours": 5.12,
+      "sleep_score": 64.0,
       "load": 0.0,
       "srpe": null,
       "sessions": 0,
@@ -1247,7 +1247,7 @@
       "shift": null,
       "ctl": 3.7,
       "atl": 14.0,
-      "v2_score": 70,
+      "v2_score": 64,
       "hybrid_score": 67,
       "decision_zone": "yellow",
       "deep_min": null,
@@ -1744,7 +1744,8 @@
     "hrv_ms": "garmin_hrv_timeline",
     "night_hr": "garmin_heart_rate",
     "resting_hr": "garmin_heart_rate",
-    "sleep_hours": "garmin_sleep_history"
+    "sleep_hours": "garmin_sleep_history",
+    "sleep_score": "garmin_sleep_history"
   },
   "mode": "shadow",
   "mode_note": "Modelo experimental en paralelo: no sustituye recovery_assessment.json. La recomendación del día es decision.guidance (la más conservadora entre modelos), no readiness.guidance.",
