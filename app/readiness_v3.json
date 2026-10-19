@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-10-19T08:33:03.777427+02:00",
+  "generated_at": "2026-10-19T09:36:13.327211+02:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-19",
   "decision": {
@@ -264,16 +264,16 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-10-19T08:33:03.777427+02:00",
+    "generated_at": "2026-10-19T09:36:13.327211+02:00",
     "cycle": {
       "cycle_id": "2026-10-19-0830",
       "slot_at": "2026-10-19T08:30:00+02:00",
       "status": "ready",
       "verified_at": "2026-10-19T08:33:03.502964+02:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-10-19T08:32:23.860966+02:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-10-19T09:35:25.720875+02:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 39210457865,
@@ -312,40 +312,40 @@
       },
       "heart_rate_live": {
         "measured_at": "2026-10-19T06:16:00+02:00",
-        "age_minutes": 137.0,
-        "state": "reciente",
+        "age_minutes": 200.0,
+        "state": "antigua",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-10-19T06:09:00+02:00",
-        "age_minutes": 144.0,
-        "state": "reciente",
+        "age_minutes": 207.0,
+        "state": "antigua",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-10-19T06:32:44.325702+00:00",
+      "fetched_at": "2026-10-19T07:35:50.445651+00:00",
       "latest_date": "2026-10-18",
       "rows_sha256": "5e11678637fb0190",
-      "advanced_run_id": "39210521110"
+      "advanced_run_id": "39216994568"
     },
     "source_sha256": {
       "wellness.json": "794851a326d63329",
-      "garmin_hrv_timeline.json": "6546fefda10b4b13",
-      "garmin_sleep_history.json": "858cdc41125c1243",
-      "garmin_extended.json": "94fc0e9b40b0ae64",
-      "garmin_heart_rate.json": "2657a8b3314be399",
-      "garmin_stress.json": "326f0590df8fa67c",
-      "garmin_body_battery.json": "a1b3032f294c9379",
+      "garmin_hrv_timeline.json": "807383d1bdd6b210",
+      "garmin_sleep_history.json": "abcbb1a4e27d173f",
+      "garmin_extended.json": "7529226931c853a2",
+      "garmin_heart_rate.json": "00f6b1d436588cc9",
+      "garmin_stress.json": "6159e934f74a7abe",
+      "garmin_body_battery.json": "c4c1b5ea9bb55ec5",
       "activities.json": "d1de86b8977a3310",
-      "training_feedback.json": "bf56b7eaba00db52",
+      "training_feedback.json": "53e1b5bc05691c01",
       "shift_calendar.json": "55ba856114d2b41a",
-      "morning_sleep_status.json": "072b92c839271bdb",
-      "recovery_assessment.json": "691b46905de17ee1",
+      "morning_sleep_status.json": "83ff0ceb200c637f",
+      "recovery_assessment.json": "1b67df861870d7dd",
       "report_ready.json": "874fb2f8c10acfc1",
-      "garmin_hr_timeline.json": "13fc0f85243ddeae",
-      "daily_summary.json": "586ed4ed812d3219",
-      "workflow_health.json": "9078aba03a2a6033",
+      "garmin_hr_timeline.json": "d723b54d3c02b4d2",
+      "daily_summary.json": "b452a3b7a0043a03",
+      "workflow_health.json": "9d19f88f9ef9b7df",
       "recovery.csv": "ce01ac082d8ca43f"
     },
     "consistency_v3_v2": {
@@ -370,7 +370,7 @@
     },
     "execution_health": {
       "status": "attention",
-      "checked_at": "2026-10-19T03:16:51.799955+02:00",
+      "checked_at": "2026-10-19T08:33:16.007588+02:00",
       "alerts": [
         {
           "code": "cron_missed_dispatch_recovered",
@@ -394,6 +394,7 @@
     },
     "status": "con_avisos",
     "issues": [
+      "mediciones no recientes: heart_rate_live, body_battery_live",
       "3 franja(s) de Sync sin ejecutar ni recuperar"
     ]
   },
