@@ -244,6 +244,57 @@ def _training_html(tb: dict | None, prog: dict | None) -> str:
     return head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
 
 
+def _weight_svg(points: list[dict]) -> str:
+    from datetime import date as _d
+    w, h, px_, py_ = 300, 130, 24, 26
+    xs = [(_d.fromisoformat(p["date"]) - _d.fromisoformat(points[0]["date"])).days for p in points]
+    span = max(xs) or 1
+    vals = [p["weight"] for p in points]
+    lo, hi = min(vals) - 0.6, max(vals) + 0.6
+
+    def X(i):
+        return px_ + xs[i] / span * (w - 2 * px_)
+
+    def Y(v):
+        return h - py_ - (v - lo) / (hi - lo) * (h - 2 * py_ - 6)
+    line = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))
+    dots = labs = ""
+    for i, p in enumerate(points):
+        last = i == len(points) - 1
+        cls = "wt-last" if last else "wt-dot" + (" derived" if p["derived"] else "")
+        dots += f'<circle cx="{X(i):.1f}" cy="{Y(p["weight"]):.1f}" r="{4.5 if last else 3.4}" class="{cls}"><title>{_ddmm(p["date"])}: {_kg(p["weight"])} kg{" (calculado)" if p["derived"] else ""}</title></circle>'
+        labs += (f'<text x="{X(i):.1f}" y="{Y(p["weight"]) - 9:.1f}" text-anchor="middle" class="pg-val">{_kg(p["weight"])}</text>'
+                 f'<text x="{X(i):.1f}" y="{h - 6}" text-anchor="middle" class="pg-date">{_ddmm(p["date"])}</text>')
+    label = "Peso: " + ", ".join(f'{_ddmm(p["date"])} {_kg(p["weight"])} kg' for p in points)
+    return (f'<svg class="wt-svg" viewBox="0 0 {w} {h}" role="img" aria-label="{_esc(label)}">'
+            f'<polyline points="{line}" class="wt-line"/>{dots}{labs}</svg>')
+
+
+def _weight_html(wt: dict | None) -> str:
+    if not isinstance(wt, dict):
+        return ""
+    cur = f'{_kg(wt["current"])} kg'
+    stats = f'<li><b>{cur}</b><span>última medición · {_ddmm(wt["current_date"])}</span></li>'
+    if wt.get("mean7") is not None:
+        stats += f'<li><b>{_kg(wt["mean7"])} kg</b><span>media de {wt["n7"]} lecturas en 7 días</span></li>'
+    if "delta_prev" in wt:
+        d = wt["delta_prev"]
+        sign = "+" if d > 0 else "−" if d < 0 else ""
+        stats += f'<li><b>{sign}{_kg(abs(d))} kg</b><span>frente al {_ddmm(wt["prev_date"])}</span></li>'
+    if "delta_first" in wt and wt["first_date"] != wt.get("prev_date"):
+        d = wt["delta_first"]
+        sign = "+" if d > 0 else "−" if d < 0 else ""
+        stats += f'<li><b>{sign}{_kg(abs(d))} kg</b><span>en {wt["span_days"]} días</span></li>'
+    stale = '<p class="pg-note">La última medición tiene más de 7 días.</p>' if wt.get("stale") else ""
+    chart = _weight_svg(wt["points"]) if len(wt["points"]) >= 2 else ""
+    derived = '<p class="pg-note">El punto hueco está calculado a partir de una diferencia que muestra la app, no es una lectura directa.</p>' if wt.get("has_derived") else ""
+    return ('<section class="card" id="peso" aria-label="Peso corporal"><h2>Peso</h2>'
+            '<p class="h2sub">báscula Xiaomi · Zepp Life · lo que muestras o dictas</p>'
+            f'<ul class="tbsum wt-stats">{stats}</ul>{chart}{stale}{derived}'
+            '<p class="pg-note">Compara lecturas hechas a la misma hora (mejor por la mañana, en ayunas): el peso varía 1–2 kg en el día por comida, '
+            'hidratación y entrenos. Descriptivo, sin causas; no es una valoración médica.</p></section>')
+
+
 def _glance_html(chips: list[dict] | None) -> str:
     if not chips:
         return ""
@@ -509,7 +560,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     return {"banner": "",
             "hoytop": top_block, "cambios": changes,
             "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
-            "tendencias": calendar_html + week_html,
+            "tendencias": _weight_html(extras.get("weight")) + calendar_html + week_html,
             "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
@@ -804,6 +855,12 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .mc-res{margin:6px 0;font-size:16px;font-weight:650}.mc-res.none{font-size:13px;font-weight:400;color:var(--text-3)}
 .mc .chips{margin:6px 0}.mc-cap{margin:10px 0 2px;font-size:12px;color:var(--text-2)}
 .mc .bars{margin-bottom:6px}
+
+.wt-stats{grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}
+.wt-svg{width:100%;height:auto;display:block;overflow:visible;max-width:460px;margin:2px auto 6px}
+.wt-line{fill:none;stroke:var(--series-1);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.wt-dot{fill:var(--series-1)}.wt-dot.derived{fill:var(--surface);stroke:var(--series-1);stroke-width:2}
+.wt-last{fill:var(--text);stroke:var(--series-1);stroke-width:2}
 
 .glance ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:0}
 .gl{display:flex;flex-direction:column;gap:1px;padding:10px 12px;border-radius:16px;background:var(--glass-chip,var(--surface-2));min-width:0}
