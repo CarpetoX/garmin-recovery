@@ -2,20 +2,20 @@
 **En breve:**
 🟡 Recuperación: oficial 64/100, confianza alta; el híbrido marca 67 y el experimental 72 (más permisivo). Ayer no tiene medición completa, no hay diferencia fiable
 🌙 Sueño: 5 h 07 min (06:41 → 12:19, sueño diurno) · puntuación 64
-🏋️ Carga: última sesión 18/10, fuerza de pierna, RPE 7,5; 7 días: 9 sesiones, sRPE 1.694, carga 142
-❤️ Señal destacada: HRV 60 ms (mediana 28 días 58) y FC en reposo 53 lpm (mediana 56); la alerta es el sueño corto frente a una mediana de 7 h 19 min
-Orientación: ámbar, entrenar con control (RPE máx. 7); el turno de hoy no consta, así que prioriza dormir antes de cualquier sesión.
+🏋️ Carga: 7 días: 13 sesiones, carga 189, sRPE 1.694; hoy 4 actividades HIIT (11–48 min) sin RPE
+❤️ Señal destacada: HRV 60 ms (mediana 28 días 58) y FC en reposo 53 lpm (mediana 56); la alerta es el sueño corto, con deuda de 2,4 h en 3 noches
+Orientación: ámbar, entrenar con control (RPE máx. 7); el turno de hoy no consta en el calendario, así que prioriza dormir esta noche (objetivo 8,3 h).
 
-**Análisis · lunes 19/10/2026 · ciclo 16:45** (certificado READY a las 16:48; 4 de 4 etapas correctas, con 3 franjas de Sync sin ejecutar o tardías; Body Battery 60 de las 12:15, no es una medición nueva).
+**Análisis · lunes 19/10/2026 · datos de las 20:38, ciclo 16:45** (certificado READY a las 16:48; 4 de 4 etapas correctas, con 3 franjas de Sync sin ejecutar o tardías; la entrega no se ha confirmado).
 
-**Qué explica la puntuación.** La decisión es **ámbar**: la fijan el modelo oficial (64) y el híbrido (67); el experimental (72, verde) se descarta por ser menos conservador. HRV y FC en reposo están en rango, así que el peso lo lleva el sueño: 5 h 07 min (profundo 1 h 16 min, REM 52 min) con deuda de 2,4 h en 3 noches y 8,4 h en 7.
+**Qué explica la puntuación.** La decisión es **ámbar**: la fijan el modelo oficial (64) y el híbrido (67); el experimental (72, verde) se descarta por ser menos conservador. HRV y FC en reposo están en rango, así que el peso lo lleva el sueño: 5 h 07 min (profundo 1 h 16 min, REM 52 min). Body Battery: 36/100 a las 19:51.
 
-**Carga reciente.** 5 de las 9 sesiones de la semana fueron de RPE ≥ 8. La sentadilla trasera del 18/10 llegó a 185 kg (RPE 9,5 en esa repetición): evita otra sesión pesada de piernas hasta el 20/10.
+**Carga reciente.** Desde el informe anterior hay 4 sesiones nuevas (carga +47), todas HIIT sin RPE registrado, así que no se puede valorar su esfuerzo. La sentadilla trasera del 18/10 llegó a 185 kg: evita otra sesión pesada de piernas hasta el 20/10.
 
 **3 prioridades**
-1. Dormir: la necesidad estimada esta noche es 9,0 h; suma 30–45 min por noche en lugar de una sola noche larga.
-2. Hoy, solo técnica o fuerza submáxima de tren superior, o descanso; sin WOD máximos.
-3. Registrar sensaciones y RPE en Intervals (0 de 14 días con sensaciones).
+1. Dormir: objetivo de 8,3 h esta noche; mañana la decisión dependerá del sueño y la HRV.
+2. Registrar el RPE de las 4 actividades de hoy y las sensaciones en Intervals.icu (0 de 14 días con sensaciones).
+3. Sin WOD máximos ni series al fallo mientras la decisión siga en ámbar.
 
 **Plan de 7 días** (turnos: 22/10 MT, 23/10 TN)
 - 20/10: sesión exigente solo si el sueño y la HRV acompañan.
