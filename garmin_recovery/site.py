@@ -172,13 +172,6 @@ def _live_extras(root: Path, result: dict) -> dict:
     except Exception as exc:  # noqa: BLE001
         optional_blocks.failed("web:sleep_need", exc)
     try:
-        from . import shift_calendar, shiftstrip
-        gen = datetime.fromisoformat(result["generated_at"])
-        cal = shift_calendar.load_calendar(str(root / "shift_calendar.json"))
-        out["shifts"] = shiftstrip.compute(cal, today, gen.hour + gen.minute / 60)
-    except Exception as exc:  # noqa: BLE001 — opcional
-        optional_blocks.failed("web:shiftstrip", exc)
-    try:
         sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
         out["plan"] = improvement._plan(root, result, today, sessions)
     except Exception as exc:  # noqa: BLE001
