@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-19T20:38:42.752614+02:00",
+  "generated_at": "2026-10-19T22:47:57.918531+02:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
-  "sheet_rows_loaded": 18,
+  "sheet_rows_loaded": 22,
   "sheet_fetch_policy": "same_advanced_run_sha256_snapshot",
-  "sheet_latest_date": "2026-10-18",
+  "sheet_latest_date": "2026-10-19",
   "latest_activity_date": "2026-10-19",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.",
@@ -379,7 +379,7 @@
       },
       "response": {
         "24h": {
-          "hrv_pct": 36.9,
+          "hrv_pct": 34.5,
           "nighttime_hr_delta": -8.5,
           "resting_hr_delta": -7.0,
           "sleep_hours_delta": -2.21,
@@ -407,7 +407,7 @@
         "intervals_training_load": 47.0,
         "garmin_activity_load": 142.3,
         "trimp": 79.9,
-        "session_rpe_load": 0
+        "session_rpe_load": 261.4
       },
       "baseline_previous_3d": {
         "hrv": 57.1,
@@ -464,7 +464,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-19T20:38:27.538493+02:00",
+    "generated_at": "2026-10-19T22:47:45.209537+02:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "yellow",
@@ -586,26 +586,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-10-19T12:19:00+02:00",
-            "age_minutes": 499.5,
+            "age_minutes": 628.8,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-10-19T12:16:16+02:00",
-            "age_minutes": 502.2,
+            "age_minutes": 631.5,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
             "state": "recent",
-            "measured_at": "2026-10-19T20:32:00+02:00",
-            "age_minutes": 6.5,
+            "measured_at": "2026-10-19T22:36:00+02:00",
+            "age_minutes": 11.8,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
             "state": "recent",
-            "measured_at": "2026-10-19T19:51:00+02:00",
-            "age_minutes": 47.5,
+            "measured_at": "2026-10-19T22:06:00+02:00",
+            "age_minutes": 41.8,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -637,8 +637,8 @@
           "easy_aerobic": "optional_easy_only_if_alert_and_symptoms_allow",
           "mobility": "optional_light_mobility"
         },
-        "recent_sessions_with_declared_rpe": 1,
-        "recent_high_rpe_sessions": 0,
+        "recent_sessions_with_declared_rpe": 5,
+        "recent_high_rpe_sessions": 2,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
     },
@@ -654,14 +654,36 @@
       "date": "2026-10-19",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Técnica - toes to bar",
+          "rpe": 1.0,
+          "notes": "Técnica de toes to bar de 47 min. Series, repeticiones y progresiones no indicadas. RPE 1. Tiempo Garmin 47,7 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "skill",
+            "exercise": "toes to bar",
+            "garmin_activity_id": "i199136845",
+            "rpe": 1,
+            "recorded_garmin_minutes": 47.68,
+            "performed": true,
+            "notes": "Sin series ni repeticiones declaradas."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 1.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 47.68,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 47.7,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -685,14 +707,82 @@
       "date": "2026-10-19",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "EMOM 12 min - echo bike / squat clean",
+          "rpe": 9.0,
+          "notes": "EMOM de 12 min según pizarra: 16 cal Echo Bike + máximas repeticiones de squat clean con 70 kg y 1 min de descanso; 4 rondas. Squat clean por ronda: 9, 6, 5 y 4 (total 24). RPE 9. Tiempo Garmin 11:49 min (en movimiento).",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "metcon",
+            "format": "EMOM",
+            "garmin_activity_id": "i199113233",
+            "rpe": 9,
+            "duration_minutes": 12,
+            "recorded_garmin_minutes": 11.83,
+            "prescribed_round": [
+              {
+                "name": "Echo Bike",
+                "calories": "16/12"
+              },
+              {
+                "name": "squat clean",
+                "reps": "máximas",
+                "load_kg": 70
+              },
+              {
+                "name": "descanso",
+                "minutes": 1
+              }
+            ],
+            "performed": {
+              "rounds_complete": 4,
+              "rounds": [
+                {
+                  "round": 1,
+                  "echo_bike_calories": 16,
+                  "squat_clean_reps": 9
+                },
+                {
+                  "round": 2,
+                  "echo_bike_calories": 16,
+                  "squat_clean_reps": 6
+                },
+                {
+                  "round": 3,
+                  "echo_bike_calories": 16,
+                  "squat_clean_reps": 5
+                },
+                {
+                  "round": 4,
+                  "echo_bike_calories": 16,
+                  "squat_clean_reps": 4
+                }
+              ],
+              "totals": {
+                "squat_clean_reps": 24
+              },
+              "per_round_breakdown_confirmed": true
+            },
+            "load_unit": "kg_total_barra",
+            "load_kg": 70,
+            "notes": "Carga de 70 kg en todas las rondas, confirmada por el atleta; 16 cal de Echo Bike en cada ronda."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 9.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 11.83,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 106.5,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -716,14 +806,89 @@
       "date": "2026-10-19",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Fuerza - power clean + squat clean y squat clean EMOM",
+          "rpe": 8.0,
+          "notes": "EMOM cada minuto (según pizarra: complex power clean + squat clean touch & go 2/2/1/1/1 y squat clean drop & go 2/2/1/1/1, 5 min cada uno). Complex: 2x60, 2x70, 1x80, 1x85, 1x90 kg; squat clean: 2x90, 2x95, 1x100, 1x105, 1x110 kg. RPE de la sesión 8. Tiempo Garmin 11,3 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "format": "EMOM",
+            "garmin_activity_id": "i199099543",
+            "rpe": 8,
+            "recorded_garmin_minutes": 11.25,
+            "exercises": [
+              {
+                "name": "power clean + squat clean (complex 1+1)",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 2,
+                    "load_kg": 60
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 70
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 90
+                  }
+                ]
+              },
+              {
+                "name": "squat clean",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 2,
+                    "load_kg": 90
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 95
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 100
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 105
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 110
+                  }
+                ]
+              }
+            ],
+            "notes": "Cadencia y esquema 2/2/1/1/1 tomados de la pizarra del box; las cargas, del dictado del atleta."
+          },
+          "minimum_verified_volume_kg": 1200.0,
+          "volume_complete": true,
+          "structured_sets_known": 10,
+          "structured_sets_total": 10
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 8.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 11.25,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 90.0,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -747,14 +912,54 @@
       "date": "2026-10-19",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Calentamiento previo a power clean y squat clean",
+          "rpe": 1.0,
+          "notes": "Calentamiento de 17 min previo al bloque de fuerza: ejercicios con barra vacía (sin desglose) y 5 min de complex power clean + squat clean, 3 series de 1 con 40, 50 y 60 kg. RPE 1. Tiempo Garmin 17,9 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "warmup",
+            "garmin_activity_id": "i199091404",
+            "rpe": 1,
+            "recorded_garmin_minutes": 17.88,
+            "exercises": [
+              {
+                "name": "power clean + squat clean (complex 1+1)",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 40
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 50
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60
+                  }
+                ]
+              }
+            ],
+            "notes": "Ejercicios previos con barra vacía sin desglose confirmado."
+          },
+          "minimum_verified_volume_kg": 150.0,
+          "volume_complete": true,
+          "structured_sets_known": 3,
+          "structured_sets_total": 3
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 1.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 17.88,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 17.9,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -2483,6 +2688,81 @@
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
+        "date": "2026-10-19",
+        "activity_id": "i199099543",
+        "exercise": "power clean + squat clean (complex 1+1)",
+        "movement_pattern": "squat",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 515.0,
+        "known_sets": 5,
+        "total_sets": 5,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 90.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 90.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 90.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 8.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-19",
+        "activity_id": "i199099543",
+        "exercise": "squat clean",
+        "movement_pattern": "squat",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 685.0,
+        "known_sets": 5,
+        "total_sets": 5,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 110.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 110.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 110.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 8.0,
+        "pain": null
+      },
+      {
+        "date": "2026-10-19",
+        "activity_id": "i199091404",
+        "exercise": "power clean + squat clean (complex 1+1)",
+        "movement_pattern": "squat",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 150.0,
+        "known_sets": 3,
+        "total_sets": 3,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 60.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 60.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 60.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 1.0,
+        "pain": null
+      },
+      {
         "date": "2026-10-18",
         "activity_id": "i198584544",
         "exercise": "sentadilla trasera",
@@ -2936,10 +3216,10 @@
     "movement_pattern_load": {
       "7d": {
         "squat": {
-          "verified_volume_kg": 7913.0,
-          "known_sets": 27,
-          "total_sets": 27,
-          "sessions": 3,
+          "verified_volume_kg": 9263.0,
+          "known_sets": 40,
+          "total_sets": 40,
+          "sessions": 6,
           "volume_complete": true,
           "mixed_equipment_caution": true
         },
@@ -2954,10 +3234,10 @@
       },
       "28d": {
         "squat": {
-          "verified_volume_kg": 19208.0,
-          "known_sets": 50,
-          "total_sets": 50,
-          "sessions": 6,
+          "verified_volume_kg": 20558.0,
+          "known_sets": 63,
+          "total_sets": 63,
+          "sessions": 9,
           "volume_complete": true,
           "mixed_equipment_caution": true
         },
@@ -3014,11 +3294,11 @@
     "movement_pattern_load_by_equipment": {
       "7d": {
         "squat:barbell": {
-          "verified_volume_kg": 5993.0,
-          "known_sets": 23,
-          "external_sets_expected": 23,
-          "total_sets": 23,
-          "sessions": 2,
+          "verified_volume_kg": 7343.0,
+          "known_sets": 36,
+          "external_sets_expected": 36,
+          "total_sets": 36,
+          "sessions": 5,
           "volume_complete": true
         },
         "squat:machine_stack": {
@@ -3040,11 +3320,11 @@
       },
       "28d": {
         "squat:barbell": {
-          "verified_volume_kg": 12968.0,
-          "known_sets": 42,
-          "external_sets_expected": 42,
-          "total_sets": 42,
-          "sessions": 4,
+          "verified_volume_kg": 14318.0,
+          "known_sets": 55,
+          "external_sets_expected": 55,
+          "total_sets": 55,
+          "sessions": 7,
           "volume_complete": true
         },
         "squat:machine_stack": {
@@ -3148,6 +3428,17 @@
     "metcon_exposure": {
       "entries": [
         {
+          "date": "2026-10-19",
+          "activity_id": "i199113233",
+          "movement": "squat clean",
+          "verified_reps": 24,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 11.83
+        },
+        {
           "date": "2026-10-14",
           "activity_id": "i197353076",
           "movement": "carrera",
@@ -3238,6 +3529,11 @@
       ],
       "movement_work": {
         "7d": {
+          "squat clean": {
+            "reps": 24,
+            "distance_m": 0.0,
+            "entries": 1
+          },
           "carrera": {
             "reps": 0,
             "distance_m": 1000.0,
@@ -3250,6 +3546,11 @@
           }
         },
         "28d": {
+          "squat clean": {
+            "reps": 24,
+            "distance_m": 0.0,
+            "entries": 1
+          },
           "carrera": {
             "reps": 0,
             "distance_m": 2200.0,
@@ -3647,7 +3948,7 @@
           },
           "response": {
             "24h": {
-              "hrv_pct": 36.9,
+              "hrv_pct": 34.5,
               "nighttime_hr_delta": -8.5,
               "resting_hr_delta": -7.0,
               "sleep_hours_delta": -2.21,
@@ -3675,7 +3976,7 @@
             "intervals_training_load": 47.0,
             "garmin_activity_load": 142.3,
             "trimp": 79.9,
-            "session_rpe_load": 0
+            "session_rpe_load": 261.4
           },
           "baseline_previous_3d": {
             "hrv": 57.1,
@@ -3734,20 +4035,20 @@
       "window_summaries": {
         "recent_7d": {
           "sessions": 13,
-          "sessions_with_rpe": 9,
-          "high_rpe_sessions": 5,
+          "sessions_with_rpe": 13,
+          "high_rpe_sessions": 7,
           "recorded_duration_minutes": 325.1,
           "sessions_with_duration": 13,
-          "srpe_from_recorded_duration": 1694.0,
-          "srpe_sessions": 9,
-          "minimum_recorded_external_volume_kg": 5993.0,
-          "strength_blocks_with_quantified_weight": 2,
-          "strength_blocks_missing_quantified_weight": 7,
+          "srpe_from_recorded_duration": 1956.1,
+          "srpe_sessions": 13,
+          "minimum_recorded_external_volume_kg": 7343.0,
+          "strength_blocks_with_quantified_weight": 4,
+          "strength_blocks_missing_quantified_weight": 9,
           "garmin_intervals_load_separate": 189.0,
           "intervals_load_sessions": 13,
           "trimp_separate": 306.5,
           "trimp_sessions": 13,
-          "mean_recorded_rpe": 7.22
+          "mean_recorded_rpe": 6.46
         },
         "previous_7d": {
           "sessions": 9,
@@ -3768,20 +4069,20 @@
         },
         "recent_28d": {
           "sessions": 22,
-          "sessions_with_rpe": 18,
-          "high_rpe_sessions": 9,
+          "sessions_with_rpe": 22,
+          "high_rpe_sessions": 11,
           "recorded_duration_minutes": 587.4,
           "sessions_with_duration": 22,
-          "srpe_from_recorded_duration": 3151.7,
-          "srpe_sessions": 18,
-          "minimum_recorded_external_volume_kg": 13998.0,
-          "strength_blocks_with_quantified_weight": 5,
-          "strength_blocks_missing_quantified_weight": 13,
+          "srpe_from_recorded_duration": 3413.8,
+          "srpe_sessions": 22,
+          "minimum_recorded_external_volume_kg": 15348.0,
+          "strength_blocks_with_quantified_weight": 7,
+          "strength_blocks_missing_quantified_weight": 15,
           "garmin_intervals_load_separate": 310.0,
           "intervals_load_sessions": 22,
           "trimp_separate": 502.4,
           "trimp_sessions": 22,
-          "mean_recorded_rpe": 6.81
+          "mean_recorded_rpe": 6.43
         }
       },
       "daily_chart_7d": [
@@ -3830,27 +4131,27 @@
         {
           "date": "2026-10-19",
           "sessions": 4,
-          "mean_recorded_rpe": null,
+          "mean_recorded_rpe": 4.75,
           "recorded_minutes": 88.6,
-          "srpe_from_recorded_duration": 0.0
+          "srpe_from_recorded_duration": 262.1
         }
       ],
       "latest_session": {
         "date": "2026-10-19",
         "activity_id": "i199136845",
         "name": "HIIT",
-        "rpe": null,
+        "rpe": 1.0,
         "recorded_minutes": 47.68,
         "heart_rate": {
           "average": 118.0,
           "max": 140.0
         },
-        "manual_blocks_recorded": 0
+        "manual_blocks_recorded": 1
       },
       "previous_week_context": {
         "sufficient_for_descriptive_comparison": true,
         "session_count_change": 4,
-        "mean_rpe_change": 0.83,
+        "mean_rpe_change": 0.07,
         "note": "El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento."
       },
       "benchmark_comparisons": [],
@@ -3887,37 +4188,25 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-19T20:38:42.752614+02:00",
+    "checked_at": "2026-10-19T22:47:57.918531+02:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-19",
     "latest_activity_age_days": 0,
-    "sheet_rows": 18,
-    "manual_coverage_7d_pct": 69.2,
-    "flags": [
-      {
-        "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 4,
-        "ids": [
-          "i199136845",
-          "i199113233",
-          "i199099543",
-          "i199091404"
-        ]
-      }
-    ],
+    "sheet_rows": 22,
+    "manual_coverage_7d_pct": 100.0,
+    "flags": [],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
   },
   "weekly_report": {
     "window_start": "2026-10-13",
     "window_end": "2026-10-19",
     "activities": 13,
-    "activities_with_manual_sheet_match": 9,
-    "activities_missing_manual_match": 4,
-    "mean_rpe": 7.22,
-    "recorded_srpe_sum": 1694.0,
+    "activities_with_manual_sheet_match": 13,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 6.46,
+    "recorded_srpe_sum": 1956.1,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 5993.0,
+    "minimum_verified_strength_volume_kg": 7343.0,
     "strength_blocks_with_missing_weights": 0,
     "readiness_latest": {
       "score": 67,
@@ -3945,23 +4234,23 @@
       "recovery_assessment_state": "assessed"
     },
     "recommendation": "Interpret trends cautiously; compare only equivalent workouts and consider shift-work and subjective symptoms.",
-    "confidence": "limited",
+    "confidence": "moderate",
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-19T20:38:42.752614+02:00",
+    "checked_at": "2026-10-19T22:47:57.918531+02:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-19T20:37:41.063578+02:00",
+        "generated_at": "2026-10-19T22:47:02.861546+02:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-19T20:37:59.028800+02:00",
+        "generated_at": "2026-10-19T22:47:21.736748+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -3975,28 +4264,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-19T20:38:25.354752+02:00",
+        "generated_at": "2026-10-19T22:47:44.749752+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-19T20:38:25.354752+02:00",
+        "generated_at": "2026-10-19T22:47:44.749752+02:00",
         "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-19T20:37:41.063578+02:00",
+        "generated_at": "2026-10-19T22:47:02.861546+02:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-19T20:37:59.028800+02:00",
+        "generated_at": "2026-10-19T22:47:21.736748+02:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"

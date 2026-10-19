@@ -1,8 +1,8 @@
 # Cierre diario · 19/10/2026
 
-`GR-2026-10-19-2038-18bd66` · cita este identificador al reenviar el informe.
+`GR-2026-10-19-2248-c06686` · cita este identificador al reenviar el informe.
 
-> ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
+> ⚠️ Certificado con avisos: 4 franja(s) de Sync sin ejecutar ni recuperar.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -57,22 +57,22 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-19-1648-0b8480 (19/10 16:48):
-- Sesiones nuevas desde entonces: **4** (carga +47).
+Frente al informe GR-2026-10-19-2038-18bd66 (19/10 20:38):
+- Sesiones con RPE: 18 → 22.
 
 ## Balance del día
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 19/10 18:22 | Sin detalle | HIIT | 48 | 20 | 118 | — | — |
-| 19/10 17:58 | Sin detalle | HIIT | 12 | 13 | 155 | — | — |
-| 19/10 17:37 | Sin detalle | HIIT | 11 | 9 | 142 | — | — |
-| 19/10 17:19 | Sin detalle | HIIT | 18 | 5 | 105 | — | — |
+| 19/10 18:22 | Técnica | Técnica - toes to bar | 48 | 20 | 118 | 1,0 | 48 |
+| 19/10 17:58 | Halterofilia | EMOM 12 min - echo bike / squat clean | 12 | 13 | 155 | 9,0 | 106 |
+| 19/10 17:37 | Halterofilia | Fuerza - power clean + squat clean y squat clean EMOM | 11 | 9 | 142 | 8,0 | 90 |
+| 19/10 17:19 | Halterofilia | Calentamiento previo a power clean y squat clean | 18 | 5 | 105 | 1,0 | 18 |
 
 ## Balance de la semana
 
 - Carga 7 días: **189** en 13 sesiones (+56 % vs. semana previa).
-- sRPE 7 días 1.694 · monotonía — · strain —.
+- sRPE 7 días 1.955 · monotonía 1,11 · strain 2.179.
 - Fatiga acumulada: ATL 20,3, CTL 4,8, TSB -15,5 (CTL insuficiente: la forma no se interpreta todavía).
 
 ## Previsión orientativa para mañana
@@ -94,7 +94,9 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
 
-**Acumulando datos: 0/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
+**Acumulando datos: 1/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
+
+- Días entrenados con predicción: 1; por encima del RPE máximo del día: 1.
 
 ## Recuperación: tendencias de 28 días
 
@@ -110,10 +112,6 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i199091404** (19/10 17:19, Sin detalle, 18 min, carga 5) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i199099543** (19/10 17:37, Sin detalle, 11 min, carga 9) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i199113233** (19/10 17:58, Sin detalle, 12 min, carga 13) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i199136845** (19/10 18:22, Sin detalle, 48 min, carga 20) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -122,6 +120,9 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 19/10 | power clean + squat clean (complex 1+1) | barra | 90,0 kg con barra | 90 × 1 | 90,0 kg | 515 kg | 5/5 | 8,0 |
+| 19/10 | squat clean | barra | 110,0 kg con barra | 110 × 1 | 110,0 kg | 685 kg | 5/5 | 8,0 |
+| 19/10 | power clean + squat clean (complex 1+1) | barra | 60,0 kg con barra | 60 × 1 | 60,0 kg | 150 kg | 3/3 | 1,0 |
 | 18/10 | sentadilla trasera | barra | 185,0 kg con barra | 185 × 1 | 185,0 kg | 5.415 kg | 15/15 | 7,5 |
 | 18/10 | sentadilla péndulo | máquina de placas | 60,0 kg indicados en máquina | — | — | 1.920 kg | 4/4 | 7,5 |
 | 18/10 | curl femoral tumbado | máquina de placas | 67,0 kg indicados en máquina | — | — | 2.208 kg | 4/4 | 7,5 |
@@ -131,9 +132,6 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 | 11/10 | prensa horizontal | máquina de placas | 120,0 kg indicados en máquina | — | — | 4.320 kg | 4/4 | 6,0 |
 | 11/10 | curl femoral tumbado | máquina de placas | 60,0 kg indicados en máquina | — | — | 2.712 kg | 4/4 | 6,0 |
 | 11/10 | curl femoral de pie unilateral | máquina de placas | 40,0 kg indicados en máquina | — | — | 2.560 kg | 8/8 | 6,0 |
-| 10/10 | press de pecho inclinado con mancuernas | mancuernas (par) | 80,0 kg total (2 × 40,0 kg) | 80 × 4 | 90,7 kg | 3.488 kg | 7/7 | 6,0 |
-| 10/10 | press banca en máquina sentado | máquina de placas | 65,0 kg indicados en máquina | — | — | 2.080 kg | 4/4 | 6,0 |
-| 10/10 | press superinclinado iso lateral | máquina de discos | 60,0 kg total (dos lados) | — | — | 2.400 kg | 5/5 | 6,0 |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -142,16 +140,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-19-2038-18bd66`
+- **Identificador del informe:** `GR-2026-10-19-2248-c06686`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-19-1645 · datos sincronizados a las 20:37 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 8,3 h ✓ · última HRV hace 8,4 h ✓ · última FC hace 7 min ✓ · último Body Battery hace 48 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 18/22 (sin RPE: 19/10 17:19, 19/10 17:37, 19/10 17:58, 19/10 18:22)
-- **Ejecución:** 3 franja(s) de Sync perdidas (18/10 16:45, 18/10 22:45, 19/10 08:30)
+- **Ciclo:** 2026-10-19-2245 · datos sincronizados a las 22:47
+- **Antigüedad:** fin del sueño hace 10,5 h ✓ · última HRV hace 10,5 h ✓ · última FC hace 12 min ✓ · último Body Battery hace 42 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 22/22
+- **Ejecución:** 4 franja(s) de Sync perdidas (18/10 16:45, 18/10 22:45, 19/10 08:30, 19/10 16:45)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 20:38 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 22:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
