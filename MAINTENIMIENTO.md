@@ -225,3 +225,10 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - **Sueño efectivo:** si Garmin informa `awakeSleepSeconds`, el sueño efectivo no puede ocupar toda la ventana (se descuenta el tiempo despierto).
 - **Avisos:** una franja cuyo alert es `cron_missed_dispatch_recovered` (el cron de GitHub no disparó pero el Apps Script lanzó el Sync) ya no abre issue ni manda correo; solo `sync_slot_not_recovered` o franjas del certificado sin recuperar lo hacen.
 - **Hoy:** «En tres líneas» no se muestra si ya hay «Resumen de hoy · Claude»; la pauta usa «modelo experimental» en lugar de «v3».
+
+## V7.15 — Progresión por ejercicio
+
+- **`garmin_recovery/progression.py`** (puro; `main` es el único que toca ficheros): extrae de `crossfit_insights.json` los ejercicios de fuerza con cargas confirmadas (`detail_json.exercises`, `exercise` + `sets` y `blocks[].exercises`), excluye metcons, calentamientos, habilidades, barra vacía y ejercicios de peso corporal, y los acumula en **`exercise_history.json`** para que no desaparezcan al salir de la ventana de Garmin. Una actividad vigente sustituye a sus entradas anteriores (si se corrige el registro); las demás se conservan.
+- **Qué compara:** la mejor carga de cada sesión (con sus repeticiones), el volumen (solo si todas las series tienen carga) y las series, por ejercicio y unidad (barra, máquina, mancuernas no se mezclan). Veredicto: sube / igual / baja frente a la sesión anterior; avisa si las repeticiones de la mejor serie cambian en 2 o más. No estima 1RM ni atribuye causas.
+- **Dónde se ve:** tarjeta «Progresión por ejercicio» arriba de Entrenos, con gráfica por ejercicio y detalle por sesión; los ejercicios que aún no se han repetido van en un desplegable. El paso «Historial de ejercicios» del workflow de CrossFit lo actualiza y lo sube con `crossfit_insights.json`.
+- **Para que un ejercicio sea comparable**, dicta siempre el mismo nombre y la carga total de barra (o la unidad indicada en `load_unit`).

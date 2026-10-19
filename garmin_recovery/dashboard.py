@@ -15,6 +15,98 @@ ZONE_UI = {
 }
 
 
+def _kg(v) -> str:
+    return f"{v:g}".replace(".", ",")
+
+
+def _ddmm(date_s: str) -> str:
+    return f"{date_s[8:10]}/{date_s[5:7]}"
+
+
+def _prog_svg(points: list[dict], big: bool = False) -> str:
+    """Mejor carga por sesión: línea con puntos (la última destacada); en grande, con la carga y la fecha de cada punto."""
+    from datetime import date as _d
+    w, h = (300, 120) if big else (110, 34)
+    padx, pady = (26, 22) if big else (5, 5)
+    xs = [(_d.fromisoformat(p["date"]) - _d.fromisoformat(points[0]["date"])).days for p in points]
+    span = max(xs) or 1
+    vals = [p["top_load"] for p in points]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1.0
+
+    def px(i):
+        return padx + (xs[i] / span) * (w - 2 * padx)
+
+    def py(i):
+        return h - pady - ((vals[i] - lo) / rng) * (h - 2 * pady) if hi != lo else h / 2
+    pts = " ".join(f"{px(i):.1f},{py(i):.1f}" for i in range(len(points)))
+    dots = "".join(f'<circle cx="{px(i):.1f}" cy="{py(i):.1f}" r="{4 if (big and i == len(points) - 1) or (not big and i == len(points) - 1) else 2.6}" '
+                   f'class="{"pg-last" if i == len(points) - 1 else "pg-dot"}"/>' for i in range(len(points)))
+    labels = ""
+    if big:
+        for i, p in enumerate(points):
+            labels += (f'<text x="{px(i):.1f}" y="{py(i) - 8:.1f}" text-anchor="middle" class="pg-val">{_kg(p["top_load"])}</text>'
+                       f'<text x="{px(i):.1f}" y="{h - 4}" text-anchor="middle" class="pg-date">{_ddmm(p["date"])}</text>')
+    label = "Mejor carga por sesión: " + ", ".join(f'{_ddmm(p["date"])} {_kg(p["top_load"])} kg' for p in points)
+    return (f'<svg class="pg-svg{" big" if big else ""}" viewBox="0 0 {w} {h}" role="img" aria-label="{_esc(label)}">'
+            f'<polyline points="{pts}" class="pg-line"/>{dots}{labels}</svg>')
+
+
+def _progression_html(prog: dict | None) -> str:
+    """Progresión por ejercicio repetido: resumen, una fila con gráfica por ejercicio y lo aún no repetido."""
+    if not isinstance(prog, dict) or not prog.get("items"):
+        return ""
+    items, summ = prog["items"], prog.get("summary") or {}
+    comp = [s for s in items if s["comparable"]]
+    once = [s for s in items if not s["comparable"]]
+    mark = {"up": ("▲", "sube"), "down": ("▼", "baja"), "flat": ("=", "igual")}
+    rows = ""
+    for s in comp:
+        pts = s["points"]
+        last = pts[-1]
+        sym, word = mark[s["state"]]
+        d = s["delta_prev"]
+        delta = f'{sym} {word}' + (f' {"+" if d > 0 else "−"}{_kg(abs(d))} kg' if abs(d) > 0.01 else "")
+        notes = []
+        if s.get("new_best"):
+            notes.append("Es tu mejor carga registrada en este ejercicio.")
+        if s.get("rep_scheme_differs"):
+            notes.append(f'Las repeticiones de la mejor serie cambian ({_kg(pts[-2]["top_reps"])} → {_kg(last["top_reps"])}): compara con cautela.')
+        if s.get("volume_change_pct") is not None:
+            notes.append(f'Volumen frente a la sesión anterior: {s["volume_change_pct"]:+d} %.')
+        elif not (last["volume_complete"] and pts[-2]["volume_complete"]):
+            notes.append("Volumen no comparable: hay series sin carga registrada.")
+        table = "".join(
+            f'<tr><td>{_ddmm(p["date"])}</td><td class="num">{_kg(p["top_load"])} kg × {_kg(p["top_reps"])}</td>'
+            f'<td class="num">{p["work_sets"]}</td><td class="num">{_kg(round(p["volume"]))}{"" if p["volume_complete"] else "*"}</td>'
+            f'<td class="num">{_kg(p["rpe"]) if p["rpe"] is not None else "—"}</td></tr>' for p in reversed(pts))
+        name = s["name"][:1].upper() + s["name"][1:]
+        rows += (f'<details class="pg"><summary><span class="pg-name">{_esc(name)}<small>{_esc(s["unit"])} · {s["sessions"]} sesiones</small></span>'
+                 f'{_prog_svg(pts)}<span class="pg-now">{_kg(last["top_load"])} kg<small class="pg-d {s["state"]}">{_esc(delta)}</small></span></summary>'
+                 f'<div class="pg-body">{_prog_svg(pts, True)}'
+                 '<div class="scroll"><table><tr><th>Fecha</th><th>Mejor serie</th><th>Series</th><th>Volumen kg</th><th>RPE</th></tr>'
+                 f'{table}</table></div>'
+                 + "".join(f'<p class="pg-note">{_esc(n)}</p>' for n in notes)
+                 + ('<p class="pg-note">* volumen mínimo: alguna serie sin carga registrada.</p>' if not last["volume_complete"] else "")
+                 + "</div></details>")
+    stats = ""
+    if summ.get("available"):
+        stats = (f'<p class="pg-sum"><b>{summ["up"]}</b> ▲ suben · <b>{summ["flat"]}</b> = igual · <b>{summ["down"]}</b> ▼ bajan'
+                 f'<small>mejor carga frente a la sesión anterior, {summ["comparable"]} ejercicios repetidos</small></p>')
+    else:
+        stats = '<p class="pg-sum"><small>Aún no hay ningún ejercicio repetido en dos sesiones con cargas registradas.</small></p>'
+    once_html = ""
+    if once:
+        lis = "".join(f'<li>{_esc(s["name"][:1].upper() + s["name"][1:])} <span class="weight">{_kg(s["points"][-1]["top_load"])} kg · '
+                      f'{_ddmm(s["points"][-1]["date"])}</span></li>' for s in once)
+        once_html = (f'<details class="pg-once"><summary>Todavía sin repetir ({len(once)})</summary><ul class="clean">{lis}</ul>'
+                     '<p class="pg-note">Aparecerán arriba cuando los hagas en otra sesión.</p></details>')
+    caution = f'<p class="h2sub pg-caution">{_esc(summ["caution"])}</p>' if summ.get("caution") else ""
+    return ('<section class="card" id="progresion" aria-label="Progresión por ejercicio"><h2>Progresión por ejercicio</h2>'
+            '<p class="h2sub">mejor carga de cada sesión en fuerza registrada con cargas · el historial se conserva aunque pasen los 28 días</p>'
+            + stats + rows + once_html + caution + "</section>")
+
+
 def _esc(value) -> str:
     return html.escape("" if value is None else str(value))
 
@@ -266,7 +358,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             "hoytop": top_block, "cambios": changes,
             "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": calendar_html + week_html,
-            "entrenos": "",
+            "entrenos": _progression_html(extras.get("progression")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 
@@ -505,6 +597,25 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .js .tab.on>*{animation:rise .42s cubic-bezier(.22,.8,.24,1) both}
 .js .tab.on>*:nth-child(2){animation-delay:.05s}.js .tab.on>*:nth-child(3){animation-delay:.1s}.js .tab.on>*:nth-child(4){animation-delay:.15s}.js .tab.on>*:nth-child(n+5){animation-delay:.2s}
 @media (prefers-reduced-transparency:reduce){.card{border-color:var(--line)}}
+/* ---- V7.15: progresión por ejercicio ---- */
+.pg-sum{margin:0 0 10px;font-size:15px}.pg-sum small{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
+.pg{border-top:1px solid var(--line)}
+.pg>summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 110px auto;gap:10px;align-items:center;padding:10px 0;cursor:pointer}
+.pg>summary::-webkit-details-marker{display:none}
+.pg-name{font-size:14px;font-weight:600;min-width:0}.pg-name small{display:block;font-weight:400;font-size:12px;color:var(--text-3)}
+.pg-now{font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.pg-now small{display:block;font-size:12px;font-weight:500}
+.pg-d.up{color:var(--good-ink)}.pg-d.down{color:var(--critical-ink)}.pg-d.flat{color:var(--text-3)}
+.pg-svg{width:100%;height:auto;display:block;overflow:visible}
+.pg-line{fill:none;stroke:var(--series-1);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pg-dot{fill:var(--series-1)}.pg-last{fill:var(--text);stroke:var(--series-1);stroke-width:2}
+.pg-val{font-size:10px;fill:var(--text);font-variant-numeric:tabular-nums}.pg-date{font-size:9px;fill:var(--text-3)}
+.pg-body{padding:0 0 12px}.pg-svg.big{max-width:420px;margin:0 auto 8px}
+.pg-note{font-size:12px;color:var(--text-2);margin:6px 0 0}
+.pg-once summary{cursor:pointer;font-size:13px;color:var(--text-2);padding:10px 0;border-top:1px solid var(--line)}
+.pg-once li{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:4px 0}
+.pg-caution{margin:10px 0 0}
+@media (max-width:420px){.pg>summary{grid-template-columns:minmax(0,1fr) 84px auto}}
 @media (prefers-reduced-motion:reduce){.js .tab.on>*{animation:none}.heroring .arc{transition:none}}
 /* sesiones como tarjetas en móvil */
 @media (max-width:640px){
@@ -649,13 +760,13 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
   </div>
 
   <div class="grid tab" id="tab-entrenos" data-tab="entrenos">
+    {{ENT}}
     <section class="card">
       <h2>Sesiones recientes</h2>
       <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
       <div class="scroll"><table id="sessions"></table></div>
     </section>
     <section class="card" id="hrdetail" hidden aria-live="polite"></section>
-    {{ENT}}
   </div>
 
   <div class="grid tab" id="tab-sistema" data-tab="sistema">
