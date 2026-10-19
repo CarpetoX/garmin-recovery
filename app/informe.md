@@ -1,6 +1,6 @@
 # Informe de seguimiento · 19/10/2026
 
-`GR-2026-10-19-1546-26a312` · cita este identificador al reenviar el informe.
+`GR-2026-10-19-1648-0b8480` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live; 3 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -57,7 +57,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-19-1312-cfdbd5 (19/10 13:12):
+Frente al informe GR-2026-10-19-1546-26a312 (19/10 15:46):
 - Sin cambios en los datos.
 
 ## Actividad de hoy
@@ -120,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-19-1546-26a312`
+- **Identificador del informe:** `GR-2026-10-19-1648-0b8480`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-19-0830-post-sleep · datos sincronizados a las 15:45 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 3,5 h ✓ · última HRV hace 3,5 h ✓ · última FC hace 18 min ✓ · último Body Battery hace 3,5 h !
+- **Ciclo:** 2026-10-19-1645 · datos sincronizados a las 16:47
+- **Antigüedad:** fin del sueño hace 4,5 h ✓ · última HRV hace 4,5 h ✓ · última FC hace 42 min ✓ · último Body Battery hace 4,5 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 18/18
 - **Ejecución:** 3 franja(s) de Sync perdidas (18/10 16:45, 18/10 22:45, 19/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 15:46 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
