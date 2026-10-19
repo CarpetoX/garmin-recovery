@@ -8,7 +8,7 @@ Orientación: hoy solo técnica ligera o movilidad (RPE ≤ 6), sin intensidad a
 
 **Análisis · lunes 19/10/2026 · ciclo de las 08:30** (certificado con avisos: 3 franjas de Sync perdidas el 18/10; el ciclo de hoy se completó)
 
-**Qué explica la puntuación.** Faltan HRV y horas de sueño de hoy, y el sueño no está confirmado, así que el modelo oficial y el experimental quedan pendientes. La decisión es **pendiente** (RPE ≤ 6). Solo consta la FC en reposo (61 lpm) y el estrés de ayer (30, mediana 38). Frecuencia cardíaca y Body Battery tienen retraso (06:16 y 06:09), no son mediciones nuevas.
+**Qué explica la puntuación.** Faltan HRV y horas de sueño de hoy, y el sueño no está confirmado, así que el modelo oficial y el experimental quedan pendientes. La decisión es **pendiente** (RPE ≤ 6). Solo consta la FC en reposo (61 lpm) y el estrés de ayer (30, mediana 38). Frecuencia cardíaca y Body Battery tienen retraso (06:16 y 06:09; a las 09:35 ya contaban 200 y 207 min), no son mediciones nuevas. Un Sync posterior (09:35) quedó fuera de franja y sin certificado propio; el sueño sigue sin confirmar.
 
 **Carga reciente.** Semana con carga 142 (121 la anterior) y monotonía 0,89. CTL 3,7: insuficiente para interpretar la forma.
 
