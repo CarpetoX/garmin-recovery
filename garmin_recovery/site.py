@@ -172,6 +172,14 @@ def _live_extras(root: Path, result: dict) -> dict:
     except Exception as exc:  # noqa: BLE001
         optional_blocks.failed("web:sleep_need", exc)
     try:
+        from . import progression
+        hist = json.loads((root / "exercise_history.json").read_text(encoding="utf-8")) if (root / "exercise_history.json").exists() else None
+        cf = json.loads((root / "crossfit_insights.json").read_text(encoding="utf-8")) if (root / "crossfit_insights.json").exists() else None
+        built = progression.build(hist, cf)
+        out["progression"] = {"items": built["items"], "summary": built["summary"]}
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:progression", exc)
+    try:
         sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
         out["plan"] = improvement._plan(root, result, today, sessions)
     except Exception as exc:  # noqa: BLE001
