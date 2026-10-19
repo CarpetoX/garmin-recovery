@@ -1,8 +1,8 @@
 # Informe de seguimiento · 19/10/2026
 
-`GR-2026-10-19-1312-cfdbd5` · cita este identificador al reenviar el informe.
+`GR-2026-10-19-1546-26a312` · cita este identificador al reenviar el informe.
 
-> ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
+> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live; 3 franja(s) de Sync sin ejecutar ni recuperar.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -57,10 +57,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-19-1250-f2c2f7 (19/10 12:50):
-- Oficial v2: 70 → 64 (-6).
-- v3: 73 → 72 (-1).
-- Nueva noche registrada: HRV 60 → 60 ms, sueño 5,63 → 5,12 h, FC reposo 53 → 53 lpm.
+Frente al informe GR-2026-10-19-1312-cfdbd5 (19/10 13:12):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
@@ -122,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-19-1312-cfdbd5`
+- **Identificador del informe:** `GR-2026-10-19-1546-26a312`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-19-0830-post-sleep · datos sincronizados a las 13:11 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 53 min ✓ · última HRV hace 56 min ✓ · última FC hace 2 min ✓ · último Body Battery hace 57 min ✓
+- **Ciclo:** 2026-10-19-0830-post-sleep · datos sincronizados a las 15:45 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 3,5 h ✓ · última HRV hace 3,5 h ✓ · última FC hace 18 min ✓ · último Body Battery hace 3,5 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 18/18
 - **Ejecución:** 3 franja(s) de Sync perdidas (18/10 16:45, 18/10 22:45, 19/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 13:12 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 15:46 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
