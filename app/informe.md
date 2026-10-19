@@ -1,12 +1,12 @@
-# Informe matutino · 19/10/2026
+# Informe de seguimiento · 19/10/2026
 
-`GR-2026-10-19-1146-ed3cf3` · cita este identificador al reenviar el informe.
+`GR-2026-10-19-1247-6392f9` · cita este identificador al reenviar el informe.
 
-> ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
+> ⚠️ Certificado con avisos: 4 franja(s) de Sync sin ejecutar ni recuperar.
 
 > **Hoy: ⚪ pendiente — Pendiente de datos.** RPE ≤ 6 · volumen según sensaciones.
 >
-> **Por qué:** faltan datos de hoy (hrv_ms, sleep_hours).
+> **Por qué:** faltan datos de hoy.
 >
 > **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
 
@@ -14,17 +14,17 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 6 | según sensaciones | — ms | 54 lpm | — h | 77/100 |
+| 6 | según sensaciones | 60 ms | 53 lpm | 5,63 h | 54/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
-| Recuperación oficial | — | pendiente | oficial |
-| Híbrido Garmin + local | 74 | ámbar | salvaguarda |
+| Recuperación oficial | 70 | ámbar | oficial |
+| Híbrido Garmin + local | 67 | ámbar | salvaguarda |
 | Modelo experimental | — | pendiente | sombra |
 | Modelo de compatibilidad | 74 | ámbar | compatibilidad |
-| Garmin Training Readiness | 77 | — | contexto |
+| Garmin Training Readiness | 54 | — | contexto |
 
 _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
 
@@ -36,7 +36,7 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## Cómo ajustar tu sesión de hoy
 
-<details open><summary>Reglas por tipo de sesión</summary>
+<details><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
@@ -55,33 +55,31 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-19-1041-a59bda (19/10 10:41):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-19-1146-ed3cf3 (19/10 11:46):
+- Híbrido: 74 → 67 (-7).
+- Nueva noche registrada: HRV — → 60 ms, sueño — → 5,63 h, FC reposo 54 → 53 lpm.
 
-## Qué ha cambiado respecto a tu línea base
+## Actividad de hoy
 
-- **FC:** reposo 54 lpm (-1 vs. mediana 55); nocturna — lpm (—).
-- **Estrés Garmin ayer:** 30 de media (tu mediana 38).
+_Sin sesiones registradas._
 
-**Señales coincidentes:** 0 de 2 señales en contra; a favor: Estrés del día anterior (Garmin). Sin datos: Variabilidad cardiaca (HRV), Sueño, Carga de entrenamiento, Sensaciones (Intervals).
+**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
 
-## Incertidumbre
+**Carga 7 días:** 142 en 9 sesiones (+17 % vs. semana previa) · sRPE 1.694 · monotonía 0,89.
 
-- Confianza de los datos: **baja** (faltan datos de hoy: hrv_ms, sleep_hours; sueño de hoy sin confirmar; cobertura 7 días: 5/7 noches en la métrica más incompleta)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
+## Gráficas
 
-## Plan del día
+![RPE frente al máximo del día](charts/rpe.svg)
 
-- Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño. RPE ≤ 6, volumen según sensaciones.
-- Post-turno de noche: prioriza dormir; cualquier sesión, suave.
+![Carga](charts/load.svg)
 
-## Tendencias
+![Sesiones](charts/sessions.svg)
 
-![Disponibilidad](charts/readiness.svg)
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
 
 ## Recuperación: tendencias de 28 días
 
-<details open><summary>HRV, FC y sueño</summary>
+<details><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -121,16 +119,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-19-1146-ed3cf3`
+- **Identificador del informe:** `GR-2026-10-19-1247-6392f9`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-19-0830 · datos sincronizados a las 11:45 · Sync fuera de franja
-- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 1,8 h ✓ · último Body Battery hace 1,8 h ✓
+- **Ciclo:** 2026-10-19-0830 · datos sincronizados a las 12:46 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 28 min ✓ · última HRV hace 31 min ✓ · última FC hace 13 min ✓ · último Body Battery hace 32 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 18/18
-- **Ejecución:** 3 franja(s) de Sync perdidas (18/10 08:30, 18/10 16:45, 18/10 22:45)
+- **Ejecución:** 4 franja(s) de Sync perdidas (18/10 08:30, 18/10 16:45, 18/10 22:45, 19/10 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 11:46 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-19 12:47 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
