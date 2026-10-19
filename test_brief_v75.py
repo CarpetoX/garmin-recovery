@@ -71,3 +71,4 @@ class AiLead(unittest.TestCase):
         self.assertIn("<strong>listo</strong>", html)
         self.assertIn("&lt;b&gt;", html)  # el texto se escapa
         self.assertNotIn('aria-label="Análisis de Claude"', dashboard.render(res, {}))
+        self.assertNotIn('aria-label="Resumen de hoy"', html)  # no repite «En tres líneas» si Claude ya resume

@@ -248,7 +248,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
                + "".join(f"<p>{md_inline(x)}</p>" for x in ai_lines)
                + '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai_lines else ""
     # el resumen de reglas solo es el respaldo cuando no hay resumen de Claude del ciclo vigente
-    top_block = changes + (ai_html or brief_html) + ('' if extras.get('changes') and extras['changes'].get('available') else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
