@@ -577,7 +577,7 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .bars7 i{display:block;width:6px;border-radius:2px;background:var(--series-2)}
 .ring-card:last-child .ring-num{margin-top:6px;font-size:20px}
 .ring-card:last-child .ring-label{margin-top:2px}
-.warn-chip{background:var(--warning)!important;color:#1a1a19!important}
+.warn-chip{background:transparent!important;color:var(--warning-ink)!important;box-shadow:inset 0 0 0 1.5px var(--warning)}
 tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--glass-chip, var(--surface-2))}.hrmark{color:var(--critical);font-size:11px}
 .hrwrap{position:relative}.hrtip{position:absolute;left:8px;top:2px;font-size:12px;background:var(--glass, var(--surface));border:1px solid var(--line);border-radius:8px;padding:2px 8px;opacity:0;pointer-events:none}
 .zh{font-size:13px;margin:12px 0 4px}.zrow{display:grid;grid-template-columns:96px 1fr 54px;gap:8px;align-items:center;font-size:12.5px;padding:2px 0}.zrow i{display:block;height:8px;border-radius:4px}.zrow b{text-align:right}
@@ -843,7 +843,8 @@ const zoneTxt = {green:'verde', yellow:'ámbar', red:'rojo', unavailable:'pendie
 // ---------- Cabecera y héroe ----------
 const gen = new Date(D.generated_at);
 $('sub').textContent = `${new Date(D.date+'T12:00').toLocaleDateString('es-ES',{weekday:'long', day:'numeric', month:'long'})} · actualizado ${gen.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}`;
-$('badge').textContent = `Modelo ${D.model_version} · ${D.mode === 'shadow' ? 'en paralelo' : 'activo'}`;
+$('badge').textContent = `Modelo experimental · ${D.mode === 'shadow' ? 'en paralelo' : 'activo'}`;
+$('badge').title = `Versión ${D.model_version}`;
 const DEC = D.decision || {zone: R.zone, guidance: R.guidance, registry: [], divergence: []};
 const official = (DEC.registry || []).find(m => m.role === 'oficial') || {};
 $('score').innerHTML = official.score == null ? '—' : `${fmt(official.score)}<small>/100</small>`;
