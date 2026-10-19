@@ -172,6 +172,14 @@ def _live_extras(root: Path, result: dict) -> dict:
     except Exception as exc:  # noqa: BLE001
         optional_blocks.failed("web:sleep_need", exc)
     try:
+        from . import shift_calendar
+        cal = shift_calendar.load_calendar(str(root / "shift_calendar.json"))
+        d0 = shift_calendar.parse_day(today)
+        out["glance_shifts"] = {"today": shift_calendar.resolve_day(d0, cal)["label"],
+                                "tomorrow": shift_calendar.resolve_day(d0 + timedelta(days=1), cal)["label"]}
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:glance_shifts", exc)
+    try:
         from . import progression
         hist = json.loads((root / "exercise_history.json").read_text(encoding="utf-8")) if (root / "exercise_history.json").exists() else None
         cf = json.loads((root / "crossfit_insights.json").read_text(encoding="utf-8")) if (root / "crossfit_insights.json").exists() else None

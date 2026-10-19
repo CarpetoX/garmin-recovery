@@ -232,3 +232,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 - **Qué compara:** la mejor carga de cada sesión (con sus repeticiones), el volumen (solo si todas las series tienen carga) y las series, por ejercicio y unidad (barra, máquina, mancuernas no se mezclan). Veredicto: sube / igual / baja frente a la sesión anterior; avisa si las repeticiones de la mejor serie cambian en 2 o más. No estima 1RM ni atribuye causas.
 - **Dónde se ve:** tarjeta «Progresión por ejercicio» arriba de Entrenos, con gráfica por ejercicio y detalle por sesión; los ejercicios que aún no se han repetido van en un desplegable. El paso «Historial de ejercicios» del workflow de CrossFit lo actualiza y lo sube con `crossfit_insights.json`.
 - **Para que un ejercicio sea comparable**, dicta siempre el mismo nombre y la carga total de barra (o la unidad indicada en `load_unit`).
+
+## V7.16 — «De un vistazo» en Hoy
+
+`glance.compose(result, turnos, progresión)` (puro) devuelve fichas con tono (bueno / atención / neutro) para: último entreno y su RPE, registros de la semana (cuántas sesiones tienen RPE), últimos 7 días (sin porcentaje si no hay dos semanas completas), turno de hoy y mañana (compacto, desde `shift_calendar.json`) y resumen de la progresión de cargas. Se muestra justo debajo de la decisión de hoy; `dashboard._glance_html` la pinta y `site._live_extras` aporta los turnos.
