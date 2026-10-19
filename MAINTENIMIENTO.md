@@ -240,3 +240,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 ## V7.17 — Marcas de contexto en Tendencias
 
 Las gráficas de series temporales (`chart()` en `dashboard.py`) dibujan una franja tenue en los días de turno de noche (`trend_28d[].shift == 'TN'`) y un triángulo ▲ en los días con alguna sesión de RPE ≥ 8 (`sessions_28d`). Se puede desactivar por gráfica con `noMarks`. Solo son marcas descriptivas, sin causalidad. El historial diario se sigue guardando en `history/daily.csv`; el selector 7/28/90 días se añadirá cuando haya más de 28 días de datos.
+
+## V7.18 — Entrenos: fuerza, halterofilia y metcons
+
+`training_blocks.build(crossfit, entradas_del_historial, hoy)` (puro) separa lo confirmado en `detail_json`: **fuerza**, **halterofilia** (ejercicios con snatch/clean/jerk/arrancada/cargada/envión en el nombre) y **metcons**; técnica y calentamientos quedan aparte y no cuentan. Devuelve volumen semanal de barra (mínimo verificado, se omiten las semanas anteriores al primer registro), sesiones con series («reps @ kg», `3× 8 @ 60` = tres series) y tarjetas de metcon con fórmula, resultado, tiempos (cronómetro oficial y reloj por separado, nunca mezclados), RPE, FC y repeticiones por ronda si constan y varían. `dashboard._training_html` pinta el resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones (la pestaña elegida se recuerda en `sessionStorage`); la progresión por ejercicio se filtra por tipo. Los metcons solo salen de la ventana de `crossfit_insights.json` (no se acumulan como el historial de ejercicios).
