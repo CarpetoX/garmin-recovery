@@ -1,9 +1,9 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Lunes, 19 de octubre de 2026 · 12:47 · `GR-2026-10-19-1247-6392f9`
+Lunes, 19 de octubre de 2026 · 12:50 · `GR-2026-10-19-1250-f2c2f7`
 
 ```cards
-Decisión|Pendiente de datos|RPE máx. 6|unavailable
+Decisión|Entrenar con control|RPE máx. 7|yellow
 Recuperación oficial|70/100|confianza high|yellow
 HRV|60 ms|+3 % vs mediana|green
 Sueño|5 h 38 min|puntuación —|unavailable
@@ -13,28 +13,28 @@ Carga 7 días|9 sesiones|sRPE 1694|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-19-0830 validado; 4 de 4 procesos finalizados correctamente.
-- ⚪ **Recuperación:** 70/100 (oficial, confianza high). Híbrido: 67/100. **Decisión: Pendiente de datos**, RPE máx. 6.
+- 🟢 **Certificación:** ciclo 2026-10-19-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
+- 🟡 **Recuperación:** 70/100 (oficial, confianza high). Híbrido: 67/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 5 h 38 min, puntuación —/100.
 - ❤️ **Principal alerta:** HRV 60 ms, 3,4 % por encima de tu mediana de 28 días.
-- 🏋️ **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+- 🏋️ **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
 
 ## 1. Certificación y calidad
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-19-0830 |
+| Ciclo | 2026-10-19-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:03 |
+| Certificado generado | 12:50:44 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 84/100 (usable) |
 
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-18 08:30, 10-18 16:45, 10-18 22:45, 10-19 08:30.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-18 16:45, 10-18 22:45, 10-19 08:30.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -76,11 +76,13 @@ La HRV está 3 % por encima de su mediana; la FC en reposo está 3 lpm por debaj
 |---|---|---|
 | Recuperación oficial | 🟡 70/100 | oficial |
 | Híbrido Garmin + local | 🟡 67/100 | salvaguarda |
-| Modelo experimental | — | sombra |
+| Modelo experimental | 🟢 73/100 | sombra |
 | Modelo de compatibilidad | 🟡 74/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 54/100 | contexto |
 | Tiempo de recuperación Garmin | 0,0 h | contexto |
 | Índice personal experimental | 70/100 | provisional |
+
+_Divergencia entre modelos:_ El v3 (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora.
 
 **Qué ha cambiado desde ayer**
 
@@ -272,7 +274,7 @@ Turno: hoy sin dato, mañana sin dato.
 
 ### Recomendaciones
 
-1. **Pendiente de datos** — Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+1. **Entrenar con control** — Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
 2. **Piernas.** Sentadilla trasera a RPE 9,5 el 18/10: evita otra sesión pesada de piernas hasta el 20/10 (margen orientativo de 48 h, sin validar). Tren superior, técnica o aeróbico suave sí encajan.
 3. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
 4. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
@@ -333,7 +335,7 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| lun 19/10 | post-TN | 🟢 Suave / movilidad | la decisión de hoy limita la intensidad · sin piernas pesadas hasta el 20/10 |
+| lun 19/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir · sin piernas pesadas hasta el 20/10 |
 | mar 20/10 | free | 🔥 Exigente | día libre con margen para una sesión exigente |
 | mié 21/10 | free | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
 | jue 22/10 | MT | 🟢 Suave / movilidad | turno largo: movilidad o descanso |
@@ -345,7 +347,7 @@ Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separada
 
 ### Reglas para los próximos 7 días
 
-1. **Hoy:** respeta la decisión del día (Pendiente de datos, RPE máx. 6).
+1. **Hoy:** respeta la decisión del día (Entrenar con control, RPE máx. 7).
 2. **Esfuerzos máximos:** como mucho 2–3 sesiones de RPE ≥ 8 en la semana y separadas ≥ 48 h.
 3. **Sueño:** suma 30–45 min cada noche en lugar de una sola noche larga; antes de un turno de noche, siesta corta.
 4. **Registro:** fatiga, agujetas y ánimo cada mañana en Intervals; RPE de cada sesión el mismo día.
@@ -355,8 +357,8 @@ _Los puntos 2 y 3 son criterios generales de entrenamiento y descanso, no una pr
 
 ## Conclusión
 
-Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ Pendiente de datos**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
+Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 Entrenar con control**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-19-0830 · generado 19/10/2026 12:47 Europe/Madrid · certificado READY · sync_run_id 39210457865.
+Traza: informe de tarde · ciclo 2026-10-19-0830-post-sleep · generado 19/10/2026 12:50 Europe/Madrid · certificado READY · sync_run_id 39240211739.
