@@ -107,6 +107,14 @@ def _progression_html(prog: dict | None) -> str:
             + stats + rows + once_html + caution + "</section>")
 
 
+def _glance_html(chips: list[dict] | None) -> str:
+    if not chips:
+        return ""
+    cells = "".join(f'<li class="gl {_esc(c["tone"])}"><span class="gl-l"><i aria-hidden="true"></i>{_esc(c["label"])}</span>'
+                    f'<span class="gl-v">{_esc(c["value"])}</span><span class="gl-s">{_esc(c["sub"])}</span></li>' for c in chips)
+    return f'<section class="glance" aria-label="De un vistazo"><ul class="clean">{cells}</ul></section>'
+
+
 def _esc(value) -> str:
     return html.escape("" if value is None else str(value))
 
@@ -339,8 +347,15 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     ai_html = ('<section class="card brief ai" aria-label="Análisis de Claude"><h2>Resumen de hoy · Claude</h2>'
                + "".join(f"<p>{md_inline(x)}</p>" for x in ai_lines)
                + '<p class="h2sub">redactado por un modelo de IA con los datos del ciclo · detalle y plan de 7 días en el informe completo</p></section>') if ai_lines else ""
+    try:
+        from . import glance
+        glance_html = _glance_html(glance.compose(result, extras.get("glance_shifts"), extras.get("progression")))
+    except Exception as exc:  # noqa: BLE001 — opcional
+        from . import optional_blocks
+        optional_blocks.failed("web:glance", exc)
+        glance_html = ""
     # el resumen de reglas solo es el respaldo cuando no hay resumen de Claude del ciclo vigente
-    top_block = changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
@@ -616,6 +631,15 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .pg-once li{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:4px 0}
 .pg-caution{margin:10px 0 0}
 @media (max-width:420px){.pg>summary{grid-template-columns:minmax(0,1fr) 84px auto}}
+/* ---- V7.16: de un vistazo ---- */
+.glance ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:0}
+.gl{display:flex;flex-direction:column;gap:1px;padding:10px 12px;border-radius:16px;background:var(--glass-chip,var(--surface-2));min-width:0}
+.gl:last-child:nth-child(odd){grid-column:1/-1}
+.gl-l{font-size:12px;color:var(--text-2);display:flex;align-items:center;gap:6px}
+.gl-l i{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 8px}
+.gl.good .gl-l i{background:var(--good)}.gl.warning .gl-l i{background:var(--warning)}.gl.critical .gl-l i{background:var(--critical)}
+.gl-v{font-size:14px;font-weight:650;line-height:1.3;overflow-wrap:anywhere}
+.gl-s{font-size:12px;color:var(--text-3);line-height:1.3}
 @media (prefers-reduced-motion:reduce){.js .tab.on>*{animation:none}.heroring .arc{transition:none}}
 /* sesiones como tarjetas en móvil */
 @media (max-width:640px){
