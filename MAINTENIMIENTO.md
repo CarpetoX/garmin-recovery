@@ -236,3 +236,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 ## V7.16 — «De un vistazo» en Hoy
 
 `glance.compose(result, turnos, progresión)` (puro) devuelve fichas con tono (bueno / atención / neutro) para: último entreno y su RPE, registros de la semana (cuántas sesiones tienen RPE), últimos 7 días (sin porcentaje si no hay dos semanas completas), turno de hoy y mañana (compacto, desde `shift_calendar.json`) y resumen de la progresión de cargas. Se muestra justo debajo de la decisión de hoy; `dashboard._glance_html` la pinta y `site._live_extras` aporta los turnos.
+
+## V7.17 — Marcas de contexto en Tendencias
+
+Las gráficas de series temporales (`chart()` en `dashboard.py`) dibujan una franja tenue en los días de turno de noche (`trend_28d[].shift == 'TN'`) y un triángulo ▲ en los días con alguna sesión de RPE ≥ 8 (`sessions_28d`). Se puede desactivar por gráfica con `noMarks`. Solo son marcas descriptivas, sin causalidad. El historial diario se sigue guardando en `history/daily.csv`; el selector 7/28/90 días se añadirá cuando haya más de 28 días de datos.
