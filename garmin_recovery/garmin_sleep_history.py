@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo('Europe/Madrid')
 STORE = Path('garmin_sleep_history.json')
+OVERRIDES = Path('manual_sleep_overrides.json')
 RETENTION_DAYS = 60
 BACKFILL_PER_RUN = 4
 
@@ -81,6 +82,10 @@ def extract_sleep(raw, day, generated_at):
     confirmed = dto.get('sleepWindowConfirmed')
     if confirmed is False:
         return None
+    # Si Garmin informa de tiempo despierto, el sueño efectivo no puede ocupar toda la ventana.
+    awake_secs = n(dto.get('awakeSleepSeconds'), 0, 72000)
+    if awake_secs and asleep_secs > elapsed - awake_secs + 600:
+        asleep_secs = max(600, elapsed - awake_secs)
     scores = dto.get('sleepScores') or {}
     overall = (scores.get('overall') or {}) if isinstance(scores, dict) else {}
     score = n(overall.get('value'), 0, 100) if isinstance(overall, dict) else None
@@ -113,7 +118,7 @@ def choose_dates(today, rows, cursor):
     return selected, (offset + BACKFILL_PER_RUN) % max(1, len(missing))
 
 
-def collect(api, now=None, existing=None):
+def collect(api, now=None, existing=None, overrides=None):
     now = now or datetime.now(TZ)
     now = now.replace(tzinfo=TZ) if now.tzinfo is None else now.astimezone(TZ)
     old = existing if isinstance(existing, dict) else {}
@@ -142,6 +147,12 @@ def collect(api, now=None, existing=None):
                 unavailable.append(f'hrv:{key}')
         except Exception as exc:
             errors[f'hrv:{key}'] = f'{type(exc).__name__}: {exc}'
+        fix = (overrides or {}).get(key)
+        if isinstance(fix, dict) and fix:
+            old.update({k: v for k, v in fix.items() if k != 'reason'})
+            old['source'] = 'Garmin Connect + corrección manual desde el reloj'
+            if fix.get('reason'):
+                old['note'] = str(fix['reason'])
         if old:
             old.setdefault('date', key)
             old['generated_at'] = now.isoformat()
@@ -169,7 +180,11 @@ def main():
         existing = json.loads(STORE.read_text(encoding='utf-8'))
     except (OSError, ValueError):
         existing = {}
-    result = collect(api, existing=existing)
+    try:
+        overrides = json.loads(OVERRIDES.read_text(encoding='utf-8')).get('days') or {}
+    except (OSError, ValueError, AttributeError):
+        overrides = {}
+    result = collect(api, existing=existing, overrides=overrides)
     STORE.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     print(json.dumps({'saved_to': str(STORE), 'nights': len(result['days']),
                       'unavailable': result['unavailable_dates'],

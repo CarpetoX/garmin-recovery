@@ -111,5 +111,20 @@ class Collect(unittest.TestCase):
         self.assertEqual(out["days"], {})
 
 
+class EffectiveSleep(unittest.TestCase):
+    def test_awake_time_is_discounted_when_garmin_reports_whole_window(self):
+        raw = {"dailySleepDTO": {"sleepStartTimestampGMT": 1760848860000, "sleepEndTimestampGMT": 1760848860000 + int(5.6333 * 3600 * 1000),
+                                 "sleepTimeSeconds": int(5.6333 * 3600), "awakeSleepSeconds": 31 * 60, "sleepWindowConfirmed": True}}
+        rec = sh.extract_sleep(raw, date(2026, 10, 19), "2026-10-19T14:00:00+02:00")
+        self.assertEqual(rec["sleep_hours"], 5.12)
+
+    def test_manual_override_wins_over_garmin(self):
+        api = FakeApi(sleep={"2026-10-18": NIGHT}, hrv={})
+        out = sh.collect(api, NOW, None, {"2026-10-18": {"sleep_hours": 5.12, "sleep_score": 64, "reason": "x"}})
+        row = out["days"]["2026-10-18"]
+        self.assertEqual((row["sleep_hours"], row["sleep_score"]), (5.12, 64))
+        self.assertIn("corrección manual", row["source"])
+
+
 if __name__ == "__main__":
     unittest.main()
