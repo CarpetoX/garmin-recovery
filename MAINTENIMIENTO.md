@@ -218,3 +218,10 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 ## V7.12 — Resumen de hoy redactado por Claude
 
 `ai_analysis.lead` devuelve ahora el bloque «**En breve:**» completo (líneas hasta la primera en blanco, máx. 8). En Hoy, la tarjeta «Resumen de hoy · Claude» sustituye a «Hoy en breve» (reglas) cuando el análisis es del ciclo vigente; sin él, se muestra el resumen por reglas. La rutina debe escribir el formato con emojis y «Orientación:» (ver INSTRUCCIONES_INFORME.md).
+
+## V7.14 — Correcciones manuales de sueño y avisos
+
+- **`manual_sleep_overrides.json`:** correcciones por fecha de despertar (`days → "AAAA-MM-DD" → campos`; `reason` explica el motivo). `garmin_sleep_history.collect` las aplica después de lo que devuelva Garmin Connect en cada Sync, y el origen pasa a «Garmin Connect + corrección manual desde el reloj». Úsalo cuando el reloj muestre un dato distinto o más completo que la nube (p. ej. 19/10: Garmin dio la ventana completa, 5,63 h, sin descontar 31 min despierto).
+- **Sueño efectivo:** si Garmin informa `awakeSleepSeconds`, el sueño efectivo no puede ocupar toda la ventana (se descuenta el tiempo despierto).
+- **Avisos:** una franja cuyo alert es `cron_missed_dispatch_recovered` (el cron de GitHub no disparó pero el Apps Script lanzó el Sync) ya no abre issue ni manda correo; solo `sync_slot_not_recovered` o franjas del certificado sin recuperar lo hacen.
+- **Hoy:** «En tres líneas» no se muestra si ya hay «Resumen de hoy · Claude»; la pauta usa «modelo experimental» en lugar de «v3».
