@@ -612,6 +612,10 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .js .tab.on>*{animation:rise .42s cubic-bezier(.22,.8,.24,1) both}
 .js .tab.on>*:nth-child(2){animation-delay:.05s}.js .tab.on>*:nth-child(3){animation-delay:.1s}.js .tab.on>*:nth-child(4){animation-delay:.15s}.js .tab.on>*:nth-child(n+5){animation-delay:.2s}
 @media (prefers-reduced-transparency:reduce){.card{border-color:var(--line)}}
+/* ---- V7.17: marcas de contexto en las gráficas ---- */
+.marks-note{margin:0;font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mk-tn{display:inline-block;width:14px;height:10px;border-radius:2px;background:color-mix(in srgb,var(--series-2) 24%,transparent)}
+.mk-hard{font-style:normal;font-size:10px;color:var(--text-2)}
 /* ---- V7.15: progresión por ejercicio ---- */
 .pg-sum{margin:0 0 10px;font-size:15px}.pg-sum small{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
 .pg{border-top:1px solid var(--line)}
@@ -737,6 +741,7 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 
   <div class="grid tab" id="tab-tendencias" data-tab="tendencias">
     <section class="grid tiles" id="tiles" aria-label="Indicadores clave"></section>
+    <p class="marks-note" id="marks-note"><i class="mk-tn" aria-hidden="true"></i> turno de noche · <i class="mk-hard" aria-hidden="true">▲</i> día con una sesión de RPE 8 o más</p>
     {{TEND}}
     <section class="card">
       <h2>Disponibilidad · 28 días</h2>
@@ -926,6 +931,14 @@ function chart(el, opt){
     for (let v = lo; v <= hi + 1e-9; v += step) {
       s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
       s += `<text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--text-3)">${fmt(v, step < 1 ? 1 : 0)}</text>`;
+    }
+    // marcas de contexto: franja en los turnos de noche y triángulo en los días con una sesión de RPE ≥ 8
+    if (!opt.noMarks) {
+      const hard = new Set((D.sessions_28d || []).filter(q => q.rpe != null && q.rpe >= 8).map(q => q.date));
+      T.forEach((d, i) => {
+        if (d.shift === 'TN') s += `<rect x="${x(i) - bw/2}" y="${m.t}" width="${bw}" height="${ih}" fill="var(--series-2)" fill-opacity=".11"/>`;
+        if (hard.has(d.date)) s += `<path d="M${x(i) - 4},${m.t + ih} l4,-7 l4,7Z" fill="var(--text-2)"/>`;
+      });
     }
     const every = Math.max(1, Math.ceil(n / Math.max(2, Math.floor(iw / 46))));
     T.forEach((d, i) => { if ((n - 1 - i) % every === 0) s += `<text x="${x(i)}" y="${Hh - 6}" text-anchor="middle" font-size="11" fill="var(--text-3)">${dshort(d.date)}</text>`; });
