@@ -52,11 +52,18 @@ def _prog_svg(points: list[dict], big: bool = False) -> str:
             f'<polyline points="{pts}" class="pg-line"/>{dots}{labels}</svg>')
 
 
-def _progression_html(prog: dict | None) -> str:
-    """Progresión por ejercicio repetido: resumen, una fila con gráfica por ejercicio y lo aún no repetido."""
+def _progression_html(prog: dict | None, kind: str | None = None) -> str:
+    """Progresión por ejercicio repetido: resumen, una fila con gráfica por ejercicio y lo aún no repetido.
+    `kind`: None = todos, "fuerza" o "halterofilia" (se filtra por el nombre del ejercicio)."""
     if not isinstance(prog, dict) or not prog.get("items"):
         return ""
-    items, summ = prog["items"], prog.get("summary") or {}
+    from . import progression as _pg, training_blocks as _tb
+    items = prog["items"]
+    if kind:
+        items = [x for x in items if _tb.is_olympic(x["name"]) == (kind == "halterofilia")]
+        if not items:
+            return ""
+    summ = _pg.summary(items) if kind else (prog.get("summary") or {})
     comp = [s for s in items if s["comparable"]]
     once = [s for s in items if not s["comparable"]]
     mark = {"up": ("▲", "sube"), "down": ("▼", "baja"), "flat": ("=", "igual")}
@@ -102,9 +109,139 @@ def _progression_html(prog: dict | None) -> str:
         once_html = (f'<details class="pg-once"><summary>Todavía sin repetir ({len(once)})</summary><ul class="clean">{lis}</ul>'
                      '<p class="pg-note">Aparecerán arriba cuando los hagas en otra sesión.</p></details>')
     caution = f'<p class="h2sub pg-caution">{_esc(summ["caution"])}</p>' if summ.get("caution") else ""
-    return ('<section class="card" id="progresion" aria-label="Progresión por ejercicio"><h2>Progresión por ejercicio</h2>'
-            '<p class="h2sub">mejor carga de cada sesión en fuerza registrada con cargas · el historial se conserva aunque pasen los 28 días</p>'
+    return ('<section class="card" id="progresion' + ("-" + kind if kind else "") + '" aria-label="Progresión por ejercicio"><h2>Progresión por ejercicio</h2>'
+            '<p class="h2sub">mejor carga de cada sesión en los ejercicios con carga registrada · el historial se conserva aunque pasen los 28 días</p>'
             + stats + rows + once_html + caution + "</section>")
+
+
+def _bars_svg(items: list[dict], unit: str = "", label: str = "") -> str:
+    """Barras verticales sencillas: items = {label, value, text, soft (semana en curso), mark (valor mínimo)}."""
+    w, h, padt, padb = 300, 118, 18, 20
+    n = len(items)
+    top = max((i["value"] for i in items), default=0) or 1
+    slot = w / max(n, 1)
+    bw = min(34.0, slot * 0.62)
+    out = ""
+    for k, it in enumerate(items):
+        cx = slot * k + slot / 2
+        bh = (h - padt - padb) * it["value"] / top
+        y = h - padb - bh
+        cls = "bar soft" if it.get("soft") else "bar"
+        if it["value"] > 0:
+            out += (f'<path d="M{cx - bw / 2:.1f},{h - padb:.1f} V{y + 4:.1f} q0,-4 4,-4 h{bw - 8:.1f} q4,0 4,4 V{h - padb:.1f}Z" class="{cls}">'
+                    f'<title>{_esc(it["label"])}: {_esc(it["text"])}</title></path>')
+            out += f'<text x="{cx:.1f}" y="{y - 4:.1f}" text-anchor="middle" class="bar-val">{_esc(it["text"])}</text>'
+        else:
+            out += f'<text x="{cx:.1f}" y="{h - padb - 4:.1f}" text-anchor="middle" class="bar-val none">—</text>'
+        out += f'<text x="{cx:.1f}" y="{h - 5}" text-anchor="middle" class="bar-lab">{_esc(it["label"])}</text>'
+    out += f'<line x1="0" x2="{w}" y1="{h - padb}" y2="{h - padb}" class="bar-axis"/>'
+    return f'<svg class="bars" viewBox="0 0 {w} {h}" role="img" aria-label="{_esc(label)}">{out}</svg>'
+
+
+def _rpe_pill(rpe) -> str:
+    if not isinstance(rpe, (int, float)):
+        return '<span class="rpe-pill none">RPE —</span>'
+    tone = "hi" if rpe >= 9 else "mid" if rpe >= 7 else "lo"
+    return f'<span class="rpe-pill {tone}">RPE {_kg(rpe)}</span>'
+
+
+def _day_name(date_s: str) -> str:
+    from datetime import date as _d
+    d = _d.fromisoformat(date_s)
+    return ("lun", "mar", "mié", "jue", "vie", "sáb", "dom")[d.weekday()] + " " + _ddmm(date_s)
+
+
+def _weekly_html(weeks: list[dict], title: str, sub: str) -> str:
+    if not weeks or not any(w["volume"] for w in weeks):
+        return ""
+    items = [{"label": _ddmm(w["start"]), "value": w["volume"], "soft": w["current"],
+              "text": (f'{w["volume"]:,}'.replace(",", ".") + ("*" if not w["complete"] else ""))} for w in weeks]
+    lab = f"{title}: " + ", ".join(f'semana del {_ddmm(w["start"])} {w["volume"]} kg' for w in weeks)
+    note = ("* hay series sin carga registrada: es un mínimo. " if any(not w["complete"] for w in weeks) else "")
+    return (f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">{_esc(sub)}</p>{_bars_svg(items, "kg", lab)}'
+            f'<p class="pg-note">kg × repeticiones con carga registrada · semanas desde el lunes indicado · la clara es la semana en curso. {note}'
+            'Volumen mínimo verificado, sin atribuir causas.</p></section>')
+
+
+def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
+    if not sessions:
+        return f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">{_esc(empty)}</p></section>'
+    cards = ""
+    for s in sessions:
+        rows = ""
+        for e in s["exercises"]:
+            name = e["name"][:1].upper() + e["name"][1:]
+            vol = (f'{_kg(round(e["volume"]))} kg' + ("" if e["volume_complete"] else "*")) if e["unit"] == "barra" else ""
+            rows += (f'<li><div class="lf-top"><span class="lf-name">{_esc(name)}<small>{_esc(e["unit"])}</small></span>'
+                     f'<span class="lf-best">{_kg(e["top_load"])} kg<small>× {_kg(e["top_reps"])}</small></span></div>'
+                     f'<p class="lf-sets">{_esc(e["sets"])}</p>'
+                     f'<p class="lf-meta">{e["work_sets"]} series' + (f' · volumen {vol}' if vol else "") + "</p></li>")
+        cards += (f'<article class="lf"><header><b>{_day_name(s["date"])}</b>{_rpe_pill(s["rpe"])}</header>'
+                  f'<p class="lf-title">{_esc(s["title"])}</p><ul class="clean">{rows}</ul></article>')
+    return (f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">series como repeticiones @ kg · «3× 8 @ 60» = tres series · mejor serie a la derecha</p>{cards}'
+            '<p class="pg-note">Solo se muestra lo confirmado en el registro de cada sesión; las barras vacías de calentamiento no cuentan. '
+            '* volumen mínimo: alguna serie sin carga.</p></section>')
+
+
+def _metcons_html(metcons: list[dict]) -> str:
+    if not metcons:
+        return '<section class="card"><h2>Metcons</h2><p class="h2sub">Aún no hay metcons registrados con detalle.</p></section>'
+    rp = list(reversed([m for m in metcons if isinstance(m["rpe"], (int, float))][:8]))
+    chart = ""
+    if len(rp) >= 2:
+        items = [{"label": _ddmm(m["date"]), "value": float(m["rpe"]), "text": _kg(m["rpe"]), "soft": False} for m in rp]
+        lab = "RPE por metcon: " + ", ".join(f'{_ddmm(m["date"])} {_kg(m["rpe"])}' for m in rp)
+        chart = f'<p class="mc-cap">RPE de los últimos {len(rp)} metcons</p>{_bars_svg(items, "", lab)}'
+    cards = ""
+    for m in metcons:
+        presc = "".join(f"<li>{_esc(x)}</li>" for x in m["prescription"])
+        times = "".join(f'<span class="rx-chip">{_esc(t)}</span>' for t in m["timing"])
+        if m["minutes"] is not None:
+            times += f'<span class="rx-chip">{_kg(m["minutes"])} min grabados</span>'
+        hr = m.get("hr") or {}
+        if hr.get("average") and hr.get("max"):
+            times += f'<span class="rx-chip">FC {_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>'
+        rounds = ""
+        if m["rounds"]:
+            vals = m["rounds"]["values"]
+            its = [{"label": f"R{i + 1}", "value": v, "text": _kg(v), "soft": False} for i, v in enumerate(vals)]
+            rounds = (f'<p class="mc-cap">{_esc(m["rounds"]["label"][:1].upper() + m["rounds"]["label"][1:])}</p>'
+                      + _bars_svg(its, "", "Repeticiones por ronda: " + ", ".join(_kg(v) for v in vals)))
+        cards += (f'<article class="mc"><header><span class="mc-fmt">{_esc(m["format"])}' + (" · parejas" if m["partner"] else "")
+                  + f'</span><span class="mc-date">{_day_name(m["date"])}</span>{_rpe_pill(m["rpe"])}</header>'
+                  + (f'<ul class="mc-presc clean">{presc}</ul>' if presc else "")
+                  + (f'<p class="mc-res">{_esc(m["result"])}</p>' if m["result"] else '<p class="mc-res none">Resultado no registrado</p>')
+                  + (f'<div class="chips">{times}</div>' if times else "") + rounds
+                  + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + "</article>")
+    return ('<section class="card"><h2>Metcons</h2><p class="h2sub">fórmula, resultado y tiempos tal como constan · el cronómetro oficial y el reloj se muestran por separado</p>'
+            + chart + cards + '<p class="pg-note">Los metcons no son comparables entre sí salvo que repitan formato y ejercicios.</p></section>')
+
+
+def _training_html(tb: dict | None, prog: dict | None) -> str:
+    """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones."""
+    if not isinstance(tb, dict):
+        return _progression_html(prog)
+    s = tb.get("summary7") or {}
+    chips = (f'<li><b>{s.get("fuerza", 0)}</b><span>fuerza</span></li><li><b>{s.get("halterofilia", 0)}</b><span>halterofilia</span></li>'
+             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li>'
+             f'<li><b>{_kg(s["metcon_rpe_mean"]) if s.get("metcon_rpe_mean") is not None else "—"}</b><span>RPE medio metcons</span></li>')
+    head = (f'<section class="card tbhead"><h2>Últimos 7 días</h2><ul class="tbsum">{chips}</ul>'
+            '<div class="seg" role="tablist" aria-label="Tipo de entrenamiento">'
+            '<button role="tab" data-pane="fuerza" aria-selected="true">Fuerza</button>'
+            '<button role="tab" data-pane="halterofilia" aria-selected="false">Halterofilia</button>'
+            '<button role="tab" data-pane="metcons" aria-selected="false">Metcons</button>'
+            '<button role="tab" data-pane="sesiones" aria-selected="false">Sesiones</button></div></section>')
+    fz, hl = tb.get("fuerza") or {}, tb.get("halterofilia") or {}
+    panes = {
+        "fuerza": (_weekly_html(fz.get("weekly"), "Volumen de fuerza", "barra, por semana")
+                   + _progression_html(prog, "fuerza")
+                   + _lifts_html(fz.get("sessions"), "Sesiones de fuerza", "Aún no hay sesiones de fuerza con cargas registradas.")),
+        "halterofilia": (_weekly_html(hl.get("weekly"), "Volumen de halterofilia", "barra, por semana")
+                         + _progression_html(prog, "halterofilia")
+                         + _lifts_html(hl.get("sessions"), "Sesiones de halterofilia", "Aún no hay sesiones de halterofilia con cargas registradas.")),
+        "metcons": _metcons_html(tb.get("metcons") or []),
+    }
+    return head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
 
 
 def _glance_html(chips: list[dict] | None) -> str:
@@ -373,7 +510,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             "hoytop": top_block, "cambios": changes,
             "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": calendar_html + week_html,
-            "entrenos": _progression_html(extras.get("progression")),
+            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 
@@ -636,6 +773,38 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .pg-caution{margin:10px 0 0}
 @media (max-width:420px){.pg>summary{grid-template-columns:minmax(0,1fr) 84px auto}}
 /* ---- V7.16: de un vistazo ---- */
+/* V7.18 Entrenos: fuerza, halterofilia y metcons */
+.tbsum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:4px 0 14px;padding:0;list-style:none}
+.tbsum li{background:var(--surface-2);border-radius:12px;padding:9px 6px;text-align:center}
+.tbsum b{display:block;font-size:22px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.1}
+.tbsum span{display:block;font-size:11px;color:var(--text-2);margin-top:3px;line-height:1.2}
+.seg{display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px}
+.seg button{flex:1;min-width:0;border:0;background:transparent;color:var(--text-2);font:inherit;font-size:13px;font-weight:600;padding:8px 2px;border-radius:9px;cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.seg button:focus-visible{outline:2px solid var(--series-1);outline-offset:1px}
+.tbpane{display:grid;gap:14px}.tbpane[hidden]{display:none}
+.bars{width:100%;height:auto;display:block;overflow:visible;max-width:460px}
+.bar{fill:var(--series-1)}.bar.soft{fill:var(--series-1);fill-opacity:.45}
+.bar-val{font-size:10px;fill:var(--text);font-variant-numeric:tabular-nums;font-weight:600}.bar-val.none{fill:var(--text-3);font-weight:400}
+.bar-lab{font-size:9px;fill:var(--text-3)}.bar-axis{stroke:var(--line);stroke-width:1}
+.rpe-pill{font-size:12px;font-weight:650;padding:2px 9px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--surface-2);color:var(--text-2)}
+.rpe-pill.mid{background:rgba(250,178,25,.2);color:var(--warning-ink)}.rpe-pill.hi{background:rgba(208,59,59,.16);color:var(--critical-ink)}
+.lf,.mc{border-top:1px solid var(--line);padding:12px 0 4px}
+.lf header,.mc header{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.lf-title{margin:2px 0 6px;font-size:12px;color:var(--text-3)}
+.lf ul>li{padding:7px 0;border-top:1px dashed var(--line)}.lf ul>li:first-child{border-top:0}
+.lf-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.lf-name{font-size:14px;font-weight:600;min-width:0}.lf-name small{display:block;font-weight:400;font-size:11px;color:var(--text-3)}
+.lf-best{font-size:15px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}.lf-best small{font-weight:500;font-size:12px;color:var(--text-3);margin-left:3px}
+.lf-sets{margin:3px 0 0;font-size:13px;color:var(--text-2);font-variant-numeric:tabular-nums;line-height:1.45}
+.lf-meta{margin:2px 0 0;font-size:11px;color:var(--text-3)}
+.mc header{flex-wrap:wrap}.mc-fmt{font-size:15px;font-weight:650}.mc-date{font-size:12px;color:var(--text-3);margin-right:auto}
+.mc-presc{margin:8px 0 6px}.mc-presc li{font-size:13px;color:var(--text-2);padding:2px 0 2px 14px;position:relative}
+.mc-presc li::before{content:"";position:absolute;left:3px;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--series-2)}
+.mc-res{margin:6px 0;font-size:16px;font-weight:650}.mc-res.none{font-size:13px;font-weight:400;color:var(--text-3)}
+.mc .chips{margin:6px 0}.mc-cap{margin:10px 0 2px;font-size:12px;color:var(--text-2)}
+.mc .bars{margin-bottom:6px}
+
 .glance ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:0}
 .gl{display:flex;flex-direction:column;gap:1px;padding:10px 12px;border-radius:16px;background:var(--glass-chip,var(--surface-2));min-width:0}
 .gl:last-child:nth-child(odd){grid-column:1/-1}
@@ -790,7 +959,7 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 
   <div class="grid tab" id="tab-entrenos" data-tab="entrenos">
     {{ENT}}
-    <section class="card">
+    <section class="card tbpane" data-pane="sesiones" hidden>
       <h2>Sesiones recientes</h2>
       <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
       <div class="scroll"><table id="sessions"></table></div>
@@ -1187,6 +1356,22 @@ if (cal && T.length) {
 }
 
 $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días frente a tu línea base de hasta 60 días con banda de cambio mínimo relevante (±0,5 DE). FC en reposo y nocturna en desviaciones robustas (mediana/MAD). Sueño frente a ${fmt(S.need_hours,1)} h de necesidad y deuda de ${'3'} noches. La carga solo puntúa cuando la carga crónica (CTL) permite interpretar la forma. Sin datos de hoy o con sueño sin confirmar no se autoriza intensidad alta.<br>${esc(R.disclaimer)} · App ${esc(D.app_version)} · Historial desde ${esc(D.history.first_date || '—')} (${D.history.sessions} sesiones).`;
+})();
+
+// Entrenos: selector Fuerza · Halterofilia · Metcons · Sesiones
+(function(){
+  const seg = document.querySelector('.seg');
+  const panes = document.querySelectorAll('[data-pane].tbpane');
+  if (!seg){ panes.forEach(p => { p.hidden = false; }); return; }
+  function pick(k){
+    seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pane === k)));
+    panes.forEach(p => { if (p.dataset.pane === k) p.hidden = false; else p.hidden = true; });
+    if (k !== 'sesiones'){ const h = document.getElementById('hrdetail'); if (h) h.hidden = true; }
+    try { sessionStorage.setItem('entrenos-pane', k); } catch(e){}
+  }
+  seg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pick(b.dataset.pane); });
+  let k = 'fuerza'; try { k = sessionStorage.getItem('entrenos-pane') || k; } catch(e){}
+  pick(seg.querySelector('[data-pane="' + k + '"]') ? k : 'fuerza');
 })();
 
 // Pestañas: Hoy · Tendencias · Entrenos · Sistema (los enlaces antiguos como #plan o #calidad siguen funcionando)

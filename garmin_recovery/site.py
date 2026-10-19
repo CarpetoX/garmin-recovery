@@ -185,6 +185,8 @@ def _live_extras(root: Path, result: dict) -> dict:
         cf = json.loads((root / "crossfit_insights.json").read_text(encoding="utf-8")) if (root / "crossfit_insights.json").exists() else None
         built = progression.build(hist, cf)
         out["progression"] = {"items": built["items"], "summary": built["summary"]}
+        from . import training_blocks
+        out["training_blocks"] = training_blocks.build(cf, built["entries"], today)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:progression", exc)
     try:
