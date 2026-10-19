@@ -6,7 +6,7 @@
 ❤️ Señal destacada: HRV 60 ms (mediana 28 días 58) y FC en reposo 53 lpm (mediana 56); la alerta es el sueño corto (5,1 h frente a mediana 7,3 h)
 Orientación: ámbar, entrenar con control (RPE ≤ 7, volumen 70–80 %); hoy no hay turno, pero conviene recuperar sueño antes de cualquier sesión.
 
-**Análisis · lunes 19/10/2026 · ciclo 08:30 post-sueño** (certificado a las 12:50; datos sincronizados a las 13:11, con avisos: 3 franjas de Sync sin ejecutar).
+**Análisis · lunes 19/10/2026 · ciclo 08:30 post-sueño** (certificado a las 12:50; datos actualizados a las 15:46, con avisos: 3 franjas de Sync sin ejecutar y Body Battery en vivo no reciente).
 
 **Qué explica la puntuación.** El sueño ya es definitivo (sueño confirmado, margen de 30 minutos cumplido). La decisión es **ámbar** y la fijan el modelo oficial (64) y el híbrido (67); el experimental (72, verde) es más permisivo y se aplica el más conservador. La puntuación baja sobre todo por el sueño: 5,1 h (puntuación 64) frente a tu mediana de 7,3 h y una deuda de 2,4 h en 3 noches. HRV y FC en reposo están en rango; el estrés de ayer fue 30 de media (tu mediana 38). Las fases profunda y REM no constan.
 
