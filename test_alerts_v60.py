@@ -45,6 +45,17 @@ class Problems(unittest.TestCase):
         keys = [p["key"] for p in alerts.problems(workspace(missed=[old, recent]), NOW)]
         self.assertEqual(keys, ["missed:2026-10-18T08:30"])
 
+    def test_recovered_slot_is_not_a_problem(self):
+        recent = (NOW - timedelta(minutes=30)).isoformat()
+        ws = workspace(missed=[recent])
+        (ws / "workflow_health.json").write_text(json.dumps({"alerts": [
+            {"code": "cron_missed_dispatch_recovered", "slots": [recent]}]}))
+        self.assertEqual(alerts.problems(ws, NOW), [])
+        (ws / "workflow_health.json").write_text(json.dumps({"alerts": [
+            {"code": "cron_missed_dispatch_recovered", "slots": [recent]},
+            {"code": "sync_slot_not_recovered", "slots": [recent]}]}))
+        self.assertEqual([p["key"] for p in alerts.problems(ws, NOW)], ["missed:2026-10-18T08:30"])
+
 
 class FakeGitHub:
     """Simula issues y comentarios con estado (crear, comentar, cerrar)."""

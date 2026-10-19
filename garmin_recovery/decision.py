@@ -104,7 +104,7 @@ def operative_decision(readiness_v3: dict, legacy: dict, daily_summary: dict,
     v3_zone = readiness_v3.get("zone")
     divergence = []
     if v3_zone in ORDER and zone in ORDER and ORDER[v3_zone] > ORDER[zone]:
-        divergence.append(f"El v3 ({ZONE_ES[v3_zone]}) es más permisivo que la decisión ({ZONE_ES[zone]}); "
+        divergence.append(f"El modelo experimental ({ZONE_ES[v3_zone]}) es más permisivo que la decisión ({ZONE_ES[zone]}); "
                           "se aplica la más conservadora.")
     spread = [m["zone"] for m in voting if m["zone"] in ORDER]
     agreement = "total" if len(set(spread)) == 1 and not missing else "parcial"

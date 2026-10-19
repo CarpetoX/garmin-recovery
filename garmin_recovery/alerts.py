@@ -70,10 +70,18 @@ def problems(root: Path, now: datetime, scope: str = "chain", job_status: str = 
         out.append({"key": "stale", "text": f"No hay informe nuevo desde {when}. Revisa los activadores de Apps Script "
                     "y las ejecuciones de *Garmin Recovery Sync*."})
     out += source_problems(root, now)
+    missed_unrecovered: set[str] = set()
     missed = set((((data.get("certificate") or {}).get("execution_health") or {}).get("missed_slots")) or [])
     for alert in _read(root / "workflow_health.json").get("alerts") or []:
         if isinstance(alert, dict) and alert.get("code") == "sync_slot_not_recovered":
             missed |= {s for s in alert.get("slots") or [] if isinstance(s, str)}
+            missed_unrecovered |= {s for s in alert.get("slots") or [] if isinstance(s, str)}
+    # una franja que el Apps Script recuperó (el cron de GitHub no disparó pero el Sync se ejecutó) no es un fallo
+    recovered = set()
+    for alert in _read(root / "workflow_health.json").get("alerts") or []:
+        if isinstance(alert, dict) and alert.get("code") == "cron_missed_dispatch_recovered":
+            recovered |= {s for s in alert.get("slots") or [] if isinstance(s, str)}
+    missed -= recovered - {s for s in missed_unrecovered}
     recent = sorted(t.astimezone(TZ) for t in (_dt(s) for s in missed)
                     if t is not None and timedelta(0) <= now - t <= timedelta(hours=missed_hours))
     for t in recent:
