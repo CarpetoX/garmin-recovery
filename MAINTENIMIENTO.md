@@ -218,3 +218,7 @@ Calidad: la cobertura medida en CI es del 79 % y `fail_under` es 77.
 ## V7.12 — Resumen de hoy redactado por Claude
 
 `ai_analysis.lead` devuelve ahora el bloque «**En breve:**» completo (líneas hasta la primera en blanco, máx. 8). En Hoy, la tarjeta «Resumen de hoy · Claude» sustituye a «Hoy en breve» (reglas) cuando el análisis es del ciclo vigente; sin él, se muestra el resumen por reglas. La rutina debe escribir el formato con emojis y «Orientación:» (ver INSTRUCCIONES_INFORME.md).
+
+## V7.13 — Franja de turnos en Hoy
+
+`shiftstrip.compute(calendario, fecha, hora)` (módulo puro) calcula los bloques de hoy y mañana a partir de `shift_calendar.json`; el turno de noche de ayer entra por la izquierda de hoy. `site._live_extras` lo guarda en `extras["shifts"]` y `dashboard._shift_strip_html` pinta la tarjeta «Hoy y mañana en el reloj» justo debajo de la decisión. Si el día no consta en el calendario se dice «turno sin registrar»; si no consta ninguno, no hay tarjeta.
