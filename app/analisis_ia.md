@@ -6,9 +6,9 @@
 ❤️ Señal destacada: FC en reposo 54 lpm, 2 por debajo de tu mediana de 28 días (56)
 Orientación: hoy solo técnica ligera o movilidad (RPE ≤ 6), sin intensidad alta, y prioriza dormir tras el turno de noche.
 
-**Análisis · lunes 19/10/2026 · ciclo de las 08:30** (certificado con avisos: 3 franjas de Sync perdidas el 18/10; el ciclo de hoy se completó)
+**Análisis · lunes 19/10/2026 · ciclo de las 08:30** (certificado con avisos: 3 franjas de Sync perdidas el 18/10; el ciclo de hoy se completó a las 08:33, así que este análisis tiene más de 90 minutos y se apoya en un Sync posterior sin certificado propio)
 
-**Qué explica la puntuación.** Faltan HRV y horas de sueño de hoy, y el sueño no está confirmado, así que el modelo oficial y el experimental quedan pendientes. La decisión es **pendiente** (RPE ≤ 6). Solo consta la FC en reposo (54 lpm; mediana 56) y el estrés de ayer (30, mediana 38). Frecuencia cardíaca y Body Battery tienen retraso (la marca de tiempo de las muestras es anterior al ciclo; no son mediciones nuevas), no son mediciones nuevas. Los Sync posteriores quedaron fuera de franja y sin certificado propio; a las 10:40 el sueño sigue sin confirmar (posible sueño diurno tras el turno de noche).
+**Qué explica la puntuación.** Faltan HRV y horas de sueño de hoy, y el sueño no está confirmado, así que el modelo oficial y el experimental quedan pendientes. La decisión es **pendiente** (RPE ≤ 6). Solo consta la FC en reposo (54 lpm; mediana 56) y el estrés de ayer (30, mediana 38). Frecuencia cardíaca y Body Battery tienen retraso (muestras de las 06:16 y 06:09, anteriores al ciclo; no son mediciones nuevas). Los Sync posteriores quedaron fuera de franja y sin certificado propio; a las 11:45 el sueño sigue sin confirmar (posible sueño diurno tras el turno de noche).
 
 **Carga reciente.** Semana con carga 142 (121 la anterior) y monotonía 0,89. CTL 3,7: insuficiente para interpretar la forma.
 
