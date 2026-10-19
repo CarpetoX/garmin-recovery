@@ -190,6 +190,12 @@ def _live_extras(root: Path, result: dict) -> dict:
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:progression", exc)
     try:
+        from . import weight
+        reg = json.loads((root / "peso_registro.json").read_text(encoding="utf-8")) if (root / "peso_registro.json").exists() else None
+        out["weight"] = weight.build(reg, today)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:weight", exc)
+    try:
         sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
         out["plan"] = improvement._plan(root, result, today, sessions)
     except Exception as exc:  # noqa: BLE001

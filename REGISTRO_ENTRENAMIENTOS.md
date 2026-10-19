@@ -56,3 +56,7 @@ Ejemplo mínimo (metcon):
 ```
 Registro de entrenamientos: cuando el usuario cuente un entrenamiento o un RPE, apúntalo en la hoja «RPE CrossFit - Registro», pestaña RPE (columnas Fecha, ID actividad, Actividad, RPE, Sensaciones, Notas, Registrado, Detalle JSON), siguiendo REGISTRO_ENTRENAMIENTOS.md del repositorio. Primero empareja el dictado con la actividad por su ID exacto (pregunta si hay duda), añade una fila por actividad sin borrar nada, no inventes cargas ni RPE, marca lo no confirmado, relee la fila y confirma en una línea.
 ```
+
+## Peso corporal
+
+Cuando el atleta dicte o muestre una pesada: añade una fila en la pestaña **`Peso`** (Fecha, Hora, Peso kg, Grasa %, Músculo kg, Agua %, Fuente, Notas) y una entrada en `peso_registro.json` del repositorio (la app lee de ahí). Solo valores reales; lo calculado a partir de diferencias se marca como `derivado`.
