@@ -1,30 +1,28 @@
 {
-  "generated_at": "2026-10-20T09:40:45.819759+02:00",
+  "generated_at": "2026-10-20T10:15:46.134098+02:00",
   "methodology_version": "recovery-reliability-v2.3.1",
-  "state": "pending",
-  "status": "unavailable",
-  "score": null,
-  "confidence": "low",
-  "reason": "faltan_sueno_vfc_o_fc_reposo",
-  "missing_essential": [
-    "hrv_ms"
-  ],
+  "state": "assessed",
+  "status": "green",
+  "score": 80,
+  "confidence": "high",
+  "reason": null,
+  "missing_essential": [],
   "fresh_sources": true,
-  "context": "day_sleep",
+  "context": "night_sleep",
   "work_shift_context": "free",
-  "sleep_context": "day_sleep",
+  "sleep_context": "night_sleep",
   "current": {
     "date": "2026-10-20",
-    "hrv_ms": null,
-    "sleep_hours": 5.12,
-    "sleep_score": 64.0,
+    "hrv_ms": 53.0,
+    "sleep_hours": 10.15,
+    "sleep_score": 82.0,
     "resting_hr": 59.0,
-    "night_hr": 59.6,
-    "sleep_context": "day_sleep",
-    "sleep_start_local": "2026-10-19T06:41:38+02:00",
-    "sleep_end_local": "2026-10-19T12:19:38+02:00",
+    "night_hr": 62.6,
+    "sleep_context": "night_sleep",
+    "sleep_start_local": "2026-10-19T23:30:36+02:00",
+    "sleep_end_local": "2026-10-20T10:09:36+02:00",
     "sources": {
-      "hrv_ms": null,
+      "hrv_ms": "garmin_hrv_timeline",
       "sleep_hours": "garmin_sleep_history",
       "sleep_score": "garmin_sleep_history",
       "resting_hr": "garmin_heart_rate",
@@ -63,9 +61,27 @@
       "scope": "overall"
     }
   },
-  "metrics_used": [],
+  "metrics_used": [
+    {
+      "metric": "hrv_ms",
+      "value": 53.0,
+      "reference": 58.0,
+      "change_pct": -8.6
+    },
+    {
+      "metric": "resting_hr",
+      "value": 59.0,
+      "reference": 56.0,
+      "delta_bpm": 3.0
+    },
+    {
+      "metric": "sleep_hours",
+      "value": 10.15,
+      "reference": 7.27
+    }
+  ],
   "warnings": [],
-  "recommendation": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
+  "recommendation": "Interpretar junto con dolor, sensaciones, RPE y rendimiento; no es un diagnóstico.",
   "limitations": [
     "No mide fatiga neuromuscular directamente.",
     "Puntuación heurística no validada clínicamente.",
@@ -76,7 +92,7 @@
     "shift_context": "free",
     "sleep_integrity": {
       "main_sleep_confirmed": true,
-      "main_sleep_minutes": 307,
+      "main_sleep_minutes": 609,
       "unconfirmed_separate_events": 0,
       "unconfirmed_separate_minutes": 0,
       "overlapping_body_battery_events": 0,
@@ -84,45 +100,42 @@
       "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
     },
     "sleep_score_provenance": {
-      "confirmed_sleep_score": 64.0,
-      "readiness_sleep_field": null,
-      "status": "missing_comparison",
+      "confirmed_sleep_score": 82.0,
+      "readiness_sleep_field": 82.0,
+      "status": "close_values",
       "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
     },
     "subjective_checkin": "not_provided",
     "subjective_values_exported": false,
     "intensity_guardrail": "use_v22_guidance",
-    "reason_codes": [
-      "short_sleep",
-      "live_measurement_uncertain"
-    ],
-    "baseline_caution": "day_sleep_baseline_not_mature",
+    "reason_codes": [],
+    "baseline_caution": "standard",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
     "measurement_provenance": {
       "sources": {
         "confirmed_sleep": {
-          "state": "delayed",
-          "measured_at": "2026-10-19T12:19:38+02:00",
-          "age_minutes": 1281.1,
+          "state": "recent",
+          "measured_at": "2026-10-20T10:09:36+02:00",
+          "age_minutes": 6.2,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
-          "state": "unverified_timestamp",
-          "measured_at": null,
-          "age_minutes": null,
+          "state": "recent",
+          "measured_at": "2026-10-20T10:06:16+02:00",
+          "age_minutes": 9.5,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
           "state": "recent",
-          "measured_at": "2026-10-20T08:20:00+02:00",
-          "age_minutes": 80.8,
+          "measured_at": "2026-10-20T10:10:00+02:00",
+          "age_minutes": 5.8,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "delayed",
-          "measured_at": "2026-10-20T08:00:00+02:00",
-          "age_minutes": 100.8,
+          "state": "recent",
+          "measured_at": "2026-10-20T09:51:00+02:00",
+          "age_minutes": 24.8,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -133,10 +146,8 @@
         }
       },
       "invalid_core_episode": false,
-      "live_data_limited": true,
-      "limited_live_metrics": [
-        "body_battery_live"
-      ],
+      "live_data_limited": false,
+      "limited_live_metrics": [],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
     },
     "sleep_fragmentation": {
@@ -148,13 +159,13 @@
       "note": "User-confirmed extra naps may inform discussion but are not merged with Garmin HRV, stages or sleep-score baselines."
     },
     "training_guidance": {
-      "guidance_level": "restrict",
+      "guidance_level": "individualize",
       "session_types": {
-        "heavy_strength": "postpone_heavy_sets",
-        "olympic_lifting": "avoid_heavy_or_complex_skill",
-        "high_intensity_metcon": "postpone_intense_metcon",
-        "easy_aerobic": "optional_easy_only_if_alert_and_symptoms_allow",
-        "mobility": "optional_light_mobility"
+        "heavy_strength": "consider_planned_work_after_symptom_and_warmup_check",
+        "olympic_lifting": "consider_planned_technique_after_warmup",
+        "high_intensity_metcon": "consider_planned_session_after_warmup",
+        "easy_aerobic": "usual_program_if_well",
+        "mobility": "usual_program_if_well"
       },
       "recent_sessions_with_declared_rpe": 5,
       "recent_high_rpe_sessions": 2,
