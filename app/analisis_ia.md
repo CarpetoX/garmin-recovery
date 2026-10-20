@@ -6,7 +6,7 @@
 ❤️ Señal destacada: deuda de sueño de 4,8 h en 3 noches; FC en reposo 59 lpm (+4 sobre tu mediana)
 Orientación: hoy no hay turno (el próximo es MT el 22/10); solo técnica ligera y movilidad, RPE máx. 6, hasta confirmar el sueño.
 
-**Análisis · martes 20/10/2026 · cierre matinal, ciclo 08:30** (certificado READY a las 08:33; 4 de 4 etapas; 3 franjas de Sync de ayer sin ejecutar ni recuperar; la entrega no se ha confirmado). Informe base GR-2026-10-20-0906 sin cambios en los datos respecto al de las 08:33; el sueño de hoy sigue sin confirmar a las 09:05.
+**Análisis · martes 20/10/2026 · cierre matinal, ciclo 08:30** (certificado READY a las 08:33; 4 de 4 etapas; 3 franjas de Sync de ayer sin ejecutar ni recuperar; la entrega no se ha confirmado). Informe base GR-2026-10-20-0941-d56e50 (09:41) sin cambios en los datos respecto al de las 09:06; el sueño de hoy sigue sin confirmar a las 09:40.
 
 **Qué explica la puntuación.** La decisión es **pendiente**: faltan la HRV de hoy y el sueño confirmado, así que no se autoriza intensidad alta. El híbrido (74, ámbar) es solo una salvaguarda. El peso lo lleva el sueño corto.
 
