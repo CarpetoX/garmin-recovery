@@ -1,25 +1,25 @@
-<!-- cycle_id: 2026-10-19-2245 -->
+<!-- cycle_id: 2026-10-20-0830 -->
 **En breve:**
-🟡 Recuperación: oficial 64/100, confianza alta; el híbrido marca 67 y el experimental 72 (más permisivo)
-🌙 Sueño: 5 h 07 min (06:41 → 12:19, sueño diurno tras turno de noche) · puntuación 64
-🏋️ Carga: hoy 4 sesiones (sRPE 261), dos con RPE 8 y 9; 7 días: 13 sesiones, carga 189, sRPE 1.955
-❤️ Señal destacada: HRV 60 ms (mediana 28 días 58) y FC en reposo 53 lpm (mediana 56); la alerta es la deuda de sueño: 2,4 h en 3 noches
-Orientación: ámbar, entrenar con control (RPE máx. 7); hoy ya hay carga alta, así que prioriza dormir esta noche.
+⚪ Recuperación: oficial pendiente (sin puntuación hoy), confianza baja; el híbrido marca 74 (ámbar)
+🌙 Sueño: de hoy sin confirmar (posible sueño en curso o sincronización pendiente); último episodio registrado 5,1 h · puntuación 64
+🏋️ Carga: 7 días: 11 sesiones, carga 158 (semana anterior 119), sRPE 1.670; ayer 19/10 hubo sesiones con RPE 8 y 9
+❤️ Señal destacada: deuda de sueño de 4,8 h en 3 noches; FC en reposo 59 lpm (+4 sobre tu mediana)
+Orientación: hoy no hay turno (el próximo es MT el 22/10); solo técnica ligera y movilidad, RPE máx. 6, hasta confirmar el sueño.
 
-**Análisis · lunes 19/10/2026 · cierre nocturno, ciclo 22:45** (certificado READY a las 22:48; 4 de 4 etapas correctas; 4 franjas de Sync sin ejecutar ni recuperar; la entrega no se ha confirmado).
+**Análisis · martes 20/10/2026 · cierre matinal, ciclo 08:30** (certificado READY a las 08:33; 4 de 4 etapas; 3 franjas de Sync de ayer sin ejecutar ni recuperar; la entrega no se ha confirmado).
 
-**Qué explica la puntuación.** La decisión es **ámbar**, fijada por el modelo oficial (64) y el híbrido (67); el experimental (72, verde) se descarta por ser menos conservador. HRV y FC en reposo están en rango; el peso lo lleva el sueño (profundo 1 h 16 min, REM 52 min).
+**Qué explica la puntuación.** La decisión es **pendiente**: faltan la HRV de hoy y el sueño confirmado, así que no se autoriza intensidad alta. El híbrido (74, ámbar) es solo una salvaguarda. El peso lo lleva el sueño corto.
 
-**Carga reciente.** Hoy: EMOM echo bike/squat clean (RPE 9) y fuerza de power clean/squat clean (RPE 8), por encima del RPE máx. 7 de la decisión. La semana en curso lleva carga 189 frente a 121 la anterior; la semana pasada, completa, suma sRPE 1.694. Sin sensaciones registradas en 14 días.
+**Carga reciente.** Ayer: fuerza de power clean/squat clean (RPE 8) y EMOM echo bike/squat clean (RPE 9). Sin sensaciones registradas hoy.
 
 **3 prioridades**
-1. Dormir hoy: objetivo 30–45 min más de lo habitual, sin una sola noche larga.
-2. Mañana, sesión suave o moderada; evita piernas pesadas y otro esfuerzo máximo (RPE ≥ 8) hasta tener ≥ 48 h.
-3. Anotar sensaciones en Intervals.icu para afinar el modelo.
+1. Dormir lo suficiente hoy y dejar que el sueño se sincronice; reevalúa entonces.
+2. Sin esfuerzos de RPE ≥ 7 hasta que el sueño y la HRV estén confirmados.
+3. Anotar sensaciones en Intervals.icu.
 
 **Plan de 7 días** (turnos: 22/10 MT, 23/10 TN)
-- 20/10: moderada.
-- 21/10: una sesión exigente como máximo, solo si el sueño y la HRV lo permiten.
+- 20/10: técnica ligera, movilidad o Zona 2 suave.
+- 21/10: una sesión moderada o exigente, solo si el sueño y la HRV lo permiten.
 - 22/10 (MT): movilidad o descanso.
 - 23/10 (TN): si entrenas, por la mañana y suave.
 - 24/10: descanso tras TN.
