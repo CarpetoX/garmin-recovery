@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Martes, 20 de octubre de 2026 · 08:33 · `GR-2026-10-20-0833-61ec46`
+Martes, 20 de octubre de 2026 · 09:06 · `GR-2026-10-20-0906-bd276c`
 
 ```cards
 Decisión|Pendiente de datos|RPE máx. 6|unavailable
@@ -364,4 +364,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ 
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-20-0830 · generado 20/10/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 39380915866.
+Traza: cierre matinal · ciclo 2026-10-20-0830 · generado 20/10/2026 09:06 Europe/Madrid · certificado READY · sync_run_id 39380915866.
