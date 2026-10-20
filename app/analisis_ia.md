@@ -1,28 +1,28 @@
-<!-- cycle_id: 2026-10-20-0830 -->
+<!-- cycle_id: 2026-10-20-0830-post-sleep -->
 **En breve:**
-🟢 Recuperación: oficial 80/100, confianza alta; el modelo experimental sigue pendiente
-🌙 Sueño: 10,2 h (23:30 → 10:09) · puntuación 82; despertar confirmado, falta el margen de 30 min (definitivo a las 10:39)
-🏋️ Carga: 7 días: 11 sesiones, carga 158 (semana anterior 119), sRPE 1.670; ayer 19/10 hubo sesiones con RPE 8 y 9
-❤️ Señal destacada: HRV 53 ms (media de 28 días 58) y FC en reposo 59 lpm (referencia 56)
-Orientación: hoy no hay turno (el próximo es MT el 22/10); la decisión sigue pendiente, así que técnica ligera y movilidad, RPE máx. 6, hasta que el sueño sea definitivo.
+🟢 Recuperación: oficial 80/100, confianza alta; híbrido 85 y experimental 71, los tres en verde
+🌙 Sueño: 10,2 h (hasta las 10:09) · puntuación 82; definitivo y confirmado
+🏋️ Carga: 7 días: 11 sesiones, carga 158, sRPE 1.670; ayer 19/10 hubo sesiones con RPE 8 y 9
+❤️ Señal destacada: HRV 53 ms (referencia 58) y FC en reposo 59 lpm (mediana 55)
+Orientación: hoy no hay turno (el próximo es MT el 22/10); la decisión es verde (RPE máx. 9), pero con HRV baja y carga alta ayer conviene calentar bien y no pasar de RPE 8 si la barra va lenta.
 
-**Análisis · martes 20/10/2026 · ciclo 08:30** (certificado READY; 4 de 4 etapas; cadena completada a las 10:16; la entrega no se ha confirmado).
+**Análisis · martes 20/10/2026 · ciclo 08:30 (post-sueño)** (certificado READY; 4 de 4 etapas; cadena completada a las 10:41; la entrega no se ha confirmado; 3 franjas de Sync sin ejecutar).
 
-**Qué explica la puntuación.** La zona operativa es la más conservadora entre modelos: el oficial (80) y el híbrido (82) están en verde, pero el experimental está pendiente por sueño no definitivo, así que no se autoriza intensidad alta aún. HRV 8,6 % por debajo de tu referencia y FC en reposo 3 lpm por encima; el sueño largo compensa la deuda de 2,4 h en 3 noches.
+**Qué explica la puntuación.** La zona operativa es la más conservadora entre modelos y los tres coinciden en verde, con sueño ya definitivo. Pesan en contra la HRV (53 ms, media de 7 días por debajo de tu rango normal) y la FC en reposo (+4 lpm sobre la mediana); a favor, el sueño de 10,2 h y el estrés de ayer (30 de media). Sigue una deuda de 2,4 h en 3 noches.
 
-**Carga reciente.** Ayer: fuerza de power clean/squat clean (RPE 8), EMOM echo bike/squat clean (RPE 9) y técnica de toes to bar (RPE 1). Sin sensaciones registradas hoy.
+**Carga reciente.** Ayer 19/10: fuerza de power clean/squat clean (RPE 8), EMOM echo bike/squat clean (RPE 9) y técnica (RPE 1). La semana en curso está incompleta y no se compara con la anterior. Sin sensaciones registradas.
 
 **3 prioridades**
-1. Esperar a las 10:39 y reevaluar con el sueño definitivo.
-2. Hoy RPE máx. 6; sin esfuerzos de RPE ≥ 7 hasta entonces.
-3. Anotar sensaciones en Intervals.icu.
+1. Calentamiento progresivo; si la barra va lenta, baja a la pauta ámbar.
+2. Evitar encadenar otro día de RPE ≥ 8–9 mañana sin ver cómo responden HRV y FC en reposo.
+3. Anotar sensaciones en Intervals.icu y el RPE de cada sesión el mismo día.
 
 **Plan de 7 días** (22/10 MT, 23/10 TN)
-- 20/10: técnica ligera, movilidad o Zona 2 suave.
-- 21/10: una sesión moderada o exigente si se confirma la recuperación.
+- 20/10: sesión según lo planificado, RPE ≤ 9 solo si el calentamiento responde.
+- 21/10: moderada, según HRV de la mañana.
 - 22/10 (MT): movilidad o descanso.
-- 23/10 (TN): si entrenas, por la mañana y suave.
-- 24/10: descanso tras TN.
+- 23/10 (TN): si entrenas, por la mañana y suave; siesta corta antes del turno.
+- 24/10: descanso y priorizar dormir tras TN.
 - 25/10: una sesión exigente como máximo.
 
 _Herramienta de entrenamiento; no es un diagnóstico médico._
