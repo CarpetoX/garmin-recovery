@@ -23,8 +23,9 @@ def decode_context_map():
                 env_days = data.get("days", data)
                 if isinstance(env_days, dict):
                     merged.update(env_days)
-        except Exception:
-            pass
+        except ValueError as exc:  # base64 o JSON mal formado (incluye binascii.Error y UnicodeDecodeError)
+            from .optional_blocks import failed
+            failed("advanced:contexto_secreto", exc)
 
     from .shift_calendar import context_map as shift_context_map
     return shift_context_map({

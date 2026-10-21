@@ -29,7 +29,7 @@ def load_json(path, default):
     try:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except Exception:
+    except (OSError, ValueError):
         return default
 
 def save_json(path, data):
@@ -49,7 +49,7 @@ def safe_date(value):
     if isinstance(value, str) and len(value) >= 10:
         try:
             return datetime.strptime(value[:10], "%Y-%m-%d").date()
-        except Exception:
+        except ValueError:
             return None
     return None
 
@@ -58,7 +58,7 @@ def parse_dt(value):
         return None
     try:
         return datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except Exception:
+    except ValueError:
         return None
 
 def percentile(values, p):

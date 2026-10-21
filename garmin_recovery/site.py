@@ -207,6 +207,7 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     from .dashboard import render
     from .weekly import punctuality
     root, out = Path(root), Path(out)
+    optional_blocks.reset()
     result = json.loads((root / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
     try:
         with (root / "history" / "reports.csv").open(encoding="utf-8", newline="") as fh:
@@ -247,7 +248,10 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         except Exception as exc:  # noqa: BLE001 — un día con datos raros no debe romper la web
             optional_blocks.failed(f"web:dia {o['date']}", exc)
             extras["days"] = [x for x in extras["days"] if x["date"] != o["date"]]
+    extras["web_failures"] = optional_blocks.failures()  # se muestran al pie de la web (V7.24)
     (out / "index.html").write_text(render(result, extras), encoding="utf-8")
+    (out / "estado_web.json").write_text(json.dumps({"optional_failures": optional_blocks.failures()}, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
     (out / "manifest.webmanifest").write_text(json.dumps(MANIFEST, ensure_ascii=False, indent=1), encoding="utf-8")
     (out / "sw.js").write_text(SERVICE_WORKER, encoding="utf-8")
     for size in (180, 192, 512):

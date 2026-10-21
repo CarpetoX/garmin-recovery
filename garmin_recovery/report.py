@@ -918,8 +918,9 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     try:
         from . import session_effort
         crossfit["_effort"] = session_effort.load(root)
-    except Exception:  # noqa: BLE001 — opcional: sin esfuerzo relativo, la tabla sale igual
-        pass
+    except Exception as exc:  # noqa: BLE001 — opcional: sin esfuerzo relativo, la tabla sale igual
+        from .optional_blocks import failed
+        failed("informe:rpe_frente_fc", exc)
     import csv
     reports_csv = Path(root) / "history" / "reports.csv"
     previous = None

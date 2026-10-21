@@ -83,13 +83,17 @@ def build_message(root: Path, now: datetime | None = None, max_age_min: float = 
     body = label + (f" · RPE máx. {rpe}" if rpe is not None else "")
     try:
         tip = night_shift_tip(root, result, now)
-    except Exception:  # noqa: BLE001 — el consejo es opcional
+    except Exception as exc:  # noqa: BLE001 — el consejo es opcional
+        from .optional_blocks import failed
+        failed("aviso:consejo_turno", exc)
         tip = None
     if tip:
         body += "\n" + tip
     try:
         pend = rpe_pending_tip(result, now)
-    except Exception:  # noqa: BLE001 — opcional
+    except Exception as exc:  # noqa: BLE001 — opcional
+        from .optional_blocks import failed
+        failed("aviso:rpe_pendiente", exc)
         pend = None
     if pend:
         body += "\n" + pend
