@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Miércoles, 21 de octubre de 2026 · 09:06 · `GR-2026-10-21-0906-81a111`
+Miércoles, 21 de octubre de 2026 · 14:08 · `GR-2026-10-21-1408-2fc8a6`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -32,7 +32,7 @@ Carga 7 días|9 sesiones|sRPE 1098|unavailable
 | Certificado generado | 09:06:08 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
-| Calidad fisiológica de los datos | 74/100 (usable) |
+| Calidad fisiológica de los datos | 89/100 (good) |
 
 ⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-20 08:30, 10-20 16:45, 10-20 22:45.
 
@@ -134,7 +134,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 92,0 lpm | 89,1 lpm |
+| Hoy* | 91,5 lpm | 89,1 lpm |
 | 3 días | 84,9 lpm | 62,3 lpm |
 | 7 días | 86,3 lpm | 64,8 lpm |
 | 28 días | 83,3 lpm | 63,1 lpm |
@@ -155,7 +155,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 73, máximo 99.
-- Body Battery: último valor 7/100, medido a las 08:33.
+- Body Battery: último valor 6/100, medido a las 09:06 (hace 5 h 02 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -282,7 +282,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy sin dato, mañana MT.
-- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (4/100); Body Battery bajo (7/100).
+- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (4/100); Body Battery bajo (6/100).
 
 ### Recomendaciones
 
@@ -372,4 +372,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-21-0830-post-sleep · generado 21/10/2026 09:06 Europe/Madrid · certificado READY · sync_run_id 39559529636.
+Traza: informe de tarde · ciclo 2026-10-21-0830-post-sleep · generado 21/10/2026 14:08 Europe/Madrid · certificado READY · sync_run_id 39559529636.
