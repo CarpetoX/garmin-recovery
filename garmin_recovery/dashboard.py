@@ -881,6 +881,19 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .gl-v{font-size:14px;font-weight:650;line-height:1.3;overflow-wrap:anywhere}
 .gl-s{font-size:12px;color:var(--text-3);line-height:1.3}
 @media (prefers-reduced-motion:reduce){.js .tab.on>*{animation:none}.heroring .arc{transition:none}}
+/* V7.21: gráficas que se dibujan, curva de FC y ♥ que late a la FC media */
+.pre:not(.play) :is(path.ln,polyline.pg-line,polyline.wt-line){opacity:0}
+.pre :is(path.ln,polyline.pg-line,polyline.wt-line){transition:stroke-dashoffset 1.1s cubic-bezier(.33,.7,.3,1)}
+.pre:not(.play) :is(.br,.bar){transform:scaleY(0)}
+.pre :is(.br,.bar){transform-box:fill-box;transform-origin:50% 100%}
+.pre.play :is(.br,.bar){transition:transform .55s cubic-bezier(.22,.8,.24,1) calc(var(--i,0) * 22ms)}
+.pre:not(.play) :is(.fd,circle,text.pg-val,text.bar-val){opacity:0}
+.pre.play :is(.fd,circle,text.pg-val,text.bar-val){transition:opacity .5s ease .55s}
+.hrwrap.pre path.ln{transition-duration:1.4s}
+.zarc{transition:stroke-dasharray .45s ease-out var(--d,0s)}
+.hrmark.beat{display:inline-block;animation:beat var(--beat,1s) ease-in-out infinite;transform-origin:50% 60%}
+@keyframes beat{0%,55%,100%{transform:scale(1)}14%{transform:scale(1.28)}28%{transform:scale(1.04)}40%{transform:scale(1.16)}}
+@media (prefers-reduced-motion:reduce){.hrmark.beat{animation:none}.zarc{transition:none}}
 /* sesiones como tarjetas en móvil */
 @media (max-width:640px){
  #sessions,#sessions tbody{display:block}#sessions thead{display:none}
@@ -1146,6 +1159,19 @@ $('meters').innerHTML = Object.entries(C).map(([k, c]) => `
 
 // ---------- Motor de gráficos ----------
 const tip = $('tip');
+// V7.21: animaciones. Las gráficas se dibujan al entrar en pantalla; con «reducir movimiento» no se anima nada.
+const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LINES = 'path.ln, polyline.pg-line, polyline.wt-line';
+function playIn(h) {
+  h.querySelectorAll(LINES).forEach(p => { let L = 0; try { L = p.getTotalLength(); } catch (e) {}
+    if (!(L > 0)) return; p.style.transition = 'none'; p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+  h.getBoundingClientRect();  // fija el estado inicial antes de animar
+  requestAnimationFrame(() => { h.classList.add('play');
+    h.querySelectorAll(LINES).forEach(p => { p.style.transition = ''; p.style.strokeDashoffset = 0; }); });
+}
+const IOA = (!RM && 'IntersectionObserver' in window) ? new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { IOA.unobserve(e.target); playIn(e.target); } }), {threshold: .3}) : null;
+function animIn(h) { if (!IOA || !h || h.dataset.anim) return; h.dataset.anim = '1'; h.classList.add('pre'); IOA.observe(h); }
 function chart(el, opt){
   const draw = () => {
     const W = el.clientWidth, Hh = el.clientHeight, m = {t:10, r:12, b:22, l:34};
@@ -1188,7 +1214,7 @@ function chart(el, opt){
     });
     if (opt.stack) { const w = Math.min(24, bw * .62);
       T.forEach((d, i) => { let acc = 0; opt.stack.forEach(se => { const v = d[se.key]; if (!v || v <= 0) return;
-        const top = y(acc + v), base = y(acc); s += `<rect x="${x(i) - w/2}" y="${top}" width="${w}" height="${Math.max(1, base - top)}" fill="${se.color}" rx="2"/>`; acc += v; }); }); }
+        const top = y(acc + v), base = y(acc); s += `<rect class="br" style="--i:${i}" x="${x(i) - w/2}" y="${top}" width="${w}" height="${Math.max(1, base - top)}" fill="${se.color}" rx="2"/>`; acc += v; }); }); }
     (opt.series || []).forEach(se => {
       const col = `var(${se.color || '--series-1'})`;
       if (se.kind === 'tick') {
@@ -1199,20 +1225,21 @@ function chart(el, opt){
         const w = Math.min(24, bw * .62);
         T.forEach((d, i) => { const v = d[se.key]; if (v == null || v <= 0) return;
           const top = y(v), base = y(Math.max(lo, 0)), h = Math.max(1, base - top), rr = Math.min(4, w / 2, h);
-          s += `<path d="M${x(i) - w/2},${base}V${top + rr}Q${x(i) - w/2},${top} ${x(i) - w/2 + rr},${top}H${x(i) + w/2 - rr}Q${x(i) + w/2},${top} ${x(i) + w/2},${top + rr}V${base}Z" fill="${col}"/>`; });
+          s += `<path class="br" style="--i:${i}" d="M${x(i) - w/2},${base}V${top + rr}Q${x(i) - w/2},${top} ${x(i) - w/2 + rr},${top}H${x(i) + w/2 - rr}Q${x(i) + w/2},${top} ${x(i) + w/2},${top + rr}V${base}Z" fill="${col}"/>`; });
       } else {
         const segs = []; let cur = [];
         T.forEach((d, i) => { const v = d[se.key]; if (v == null) { if (cur.length) segs.push(cur); cur = []; } else cur.push([x(i), y(v)]); });
         if (cur.length) segs.push(cur);
         if (se.kind !== 'dots') segs.forEach(g => { if (g.length > 1) { const d = smooth(g);
-          if (se.area) s += `<path d="${d}L${g[g.length-1][0]},${y(lo)}L${g[0][0]},${y(lo)}Z" fill="${col}" fill-opacity=".13"/>`;
-          s += `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>`; } });
-        if (se.kind === 'dots' || se.markers) T.forEach((d, i) => { const v = d[se.key]; if (v != null) s += `<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`; });
+          if (se.area) s += `<path class="fd" d="${d}L${g[g.length-1][0]},${y(lo)}L${g[0][0]},${y(lo)}Z" fill="${col}" fill-opacity=".13"/>`;
+          s += `<path class="ln" d="${d}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>`; } });
+        if (se.kind === 'dots' || se.markers) T.forEach((d, i) => { const v = d[se.key]; if (v != null) s += `<circle class="fd" cx="${x(i)}" cy="${y(v)}" r="4" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`; });
       }
     });
     s += `<line class="xh" x1="0" x2="0" y1="${m.t}" y2="${m.t + ih}" stroke="var(--text-3)" stroke-width="1" opacity="0"/>`;
     s += `<rect x="${m.l}" y="0" width="${iw}" height="${Hh}" fill="transparent"/></svg>`;
     el.innerHTML = s;
+    animIn(el);
     const svg = el.querySelector('svg'), xh = svg.querySelector('.xh');
     const move = ev => {
       const rect = svg.getBoundingClientRect(), px = ev.clientX - rect.left;
@@ -1316,8 +1343,10 @@ const effTxt = {alto: 'RPE alto para tu FC', bajo: 'RPE bajo para tu FC'};
 const effTip = {alto: 'Te costó más de lo habitual para la FC registrada en este tipo de sesión.',
                 bajo: 'La FC fue alta para el esfuerzo que marcaste en este tipo de sesión.'};
 const effFlag = id => { const e = EFF[id]; return e && e.flag ? e : null; };
+// ♥ que late a la FC media de la sesión (un latido = 60 / FC segundos)
+const beat = hr => `<span class="hrmark${hr > 0 ? ' beat' : ''}" aria-hidden="true"${hr > 0 ? ` style="--beat:${(60 / hr).toFixed(3)}s"` : ''}>♥</span>`;
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? '<span class="hrmark" aria-hidden="true">♥</span> ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 
 // ---------- Detalle de FC de una sesión ----------
@@ -1336,21 +1365,23 @@ function showHr(id, anchor) {
   for (let v = lo; v <= hi; v += 20) svg += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${m.l - 5}" y="${y(v) + 4}" text-anchor="end" font-size="10" fill="var(--text-3)">${v}</text>`;
   const step = tmax > 5400 ? 1200 : tmax > 2400 ? 600 : 300;
   for (let t = 0; t <= tmax; t += step) svg += `<text x="${x(t)}" y="${H - 7}" text-anchor="middle" font-size="10" fill="var(--text-3)">${Math.round(t / 60)}′</text>`;
-  svg += `<path d="M${pts.map(p => x(p[0]).toFixed(1) + ',' + y(p[1]).toFixed(1)).join('L')}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"/>` +
+  svg += `<path class="ln" d="M${pts.map(p => x(p[0]).toFixed(1) + ',' + y(p[1]).toFixed(1)).join('L')}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"/>` +
     `<line id="hrx" y1="${m.t}" y2="${m.t + ih}" stroke="var(--text-3)" opacity="0"/><rect id="hrhit" x="${m.l}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
   const zs = c.zone_seconds || [], ztot = zs.reduce((a, b) => a + (b || 0), 0);
   const zdon = (() => { if (!(ztot > 0)) return ''; const r = 38, cc = 2 * Math.PI * r; let off = 0, arcs = '';
     zs.forEach((sec, i) => { if (!(sec > 0)) return; const len = sec / ztot * cc;
-      arcs += `<circle cx="50" cy="50" r="${r}" fill="none" stroke="${zc[i] || zc[6]}" stroke-width="14" stroke-dasharray="${len.toFixed(2)} ${(cc - len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 50 50)"/>`; off += len; });
+      arcs += `<circle class="zarc" style="--d:${(off / cc * 0.9).toFixed(2)}s" data-to="${len.toFixed(2)} ${(cc - len).toFixed(2)}" cx="50" cy="50" r="${r}" fill="none" stroke="${zc[i] || zc[6]}" stroke-width="14" stroke-dasharray="${RM ? len.toFixed(2) + ' ' + (cc - len).toFixed(2) : '0 ' + cc.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 50 50)"/>`; off += len; });
     const top = zs.reduce((b, v, i) => v > zs[b] ? i : b, 0);
     return `<svg viewBox="0 0 100 100" width="104" height="104" role="img" aria-label="Reparto del tiempo por zonas de FC">${arcs}<text x="50" y="48" text-anchor="middle" font-size="15" font-weight="650" fill="var(--text)">Z${top + 1}</text><text x="50" y="62" text-anchor="middle" font-size="8" fill="var(--text-3)">${Math.round(zs[top] / ztot * 100)} %</text></svg>`; })();
   const zrows = ztot > 0 ? zs.map((sec, i) => sec > 0 ? `<div class="zrow"><span>Z${i + 1}${zb[i] != null ? ` · hasta ${zb[i]}` : ''}</span><i style="width:${Math.max(2, Math.round(sec / ztot * 100))}%;background:${zc[i] || zc[6]}"></i><b>${Math.round(sec / 60)} min</b></div>` : '').join('') : '';
-  box.innerHTML = `<h2>${esc((s && (s.label || s.name)) || c.name || 'Sesión')}</h2><p class="h2sub">${dshort(c.date)} ${c.start_local ? c.start_local.slice(11,16) : ''} · FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm · ${fmt((c.duration_s || 0) / 60)} min${s && s.rpe != null ? ' · RPE ' + fmt(s.rpe, 1) : ''}</p>` +
+  box.innerHTML = `<h2>${esc((s && (s.label || s.name)) || c.name || 'Sesión')}</h2><p class="h2sub">${dshort(c.date)} ${c.start_local ? c.start_local.slice(11,16) : ''} · ${beat(c.avg_hr)} FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm · ${fmt((c.duration_s || 0) / 60)} min${s && s.rpe != null ? ' · RPE ' + fmt(s.rpe, 1) : ''}</p>` +
     (effFlag(id) ? `<p class="effflag ${effFlag(id).flag}">${effTxt[effFlag(id).flag]}. ${effTip[effFlag(id).flag]}</p>` : '') +
     `<div class="hrwrap">${svg}<div class="hrtip" id="hrtip"></div></div>` +
     (zrows ? `<h3 class="zh">Tiempo por zona de FC</h3><div class="zdonut">${zdon}<div class="zrows">${zrows}</div></div>` : '') +
     `<p class="h2sub" style="margin-top:8px">Un punto cada ${c.step_s} s (Intervals.icu). Las zonas son las de tu perfil. Es una vista de la sesión: no cambia la decisión del día.</p>`;
   box.hidden = false;
+  if (!RM) { const hw = box.querySelector('.hrwrap'); hw.classList.add('pre'); playIn(hw);
+    requestAnimationFrame(() => requestAnimationFrame(() => box.querySelectorAll('.zarc').forEach(a => a.setAttribute('stroke-dasharray', a.dataset.to)))); }
   const svgEl = box.querySelector('svg'), xh = $('hrx'), tp = $('hrtip');
   const mv = ev => { const r = svgEl.getBoundingClientRect(), t = Math.max(0, Math.min(tmax, ((ev.clientX - r.left) / r.width * W - m.l) / iw * tmax));
     let b = pts[0]; pts.forEach(p => { if (Math.abs(p[0] - t) < Math.abs(b[0] - t)) b = p; });
@@ -1368,17 +1399,18 @@ function miniHr(c) {
   const tmax = Math.max(pts[pts.length - 1][0], c.duration_s || 0) || 1, ys = pts.map(p => p[1]);
   const lo = Math.min(...ys) - 4, hi = Math.max(...ys) + 4, y = v => 2 + (H - 4) * (1 - (v - lo) / (hi - lo));
   const d = pts.map(p => (p[0] / tmax * W).toFixed(1) + ',' + y(p[1]).toFixed(1)).join('L');
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" class="hrspark"><path d="M0,${H}L${d}L${W},${H}Z" fill="var(--series-1)" opacity=".12"/><path d="M${d}" fill="none" stroke="var(--series-1)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" class="hrspark"><path class="fd" d="M0,${H}L${d}L${W},${H}Z" fill="var(--series-1)" opacity=".12"/><path class="ln" d="M${d}" fill="none" stroke="var(--series-1)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
 }
 document.querySelectorAll('.hrmini').forEach(el => {
   const id = el.dataset.id, c = HRC[id], e = effFlag(id);
   let h = '';
-  if (c && c.available) h += `<button type="button" class="hrbtn" data-id="${esc(id)}" aria-label="Ver la curva de FC y las zonas de la sesión">${miniHr(c)}<span class="hrmeta"><span class="hrmark" aria-hidden="true">♥</span> FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm<span class="hrmore">curva y zonas ›</span></span></button>`;
+  if (c && c.available) h += `<button type="button" class="hrbtn" data-id="${esc(id)}" aria-label="Ver la curva de FC y las zonas de la sesión">${miniHr(c)}<span class="hrmeta">${beat(c.avg_hr)} FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm<span class="hrmore">curva y zonas ›</span></span></button>`;
   if (e) h += `<p class="effflag ${e.flag}" title="${esc(effTip[e.flag])}">${effTxt[e.flag]}</p>`;
   if (h) { el.innerHTML = h; el.hidden = false; }
   if (c && c.available) { const chip = el.closest('article') && el.closest('article').querySelector('.hrchip'); if (chip) chip.remove(); }  // la FC ya va con su curva
 });
 document.addEventListener('click', e => { const b = e.target.closest('.hrbtn'); if (b) showHr(b.dataset.id, b.closest('article')); });
+document.querySelectorAll('.hrspark, svg.bars, svg.pg-svg, svg.wt-svg').forEach(animIn);
 $('sessions').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { const tr = e.target.closest('tr.clk'); if (tr) { e.preventDefault(); showHr(tr.dataset.id); } } });
 const today = T[T.length - 1] || {};
 const legacy = D.legacy_v2 || {};

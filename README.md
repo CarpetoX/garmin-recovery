@@ -162,3 +162,7 @@ El informe completo incluye tarjetas de estado, las gráficas del ciclo (HRV con
 - **RPE frente a FC** (`garmin_recovery/session_effort.py`): el mismo esfuerzo relativo de la validación de modelos, ln(sRPE / carga de FC) estandarizado por tipo de sesión con tu historial (mediana/MAD, mínimo 5 sesiones del tipo). Con |z| ≥ 1,5 la sesión se marca «RPE alto para tu FC» o «RPE bajo para tu FC» en la app, el informe del ciclo y la sección 6 del informe completo. Es descriptivo y no cambia la decisión del día.
 - **Informes:** la tabla de sesiones muestra FC media / máxima; la sección 6 del informe completo añade FC y TRIMP por sesión.
 - **Sesiones sin RPE a propósito:** si la hoja deja el RPE vacío y la fila dice «sin RPE» (o es calentamiento/técnica), el historial borra el RPE que tuviera esa sesión. Solo ocurre si la instantánea de la hoja se cargó; si falla la descarga, se conserva lo anterior.
+
+## V7.21 — Animaciones
+
+Las gráficas de Hoy, Tendencias y Entrenos se dibujan al entrar en pantalla (líneas que se trazan, barras que crecen, puntos que aparecen después). Al abrir la FC de una sesión, la curva se traza y el anillo de zonas se rellena de Z1 a Z5. El ♥ de cada sesión late a su FC media (60 / FC segundos por latido). Con «reducir movimiento» activado en el móvil no se anima nada; los datos no cambian.
