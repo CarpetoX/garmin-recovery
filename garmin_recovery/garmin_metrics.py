@@ -22,7 +22,7 @@ def load_json(path, default):
     try:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except Exception:
+    except (OSError, ValueError):
         return default
 
 
@@ -54,7 +54,7 @@ def epoch_ms(value):
             return int(
                 datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp() * 1000
             )
-        except Exception:
+        except ValueError:
             return None
     return None
 
@@ -93,7 +93,7 @@ def local_iso_from_ms(value):
         return None
     try:
         return datetime.fromtimestamp(value / 1000, TZ).isoformat()
-    except Exception:
+    except (ValueError, OverflowError, OSError):
         return None
 
 
@@ -661,7 +661,8 @@ def main():
                 if day < TODAY:
                     try:
                         sleep_next_hr = get_sleep_cached(day + timedelta(days=1))
-                    except Exception:
+                    except Exception as exc:  # noqa: BLE001 — la API de Garmin lanza tipos variados
+                        print(f"::warning title=Sueño del día siguiente no disponible::{day + timedelta(days=1)} ({type(exc).__name__})")
                         sleep_next_hr = None
 
                 summary = heart_rate_summary(

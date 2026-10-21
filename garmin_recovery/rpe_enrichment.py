@@ -20,7 +20,7 @@ def load_json(path, default):
     try:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except Exception:
+    except (OSError, ValueError):
         return default
 
 
@@ -37,7 +37,7 @@ def number(value):
     if isinstance(value, str):
         try:
             return float(value.replace(",", "."))
-        except Exception:
+        except ValueError:
             return None
     return None
 

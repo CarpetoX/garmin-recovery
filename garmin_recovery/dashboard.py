@@ -322,6 +322,8 @@ def render(result: dict, extras: dict | None = None) -> str:
         data["hr_curves"] = extras["hr_curves"]
     if extras.get("session_effort"):
         data["session_effort"] = extras["session_effort"]
+    if extras.get("web_failures"):
+        data["web_failures"] = extras["web_failures"]
     data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
     payload = json.dumps(data, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
@@ -511,7 +513,9 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     summary = "".join(f"<p style='margin:4px 0'>{md_inline(x)}</p>" for x in lines)
     try:
         w = weekly_summary(result)
-    except Exception:  # noqa: BLE001 — la tarjeta semanal nunca rompe el panel
+    except Exception as exc:  # noqa: BLE001 — la tarjeta semanal nunca rompe el panel
+        from . import optional_blocks
+        optional_blocks.failed("web:semana", exc)
         w = None
     week = ""
     if w:

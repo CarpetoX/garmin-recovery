@@ -19,7 +19,7 @@ def load_json(path, default):
     try:
         with open(path, encoding="utf-8") as f:
             return json.load(f)
-    except Exception:
+    except (OSError, ValueError):
         return default
 
 
@@ -314,7 +314,8 @@ def main():
                 start_str,
                 today_str,
             )
-        except Exception:
+        except Exception as exc:  # noqa: BLE001 — la API de Garmin lanza tipos variados
+            print(f"::warning title=Carga de entrenamiento de Garmin no disponible::{type(exc).__name__}: {str(exc)[:120]}")
             training_load_raw = []
 
         load_by_id = {}

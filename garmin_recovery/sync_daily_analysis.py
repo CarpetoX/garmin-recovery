@@ -32,7 +32,7 @@ def avg(values):
 def parse_day(value):
     try:
         return date.fromisoformat(value)
-    except Exception:
+    except (TypeError, ValueError):
         return None
 
 def wellness_day(x):
