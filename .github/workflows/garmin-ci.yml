@@ -48,6 +48,9 @@ jobs:
           python -m pip install --disable-pip-version-check 'ruff==0.16.8'
           ruff check .
 
+      - name: Sintaxis del JavaScript de la web
+        run: node --check garmin_recovery/web/dashboard.js
+
       - name: Validate workflow YAML, triggers and pipeline topology
         run: |
           python - <<'PY'

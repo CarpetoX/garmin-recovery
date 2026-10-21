@@ -248,3 +248,7 @@ Las gráficas de series temporales (`chart()` en `dashboard.py`) dibujan una fra
 ## V7.19 — Peso corporal
 
 `peso_registro.json` guarda el peso que el atleta muestra o dicta (báscula Xiaomi Mi Body Composition Scale 2 / Zepp Life); se apunta también en la pestaña «Peso» de la hoja «RPE CrossFit - Registro». La hoja es privada y no hay endpoint para esa pestaña, por lo que el repositorio es la fuente de la app. `weight.build` (puro) saca la serie, la media de 7 días (solo con ≥ 2 lecturas directas), el cambio frente a la lectura anterior y el total del periodo; las lecturas «derivadas» se marcan con punto hueco y no entran en la media. La tarjeta «Peso» está arriba de Tendencias. Para añadir una medición: nueva entrada en `entries` (`date`, `time`, `weight_kg`, `source`, `note`; `fat_pct`, `muscle_kg`, `water_pct` si el atleta los da) y fila en la hoja.
+
+## V7.23 — CSS y JS de la web en archivos propios
+
+El estilo y el script del panel viven en `garmin_recovery/web/dashboard.css` y `garmin_recovery/web/dashboard.js`. `dashboard.py` los incrusta al importar (`TEMPLATE`), así que la web sigue siendo un único HTML sin red y el resultado es idéntico al anterior (comprobado byte a byte con `build_site`). La CI revisa la sintaxis del JS con `node --check`. No usar marcadores `{{…}}` dentro de esos archivos.
