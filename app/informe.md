@@ -1,8 +1,8 @@
-# Informe de seguimiento · 21/10/2026
+# Cierre diario · 21/10/2026
 
-`GR-2026-10-21-1648-be5afc` · cita este identificador al reenviar el informe.
+`GR-2026-10-21-2248-2aa8bf` · cita este identificador al reenviar el informe.
 
-> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live; 3 franja(s) de Sync sin ejecutar ni recuperar.
+> ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -56,29 +56,42 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-21-1408-2fc8a6 (21/10 14:08):
-- Oficial v2: 9 → 19 (+10).
-- Híbrido: 15 → 24 (+9).
-- v3: 37 → 44 (+7).
-- Nueva noche registrada: HRV 20 → 31 ms, sueño 0,47 → 5,72 h, FC reposo 61 → 61 lpm.
+Frente al informe GR-2026-10-21-1648-be5afc (21/10 16:48):
+- Sin cambios en los datos.
 
-## Actividad de hoy
+## Balance del día
 
 _Sin sesiones registradas._
 
-**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
+## Balance de la semana
 
-**Carga 7 días:** 116 en 9 sesiones (-37 % vs. semana previa) · sRPE 1.098 · monotonía 0,85.
+- Carga 7 días: **116** en 9 sesiones (-37 % vs. semana previa).
+- sRPE 7 días 1.098 · monotonía 0,85 · strain 937.
+- Fatiga acumulada: ATL 18,0, CTL 5,1, TSB -12,9 (CTL insuficiente: la forma no se interpreta todavía).
+
+## Previsión orientativa para mañana
+
+- Objetivo de sueño esta noche: **8,5 h** (necesidad + parte de la deuda de 4,2 h).
+- Mañana turno **MT**.
+- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.
 
 ## Gráficas
 
 ![RPE frente al máximo del día](charts/rpe.svg)
 
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+
 ![Carga](charts/load.svg)
 
-![Sesiones](charts/sessions.svg)
+![Disponibilidad](charts/readiness.svg)
 
-_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+## Validación de modelos
+
+_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
+
+**Acumulando datos: 2/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
+
+- Días entrenados con predicción: 2; por encima del RPE máximo del día: 1.
 
 ## Recuperación: tendencias de 28 días
 
@@ -102,11 +115,11 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
-| 20/10 | DB split squat | mancuernas (par) | 45,0 kg total (2 × 22,5 kg) | 45 × 10 | 60,0 kg | 1.800 kg | 4/4 | 1,0 |
-| 20/10 | ring row pies elevados | peso corporal | peso corporal | — | — | — | —/4 | 1,0 |
+| 20/10 | DB split squat | mancuernas (par) | 45,0 kg total (2 × 22,5 kg) | 45 × 10 | 60,0 kg | 1.800 kg | 4/4 | — |
+| 20/10 | ring row pies elevados | peso corporal | peso corporal | — | — | — | —/4 | — |
 | 19/10 | power clean + squat clean (complex 1+1) | barra | 90,0 kg con barra | 90 × 1 | 90,0 kg | 515 kg | 5/5 | 8,0 |
 | 19/10 | squat clean | barra | 110,0 kg con barra | 110 × 1 | 110,0 kg | 685 kg | 5/5 | 8,0 |
-| 19/10 | power clean + squat clean (complex 1+1) | barra | 60,0 kg con barra | 60 × 1 | 60,0 kg | 150 kg | 3/3 | 1,0 |
+| 19/10 | power clean + squat clean (complex 1+1) | barra | 60,0 kg con barra | 60 × 1 | 60,0 kg | 150 kg | 3/3 | — |
 | 18/10 | sentadilla trasera | barra | 185,0 kg con barra | 185 × 1 | 185,0 kg | 5.415 kg | 15/15 | 7,5 |
 | 18/10 | sentadilla péndulo | máquina de placas | 60,0 kg indicados en máquina | — | — | 1.920 kg | 4/4 | 7,5 |
 | 18/10 | curl femoral tumbado | máquina de placas | 67,0 kg indicados en máquina | — | — | 2.208 kg | 4/4 | 7,5 |
@@ -122,16 +135,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-21-1648-be5afc`
+- **Identificador del informe:** `GR-2026-10-21-2248-2aa8bf`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-21-1645 · datos sincronizados a las 16:47
-- **Antigüedad:** fin del sueño hace 2,7 h ✓ · última HRV hace 2,8 h ✓ · última FC hace 14 min ✓ · último Body Battery hace 3,0 h !
+- **Ciclo:** 2026-10-21-2245 · datos sincronizados a las 22:47
+- **Antigüedad:** fin del sueño hace 8,7 h ✓ · última HRV hace 8,8 h ✓ · última FC hace 48 min ✓ · último Body Battery hace 1,8 h ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 22/22
-- **Ejecución:** 3 franja(s) de Sync perdidas (20/10 16:45, 20/10 22:45, 21/10 08:30)
+- **Ejecución:** 3 franja(s) de Sync perdidas (20/10 22:45, 21/10 08:30, 21/10 16:45)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-21 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-21 22:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

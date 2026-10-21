@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Miércoles, 21 de octubre de 2026 · 16:48 · `GR-2026-10-21-1648-be5afc`
+Miércoles, 21 de octubre de 2026 · 22:48 · `GR-2026-10-21-2248-2aa8bf`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 1098|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-21-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-21-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 19/100 (oficial, confianza high). Híbrido: 24/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 5 h 43 min, puntuación 39/100.
 - ❤️ **Principal alerta:** HRV 31 ms, 46,6 % por debajo de tu mediana de 28 días; FC nocturna 75,8 lpm (13,8 sobre la mediana).
@@ -23,18 +23,18 @@ Carga 7 días|9 sesiones|sRPE 1098|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-21-1645 |
+| Ciclo | 2026-10-21-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:48:17 |
+| Certificado generado | 22:48:07 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 89/100 (good) |
 
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-20 16:45, 10-20 22:45, 10-21 08:30.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-20 22:45, 10-21 08:30, 10-21 16:45.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -80,7 +80,7 @@ La HRV está 47 % por debajo de su mediana; la FC en reposo está 5 lpm por enci
 | Modelo de compatibilidad | 🔴 39/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 12/100 | contexto |
 | Tiempo de recuperación Garmin | 13,9 h | contexto |
-| Índice personal experimental | 4/100 | provisional |
+| Índice personal experimental | 0/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -125,7 +125,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 89,5 lpm | 75,8 lpm |
+| Hoy* | 86,1 lpm | 75,8 lpm |
 | 3 días | 84,9 lpm | 65,3 lpm |
 | 7 días | 86,3 lpm | 65,9 lpm |
 | 28 días | 83,3 lpm | 63,4 lpm |
@@ -145,8 +145,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 63, máximo 99.
-- Body Battery: último valor 18/100, medido a las 13:45 (hace 3 h 03 min: no es una medición nueva).
+- Estrés medio: 60, máximo 99.
+- Body Battery: último valor 7/100, medido a las 21:00 (hace 1 h 48 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -189,10 +189,10 @@ Contraste Garmin ↔ Intervals: las 9 actividades de Garmin de los últimos 7 d�
 |---|---|
 | Sesiones registradas | 9 |
 | Días con actividad | 4 |
-| RPE medio | 5,28 |
+| RPE medio | 7,42 |
 | Sesiones de RPE ≥ 8 | 4 |
 | Minutos grabados (Garmin) | 226,0 min |
-| sRPE por duración registrada | 1099 |
+| sRPE por duración registrada | 1017 |
 | TRIMP | 186,3 |
 | Carga de actividades (Intervals) | 116 |
 | Volumen externo mínimo verificado | 6765 kg |
@@ -219,24 +219,26 @@ Monotonía 0,9 · strain 1010 (descriptores de contexto, sin umbral médico).
 
 ## 6. Fuerza, halterofilia y metcons
 
-- **20 oct — WOD 5 Rounds For Time - wall ball / double unders / WB step up** · RPE 8
+- **20 oct — WOD 5 Rounds For Time - wall ball / double unders / WB step up** · RPE 8 · FC media 159 / máx. 178 lpm · TRIMP 26
   5 rondas por tiempo con time cap de 13 min (no completado): 3 rondas + 20 wall ball + 30 double unders. Wall ball y WB step up con 9 kg. Garmin 13,2 min. Actividad emparejada por duración con el segundo HIIT del día (el primero, de 16 min, sin dictar).
-- **20 oct — Fuerza - EMOM 8 min: DB split squat / ring row pies elevados** · RPE 1
-  EMOM 8 min: DB split squat 4x10 por pierna con 22,5 kg por mano (45 kg en total) y ring row con pies elevados 4x10 a peso corporal, alternando los ejercicios minuto a minuto (confirmado). RPE 1. Garmin 16,1 min (incluye calentamiento).
-- **19 oct — Técnica - toes to bar** · RPE 1
-  Técnica de toes to bar de 47 min. Series, repeticiones y progresiones no indicadas. RPE 1. Tiempo Garmin 47,7 min.
-- **19 oct — EMOM 12 min - echo bike / squat clean** · RPE 9
+- **20 oct — Fuerza - EMOM 8 min: DB split squat / ring row pies elevados** · FC media 120 / máx. 151 lpm · TRIMP 11 · ⚠️ RPE bajo para tu FC: la FC fue alta para el esfuerzo que marcaste
+  EMOM 8 min: DB split squat 4x10 por pierna con 22,5 kg por mano (45 kg en total) y ring row con pies elevados 4x10 a peso corporal, alternando los ejercicios minuto a minuto (confirmado). Garmin 16,1 min (incluye calentamiento). Sin RPE: sesión no puntuada por decisión del atleta (21/10/2026; antes figuraba RPE 1).
+- **19 oct — Técnica - toes to bar** · FC media 118 / máx. 140 lpm · TRIMP 34
+  Técnica de toes to bar de 47 min. Series, repeticiones y progresiones no indicadas. Tiempo Garmin 47,7 min. Sin RPE: sesión no puntuada por decisión del atleta (21/10/2026; antes figuraba RPE 1).
+- **19 oct — EMOM 12 min - echo bike / squat clean** · RPE 9 · FC media 155 / máx. 186 lpm · TRIMP 22
   EMOM de 12 min según pizarra: 16 cal Echo Bike + máximas repeticiones de squat clean con 70 kg y 1 min de descanso; 4 rondas. Squat clean por ronda: 9, 6, 5 y 4 (total 24). RPE 9. Tiempo Garmin 11:49 min (en movimiento).
-- **19 oct — Fuerza - power clean + squat clean y squat clean EMOM** · RPE 8 · volumen de barra cuantificado 1200 kg
+- **19 oct — Fuerza - power clean + squat clean y squat clean EMOM** · RPE 8 · volumen de barra cuantificado 1200 kg · FC media 142 / máx. 167 lpm · TRIMP 15
   EMOM cada minuto (según pizarra: complex power clean + squat clean touch & go 2/2/1/1/1 y squat clean drop & go 2/2/1/1/1, 5 min cada uno). Complex: 2x60, 2x70, 1x80, 1x85, 1x90 kg; squat clean: 2x90, 2x95, 1x100, 1x105, 1x110 kg. RPE de la sesión 8. Tiempo Garmin 11,3 min.
-- **19 oct — Calentamiento previo a power clean y squat clean** · RPE 1 · volumen de barra cuantificado 150 kg
-  Calentamiento de 17 min previo al bloque de fuerza: ejercicios con barra vacía (sin desglose) y 5 min de complex power clean + squat clean, 3 series de 1 con 40, 50 y 60 kg. RPE 1. Tiempo Garmin 17,9 min.
-- **18 oct — Fuerza - pierna: sentadilla trasera, péndulo y femorales** · RPE 7,5 · volumen de barra cuantificado 5415 kg
+- **19 oct — Calentamiento previo a power clean y squat clean** · volumen de barra cuantificado 150 kg · FC media 105 / máx. 145 lpm · TRIMP 9 · ⚠️ RPE bajo para tu FC: la FC fue alta para el esfuerzo que marcaste
+  Calentamiento de 17 min previo al bloque de fuerza: ejercicios con barra vacía (sin desglose) y 5 min de complex power clean + squat clean, 3 series de 1 con 40, 50 y 60 kg. Tiempo Garmin 17,9 min. Sin RPE: sesión no puntuada por decisión del atleta (21/10/2026; antes figuraba RPE 1).
+- **18 oct — Fuerza - pierna: sentadilla trasera, péndulo y femorales** · RPE 7,5 · volumen de barra cuantificado 5415 kg · FC media 113 / máx. 148 lpm · TRIMP 38
   Sentadilla trasera: 2x10 barra vacía (20 kg), 8x40, 8x70, 5x90, 3x110, 1x130, 1x150, 1x160, 1x170, 1x180, 1x185, 3x150, 8x110, 15x70 kg; volumen verificado 5.415 kg; RPE 9,5 de la repetición más pesada (185 kg), no de la sesión completa. Sentadilla péndulo 4x8 60 kg, RPE 7. Curl femoral tumbado 1x10 60 kg y 3x8 67 kg, RPE 6. Curl femoral unilateral de pie 4x10 con 42,5 kg en cada pierna, RPE 6. Cargas de máquina no…
-- **15 oct — WOD parejas - 3 Rounds For Time** · RPE 8
+- **15 oct — WOD parejas - 3 Rounds For Time** · RPE 8 · FC media 144 / máx. 176 lpm · TRIMP 18
   WOD parejas 3 RFT, 13:28 (cap 18:00; 4:32 antes). 3 rondas: 40 cal compartidas en SkiErg, remo y Assault Bike respectivamente; en cada ronda 20 burpees no jump no clap sincronizados + 20 dumbbell snatch sincronizados con 25 kg. Total por equipo: 120 cal compartidas, 60 burpees sync y 60 snatches sync. RPE 8. Garmin 10:03, 13:15, FC 144/176 lpm y 192 kcal; diferencia con tiempo oficial -13 s.
-- **15 oct — Técnica - Handstand push-ups (semana 3)** · RPE 4
+- **15 oct — Técnica - Handstand push-ups (semana 3)** · RPE 4 · FC media 108 / máx. 143 lpm · TRIMP 13
   HSPU técnica. Garmin 09:21, 29:22, FC media 108 lpm, máxima 143 lpm, 219 kcal. RPE 4 declarado posteriormente por el atleta (17/10/2026). Sesión independiente del WOD.
+
+RPE frente a FC: se marcan las sesiones cuyo esfuerzo relativo, ln(sRPE / carga de FC) frente a tu historial del mismo tipo, se aleja ±1,5 desviaciones robustas. Es descriptivo y no cambia la decisión del día.
 
 **Carga de fuerza por patrón**
 
@@ -273,12 +275,12 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy sin dato, mañana MT.
-- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (12/100); Body Battery bajo (18/100).
+- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (12/100); Body Battery bajo (7/100).
 
 ### Recomendaciones
 
 1. **Prioriza recuperar** — Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -363,4 +365,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-21-1645 · generado 21/10/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 39619864386.
+Traza: cierre nocturno · ciclo 2026-10-21-2245 · generado 21/10/2026 22:48 Europe/Madrid · certificado READY · sync_run_id 39673265939.
