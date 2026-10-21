@@ -1,25 +1,25 @@
-<!-- cycle_id: 2026-10-21-0830 -->
-**En breve:** hoy no hay datos de sueño ni de variabilidad cardiaca, así que la recuperación queda pendiente.
+<!-- cycle_id: 2026-10-21-0830-post-sleep -->
+**En breve:** hoy toca recuperar: las señales de la noche están claramente en contra.
+🔴 Recuperación oficial 9/100 (confianza alta).
+🌙 Sueño 28 min, puntuación 16/100.
 🏋️ Carga: 116 esta semana en 9 sesiones (−37 % vs. semana previa).
-❤️ Alerta: pulso en reposo 62 lpm, 7 por encima de tu mediana (55).
-Orientación: día libre sin turno; solo técnica ligera o movilidad (RPE máx. 6) hasta que se confirme el sueño.
+❤️ Alerta principal: HRV 20 ms (−66 % vs. tu base de 58 ms); FC nocturna 89,1 lpm.
+Orientación: día libre, solo movilidad o zona 2 suave (RPE ≤ 4, volumen 0–50 %); mañana turno MT.
 
-**Qué explica la puntuación.** La decisión es «pendiente»: faltan HRV y sueño de hoy y la confianza es baja. Lo único medido es la FC en reposo (62 lpm, +7 vs. mediana 55) y el estrés de ayer (38, igual que tu mediana). Deuda de sueño de 2,4 h en 2 noches (necesidad 7,5 h).
+**Qué explica la puntuación.** Los tres modelos coinciden en rojo (oficial 9, híbrido 15, experimental 37). Pesan el sueño de 0,47 h (deuda 9,4 h en 3 noches), la HRV de hoy (20 ms; media de 7 días 45,0 ms, bajo el rango normal 54–62) y la FC en reposo de 61 lpm (+6 sobre tu mediana). El estrés de Garmin (38) está en tu mediana. Dato a vigilar: el episodio de sueño registrado (04:12–04:40) es muy corto; si fue solo una parte de la noche, la cifra puede ser pesimista, pero hoy no se autoriza intensidad.
 
-**Carga reciente.** 9 sesiones y sRPE 1097,5 en 7 días, monotonía 0,85; todas las sesiones con RPE (22/22). Últimas: WOD 5 rounds (20/10) y fuerza EMOM con DB split squat (20/10), con esfuerzo bajo; el 19/10 hubo squat clean pesado (RPE 8) y el 18/10 sentadilla trasera (RPE 7,5). Según el informe, 12 de 24 sesiones fueron de RPE ≥ 8.
+**Carga reciente.** 9 sesiones y sRPE 1097,5 en 7 días, monotonía 0,85. Las últimas fueron del 19/10 (power clean y squat clean RPE 8, EMOM RPE 9) y del 20/10 (WOD RPE 8). CTL 5,1 es aún bajo para interpretar la forma.
 
-**3 prioridades**
-1. Sueño: recuperar la deuda con 30–45 min más cada noche, no con una sola noche larga.
-2. Intensidad: intercalar sesiones de RPE 5–6 entre las duras; ≥ 48 h entre esfuerzos máximos.
-3. Registro: anotar sensaciones en Intervals (0 de los últimos 14 días).
+**Prioridades**
+1. Dormir: recuperar la deuda sumando 30–45 min cada noche, no una sola noche larga; siesta corta antes del TN del viernes.
+2. Espaciar los esfuerzos duros (RPE ≥ 8) al menos 48 h y solo en días libres.
+3. Registrar sensaciones en Intervals cada mañana (faltan hoy).
 
 **Plan 7 días** (la decisión del día manda)
-- Mié 21: técnica ligera / movilidad, RPE ≤ 6; reevaluar al sincronizar el sueño.
+- Mié 21: movilidad / zona 2 suave.
 - Jue 22 (MT): movilidad o descanso.
-- Vie 23 (TN): si entrenas, por la mañana y moderado (RPE ~6); siesta corta antes del turno.
-- Sáb 24 (post-TN): descanso, priorizar dormir.
-- Dom 25: sesión exigente si HRV y sueño lo confirman.
+- Vie 23 (TN): moderada por la mañana, si entrenas.
+- Sáb 24 (post-TN): descanso y sueño.
+- Dom 25: exigente solo si HRV y sueño se han recuperado.
 - Lun 26: moderada.
-- Mar 27: exigente solo con ≥ 48 h desde la anterior.
-
-No es un diagnóstico médico.
+- Mar 27: exigente, si hay margen.
