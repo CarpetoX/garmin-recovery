@@ -1,6 +1,6 @@
 # Resumen semanal · 15/10–21/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-21-1408-2fc8a6`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-21-1648-be5afc`)._
 
 ## En una frase
 
@@ -38,11 +38,11 @@ Monotonía 0,85 · strain 937 · ACWR — · RPE registrado en 9/9 sesiones.
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| HRV media | 48,2 ms | 57,9 ms |
+| HRV media | 50,0 ms | 57,9 ms |
 | FC en reposo media | 58,4 lpm | 55,1 lpm |
-| Sueño medio | 6,14 h | 6,83 h |
+| Sueño medio | 6,89 h | 6,83 h |
 
-HRV de 7 días hoy: 45,0 ms (rango normal 54,3–62,0 ms). Turnos: MT, TN.
+HRV de 7 días hoy: 48,4 ms (rango normal 54,3–62,0 ms). Turnos: MT, TN.
 
 ## Fuerza de la semana
 
@@ -61,7 +61,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**12 de 12** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**13 de 13** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -77,6 +77,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 20/10 | 16:45 | 16:47 | 16:48 | 21 min ✓ |
 | 20/10 | 22:45 | 22:47 | 22:48 | 22 min ✓ |
 | 21/10 | 08:30 | 08:32 | 08:33 | 32 min ✓ |
+| 21/10 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
 
 ## Calidad de los datos
 
