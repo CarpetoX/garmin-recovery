@@ -559,16 +559,25 @@ def shift_notes(result, trend) -> list[str]:
     return [n for n in notes if "turno" in n.lower()] or ([f"Turno de hoy: {today.get('shift')}."] if today.get("shift") else [])
 
 
-def sessions_table(sessions, day=None, limit=8) -> str:
+def sessions_table(sessions, day=None, limit=8, effort=None) -> str:
+    """Sesiones con FC media / máxima; con ``effort`` (V7.20) añade las que tienen un RPE que no cuadra con la FC."""
     rows = [s for s in sessions if day is None or s.get("date") == day][:limit]
     if not rows:
         return "_Sin sesiones registradas._\n"
-    out = ["| Fecha | Tipo | Sesión | Min | Carga | FC media | RPE | sRPE |", "|---|---|---|--:|--:|--:|--:|--:|"]
+    out = ["| Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |", "|---|---|---|--:|--:|--:|--:|--:|"]
+    flags = []
     for s in rows:
         hhmm = (s.get("start_local") or "")[11:16]
         name = (s.get("label") or s.get("name") or "").replace("|", "/")
+        hr = fmt(s.get("avg_hr")) + (f" / {fmt(s.get('max_hr'))}" if s.get("max_hr") is not None else "")
         out.append(f"| {dshort(s['date'])} {hhmm} | {categorize(s)} | {name} | {fmt(s.get('duration_min'))} | "
-                   f"{fmt(s.get('load'))} | {fmt(s.get('avg_hr'))} | {fmt(s.get('rpe'), 1)} | {fmt(s.get('srpe'))} |")
+                   f"{fmt(s.get('load'))} | {hr} | {fmt(s.get('rpe'), 1)} | {fmt(s.get('srpe'))} |")
+        e = (effort or {}).get(str(s.get("id") or ""))
+        if e and e.get("flag"):
+            from .session_effort import TEXT
+            flags.append(f"- ⚠️ {name}: {TEXT[e['flag']]}.")
+    if flags:
+        out += [""] + flags + ["", "_RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._"]
     return "\n".join(out) + "\n"
 
 
@@ -846,7 +855,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
         md += ["## Tendencias", "", "![Disponibilidad](charts/readiness.svg)", ""]
     elif slot == "tarde":
         today_sessions = [s for s in sessions if s.get("date") == today]
-        md += ["## Actividad de hoy", "", sessions_table(sessions, day=today)]
+        md += ["## Actividad de hoy", "", sessions_table(sessions, day=today, effort=(crossfit or {}).get("_effort"))]
         load_today = sum(s.get("load") or 0 for s in today_sessions)
         max_rpe = max([s.get("rpe") or 0 for s in today_sessions] or [0])
         fit = ("Sin sesiones registradas todavía hoy." if not today_sessions else
@@ -861,7 +870,7 @@ def build_report(result: dict, crossfit: dict | None = None, previous: dict | No
                "![Sesiones](charts/sessions.svg)", "", RPE_NOTE, ""]
     else:
         today_sessions = [s for s in sessions if s.get("date") == today]
-        md += ["## Balance del día", "", sessions_table(sessions, day=today)]
+        md += ["## Balance del día", "", sessions_table(sessions, day=today, effort=(crossfit or {}).get("_effort"))]
         md += ["## Balance de la semana", "",
                f"- Carga 7 días: **{fmt(load.get('week_load'))}** en {load.get('week_sessions', '—')} sesiones"
                + (f" ({signed(load.get('week_change_pct'))} % vs. semana previa)" if load.get('week_change_pct') is not None else "") + ".",
@@ -906,6 +915,11 @@ def write_report(root: Path, out_dir: Path, result: dict) -> None:
     except (OSError, ValueError):
         shifts = {}
     crossfit = dict(crossfit, _shifts=shifts)
+    try:
+        from . import session_effort
+        crossfit["_effort"] = session_effort.load(root)
+    except Exception:  # noqa: BLE001 — opcional: sin esfuerzo relativo, la tabla sale igual
+        pass
     import csv
     reports_csv = Path(root) / "history" / "reports.csv"
     previous = None

@@ -155,3 +155,10 @@ ntfy lo abre al tocarla. `test_fullreport_v65.py` verifica estructura, cifras fr
 ## V6.8 — Informe visual y análisis de mejora
 
 El informe completo incluye tarjetas de estado, las gráficas del ciclo (HRV con rango normal, FC, sueño y fases, carga, RPE, fuerza) y la sección 8 «Análisis de mejora física y recuperación» (`improvement.py`): tendencia de HRV y FC en reposo, cantidad y regularidad del sueño, distribución de la intensidad, respuesta a las sesiones duras, fuerza y huecos de registro, con prioridades y reglas para 7 días. Todo por reglas sobre los datos publicados; si no hay datos suficientes, lo dice y no concluye.
+
+## V7.20 — FC en cada entrenamiento y RPE frente a FC
+
+- **Entrenos:** cada tarjeta de fuerza, halterofilia y metcon lleva la curva de FC de la sesión (Intervals.icu, un punto cada 10 s) con la FC media y máxima. Al tocarla se abre, bajo la tarjeta, la curva completa y el tiempo por zona. La pestaña «Sesiones» sigue funcionando igual.
+- **RPE frente a FC** (`garmin_recovery/session_effort.py`): el mismo esfuerzo relativo de la validación de modelos, ln(sRPE / carga de FC) estandarizado por tipo de sesión con tu historial (mediana/MAD, mínimo 5 sesiones del tipo). Con |z| ≥ 1,5 la sesión se marca «RPE alto para tu FC» o «RPE bajo para tu FC» en la app, el informe del ciclo y la sección 6 del informe completo. Es descriptivo y no cambia la decisión del día.
+- **Informes:** la tabla de sesiones muestra FC media / máxima; la sección 6 del informe completo añade FC y TRIMP por sesión.
+- **Sesiones sin RPE a propósito:** si la hoja deja el RPE vacío y la fila dice «sin RPE» (o es calentamiento/técnica), el historial borra el RPE que tuviera esa sesión. Solo ocurre si la instantánea de la hoja se cargó; si falla la descarga, se conserva lo anterior.

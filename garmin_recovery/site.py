@@ -227,6 +227,11 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
                 k: v for k, v in hc["activities"].items() if isinstance(v, dict) and v.get("available")}}
     except (OSError, ValueError):
         pass  # aún sin curvas: la tabla de sesiones funciona igual
+    try:
+        from . import session_effort
+        extras["session_effort"] = session_effort.load(root)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:session_effort", exc)
     extras |= {"pwa": True, "full_report": (root / "app" / "informe_completo.md").exists(),
               "punctuality": punctuality(reports, date.fromisoformat(result["date"]), gen),
               "history": report_history(root) if history else []}

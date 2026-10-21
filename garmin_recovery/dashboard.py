@@ -163,6 +163,11 @@ def _weekly_html(weeks: list[dict], title: str, sub: str) -> str:
             'Volumen mínimo verificado, sin atribuir causas.</p></section>')
 
 
+def _hr_slot(activity_id) -> str:
+    """Hueco para la FC de la sesión (V7.20): el script lo rellena con la curva de Intervals si existe."""
+    return f'<div class="hrmini" data-id="{_esc(activity_id)}" hidden></div>' if activity_id else ""
+
+
 def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
     if not sessions:
         return f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">{_esc(empty)}</p></section>'
@@ -177,7 +182,7 @@ def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
                      f'<p class="lf-sets">{_esc(e["sets"])}</p>'
                      f'<p class="lf-meta">{e["work_sets"]} series' + (f' · volumen {vol}' if vol else "") + "</p></li>")
         cards += (f'<article class="lf"><header><b>{_day_name(s["date"])}</b>{_rpe_pill(s["rpe"])}</header>'
-                  f'<p class="lf-title">{_esc(s["title"])}</p><ul class="clean">{rows}</ul></article>')
+                  f'<p class="lf-title">{_esc(s["title"])}</p><ul class="clean">{rows}</ul>{_hr_slot(s.get("activity_id"))}</article>')
     return (f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">series como repeticiones @ kg · «3× 8 @ 60» = tres series · mejor serie a la derecha</p>{cards}'
             '<p class="pg-note">Solo se muestra lo confirmado en el registro de cada sesión; las barras vacías de calentamiento no cuentan. '
             '* volumen mínimo: alguna serie sin carga.</p></section>')
@@ -200,7 +205,7 @@ def _metcons_html(metcons: list[dict]) -> str:
             times += f'<span class="rx-chip">{_kg(m["minutes"])} min grabados</span>'
         hr = m.get("hr") or {}
         if hr.get("average") and hr.get("max"):
-            times += f'<span class="rx-chip">FC {_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>'
+            times += f'<span class="rx-chip hrchip">FC {_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>'
         rounds = ""
         if m["rounds"]:
             vals = m["rounds"]["values"]
@@ -212,7 +217,7 @@ def _metcons_html(metcons: list[dict]) -> str:
                   + (f'<ul class="mc-presc clean">{presc}</ul>' if presc else "")
                   + (f'<p class="mc-res">{_esc(m["result"])}</p>' if m["result"] else '<p class="mc-res none">Resultado no registrado</p>')
                   + (f'<div class="chips">{times}</div>' if times else "") + rounds
-                  + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + "</article>")
+                  + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + _hr_slot(m.get("activity_id")) + "</article>")
     return ('<section class="card"><h2>Metcons</h2><p class="h2sub">fórmula, resultado y tiempos tal como constan · el cronómetro oficial y el reloj se muestran por separado</p>'
             + chart + cards + '<p class="pg-note">Los metcons no son comparables entre sí salvo que repitan formato y ejercicios.</p></section>')
 
@@ -314,6 +319,8 @@ def render(result: dict, extras: dict | None = None) -> str:
     data = dict(result)
     if extras.get("hr_curves"):
         data["hr_curves"] = extras["hr_curves"]
+    if extras.get("session_effort"):
+        data["session_effort"] = extras["session_effort"]
     data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
     payload = json.dumps(data, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
@@ -767,6 +774,9 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .ring-card:last-child .ring-label{margin-top:2px}
 .warn-chip{background:transparent!important;color:var(--warning-ink)!important;box-shadow:inset 0 0 0 1.5px var(--warning)}
 tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--glass-chip, var(--surface-2))}.hrmark{color:var(--critical);font-size:11px}
+.hrmini{margin-top:8px}.hrbtn{display:block;width:100%;padding:6px 8px 7px;border:1px solid var(--line);border-radius:10px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}.hrbtn:hover,.hrbtn:focus-visible{background:var(--glass-chip, var(--surface-2))}
+.hrspark{display:block;width:100%;height:46px}.hrmeta{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12.5px;margin-top:4px}.hrmore{margin-left:auto;color:var(--text-3);font-size:12px}
+.effflag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;margin:6px 0 0;background:var(--surface-2)}.effflag.alto{color:var(--critical)}.effflag.bajo{color:var(--text-2, var(--text-3))}
 .hrwrap{position:relative}.hrtip{position:absolute;left:8px;top:2px;font-size:12px;background:var(--glass, var(--surface));border:1px solid var(--line);border-radius:8px;padding:2px 8px;opacity:0;pointer-events:none}
 .zh{font-size:13px;margin:12px 0 4px}.zrow{display:grid;grid-template-columns:96px 1fr 54px;gap:8px;align-items:center;font-size:12.5px;padding:2px 0}.zrow i{display:block;height:8px;border-radius:4px}.zrow b{text-align:right}
 
@@ -1301,14 +1311,20 @@ const typeEs = t => ({HighIntensityIntervalTraining:'HIIT', WeightTraining:'Fuer
 const sess = D.recent_sessions || [];
 const HRC = (D.hr_curves && D.hr_curves.activities) || {};
 const hasCurve = s => !!(HRC[s.id] && HRC[s.id].available);
+const EFF = D.session_effort || {};
+const effTxt = {alto: 'RPE alto para tu FC', bajo: 'RPE bajo para tu FC'};
+const effTip = {alto: 'Te costó más de lo habitual para la FC registrada en este tipo de sesión.',
+                bajo: 'La FC fue alta para el esfuerzo que marcaste en este tipo de sesión.'};
+const effFlag = id => { const e = EFF[id]; return e && e.flag ? e : null; };
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? '<span class="hrmark" aria-hidden="true">♥</span> ' : ''}${esc(s.label || s.name || '')}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? '<span class="hrmark" aria-hidden="true">♥</span> ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 
 // ---------- Detalle de FC de una sesión ----------
-function showHr(id) {
-  const c = HRC[id], s = sess.find(x => x.id === id), box = $('hrdetail');
+function showHr(id, anchor) {
+  const c = HRC[id], s = sess.find(x => x.id === id) || (D.sessions_28d || []).find(x => x.id === id), box = $('hrdetail');
   if (!c || !c.available) { box.hidden = true; return; }
+  if (anchor) anchor.insertAdjacentElement('afterend', box); else $('tab-entrenos').appendChild(box);
   const pts = c.points, W = 340, H = 190, m = {t: 10, r: 8, b: 24, l: 34}, iw = W - m.l - m.r, ih = H - m.t - m.b;
   const tmax = Math.max(pts[pts.length - 1][0], c.duration_s || 0), ys = pts.map(p => p[1]);
   const lo = Math.floor((Math.min(...ys) - 8) / 10) * 10, hi = Math.ceil((Math.max(...ys) + 6) / 10) * 10;
@@ -1330,6 +1346,7 @@ function showHr(id) {
     return `<svg viewBox="0 0 100 100" width="104" height="104" role="img" aria-label="Reparto del tiempo por zonas de FC">${arcs}<text x="50" y="48" text-anchor="middle" font-size="15" font-weight="650" fill="var(--text)">Z${top + 1}</text><text x="50" y="62" text-anchor="middle" font-size="8" fill="var(--text-3)">${Math.round(zs[top] / ztot * 100)} %</text></svg>`; })();
   const zrows = ztot > 0 ? zs.map((sec, i) => sec > 0 ? `<div class="zrow"><span>Z${i + 1}${zb[i] != null ? ` · hasta ${zb[i]}` : ''}</span><i style="width:${Math.max(2, Math.round(sec / ztot * 100))}%;background:${zc[i] || zc[6]}"></i><b>${Math.round(sec / 60)} min</b></div>` : '').join('') : '';
   box.innerHTML = `<h2>${esc((s && (s.label || s.name)) || c.name || 'Sesión')}</h2><p class="h2sub">${dshort(c.date)} ${c.start_local ? c.start_local.slice(11,16) : ''} · FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm · ${fmt((c.duration_s || 0) / 60)} min${s && s.rpe != null ? ' · RPE ' + fmt(s.rpe, 1) : ''}</p>` +
+    (effFlag(id) ? `<p class="effflag ${effFlag(id).flag}">${effTxt[effFlag(id).flag]}. ${effTip[effFlag(id).flag]}</p>` : '') +
     `<div class="hrwrap">${svg}<div class="hrtip" id="hrtip"></div></div>` +
     (zrows ? `<h3 class="zh">Tiempo por zona de FC</h3><div class="zdonut">${zdon}<div class="zrows">${zrows}</div></div>` : '') +
     `<p class="h2sub" style="margin-top:8px">Un punto cada ${c.step_s} s (Intervals.icu). Las zonas son las de tu perfil. Es una vista de la sesión: no cambia la decisión del día.</p>`;
@@ -1344,6 +1361,24 @@ function showHr(id) {
   box.scrollIntoView({behavior: 'smooth', block: 'nearest'});
 }
 $('sessions').addEventListener('click', e => { const tr = e.target.closest('tr.clk'); if (tr) showHr(tr.dataset.id); });
+// V7.20: la FC de cada sesión en las tarjetas de fuerza, halterofilia y metcons
+function miniHr(c) {
+  const pts = c.points || [], W = 300, H = 46;
+  if (pts.length < 2) return '';
+  const tmax = Math.max(pts[pts.length - 1][0], c.duration_s || 0) || 1, ys = pts.map(p => p[1]);
+  const lo = Math.min(...ys) - 4, hi = Math.max(...ys) + 4, y = v => 2 + (H - 4) * (1 - (v - lo) / (hi - lo));
+  const d = pts.map(p => (p[0] / tmax * W).toFixed(1) + ',' + y(p[1]).toFixed(1)).join('L');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" class="hrspark"><path d="M0,${H}L${d}L${W},${H}Z" fill="var(--series-1)" opacity=".12"/><path d="M${d}" fill="none" stroke="var(--series-1)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+}
+document.querySelectorAll('.hrmini').forEach(el => {
+  const id = el.dataset.id, c = HRC[id], e = effFlag(id);
+  let h = '';
+  if (c && c.available) h += `<button type="button" class="hrbtn" data-id="${esc(id)}" aria-label="Ver la curva de FC y las zonas de la sesión">${miniHr(c)}<span class="hrmeta"><span class="hrmark" aria-hidden="true">♥</span> FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm<span class="hrmore">curva y zonas ›</span></span></button>`;
+  if (e) h += `<p class="effflag ${e.flag}" title="${esc(effTip[e.flag])}">${effTxt[e.flag]}</p>`;
+  if (h) { el.innerHTML = h; el.hidden = false; }
+  if (c && c.available) { const chip = el.closest('article') && el.closest('article').querySelector('.hrchip'); if (chip) chip.remove(); }  // la FC ya va con su curva
+});
+document.addEventListener('click', e => { const b = e.target.closest('.hrbtn'); if (b) showHr(b.dataset.id, b.closest('article')); });
 $('sessions').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { const tr = e.target.closest('tr.clk'); if (tr) { e.preventDefault(); showHr(tr.dataset.id); } } });
 const today = T[T.length - 1] || {};
 const legacy = D.legacy_v2 || {};
@@ -1423,7 +1458,7 @@ $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días
   function pick(k){
     seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pane === k)));
     panes.forEach(p => { if (p.dataset.pane === k) p.hidden = false; else p.hidden = true; });
-    if (k !== 'sesiones'){ const h = document.getElementById('hrdetail'); if (h) h.hidden = true; }
+    { const h = document.getElementById('hrdetail'); if (h) h.hidden = true; }
     try { sessionStorage.setItem('entrenos-pane', k); } catch(e){}
   }
   seg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pick(b.dataset.pane); });

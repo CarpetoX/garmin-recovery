@@ -65,10 +65,28 @@ def _battery_range(row: dict):
     return (max(levels), min(levels)) if levels else (None, None)
 
 
+def declared_unscored(feedback_snapshot: dict | None) -> set[str]:
+    """IDs que la hoja declara sin RPE a propósito (RPE vacío y «sin RPE», calentamiento o técnica).
+
+    Solo se usa la instantánea completa de la hoja (``source_rows_AH``): si no se cargó, no se
+    declara nada y el historial conserva lo que tenía (V7.20).
+    """
+    from .quality import rpe_not_applicable
+    out = set()
+    for row in (feedback_snapshot or {}).get("source_rows_AH") or []:
+        if not isinstance(row, dict) or not row.get("ID actividad"):
+            continue
+        entry = {"rpe": row.get("RPE") or None, "notes": row.get("Notas"), "detail_json": row.get("Detalle JSON")}
+        if rpe_not_applicable(entry):
+            out.add(str(row["ID actividad"]))
+    return out
+
+
 def build_sessions(inputs: dict) -> list[dict]:
     feedback = (inputs.get("feedback") or {}).get("activities") or {}
     if not isinstance(feedback, dict):
         feedback = {}
+    unscored = declared_unscored(inputs.get("feedback"))
     sessions = []
     for act in inputs.get("activities") or []:
         if not isinstance(act, dict) or not act.get("id"):
@@ -80,11 +98,12 @@ def build_sessions(inputs: dict) -> list[dict]:
         seconds = num(act.get("moving_time"), 0, 86400) or num(act.get("elapsed_time"), 0, 86400)
         minutes = round(seconds / 60, 1) if seconds else None
         fb = feedback.get(str(act["id"])) or {}
-        rpe = num(fb.get("rpe"), 0, 10)
-        if rpe is None:
+        clear = str(act["id"]) in unscored and num(fb.get("rpe"), 0, 10) is None
+        rpe = None if clear else num(fb.get("rpe"), 0, 10)
+        if rpe is None and not clear:
             rpe = num(act.get("icu_rpe"), 0, 10)
         srpe = round(rpe * minutes, 1) if rpe is not None and minutes else None
-        sessions.append({
+        sessions.append(({"_clear": ["rpe", "srpe"]} if clear else {}) | {
             "id": str(act["id"]), "date": day, "start_local": start or None,
             "type": act.get("type"), "name": act.get("name"),
             "label": fb.get("activity") or None,

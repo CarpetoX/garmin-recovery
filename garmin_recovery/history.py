@@ -40,7 +40,11 @@ def merge(existing: dict, fresh: dict) -> dict:
     out = {k: dict(v) for k, v in existing.items()}
     for key, row in fresh.items():
         target = out.setdefault(key, {})
+        for field in row.get("_clear") or ():  # vaciado explícito y declarado (V7.20: sesión sin RPE a propósito)
+            target[field] = None
         for field, value in row.items():
+            if field == "_clear":
+                continue
             if value is not None:
                 target[field] = value
             else:
