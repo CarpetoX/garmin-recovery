@@ -77,7 +77,8 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
            "json: model_validation ausente o con estado inválido")
     preds = hist / "model_predictions.csv"
     if preds.exists():
-        pd = [r.get("date") for r in csv.DictReader(preds.open(encoding="utf-8"))]
+        with preds.open(encoding="utf-8") as fh:
+            pd = [r.get("date") for r in csv.DictReader(fh)]
         checks += 1
         _check(errors, pd == sorted(pd) and len(pd) == len(set(pd)) and (not pd or pd[-1] <= str(data.get("date"))),
                "historial: model_predictions.csv con fechas duplicadas, desordenadas o futuras")
@@ -145,7 +146,8 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
     # 4) Historial
     reports = hist / "reports.csv"
     if reports.exists():
-        rows = list(csv.DictReader(reports.open(encoding="utf-8")))
+        with reports.open(encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
         ids = [r.get("report_id") for r in rows]
         checks += 3
         _check(errors, all(i and GR_RE.match(i) for i in ids), "historial: identificador GR inválido en reports.csv")
@@ -162,7 +164,8 @@ def validate(root: str | Path = ".", max_age_minutes: float | None = None, now: 
         errors.append("historial: falta history/reports.csv")
     daily = hist / "daily.csv"
     if daily.exists():
-        dd = [r.get("date") for r in csv.DictReader(daily.open(encoding="utf-8"))]
+        with daily.open(encoding="utf-8") as fh:
+            dd = [r.get("date") for r in csv.DictReader(fh)]
         checks += 1
         _check(errors, dd == sorted(dd) and len(dd) == len(set(dd)), "historial: daily.csv con fechas duplicadas o desordenadas")
 

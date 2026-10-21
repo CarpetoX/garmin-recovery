@@ -83,9 +83,6 @@ class EntrenosCards(unittest.TestCase):
         self.assertLess(page.index("const EFF ="), page.index("$('sessions').innerHTML"))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class UnscoredSessions(unittest.TestCase):
     """Una sesión que la hoja declara sin RPE deja de llevar el RPE antiguo en el historial."""
@@ -116,3 +113,49 @@ class UnscoredSessions(unittest.TestCase):
     def test_pending_rpe_is_not_cleared(self):
         row = {"ID actividad": "i1", "RPE": "", "Notas": "RPE pendiente.", "Detalle JSON": '{"type": "strength"}'}
         self.assertEqual(self._hist({"activities": {}, "source_rows_AH": [row]})["rpe"], 1.0)
+
+
+class EnrichmentDropsStaleRpe(unittest.TestCase):
+    """V7.22: la copia de la hoja no arrastra el RPE de una fila que ahora dice «sin RPE»."""
+
+    def _run(self, remote_rows, fail=False):
+        import os
+        import tempfile
+        from unittest import mock
+
+        from garmin_recovery import rpe_enrichment as rp
+        old = {"activities": {"i1": {"rpe": 1.0, "date": "2026-10-20"}, "i2": {"rpe": 8.0, "date": "2026-10-20"}}}
+        with tempfile.TemporaryDirectory() as d:
+            cwd = os.getcwd()
+            os.chdir(d)
+            try:
+                Path("training_feedback.json").write_text(json.dumps(old), encoding="utf-8")
+                Path("activities.json").write_text("[]", encoding="utf-8")
+
+                def fetch(url):
+                    if fail:
+                        raise OSError("sin red")
+                    return {"i2": {"rpe": 8.0, "date": "2026-10-20"}}, remote_rows
+                with mock.patch.dict(os.environ, {"RPE_CSV_URL": "https://x"}), \
+                        mock.patch.object(rp, "feedback_from_csv", fetch), \
+                        mock.patch("garmin_recovery.advanced.main", lambda: None):
+                    rp.main()
+                return json.loads(Path("training_feedback.json").read_text(encoding="utf-8"))["activities"]
+            finally:
+                os.chdir(cwd)
+
+    ROWS = [{"ID actividad": "i1", "RPE": "", "Notas": "Sin RPE: sesión no puntuada por decisión del atleta.",
+             "Detalle JSON": '{"type": "strength", "rpe": null}'},
+            {"ID actividad": "i2", "RPE": "8", "Notas": "", "Detalle JSON": ""}]
+
+    def test_unscored_row_drops_old_value(self):
+        acts = self._run(self.ROWS)
+        self.assertNotIn("i1", acts)
+        self.assertEqual(acts["i2"]["rpe"], 8.0)
+
+    def test_failed_download_keeps_everything(self):
+        self.assertEqual(self._run(self.ROWS, fail=True)["i1"]["rpe"], 1.0)
+
+
+if __name__ == "__main__":
+    unittest.main()
