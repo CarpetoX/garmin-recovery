@@ -101,7 +101,8 @@ class RealDataTests(unittest.TestCase):
 
     def test_history_records_model_scores(self):
         import csv
-        rows = list(csv.DictReader(Path(self.tmp.name, "history", "daily.csv").open(encoding="utf-8")))
+        with Path(self.tmp.name, "history", "daily.csv").open(encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
         today = [r for r in rows if r["date"] == self.result["date"]][0]
         self.assertEqual(today["decision_zone"], self.result["decision"]["zone"])
 
