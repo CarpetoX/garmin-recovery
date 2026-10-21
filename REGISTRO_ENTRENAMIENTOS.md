@@ -33,6 +33,7 @@ Hoja de Google «RPE CrossFit - Registro», pestaña **`RPE`**, columnas A–H (
 - **No mezclar medidas:** cronómetro oficial del WOD y tiempo grabado por el reloj se guardan los dos.
 - **Unidad de carga explícita:** `kg_total_barra`, `kg_total_dos_mancuernas` (con `load_per_dumbbell_kg`), `kg_indicado_maquina`, `peso_corporal`. Las cargas de máquina no son comparables con la barra.
 - **RPE:** solo el que dice el atleta; si lo da por bloque, cada bloque con el suyo y en la columna D el del bloque principal. No estimar 1RM desde el RPE.
+- **Sesión sin puntuar:** si el atleta no quiere dar RPE (calentamiento, técnica o un bloque suave), la columna D queda vacía, `"rpe": null` en el JSON y las notas dicen «Sin RPE: sesión no puntuada por decisión del atleta». Nunca se pone 1 como marcador.
 - **Unilaterales:** confirmar con el atleta si la carga y las repeticiones son por pierna/brazo y si se hicieron ambos lados.
 - **Sensaciones diarias** (fatiga, agujetas, ánimo, estrés) no van a esta hoja: se registran en Intervals.icu (bienestar). La columna E es solo para lo previo a esa sesión.
 

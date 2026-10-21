@@ -353,10 +353,20 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     # 6 ------------------------------------------------------------------
     add("\n## 6. Fuerza, halterofilia y metcons\n")
     lo = (date.fromisoformat(today) - timedelta(days=6)).isoformat()
-    shown = 0
+    try:
+        from . import session_effort
+        effort = session_effort.load(root)
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("session_effort", exc)
+        effort = {}
+    shown = flagged = 0
     for a in cf.get("activities") or []:
         if not isinstance(a, dict) or (a.get("date") or "") < lo:
             continue
+        hr_a = a.get("heart_rate") if isinstance(a.get("heart_rate"), dict) else {}
+        trimp = _num(_d(a, "internal_load_not_additive", "trimp"))
+        eff = effort.get(str(a.get("activity_id") or "")) or {}
+        first = True
         for b in a.get("manual_blocks") or []:
             if not isinstance(b, dict) or not (b.get("notes") or b.get("detail_json")):
                 continue
@@ -365,12 +375,24 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
             vol = _num(b.get("minimum_verified_volume_kg"))
             if vol:
                 bits.append(f"volumen de barra cuantificado {n(vol, 0, ' kg')}" + ("" if b.get("volume_complete") else " (parcial)"))
+            if first:  # la FC es de la actividad de Garmin: una vez aunque tenga varios bloques
+                if _num(hr_a.get("average")) is not None and _num(hr_a.get("max")) is not None:
+                    bits.append(f"FC media {n(hr_a['average'])} / máx. {n(hr_a['max'])} lpm")
+                if trimp is not None:
+                    bits.append(f"TRIMP {n(trimp)}")
+                if eff.get("flag"):
+                    bits.append(f"⚠️ {session_effort.TEXT[eff['flag']]}")
+                    flagged += 1
+            first = False
             add(f"- {head}" + (" · " + " · ".join(x for x in bits if x) if any(bits) else ""))
             if b.get("notes"):
                 add(f"  {_clean(b['notes'])}")
             shown += 1
     if not shown:
         add("No hay sesiones con detalle registrado en los últimos 7 días.")
+    elif flagged:
+        add(f"\nRPE frente a FC: se marcan las sesiones cuyo esfuerzo relativo, ln(sRPE / carga de FC) frente a tu historial del mismo tipo, "
+            f"se aleja ±{n(session_effort.FLAG_Z, 1)} desviaciones robustas. Es descriptivo y no cambia la decisión del día.")
     best = (_d(cf, "muscle_load", "best_estimated_1rm_by_exercise") or {})
     if isinstance(best, dict) and best:
         top = sorted(((k, v) for k, v in best.items() if isinstance(v, dict)), key=lambda kv: -(_num(kv[1].get("e1rm_min_kg")) or _num(kv[1].get("kg")) or 0))[:3]

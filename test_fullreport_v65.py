@@ -22,8 +22,11 @@ class FullReport(unittest.TestCase):
         for h in ("## Resumen ejecutivo", "## 1.", "## 2.", "## 3.", "## 4.", "## 5.", "## 6.", "## 7.", "## Conclusión"):
             self.assertIn(h, self.md)
         self.assertIn("GR-TEST", self.md)
-        for bad in ("None", "NaN", "nan", "{", "}"):
-            self.assertNotIn(bad, self.md.replace("```", ""))
+        body = self.md.replace("```", "")
+        for bad in ("{", "}"):
+            self.assertNotIn(bad, body)
+        for bad in ("None", "NaN", "nan"):  # como palabra: «alternando» o «nanosegundo» en unas notas no son un fallo
+            self.assertIsNone(re.search(rf"\b{bad}\b", body), bad)
 
     def test_figures_come_from_data(self):
         cur, dec = self.ra["current"], self.result["decision"]

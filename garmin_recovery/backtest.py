@@ -91,26 +91,38 @@ def _f(v):
     return x if math.isfinite(x) else None
 
 
-def effort_by_day(sessions: dict, categorize) -> dict:
-    """Media diaria del esfuerzo relativo z = ln(sRPE/carga) estandarizado por tipo de sesión."""
+def effort_by_session(sessions: dict, categorize) -> dict:
+    """Esfuerzo relativo de cada sesión: z = ln(sRPE/carga) estandarizado por tipo de sesión.
+
+    Devuelve ``{id: {"date", "category", "z", "n_ref"}}``. Solo entran sesiones con RPE y carga
+    de FC; un tipo de sesión necesita al menos 5 sesiones de referencia.
+    """
     raw = []
-    for s in sessions.values():
+    for sid, s in sessions.items():
         srpe, load = _f(s.get("srpe")), _f(s.get("load"))
         if s.get("removed") or not s.get("date") or not srpe or not load or srpe <= 0 or load <= 0:
             continue
-        raw.append((s["date"], categorize(s), math.log(srpe / load)))
+        raw.append((str(s.get("id") or sid), s["date"], categorize(s), math.log(srpe / load)))
     by_cat: dict = {}
-    for _, cat, v in raw:
+    for _, _, cat, v in raw:
         by_cat.setdefault(cat, []).append(v)
-    days: dict = {}
-    for d, cat, v in raw:
+    out: dict = {}
+    for sid, d, cat, v in raw:
         ref = by_cat[cat]
         if len(ref) < 5:
             continue  # sin referencia suficiente para ese tipo de sesión
         sigma = mad_sigma(ref)
         if not sigma:
             continue
-        days.setdefault(d, []).append((v - median(ref)) / sigma)
+        out[sid] = {"date": d, "category": cat, "z": (v - median(ref)) / sigma, "n_ref": len(ref)}
+    return out
+
+
+def effort_by_day(sessions: dict, categorize) -> dict:
+    """Media diaria del esfuerzo relativo z = ln(sRPE/carga) estandarizado por tipo de sesión."""
+    days: dict = {}
+    for e in effort_by_session(sessions, categorize).values():
+        days.setdefault(e["date"], []).append(e["z"])
     return {d: sum(z) / len(z) for d, z in days.items()}
 
 
