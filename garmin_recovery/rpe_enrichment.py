@@ -172,6 +172,11 @@ def main():
                 default=None,
             )
             feedback.update(remote)
+            # La hoja manda: una fila que declara «sin RPE» a propósito no arrastra el RPE de la copia
+            # anterior (V7.22). Solo con la hoja descargada; si falla la descarga, se conserva todo.
+            from garmin_recovery.records import declared_unscored
+            for aid in declared_unscored({"source_rows_AH": raw_remote_rows}) - set(remote):
+                feedback.pop(aid, None)
         except Exception as exc:
             remote_error = f"{type(exc).__name__}: {exc}"
 
