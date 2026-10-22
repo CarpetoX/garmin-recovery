@@ -514,6 +514,41 @@ def _publish_post_sleep(chain, generated, now, output):
     return True
 
 
+# V7.28: GitHub puede tardar en marcar «completed» una ejecución que ya terminó (el 22/10/2026 un Sync acabado
+# siguió «in_progress» más de 30 min). Si la etapa anterior aún no consta como terminada, se reintenta en vez de
+# fallar el ciclo. No relaja ninguna comprobación: solo espera a que GitHub publique el estado real.
+RETRYABLE = {'advanced_missing_or_not_correlated', 'heart_missing_or_not_correlated', 'sync_missing_or_not_correlated'}
+RETRY_DELAYS = (15, 30, 45, 60, 90)
+
+
+def fetch_chain(repo, token, crossfit_id, advanced_id, fetch=None, sleep=None):
+    import time
+    sleep = sleep or time.sleep
+    base = f'https://api.github.com/repos/{repo}'
+    if fetch is None:  # se resuelven en cada llamada: las pruebas golden sustituyen github_json y get_runs del módulo
+        def fetch(url, tok):
+            return github_json(url, tok)
+
+        def runs(workflow):
+            return get_runs(repo, token, workflow)
+    else:
+        def runs(workflow):
+            return fetch(base + f'/actions/workflows/{workflow}/runs?per_page=80', token).get('workflow_runs', [])
+    problems = []
+    for attempt, delay in enumerate((0,) + RETRY_DELAYS):
+        if delay:
+            print(f'Report gate: GitHub aún no publica la etapa anterior como terminada ({", ".join(problems)}); '
+                  f'reintento {attempt}/{len(RETRY_DELAYS)} en {delay} s')
+            sleep(delay)
+        crossfit = fetch(base + f'/actions/runs/{crossfit_id}', token)
+        # GitHub supplies the EXACT triggering Advanced Analytics run id.
+        advanced = fetch(base + f'/actions/runs/{advanced_id}', token)
+        chain, problems = validate_chain(crossfit, [advanced], runs(WORKFLOW['heart']), runs(WORKFLOW['sync']))
+        if not problems or not set(problems) <= RETRYABLE:
+            break
+    return chain, problems
+
+
 def main():
     repo = os.environ.get('GITHUB_REPOSITORY', '')
     token = os.environ.get('GH_TOKEN', '')
@@ -521,13 +556,7 @@ def main():
     advanced_id = os.environ.get('ADVANCED_RUN_ID', '')
     if not repo or not token or not crossfit_id.isdigit() or not advanced_id.isdigit():
         raise SystemExit('Missing GH_TOKEN/repository or CrossFit/Advanced run IDs')
-    base = f'https://api.github.com/repos/{repo}'
-    crossfit = github_json(base + f'/actions/runs/{crossfit_id}', token)
-    # GitHub supplies the EXACT triggering Advanced Analytics run id.
-    advanced = github_json(base + f'/actions/runs/{advanced_id}', token)
-    chain, problems = validate_chain(
-        crossfit, [advanced], get_runs(repo, token, WORKFLOW['heart']),
-        get_runs(repo, token, WORKFLOW['sync']))
+    chain, problems = fetch_chain(repo, token, crossfit_id, advanced_id)
     if problems:
         print('Report gate: NOT READY: ' + ', '.join(problems))
         return 0 if problems == ['sync_outside_report_slot'] else 1
