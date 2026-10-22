@@ -187,14 +187,26 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
                 continue
             if d.get("type") == "metcon":
                 metcons.append(metcon_card(act, block))
-            elif d.get("type") in SKIP_TYPES:
-                other.append({"date": act["date"], "kind": d["type"], "title": (block.get("activity") or "")[:90],
-                              "rpe": d.get("rpe"), "minutes": act.get("recorded_minutes")})
     metcons.sort(key=lambda m: (m["date"], m["activity_id"]), reverse=True)
     t = _date.fromisoformat(today)
     last7 = (t - timedelta(days=6)).isoformat()
     fz = lift_sessions(entries, rpe_map, False)
     hl = lift_sessions(entries, rpe_map, True)
+    # V7.29: toda actividad sin tarjeta de fuerza, halterofilia o metcon sale en «Técnica y otras» (calentamientos,
+    # técnica y sesiones sin detalle estructurado), para que ningún entrenamiento quede fuera de Entrenos.
+    shown = {str(x["activity_id"]) for x in fz + hl + metcons}
+    for act in crossfit.get("activities") or []:
+        aid = str((act or {}).get("activity_id") or "") if isinstance(act, dict) else ""
+        if not aid or aid in shown or not act.get("date"):
+            continue
+        blocks = [b for b in act.get("manual_blocks") or [] if isinstance(b, dict)]
+        b = blocks[0] if blocks else {}
+        d = b.get("detail_json") if isinstance(b.get("detail_json"), dict) else {}
+        kind = d.get("type") if d.get("type") in SKIP_TYPES else "other"
+        other.append({"date": act["date"], "activity_id": aid, "kind": kind,
+                      "title": (b.get("activity") or act.get("name") or "Sesión")[:90],
+                      "rpe": act.get("rpe_used") if isinstance(act.get("rpe_used"), (int, float)) else None,
+                      "minutes": act.get("recorded_minutes"), "note": (b.get("notes") or "")[:400]})
     mc7 = [m for m in metcons if m["date"] >= last7]
     rp = [m["rpe"] for m in mc7 if isinstance(m["rpe"], (int, float))]
     fv = weekly_volume(entries, False, today)
@@ -202,11 +214,11 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
     return {
         "fuerza": {"sessions": fz, "weekly": fv},
         "halterofilia": {"sessions": hl, "weekly": hv},
-        "metcons": metcons, "otros": sorted(other, key=lambda o: o["date"], reverse=True),
+        "metcons": metcons, "otros": sorted(other, key=lambda o: (o["date"], o["activity_id"]), reverse=True),
         "summary7": {
             "fuerza": len({s["activity_id"] for s in fz if s["date"] >= last7}),
             "halterofilia": len({s["activity_id"] for s in hl if s["date"] >= last7}),
-            "metcons": len(mc7), "metcon_rpe_mean": round(sum(rp) / len(rp), 1) if rp else None,
+            "metcons": len(mc7), "otros": len([o for o in other if o["date"] >= last7]), "metcon_rpe_mean": round(sum(rp) / len(rp), 1) if rp else None,
             "barbell_volume_kg": fv[-1]["volume"] + hv[-1]["volume"] if fv and hv else None,
         },
     }

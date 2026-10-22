@@ -81,5 +81,34 @@ class TrainingBlocks(unittest.TestCase):
         self.assertIsNone(tb._round_series(d))
 
 
+
+
+class OthersPaneV729(unittest.TestCase):
+    """V7.29: ninguna actividad del registro queda fuera de Entrenos."""
+
+    def test_every_activity_has_a_card(self):
+        import json
+        from pathlib import Path
+
+        from garmin_recovery import progression, training_blocks
+        root = Path(__file__).resolve().parent
+        cf = json.loads((root / "crossfit_insights.json").read_text(encoding="utf-8"))
+        hist = json.loads((root / "exercise_history.json").read_text(encoding="utf-8"))
+        tb = training_blocks.build(cf, progression.build(hist, cf)["entries"], "2026-10-22")
+        shown = {str(x["activity_id"]) for k in ("fuerza", "halterofilia") for x in tb[k]["sessions"]}
+        shown |= {str(m["activity_id"]) for m in tb["metcons"]} | {o["activity_id"] for o in tb["otros"]}
+        self.assertEqual({str(a["activity_id"]) for a in cf["activities"]} - shown, set())
+        self.assertTrue(all(o["kind"] in ("warmup", "skill", "other") for o in tb["otros"]))
+
+    def test_pane_renders_with_hr_slot(self):
+        from garmin_recovery.dashboard import _others_html
+        out = _others_html([{"date": "2026-10-19", "activity_id": "i9", "kind": "skill", "title": "Técnica - toes to bar",
+                             "rpe": None, "minutes": 47.68, "note": "Sin RPE"}])
+        self.assertIn("Técnica", out)
+        self.assertIn("RPE —", out)
+        self.assertIn("47,7 min", out)
+        self.assertIn('data-id="i9"', out)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -250,7 +250,7 @@ chart($('c-load'), {label:'Carga diaria', zero:true,
 
 // ---------- Tablas ----------
 const typeEs = t => ({HighIntensityIntervalTraining:'HIIT', WeightTraining:'Fuerza', Run:'Carrera', Ride:'Bici', Walk:'Caminar', Swim:'Natación'})[t] || t || '—';
-const sess = D.recent_sessions || [];
+const sess = D.sessions_28d && D.sessions_28d.length ? D.sessions_28d.slice().sort((a, b) => (b.start_local || b.date || '').localeCompare(a.start_local || a.date || '')) : (D.recent_sessions || []);  // V7.29: los 28 días
 const HRC = (D.hr_curves && D.hr_curves.activities) || {};
 const hasCurve = s => !!(HRC[s.id] && HRC[s.id].available);
 const EFF = D.session_effort || {};
