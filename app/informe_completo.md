@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Jueves, 22 de octubre de 2026 · 08:33 · `GR-2026-10-22-0833-481d3c`
+Jueves, 22 de octubre de 2026 · 14:12 · `GR-2026-10-22-1412-ec78bc`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -33,8 +33,6 @@ Carga 7 días|7 sesiones|sRPE 793|unavailable
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 89/100 (good) |
-
-⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 10-21 08:30, 10-21 16:45, 10-21 22:45.
 
 La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
@@ -80,7 +78,7 @@ La HRV está 11 % por debajo de su mediana; la FC en reposo está 2 lpm por enci
 | Modelo de compatibilidad | 🟡 74/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 50/100 | contexto |
 | Tiempo de recuperación Garmin | 0,0 h | contexto |
-| Índice personal experimental | 46/100 | provisional |
+| Índice personal experimental | 47/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -90,7 +88,7 @@ Modelo experimental: 44 → 59 (red → yellow). Cambios notables frente a ayer:
 - FC en reposo: 61 → 58 lpm (favorable)
 - FC nocturna: 75,8 → 66,6 lpm (favorable)
 - Puntuación de sueño: 39 → 63 (favorable)
-- Estrés medio: 58 → 28 (favorable)
+- Estrés medio: 58 → 27 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -133,7 +131,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 73,8 lpm | 66,6 lpm |
+| Hoy* | 68,6 lpm | 66,6 lpm |
 | 3 días | 88,4 lpm | 67,1 lpm |
 | 7 días | 84,2 lpm | 65,9 lpm |
 | 28 días | 83,4 lpm | 63,5 lpm |
@@ -153,8 +151,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 28, máximo 75.
-- Body Battery: último valor 47/100, medido a las 07:21.
+- Estrés medio: 27, máximo 75.
+- Body Battery: último valor 41/100, medido a las 11:06 (hace 3 h 07 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -369,4 +367,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-22-0830 · generado 22/10/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 39734523531.
+Traza: cierre matinal · ciclo 2026-10-22-0830 · generado 22/10/2026 14:12 Europe/Madrid · certificado READY · sync_run_id 39734523531.

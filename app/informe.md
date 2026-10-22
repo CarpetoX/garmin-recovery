@@ -1,8 +1,8 @@
-# Informe matutino · 22/10/2026
+# Informe de seguimiento · 22/10/2026
 
-`GR-2026-10-22-0833-481d3c` · cita este identificador al reenviar el informe.
+`GR-2026-10-22-1412-ec78bc` · cita este identificador al reenviar el informe.
 
-> ⚠️ Certificado con avisos: 3 franja(s) de Sync sin ejecutar ni recuperar.
+> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -38,7 +38,7 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## Cómo ajustar tu sesión de hoy
 
-<details open><summary>Reglas por tipo de sesión</summary>
+<details><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
@@ -57,40 +57,30 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-21-2248-2aa8bf (21/10 22:48):
-- **Decisión:** rojo → **ámbar**.
-- Oficial v2: 19 → 60 (+41).
-- Híbrido: 24 → 67 (+43).
-- v3: 44 → 59 (+15).
-- Nueva noche registrada: HRV 31 → 51 ms, sueño 5,72 → 6,38 h, FC reposo 61 → 58 lpm.
-- Sesiones con RPE: 22 → 16.
+Frente al informe GR-2026-10-22-0833-481d3c (22/10 08:33):
+- Sin cambios en los datos.
 
-## Qué ha cambiado respecto a tu línea base
+## Actividad de hoy
 
-- **HRV:** 51 ms esta noche (-12 % vs. base 58 ms); media de 7 días 50,2 ms, por debajo de tu rango normal (54–62 ms).
-- **FC:** reposo 58 lpm (+2 vs. mediana 56); nocturna 66,6 lpm (+5,1).
-- **Sueño:** 6,38 h, puntuación 63; deuda 2,9 h en 3 noches frente a 7,5 h de necesidad.
-- **Estrés Garmin ayer:** 58 de media (tu mediana 38).
+_Sin sesiones registradas._
 
-**Señales coincidentes:** 4 de 4 señales en contra (Variabilidad cardiaca (HRV), FC en reposo y nocturna, Sueño, Estrés del día anterior (Garmin)). Sin datos: Carga de entrenamiento, Sensaciones (Intervals).
+**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
 
-## Incertidumbre
+**Carga 7 días:** 95 en 7 sesiones (-43 % vs. semana previa) · sRPE 793 · monotonía —.
 
-- Confianza de los datos: **alta**
-- Confianza de la recomendación: **media** (línea base de 21 noches (alta desde 28))
+## Gráficas
 
-## Plan del día
+![RPE frente al máximo del día](charts/rpe.svg)
 
-- Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos. RPE ≤ 7, volumen 70–80 %.
-- Turno de hoy: MT.
+![Carga](charts/load.svg)
 
-## Tendencias
+![Sesiones](charts/sessions.svg)
 
-![Disponibilidad](charts/readiness.svg)
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
 
 ## Recuperación: tendencias de 28 días
 
-<details open><summary>HRV, FC y sueño</summary>
+<details><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -130,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-22-0833-481d3c`
+- **Identificador del informe:** `GR-2026-10-22-1412-ec78bc`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-22-0830 · datos sincronizados a las 08:32
-- **Antigüedad:** fin del sueño hace 78 min ✓ · última HRV hace 82 min ✓ · última FC hace 29 min ✓ · último Body Battery hace 72 min ✓
+- **Ciclo:** 2026-10-22-0830 · datos sincronizados a las 14:11 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 7,0 h ✓ · última HRV hace 7,0 h ✓ · última FC hace 31 min ✓ · último Body Battery hace 3,1 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+3 sin RPE por diseño: calentamiento/técnica)
-- **Ejecución:** 3 franja(s) de Sync perdidas (21/10 08:30, 21/10 16:45, 21/10 22:45)
+- **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-22 08:33 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-22 14:12 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
