@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Jueves, 22 de octubre de 2026 · 17:52 · `GR-2026-10-22-1752-062ff8`
+Jueves, 22 de octubre de 2026 · 17:52 · `GR-2026-10-22-1752-2b334a`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -14,7 +14,7 @@ Carga 7 días|7 sesiones|sRPE 793|unavailable
 ## Resumen ejecutivo
 
 - 🟢 **Certificación:** ciclo 2026-10-22-1645 validado; 4 de 4 procesos finalizados correctamente.
-- 🟡 **Recuperación:** 60/100 (oficial, confianza high). Híbrido: 67/100. **Decisión: Entrenar con control**, RPE máx. 7.
+- 🟡 **Recuperación:** 60/100 (oficial, confianza high). Híbrido: 64/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 6 h 23 min, puntuación 63/100.
 - ❤️ **Principal alerta:** HRV 51 ms, 10,5 % por debajo de tu mediana de 28 días; FC nocturna 66,6 lpm (4,1 sobre la mediana).
 - 🏋️ **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
@@ -73,7 +73,7 @@ La HRV está 11 % por debajo de su mediana; la FC en reposo está 2 lpm por enci
 | Modelo | Resultado | Papel |
 |---|---|---|
 | Recuperación oficial | 🟡 60/100 | oficial |
-| Híbrido Garmin + local | 🟡 67/100 | salvaguarda |
+| Híbrido Garmin + local | 🟡 64/100 | salvaguarda |
 | Modelo experimental | 🟡 59/100 | sombra |
 | Modelo de compatibilidad | 🟡 74/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 50/100 | contexto |

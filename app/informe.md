@@ -1,10 +1,10 @@
 # Informe de seguimiento · 22/10/2026
 
-`GR-2026-10-22-1752-062ff8` · cita este identificador al reenviar el informe.
+`GR-2026-10-22-1752-2b334a` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
-> **Por qué:** lo marcan Recuperación oficial (60) y Híbrido Garmin + local (67) y Modelo experimental (59); señales: Estrés Garmin ayer 58 de media (tu mediana 38) · FC en reposo 58 lpm (+2 vs. tu mediana).
+> **Por qué:** lo marcan Recuperación oficial (60) y Híbrido Garmin + local (64) y Modelo experimental (59); señales: Estrés Garmin ayer 58 de media (tu mediana 38) · FC en reposo 58 lpm (+2 vs. tu mediana).
 >
 > **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
 
@@ -19,7 +19,7 @@
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
 | Recuperación oficial | 60 | ámbar | oficial |
-| Híbrido Garmin + local | 67 | ámbar | salvaguarda |
+| Híbrido Garmin + local | 64 | ámbar | salvaguarda |
 | Modelo experimental | 59 | ámbar | sombra |
 | Modelo de compatibilidad | 74 | ámbar | compatibilidad |
 | Garmin Training Readiness | 50 | — | contexto |
@@ -55,8 +55,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-22-1412-ec78bc (22/10 14:12):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-22-1752-062ff8 (22/10 17:52):
+- Híbrido: 67 → 64 (-3).
 
 ## Actividad de hoy
 
@@ -118,12 +118,12 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-22-1752-062ff8`
+- **Identificador del informe:** `GR-2026-10-22-1752-2b334a`
 
 <details><summary>Detalle del certificado</summary>
 
 - **Ciclo:** 2026-10-22-1645 · datos sincronizados a las 17:51
-- **Antigüedad:** fin del sueño hace 10,6 h ✓ · última HRV hace 10,7 h ✓ · última FC hace 26 min ✓ · último Body Battery hace 55 min ✓
+- **Antigüedad:** fin del sueño hace 10,6 h ✓ · última HRV hace 10,7 h ✓ · última FC hace 27 min ✓ · último Body Battery hace 56 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+3 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
