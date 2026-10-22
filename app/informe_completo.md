@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Jueves, 22 de octubre de 2026 · 17:52 · `GR-2026-10-22-1752-2b334a`
+Jueves, 22 de octubre de 2026 · 22:48 · `GR-2026-10-22-2248-57df65`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -13,8 +13,8 @@ Carga 7 días|7 sesiones|sRPE 793|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-22-1645 validado; 4 de 4 procesos finalizados correctamente.
-- 🟡 **Recuperación:** 60/100 (oficial, confianza high). Híbrido: 64/100. **Decisión: Entrenar con control**, RPE máx. 7.
+- 🟢 **Certificación:** ciclo 2026-10-22-2245 validado; 4 de 4 procesos finalizados correctamente.
+- 🟡 **Recuperación:** 60/100 (oficial, confianza high). Híbrido: 67/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 6 h 23 min, puntuación 63/100.
 - ❤️ **Principal alerta:** HRV 51 ms, 10,5 % por debajo de tu mediana de 28 días; FC nocturna 66,6 lpm (4,1 sobre la mediana).
 - 🏋️ **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
@@ -23,13 +23,13 @@ Carga 7 días|7 sesiones|sRPE 793|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-22-1645 |
+| Ciclo | 2026-10-22-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 17:52:06 |
+| Certificado generado | 22:48:06 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 89/100 (good) |
@@ -73,12 +73,12 @@ La HRV está 11 % por debajo de su mediana; la FC en reposo está 2 lpm por enci
 | Modelo | Resultado | Papel |
 |---|---|---|
 | Recuperación oficial | 🟡 60/100 | oficial |
-| Híbrido Garmin + local | 🟡 64/100 | salvaguarda |
+| Híbrido Garmin + local | 🟡 67/100 | salvaguarda |
 | Modelo experimental | 🟡 59/100 | sombra |
 | Modelo de compatibilidad | 🟡 74/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 50/100 | contexto |
 | Tiempo de recuperación Garmin | 0,0 h | contexto |
-| Índice personal experimental | 46/100 | provisional |
+| Índice personal experimental | 44/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -131,7 +131,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 69,5 lpm | 66,6 lpm |
+| Hoy* | 69,3 lpm | 66,6 lpm |
 | 3 días | 88,4 lpm | 67,1 lpm |
 | 7 días | 84,2 lpm | 65,9 lpm |
 | 28 días | 83,4 lpm | 63,5 lpm |
@@ -152,7 +152,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 28, máximo 75.
-- Body Battery: último valor 36/100, medido a las 16:57.
+- Body Battery: último valor 29/100, medido a las 19:30 (hace 3 h 18 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -282,7 +282,7 @@ Turno: hoy MT, mañana TN.
 ### Recomendaciones
 
 1. **Entrenar con control** — Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -367,4 +367,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-22-1645 · generado 22/10/2026 17:52 Europe/Madrid · certificado READY · sync_run_id 39802553765.
+Traza: cierre nocturno · ciclo 2026-10-22-2245 · generado 22/10/2026 22:48 Europe/Madrid · certificado READY · sync_run_id 39851791909.
