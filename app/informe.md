@@ -1,8 +1,6 @@
 # Informe de seguimiento · 22/10/2026
 
-`GR-2026-10-22-1412-ec78bc` · cita este identificador al reenviar el informe.
-
-> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
+`GR-2026-10-22-1752-062ff8` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -57,7 +55,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-22-0833-481d3c (22/10 08:33):
+Frente al informe GR-2026-10-22-1412-ec78bc (22/10 14:12):
 - Sin cambios en los datos.
 
 ## Actividad de hoy
@@ -120,16 +118,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-22-1412-ec78bc`
+- **Identificador del informe:** `GR-2026-10-22-1752-062ff8`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-22-0830 · datos sincronizados a las 14:11 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 7,0 h ✓ · última HRV hace 7,0 h ✓ · última FC hace 31 min ✓ · último Body Battery hace 3,1 h !
+- **Ciclo:** 2026-10-22-1645 · datos sincronizados a las 17:51
+- **Antigüedad:** fin del sueño hace 10,6 h ✓ · última HRV hace 10,7 h ✓ · última FC hace 26 min ✓ · último Body Battery hace 55 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+3 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-22 14:12 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-22 17:52 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
