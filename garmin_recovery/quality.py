@@ -117,7 +117,12 @@ def certificate(root: Path, inputs: dict, readiness: dict, now: datetime, tz, cf
         issues.append("la cadena no certificó datos preparados para este ciclo")
     health = inputs.get("workflow_health") or {}
     alerts = [a for a in health.get("alerts") or [] if isinstance(a, dict)]
-    missed = sorted({sl for a in alerts for sl in (a.get("slots") or []) if isinstance(sl, str)})
+    # Solo cuenta como perdida una franja que nadie recuperó. Si el cron de GitHub no disparó pero el respaldo de
+    # Apps Script lanzó el Sync a tiempo («cron_missed_dispatch_recovered»), el ciclo se ejecutó: no es un aviso (V7.27).
+    def _slots(code):
+        return sorted({sl for a in alerts if a.get("code") == code for sl in (a.get("slots") or []) if isinstance(sl, str)})
+    missed = _slots("sync_slot_not_recovered")
+    recovered = [sl for sl in _slots("cron_missed_dispatch_recovered") if sl not in missed]
     if missed:
         issues.append(f"{len(missed)} franja(s) de Sync sin ejecutar ni recuperar")
     return {
@@ -143,7 +148,7 @@ def certificate(root: Path, inputs: dict, readiness: dict, now: datetime, tz, cf
         "execution_health": {"status": health.get("status"), "checked_at": health.get("checked_at"),
                              "alerts": [{"code": a.get("code"), "severity": a.get("severity"),
                                          "slots": a.get("slots")} for a in alerts],
-                             "missed_slots": missed},
+                             "missed_slots": missed, "recovered_slots": recovered},
         "delivery": {
             "status": "no_verificable_en_etapa_de_datos",
             "detail": ("Este certificado acredita datos preparados, no la recepción del informe. "
