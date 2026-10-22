@@ -223,20 +223,39 @@ def _metcons_html(metcons: list[dict]) -> str:
             + chart + cards + '<p class="pg-note">Los metcons no son comparables entre sí salvo que repitan formato y ejercicios.</p></section>')
 
 
+KIND_ES = {"warmup": "Calentamiento", "skill": "Técnica", "other": "Sin detalle estructurado"}
+
+
+def _others_html(others: list[dict]) -> str:
+    """V7.29: calentamientos, técnica y sesiones sin detalle, con su FC; ninguna sesión queda fuera de Entrenos."""
+    if not others:
+        return '<section class="card"><h2>Técnica y otras</h2><p class="h2sub">Sin calentamientos ni sesiones de técnica registrados.</p></section>'
+    cards = ""
+    for o in others:
+        mins = f'<span class="rx-chip">{_kg(round(o["minutes"], 1))} min grabados</span>' if o.get("minutes") is not None else ""
+        cards += (f'<article class="mc"><header><span class="mc-fmt">{_esc(KIND_ES.get(o["kind"], "Sesión"))}</span>'
+                  f'<span class="mc-date">{_day_name(o["date"])}</span>{_rpe_pill(o["rpe"])}</header>'
+                  f'<p class="lf-title">{_esc(o["title"])}</p>' + (f'<div class="chips">{mins}</div>' if mins else "")
+                  + (f'<p class="pg-note">{_esc(o["note"])}</p>' if o.get("note") else "") + _hr_slot(o.get("activity_id")) + "</article>")
+    return ('<section class="card"><h2>Técnica y otras</h2><p class="h2sub">calentamientos, técnica y sesiones sin ejercicios estructurados · '
+            '«RPE —» = sesión sin puntuar</p>' + cards + '<p class="pg-note">Cuentan en la carga y en la FC; no entran en las comparaciones de fuerza ni de metcons.</p></section>')
+
+
 def _training_html(tb: dict | None, prog: dict | None) -> str:
     """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones."""
     if not isinstance(tb, dict):
         return _progression_html(prog)
     s = tb.get("summary7") or {}
     chips = (f'<li><b>{s.get("fuerza", 0)}</b><span>fuerza</span></li><li><b>{s.get("halterofilia", 0)}</b><span>halterofilia</span></li>'
-             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li>'
+             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li><li><b>{s.get("otros", 0)}</b><span>técnica y otras</span></li>'
              f'<li><b>{_kg(s["metcon_rpe_mean"]) if s.get("metcon_rpe_mean") is not None else "—"}</b><span>RPE medio metcons</span></li>')
     head = (f'<section class="card tbhead"><h2>Últimos 7 días</h2><ul class="tbsum">{chips}</ul>'
             '<div class="seg" role="tablist" aria-label="Tipo de entrenamiento">'
             '<button role="tab" data-pane="fuerza" aria-selected="true">Fuerza</button>'
             '<button role="tab" data-pane="halterofilia" aria-selected="false">Halterofilia</button>'
             '<button role="tab" data-pane="metcons" aria-selected="false">Metcons</button>'
-            '<button role="tab" data-pane="sesiones" aria-selected="false">Sesiones</button></div></section>')
+            '<button role="tab" data-pane="otros" aria-selected="false">Técnica</button>'
+            '<button role="tab" data-pane="sesiones" aria-selected="false">Todas</button></div></section>')
     fz, hl = tb.get("fuerza") or {}, tb.get("halterofilia") or {}
     panes = {
         "fuerza": (_weekly_html(fz.get("weekly"), "Volumen de fuerza", "barra, por semana")
@@ -246,6 +265,7 @@ def _training_html(tb: dict | None, prog: dict | None) -> str:
                          + _progression_html(prog, "halterofilia")
                          + _lifts_html(hl.get("sessions"), "Sesiones de halterofilia", "Aún no hay sesiones de halterofilia con cargas registradas.")),
         "metcons": _metcons_html(tb.get("metcons") or []),
+        "otros": _others_html(tb.get("otros") or []),
     }
     return head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
 
@@ -685,7 +705,7 @@ _TEMPLATE_HTML = r"""<!doctype html>
   <div class="grid tab" id="tab-entrenos" data-tab="entrenos">
     {{ENT}}
     <section class="card tbpane" data-pane="sesiones" hidden>
-      <h2>Sesiones recientes</h2>
+      <h2>Sesiones de los últimos 28 días</h2>
       <p class="h2sub">sRPE = RPE × minutos (Foster), solo con RPE registrado por ID de actividad</p>
       <div class="scroll"><table id="sessions"></table></div>
     </section>
