@@ -1,25 +1,25 @@
 <!-- cycle_id: 2026-10-22-0830 -->
-**En breve:** recuperación media, mejor que ayer; hoy toca entrenar con control.
-🟢 Recuperación oficial 60/100, confianza alta (+41 frente al informe de anoche, que marcaba 19).
-🌙 Sueño 6,38 h, puntuación 63; deuda de 2,9 h en 3 noches.
-🏋️ Carga: 7 sesiones en 7 días, carga 95 (semana previa 167).
-❤️ Alerta: HRV media de 7 días 50 ms, por debajo de tu rango normal (54–62 ms).
-Orientación: turno de mañana y tarde (MT): RPE máx. 7, volumen 70–80 %, sin series al fallo ni WOD máximos.
+**En breve:** recuperación media: hoy toca entrenar con control, sin intensidad máxima.
+🟢 Recuperación oficial 60/100, confianza alta.
+🌙 Sueño 6,4 h, puntuación 63.
+🏋️ Carga 7 días: 95 en 7 sesiones (−43 % vs. semana previa).
+❤️ Alerta: HRV 51 ms, por debajo de tu rango normal (54–62 ms).
+Orientación: turno de mañana-tarde (MT); RPE máx. 7, volumen 70–80 %, técnica y fuerza submáxima.
 
-**Qué explica la puntuación.** Las cuatro señales van en contra de tu base: estrés de Garmin ayer 58 (tu mediana 38), FC en reposo 58 lpm (+2,5), sueño corto y HRV 51 ms (−12 % vs. 58). La mejora de hoy frente a anoche viene de una noche mejor registrada (HRV 31→51 ms), pero sigues por debajo de tu línea base.
+**Qué explica la puntuación.** Estrés Garmin de ayer 58 de media (tu mediana 38), FC en reposo 58 lpm (+2,5 vs. tu base), sueño de 6,4 h con deuda de 2,9 h en 3 noches y HRV media de 7 días de 50 ms, un 14 % bajo tu base (58 ms). Oficial, híbrido (67) y experimental (59) coinciden en ámbar.
 
-**Carga reciente.** Semana con menos carga que la anterior (−43 %), sRPE 793 y 16 de 16 sesiones con RPE. Del análisis por reglas: 12 de 20 sesiones fueron de RPE ≥ 8 y hubo 4 veces dos días duros seguidos; tras sesión dura, HRV de 47 ms frente a 55 ms (descriptivo, pocos días).
+**Carga reciente.** 7 sesiones, carga 95, sRPE 793; monotonía sin dato. Últimas con RPE: WOD 5 rondas (20/10) RPE 8 y EMOM echo bike/squat clean (19/10) RPE 9. Según el análisis por reglas, 12 de 20 sesiones con RPE fueron ≥ 8 y la HRV del día siguiente fue 8 ms menor tras esas sesiones (descriptivo, pocos días). Faltan sensaciones en Intervals.
 
-**Prioridades**
-1. Sueño: recuperar la deuda con 30–45 min más cada noche, no con una sola noche larga.
-2. Intensidad: limitar los días de RPE ≥ 8 y evitar encadenarlos.
-3. Registrar sensaciones en Intervals.icu (0 de los últimos 14 días) para contrastar los números del reloj.
+**3 prioridades**
+1. HRV: baja la intensidad unos días y reevalúa en una semana.
+2. Sueño: recupera la deuda con 30–45 min más cada noche, sobre todo antes del TN de mañana.
+3. FC en reposo/estrés: evita encadenar esfuerzos máximos y registra sensaciones en Intervals.
 
-**Plan 7 días** (sujeto al informe de cada día)
-- Jue 22 (MT): técnica y fuerza submáxima, RPE ≤ 7, o movilidad.
-- Vie 23 (TN): sesión moderada por la mañana, si entrenas; acuéstate pronto antes del turno.
+**Plan 7 días** (se reajusta cada día según la decisión)
+- Jue 22 (MT): ámbar; movilidad o técnica ligera, RPE ≤ 7.
+- Vie 23 (TN): si entrenas, por la mañana y moderado; duerme bien antes.
 - Sáb 24 (post-TN): descanso, prioriza dormir.
-- Dom 25: único día para una sesión exigente, solo si la recuperación lo permite.
-- Lun–mié: alterna una sesión moderada y una suave; sin dos días duros seguidos.
+- Dom 25 (libre): sesión exigente solo si la decisión sale verde.
+- Lun 26–mié 28: alterna un día suave y uno moderado, sin dos días duros seguidos; el siguiente día duro solo con HRV de vuelta a su rango.
 
-_Herramienta basada en tendencias personales; no es un diagnóstico médico._
+_No es un diagnóstico médico._
