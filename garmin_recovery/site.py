@@ -69,7 +69,7 @@ def icon_png(size: int) -> bytes:
 MANIFEST = {
     "name": "Garmin Recovery · Rendimiento y recuperación", "short_name": "Recuperación",
     "lang": "es", "start_url": "./", "scope": "./", "display": "standalone",
-    "background_color": "#f6f6f4", "theme_color": "#2a78d6",
+    "background_color": "#07090c", "theme_color": "#07090c",
     "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
               {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}],

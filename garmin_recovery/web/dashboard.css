@@ -359,3 +359,69 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 .hcells{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px}.hcells i{display:block;height:22px;border-radius:4px;background:var(--glass-chip,var(--surface-2))}
 .hax{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3)}
 .zdonut{display:flex;gap:14px;align-items:center;margin:6px 0 2px}.zdonut svg{flex:0 0 104px}.zdonut .zrows{flex:1;min-width:0}.zdonut .zrow{grid-template-columns:1fr 12px 52px}.zdonut .zrow i{width:10px!important;height:10px;border-radius:50%}
+
+/* ==== V8.0 · Rediseño oscuro tipo WHOOP: alto contraste, cifras grandes, menos texto ====
+   Oscuro por defecto; «claro» o «automático» desde Sistema (data-theme en <html>). */
+:root:not([data-theme="light"]){
+  color-scheme: dark;
+  --bg:#07090c; --surface:#12151a; --surface-2:#1b1f26; --line:#252a32;
+  --text:#f3f5f8; --text-2:#b9c0cb; --text-3:#8e97a4;
+  --series-1:#4ea1ff; --series-1-wash:rgba(78,161,255,.16); --series-2:#ff8a4c;
+  --good:#2fe07a; --warning:#ffcc33; --critical:#ff4d5e; --muted:#6b7380;
+  --good-ink:#2fe07a; --warning-ink:#ffcc33; --critical-ink:#ff6b79;
+  --glass:#12151a; --glass-edge:#232831; --glass-chip:rgba(255,255,255,.07);
+  --glass-hi:none; --glass-shadow:0 1px 0 rgba(255,255,255,.03);
+  --blob-a:rgba(78,161,255,.10); --blob-b:rgba(255,138,76,.06); --blob-c:rgba(47,224,122,.07);
+}
+@media (prefers-color-scheme: light){
+  :root[data-theme="auto"]{
+    color-scheme: light;
+    --bg:#f6f6f4; --surface:#fcfcfb; --surface-2:#f0efec; --line:#e4e3df;
+    --text:#0b0b0b; --text-2:#52514e; --text-3:#63625c;
+    --series-1:#2a78d6; --series-1-wash:rgba(42,120,214,.12); --series-2:#eb6834;
+    --good:#0ca30c; --warning:#fab219; --critical:#d03b3b; --muted:#9a9990;
+    --good-ink:#006300; --warning-ink:#7a5200; --critical-ink:#a32727;
+    --glass:rgba(255,255,255,.58); --glass-edge:rgba(255,255,255,.75); --glass-chip:rgba(90,100,120,.12);
+    --glass-hi:inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(255,255,255,.25); --glass-shadow:0 8px 30px rgba(20,30,60,.10);
+  }
+}
+:root:not([data-theme="light"]) .card,:root:not([data-theme="light"]) .tabbar,:root:not([data-theme="light"]) .cta{
+  -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border:1px solid var(--glass-edge);border-radius:20px}
+:root:not([data-theme="light"]) .tabbar{background:rgba(18,21,26,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+:root:not([data-theme="light"]) .tone-good{--tone-tint:rgba(47,224,122,.16)}
+:root:not([data-theme="light"]) .tone-warning{--tone-tint:rgba(255,204,51,.14)}
+:root:not([data-theme="light"]) .tone-critical{--tone-tint:rgba(255,77,94,.16)}
+:root:not([data-theme="light"]) .heroring .arc{filter:drop-shadow(0 0 6px rgba(47,224,122,.45))}
+:root:not([data-theme="light"]) .tone-warning .heroring .arc{filter:drop-shadow(0 0 6px rgba(255,204,51,.45))}
+:root:not([data-theme="light"]) .tone-critical .heroring .arc{filter:drop-shadow(0 0 6px rgba(255,77,94,.45))}
+/* Cifras grandes y etiquetas pequeñas en mayúsculas, como un panel deportivo */
+.score,.tile .value,.ring-num,.kpi strong,.tbsum b{font-weight:720;letter-spacing:-.03em}
+.heroring .score{font-size:50px}
+.tile .label,.ring-label,.tbsum span{text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;font-weight:650;color:var(--text-3)}
+.tile .value{font-size:30px}
+.ring-num{font-size:24px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--text-2)}
+#hrdetail h2,.lf-title,.mc-fmt{text-transform:none;letter-spacing:0}
+#hrdetail h2{font-size:16px;color:var(--text)}
+/* «Ver detalle»: el texto explicativo queda plegado; la información no desaparece */
+details.more{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
+details.more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+  color:var(--series-1);padding:4px 0;user-select:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+details.more[open]>summary::after{transform:rotate(-135deg) translateY(-1px)}
+details.more>summary:focus-visible{outline:2px solid var(--series-1);outline-offset:2px;border-radius:4px}
+details.more .more-body>*{margin:6px 0 0}
+details.more .more-body .h2sub{font-size:12.5px;color:var(--text-2)}
+.fold-item{display:none}.open>.fold-item,.open .fold-item{display:block}
+.has-fold{cursor:pointer}.has-fold:focus-visible{outline:2px solid var(--series-1);outline-offset:2px}
+.fold-hint{display:inline-block;margin-top:4px;font-size:11px;font-weight:650;color:var(--series-1)}
+.open>.fold-hint,.open .fold-hint{display:none}
+/* Apariencia (Sistema) */
+.theme-seg{display:flex;gap:4px;background:var(--surface-2);border-radius:12px;padding:4px;margin-top:8px}
+.theme-seg button{flex:1;border:0;background:transparent;color:var(--text-2);font:inherit;font-size:13px;font-weight:600;padding:8px 4px;border-radius:9px;cursor:pointer}
+.theme-seg button[aria-pressed="true"]{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.tbsum span{text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;overflow-wrap:normal;hyphens:auto}
+.tbsum b{font-size:22px}
+@media (max-width:430px){.tbsum{grid-template-columns:repeat(3,minmax(0,1fr))}}

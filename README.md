@@ -166,3 +166,7 @@ El informe completo incluye tarjetas de estado, las gráficas del ciclo (HRV con
 ## V7.21 — Animaciones
 
 Las gráficas de Hoy, Tendencias y Entrenos se dibujan al entrar en pantalla (líneas que se trazan, barras que crecen, puntos que aparecen después). Al abrir la FC de una sesión, la curva se traza y el anillo de zonas se rellena de Z1 a Z5. El ♥ de cada sesión late a su FC media (60 / FC segundos por latido). Con «reducir movimiento» activado en el móvil no se anima nada; los datos no cambian.
+
+## V8.0 — Rediseño oscuro tipo WHOOP
+
+Tema oscuro por defecto (fondo casi negro, cifras grandes, colores de zona vivos) con selector Oscuro / Claro / Automático en Sistema (se guarda en el móvil). Para tener menos letra sin perder información, las explicaciones de cada tarjeta (subtítulos, notas, lecturas, metodología) se pliegan bajo «Ver detalle» y las notas de cada sesión o día se abren al tocarlo («+ detalle»). Comprobado nodo a nodo: ningún texto desaparece, solo cambia de sitio. Palabras a la vista: Hoy 610 → 402, Tendencias 628 → 471, Entrenos 787 → 665.
