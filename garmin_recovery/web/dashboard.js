@@ -433,3 +433,57 @@ $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días
   addEventListener('hashchange', () => show(location.hash));
   show(location.hash);
 })();
+
+// ==== V8.0 · Menos texto a la vista: las explicaciones se pliegan bajo «Ver detalle» (no se borra nada) ====
+(function(){
+  const CARD_FOLD = '.h2sub, .pg-note, .marks-note, .tip-line, .read, .notes, .meta';
+  const ITEM_FOLD = '.why, .pg-note';
+  const ITEM = 'article, .plan li, .plan-day, .cal-day';
+  const keep = el => el.closest('#hrdetail, .tbhead, .hero, details.more, table, .tip, .hrmini') ||
+                     ((el.textContent || '').trim().length <= 40 && el.matches('.h2sub'));
+  // 1) Dentro de cada sesión, día o tarjeta pequeña: se abre al tocarla
+  document.querySelectorAll(ITEM).forEach(item => {
+    const parts = [...item.querySelectorAll(ITEM_FOLD)].filter(el => !el.closest('#hrdetail') && el.closest(ITEM) === item);
+    if (!parts.length) return;
+    parts.forEach(el => el.classList.add('fold-item'));
+    const hint = document.createElement('span'); hint.className = 'fold-hint'; hint.textContent = '+ detalle';
+    item.appendChild(hint); item.classList.add('has-fold'); item.tabIndex = item.tabIndex >= 0 ? item.tabIndex : 0;
+    const toggle = e => { if (e.target.closest('button, a, .hrbtn, summary')) return; item.classList.toggle('open'); };
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); } });
+  });
+  // 2) En cada tarjeta: subtítulos explicativos, notas y lecturas pasan a «Ver detalle»
+  document.querySelectorAll('section.card').forEach(card => {
+    if (card.id === 'hrdetail') return;
+    const parts = [...card.querySelectorAll(CARD_FOLD)].filter(el => !keep(el) && !el.classList.contains('fold-item') && !el.closest(ITEM));
+    if (!parts.length) return;
+    const d = document.createElement('details'); d.className = 'more';
+    d.innerHTML = '<summary>Ver detalle</summary><div class="more-body"></div>';
+    const body = d.querySelector('.more-body');
+    parts.forEach(el => body.appendChild(el));
+    card.appendChild(d);
+  });
+  // 3) Metodología del pie
+  const f = document.getElementById('footer');
+  if (f && f.textContent.trim() && !f.closest('details')) {
+    const d = document.createElement('details'); d.className = 'more';
+    d.innerHTML = '<summary>Metodología y versión</summary>';
+    f.parentNode.insertBefore(d, f); d.appendChild(f);
+  }
+})();
+
+// ==== V8.0 · Apariencia: oscuro (por defecto), claro o automático ====
+(function(){
+  const host = document.getElementById('tab-sistema'); if (!host) return;
+  const cur = () => document.documentElement.getAttribute('data-theme') || 'dark';
+  const sec = document.createElement('section'); sec.className = 'card'; sec.id = 'apariencia';
+  sec.innerHTML = '<h2>Apariencia</h2><div class="theme-seg" role="group" aria-label="Tema de la app">' +
+    [['dark', 'Oscuro'], ['light', 'Claro'], ['auto', 'Automático']].map(([k, l]) => `<button type="button" data-t="${k}">${l}</button>`).join('') + '</div>';
+  host.insertBefore(sec, host.firstChild);
+  const paint = () => sec.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.t === cur())));
+  sec.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.t === 'dark') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', b.dataset.t);
+    try { localStorage.setItem('gr-theme', b.dataset.t); } catch (err) {}
+    paint(); });
+  paint();
+})();

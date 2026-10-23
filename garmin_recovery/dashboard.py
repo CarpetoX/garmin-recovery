@@ -360,7 +360,7 @@ def render(result: dict, extras: dict | None = None) -> str:
 
 
 PWA_HEAD = """<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#2a78d6">
+<meta name="theme-color" content="#07090c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Recuperación">
 <link rel="icon" href="icon-192.png">
@@ -604,6 +604,7 @@ _TEMPLATE_HTML = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}}</title>
+<script>try{var t=localStorage.getItem("gr-theme");if(t==="light"||t==="auto")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 {{HEAD}}
 <style>
 {{CSS}}
