@@ -1,27 +1,27 @@
-<!-- cycle_id: 2026-10-22-2245 -->
-**En breve:** recuperación media; mañana empieza el turno de noche, conviene dormir bien esta noche.
-🟢 Recuperación oficial 60/100 (confianza alta)
-🌙 Sueño 6,4 h, puntuación 63
-🏋️ Carga 7 días: 7 sesiones, 95 (−43 % vs. semana previa)
-❤️ Alerta: HRV 7 días 50 ms, un 14 % por debajo de tu base
-Orientación: hoy turno de mañana y sin sesiones registradas; mañana (TN) RPE ≤ 7, volumen 70–80 %, sin series al fallo ni WOD máximos.
+<!-- cycle_id: 2026-10-23-0830 -->
+**En breve:** día verde: puedes entrenar según lo planificado, pero hoy tienes turno de noche.
+🟢 Recuperación oficial 88/100 (confianza alta), +28 frente a ayer (60).
+🌙 Sueño 7,3 h, puntuación 83.
+🏋️ Carga 7 días: 95 en 7 sesiones, un 39 % menos que la semana previa.
+❤️ HRV de esta noche 62 ms, +7 % sobre tu base (58 ms).
+Orientación: si entrenas, antes del turno de las 15:00, corto y sin máximos (RPE ≤ 9 permitido).
 
-**Qué explica la puntuación.** Oficial 60, híbrido 67 y experimental 59 coinciden en ámbar. Pesan el estrés de Garmin de ayer (58 de media, tu mediana 38), la FC en reposo (58 lpm, +2,5 sobre tu mediana; nocturna 66,6 lpm), el sueño (6,4 h, deuda de 2,9 h en 3 noches) y la HRV (51 ms hoy; rango normal 54–62 ms). Frente a ayer, HRV, FC y puntuación de sueño mejoran (experimental 44 → 59), pero siguen por debajo de tu base.
+**Qué explica la puntuación.** La noche ha sido buena: HRV 62 ms, FC en reposo 56 lpm (igual que tu mediana) y estrés de ayer 28 (mediana 38). Pesa en contra la media de HRV de 7 días (51,7 ms), por debajo de tu rango normal (54–62 ms), y la deuda de sueño de 3,1 h en 3 noches.
 
-**Carga reciente.** 7 sesiones en 7 días, carga 95 y sRPE 793; la semana baja frente a la anterior (167). Aun así, según el análisis por reglas, 12 de 20 sesiones con RPE fueron ≥ 8 y la HRV al día siguiente de una sesión dura fue 47 ms frente a 55 ms (descriptivo, pocos días). Faltan sensaciones en Intervals.
+**Carga reciente.** Última sesión registrada el 20/10 (WOD RPE 8); 19/10 incluyó un EMOM con RPE 9. El análisis por reglas señala 12 de 20 sesiones con RPE ≥ 8 (60 %) y cuatro veces dos días duros seguidos.
 
 **Prioridades**
-1. **HRV y FC en reposo:** baja la intensidad unos días y evita encadenar esfuerzos máximos hasta que la media de 7 días vuelva a tu rango.
-2. **Sueño:** objetivo de 8,5 h esta noche; sube 30–45 min cada noche en vez de una sola noche larga, y ancla la hora de despertar con el TN.
-3. **Distribución de la intensidad:** intercala sesiones de RPE 5–6 entre las duras, con ≥ 48 h entre esfuerzos máximos.
+1. Sueño: adelantar 30–45 min el acostarte, sobre todo antes de un turno.
+2. Intensidad: intercalar sesiones de RPE 5–6 y dejar ≥ 48 h entre esfuerzos máximos.
+3. Registrar sensaciones en Intervals.icu (0 de los últimos 14 días) para afinar el modelo.
 
-**Plan de 7 días** (orientativo; la decisión del día manda)
-- jue 22 (MT): descanso; prioridad al sueño.
-- vie 23 (TN): sesión suave o moderada antes del turno, RPE ≤ 7.
-- sáb 24 (post-TN): descanso y sueño de recuperación.
-- dom 25: exigente solo si HRV y FC han vuelto a su rango.
-- lun 26: suave, RPE 5–6.
-- mar 27: exigente, ≥ 48 h tras la anterior.
-- mié 28: suave o movilidad.
+**Plan 7 días** (decisión de hoy: verde; revisa cada mañana)
+- Vie 23 (TN): sesión corta antes del turno, RPE ≤ 7; siesta/sueño anclado al despertar.
+- Sáb 24: dormir tras el turno; solo movilidad.
+- Dom 25: fuerza o halterofilia, RPE 8–9 si la decisión sigue verde.
+- Lun 26: aeróbico suave o técnica, RPE 5–6.
+- Mar 27: WOD duro (RPE 8) solo si HRV y sueño acompañan.
+- Mié 28: suave, RPE 5–6.
+- Jue 29: movilidad y acostarte pronto; el 30 hay TN.
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
+*Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico.*
