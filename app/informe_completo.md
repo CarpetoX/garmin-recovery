@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Viernes, 23 de octubre de 2026 · 13:54 · `GR-2026-10-23-1354-11f3b8`
+Viernes, 23 de octubre de 2026 · 16:48 · `GR-2026-10-23-1648-0e6494`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 793|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-23-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-23-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🟢 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 82/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 7 h 16 min, puntuación 83/100.
 - ❤️ **Principal alerta:** HRV 62 ms, 10,7 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|9 sesiones|sRPE 793|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-23-0830 |
+| Ciclo | 2026-10-23-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:12 |
+| Certificado generado | 16:48:11 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 89/100 (good) |
@@ -78,7 +78,7 @@ La HRV está 11 % por encima de su mediana; la FC en reposo coincide con su medi
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 67/100 | contexto |
 | Tiempo de recuperación Garmin | 0,0 h | contexto |
-| Índice personal experimental | 79/100 | provisional |
+| Índice personal experimental | 78/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -130,7 +130,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 87,4 lpm | 61,4 lpm |
+| Hoy* | 85,2 lpm | 61,4 lpm |
 | 3 días | 77,2 lpm | 67,4 lpm |
 | 7 días | 79,7 lpm | 64,7 lpm |
 | 28 días | 82,9 lpm | 63,5 lpm |
@@ -150,8 +150,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 21, máximo 96.
-- Body Battery: último valor 59/100, medido a las 12:24 (hace 1 h 30 min: no es una medición nueva).
+- Estrés medio: 24, máximo 97.
+- Body Battery: último valor 48/100, medido a las 14:54 (hace 1 h 54 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -366,4 +366,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-23-0830 · generado 23/10/2026 13:54 Europe/Madrid · certificado READY · sync_run_id 39912050097.
+Traza: informe de tarde · ciclo 2026-10-23-1645 · generado 23/10/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 39972560113.

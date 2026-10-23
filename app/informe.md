@@ -1,6 +1,6 @@
 # Informe de seguimiento · 23/10/2026
 
-`GR-2026-10-23-1354-11f3b8` · cita este identificador al reenviar el informe.
+`GR-2026-10-23-1648-0e6494` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
@@ -54,8 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-23-0833-647972 (23/10 08:33):
-- Sesiones nuevas desde entonces: **2** (carga +26).
+Frente al informe GR-2026-10-23-1354-11f3b8 (23/10 13:54):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
@@ -122,16 +122,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-23-1354-11f3b8`
+- **Identificador del informe:** `GR-2026-10-23-1648-0e6494`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-23-0830 · datos sincronizados a las 13:53 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 5,9 h ✓ · última HRV hace 6,0 h ✓ · última FC hace 84 min ✓ · último Body Battery hace 1,5 h ✓
+- **Ciclo:** 2026-10-23-1645 · datos sincronizados a las 16:47
+- **Antigüedad:** fin del sueño hace 8,8 h ✓ · última HRV hace 8,9 h ✓ · última FC hace 1,8 h ✓ · último Body Battery hace 1,9 h ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/16 (+3 sin RPE por diseño: calentamiento/técnica) (sin RPE: 23/10 10:18, 23/10 10:56)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-23 13:54 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-23 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
