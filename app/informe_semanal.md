@@ -1,6 +1,6 @@
 # Resumen semanal · 18/10–24/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-24-1041-b79f0f`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-24-1146-8a32fe`)._
 
 ## En una frase
 
