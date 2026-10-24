@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Sábado, 24 de octubre de 2026 · 09:36 · `GR-2026-10-24-0936-bee95c`
+Sábado, 24 de octubre de 2026 · 10:41 · `GR-2026-10-24-1041-b79f0f`
 
 ```cards
 Decisión|Pendiente de datos|RPE máx. 6|unavailable
@@ -147,7 +147,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 30, máximo 78.
-- Body Battery: último valor 11/100, medido a las 06:24 (hace 3 h 12 min: no es una medición nueva).
+- Body Battery: último valor 11/100, medido a las 06:24 (hace 4 h 17 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -366,4 +366,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ 
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-24-0830 · generado 24/10/2026 09:36 Europe/Madrid · certificado READY · sync_run_id 40070571093.
+Traza: cierre matinal · ciclo 2026-10-24-0830 · generado 24/10/2026 10:41 Europe/Madrid · certificado READY · sync_run_id 40070571093.
