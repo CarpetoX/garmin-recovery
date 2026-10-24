@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Sábado, 24 de octubre de 2026 · 13:22 · `GR-2026-10-24-1322-6275a2`
+Sábado, 24 de octubre de 2026 · 16:48 · `GR-2026-10-24-1648-38bbb5`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 887|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-24-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-24-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🟡 **Recuperación:** 64/100 (oficial, confianza medium). Híbrido: 60/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 5 h 28 min, puntuación 60/100.
 - ❤️ **Principal alerta:** HRV 51 ms, 8,9 % por debajo de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|9 sesiones|sRPE 887|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-24-0830 |
+| Ciclo | 2026-10-24-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:05 |
+| Certificado generado | 16:48:12 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | medium |
 | Calidad fisiológica de los datos | 89/100 (good) |
@@ -123,7 +123,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 70,7 lpm | 61,9 lpm |
+| Hoy* | 72,1 lpm | 61,9 lpm |
 | 3 días | 75,0 lpm | 63,4 lpm |
 | 7 días | 80,6 lpm | 63,9 lpm |
 | 28 días | 83,2 lpm | 63,4 lpm |
@@ -143,8 +143,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 24, máximo 78.
-- Body Battery: último valor 58/100, medido a las 12:06.
+- Estrés medio: 26, máximo 99.
+- Body Battery: último valor 59/100, medido a las 13:24 (hace 3 h 24 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -363,4 +363,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **🟡
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-24-0830 · generado 24/10/2026 13:22 Europe/Madrid · certificado READY · sync_run_id 40070571093.
+Traza: informe de tarde · ciclo 2026-10-24-1645 · generado 24/10/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 40104029880.
