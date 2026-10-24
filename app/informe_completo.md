@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Sábado, 24 de octubre de 2026 · 12:47 · `GR-2026-10-24-1247-efe5a0`
+Sábado, 24 de octubre de 2026 · 13:22 · `GR-2026-10-24-1322-6275a2`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -363,4 +363,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **🟡
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-24-0830 · generado 24/10/2026 12:47 Europe/Madrid · certificado READY · sync_run_id 40070571093.
+Traza: cierre matinal · ciclo 2026-10-24-0830 · generado 24/10/2026 13:22 Europe/Madrid · certificado READY · sync_run_id 40070571093.
