@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-10-24T08:33:05.957550+02:00",
+  "generated_at": "2026-10-24T09:36:16.190512+02:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-24",
   "decision": {
@@ -263,16 +263,16 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-10-24T08:33:05.957550+02:00",
+    "generated_at": "2026-10-24T09:36:16.190512+02:00",
     "cycle": {
       "cycle_id": "2026-10-24-0830",
       "slot_at": "2026-10-24T08:30:00+02:00",
       "status": "ready",
       "verified_at": "2026-10-24T08:33:05.334397+02:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-10-24T08:32:19.565737+02:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-10-24T09:35:29.525311+02:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 40070571093,
@@ -311,41 +311,41 @@
       },
       "heart_rate_live": {
         "measured_at": "2026-10-24T06:54:00+02:00",
-        "age_minutes": 99.0,
+        "age_minutes": 162.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-10-24T06:24:00+02:00",
-        "age_minutes": 129.0,
-        "state": "reciente",
+        "age_minutes": 192.0,
+        "state": "antigua",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-10-24T06:32:43.948407+00:00",
+      "fetched_at": "2026-10-24T07:35:55.577578+00:00",
       "latest_date": "2026-10-23",
       "rows_sha256": "b1648723a834027f",
-      "advanced_run_id": "40070618200"
+      "advanced_run_id": "40074760980"
     },
     "source_sha256": {
-      "wellness.json": "fdd44a1b63b51278",
-      "garmin_hrv_timeline.json": "005428df4e998d48",
-      "garmin_sleep_history.json": "b34733fd82f4ab3d",
-      "garmin_extended.json": "7af5b7c499c5393e",
-      "garmin_heart_rate.json": "47d413a2c314818c",
-      "garmin_stress.json": "b15394ca690727a2",
-      "garmin_body_battery.json": "c5f7fc9530909c3a",
+      "wellness.json": "5dc4b1245619771e",
+      "garmin_hrv_timeline.json": "2d1753dc1cd775e5",
+      "garmin_sleep_history.json": "f2debed6470f78eb",
+      "garmin_extended.json": "8783b3d20363c6d9",
+      "garmin_heart_rate.json": "0edc81ee9c77d256",
+      "garmin_stress.json": "7b178ebb43b9b13b",
+      "garmin_body_battery.json": "b94733f15a79fa47",
       "activities.json": "53f741c8b42d11d2",
-      "training_feedback.json": "121e1c612544ef69",
+      "training_feedback.json": "cd58f9ec1d258ff4",
       "shift_calendar.json": "49abff935151d5fc",
-      "morning_sleep_status.json": "43e2a10e9900d2de",
-      "recovery_assessment.json": "466a85921dcfbfbd",
+      "morning_sleep_status.json": "c9560d759e672eb0",
+      "recovery_assessment.json": "57575cdd80eb24c6",
       "report_ready.json": "fff761cc216758e8",
-      "garmin_hr_timeline.json": "9225eee5cff18461",
-      "daily_summary.json": "4b67e1c6f9d472c8",
-      "workflow_health.json": "8a642237ca28ce30",
-      "recovery.csv": "db15ac303747a59a"
+      "garmin_hr_timeline.json": "a6c53736d9b55073",
+      "daily_summary.json": "2dc3a82719ae0255",
+      "workflow_health.json": "3cd0ee14e490041a",
+      "recovery.csv": "c4b25ade2e30cb37"
     },
     "consistency_v3_v2": {
       "status": "ok",
@@ -369,7 +369,7 @@
     },
     "execution_health": {
       "status": "attention",
-      "checked_at": "2026-10-24T03:35:02.573198+02:00",
+      "checked_at": "2026-10-24T08:33:18.235343+02:00",
       "alerts": [
         {
           "code": "cron_missed_dispatch_recovered",
@@ -392,8 +392,10 @@
       "status": "no_verificable_en_etapa_de_datos",
       "detail": "Este certificado acredita datos preparados, no la recepción del informe. ChatGPT no devuelve acuse; la rutina de Claude registra el ID de sesión en el paso V5.1."
     },
-    "status": "ok",
-    "issues": []
+    "status": "con_avisos",
+    "issues": [
+      "mediciones no recientes: body_battery_live"
+    ]
   },
   "training_integrity": {
     "window_days": 14,
