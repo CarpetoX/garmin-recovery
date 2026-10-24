@@ -1,8 +1,6 @@
-# Informe de seguimiento · 24/10/2026
+# Cierre diario · 24/10/2026
 
-`GR-2026-10-24-1648-38bbb5` · cita este identificador al reenviar el informe.
-
-> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
+`GR-2026-10-24-2248-2abe3a` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -57,26 +55,41 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-24-1322-6275a2 (24/10 13:22):
+Frente al informe GR-2026-10-24-1648-38bbb5 (24/10 16:48):
 - Sin cambios en los datos.
 
-## Actividad de hoy
+## Balance del día
 
 _Sin sesiones registradas._
 
-**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
+## Balance de la semana
 
-**Carga 7 días:** 121 en 9 sesiones (-11 % vs. semana previa) · sRPE 887 · monotonía —.
+- Carga 7 días: **121** en 9 sesiones (-11 % vs. semana previa).
+- sRPE 7 días 887 · monotonía — · strain —.
+- Fatiga acumulada: ATL 14,7, CTL 5,4, TSB -9,3 (CTL insuficiente: la forma no se interpreta todavía).
+
+## Previsión orientativa para mañana
+
+- Objetivo de sueño esta noche: **8,5 h** (necesidad + parte de la deuda de 3,4 h).
+- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.
 
 ## Gráficas
 
 ![RPE frente al máximo del día](charts/rpe.svg)
 
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+
 ![Carga](charts/load.svg)
 
-![Sesiones](charts/sessions.svg)
+![Disponibilidad](charts/readiness.svg)
 
-_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+## Validación de modelos
+
+_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
+
+**Acumulando datos: 3/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
+
+- Días entrenados con predicción: 3; por encima del RPE máximo del día: 1.
 
 ## Recuperación: tendencias de 28 días
 
@@ -120,16 +133,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-24-1648-38bbb5`
+- **Identificador del informe:** `GR-2026-10-24-2248-2abe3a`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-24-1645 · datos sincronizados a las 16:47
-- **Antigüedad:** fin del sueño hace 4,9 h ✓ · última HRV hace 5,0 h ✓ · última FC hace 50 min ✓ · último Body Battery hace 3,4 h !
+- **Ciclo:** 2026-10-24-2245 · datos sincronizados a las 22:47
+- **Antigüedad:** fin del sueño hace 10,9 h ✓ · última HRV hace 10,9 h ✓ · última FC hace 48 min ✓ · último Body Battery hace 54 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/14 (+4 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-24 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-24 22:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
