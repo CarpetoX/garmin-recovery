@@ -6373,76 +6373,100 @@
       }
     },
     "2026-10-25": {
-      "generated_at": "2026-10-25T11:25:27.894962+01:00",
+      "generated_at": "2026-10-25T12:00:27.977892+01:00",
       "training_readiness": {
-        "score": 76,
-        "level": "HIGH",
-        "timestamp_local": "2026-10-25T00:06:19.0",
+        "score": 11,
+        "level": "POOR",
+        "timestamp_local": "2026-10-25T11:55:40.0",
         "input_context": "AFTER_WAKEUP_RESET",
-        "feedback_short": "WELL_RECOVERED",
-        "feedback_long": "HIGH_RT_AVAILABLE_SS_UNKNOWN",
-        "sleep_score": null,
-        "sleep_factor_percent": 0,
-        "sleep_factor_feedback": "NONE",
-        "recovery_time_minutes": 1,
-        "recovery_time_hours": 0.0,
-        "recovery_time_factor_percent": 99,
+        "feedback_short": "TIME_TO_SLOW_DOWN",
+        "feedback_long": "POOR_HRV_UNBALANCED",
+        "sleep_score": 36,
+        "sleep_factor_percent": 28,
+        "sleep_factor_feedback": "POOR",
+        "recovery_time_minutes": 347,
+        "recovery_time_hours": 5.8,
+        "recovery_time_factor_percent": 90,
         "recovery_time_feedback": "GOOD",
-        "recovery_time_change_phrase": null,
+        "recovery_time_change_phrase": "POOR_SLEEP_RT_LOW",
         "acwr_factor_percent": 100,
         "acwr_factor_feedback": "VERY_GOOD",
-        "hrv_factor_percent": 83,
-        "hrv_factor_feedback": "GOOD",
-        "stress_history_factor_percent": 88,
-        "stress_history_factor_feedback": "GOOD"
+        "hrv_factor_percent": 52,
+        "hrv_factor_feedback": "MODERATE",
+        "stress_history_factor_percent": 61,
+        "stress_history_factor_feedback": "MODERATE"
       },
       "recovery_time": {
-        "minutes": 1,
-        "hours": 0.0,
-        "factor_percent": 99,
+        "minutes": 347,
+        "hours": 5.8,
+        "factor_percent": 90,
         "feedback": "GOOD",
-        "change_phrase": null
+        "change_phrase": "POOR_SLEEP_RT_LOW"
       },
       "hrv_status": {
-        "last_night_avg": null,
-        "weekly_avg": 50,
-        "last_night_5_min_high": null,
-        "status": "BALANCED",
-        "feedback": "HRV_BALANCED_8",
+        "last_night_avg": 19,
+        "weekly_avg": 43,
+        "last_night_5_min_high": 36,
+        "status": "UNBALANCED",
+        "feedback": "HRV_UNBALANCED_12",
         "baseline": {
           "low_upper": 41,
           "balanced_low": 47,
           "balanced_upper": 81,
-          "marker_value": 0.29411316
+          "marker_value": 0.17900085
         },
-        "sleep_start_local": null,
-        "sleep_end_local": null,
-        "reading_count": 0
+        "sleep_start_local": "2026-10-25T03:33:00.0",
+        "sleep_end_local": "2026-10-25T11:55:40.0",
+        "reading_count": 67
       },
       "sleep_detail": {
-        "sleep_hours": null,
-        "nap_minutes": null,
-        "deep_minutes": null,
-        "light_minutes": null,
-        "rem_minutes": null,
-        "awake_minutes": null,
-        "sleep_start_local": null,
-        "sleep_end_local": null,
-        "sleep_window_confirmed": null,
+        "sleep_hours": 7.63,
+        "nap_minutes": 0.0,
+        "deep_minutes": 88.0,
+        "light_minutes": 364.0,
+        "rem_minutes": 7.0,
+        "awake_minutes": 45.0,
+        "sleep_start_local": 1792899180000,
+        "sleep_end_local": 1792929340000,
+        "sleep_window_confirmed": true,
         "avg_sleep_hrv": null,
         "avg_spo2": null,
-        "avg_respiration": null,
-        "lowest_respiration": null,
-        "highest_respiration": null,
+        "avg_respiration": 19.0,
+        "lowest_respiration": 13.0,
+        "highest_respiration": 24.0,
         "score_components": {
-          "overall": null,
-          "total_duration": null,
-          "stress": null,
-          "awake_count": null,
-          "rem_percentage": null,
-          "restlessness": null,
-          "light_percentage": null,
-          "deep_percentage": null
+          "overall": {
+            "value": 42,
+            "qualifier": "POOR"
+          },
+          "total_duration": {
+            "value": null,
+            "qualifier": "EXCELLENT"
+          },
+          "stress": {
+            "value": null,
+            "qualifier": "POOR"
+          },
+          "awake_count": {
+            "value": null,
+            "qualifier": "POOR"
+          },
+          "rem_percentage": {
+            "value": 2,
+            "qualifier": "POOR"
+          },
+          "restlessness": {
+            "value": null,
+            "qualifier": "FAIR"
+          },
+          "light_percentage": {
+            "value": 80,
+            "qualifier": "FAIR"
+          },
+          "deep_percentage": {
+            "value": 19,
+            "qualifier": "EXCELLENT"
+          }
         }
       },
       "training_status": {
@@ -6508,9 +6532,42 @@
         "metricsTrainingLoadBalanceDTOMap.3639504748.trainingBalanceFeedbackPhrase": "BALANCED"
       },
       "body_battery_events": {
-        "event_count": 0,
+        "event_count": 1,
         "event_type_counts": {},
-        "events": []
+        "events": [
+          {
+            "event.eventType": "SLEEP",
+            "event.eventStartTimeGmt": "2026-10-25T05:18:19.0",
+            "event.durationInMilliseconds": 20220000,
+            "event.bodyBatteryImpact": 7,
+            "event.feedbackType": "NONE",
+            "activityName": null,
+            "activityType": null,
+            "activityId": null,
+            "stressValuesArray[0][0]": 1792905480000,
+            "stressValuesArray[0][1]": 70,
+            "stressValuesArray[1][0]": 1792905660000,
+            "stressValuesArray[1][1]": 73,
+            "stressValuesArray[2][0]": 1792905840000,
+            "stressValuesArray[2][1]": 75,
+            "stressValuesArray[3][0]": 1792906020000,
+            "stressValuesArray[3][1]": 75,
+            "stressValuesArray[4][0]": 1792906200000,
+            "stressValuesArray[4][1]": 72,
+            "stressValuesArray[5][0]": 1792906380000,
+            "stressValuesArray[5][1]": 71,
+            "stressValuesArray[6][0]": 1792906560000,
+            "stressValuesArray[6][1]": 72,
+            "stressValuesArray[7][0]": 1792906740000,
+            "stressValuesArray[7][1]": 64,
+            "stressValuesArray[8][0]": 1792906920000,
+            "stressValuesArray[8][1]": 50,
+            "stressValuesArray[9][0]": 1792907100000,
+            "stressValuesArray[9][1]": 66,
+            "stressValuesArray[10][0]": 1792907280000,
+            "stressValuesArray[10][1]": 73
+          }
+        ]
       },
       "availability": {
         "training_readiness": true,
@@ -6532,5 +6589,5 @@
       }
     }
   },
-  "generated_at": "2026-10-25T11:25:30.103913+01:00"
+  "generated_at": "2026-10-25T12:00:29.971177+01:00"
 }
