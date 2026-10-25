@@ -2,75 +2,75 @@
   "schema_version": 1,
   "gate_version": "2.4.8",
   "status": "ready",
-  "cycle_id": "2026-10-25-0830",
+  "cycle_id": "2026-10-25-0830-post-sleep",
   "slot_at": "2026-10-25T08:30:00+01:00",
-  "target_report_at": "09:05",
+  "target_report_at": "after_confirmed_sleep",
   "timezone": "Europe/Madrid",
-  "verified_at": "2026-10-25T08:33:15.993799+01:00",
+  "verified_at": "2026-10-25T12:36:00.633268+01:00",
   "chain": {
     "sync": {
-      "id": 40173116369,
+      "id": 40189468826,
       "event": "workflow_dispatch",
-      "started_at": "2026-10-25T08:31:54+01:00",
-      "finished_at": "2026-10-25T08:32:07+01:00",
+      "started_at": "2026-10-25T12:34:58+01:00",
+      "finished_at": "2026-10-25T12:35:08+01:00",
       "conclusion": "success"
     },
     "heart": {
-      "id": 40173132424,
+      "id": 40189484023,
       "event": "workflow_run",
-      "started_at": "2026-10-25T08:32:08+01:00",
-      "finished_at": "2026-10-25T08:32:42+01:00",
+      "started_at": "2026-10-25T12:35:10+01:00",
+      "finished_at": "2026-10-25T12:35:30+01:00",
       "conclusion": "success"
     },
     "advanced": {
-      "id": 40173169896,
+      "id": 40189509109,
       "event": "workflow_run",
-      "started_at": "2026-10-25T08:32:44+01:00",
-      "finished_at": "2026-10-25T08:32:59+01:00",
+      "started_at": "2026-10-25T12:35:32+01:00",
+      "finished_at": "2026-10-25T12:35:47+01:00",
       "conclusion": "success"
     },
     "crossfit": {
-      "id": 40173187061,
+      "id": 40189529207,
       "event": "workflow_run",
-      "started_at": "2026-10-25T08:33:01+01:00",
-      "finished_at": "2026-10-25T08:33:04+01:00",
+      "started_at": "2026-10-25T12:35:49+01:00",
+      "finished_at": "2026-10-25T12:35:52+01:00",
       "conclusion": "publishing_in_same_job"
     }
   },
   "source_generated_at": {
-    "daily_summary.json": "2026-10-25T08:32:02.187213+01:00",
-    "weekly_summary.json": "2026-10-25T08:32:02.187213+01:00",
-    "garmin_status.json": "2026-10-25T08:32:26.649896+01:00",
-    "garmin_heart_rate.json": "2026-10-25T08:32:26.649896+01:00",
-    "recovery_assessment.json": "2026-10-25T08:32:53.580027+01:00",
-    "advanced_analytics.json": "2026-10-25T08:32:52.947205+01:00",
-    "data_quality.json": "2026-10-25T08:32:52.947205+01:00",
-    "crossfit_insights.json": "2026-10-25T08:33:10.628733+01:00"
+    "daily_summary.json": "2026-10-25T12:35:04.686582+01:00",
+    "weekly_summary.json": "2026-10-25T12:35:04.686582+01:00",
+    "garmin_status.json": "2026-10-25T12:35:20.241059+01:00",
+    "garmin_heart_rate.json": "2026-10-25T12:35:20.241059+01:00",
+    "recovery_assessment.json": "2026-10-25T12:35:41.979612+01:00",
+    "advanced_analytics.json": "2026-10-25T12:35:41.651114+01:00",
+    "data_quality.json": "2026-10-25T12:35:41.651114+01:00",
+    "crossfit_insights.json": "2026-10-25T12:35:56.322786+01:00"
   },
   "measurement_provenance": {
     "confirmed_sleep": {
-      "state": "unverified_timestamp",
-      "measured_at": null
+      "state": "recent",
+      "measured_at": "2026-10-25T11:55:40+01:00"
     },
     "sleep_hrv": {
-      "state": "unverified_timestamp",
-      "measured_at": null
+      "state": "recent",
+      "measured_at": "2026-10-25T11:51:19+01:00"
     },
     "heart_rate_live": {
-      "state": "old_measurement",
-      "measured_at": "2026-10-25T03:46:00+01:00"
+      "state": "recent",
+      "measured_at": "2026-10-25T12:28:00+01:00"
     },
     "body_battery_live": {
-      "state": "old_measurement",
-      "measured_at": "2026-10-25T02:12:00+01:00"
+      "state": "recent",
+      "measured_at": "2026-10-25T11:51:00+01:00"
     },
     "resting_hr_summary": {
       "state": "daily_summary_not_instantaneous",
       "measured_at": null
     }
   },
-  "recovery_state": "pending",
-  "recovery_confidence": "low",
+  "recovery_state": "assessed",
+  "recovery_confidence": "high",
   "delivery_status": "unconfirmed_no_chatgpt_receipt",
   "evidence": "Three successful upstream GitHub Actions runs, current CrossFit step successful; all key generated_at renewed; certificate committed atomically with CrossFit output",
   "limitations": [
@@ -84,39 +84,33 @@
   "live_sensor_quality": {
     "live_measurements": {
       "heart_rate_live": {
-        "state": "delayed",
-        "measured_at": "2026-10-25T03:46:00+01:00",
-        "age_minutes_at_report": 287.3,
-        "source_state": "old_measurement"
+        "state": "recent",
+        "measured_at": "2026-10-25T12:28:00+01:00",
+        "age_minutes_at_report": 8.0,
+        "source_state": "recent"
       },
       "body_battery_live": {
-        "state": "delayed",
-        "measured_at": "2026-10-25T02:12:00+01:00",
-        "age_minutes_at_report": 381.3,
-        "source_state": "old_measurement"
+        "state": "recent",
+        "measured_at": "2026-10-25T11:51:00+01:00",
+        "age_minutes_at_report": 45.0,
+        "source_state": "recent"
       }
     },
-    "not_confirmed_recent": [
-      "heart_rate_live",
-      "body_battery_live"
-    ],
-    "interpretation": "caution",
+    "not_confirmed_recent": [],
+    "interpretation": "available_recent",
     "note": "Data generation time never proves a new sensor reading. Sleep HRV is measured during sleep, not continuously."
   },
   "morning_sleep": {
-    "state": "sleep_or_sync_pending",
-    "is_definitive_source": false,
-    "evidence_valid": false,
-    "evidence_issues": [
-      "not_confirmed_ready",
-      "invalid_sleep_end",
-      "margin_not_verified",
-      "recovery_not_fresh"
-    ],
-    "generated_at": "2026-10-25T08:32:53.681469+01:00",
+    "state": "confirmed_ready",
+    "is_definitive_source": true,
+    "evidence_valid": true,
+    "evidence_issues": [],
+    "generated_at": "2026-10-25T12:35:42.049741+01:00",
     "date": "2026-10-25",
-    "sleep_end_local": null,
-    "earliest_definitive_at": null
+    "sleep_end_local": "2026-10-25T11:55:40+01:00",
+    "earliest_definitive_at": "2026-10-25T12:25:40+01:00"
   },
-  "physiological_report_status": "provisional"
+  "physiological_report_status": "definitive",
+  "parent_cycle_id": "2026-10-25-0830",
+  "certificate_kind": "post_sleep_supplement"
 }
