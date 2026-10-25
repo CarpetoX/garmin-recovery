@@ -1,6 +1,6 @@
 # Informe de seguimiento · 25/10/2026
 
-`GR-2026-10-25-1236-86b065` · cita este identificador al reenviar el informe.
+`GR-2026-10-25-1341-45ca68` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -54,8 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-25-1201-5e4bc2 (25/10 12:01):
-- Híbrido: 29 → 37 (+8).
+Frente al informe GR-2026-10-25-1236-86b065 (25/10 12:36):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
@@ -117,16 +117,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-25-1236-86b065`
+- **Identificador del informe:** `GR-2026-10-25-1341-45ca68`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-25-0830-post-sleep · datos sincronizados a las 12:35
-- **Antigüedad:** fin del sueño hace 40 min ✓ · última HRV hace 45 min ✓ · última FC hace 8 min ✓ · último Body Battery hace 45 min ✓
+- **Ciclo:** 2026-10-25-0830-post-sleep · datos sincronizados a las 13:40 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 1,8 h ✓ · última HRV hace 1,8 h ✓ · última FC hace 19 min ✓ · último Body Battery hace 1,8 h ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+4 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-25 12:36 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-25 13:41 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

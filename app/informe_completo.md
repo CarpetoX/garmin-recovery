@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 25 de octubre de 2026 · 12:36 · `GR-2026-10-25-1236-86b065`
+Domingo, 25 de octubre de 2026 · 13:41 · `GR-2026-10-25-1341-45ca68`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -89,7 +89,7 @@ Modelo experimental: 66 → 47 (yellow → red). Cambios notables frente a ayer:
 - FC nocturna: 61,9 → 79,4 lpm (desfavorable)
 - Sueño: 5,5 → 7,6 h (favorable)
 - Puntuación de sueño: 60 → 42 (desfavorable)
-- Estrés medio: 41 → 72 (desfavorable)
+- Estrés medio: 41 → 70 (desfavorable)
 
 Son diferencias observadas, no causas.
 
@@ -133,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 94,3 lpm | 79,4 lpm |
+| Hoy* | 91,3 lpm | 79,4 lpm |
 | 3 días | 80,3 lpm | 68,6 lpm |
 | 7 días | 80,6 lpm | 66,9 lpm |
 | 28 días | 83,3 lpm | 64,2 lpm |
@@ -153,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 72, máximo 99.
-- Body Battery: último valor 12/100, medido a las 11:51.
+- Estrés medio: 70, máximo 99.
+- Body Battery: último valor 12/100, medido a las 11:51 (hace 1 h 50 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -372,4 +372,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-25-0830-post-sleep · generado 25/10/2026 12:36 Europe/Madrid · certificado READY · sync_run_id 40189468826.
+Traza: informe de tarde · ciclo 2026-10-25-0830-post-sleep · generado 25/10/2026 13:41 Europe/Madrid · certificado READY · sync_run_id 40189468826.
