@@ -233,6 +233,8 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         ext = json.loads((root / "garmin_extended.json").read_text(encoding="utf-8")) if (root / "garmin_extended.json").exists() else None
         acts = json.loads((root / "activities.json").read_text(encoding="utf-8")) if (root / "activities.json").exists() else []
         extras["garmin_insights"] = garmin_insights.build(ext, acts if isinstance(acts, list) else [], result.get("date"), result.get("trend_28d"))
+        from . import signals
+        extras["signals"] = signals.compute(result, ((ext or {}).get("days") or {}).get(result.get("date")))
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:garmin_insights", exc)
     try:
