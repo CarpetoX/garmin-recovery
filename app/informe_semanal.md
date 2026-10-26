@@ -1,10 +1,10 @@
 # Resumen semanal · 20/10–26/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-26-1345-346942`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-26-1348-c4994c`)._
 
 ## En una frase
 
-- 7 sesiones (−6); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (2 de 3 días entrenados comprobados).
+- 7 sesiones (−6); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (3 de 3 días entrenados comprobados).
 - Decisión registrada en 7/7 días: verde 3 · ámbar 2 · rojo 2.
 
 ## Gráficas de la semana
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 7 | 13 |
 | Minutos | 167 | 325 |
 | Carga (Intervals) | 102 | 189 |
-| sRPE (RPE × min) | 200 | 1890 |
+| sRPE (RPE × min) | 531 | 1890 |
 
-Monotonía — · strain — · ACWR — · RPE registrado en 2/7 sesiones.
+Monotonía — · strain — · ACWR — · RPE registrado en 4/7 sesiones.
 
 ## Recuperación
 
@@ -48,6 +48,7 @@ HRV de 7 días hoy: 45,8 ms (rango normal 54,1–62,2 ms). Turnos: MT, TN.
 |---|---|--:|--:|--:|--:|
 | 20/10 | DB split squat | 45,0 kg | 45 × 10 | 60,0 kg | 4/4 |
 | 23/10 | chin up lastrado | 15,0 kg | — | — | 4/4 |
+| 26/10 | squat snatch | 75,0 kg | 75 × 1 | 75,0 kg | 9/9 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
@@ -80,7 +81,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 2/7.
+- Sesiones con RPE: 4/7.
 
 ## Validación de modelos
 
