@@ -229,15 +229,15 @@ def _drivers(components: dict) -> list[dict]:
         band = {"normal": "dentro de tu rango normal", "suprimida": "por debajo de tu rango normal",
                 "elevada": "por encima de tu rango normal"}.get(hrv.get("band"), "")
         texts.append({"component": "hrv", "z": hrv["z"],
-                      "text": f"HRV {hrv['today_ms']:.0f} ms hoy; media 7 días {pct:+.0f} % vs. tu base {band}".strip()})
+                      "text": (f"HRV {hrv['today_ms']:.0f} ms hoy; media 7 días {pct:+.0f} % vs. tu base" + (f" ({band})" if band else "")).replace("-", "−")})
     if card.get("z") is not None and card.get("resting_delta_bpm") is not None:
         texts.append({"component": "cardiac", "z": card["z"],
                       "text": f"FC en reposo {card['resting_hr']:.0f} lpm ({card['resting_delta_bpm']:+.0f} vs. tu mediana)"})
     if slp.get("z") is not None:
-        extra = f", deuda {slp['debt_hours']:.1f} h en {slp['debt_nights']} noches" if slp.get("debt_hours") else ""
+        extra = f", deuda {slp['debt_hours']:.1f} h en {slp['debt_nights']} noches".replace(".", ",") if slp.get("debt_hours") else ""
         score = f", puntuación {slp['sleep_score']:.0f}" if slp.get("sleep_score") is not None else ""
         texts.append({"component": "sleep", "z": slp["z"],
-                      "text": f"Sueño {slp['hours']:.1f} h{score}{extra}"})
+                      "text": f"Sueño {slp['hours']:.1f}".replace(".", ",") + f" h{score}{extra}"})
     st = components.get("stress") or {}
     if st.get("z") is not None and st.get("yesterday_avg") is not None:
         texts.append({"component": "stress", "z": st["z"],

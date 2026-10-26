@@ -5,6 +5,7 @@ const $ = id => document.getElementById(id);
 const fmt = (v, d=0) => v == null || Number.isNaN(v) ? '—' : Number(v).toLocaleString('es-ES', {maximumFractionDigits:d, minimumFractionDigits:d});
 const sign = (v, d=0) => v == null ? '—' : (v > 0 ? '+' : '') + fmt(v, d);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shiftEs = t => ({free: 'libre', 'post-TN': 'tras TN', unknown: 'sin registrar'})[t] || t;
 const dshort = iso => { const [y,m,d] = iso.split('-'); return `${+d}/${+m}`; };
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const zoneTxt = {green:'verde', yellow:'ámbar', red:'rojo', unavailable:'pendiente'};
@@ -20,13 +21,28 @@ $('score').innerHTML = official.score == null ? '—' : `${fmt(official.score)}<
 (function(){ const a = $('heroarc'); if (!a) return; const c = 2 * Math.PI * 52, v = official.score == null ? 0 : Math.max(0, Math.min(100, official.score));
   a.style.strokeDasharray = c.toFixed(1); a.style.strokeDashoffset = c.toFixed(1);
   requestAnimationFrame(() => requestAnimationFrame(() => { a.style.strokeDashoffset = (c * (1 - v / 100)).toFixed(1); })); })();
-$('zone-label').textContent = DEC.guidance.label + (DEC.agreement === 'total' ? ' · modelos de acuerdo' : ' · regla conservadora');
+$('zone-label').textContent = DEC.guidance.label + (DEC.agreement === 'total' ? ' · los 3 modelos de la app coinciden' : ' · se aplica el modelo más prudente');
 const reasons = (R.reasons || []).map(r => r.split(':')[0].replace(/_/g,' '));
 const DC = R.data_confidence || {}, RC = R.recommendation_confidence || {};
 $('confidence').textContent = `Datos: confianza ${DC.level || '—'} · Recomendación: confianza ${RC.level || R.confidence}` + (reasons.length ? ` · ${reasons.join(', ')}` : '') + ` · historial ${D.history.days} días`;
 $('guidance').textContent = DEC.guidance.text;
 $('rx').innerHTML = `<span>RPE máx. <b>${DEC.guidance.rpe_max}</b></span><span>Volumen <b>${esc(DEC.guidance.volume)}</b></span>` +
   (DEC.agreement === 'total' ? '' : '<span class="warn-chip">⚠ Los modelos discrepan: se aplica el más prudente</span>');
+// V8.5: lo que ya llevas hoy, para que «intensidad permitida» no se lea igual a las 9:00 que tras cuatro sesiones
+(function(){
+  const day = (D.sessions_28d || []).filter(s => s.date === D.date && !s.removed);
+  if (!day.length) return;
+  const mins = day.reduce((a, s) => a + (s.duration_min || 0), 0);
+  const rp = day.map(s => s.rpe).filter(v => v != null), top = rp.length ? Math.max(...rp) : null;
+  const srpe = day.reduce((a, s) => a + (s.srpe || 0), 0), cap = DEC.guidance.rpe_max;
+  let msg = '', cls = '';
+  if (top != null && cap != null && top > cap) { msg = `Has pasado del máximo de hoy (RPE ${fmt(top, 1)} sobre ${cap}): el resto del día, recuperación.`; cls = 'neg'; }
+  else if (top != null && top >= 8) { msg = 'Ya has hecho una sesión dura hoy: lo que añadas, suave.'; cls = 'warn'; }
+  const el = document.createElement('p'); el.className = 'today-done ' + cls; el.id = 'hoy-llevas';
+  el.innerHTML = `<b>Hoy llevas</b> ${day.length} ${day.length === 1 ? 'sesión' : 'sesiones'} · ${fmt(mins)} min` +
+    (top != null ? ` · RPE máx. ${fmt(top, top % 1 ? 1 : 0)}` : '') + (srpe ? ` · sRPE ${fmt(srpe)}` : '') + (msg ? `<br>${msg}` : '');
+  $('rx').insertAdjacentElement('afterend', el);
+})();
 $('v3-title').textContent = `Modelo experimental (en pruebas) · ${R.score == null ? 'sin puntuación' : fmt(R.score) + '/100 · ' + zoneTxt[R.zone]}`;
 $('drivers').innerHTML = (R.drivers || []).map(d => {
   const cls = d.z <= -0.5 ? 'neg' : d.z >= 0.5 ? 'pos' : 'neu';
@@ -161,7 +177,7 @@ function chart(el, opt){
       const i = Math.max(0, Math.min(n - 1, Math.floor((px - m.l) / bw)));
       const d = T[i];
       xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('opacity', .5);
-      tip.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'short', day:'numeric', month:'short'})}</b>` + (d.shift ? ` · turno ${esc(d.shift)}` : '') + '<br>' + opt.tip(d);
+      tip.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'short', day:'numeric', month:'short'})}</b>` + (d.shift ? ` · turno ${esc(shiftEs(d.shift))}` : '') + '<br>' + opt.tip(d);
       tip.style.opacity = 1;
       const tw = tip.offsetWidth, th = tip.offsetHeight;
       let left = rect.left + window.scrollX + x(i) + 12; if (left + tw > window.scrollX + document.documentElement.clientWidth - 8) left = rect.left + window.scrollX + x(i) - tw - 12;
@@ -200,14 +216,15 @@ chart($('c-stages'), {label:'Sueño por fases', zero:true, refs:[{y:S.need_hours
 (function(){
   const avg = (arr, k) => { const v = arr.map(d => d[k]).filter(x => x != null); return v.length ? {m: v.reduce((a, b) => a + b, 0) / v.length, n: v.length} : null; };
   const read = (id, key, o) => { const el = $(id); if (!el) return;
-    const a = avg(T.slice(-7), key), b = avg(T, key);
+    let a = avg(T.slice(-7), key); const b = avg(T, key);
+    if (o.rolling) { const last = [...T].reverse().find(d => d[o.rolling] != null); if (last && a) a = {m: last[o.rolling], n: a.n}; }  // misma cifra que la tarjeta
     if (!a || !b || a.n < 4 || b.n < 10) { el.hidden = true; return; }
     const diff = a.m - b.m, dir = Math.abs(diff) < o.eps ? 0 : diff > 0 ? 1 : -1, good = dir === 0 ? null : (o.better === 0 ? null : dir === o.better);
     const cls = dir === 0 ? 'neu' : good === null ? 'neu' : good ? 'pos' : 'neg', arrow = dir === 0 ? '→' : dir > 0 ? '↑' : '↓';
     const word = dir === 0 ? 'estable' : dir > 0 ? 'sube' : 'baja';
     el.className = 'read ' + cls;
     el.innerHTML = `<b>${arrow} ${word}</b> · últimos 7 días ${fmt(a.m, o.dec)} ${o.unit} · media 28 días ${fmt(b.m, o.dec)} ${o.unit}`; };
-  read('r-hrv', 'hrv_ms', {eps: 1.5, dec: 0, unit: 'ms', better: 1});
+  read('r-hrv', 'hrv_ms', {eps: 1.5, dec: 0, unit: 'ms', better: 1, rolling: 'hrv_rolling_ms'});
   read('r-rhr', 'resting_hr', {eps: 0.8, dec: 1, unit: 'lpm', better: -1});
   read('r-sleep', 'sleep_hours', {eps: 0.25, dec: 1, unit: 'h', better: 1});
   read('r-load', 'load', {eps: 4, dec: 0, unit: '', better: 0});
@@ -342,7 +359,7 @@ $('compare').innerHTML = `<thead><tr><th>Modelo</th><th>Rol</th><th class="num">
   <tr><td>Monotonía / strain 7 días</td><td></td><td class="num">${fmt(L.monotony,2)} / ${fmt(L.strain)}</td><td colspan="2">monotonía &gt; 2 = carga poco variada</td></tr>
   <tr><td>Días seguidos entrenando</td><td></td><td class="num">${L.consecutive_training_days}</td><td colspan="2">—</td></tr></tbody>`;
 $('daily').innerHTML = `<thead><tr><th>Fecha</th><th>Turno</th><th class="num">Punt.</th><th class="num">HRV</th><th class="num">HRV 7d</th><th class="num">FC rep.</th><th class="num">Sueño h</th><th class="num">Carga</th></tr></thead><tbody>` +
-  T.slice().reverse().map(d => `<tr><td>${dshort(d.date)}</td><td>${esc(d.shift || '')}</td><td class="num">${fmt(d.score)}</td><td class="num">${fmt(d.hrv_ms)}</td><td class="num">${fmt(d.hrv_rolling_ms,1)}</td><td class="num">${fmt(d.resting_hr)}</td><td class="num">${fmt(d.sleep_hours,1)}</td><td class="num">${fmt(d.load)}</td></tr>`).join('') + '</tbody>';
+  T.slice().reverse().map(d => `<tr><td>${dshort(d.date)}</td><td>${esc(shiftEs(d.shift || ''))}</td><td class="num">${fmt(d.score)}</td><td class="num">${fmt(d.hrv_ms)}</td><td class="num">${fmt(d.hrv_rolling_ms,1)}</td><td class="num">${fmt(d.resting_hr)}</td><td class="num">${fmt(d.sleep_hours,1)}</td><td class="num">${fmt(d.load)}</td></tr>`).join('') + '</tbody>';
 
 const CE = D.certificate || {}, TI = D.training_integrity || {}, CY = CE.cycle || {};
 const okTxt = ok => ok ? '<span class="pos">✓</span>' : '<span class="neg">!</span>';
@@ -388,7 +405,7 @@ if (cal && T.length) {
     cal.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.i == i));
     const ss = SESS.filter(x => x.date === d.date);
     det.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'long', day:'numeric', month:'long'})}</b>` +
-      (d.shift ? ` · turno ${esc(d.shift)}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
+      (d.shift ? ` · turno ${esc(shiftEs(d.shift))}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
       (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
       (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
         ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td>${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
@@ -440,7 +457,7 @@ $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días
 
 // ==== V8.0 · Menos texto a la vista: las explicaciones se pliegan bajo «Ver detalle» (no se borra nada) ====
 (function(){
-  const CARD_FOLD = '.h2sub, .pg-note, .marks-note, .tip-line, .read, .notes, .meta';
+  const CARD_FOLD = '.h2sub, .pg-note, .marks-note, .tip-line, .notes, .meta';  // las lecturas (.read) son la conclusión de cada gráfica: a la vista
   const ITEM_FOLD = '.why, .pg-note';
   const ITEM = 'article, .plan li, .plan-day, .cal-day';
   const keep = el => el.closest('#hrdetail, .tbhead, .hero, details.more, table, .tip, .hrmini') ||
