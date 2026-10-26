@@ -135,7 +135,8 @@ def analyze(activities, as_of):
             groups = exercises if isinstance(exercises, list) else ([obj] if isinstance(obj.get('sets'), list) else [])
             for exercise in groups:
                 if not isinstance(exercise, dict): continue
-                name = str(exercise.get('name') or block.get('activity') or 'Sin nombre')
+                # V8.2: un registro de un solo ejercicio lo nombra en «exercise»; el título de la sesión es el último recurso
+                name = str(exercise.get('name') or exercise.get('exercise') or block.get('activity') or 'Sin nombre')
                 pattern = classify(name)
                 equipment = equipment_for(exercise)
                 external_expected = equipment != 'bodyweight'
