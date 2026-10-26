@@ -92,6 +92,9 @@ def build_sessions(inputs: dict) -> list[dict]:
     if not isinstance(feedback, dict):
         feedback = {}
     unscored = declared_unscored(inputs.get("feedback"))
+    # V8.5: las filas sin RPE no llegan a «activities», pero su nombre sí está en la hoja (p. ej. «Técnica - toes to bar»)
+    sheet_names = {str(r.get("ID actividad")): r.get("Actividad") for r in ((inputs.get("feedback") or {}).get("source_rows_AH") or [])
+                   if isinstance(r, dict) and r.get("ID actividad") and r.get("Actividad")}
     sessions = []
     for act in inputs.get("activities") or []:
         if not isinstance(act, dict) or not act.get("id"):
@@ -111,7 +114,7 @@ def build_sessions(inputs: dict) -> list[dict]:
         sessions.append(({"_clear": ["rpe", "srpe"]} if clear else {}) | ({"rpe_na": True} if rpe is None and str(act["id"]) in unscored else {}) | {
             "id": str(act["id"]), "date": day, "start_local": start or None,
             "type": act.get("type"), "name": act.get("name"),
-            "label": fb.get("activity") or None,
+            "label": fb.get("activity") or sheet_names.get(str(act["id"])) or None,
             "duration_min": minutes,
             "load": num(act.get("icu_training_load"), 0, 2000),
             "trimp": num(act.get("trimp"), 0, 2000),

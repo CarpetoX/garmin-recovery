@@ -7,7 +7,10 @@ SHIFT_TEXT = {"MT": "mañana-tarde 08–22", "TN": "noche 15–08", "free": "lib
 
 
 def _n(v, d=1):
-    return f"{v:.{d}f}".rstrip("0").rstrip(".").replace(".", ",") if isinstance(v, (int, float)) else "—"
+    if not isinstance(v, (int, float)):
+        return "—"
+    s = f"{v:.{d}f}"
+    return (s.rstrip("0").rstrip(".") if "." in s else s).replace(".", ",")
 
 
 def _ago(day: str, today: str) -> str:
@@ -46,7 +49,7 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
         full = (load.get("coverage_days") or 0) >= 14 and (load.get("srpe_coverage_7d_pct") or 0) >= 90
         sub = (f"{change:+.0f} % de carga frente a la semana previa".replace(".", ",") if change is not None and full
                else "sin semana previa completa para comparar")
-        chips.append({"id": "semana", "label": "Últimos 7 días", "value": f"{int(load['week_sessions'])} sesiones · carga {_n(load['week_load'], 0)}",
+        chips.append({"id": "semana", "label": "Últimos 7 días", "value": f"{int(load['week_sessions'])} sesiones · carga FC {_n(load['week_load'], 0)}",
                       "sub": sub, "tone": "warning" if (change is not None and full and change >= 30) else "neutral"})
     if isinstance(shifts, dict) and (shifts.get("today") or shifts.get("tomorrow")):
         t, m = shifts.get("today") or "unknown", shifts.get("tomorrow") or "unknown"

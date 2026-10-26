@@ -180,3 +180,10 @@ Tema oscuro por defecto (fondo casi negro, cifras grandes, colores de zona vivos
 - **Efecto de entrenamiento** aeróbico y anaeróbico (0–5) en cada tarjeta de Entrenos, enlazado por `external_id` de Garmin o por hora.
 
 Cada tarjeta tiene en «Ver detalle» un «Qué mide y cómo leerlo», y Sistema incluye el glosario «Qué significa cada dato». Connect+ no añade datos fisiológicos (solo presentación, IA y nutrición); el SpO2 nocturno no está activado en el reloj.
+
+## V8.5 — Auditoría de claridad
+
+- **Hoy llevas:** bajo la decisión, sesiones, minutos, RPE máximo y sRPE de hoy; si ya hubo una sesión dura (RPE ≥ 8) o se pasó el máximo, lo dice. Evita leer «intensidad alta permitida» igual a primera hora que tras cuatro sesiones.
+- **Cifras corregidas:** «Último entreno» mostraba 7 min en vez de 70 (redondeo); la técnica sin RPE salía como «HIIT» (ahora con su nombre de la hoja); la HRV de 7 días salía como 46 ms en la tarjeta y 50 ms en la gráfica (ahora la misma, sobre ln rMSSD).
+- **Textos:** turnos en español en el plan y en las gráficas (libre, tras TN); coma decimal en «Por qué esta puntuación»; «carga FC» frente a «sRPE»; «los 3 modelos de la app coinciden» (Garmin es contexto).
+- **Lecturas a la vista:** la conclusión de cada gráfica («↓ baja · últimos 7 días…», «125 esta semana · dentro de tu rango») ya no queda plegada en «Ver detalle».

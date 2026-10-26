@@ -547,13 +547,16 @@ def _tonight_html(t: dict | None) -> str:
             f'<ul class="clean parts">{lis}</ul>{tip}</section>')
 
 
+SHIFT_ES = {"free": "libre", "post-TN": "tras TN", "unknown": "sin turno registrado", "MT": "MT", "TN": "TN"}
+
+
 def _plan_html(plan: list | None) -> str:
     if not plan:
         return ""
     kind = {"hard": ("Exigente", "k-hard"), "moderate": ("Moderada", "k-mod"), "light": ("Suave", "k-light"), "rest": ("Descanso", "k-rest")}
     items = "".join(
         f"<li class='{kind[r['kind']][1]}'><div class='pd'>{_esc(r['dow'])}<br><b>{_esc(r['date'][8:10])}</b></div>"
-        f"<div><b>{kind[r['kind']][0]}</b> · <span class='weight'>{_esc(r['shift'])}</span><br>"
+        f"<div><b>{kind[r['kind']][0]}</b> · <span class='weight'>{_esc(SHIFT_ES.get(r['shift'], r['shift']))}</span><br>"
         f"<span class='why'>{_esc(r['why'])}</span></div></li>" for r in plan)
     return ('<section class="card" id="plan" aria-label="Próximos 7 días"><h2>Próximos 7 días</h2>'
             '<p class="h2sub">plan orientativo por reglas: turnos, sesiones duras recientes y la decisión de hoy · '

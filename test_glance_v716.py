@@ -23,7 +23,7 @@ class Compose(unittest.TestCase):
         self.assertIn("ayer", c["ultimo"]["sub"])
         self.assertEqual(c["registros"]["value"], "2 de 2 con RPE")
         self.assertEqual(c["registros"]["tone"], "good")
-        self.assertEqual(c["semana"]["value"], "9 sesiones · carga 142")
+        self.assertEqual(c["semana"]["value"], "9 sesiones · carga FC 142")  # V8.5: carga de FC, distinta del sRPE
         self.assertIn("+17 %", c["semana"]["sub"])
         self.assertEqual(c["turno"]["value"], "Hoy libre tras la noche")
         self.assertEqual(c["progresion"]["value"], "3 ▲ · 0 = · 0 ▼")
