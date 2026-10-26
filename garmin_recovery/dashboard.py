@@ -321,6 +321,82 @@ def _weight_html(wt: dict | None) -> str:
             'hidratación y entrenos. Descriptivo, sin causas; no es una valoración médica.</p></section>')
 
 
+def _resp_svg(series: list[dict], med) -> str:
+    vals = [x["value"] for x in series]
+    w, h, px, py = 300, 64, 6, 8
+    lo, hi = min(vals + ([med] if med else [])) - 1, max(vals + ([med] if med else [])) + 1
+    def X(i):
+        return px + i * (w - 2 * px) / max(len(vals) - 1, 1)
+    def Y(v):
+        return h - py - (v - lo) / (hi - lo) * (h - 2 * py)
+    out = ""
+    if med is not None:
+        out += (f'<rect x="0" y="{Y(med + 1):.1f}" width="{w}" height="{Y(med - 1) - Y(med + 1):.1f}" class="rs-band"/>'
+                f'<line x1="0" x2="{w}" y1="{Y(med):.1f}" y2="{Y(med):.1f}" class="rs-med"/>')
+    out += f'<polyline points="{" ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))}" class="pg-line rs-line"/>'
+    for i, x in enumerate(series):
+        hot = med is not None and x["value"] - med >= 2
+        out += (f'<circle cx="{X(i):.1f}" cy="{Y(x["value"]):.1f}" r="{3.6 if i == len(vals) - 1 else 2.4}" '
+                f'class="{"rs-hot" if hot else "rs-dot"}{" rs-last" if i == len(vals) - 1 else ""}"><title>{_ddmm(x["date"])}: {_kg(x["value"])} resp/min</title></circle>')
+    label = "Respiración nocturna: " + ", ".join(f'{_ddmm(x["date"])} {_kg(x["value"])}' for x in series[-7:])
+    return f'<svg class="rs-svg" viewBox="0 0 {w} {h}" preserveAspectRatio="none" role="img" aria-label="{_esc(label)}">{out}</svg>'
+
+
+def _respiration_html(r: dict | None) -> str:
+    """V8.1: respiración nocturna frente a tu normal (informativa: no cambia la puntuación)."""
+    if not isinstance(r, dict) or not r.get("available"):
+        return ""
+    med, d = r.get("median"), r.get("delta")
+    tone = {"alta_y_hrv_baja": "critical", "alta": "warning"}.get(r["state"], "good" if med is not None else "muted")
+    chip = {"alta_y_hrv_baja": "alta y con HRV baja", "alta": "más alta que tu normal", "normal": "en tu normal",
+            "sin_referencia": "sin referencia aún"}[r["state"]]
+    sub = (f'normal {_kg(med)} · {"+" if d > 0 else "−" if d < 0 else "±"}{_kg(abs(d))}' if med is not None else f'{r["n_base"]} noches de referencia')
+    when = "anoche" if r.get("is_today") else _ddmm(r["date"])
+    alert = ('<p class="rs-alert">Respiración alta y HRV baja a la vez: es la combinación que más se asocia a fatiga o a un '
+             'resfriado incipiente. Prioriza dormir y baja la intensidad.</p>') if r["state"] == "alta_y_hrv_baja" else ""
+    rng = (f'<p class="h2sub">mínima {_kg(r["lowest"])} · máxima {_kg(r["highest"])} resp/min durante la noche · banda = tu normal ±1 · '
+           f'punto naranja = +2 o más</p>') if r.get("lowest") is not None else ""
+    return (f'<section class="card tone-{tone}" id="respiracion"><h2>Respiración nocturna</h2>'
+            f'<div class="rs-top"><div class="tile"><div class="value">{_kg(r["value"])}<small>resp/min</small></div>'
+            f'<div class="delta">{when} · {sub}</div></div><span class="rs-chip">{chip}</span></div>'
+            f'{_resp_svg(r["series"], med)}{alert}{rng}</section>')
+
+
+LB_NAMES = {"aerobic_low": ("Aeróbica baja", "base · zonas 1–2"), "aerobic_high": ("Aeróbica alta", "tempo y umbral"),
+            "anaerobic": ("Anaeróbica", "esfuerzos máximos cortos")}
+
+
+def _load_balance_html(lb: dict | None) -> str:
+    if not isinstance(lb, dict) or not lb.get("available"):
+        return ""
+    top = max(max((p["target_max"] or 0), p["value"]) for p in lb["parts"]) * 1.12 or 1
+    rows = ""
+    for p in lb["parts"]:
+        name, sub = LB_NAMES[p["id"]]
+        lo, hi = p["target_min"] or 0, p["target_max"] or 0
+        st = "alto" if p["state"] == "alto" else "bajo" if p["state"] == "bajo" else "near" if p["near_top"] else "ok"
+        txt = {"alto": "por encima", "bajo": "por debajo", "near": "cerca del techo", "ok": "en rango"}[st]
+        rows += (f'<div class="lb-row"><div class="lb-h"><span>{name}<small>{sub}</small></span><b>{_kg(p["value"])}</b></div>'
+                 f'<div class="lb-track"><i class="lb-band" style="left:{lo / top * 100:.1f}%;width:{(hi - lo) / top * 100:.1f}%"></i>'
+                 f'<i class="lb-fill lb-{st}" style="width:{p["value"] / top * 100:.1f}%"></i></div>'
+                 f'<div class="lb-s">objetivo {_kg(lo)}–{_kg(hi)} · <span class="lb-t lb-{st}">{txt}</span></div></div>')
+    fb = f'<span class="rs-chip">{_esc(lb["feedback"])}</span>' if lb.get("feedback") else ""
+    return (f'<section class="card" id="equilibrio"><h2>Equilibrio de carga · 4 semanas</h2><div class="rs-top"><p class="lb-cap">Garmin · '
+            f'{_ddmm(lb["date"])}</p>{fb}</div>{rows}<p class="h2sub">banda = rango que Garmin recomienda para tu nivel · barra = tu carga de 4 semanas</p></section>')
+
+
+def _vo2_html(v: dict | None) -> str:
+    if not isinstance(v, dict) or not v.get("available"):
+        return ""
+    ch = v["change"]
+    trend = "estable" if abs(ch) < 0.5 else ("sube" if ch > 0 else "baja") + f" {_kg(abs(ch))}"
+    pts = [{"date": x["date"], "top_load": x["value"]} for x in v["series"]]
+    spark = _prog_svg(pts, big=True) if len(pts) >= 2 and len({x["value"] for x in v["series"]}) > 1 else ""
+    return (f'<section class="card" id="vo2max"><h2>VO2max</h2><div class="tile"><div class="value">{_kg(v["value"])}<small>ml/kg/min</small></div>'
+            f'<div class="delta">{trend} desde el {_ddmm(v["since"])}</div></div>{spark}'
+            '<p class="h2sub">estimación de Garmin · en HIIT y fuerza apenas se actualiza</p></section>')
+
+
 def _glance_html(chips: list[dict] | None) -> str:
     if not chips:
         return ""
@@ -342,6 +418,8 @@ def render(result: dict, extras: dict | None = None) -> str:
         data["hr_curves"] = extras["hr_curves"]
     if extras.get("session_effort"):
         data["session_effort"] = extras["session_effort"]
+    if (extras.get("garmin_insights") or {}).get("training_effect"):
+        data["training_effect"] = extras["garmin_insights"]["training_effect"]
     if extras.get("web_failures"):
         data["web_failures"] = extras["web_failures"]
     data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
@@ -591,8 +669,9 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
     return {"banner": "",
             "hoytop": top_block, "cambios": changes,
-            "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
-            "tendencias": _weight_html(extras.get("weight")) + calendar_html + week_html,
+            "hoy": full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
+            "tendencias": _weight_html(extras.get("weight")) + calendar_html + week_html
+                          + '<section class="grid cols-2">' + _load_balance_html((extras.get("garmin_insights") or {}).get("load_balance")) + _vo2_html((extras.get("garmin_insights") or {}).get("vo2max")) + '</section>',
             "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}

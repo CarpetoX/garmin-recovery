@@ -229,6 +229,13 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
     except (OSError, ValueError):
         pass  # aún sin curvas: la tabla de sesiones funciona igual
     try:
+        from . import garmin_insights
+        ext = json.loads((root / "garmin_extended.json").read_text(encoding="utf-8")) if (root / "garmin_extended.json").exists() else None
+        acts = json.loads((root / "activities.json").read_text(encoding="utf-8")) if (root / "activities.json").exists() else []
+        extras["garmin_insights"] = garmin_insights.build(ext, acts if isinstance(acts, list) else [], result.get("date"), result.get("trend_28d"))
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:garmin_insights", exc)
+    try:
         from . import session_effort
         extras["session_effort"] = session_effort.load(root)
     except Exception as exc:  # noqa: BLE001 — opcional
