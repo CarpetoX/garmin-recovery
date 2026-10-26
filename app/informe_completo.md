@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Lunes, 26 de octubre de 2026 · 16:48 · `GR-2026-10-26-1648-508fb0`
+Lunes, 26 de octubre de 2026 · 22:48 · `GR-2026-10-26-2248-5143f3`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -13,7 +13,7 @@ Carga 7 días|8 sesiones|sRPE 1020|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-26-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-26-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🟢 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 76/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 8 h 22 min, puntuación 95/100.
 - ❤️ **Principal alerta:** HRV 84 ms, 50,0 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|8 sesiones|sRPE 1020|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-26-1645 |
+| Ciclo | 2026-10-26-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:48:17 |
+| Certificado generado | 22:48:02 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 89/100 (good) |
@@ -89,7 +89,7 @@ Modelo experimental: 48 → 76 (red → green). Cambios notables frente a ayer:
 - FC nocturna: 79,4 → 56,6 lpm (favorable)
 - Sueño: 7,6 → 8,4 h (favorable)
 - Puntuación de sueño: 42 → 95 (favorable)
-- Estrés medio: 56 → 15 (favorable)
+- Estrés medio: 56 → 22 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -132,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 91,7 lpm | 56,6 lpm |
+| Hoy* | 86,2 lpm | 56,6 lpm |
 | 3 días | 79,2 lpm | 66,5 lpm |
 | 7 días | 80,6 lpm | 66,0 lpm |
 | 28 días | 83,1 lpm | 64,2 lpm |
@@ -152,8 +152,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 15, máximo 87.
-- Body Battery: último valor 56/100, medido a las 16:15.
+- Estrés medio: 22, máximo 97.
+- Body Battery: último valor 35/100, medido a las 21:51.
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -264,16 +264,16 @@ Solo series declaradas; «+» indica bloques sin número de series. El volumen e
 
 | Ejercicio | Semana | Mejor serie | 1RM mínimo | Sesiones |
 |---|---|---|---|---|
-| fuerza - squat snatch | 2026-S42 | 68 kg × 1 | 68 kg | 1 |
 | peso muerto | 2026-S41 | 170 kg × 5 | 198,3 kg | 1 |
 | power clean + squat clean (complex 1+1) | 2026-S43 | 90 kg × 1 | 90 kg | 1 |
 | press banca | 2026-S44 | 90 kg × 6 | 108 kg | 1 |
 | sentadilla trasera | 2026-S41 | 170 kg × 2 | 181,3 kg | 2 |
 | sentadilla trasera | 2026-S42 | 185 kg × 1 | 185 kg | 1 |
 | squat clean | 2026-S43 | 110 kg × 1 | 110 kg | 1 |
+| squat snatch | 2026-S42 | 68 kg × 1 | 68 kg | 1 |
 | squat snatch | 2026-S44 | 75 kg × 1 | 75 kg | 1 |
 
-Diferencias entre las dos últimas semanas con datos: sentadilla trasera: 1RM mínimo +3,7 kg entre 2026-S41 y 2026-S42.
+Diferencias entre las dos últimas semanas con datos: sentadilla trasera: 1RM mínimo +3,7 kg entre 2026-S41 y 2026-S42; squat snatch: 1RM mínimo +7 kg entre 2026-S42 y 2026-S44.
 
 Solo barra con carga total. El 1RM es un límite inferior (Epley sin RIR) y no se deduce del RPE; las semanas sin registro no implican que no se entrenara ese ejercicio.
 
@@ -288,7 +288,7 @@ Turno: hoy sin dato, mañana sin dato.
 ### Recomendaciones
 
 1. **Listo para entrenar** — Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -371,4 +371,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-26-1645 · generado 26/10/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 40352689155.
+Traza: cierre nocturno · ciclo 2026-10-26-2245 · generado 26/10/2026 22:48 Europe/Madrid · certificado READY · sync_run_id 40407217009.
