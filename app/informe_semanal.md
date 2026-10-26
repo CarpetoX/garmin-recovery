@@ -1,10 +1,10 @@
 # Resumen semanal · 20/10–26/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-26-0833-b4c2ca`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-26-0906-6351d7`)._
 
 ## En una frase
 
-- 4 sesiones (−9); 4 de 6 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (2 de 2 días entrenados comprobados).
+- 4 sesiones (−9); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (2 de 2 días entrenados comprobados).
 - Decisión registrada en 7/7 días: verde 2 · ámbar 2 · rojo 2 · pendiente 1.
 
 ## Gráficas de la semana
@@ -36,9 +36,11 @@ Monotonía — · strain — · ACWR — · RPE registrado en 2/4 sesiones.
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| HRV media | 44,5 ms | 57,2 ms |
-| FC en reposo media | 57,0 lpm | 56,6 lpm |
-| Sueño medio | 7,10 h | 6,35 h |
+| HRV media | 50,1 ms | 57,2 ms |
+| FC en reposo media | 56,9 lpm | 56,6 lpm |
+| Sueño medio | 7,25 h | 6,35 h |
+
+HRV de 7 días hoy: 45,8 ms (rango normal 54,1–62,2 ms). Turnos: MT, TN.
 
 ## Fuerza de la semana
 
@@ -77,7 +79,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Calidad de los datos
 
-- Noches con HRV: 6/7 · con sueño: 6/7.
+- Noches con HRV: 7/7 · con sueño: 7/7.
 - Sesiones con RPE: 2/4.
 
 ## Validación de modelos

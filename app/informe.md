@@ -1,10 +1,10 @@
 # Informe matutino · 26/10/2026
 
-`GR-2026-10-26-0833-b4c2ca` · cita este identificador al reenviar el informe.
+`GR-2026-10-26-0906-6351d7` · cita este identificador al reenviar el informe.
 
 > **Hoy: ⚪ pendiente — Pendiente de datos.** RPE ≤ 6 · volumen según sensaciones.
 >
-> **Por qué:** faltan datos de hoy (hrv_ms, sleep_hours).
+> **Por qué:** faltan datos de hoy.
 >
 > **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
 
@@ -12,17 +12,17 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 6 | según sensaciones | — ms | 52 lpm | — h | —/100 |
+| 6 | según sensaciones | 84 ms | 51 lpm | 8,12 h | 72/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
-| Recuperación oficial | — | pendiente | oficial |
-| Híbrido Garmin + local | 74 | ámbar | salvaguarda |
+| Recuperación oficial | 88 | verde | oficial |
+| Híbrido Garmin + local | 89 | verde | salvaguarda |
 | Modelo experimental | — | pendiente | sombra |
-| Modelo de compatibilidad | 74 | ámbar | compatibilidad |
-| Garmin Training Readiness | — | — | contexto |
+| Modelo de compatibilidad | 100 | verde | compatibilidad |
+| Garmin Training Readiness | 72 | — | contexto |
 
 _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
 
@@ -53,21 +53,22 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-25-2248-76094d (25/10 22:48):
-- **Decisión:** rojo → **pendiente**.
-- Híbrido: 42 → 74 (+32).
-- Nueva noche registrada: HRV 19 → — ms, sueño 7,63 → — h, FC reposo 59 → 52 lpm.
+Frente al informe GR-2026-10-26-0833-b4c2ca (26/10 08:33):
+- Híbrido: 74 → 89 (+15).
+- Nueva noche registrada: HRV — → 84 ms, sueño — → 8,12 h, FC reposo 52 → 51 lpm.
 
 ## Qué ha cambiado respecto a tu línea base
 
-- **FC:** reposo 52 lpm (-4 vs. mediana 56); nocturna — lpm (—).
+- **HRV:** 84 ms esta noche (+45 % vs. base 58 ms); media de 7 días 45,8 ms, por debajo de tu rango normal (54–62 ms).
+- **FC:** reposo 51 lpm (-5 vs. mediana 56); nocturna 56,3 lpm (-5,2).
+- **Sueño:** 8,12 h, puntuación 96; deuda 2,0 h en 3 noches frente a 7,5 h de necesidad.
 - **Estrés Garmin ayer:** 56 de media (tu mediana 38).
 
-**Señales coincidentes:** 1 de 2 señales en contra (Estrés del día anterior (Garmin)); a favor: FC en reposo y nocturna. Sin datos: Variabilidad cardiaca (HRV), Sueño, Carga de entrenamiento, Sensaciones (Intervals).
+**Señales coincidentes:** 1 de 4 señales en contra (Estrés del día anterior (Garmin)); a favor: FC en reposo y nocturna. Sin datos: Carga de entrenamiento, Sensaciones (Intervals).
 
 ## Incertidumbre
 
-- Confianza de los datos: **baja** (faltan datos de hoy: hrv_ms, sleep_hours; sueño de hoy sin confirmar)
+- Confianza de los datos: **baja** (sueño de hoy sin confirmar)
 - Confianza de la recomendación: **baja** (sin evaluación completa hoy)
 
 ## Plan del día
@@ -120,16 +121,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-26-0833-b4c2ca`
+- **Identificador del informe:** `GR-2026-10-26-0906-6351d7`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-26-0830 · datos sincronizados a las 08:32
-- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 2,4 h ✓ · último Body Battery hace 2,5 h ✓
+- **Ciclo:** 2026-10-26-0830 · datos sincronizados a las 09:05 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 28 min ✓ · última HRV hace 30 min ✓ · última FC hace 22 min ✓ · último Body Battery hace 72 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+4 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-26 08:33 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-26 09:06 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
