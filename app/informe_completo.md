@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Lunes, 26 de octubre de 2026 · 13:48 · `GR-2026-10-26-1348-c4994c`
+Lunes, 26 de octubre de 2026 · 13:51 · `GR-2026-10-26-1351-549feb`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -89,7 +89,7 @@ Modelo experimental: 48 → 76 (red → green). Cambios notables frente a ayer:
 - FC nocturna: 79,4 → 56,6 lpm (favorable)
 - Sueño: 7,6 → 8,4 h (favorable)
 - Puntuación de sueño: 42 → 95 (favorable)
-- Estrés medio: 56 → 11 (favorable)
+- Estrés medio: 56 → 12 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -132,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 91,1 lpm | 56,6 lpm |
+| Hoy* | 90,1 lpm | 56,6 lpm |
 | 3 días | 79,2 lpm | 66,5 lpm |
 | 7 días | 80,6 lpm | 66,0 lpm |
 | 28 días | 83,1 lpm | 64,2 lpm |
@@ -152,8 +152,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 11, máximo 66.
-- Body Battery: último valor 69/100, medido a las 12:21.
+- Estrés medio: 12, máximo 66.
+- Body Battery: último valor 69/100, medido a las 12:21 (hace 1 h 30 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 3 observaciones recientes, mediana 16,0 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -262,7 +262,7 @@ Solo series declaradas; «+» indica bloques sin número de series. El volumen e
 
 | Ejercicio | Semana | Mejor serie | 1RM mínimo | Sesiones |
 |---|---|---|---|---|
-| fuerza - squat snatch emom 8 min | 2026-S42 | 68 kg × 1 | 68 kg | 1 |
+| fuerza - squat snatch | 2026-S42 | 68 kg × 1 | 68 kg | 1 |
 | peso muerto | 2026-S41 | 170 kg × 5 | 198,3 kg | 1 |
 | power clean + squat clean (complex 1+1) | 2026-S43 | 90 kg × 1 | 90 kg | 1 |
 | sentadilla trasera | 2026-S41 | 170 kg × 2 | 181,3 kg | 2 |
@@ -368,4 +368,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-26-0830-post-sleep · generado 26/10/2026 13:48 Europe/Madrid · certificado READY · sync_run_id 40292107563.
+Traza: informe de tarde · ciclo 2026-10-26-0830-post-sleep · generado 26/10/2026 13:51 Europe/Madrid · certificado READY · sync_run_id 40292107563.
