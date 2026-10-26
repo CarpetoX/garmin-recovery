@@ -451,3 +451,15 @@ details.more .more-body .h2sub{font-size:12.5px;color:var(--text-2)}
 .explain b{color:var(--text)}
 .gloss{margin:8px 0 0}.gloss dt{font-size:13px;font-weight:700;margin-top:10px}.gloss dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--text-2)}
 .te-cap{flex-basis:100%;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:650;color:var(--text-3)}
+/* V8.3 · señales a favor y en contra */
+.sg-models{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 12px}
+.sg-m{background:var(--glass-chip,var(--surface-2));border-radius:12px;padding:8px 6px;text-align:center}
+.sg-m b{display:block;font-size:22px;font-weight:720;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sg-m span{font-size:11px;color:var(--text-3)}
+.sg-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:520px){.sg-cols{grid-template-columns:1fr}}
+.sg-col h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 4px}
+.sg-col.fav h3{color:var(--good-ink)}.sg-col.res h3{color:var(--warning-ink)}
+.sg-col li{font-size:13px;line-height:1.4;padding:4px 0 4px 14px;position:relative;color:var(--text-2)}
+.sg-col li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%}
+.sg-col.fav li::before{background:var(--good)}.sg-col.res li::before{background:var(--warning)}
+.sg-adv{margin:10px 0 0;padding:8px 10px;border-radius:10px;font-size:13px;background:rgba(255,204,51,.10);color:var(--text)}

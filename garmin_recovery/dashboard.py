@@ -397,6 +397,23 @@ def _vo2_html(v: dict | None) -> str:
             '<p class="h2sub">estimación de Garmin · en HIIT y fuerza apenas se actualiza</p></section>')
 
 
+def _signals_html(sg: dict | None) -> str:
+    """V8.3: señales a favor y en contra cuando los modelos no coinciden (no cambia la decisión)."""
+    if not isinstance(sg, dict) or not sg.get("show") or not (sg.get("favorable") or sg.get("restrictive")):
+        return ""
+    def score(label, v, extra=""):
+        return f'<div class="sg-m"><b>{_esc(v if v is not None else "—")}</b><span>{label}{extra}</span></div>'
+    head = ('<div class="sg-models">' + score("oficial", sg.get("official")) + score("híbrido", sg.get("hybrid"))
+            + score("Garmin", sg.get("garmin"), f' · {_esc(sg["garmin_level"])}' if sg.get("garmin_level") else "") + "</div>")
+    def col(title, items, cls):
+        return (f'<div class="sg-col {cls}"><h3>{title}</h3><ul class="clean">'
+                + "".join(f"<li>{_esc(x)}</li>" for x in items) + "</ul></div>") if items else ""
+    body = '<div class="sg-cols">' + col("A favor", sg.get("favorable") or [], "fav") + col("En contra", sg.get("restrictive") or [], "res") + "</div>"
+    adv = f'<p class="sg-adv">{_esc(sg["advice"])}</p>' if sg.get("advice") else ""
+    why = f'<p class="h2sub">{_esc(sg["why"])}</p>' if sg.get("why") else ""
+    return f'<section class="card" id="senales"><h2>Señales a favor y en contra</h2>{head}{body}{adv}{why}</section>'
+
+
 def _glance_html(chips: list[dict] | None) -> str:
     if not chips:
         return ""
@@ -653,7 +670,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
         optional_blocks.failed("web:glance", exc)
         glance_html = ""
     # el resumen de reglas solo es el respaldo cuando no hay resumen de Claude del ciclo vigente
-    top_block = glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = _signals_html(extras.get("signals")) + glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
             'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
