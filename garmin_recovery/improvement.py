@@ -215,6 +215,7 @@ def _logging(root, trend, sessions, today):
     fields = ("soreness", "fatigue", "stress_subjective", "mood", "motivation")
     filled = sum(1 for r in rows if any((r.get(f) or "").strip() for f in fields))
     no_rpe = sum(1 for s in sessions if s.get("removed") in (0, "0", None, False) and _num(s.get("rpe")) is None
+                 and not s.get("rpe_na")  # técnica y calentamientos no llevan RPE
                  and (s.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=27)).isoformat())
     hrv_days = sum(1 for t in trend[-14:] if _num(t.get("hrv_ms")) is not None)
     obs = f"Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en {filled} de los últimos {len(rows)} días."

@@ -74,7 +74,7 @@ def compute_load(daily: dict, sessions: dict, today: str, cfg: dict) -> dict:
     # Un día con sesiones sin RPE cuenta como sRPE 0: solo se calcula con cobertura de RPE suficiente.
     def rpe_coverage(days):
         start = (end - timedelta(days=days - 1)).isoformat()
-        win = [s_ for s_ in sessions.values() if start <= (s_.get("date") or "") <= today]
+        win = [s_ for s_ in sessions.values() if start <= (s_.get("date") or "") <= today and not s_.get("rpe_na")]
         known = sum(1 for s_ in win if s_.get("rpe") is not None)
         return 100.0 * known / len(win) if win else None
     min_cov = cfg.get("min_srpe_coverage_pct", 75)
