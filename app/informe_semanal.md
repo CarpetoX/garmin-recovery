@@ -1,6 +1,6 @@
 # Resumen semanal · 20/10–26/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-26-1628-50f436`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-26-1648-508fb0`)._
 
 ## En una frase
 
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 8 | 13 |
 | Minutos | 237 | 325 |
 | Carga (Intervals) | 125 | 189 |
-| sRPE (RPE × min) | 531 | 1890 |
+| sRPE (RPE × min) | 1020 | 1890 |
 
-Monotonía 0,62 · strain 330 · ACWR — · RPE registrado en 4/8 sesiones.
+Monotonía 0,48 · strain 494 · ACWR — · RPE registrado en 5/8 sesiones.
 
 ## Recuperación
 
@@ -48,13 +48,18 @@ HRV de 7 días hoy: 45,8 ms (rango normal 54,1–62,2 ms). Turnos: MT, TN.
 |---|---|--:|--:|--:|--:|
 | 20/10 | DB split squat | 45,0 kg | 45 × 10 | 60,0 kg | 4/4 |
 | 23/10 | chin up lastrado | 15,0 kg | — | — | 4/4 |
+| 26/10 | press banca | 90,0 kg | 90 × 6 | 108,0 kg | 8/8 |
+| 26/10 | press banca inclinado con mancuernas | 67,0 kg | 67 × 7 | 82,6 kg | 4/4 |
+| 26/10 | press superinclinado isolateral | 50,0 kg | — | — | 4/4 |
+| 26/10 | aperturas en banco inclinado con mancuernas | 32,0 kg | 32 × 10 | 42,7 kg | 4/4 |
+| 26/10 | curl de bíceps en máquina unilateral | 15,0 kg | — | — | 4/4 |
 | 26/10 | squat snatch | 75,0 kg | 75 × 1 | 75,0 kg | 9/9 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
 ## Puntualidad de los informes
 
-**18 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**19 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -77,11 +82,12 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 25/10 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
 | 25/10 | 22:45 | 22:47 | 22:48 | 22 min ✓ |
 | 26/10 | 08:30 | 08:32 | 08:33 | 32 min ✓ |
+| 26/10 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 4/8.
+- Sesiones con RPE: 5/8.
 
 ## Validación de modelos
 
