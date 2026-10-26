@@ -308,6 +308,8 @@ function showHr(id, anchor) {
 }
 $('sessions').addEventListener('click', e => { const tr = e.target.closest('tr.clk'); if (tr) showHr(tr.dataset.id); });
 // V7.20: la FC de cada sesión en las tarjetas de fuerza, halterofilia y metcons
+const TE_TXT = v => v == null ? '—' : v < 1 ? 'sin efecto' : v < 2 ? 'leve' : v < 3 ? 'mantiene' : v < 4 ? 'mejora' : v < 5 ? 'mejora mucho' : 'sobrecarga';
+const teBar = (name, v) => `<span class="te-i"><span class="te-n">${name}</span><i class="te-t"><i style="width:${v == null ? 0 : Math.min(100, v / 5 * 100)}%"></i></i><b>${v == null ? '—' : fmt(v, 1)}</b><small>${TE_TXT(v)}</small></span>`;
 function miniHr(c) {
   const pts = c.points || [], W = 300, H = 46;
   if (pts.length < 2) return '';
@@ -320,6 +322,8 @@ document.querySelectorAll('.hrmini').forEach(el => {
   const id = el.dataset.id, c = HRC[id], e = effFlag(id);
   let h = '';
   if (c && c.available) h += `<button type="button" class="hrbtn" data-id="${esc(id)}" aria-label="Ver la curva de FC y las zonas de la sesión">${miniHr(c)}<span class="hrmeta">${beat(c.avg_hr)} FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm<span class="hrmore">curva y zonas ›</span></span></button>`;
+  const te = (D.training_effect || {})[id];  // V8.1: efecto de entrenamiento de Garmin (0–5)
+  if (te) h += `<div class="te" title="Efecto de entrenamiento de Garmin, de 0 a 5"><span class="te-cap">Efecto de entrenamiento</span>${teBar('Aeróbico', te.aerobic)}${teBar('Anaeróbico', te.anaerobic)}${te.label ? `<span class="te-l">${esc(te.label)}</span>` : ''}</div>`;
   if (e) h += `<p class="effflag ${e.flag}" title="${esc(effTip[e.flag])}">${effTxt[e.flag]}</p>`;
   if (h) { el.innerHTML = h; el.hidden = false; }
   if (c && c.available) { const chip = el.closest('article') && el.closest('article').querySelector('.hrchip'); if (chip) chip.remove(); }  // la FC ya va con su curva
@@ -486,4 +490,71 @@ $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días
     try { localStorage.setItem('gr-theme', b.dataset.t); } catch (err) {}
     paint(); });
   paint();
+})();
+
+// ==== V8.1 · «Qué mide y cómo leerlo» en cada tarjeta (dentro de «Ver detalle») y glosario en Sistema ====
+(function(){
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const EXPLAIN = [
+    [/^Disponibilidad de hoy/, 'Puntuación oficial (0–100) de lo preparado que está tu cuerpo hoy: compara tu HRV, FC en reposo y nocturna, sueño, carga reciente y estrés con tu propia normalidad. La zona y los límites (RPE máximo y volumen) salen del más prudente de los tres modelos, así que un solo indicador malo puede bajarla aunque los demás estén bien.'],
+    [/^Cambios recientes/, 'Cada tarjeta compara el valor de hoy con el de ayer. La flecha va en verde si el cambio es bueno para la recuperación (HRV que sube, FC que baja…) y en rojo si es malo. La curva enseña los últimos 7 días para ver si es algo puntual o una tendencia.'],
+    [/^Resumen de hoy · Claude/, 'Texto redactado por Claude con las cifras del último ciclo certificado. No añade datos nuevos: interpreta los que ves en la app. Si el ciclo cambia, se marca como desactualizado.'],
+    [/^Hoy en breve|^En tres líneas/, 'Resumen automático por reglas a partir de la decisión del día; aparece cuando no hay resumen de Claude del ciclo vigente.'],
+    [/^Por qué esta puntuación/, 'Los factores que más han movido la puntuación de hoy, del que más pesa al que menos. ↓ empeora la recuperación, ↑ la mejora y → es neutro.'],
+    [/^Respiración nocturna/, 'Respiraciones por minuto mientras duermes, medidas por el reloj. Cambia muy poco de una noche a otra: una subida de 2 o más sobre tu normal suele anticipar fatiga, estrés, alcohol o un resfriado, sobre todo si a la vez baja la HRV. Es informativa: no cambia la puntuación.'],
+    [/^Esta noche/, 'Horas de sueño que conviene dormir esta noche: tu base (7,5 h) más un recargo por la carga de ayer y por la deuda de las últimas noches, menos las siestas que registró Garmin. Es una estimación orientativa.'],
+    [/^Próximos 7 días/, 'Plan por reglas según tus turnos y la decisión de hoy: como mucho 3 sesiones duras (RPE ≥ 8) a la semana, separadas 48 h y solo en días libres, y descanso después de un turno de noche. Se recalcula en cada informe.'],
+    [/^Peso/, 'Lecturas de la báscula Xiaomi que muestras o dictas. El peso varía 1–2 kg en el mismo día por comida, líquidos y entreno: compara solo lecturas hechas a la misma hora, mejor por la mañana en ayunas.'],
+    [/^Últimas 4 semanas/, 'Calendario de 28 días. El color es la decisión de cada día y el número, el RPE de la sesión más dura. Un anillo rojo marca que entrenaste por encima del máximo recomendado ese día. Toca un día para ver su detalle.'],
+    [/^Disponibilidad · 28 días/, 'Puntuación oficial de cada día. Las bandas de color son las zonas, las franjas tenues los turnos de noche y los triángulos los días con una sesión de RPE 8 o más. Sirve para ver cómo responde tu cuerpo a los bloques duros y a los turnos.'],
+    [/^Carga semanal/, 'Carga de los últimos 7 días frente a la habitual de las últimas 4 semanas (ACWR). Dentro de la banda verde la progresión es razonable. Muy por encima, la carga ha subido de golpe; muy por debajo, estás descargando.'],
+    [/^Mapa de 28 días/, 'Cada columna es un día y cada fila un componente: recuperación, sueño y carga. Verde es bueno, amarillo regular, rojo malo y gris sin dato. Ayuda a ver qué falla más a menudo.'],
+    [/^HRV nocturna/, 'Variabilidad de la frecuencia cardiaca durante el sueño (rMSSD, en ms). Una HRV más alta de lo normal suele indicar buena recuperación. Compárala siempre con tu propio rango (la banda) y fíjate en la media de 7 días: una noche suelta varía mucho por alcohol, cenas tarde o estrés.'],
+    [/^FC en reposo/, 'Pulsaciones más bajas en reposo (lpm). Si sube 5 o más sobre tu mediana varios días seguidos suele indicar fatiga, mal sueño, estrés o el inicio de una enfermedad. La FC nocturna es la media durante el sueño.'],
+    [/^Sueño por fases/, 'Profundo, REM y ligero estimados por Garmin a partir del movimiento y la FC. La duración total es fiable; el reparto entre fases es orientativo.'],
+    [/^Sueño/, 'Horas dormidas cada noche frente a tu necesidad configurada (7,5 h), contando el sueño de día tras un turno de noche. La deuda es lo que falta acumulado de las últimas noches.'],
+    [/^Carga diaria/, 'Carga cardiaca de cada día según Intervals.icu (TRIMP). ATL es la fatiga de los últimos 7 días y CTL la forma de las últimas 6 semanas; su diferencia (TSB, forma) indica si vienes cargado (negativo) o fresco (positivo).'],
+    [/^RPE frente al máximo/, 'La barra es el RPE de tu sesión más dura de cada día y la raya, el máximo que permitía la decisión de ese día. Una barra roja indica que entrenaste por encima de lo recomendado.'],
+    [/^Esta semana/, 'Totales de los últimos 7 días frente a los 7 anteriores. sRPE es la carga interna: RPE × minutos de cada sesión, sumado.'],
+    [/^Equilibrio de carga/, 'Garmin reparte tu carga de 4 semanas según la intensidad cardiaca: aeróbica baja (base, zonas 1–2), aeróbica alta (tempo y umbral) y anaeróbica (esfuerzos máximos cortos). La banda verde es el rango que recomienda para tu nivel. En CrossFit es normal tener mucha anaeróbica; si pasa del techo, conviene meter sesiones suaves y largas.'],
+    [/^VO2max/, 'Consumo máximo de oxígeno estimado por Garmin (ml/kg/min): mide tu capacidad aeróbica. Garmin lo calcula sobre todo en carreras y bici con GPS; en HIIT y fuerza apenas lo actualiza, por eso puede salir plano aunque mejores.'],
+    [/^Últimos 7 días/, 'Número de sesiones de cada tipo en la última semana y el RPE medio de los metcons.'],
+    [/^Volumen de/, 'Kilos levantados con barra cada semana (repeticiones × carga). Solo cuenta la barra con carga total; las mancuernas y las máquinas no se suman porque no son comparables.'],
+    [/^Progresión por ejercicio/, 'La mejor serie de cada ejercicio que repites, comparada con la sesión anterior: ▲ sube la carga o las repeticiones, = igual y ▼ baja. Solo compara series con las mismas repeticiones.'],
+    [/^Sesiones de (fuerza|halterofilia)/, 'Cada sesión con sus series («10 @ 60» = 10 repeticiones con 60 kg) y la mejor serie a la derecha. Debajo, la FC de la sesión y el efecto de entrenamiento de Garmin.'],
+    [/^Metcons/, 'Cada WOD con su formato, resultado y tiempos. El cronómetro oficial y el tiempo grabado por el reloj se guardan por separado. Solo se pueden comparar WOD que repiten formato y ejercicios.'],
+    [/^Técnica y otras/, 'Calentamientos, técnica y sesiones sin ejercicios estructurados. No llevan RPE ni cuentan como RPE pendiente, pero sí suman a la carga cardiaca.'],
+    [/^Sesiones de los últimos 28 días/, 'Todas las sesiones con su duración, carga cardiaca, FC media, RPE y sRPE (RPE × minutos). Toca una fila con ♥ para ver la curva de FC y las zonas.'],
+    [/^Ciclo completo/, 'Estado de la última cadena de datos: Sync (Intervals), FC (Garmin), Analítica, CrossFit, publicación de la web y aviso al móvil.'],
+    [/^Puntualidad/, 'Cada franja de Sync (08:30, 16:45 y 22:45) con la hora real del Sync y del informe. El margen es lo que sobró hasta la hora objetivo del informe.'],
+    [/^Modelo experimental/, 'Modelo v3 en pruebas. Se calcula en paralelo y entra en la decisión solo si es más prudente que el oficial. Cada barra es un componente con su peso entre paréntesis.'],
+  ];
+  const EXTRA = [
+    ['Efecto de entrenamiento', 'Escala de Garmin de 0 a 5 que indica cuánto mejora una sesión tu capacidad aeróbica y anaeróbica: 0–0,9 sin efecto · 1–1,9 leve · 2–2,9 mantiene · 3–3,9 mejora · 4–4,9 mejora mucho · 5 sobrecarga.'],
+    ['RPE', 'Esfuerzo percibido de la sesión de 0 a 10, el que dictas tú. La técnica y los calentamientos no lo llevan.'],
+    ['sRPE', 'Carga interna de Foster: RPE × minutos de la sesión. Refleja mejor que la FC la carga de la fuerza.'],
+    ['Body Battery', 'Energía estimada por Garmin (0–100) a partir de la HRV, el estrés y el sueño. Solo es una medición nueva cuando el reloj ha sincronizado.'],
+    ['Estrés medio', 'Índice de estrés de Garmin (0–100) calculado con la HRV durante el día. Por encima de tu media suele acompañar a peor recuperación.'],
+    ['Forma (TSB)', 'CTL − ATL: forma menos fatiga. Negativa = vienes cargado; positiva = fresco. Solo se interpreta con al menos 6 semanas de historial.'],
+  ];
+  const find = t => (EXPLAIN.find(([re]) => re.test(t)) || [])[1];
+  document.querySelectorAll('.card').forEach(card => {
+    if (card.id === 'hrdetail' || card.id === 'apariencia' || card.id === 'glosario') return;
+    const h = card.querySelector(':scope > h2, :scope h2');
+    const title = (h ? h.textContent : card.getAttribute('aria-label') || '').trim();
+    const txt = title && find(title);
+    if (!txt) return;
+    let d = card.querySelector(':scope > details.more');
+    if (!d) { d = document.createElement('details'); d.className = 'more'; d.innerHTML = '<summary>Ver detalle</summary><div class="more-body"></div>'; card.appendChild(d); }
+    const p = document.createElement('p'); p.className = 'explain'; p.innerHTML = '<b>Qué mide y cómo leerlo.</b> ' + esc(txt);
+    d.querySelector('.more-body').prepend(p);
+  });
+  const host = document.getElementById('tab-sistema'); if (!host) return;
+  const NAMES = ["Disponibilidad (puntuación de hoy)", "Cambios recientes", "Resumen de Claude", "Hoy en breve", "Por qué esta puntuación", "Respiración nocturna", "Esta noche (sueño necesario)", "Próximos 7 días", "Peso", "Últimas 4 semanas", "Disponibilidad · 28 días", "Carga semanal (ACWR)", "Mapa de 28 días", "HRV nocturna", "FC en reposo y nocturna", "Sueño por fases", "Sueño y deuda", "Carga diaria, ATL y CTL", "RPE frente al máximo del día", "Esta semana", "Equilibrio de carga · 4 semanas", "VO2max", "Últimos 7 días (Entrenos)", "Volumen de fuerza y halterofilia", "Progresión por ejercicio", "Sesiones de fuerza y halterofilia", "Metcons", "Técnica y otras", "Sesiones de los últimos 28 días", "Ciclo completo", "Puntualidad", "Modelo experimental"];
+  const names = EXPLAIN.map(([, t], i) => [NAMES[i] || '', t]);
+  const sec = document.createElement('section'); sec.className = 'card'; sec.id = 'glosario';
+  sec.innerHTML = '<h2>Qué significa cada dato</h2><details class="more"><summary>Ver glosario</summary><dl class="gloss">' +
+    names.concat(EXTRA).map(([n, t]) => `<dt>${esc(n)}</dt><dd>${esc(t)}</dd>`).join('') + '</dl></details>';
+  const ap = document.getElementById('apariencia');
+  host.insertBefore(sec, ap ? ap.nextSibling : host.firstChild);
 })();
