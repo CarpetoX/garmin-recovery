@@ -1,29 +1,32 @@
 <!-- cycle_id: 2026-10-26-0830-post-sleep -->
-**En breve:** Recuperación buena tras una noche larga; luz verde para entrenar según lo planificado.
-🟢 Recuperación oficial 88/100, confianza alta.
-🌙 Sueño 8 h 07 min, puntuación 96.
-🏋️ Carga: 4 sesiones en 7 días, sRPE 200.
-❤️ FC en reposo 51 lpm, 5 por debajo de tu mediana (56).
-Orientación: día libre; sesión completa con RPE ≤ 9 si el calentamiento responde, y a dormir pronto de cara al turno de noche del jueves.
+**En breve:** día verde, buena noche; la HRV de la semana aún va baja y la carga es ligera.
+🟢 Recuperación oficial 88/100, confianza alta
+🌙 Sueño 8,4 h, puntuación 95
+🏋️ Carga 7 días: 102 en 7 sesiones (−46 % vs. semana previa)
+❤️ FC en reposo 51 lpm (−5 vs. tu mediana)
+Orientación: día libre, entrena según lo planificado (RPE ≤ 9) si el calentamiento responde; hoy ya hay 3 sesiones HIIT, mejor suave.
 
-**Qué explica la puntuación.** HRV de anoche 84 ms (base 58) y FC en reposo/nocturna por debajo de la mediana, con sueño de 8,12 h. Pero la media de HRV de 7 días (45,8 ms) sigue bajo tu rango normal (54–62 ms), el estrés de ayer fue alto (56 vs. mediana 38) y la deuda de sueño es de 2,0 h en 3 noches. El modelo experimental marca 76 (confianza media, base de 24 noches).
+## Qué explica la puntuación
+- ↑ Sueño 8,4 h (puntuación 95) y FC en reposo 51 lpm frente a 56 de mediana.
+- ↑ HRV de anoche 84 ms (base 58 ms).
+- ↓ HRV media de 7 días 45,8 ms, por debajo del rango normal (54,1–62,2 ms): una noche buena no revierte la semana.
+- ↓ Estrés Garmin de ayer 56 de media (mediana 38); Garmin Training Readiness 39/100 (solo contexto).
 
-**Carga reciente.** 4 sesiones, carga 50 (−73,5 % vs. semana previa), RPE medio 8,25. Por RPE, 13 de 21 sesiones fueron ≥ 8 (62 %), con 4 casos de dos días duros seguidos. Tras sesiones duras la HRV siguiente fue 48 ms frente a 55 ms (descriptivo, pocos días).
+## Carga reciente
+Hoy: 3 sesiones HIIT (carga total 52) sin RPE. Semana: sRPE 200 con cobertura del 29 %, así que la carga se lee con cautela; CTL 6,4. Sensaciones sin registrar en Intervals.
 
-**Prioridades**
-1. **HRV:** una noche alta no cambia la media baja; no encadenes días duros y reevalúa en 7 días.
-2. **Sueño:** suma 30–45 min por noche; siesta corta antes del TN.
-3. **Intensidad:** máx. 2–3 sesiones RPE ≥ 8 por semana, separadas ≥ 48 h, y registrar sensaciones en Intervals (0 de 14 días).
+## 3 prioridades
+1. **HRV:** el análisis por reglas la marca a la baja (50 vs. 59 ms de referencia); alterna sesiones duras con suaves y reevalúa en 7 días.
+2. **Sueño:** deuda de 2,0 h en 3 noches; suma 30–45 min por noche, sobre todo antes del TN del jueves.
+3. **Intensidad y registro:** 62 % de sesiones con RPE ≥ 8; anota RPE de las 3 sesiones de hoy y las sensaciones.
 
-**Plan 7 días** (la decisión diaria manda)
-- Lun 26: exigente (RPE ≤ 9).
-- Mar 27: moderada.
-- Mié 28: exigente; acuéstate pronto (TN al día siguiente).
-- Jue 29 (TN): solo por la mañana y moderado.
-- Vie 30: descanso, priorizar sueño.
-- Sáb 31: exigente si la HRV acompaña.
-- Dom 1: movilidad o descanso.
+## Plan de 7 días (orientativo; manda la decisión del día)
+- Lun 26: suave/movilidad (ya entrenaste).
+- Mar 27: exigente, RPE ≤ 9.
+- Mié 28: moderada.
+- Jue 29 (TN): moderada por la mañana y siesta corta.
+- Vie 30: descanso, prioriza dormir.
+- Sáb 31: exigente.
+- Dom 1 (MT): movilidad o descanso.
 
-Informe completo: https://github.com/CarpetoX/garmin-recovery/blob/main/app/informe.md
-
-_No es un diagnóstico médico._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
