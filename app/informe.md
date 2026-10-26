@@ -1,6 +1,6 @@
 # Informe de seguimiento · 26/10/2026
 
-`GR-2026-10-26-1527-5412fd` · cita este identificador al reenviar el informe.
+`GR-2026-10-26-1628-50f436` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
@@ -54,20 +54,21 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-26-1351-549feb (26/10 13:51):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-26-1527-5412fd (26/10 15:27):
+- Sesiones nuevas desde entonces: **1** (carga +23).
 
 ## Actividad de hoy
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
+| 26/10 15:15 | Fuerza | Fuerza | 70 | 23 | 109 / 135 | — | — |
 | 26/10 10:26 | Sin detalle | HIIT | 47 | 21 | 119 / 160 | — | — |
 | 26/10 09:59 | Halterofilia | WOD AMRAP 12 min - squat snatch / burpee over bar / toes to bar | 20 | 18 | 143 / 176 | 8,0 | 159 |
 | 26/10 09:25 | Halterofilia | Fuerza - Squat snatch | 25 | 13 | 125 / 159 | 7,0 | 172 |
 
-**¿Encaja con la decisión?** La actividad de hoy (carga 52, RPE máx. 8,0) encaja con la decisión.
+**¿Encaja con la decisión?** La actividad de hoy (carga 75, RPE máx. 8,0) encaja con la decisión.
 
-**Carga 7 días:** 102 en 7 sesiones (-46 % vs. semana previa) · sRPE 531 · monotonía —.
+**Carga 7 días:** 125 en 8 sesiones (-34 % vs. semana previa) · sRPE 531 · monotonía 0,62.
 
 ## Gráficas
 
@@ -93,6 +94,7 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 ## Acciones pendientes
 
+- Añade el RPE de la actividad **i201931324** (26/10 15:15, Sin detalle, 70 min, carga 23) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -121,16 +123,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-26-1527-5412fd`
+- **Identificador del informe:** `GR-2026-10-26-1628-50f436`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-26-0830-post-sleep · datos sincronizados a las 15:26 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 6,8 h ✓ · última HRV hace 6,8 h ✓ · última FC hace 28 min ✓ · último Body Battery hace 31 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+5 sin RPE por diseño: calentamiento/técnica)
+- **Ciclo:** 2026-10-26-0830-post-sleep · datos sincronizados a las 16:27 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 7,8 h ✓ · última HRV hace 7,9 h ✓ · última FC hace 5 min ✓ · último Body Battery hace 14 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/16 (+5 sin RPE por diseño: calentamiento/técnica) (sin RPE: 26/10 15:15)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-26 15:27 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-26 16:28 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
