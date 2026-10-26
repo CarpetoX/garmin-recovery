@@ -82,6 +82,11 @@ def declared_unscored(feedback_snapshot: dict | None) -> set[str]:
     return out
 
 
+def rpe_pending(session: dict) -> bool:
+    """Sesión que de verdad espera un RPE: sin valor y no declarada como técnica, calentamiento o «sin RPE» (V7.31)."""
+    return isinstance(session, dict) and session.get("rpe") is None and not session.get("rpe_na") and not session.get("removed")
+
+
 def build_sessions(inputs: dict) -> list[dict]:
     feedback = (inputs.get("feedback") or {}).get("activities") or {}
     if not isinstance(feedback, dict):
@@ -103,7 +108,7 @@ def build_sessions(inputs: dict) -> list[dict]:
         if rpe is None and not clear:
             rpe = num(act.get("icu_rpe"), 0, 10)
         srpe = round(rpe * minutes, 1) if rpe is not None and minutes else None
-        sessions.append(({"_clear": ["rpe", "srpe"]} if clear else {}) | {
+        sessions.append(({"_clear": ["rpe", "srpe"]} if clear else {}) | ({"rpe_na": True} if rpe is None and str(act["id"]) in unscored else {}) | {
             "id": str(act["id"]), "date": day, "start_local": start or None,
             "type": act.get("type"), "name": act.get("name"),
             "label": fb.get("activity") or None,

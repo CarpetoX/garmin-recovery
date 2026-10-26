@@ -25,16 +25,20 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
         last = sessions[-1]
         rpe = last.get("rpe")
         label = str(last.get("name") or last.get("type") or "Sesión")
+        na = rpe is None and bool(last.get("rpe_na"))
         chips.append({"id": "ultimo", "label": "Último entreno",
-                      "value": label + (f" · RPE {_n(rpe)}" if rpe is not None else " · sin RPE"),
+                      "value": label + (f" · RPE {_n(rpe)}" if rpe is not None else " · no lleva RPE" if na else " · sin RPE"),
                       "sub": f"{_ago(last['date'], today)}" + (f" · {_n(last.get('duration_min'), 0)} min" if last.get("duration_min") else ""),
-                      "tone": "warning" if (rpe is not None and rpe >= 9) or rpe is None else "neutral"})
+                      "tone": "warning" if (rpe is not None and rpe >= 9) or (rpe is None and not na) else "neutral"})
         week = [s for s in sessions if 0 <= (date.fromisoformat(today) - date.fromisoformat(s["date"][:10])).days <= 6]
-        if week:
-            miss = sum(1 for s in week if s.get("rpe") is None)
+        scored = [s for s in week if not s.get("rpe_na")]  # técnica y calentamientos no llevan RPE: no cuentan (V7.31)
+        if scored:
+            miss = sum(1 for s in scored if s.get("rpe") is None)
+            skipped = len(week) - len(scored)
             chips.append({"id": "registros", "label": "Registros de la semana",
-                          "value": f"{len(week) - miss} de {len(week)} con RPE",
-                          "sub": "al día" if not miss else f"faltan {miss}: dicta el RPE para completar la carga",
+                          "value": f"{len(scored) - miss} de {len(scored)} con RPE",
+                          "sub": (f"faltan {miss}: dicta el RPE para completar la carga" if miss else "al día")
+                                 + (f" · {skipped} sin RPE a propósito (técnica, calentamiento): no cuentan" if skipped else ""),
                           "tone": "good" if not miss else "warning"})
     load = result.get("load") if isinstance(result.get("load"), dict) else {}
     if load.get("week_sessions") is not None and load.get("week_load") is not None:

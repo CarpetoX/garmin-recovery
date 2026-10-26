@@ -54,7 +54,8 @@ def rpe_pending_tip(result: dict, now: datetime) -> str | None:
     today = result.get("date") or now.date().isoformat()
     day = today if now.hour >= 12 else (datetime.fromisoformat(today) - timedelta(days=1)).date().isoformat()
     pending = [x for x in result.get("sessions_28d") or []
-               if isinstance(x, dict) and x.get("date") == day and x.get("rpe") is None and not x.get("removed")]
+               if isinstance(x, dict) and x.get("date") == day and x.get("rpe") is None and not x.get("removed")
+               and not x.get("rpe_na")]  # técnica y calentamientos no llevan RPE
     if not pending:
         return None
     n = len(pending)
