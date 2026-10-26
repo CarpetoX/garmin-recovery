@@ -252,3 +252,7 @@ Las gráficas de series temporales (`chart()` en `dashboard.py`) dibujan una fra
 ## V7.23 — CSS y JS de la web en archivos propios
 
 El estilo y el script del panel viven en `garmin_recovery/web/dashboard.css` y `garmin_recovery/web/dashboard.js`. `dashboard.py` los incrusta al importar (`TEMPLATE`), así que la web sigue siendo un único HTML sin red y el resultado es idéntico al anterior (comprobado byte a byte con `build_site`). La CI revisa la sintaxis del JS con `node --check`. No usar marcadores `{{…}}` dentro de esos archivos.
+
+## V8.4 — Ahorro de minutos de Actions
+
+Medido el 26/10/2026: ~4.250 min/mes, sobre todo porque tras el sueño hay ~10 cadenas al día en vez de 3 y cada una lanzaba monitor, web y rutina de Claude. Ahora `garmin_recovery.publish_gate` (paso «Control de publicación» de CrossFit, antes del commit) compara la huella de lo visible (decisión, puntuación, estado del sueño, ciclo, sesiones de 3 días con su RPE) con la última publicación (`publish_gate.json`): si no cambió nada y no hay certificado nuevo, no se dispara el monitor (ni la web que cuelga de él) ni la rutina. Falla abierto. Pages cancela la publicación en curso si llega otra (`cancel-in-progress: true`). Los vigías del monitor (3 cron al día) siguen igual.

@@ -136,6 +136,12 @@ jobs:
       - name: Pruebas de regresión V2.4
         run: python -m garmin_recovery.pipeline_regression_tests --stage crossfit
 
+      # V8.4: ¿hay algo nuevo que publicar? Las cadenas repetidas tras el sueño sin cambios no lanzan monitor, web ni rutina.
+      - name: V8.4 - Control de publicación (solo si hay cambios)
+        id: gate
+        continue-on-error: true
+        run: python -m garmin_recovery.publish_gate
+
       - name: Commit CrossFit insights and ready certificate
         run: |
           set -euo pipefail
@@ -153,6 +159,7 @@ jobs:
           git add training_trends_v31.json
           [ ! -f schema_health_v30.json ] || git add schema_health_v30.json
           [ ! -f pipeline_lineage_v29.json ] || git add pipeline_lineage_v29.json
+          [ ! -f publish_gate.json ] || git add publish_gate.json
           if ! git diff --cached --quiet; then
             git commit -m 'Update CrossFit insights and report readiness V2.4.6'
             for attempt in 1 2 3 4 5; do
@@ -198,7 +205,7 @@ jobs:
         run: python -m garmin_recovery notify
 
       - name: Disparar monitor final V2.4.1
-        if: success()
+        if: success() && steps.gate.outputs.publish != 'false'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -238,7 +245,7 @@ jobs:
           PY
 
       - name: V5.1 - Avisar a la rutina de Claude para el informe del ciclo
-        if: success() && github.event_name == 'workflow_run' && steps.validate_v56.outputs.valid == 'true'
+        if: success() && github.event_name == 'workflow_run' && steps.validate_v56.outputs.valid == 'true' && steps.gate.outputs.publish != 'false'
         continue-on-error: true
         timeout-minutes: 2
         env:

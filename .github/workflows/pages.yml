@@ -25,7 +25,8 @@ permissions:
 
 concurrency:
   group: garmin-pages
-  cancel-in-progress: false
+  # V8.4: si llega otra publicación (p. ej. el análisis de Claude un minuto después), basta con la última
+  cancel-in-progress: true
 
 jobs:
   build:
