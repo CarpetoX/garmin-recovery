@@ -1,34 +1,29 @@
-<!-- cycle_id: 2026-10-27-1645 -->
-**En breve:** decisión verde; recuperación buena, pero la HRV de la semana sigue por debajo de tu rango y hoy ya hay 2 sesiones registradas.
+<!-- cycle_id: 2026-10-27-2245 -->
+**En breve:** día verde y bien recuperado; la HRV de la semana sigue por debajo de tu rango, así que conviene dosificar lo duro.
 🟢 Recuperación oficial 88/100, confianza alta
 🌙 Sueño 8,2 h, puntuación 89
 🏋️ Carga: 8 sesiones en 7 días (128, −30 % vs. semana previa)
-❤️ HRV de 7 días 47 ms, por debajo de tu rango normal (54–62 ms)
-Orientación: día libre; si entrenas más, RPE máx. 9 solo si el calentamiento responde. Mañana también libre y el jueves hay TN.
+❤️ HRV media de 7 días 47 ms, por debajo de tu rango normal (54–62 ms)
+Orientación: hoy ya entrenaste; mañana libre y el jueves hay TN. Duerme 7,5 h esta noche.
 
 ## Qué explica la puntuación
-- ↓ HRV media 7 días 47,2 ms (−19 % vs. base 58 ms), aunque la de anoche fue 65 ms.
-- ↑ Sueño 8,23 h, sin deuda en el modelo; FC en reposo 56 lpm (= mediana), nocturna 58,7 (−3,3).
+- ↓ HRV 7 días 47,2 ms (−19 % vs. base 58 ms), aunque anoche fue 65 ms.
+- ↑ Sueño 8,23 h, puntuación 89; FC en reposo 56 lpm (= mediana), nocturna 58,7 (−3,3).
 - ↑ Estrés Garmin ayer 23 (mediana 38).
-- Carga: CTL 6,8, ATL 21,8; aún no penaliza la puntuación. Faltan sensaciones en Intervals.
 
 ## Carga reciente
-Semana: 8 sesiones, carga 128, sRPE 914. Hoy: dos HIIT (09:22 y 09:54, carga 27 total) sin RPE: añade los IDs i202206047 e i202211970 en la hoja RPE.
+Hoy: WOD AMRAP 15 min (RPE 8,0) y fuerza de piernas. sRPE 7 días 1.038, monotonía 0,49. Según el análisis por reglas, 15 de 25 sesiones con RPE fueron ≥ 8 (60 %) y hubo 5 veces dos días duros seguidos; tras sesiones ≥ 8 la HRV siguiente fue 50 ms frente a 55 ms (pocos días, descriptivo).
 
 ## 3 prioridades
-1. **HRV:** el informe por reglas señala 52 ms vs. 57 ms de referencia; evita encadenar días duros.
-2. **Sueño:** deuda acumulada 3,9 h en el análisis por reglas; suma 30–45 min por noche, sobre todo antes de TN.
-3. **Intensidad:** 14 de 24 sesiones con RPE ≥ 8 (58 %) y 4 veces dos días duros seguidos; intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
+1. **Espaciar lo duro:** intercalar RPE 5–6 entre sesiones exigentes, ≥ 48 h entre esfuerzos máximos.
+2. **Sueño:** acostarte 30–45 min antes, sobre todo antes de la TN del jueves.
+3. **Registrar sensaciones** en Intervals (0 de los últimos 14 días): sin ellas el modelo solo ve la parte objetiva.
 
-## Plan de 7 días (orientativo; manda la decisión del día)
-- **Mar 27:** suave/movilidad (ya entrenado).
-- **Mié 28:** exigente (libre); acuéstate pronto, mañana TN.
-- **Jue 29 (TN):** moderada por la mañana; siesta corta.
-- **Vie 30:** descanso, prioriza dormir.
-- **Sáb 31:** exigente.
+## Plan de 7 días (respeta la decisión verde, RPE máx. 9)
+- **Mié 28 (libre):** moderada, RPE ≤ 7.
+- **Jue 29 (TN):** si entrenas, por la mañana y moderado.
+- **Vie 30 (post-TN):** descanso; prioriza dormir.
+- **Sáb 31 (libre):** sesión exigente si la decisión de ese día lo permite.
 - **Dom 1/11 (MT):** movilidad o descanso.
-- **Lun 2/11 (TN):** moderada por la mañana.
 
-Máx. 2–3 sesiones RPE ≥ 8 por semana. Registra sensaciones y RPE a diario.
-
-_No es un diagnóstico médico._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
