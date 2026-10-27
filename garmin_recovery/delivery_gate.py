@@ -549,6 +549,12 @@ def fetch_chain(repo, token, crossfit_id, advanced_id, fetch=None, sleep=None):
     return chain, problems
 
 
+def _annotate(problems):
+    """V8.6: el motivo queda como anotación de GitHub, legible desde la API aunque no se puedan leer los logs."""
+    level = 'notice' if problems == ['sync_outside_report_slot'] else 'error'
+    print(f"::{level} title=Certificado no emitido::{', '.join(problems)}")
+
+
 def main():
     repo = os.environ.get('GITHUB_REPOSITORY', '')
     token = os.environ.get('GH_TOKEN', '')
@@ -559,10 +565,12 @@ def main():
     chain, problems = fetch_chain(repo, token, crossfit_id, advanced_id)
     if problems:
         print('Report gate: NOT READY: ' + ', '.join(problems))
+        _annotate(problems)
         return 0 if problems == ['sync_outside_report_slot'] else 1
     generated, problems = validate_files(chain)
     if problems:
         print('Report gate: NOT READY: ' + ', '.join(problems))
+        _annotate(problems)
         return 1
     output = Path('report_ready.json')
     _publish_post_sleep(chain, generated, datetime.now(TZ), output)
