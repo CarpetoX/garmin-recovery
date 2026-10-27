@@ -1,9 +1,9 @@
 # Garmin Recovery · Cierre matinal
 
-Martes, 27 de octubre de 2026 · 08:33 · `GR-2026-10-27-0833-780401`
+Martes, 27 de octubre de 2026 · 08:56 · `GR-2026-10-27-0856-9795bb`
 
 ```cards
-Decisión|Pendiente de datos|RPE máx. 6|unavailable
+Decisión|Listo para entrenar|RPE máx. 9|green
 Recuperación oficial|88/100|confianza high|green
 HRV|65 ms|+16 % vs mediana|green
 Sueño|8 h 14 min|puntuación 89|unavailable
@@ -13,23 +13,23 @@ Carga 7 días|6 sesiones|sRPE 914|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-27-0830 validado; 4 de 4 procesos finalizados correctamente.
-- ⚪ **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 87/100. **Decisión: Pendiente de datos**, RPE máx. 6.
+- 🟢 **Certificación:** ciclo 2026-10-27-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 87/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 8 h 14 min, puntuación 89/100.
 - ❤️ **Principal alerta:** HRV 65 ms, 16,1 % por encima de tu mediana de 28 días.
-- 🏋️ **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+- 🏋️ **Qué hacer:** Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 
 ## 1. Certificación y calidad
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-27-0830 |
+| Ciclo | 2026-10-27-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:05 |
+| Certificado generado | 08:56:11 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -74,7 +74,7 @@ La HRV está 16 % por encima de su mediana; la FC en reposo coincide con su medi
 |---|---|---|
 | Recuperación oficial | 🟢 88/100 | oficial |
 | Híbrido Garmin + local | 🟢 87/100 | salvaguarda |
-| Modelo experimental | — | sombra |
+| Modelo experimental | 🟢 78/100 | sombra |
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 67/100 | contexto |
 | Tiempo de recuperación Garmin | 10,1 h | contexto |
@@ -275,7 +275,7 @@ Turno: hoy sin dato, mañana sin dato.
 
 ### Recomendaciones
 
-1. **Pendiente de datos** — Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+1. **Listo para entrenar** — Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
@@ -333,7 +333,7 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| mar 27/10 | free | 🟢 Suave / movilidad | la decisión de hoy limita la intensidad |
+| mar 27/10 | free | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
 | mié 28/10 | free | 🔥 Exigente | día libre con margen para una sesión exigente (mañana TN: acuéstate pronto) |
 | jue 29/10 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
 | vie 30/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
@@ -345,7 +345,7 @@ Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separada
 
 ### Reglas para los próximos 7 días
 
-1. **Hoy:** respeta la decisión del día (Pendiente de datos, RPE máx. 6).
+1. **Hoy:** respeta la decisión del día (Listo para entrenar, RPE máx. 9).
 2. **Esfuerzos máximos:** como mucho 2–3 sesiones de RPE ≥ 8 en la semana y separadas ≥ 48 h.
 3. **Sueño:** suma 30–45 min cada noche en lugar de una sola noche larga; antes de un turno de noche, siesta corta.
 4. **Registro:** fatiga, agujetas y ánimo cada mañana en Intervals; RPE de cada sesión el mismo día.
@@ -355,8 +355,8 @@ _Los puntos 2 y 3 son criterios generales de entrenamiento y descanso, no una pr
 
 ## Conclusión
 
-Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ Pendiente de datos**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
+Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 Listo para entrenar**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-27-0830 · generado 27/10/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 40467672871.
+Traza: cierre matinal · ciclo 2026-10-27-0830-post-sleep · generado 27/10/2026 08:56 Europe/Madrid · certificado READY · sync_run_id 40470017246.
