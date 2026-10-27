@@ -34,12 +34,15 @@
     "reasons": [],
     "alerts": [],
     "coincident_alert_count": 0,
-    "note": "Score orientativo para decisiones de entrenamiento; no es una métrica médica ni sustituye síntomas/sensaciones."
+    "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
+    "score_before_recovery_guardrail": 100,
+    "recovery_assessment_state": "assessed",
+    "guardrails_applied": []
   },
   "recovery_today": {
     "hrv": 65.0,
-    "resting_hr": 56,
-    "sleep_secs": 29640,
+    "resting_hr": 56.0,
+    "sleep_secs": 29628,
     "sleep_hours": 8.23,
     "sleep_score": 89.0,
     "sleep_quality": 2,
@@ -102,6 +105,13 @@
       "from": "2026-09-30",
       "to": "2026-10-27",
       "note": "Daytime rolling excludes partial days; nighttime rolling may include the current completed sleep window."
+    },
+    "fusion_sources": {
+      "hrv_ms": "garmin_hrv_timeline",
+      "sleep_hours": "garmin_sleep_history",
+      "sleep_score": "garmin_sleep_history",
+      "resting_hr": "garmin_heart_rate",
+      "night_hr": "garmin_heart_rate"
     }
   },
   "baselines": {
@@ -439,5 +449,1060 @@
       "strength_set_fetch_errors": {}
     },
     "activity_metrics_generated_at": "2026-10-27T08:32:20.849296+01:00"
+  },
+  "readiness_hybrid": {
+    "score": 87,
+    "raw_score_before_guardrails": 87,
+    "status": "green",
+    "recommended_volume": "90-100%",
+    "recommendation": "normal",
+    "garmin_score": 67,
+    "garmin_level": "MODERATE",
+    "local_score": 100,
+    "local_confidence": "high",
+    "weights": {
+      "garmin": 0.4,
+      "local": 0.6
+    },
+    "source_mode": "hybrid",
+    "recovery_time_hours": 10.1,
+    "guardrails_applied": [],
+    "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
+    "score_before_recovery_guardrail": 87,
+    "intensity_guidance": "Interpretar con síntomas, dolor y sensaciones; no es un diagnóstico.",
+    "confidence": "high",
+    "recovery_assessment_state": "assessed"
+  },
+  "advanced_analytics": {
+    "generated_at": "2026-10-27T08:32:41.543494+01:00",
+    "data_quality": {
+      "generated_at": "2026-10-27T08:32:41.543494+01:00",
+      "score": 100,
+      "status": "good",
+      "confidence": "high",
+      "baseline_maturity": "mature",
+      "key_history_days": 21,
+      "issues": [],
+      "pending_today": [],
+      "today_availability_state": "evaluated",
+      "coverage_28d": {
+        "hrv": {
+          "days_present": 22,
+          "days_expected": 28,
+          "pct": 78.6
+        },
+        "resting_hr": {
+          "days_present": 28,
+          "days_expected": 28,
+          "pct": 100.0
+        },
+        "sleep_hours": {
+          "days_present": 21,
+          "days_expected": 28,
+          "pct": 75.0
+        },
+        "sleep_score": {
+          "days_present": 18,
+          "days_expected": 28,
+          "pct": 64.3
+        },
+        "respiration": {
+          "days_present": 21,
+          "days_expected": 28,
+          "pct": 75.0
+        },
+        "daytime_hr": {
+          "days_present": 28,
+          "days_expected": 28,
+          "pct": 100.0
+        },
+        "nighttime_hr": {
+          "days_present": 28,
+          "days_expected": 28,
+          "pct": 100.0
+        },
+        "stress_avg": {
+          "days_present": 26,
+          "days_expected": 28,
+          "pct": 92.9
+        },
+        "body_battery_latest": {
+          "days_present": 26,
+          "days_expected": 28,
+          "pct": 92.9
+        }
+      },
+      "today": {
+        "heart_rate_partial_day": true,
+        "day_hr_samples": 8,
+        "night_hr_samples": 248,
+        "sleep_window_available": true
+      },
+      "source_generated_at": {
+        "heart_rate": "2026-10-27T08:32:18.428311+01:00",
+        "extended": "2026-10-27T08:32:20.849296+01:00",
+        "daily": "2026-10-27T08:32:00.463175+01:00",
+        "weekly": "2026-10-27T08:32:00.463175+01:00"
+      }
+    },
+    "readiness_hybrid": {
+      "score": 87,
+      "raw_score_before_guardrails": 87,
+      "status": "green",
+      "recommended_volume": "90-100%",
+      "recommendation": "normal",
+      "garmin_score": 67,
+      "garmin_level": "MODERATE",
+      "local_score": 100,
+      "local_confidence": "high",
+      "weights": {
+        "garmin": 0.4,
+        "local": 0.6
+      },
+      "source_mode": "hybrid",
+      "recovery_time_hours": 10.1,
+      "guardrails_applied": [],
+      "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
+      "score_before_recovery_guardrail": 87,
+      "intensity_guidance": "Interpretar con síntomas, dolor y sensaciones; no es un diagnóstico.",
+      "confidence": "high",
+      "recovery_assessment_state": "assessed"
+    },
+    "personal_recovery_index": {
+      "score": 92,
+      "context": "free",
+      "baseline_used": "free",
+      "effective_baseline_days": 8,
+      "components": [
+        {
+          "metric": "hrv",
+          "value": 65.0,
+          "robust_z": 0.81,
+          "baseline_n": 9,
+          "points": 5.4
+        },
+        {
+          "metric": "nighttime_hr",
+          "value": 58.7,
+          "robust_z": -0.88,
+          "baseline_n": 11,
+          "points": 5.9
+        },
+        {
+          "metric": "resting_hr",
+          "value": 56.0,
+          "robust_z": -2.02,
+          "baseline_n": 11,
+          "points": 7.0
+        },
+        {
+          "metric": "sleep_hours",
+          "value": 8.23,
+          "robust_z": 0.31,
+          "baseline_n": 9,
+          "points": 1.4
+        },
+        {
+          "metric": "sleep_score",
+          "value": 89.0,
+          "robust_z": 0.88,
+          "baseline_n": 8,
+          "points": 4.1
+        },
+        {
+          "metric": "stress_avg",
+          "value": 12.0,
+          "robust_z": -2.29,
+          "baseline_n": 11,
+          "points": 6.0
+        },
+        {
+          "metric": "body_battery_latest",
+          "value": 98.0,
+          "robust_z": 11.87,
+          "baseline_n": 11,
+          "points": 5.0
+        },
+        {
+          "metric": "recovery_time_hours",
+          "value": 10.1,
+          "points": 4
+        },
+        {
+          "metric": "garmin_training_readiness",
+          "value": 67.0,
+          "points": 3.4
+        }
+      ],
+      "confidence": "medium",
+      "provisional": true
+    },
+    "convergence_alert": {
+      "severity": "none",
+      "signal_count": 0,
+      "signals": [],
+      "skipped_for_short_baseline": [],
+      "baseline_source": "fused_recovery_history_v2.4",
+      "baseline_scope": "overall",
+      "baseline_metrics": {
+        "hrv_ms": {
+          "n": 27,
+          "median": 56.0,
+          "mad": 7.0,
+          "scope": "overall"
+        },
+        "night_hr": {
+          "n": 28,
+          "median": 62.2,
+          "mad": 2.65,
+          "scope": "overall"
+        },
+        "resting_hr": {
+          "n": 28,
+          "median": 56.0,
+          "mad": 2.0,
+          "scope": "overall"
+        },
+        "sleep_hours": {
+          "n": 28,
+          "median": 7.3,
+          "mad": 1.21,
+          "scope": "overall"
+        },
+        "sleep_score": {
+          "n": 26,
+          "median": 70.5,
+          "mad": 15.0,
+          "scope": "overall"
+        }
+      },
+      "rule": "Alerts require converging signals and at least 7 historical observations per metric. HRV/sleep/resting/night HR use fused recovery history; stress/body battery/recovery time retain Advanced Analytics sources. Thresholds are unchanged and isolated changes are not diagnostic.",
+      "raw_metric_signal_count": 0,
+      "domain_count": 0,
+      "active_domains": [],
+      "domain_summary": {},
+      "aggregation_version": "domain_convergence_v2.4.2",
+      "aggregation_rule": "Severity is based on independent physiological domains, not raw metric count. Sleep duration + sleep score count once; resting HR + night HR count once; stress + Body Battery count once. Signal thresholds are unchanged."
+    },
+    "robust_trends": {
+      "3d": {
+        "from": "2026-10-25",
+        "to": "2026-10-27",
+        "metrics": {
+          "hrv": {
+            "n": 3,
+            "median": 65.0,
+            "mean": 56.33,
+            "p10": 27.42,
+            "p90": 81.77,
+            "mad": 20.96,
+            "slope_per_day": 23.485
+          },
+          "resting_hr": {
+            "n": 3,
+            "median": 56.0,
+            "mean": 55.0,
+            "p10": 52.0,
+            "p90": 57.6,
+            "mad": 2.0,
+            "slope_per_day": -1.0
+          },
+          "sleep_hours": {
+            "n": 3,
+            "median": 8.23,
+            "mean": 8.07,
+            "p10": 7.75,
+            "p90": 8.33,
+            "mad": 0.13,
+            "slope_per_day": 0.3
+          },
+          "sleep_score": {
+            "n": 3,
+            "median": 89.0,
+            "mean": 75.33,
+            "p10": 51.4,
+            "p90": 93.8,
+            "mad": 6.0,
+            "slope_per_day": 23.5
+          },
+          "respiration": {
+            "n": 2,
+            "median": 15.26,
+            "mean": 15.26,
+            "p10": 14.44,
+            "p90": 16.07,
+            "mad": 1.02,
+            "slope_per_day": null
+          },
+          "daytime_hr": {
+            "n": 2,
+            "median": 81.45,
+            "mean": 81.45,
+            "p10": 79.17,
+            "p90": 83.73,
+            "mad": 2.85,
+            "slope_per_day": null,
+            "partial_days_excluded": 1
+          },
+          "nighttime_hr": {
+            "n": 3,
+            "median": 58.7,
+            "mean": 64.9,
+            "p10": 57.02,
+            "p90": 75.26,
+            "mad": 2.1,
+            "slope_per_day": -10.35
+          },
+          "stress_avg": {
+            "n": 3,
+            "median": 23.0,
+            "mean": 30.33,
+            "p10": 14.2,
+            "p90": 49.4,
+            "mad": 11.0,
+            "slope_per_day": -22.0
+          },
+          "body_battery_latest": {
+            "n": 3,
+            "median": 30.0,
+            "mean": 49.0,
+            "p10": 21.2,
+            "p90": 84.4,
+            "mad": 11.0,
+            "slope_per_day": 39.5
+          }
+        }
+      },
+      "7d": {
+        "from": "2026-10-21",
+        "to": "2026-10-27",
+        "metrics": {
+          "hrv": {
+            "n": 7,
+            "median": 54.42,
+            "mean": 51.96,
+            "p10": 25.31,
+            "p90": 73.38,
+            "mad": 10.58,
+            "slope_per_day": 4.808
+          },
+          "resting_hr": {
+            "n": 7,
+            "median": 56.0,
+            "mean": 56.43,
+            "p10": 54.0,
+            "p90": 59.2,
+            "mad": 1.0,
+            "slope_per_day": -0.893
+          },
+          "sleep_hours": {
+            "n": 7,
+            "median": 7.26,
+            "mean": 7.0,
+            "p10": 5.61,
+            "p90": 8.28,
+            "mad": 0.97,
+            "slope_per_day": 0.425
+          },
+          "sleep_score": {
+            "n": 7,
+            "median": 63.0,
+            "mean": 67.29,
+            "p10": 40.8,
+            "p90": 91.4,
+            "mad": 21.0,
+            "slope_per_day": 6.179
+          },
+          "respiration": {
+            "n": 6,
+            "median": 15.26,
+            "mean": 14.23,
+            "p10": 9.76,
+            "p90": 17.66,
+            "mad": 2.4,
+            "slope_per_day": -0.721
+          },
+          "daytime_hr": {
+            "n": 6,
+            "median": 80.35,
+            "mean": 79.57,
+            "p10": 73.85,
+            "p90": 84.5,
+            "mad": 2.85,
+            "slope_per_day": 0.72,
+            "partial_days_excluded": 1
+          },
+          "nighttime_hr": {
+            "n": 7,
+            "median": 61.9,
+            "mean": 65.77,
+            "p10": 57.86,
+            "p90": 77.24,
+            "mad": 4.7,
+            "slope_per_day": -1.904
+          },
+          "stress_avg": {
+            "n": 7,
+            "median": 33.0,
+            "mean": 35.86,
+            "p10": 18.6,
+            "p90": 56.8,
+            "mad": 10.0,
+            "slope_per_day": -4.464
+          },
+          "body_battery_latest": {
+            "n": 7,
+            "median": 19.0,
+            "mean": 29.0,
+            "p10": 5.6,
+            "p90": 57.2,
+            "mad": 11.0,
+            "slope_per_day": 10.179
+          }
+        }
+      },
+      "28d": {
+        "from": "2026-09-30",
+        "to": "2026-10-27",
+        "metrics": {
+          "hrv": {
+            "n": 23,
+            "median": 52.75,
+            "mean": 53.07,
+            "p10": 37.93,
+            "p90": 68.96,
+            "mad": 11.35,
+            "slope_per_day": -0.028
+          },
+          "resting_hr": {
+            "n": 28,
+            "median": 56.0,
+            "mean": 56.43,
+            "p10": 53.0,
+            "p90": 60.0,
+            "mad": 2.0,
+            "slope_per_day": 0.021
+          },
+          "sleep_hours": {
+            "n": 22,
+            "median": 7.25,
+            "mean": 6.93,
+            "p10": 4.86,
+            "p90": 8.35,
+            "mad": 0.93,
+            "slope_per_day": 0.042
+          },
+          "sleep_score": {
+            "n": 19,
+            "median": 77.0,
+            "mean": 71.37,
+            "p10": 52.4,
+            "p90": 89.0,
+            "mad": 13.0,
+            "slope_per_day": -0.01
+          },
+          "respiration": {
+            "n": 21,
+            "median": 16.74,
+            "mean": 16.37,
+            "p10": 12.36,
+            "p90": 19.16,
+            "mad": 1.84,
+            "slope_per_day": -0.187
+          },
+          "daytime_hr": {
+            "n": 27,
+            "median": 81.8,
+            "mean": 83.66,
+            "p10": 74.4,
+            "p90": 94.24,
+            "mad": 5.8,
+            "slope_per_day": -0.263,
+            "partial_days_excluded": 1
+          },
+          "nighttime_hr": {
+            "n": 28,
+            "median": 61.7,
+            "mean": 64.02,
+            "p10": 58.58,
+            "p90": 74.05,
+            "mad": 2.4,
+            "slope_per_day": 0.022
+          },
+          "stress_avg": {
+            "n": 27,
+            "median": 38.0,
+            "mean": 38.81,
+            "p10": 27.2,
+            "p90": 56.8,
+            "mad": 8.0,
+            "slope_per_day": -0.367
+          },
+          "body_battery_latest": {
+            "n": 27,
+            "median": 18.0,
+            "mean": 21.11,
+            "p10": 5.0,
+            "p90": 35.2,
+            "mad": 9.0,
+            "slope_per_day": 0.647
+          }
+        }
+      }
+    },
+    "heart_rate_recovery": {
+      "activities_with_hrr": 3,
+      "activities_with_extended_hrr": 2,
+      "stream_calls_this_run": 1,
+      "history_file": "activity_hr_recovery.json",
+      "trends": {
+        "last_7_sessions": {
+          "sessions": 3,
+          "metrics": {
+            "hrr_1min": {
+              "n": 3,
+              "median": 16.0,
+              "mean": 16.0,
+              "p10": 13.6,
+              "p90": 18.4,
+              "mad": 3.0,
+              "slope_per_session": -1.5
+            },
+            "hrr_2min": {
+              "n": 2,
+              "median": 12.0,
+              "mean": 12.0,
+              "p10": 12.0,
+              "p90": 12.0,
+              "mad": 0.0,
+              "slope_per_session": null
+            },
+            "hrr_3min": {
+              "n": 2,
+              "median": 19.0,
+              "mean": 19.0,
+              "p10": 11.8,
+              "p90": 26.2,
+              "mad": 9.0,
+              "slope_per_session": null
+            },
+            "hrr_5min": {
+              "n": 1,
+              "median": 7.0,
+              "mean": 7.0,
+              "p10": 7.0,
+              "p90": 7.0,
+              "mad": 0.0,
+              "slope_per_session": null
+            }
+          }
+        },
+        "last_28_sessions": {
+          "sessions": 3,
+          "metrics": {
+            "hrr_1min": {
+              "n": 3,
+              "median": 16.0,
+              "mean": 16.0,
+              "p10": 13.6,
+              "p90": 18.4,
+              "mad": 3.0,
+              "slope_per_session": -1.5
+            },
+            "hrr_2min": {
+              "n": 2,
+              "median": 12.0,
+              "mean": 12.0,
+              "p10": 12.0,
+              "p90": 12.0,
+              "mad": 0.0,
+              "slope_per_session": null
+            },
+            "hrr_3min": {
+              "n": 2,
+              "median": 19.0,
+              "mean": 19.0,
+              "p10": 11.8,
+              "p90": 26.2,
+              "mad": 9.0,
+              "slope_per_session": null
+            },
+            "hrr_5min": {
+              "n": 1,
+              "median": 7.0,
+              "mean": 7.0,
+              "p10": 7.0,
+              "p90": 7.0,
+              "mad": 0.0,
+              "slope_per_session": null
+            }
+          }
+        }
+      }
+    },
+    "weekly_load": {
+      "period": {
+        "from": "2026-10-21",
+        "to": "2026-10-27"
+      },
+      "source": "session_rpe_load",
+      "daily_load": {
+        "2026-10-21": 0.0,
+        "2026-10-22": 0.0,
+        "2026-10-23": 94.3,
+        "2026-10-24": 0.0,
+        "2026-10-25": 0.0,
+        "2026-10-26": 820.0,
+        "2026-10-27": 0.0
+      },
+      "active_days": 2,
+      "sessions_with_rpe": 4,
+      "total_load": 914.3,
+      "monotony": null,
+      "strain": null,
+      "valid_for_interpretation": false,
+      "note": "Monotony/strain are contextual training-load descriptors, not medical thresholds."
+    },
+    "rpe_feedback": {
+      "feedback_activities": 24,
+      "matched_activities": 24,
+      "used_as_primary_rpe": 24,
+      "remote_csv_configured": true,
+      "remote_rows_loaded": 30,
+      "remote_latest_date": "2026-10-26",
+      "remote_fetch_policy": "cache_bust_query + no_cache_headers",
+      "advanced_run_id": "40467738593",
+      "source_rows_sha256": "a209de399c7162bf4d3a76c1e8e7bc9aea8ffc49a5b10e0f884172cb48057e59",
+      "remote_fetch_error": null,
+      "discrepancies": [],
+      "policy": "Intervals RPE has priority when present; external feedback fills missing RPE. Differences >=0.5 are reported."
+    },
+    "recovery_assessment_v2": {
+      "generated_at": "2026-10-27T08:32:42.169037+01:00",
+      "methodology_version": "recovery-reliability-v2.3.1",
+      "state": "assessed",
+      "status": "green",
+      "score": 88,
+      "confidence": "high",
+      "reason": null,
+      "missing_essential": [],
+      "fresh_sources": true,
+      "context": "night_sleep",
+      "work_shift_context": "free",
+      "sleep_context": "night_sleep",
+      "current": {
+        "date": "2026-10-27",
+        "hrv_ms": 65.0,
+        "sleep_hours": 8.23,
+        "sleep_score": 89.0,
+        "resting_hr": 56.0,
+        "night_hr": 58.7,
+        "sleep_context": "night_sleep",
+        "sleep_start_local": "2026-10-26T23:54:34+01:00",
+        "sleep_end_local": "2026-10-27T08:10:34+01:00",
+        "sources": {
+          "hrv_ms": "garmin_hrv_timeline",
+          "sleep_hours": "garmin_sleep_history",
+          "sleep_score": "garmin_sleep_history",
+          "resting_hr": "garmin_heart_rate",
+          "night_hr": "garmin_heart_rate"
+        }
+      },
+      "baseline_28d": {
+        "hrv_ms": {
+          "n": 27,
+          "median": 56.0,
+          "last7_mean": 50.14,
+          "scope": "overall"
+        },
+        "sleep_hours": {
+          "n": 28,
+          "median": 7.3,
+          "last7_mean": 7.28,
+          "scope": "overall"
+        },
+        "sleep_score": {
+          "n": 26,
+          "median": 70.5,
+          "last7_mean": 66.29,
+          "scope": "overall"
+        },
+        "resting_hr": {
+          "n": 28,
+          "median": 56.0,
+          "last7_mean": 56.86,
+          "scope": "overall"
+        },
+        "night_hr": {
+          "n": 28,
+          "median": 62.2,
+          "last7_mean": 66.33,
+          "scope": "overall"
+        }
+      },
+      "metrics_used": [
+        {
+          "metric": "hrv_ms",
+          "value": 65.0,
+          "reference": 56.0,
+          "change_pct": 16.1
+        },
+        {
+          "metric": "resting_hr",
+          "value": 56.0,
+          "reference": 56.0,
+          "delta_bpm": 0.0
+        },
+        {
+          "metric": "sleep_hours",
+          "value": 8.23,
+          "reference": 7.3
+        }
+      ],
+      "warnings": [],
+      "recommendation": "Interpretar junto con dolor, sensaciones, RPE y rendimiento; no es un diagnóstico.",
+      "limitations": [
+        "No mide fatiga neuromuscular directamente.",
+        "Puntuación heurística no validada clínicamente.",
+        "No suma valores Garmin + Intervals del mismo día."
+      ],
+      "v23": {
+        "version": "2.3.1",
+        "shift_context": "free",
+        "sleep_integrity": {
+          "main_sleep_confirmed": true,
+          "main_sleep_minutes": 494,
+          "unconfirmed_separate_events": 0,
+          "unconfirmed_separate_minutes": 0,
+          "overlapping_body_battery_events": 1,
+          "minutes_added_to_sleep": 0,
+          "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
+        },
+        "sleep_score_provenance": {
+          "confirmed_sleep_score": 89.0,
+          "readiness_sleep_field": 89.0,
+          "status": "close_values",
+          "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
+        },
+        "subjective_checkin": "not_provided",
+        "subjective_values_exported": false,
+        "intensity_guardrail": "use_v22_guidance",
+        "reason_codes": [],
+        "baseline_caution": "standard",
+        "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
+        "measurement_provenance": {
+          "sources": {
+            "confirmed_sleep": {
+              "state": "recent",
+              "measured_at": "2026-10-27T08:10:34+01:00",
+              "age_minutes": 22.1,
+              "basis": "confirmed_sleep_end",
+              "garmin_episode_confirmed": true
+            },
+            "sleep_hrv": {
+              "state": "recent",
+              "measured_at": "2026-10-27T08:06:19+01:00",
+              "age_minutes": 26.4,
+              "basis": "actual_sleep_hrv_sample"
+            },
+            "heart_rate_live": {
+              "state": "recent",
+              "measured_at": "2026-10-27T08:26:00+01:00",
+              "age_minutes": 6.7,
+              "basis": "actual_hr_sample"
+            },
+            "body_battery_live": {
+              "state": "recent",
+              "measured_at": "2026-10-27T08:03:00+01:00",
+              "age_minutes": 29.7,
+              "basis": "actual_body_battery_sample"
+            },
+            "resting_hr_summary": {
+              "state": "daily_summary_not_instantaneous",
+              "measured_at": null,
+              "age_minutes": null,
+              "basis": "daily_resting_hr_summary"
+            }
+          },
+          "invalid_core_episode": false,
+          "live_data_limited": false,
+          "limited_live_metrics": [],
+          "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
+        },
+        "sleep_fragmentation": {
+          "main_sleep_is_score_source": true,
+          "reported_naps_private": false,
+          "reported_naps_excluded_from_core_score": true,
+          "uncertain_events_remain_unconfirmed": true,
+          "validation": "not_supplied_or_not_verified",
+          "note": "User-confirmed extra naps may inform discussion but are not merged with Garmin HRV, stages or sleep-score baselines."
+        },
+        "training_guidance": {
+          "guidance_level": "individualize",
+          "session_types": {
+            "heavy_strength": "consider_planned_work_after_symptom_and_warmup_check",
+            "olympic_lifting": "consider_planned_technique_after_warmup",
+            "high_intensity_metcon": "consider_planned_session_after_warmup",
+            "easy_aerobic": "usual_program_if_well",
+            "mobility": "usual_program_if_well"
+          },
+          "recent_sessions_with_declared_rpe": 3,
+          "recent_high_rpe_sessions": 1,
+          "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
+        }
+      },
+      "input_freshness": {
+        "hrv": true,
+        "sleep": true,
+        "heart_rate": true
+      }
+    }
+  },
+  "recovery_assessment_v2": {
+    "generated_at": "2026-10-27T08:32:42.169037+01:00",
+    "methodology_version": "recovery-reliability-v2.3.1",
+    "state": "assessed",
+    "status": "green",
+    "score": 88,
+    "confidence": "high",
+    "reason": null,
+    "missing_essential": [],
+    "fresh_sources": true,
+    "context": "night_sleep",
+    "work_shift_context": "free",
+    "sleep_context": "night_sleep",
+    "current": {
+      "date": "2026-10-27",
+      "hrv_ms": 65.0,
+      "sleep_hours": 8.23,
+      "sleep_score": 89.0,
+      "resting_hr": 56.0,
+      "night_hr": 58.7,
+      "sleep_context": "night_sleep",
+      "sleep_start_local": "2026-10-26T23:54:34+01:00",
+      "sleep_end_local": "2026-10-27T08:10:34+01:00",
+      "sources": {
+        "hrv_ms": "garmin_hrv_timeline",
+        "sleep_hours": "garmin_sleep_history",
+        "sleep_score": "garmin_sleep_history",
+        "resting_hr": "garmin_heart_rate",
+        "night_hr": "garmin_heart_rate"
+      }
+    },
+    "baseline_28d": {
+      "hrv_ms": {
+        "n": 27,
+        "median": 56.0,
+        "last7_mean": 50.14,
+        "scope": "overall"
+      },
+      "sleep_hours": {
+        "n": 28,
+        "median": 7.3,
+        "last7_mean": 7.28,
+        "scope": "overall"
+      },
+      "sleep_score": {
+        "n": 26,
+        "median": 70.5,
+        "last7_mean": 66.29,
+        "scope": "overall"
+      },
+      "resting_hr": {
+        "n": 28,
+        "median": 56.0,
+        "last7_mean": 56.86,
+        "scope": "overall"
+      },
+      "night_hr": {
+        "n": 28,
+        "median": 62.2,
+        "last7_mean": 66.33,
+        "scope": "overall"
+      }
+    },
+    "metrics_used": [
+      {
+        "metric": "hrv_ms",
+        "value": 65.0,
+        "reference": 56.0,
+        "change_pct": 16.1
+      },
+      {
+        "metric": "resting_hr",
+        "value": 56.0,
+        "reference": 56.0,
+        "delta_bpm": 0.0
+      },
+      {
+        "metric": "sleep_hours",
+        "value": 8.23,
+        "reference": 7.3
+      }
+    ],
+    "warnings": [],
+    "recommendation": "Interpretar junto con dolor, sensaciones, RPE y rendimiento; no es un diagnóstico.",
+    "limitations": [
+      "No mide fatiga neuromuscular directamente.",
+      "Puntuación heurística no validada clínicamente.",
+      "No suma valores Garmin + Intervals del mismo día."
+    ],
+    "v23": {
+      "version": "2.3.1",
+      "shift_context": "free",
+      "sleep_integrity": {
+        "main_sleep_confirmed": true,
+        "main_sleep_minutes": 494,
+        "unconfirmed_separate_events": 0,
+        "unconfirmed_separate_minutes": 0,
+        "overlapping_body_battery_events": 1,
+        "minutes_added_to_sleep": 0,
+        "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
+      },
+      "sleep_score_provenance": {
+        "confirmed_sleep_score": 89.0,
+        "readiness_sleep_field": 89.0,
+        "status": "close_values",
+        "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
+      },
+      "subjective_checkin": "not_provided",
+      "subjective_values_exported": false,
+      "intensity_guardrail": "use_v22_guidance",
+      "reason_codes": [],
+      "baseline_caution": "standard",
+      "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
+      "measurement_provenance": {
+        "sources": {
+          "confirmed_sleep": {
+            "state": "recent",
+            "measured_at": "2026-10-27T08:10:34+01:00",
+            "age_minutes": 22.1,
+            "basis": "confirmed_sleep_end",
+            "garmin_episode_confirmed": true
+          },
+          "sleep_hrv": {
+            "state": "recent",
+            "measured_at": "2026-10-27T08:06:19+01:00",
+            "age_minutes": 26.4,
+            "basis": "actual_sleep_hrv_sample"
+          },
+          "heart_rate_live": {
+            "state": "recent",
+            "measured_at": "2026-10-27T08:26:00+01:00",
+            "age_minutes": 6.7,
+            "basis": "actual_hr_sample"
+          },
+          "body_battery_live": {
+            "state": "recent",
+            "measured_at": "2026-10-27T08:03:00+01:00",
+            "age_minutes": 29.7,
+            "basis": "actual_body_battery_sample"
+          },
+          "resting_hr_summary": {
+            "state": "daily_summary_not_instantaneous",
+            "measured_at": null,
+            "age_minutes": null,
+            "basis": "daily_resting_hr_summary"
+          }
+        },
+        "invalid_core_episode": false,
+        "live_data_limited": false,
+        "limited_live_metrics": [],
+        "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
+      },
+      "sleep_fragmentation": {
+        "main_sleep_is_score_source": true,
+        "reported_naps_private": false,
+        "reported_naps_excluded_from_core_score": true,
+        "uncertain_events_remain_unconfirmed": true,
+        "validation": "not_supplied_or_not_verified",
+        "note": "User-confirmed extra naps may inform discussion but are not merged with Garmin HRV, stages or sleep-score baselines."
+      },
+      "training_guidance": {
+        "guidance_level": "individualize",
+        "session_types": {
+          "heavy_strength": "consider_planned_work_after_symptom_and_warmup_check",
+          "olympic_lifting": "consider_planned_technique_after_warmup",
+          "high_intensity_metcon": "consider_planned_session_after_warmup",
+          "easy_aerobic": "usual_program_if_well",
+          "mobility": "usual_program_if_well"
+        },
+        "recent_sessions_with_declared_rpe": 3,
+        "recent_high_rpe_sessions": 1,
+        "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
+      }
+    },
+    "input_freshness": {
+      "hrv": true,
+      "sleep": true,
+      "heart_rate": true
+    }
+  },
+  "recovery_fused_baseline_28d": {
+    "hrv_ms": {
+      "n": 27,
+      "median": 56.0,
+      "last7_mean": 50.14,
+      "scope": "overall"
+    },
+    "sleep_hours": {
+      "n": 28,
+      "median": 7.3,
+      "last7_mean": 7.28,
+      "scope": "overall"
+    },
+    "sleep_score": {
+      "n": 26,
+      "median": 70.5,
+      "last7_mean": 66.29,
+      "scope": "overall"
+    },
+    "resting_hr": {
+      "n": 28,
+      "median": 56.0,
+      "last7_mean": 56.86,
+      "scope": "overall"
+    },
+    "night_hr": {
+      "n": 28,
+      "median": 62.2,
+      "last7_mean": 66.33,
+      "scope": "overall"
+    }
+  },
+  "recovery_baseline_policy": {
+    "version": "2.4.2",
+    "canonical_for_recovery_reports": "recovery_assessment.baseline_28d",
+    "convergence_history": "fused_recovery_history_v2.4",
+    "convergence_aggregation": "independent_domains",
+    "aggregation_version": "domain_convergence_v2.4.2",
+    "source": "fused Garmin timelines + Intervals fallback",
+    "excludes_current_day": true,
+    "scoring_changed": false,
+    "thresholds_changed": false,
+    "aggregation_changed": true,
+    "note": "Recovery-sensitive signals still use fused history with the same thresholds, but convergence severity is now based on independent domains so correlated metrics are not double-counted. Recovery Score and Hybrid Readiness scoring are unchanged."
+  },
+  "recovery_data_coverage": {
+    "hrv_ms": {
+      "days_present": 27,
+      "days_expected": 28,
+      "pct": 96.4
+    },
+    "sleep_hours": {
+      "days_present": 28,
+      "days_expected": 28,
+      "pct": 100.0
+    },
+    "sleep_score": {
+      "days_present": 26,
+      "days_expected": 28,
+      "pct": 92.9
+    },
+    "resting_hr": {
+      "days_present": 28,
+      "days_expected": 28,
+      "pct": 100.0
+    }
   }
 }
