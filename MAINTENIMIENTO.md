@@ -256,3 +256,8 @@ El estilo y el script del panel viven en `garmin_recovery/web/dashboard.css` y `
 ## V8.4 — Ahorro de minutos de Actions
 
 Medido el 26/10/2026: ~4.250 min/mes, sobre todo porque tras el sueño hay ~10 cadenas al día en vez de 3 y cada una lanzaba monitor, web y rutina de Claude. Ahora `garmin_recovery.publish_gate` (paso «Control de publicación» de CrossFit, antes del commit) compara la huella de lo visible (decisión, puntuación, estado del sueño, ciclo, sesiones de 3 días con su RPE) con la última publicación (`publish_gate.json`): si no cambió nada y no hay certificado nuevo, no se dispara el monitor (ni la web que cuelga de él) ni la rutina. Falla abierto. Pages cancela la publicación en curso si llega otra (`cancel-in-progress: true`). Los vigías del monitor (3 cron al día) siguen igual.
+
+## V8.6 — Sync de respaldo del cron y motivos del certificador
+
+- El cron «30 8» de GitHub llega cada día entre las 12:20 y las 15:30. Si el ciclo de las 08:30 de hoy ya está en `report_cycles.json`, `garmin_recovery.sync_guard` lo detecta y el Sync se cancela a sí mismo (aparece como «cancelled» con la anotación «Sync de respaldo innecesario»); la cadena no arranca porque Heart solo sigue a un Sync con éxito. Si el ciclo no consta (Apps Script caído), el respaldo sincroniza como siempre.
+- El certificador deja el motivo de un «NOT READY» o de una excepción como anotación de GitHub (`Certificado no emitido`, `Certificador: excepción`), legible por la API sin descargar los logs.
