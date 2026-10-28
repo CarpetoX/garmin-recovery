@@ -533,6 +533,11 @@ def render(result: dict, extras: dict | None = None) -> str:
         data["training_effect"] = extras["garmin_insights"]["training_effect"]
     if extras.get("web_failures"):
         data["web_failures"] = extras["web_failures"]
+    # V8.9: resultado de cada metcon (rondas y repeticiones) para la tabla de sesiones y el calendario
+    mres = {m["activity_id"]: m["result"] for m in (extras.get("training_blocks") or {}).get("metcons") or []
+            if isinstance(m, dict) and m.get("activity_id") and m.get("result")}
+    if mres:
+        data["metcon_results"] = mres
     from .report import categorize  # V8.7: la tabla de sesiones muestra el tipo de la app, no el de Garmin («HIIT»)
     for key in ("sessions_28d", "recent_sessions"):
         if isinstance(data.get(key), list):

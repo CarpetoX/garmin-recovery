@@ -95,6 +95,14 @@ def _round_series(detail: dict) -> dict | None:
     return None
 
 
+def _reps_sum(tot) -> float:
+    """Suma de los totales «*_reps» de un metcon (0 si no consta ninguno)."""
+    if not isinstance(tot, dict):
+        return 0
+    return sum(v for k, v in tot.items() if k.endswith("_reps") and isinstance(v, (int, float))
+               and not isinstance(v, bool) and v > 0)
+
+
 UPPER = {"db", "kb", "s2oh", "hspu", "t2b", "c2b", "du", "wb"}
 
 
@@ -157,6 +165,11 @@ def metcon_card(act: dict, block: dict) -> dict:
         result.append(f'{perf["total_reps"]} reps en total')
     elif isinstance(perf.get("totals"), dict) and perf["totals"].get("squat_clean_reps") is not None:
         result.append(f'{perf["totals"]["squat_clean_reps"]} squat clean en total')
+    else:
+        # V8.9: sin total declarado, suma de las repeticiones por ejercicio que constan (perf.totals o totals)
+        n = _reps_sum(perf.get("totals")) or _reps_sum(d.get("totals"))
+        if n:
+            result.append(f"{_fmt_n(n)} reps en total")
     official = _mmss(d.get("finish_time_seconds"))
     cap = _mmss(d.get("time_cap_seconds")) or (f'{int(d["time_cap_minutes"])}:00' if isinstance(d.get("time_cap_minutes"), (int, float)) else None)
     if official:

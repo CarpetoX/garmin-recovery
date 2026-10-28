@@ -274,11 +274,13 @@ const EFF = D.session_effort || {};
 const effTxt = {alto: 'RPE alto para tu FC', bajo: 'RPE bajo para tu FC'};
 const effTip = {alto: 'Te costó más de lo habitual para la FC registrada en este tipo de sesión.',
                 bajo: 'La FC fue alta para el esfuerzo que marcaste en este tipo de sesión.'};
+const MRES = D.metcon_results || {};  // V8.9: rondas y repeticiones de cada metcon
+const mres = id => MRES[id] ? `<span class="sres">${esc(MRES[id])}</span>` : '';
 const effFlag = id => { const e = EFF[id]; return e && e.flag ? e : null; };
 // ♥ que late a la FC media de la sesión (un latido = 60 / FC segundos)
 const beat = hr => `<span class="hrmark${hr > 0 ? ' beat' : ''}" aria-hidden="true"${hr > 0 ? ` style="--beat:${(60 / hr).toFixed(3)}s"` : ''}>♥</span>`;
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(s.category && s.category !== 'Sin detalle' ? s.category : typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(s.category && s.category !== 'Sin detalle' ? s.category : typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${mres(s.id)}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 
 // ---------- Detalle de FC de una sesión ----------
@@ -408,7 +410,7 @@ if (cal && T.length) {
       (d.shift ? ` · turno ${esc(shiftEs(d.shift))}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
       (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
       (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td class="cal-name">${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
+        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td class="cal-name">${esc(x.label || x.name || '')}${mres(x.id)}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
         : '<br><span class="weight">Sin sesiones registradas.</span>');
   };
   cal.addEventListener('click', ev => { const b = ev.target.closest('button[data-i]'); if (b) show(+b.dataset.i); });

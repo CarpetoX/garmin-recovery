@@ -93,8 +93,13 @@ class Metcons(unittest.TestCase):
     def test_rounds_format_is_a_result(self):
         m = self._card({"type": "metcon", "format": "E3MO3M", "performed": {"rounds": 8, "all_rounds_completed": True,
                         "totals": {"calories": 120, "db_hang_clean_s2oh_reps": 160, "box_jump_reps": 120}}})
-        self.assertEqual(m["result"], "8 de 8 rondas completas")
+        self.assertEqual(m["result"], "8 de 8 rondas completas · 280 reps en total")  # V8.9: suma de reps
         self.assertEqual(m["totals"], ["120 cal", "160 DB hang clean S2OH", "120 box jump"])
+
+    def test_reps_summed_from_detail_totals(self):  # V8.9: parejas con totales fuera de «performed»
+        m = self._card({"type": "metcon", "format": "3 RFT", "rounds_completed": 3,
+                        "totals": {"calories_shared_by_pair": 120, "burpee_synchronized_reps": 60, "dumbbell_snatch_synchronized_reps": 60}})
+        self.assertEqual(m["result"], "3 rondas · 120 reps en total")
 
     def test_amrap_with_distance_and_reps(self):
         m = self._card({"type": "metcon", "format": "AMRAP", "performed": {"rounds_complete": 6, "extra_distance_m": 200, "extra_reps": 10,
