@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-10-28T08:33:12.852279+01:00",
+  "generated_at": "2026-10-28T12:42:41.768389+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-28",
   "decision": {
@@ -36,7 +36,7 @@
         "version": "recovery-reliability-v2.3.1",
         "role": "oficial",
         "used_in_decision": true,
-        "score": 52,
+        "score": 58,
         "zone": "yellow",
         "state": "assessed",
         "confidence": "high",
@@ -60,7 +60,7 @@
         "version": "readiness-v3.2",
         "role": "sombra",
         "used_in_decision": true,
-        "score": 66.0,
+        "score": 68.0,
         "zone": "yellow",
         "state": "assessed",
         "confidence": "media",
@@ -84,7 +84,7 @@
         "version": "Garmin",
         "role": "contexto",
         "used_in_decision": false,
-        "score": 79.0,
+        "score": 45.0,
         "zone": null,
         "state": null,
         "confidence": null,
@@ -97,7 +97,7 @@
     "date": "2026-10-28",
     "state": "assessed",
     "zone": "yellow",
-    "score": 66.0,
+    "score": 68.0,
     "confidence": "media",
     "data_confidence": {
       "level": "alta",
@@ -136,13 +136,13 @@
       },
       {
         "component": "cardiac",
-        "z": -0.9935767726135996,
+        "z": -0.9546638441822579,
         "text": "FC en reposo 60 lpm (+4 vs. tu mediana)"
       },
       {
         "component": "sleep",
-        "z": -0.3183333333333332,
-        "text": "Sueño 7,0 h, puntuación 72, deuda 0,5 h en 3 noches"
+        "z": 0.16666666666666666,
+        "text": "Sueño 8,6 h, puntuación 75"
       },
       {
         "component": "stress",
@@ -169,27 +169,27 @@
         "label": "Variabilidad cardiaca (HRV)"
       },
       "cardiac": {
-        "z": -0.9935767726135996,
+        "z": -0.9546638441822579,
         "resting_hr": 60.0,
-        "night_hr": 66.0,
+        "night_hr": 65.7,
         "baseline_resting_hr": 56.0,
         "baseline_night_hr": 62.5,
         "resting_delta_bpm": 4.0,
-        "night_delta_bpm": 3.5,
+        "night_delta_bpm": 3.2,
         "n_baseline": 28,
-        "score": 62.6,
+        "score": 63.1,
         "weight": 0.15,
         "label": "FC en reposo y nocturna"
       },
       "sleep": {
-        "z": -0.3183333333333332,
-        "hours": 7.03,
-        "sleep_score": 72.0,
+        "z": 0.16666666666666666,
+        "hours": 8.55,
+        "sleep_score": 75.0,
         "need_hours": 7.5,
-        "debt_hours": 0.47,
+        "debt_hours": 0.0,
         "debt_nights": 3,
         "context": "night_sleep",
-        "score": 71.0,
+        "score": 77.1,
         "weight": 0.25,
         "label": "Sueño"
       },
@@ -205,29 +205,29 @@
       "load": {
         "source": "intervals_icu",
         "coverage_days": 23,
-        "ctl": 6.7,
-        "atl": 18.9,
-        "tsb": -12.3,
+        "ctl": 8.1,
+        "atl": 26.8,
+        "tsb": -18.7,
         "form_pct": null,
         "form_zone": null,
         "form_interpretable": false,
-        "week_load": 128.0,
+        "week_load": 187.0,
         "prev_week_load": 116.0,
-        "week_change_pct": 10.3,
+        "week_change_pct": 61.2,
         "week_srpe": 1037.5,
-        "week_sessions": 8,
-        "monotony": 0.49,
-        "strain": 511.3,
+        "week_sessions": 11,
+        "monotony": null,
+        "strain": null,
         "internal_load_basis": "srpe_foster",
-        "srpe_coverage_7d_pct": 100.0,
-        "srpe_coverage_28d_pct": 100.0,
+        "srpe_coverage_7d_pct": 62.0,
+        "srpe_coverage_28d_pct": 89.0,
         "acwr": null,
         "acwr_basis": "srpe_media_7_vs_28",
-        "consecutive_training_days": 0,
+        "consecutive_training_days": 3,
         "component_z": null,
         "component_basis": null,
         "notes": [
-          "CTL 6.7 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
+          "CTL 8.1 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
         ],
         "z": null,
         "score": null,
@@ -248,42 +248,42 @@
   "load": {
     "source": "intervals_icu",
     "coverage_days": 23,
-    "ctl": 6.7,
-    "atl": 18.9,
-    "tsb": -12.3,
+    "ctl": 8.1,
+    "atl": 26.8,
+    "tsb": -18.7,
     "form_pct": null,
     "form_zone": null,
     "form_interpretable": false,
-    "week_load": 128.0,
+    "week_load": 187.0,
     "prev_week_load": 116.0,
-    "week_change_pct": 10.3,
+    "week_change_pct": 61.2,
     "week_srpe": 1037.5,
-    "week_sessions": 8,
-    "monotony": 0.49,
-    "strain": 511.3,
+    "week_sessions": 11,
+    "monotony": null,
+    "strain": null,
     "internal_load_basis": "srpe_foster",
-    "srpe_coverage_7d_pct": 100.0,
-    "srpe_coverage_28d_pct": 100.0,
+    "srpe_coverage_7d_pct": 62.0,
+    "srpe_coverage_28d_pct": 89.0,
     "acwr": null,
     "acwr_basis": "srpe_media_7_vs_28",
-    "consecutive_training_days": 0,
+    "consecutive_training_days": 3,
     "component_z": null,
     "component_basis": null,
     "notes": [
-      "CTL 6.7 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
+      "CTL 8.1 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
     ]
   },
   "certificate": {
-    "generated_at": "2026-10-28T08:33:12.852279+01:00",
+    "generated_at": "2026-10-28T12:42:41.768389+01:00",
     "cycle": {
       "cycle_id": "2026-10-28-0830",
       "slot_at": "2026-10-28T08:30:00+01:00",
       "status": "ready",
       "verified_at": "2026-10-28T08:33:12.052563+01:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-10-28T08:32:26.264992+01:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-10-28T12:41:43.842345+01:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 40650680078,
@@ -309,54 +309,54 @@
     },
     "data_age": {
       "confirmed_sleep": {
-        "measured_at": "2026-10-28T07:21:00+01:00",
-        "age_minutes": 72.0,
+        "measured_at": "2026-10-28T08:44:00+01:00",
+        "age_minutes": 239.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-10-28T07:16:20+01:00",
-        "age_minutes": 77.0,
+        "age_minutes": 326.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-10-28T08:08:00+01:00",
-        "age_minutes": 25.0,
+        "measured_at": "2026-10-28T12:36:00+01:00",
+        "age_minutes": 7.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
-        "measured_at": "2026-10-28T08:00:00+01:00",
-        "age_minutes": 33.0,
+        "measured_at": "2026-10-28T12:30:00+01:00",
+        "age_minutes": 13.0,
         "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-10-28T07:32:48.170675+00:00",
+      "fetched_at": "2026-10-28T11:42:12.088124+00:00",
       "latest_date": "2026-10-27",
       "rows_sha256": "13d0a614d526ebb7",
-      "advanced_run_id": "40650759681"
+      "advanced_run_id": "40681975464"
     },
     "source_sha256": {
-      "wellness.json": "2fdadc8b954177bd",
-      "garmin_hrv_timeline.json": "9029fdd912e5a75f",
-      "garmin_sleep_history.json": "451d7988caca6e7e",
-      "garmin_extended.json": "66cb7496128bc37f",
-      "garmin_heart_rate.json": "f8205ce04abb85e8",
-      "garmin_stress.json": "380a9ffcce2bbe1c",
-      "garmin_body_battery.json": "44fc9ce72ab7843c",
-      "activities.json": "3bb68d64f41e66b5",
-      "training_feedback.json": "14447c6e25b3652c",
+      "wellness.json": "79e697672b0395ac",
+      "garmin_hrv_timeline.json": "d0634cfe5fc3714f",
+      "garmin_sleep_history.json": "fa0dbe40197663f3",
+      "garmin_extended.json": "81b75a92c1a8e255",
+      "garmin_heart_rate.json": "924838ba1dcfd516",
+      "garmin_stress.json": "75af215a860c485c",
+      "garmin_body_battery.json": "a2db6e54fcef86c8",
+      "activities.json": "01b72e42d972e2c6",
+      "training_feedback.json": "67144ba17f300e17",
       "shift_calendar.json": "49abff935151d5fc",
-      "morning_sleep_status.json": "fbd346fac8824dee",
-      "recovery_assessment.json": "cc24d26aa66ab099",
+      "morning_sleep_status.json": "03e072e905d23912",
+      "recovery_assessment.json": "40df72e83b3043a7",
       "report_ready.json": "6e47765e87f1587f",
-      "garmin_hr_timeline.json": "f1ae01258412f114",
-      "daily_summary.json": "2f4e3c0c5fa7b370",
-      "workflow_health.json": "65c94e17ba9b61c0",
-      "recovery.csv": "53b1bb4471c38d9d"
+      "garmin_hr_timeline.json": "b13c60a09dcbdd97",
+      "daily_summary.json": "eb76ca3a9ef3f4d2",
+      "workflow_health.json": "e86b8d03eba76be7",
+      "recovery.csv": "610c3cf479b322ee"
     },
     "consistency_v3_v2": {
       "status": "ok",
@@ -372,15 +372,15 @@
           "ok": true
         },
         "sleep_hours": {
-          "v3": 7.03,
-          "v2": 7.03,
+          "v3": 8.55,
+          "v2": 8.55,
           "ok": true
         }
       }
     },
     "execution_health": {
       "status": "attention",
-      "checked_at": "2026-10-28T06:42:07.244244+01:00",
+      "checked_at": "2026-10-28T08:33:26.755858+01:00",
       "alerts": [
         {
           "code": "cron_missed_dispatch_recovered",
@@ -410,9 +410,9 @@
     "window_days": 14,
     "from": "2026-10-15",
     "to": "2026-10-28",
-    "sessions": 17,
+    "sessions": 20,
     "with_rpe": 11,
-    "rpe_coverage_pct": 100.0,
+    "rpe_coverage_pct": 79.0,
     "rpe_not_applicable": [
       {
         "id": "i199091404",
@@ -445,10 +445,32 @@
         "label": "Fuerza - DB split squat / ring row feet elevated"
       }
     ],
-    "without_rpe": [],
+    "without_rpe": [
+      {
+        "id": "i202655556",
+        "start_local": "2026-10-28T09:22:15",
+        "type": "HighIntensityIntervalTraining",
+        "duration_min": 13.8,
+        "load": 6.0
+      },
+      {
+        "id": "i202655592",
+        "start_local": "2026-10-28T09:36:43",
+        "type": "HighIntensityIntervalTraining",
+        "duration_min": 24.6,
+        "load": 28.0
+      },
+      {
+        "id": "i202685333",
+        "start_local": "2026-10-28T10:21:50",
+        "type": "HighIntensityIntervalTraining",
+        "duration_min": 55.9,
+        "load": 25.0
+      }
+    ],
     "rpe_without_activity": [],
     "date_mismatch": [],
-    "status": "ok",
+    "status": "revisar",
     "rule": "Emparejado por ID exacto de actividad; las sesiones sin RPE no se rellenan ni se estiman."
   },
   "planned": {
@@ -459,7 +481,7 @@
     "rows_loaded": 0
   },
   "legacy_v2": {
-    "score": 52,
+    "score": 58,
     "status": "yellow",
     "state": "assessed",
     "date": "2026-10-28"
@@ -468,7 +490,7 @@
     "days": 35,
     "first_date": "2026-09-24",
     "last_date": "2026-10-28",
-    "sessions": 32
+    "sessions": 35
   },
   "trend_28d": [
     {
@@ -1256,7 +1278,7 @@
     },
     {
       "date": "2026-10-28",
-      "score": 66.0,
+      "score": 68.0,
       "zone": "yellow",
       "state": "assessed",
       "hrv_ms": 43.0,
@@ -1264,27 +1286,75 @@
       "hrv_low_ms": 52.9,
       "hrv_high_ms": 61.4,
       "resting_hr": 60.0,
-      "night_hr": 66.0,
-      "sleep_hours": 7.03,
-      "sleep_score": 72.0,
-      "load": 0.0,
+      "night_hr": 65.7,
+      "sleep_hours": 8.55,
+      "sleep_score": 75.0,
+      "load": 59.0,
       "srpe": null,
-      "sessions": 0,
-      "stress_avg": 26.0,
-      "garmin_readiness": 79.0,
+      "sessions": 3,
+      "stress_avg": 28.0,
+      "garmin_readiness": 45.0,
       "shift": null,
-      "ctl": 6.7,
-      "atl": 18.9,
-      "v2_score": 52,
+      "ctl": 8.1,
+      "atl": 26.8,
+      "v2_score": 58,
       "hybrid_score": 74,
       "decision_zone": "yellow",
       "deep_min": 62.0,
       "rem_min": 68.0,
       "sleep_context": "night_sleep",
-      "stress_avg_full": 26.0
+      "stress_avg_full": 28.0
     }
   ],
   "recent_sessions": [
+    {
+      "id": "i202685333",
+      "date": "2026-10-28",
+      "start_local": "2026-10-28T10:21:50",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 55.9,
+      "load": 25.0,
+      "trimp": 41.444862,
+      "avg_hr": 123.0,
+      "max_hr": 153.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i202655592",
+      "date": "2026-10-28",
+      "start_local": "2026-10-28T09:36:43",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 24.6,
+      "load": 28.0,
+      "trimp": 45.81151,
+      "avg_hr": 157.0,
+      "max_hr": 192.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i202655556",
+      "date": "2026-10-28",
+      "start_local": "2026-10-28T09:22:15",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 13.8,
+      "load": 6.0,
+      "trimp": 9.946705,
+      "avg_hr": 122.0,
+      "max_hr": 162.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
     {
       "id": "i202211970",
       "date": "2026-10-27",
@@ -1430,56 +1500,6 @@
       "max_hr": 178.0,
       "rpe": 8.0,
       "srpe": 105.6,
-      "removed": 0
-    },
-    {
-      "id": "i199422320",
-      "date": "2026-10-20",
-      "start_local": "2026-10-20T11:36:05",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "Fuerza - EMOM 8 min: DB split squat / ring row pies elevados",
-      "duration_min": 16.1,
-      "load": 7.0,
-      "trimp": 11.063089,
-      "avg_hr": 120.0,
-      "max_hr": 151.0,
-      "rpe": null,
-      "srpe": null,
-      "removed": 0,
-      "rpe_na": true
-    },
-    {
-      "id": "i199136845",
-      "date": "2026-10-19",
-      "start_local": "2026-10-19T18:22:50",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "Técnica - toes to bar",
-      "duration_min": 47.7,
-      "load": 20.0,
-      "trimp": 34.090836,
-      "avg_hr": 118.0,
-      "max_hr": 140.0,
-      "rpe": null,
-      "srpe": null,
-      "removed": 0,
-      "rpe_na": true
-    },
-    {
-      "id": "i199113233",
-      "date": "2026-10-19",
-      "start_local": "2026-10-19T17:58:19",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "EMOM 12 min - echo bike / squat clean",
-      "duration_min": 11.8,
-      "load": 13.0,
-      "trimp": 21.972296,
-      "avg_hr": 155.0,
-      "max_hr": 186.0,
-      "rpe": 9.0,
-      "srpe": 106.2,
       "removed": 0
     }
   ],
@@ -2001,6 +2021,54 @@
       "max_hr": 179.0,
       "rpe": 8.0,
       "srpe": 123.2,
+      "removed": 0
+    },
+    {
+      "id": "i202655556",
+      "date": "2026-10-28",
+      "start_local": "2026-10-28T09:22:15",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 13.8,
+      "load": 6.0,
+      "trimp": 9.946705,
+      "avg_hr": 122.0,
+      "max_hr": 162.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i202655592",
+      "date": "2026-10-28",
+      "start_local": "2026-10-28T09:36:43",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 24.6,
+      "load": 28.0,
+      "trimp": 45.81151,
+      "avg_hr": 157.0,
+      "max_hr": 192.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i202685333",
+      "date": "2026-10-28",
+      "start_local": "2026-10-28T10:21:50",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 55.9,
+      "load": 25.0,
+      "trimp": 41.444862,
+      "avg_hr": 123.0,
+      "max_hr": 153.0,
+      "rpe": null,
+      "srpe": null,
       "removed": 0
     }
   ],
