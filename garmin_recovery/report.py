@@ -24,7 +24,7 @@ INK = "#77766f"          # legible sobre fondo claro y oscuro de GitHub
 GRID = "rgba(119,118,111,0.28)"
 S1, S2 = "#2a78d6", "#eb6834"          # serie principal / secundaria
 CATEGORY_COLORS = {"WOD": "#eb6834", "Fuerza": "#2a78d6", "Halterofilia": "#1baf7a",
-                   "Técnica": "#eda100", "Sin detalle": "#9a9990"}
+                   "Técnica": "#eda100", "Calentamiento": "#b07fd6", "Sin detalle": "#9a9990"}
 
 
 def fmt(v, d=0, unit=""):
@@ -119,17 +119,10 @@ def validation_block(mv: dict | None) -> list[str]:
 
 
 def categorize(session: dict) -> str:
-    text = f"{session.get('label') or ''} {session.get('name') or ''}".lower()
-    if any(k in text for k in ("snatch", "clean", "jerk", "arrancada", "envión", "envion", "cargada", "halterofilia")):
-        return "Halterofilia"
-    if any(k in text for k in ("wod", "amrap", "for time", "rft", "rounds", "metcon", "chipper", "emom")):
-        return "WOD"
-    if any(k in text for k in ("fuerza", "sentadilla", "squat", "peso muerto", "deadlift", "press", "banca",
-                               "prensa", "dominada", "pull-up")):
-        return "Fuerza"
-    if any(k in text for k in ("técnica", "tecnica", "skill", "movilidad")):
-        return "Técnica"
-    return "Sin detalle"
+    """V8.7: una sola regla para toda la app (session_kind): un WOD con hang clean es WOD; una sesión de halterofilia va
+    entera a Halterofilia; el calentamiento y la técnica, por su nombre."""
+    from .session_kind import categorize as kind
+    return kind(session.get("label"), session.get("name"))
 
 
 # ---------------------------------------------------------------- SVG

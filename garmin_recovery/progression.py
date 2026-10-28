@@ -100,7 +100,7 @@ def extract_entries(crossfit: dict) -> tuple[dict[str, dict], set[str]]:
                     complete = complete and prev["volume_complete"]
                 top = max(sets, key=lambda s: (s["load"], s["reps"]))
                 entries[key] = {
-                    "date": act["date"], "activity_id": aid, "activity": (block.get("activity") or "")[:80],
+                    "date": act["date"], "activity_id": aid, "activity": (block.get("activity") or "")[:200],  # V8.7: se recorta al mostrarlo, con «…»
                     "exercise": str(name), "key": norm(name), "unit": unit or "", "unit_label": UNITS.get(unit or "", unit or "sin unidad"),
                     "top_load": top["load"], "top_reps": top["reps"],
                     "volume": round(sum(s["load"] * s["reps"] * s["count"] for s in sets), 1),

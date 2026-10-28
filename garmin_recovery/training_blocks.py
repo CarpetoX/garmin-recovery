@@ -19,6 +19,39 @@ def is_olympic(name: str) -> bool:
     return bool(OLYMPIC.search(norm(name)))
 
 
+def clip(text, limit: int = 90) -> str:
+    """Recorta en un espacio y marca el corte con «…» (V8.7: antes se cortaba a media palabra)."""
+    t = " ".join(str(text or "").split())
+    if len(t) <= limit:
+        return t
+    cut = t[:limit - 1]
+    sp = cut.rfind(" ")
+    return (cut[:sp] if sp > limit * 0.6 else cut).rstrip(" -/+·,;") + "…"
+
+
+def _interval(seconds) -> str | None:
+    if not isinstance(seconds, (int, float)) or isinstance(seconds, bool) or seconds <= 0:
+        return None
+    m, s = divmod(int(round(seconds)), 60)
+    return f"cada {m}'" + (f'{s:02d}"' if s else "") if m else f'cada {s}"'
+
+
+def complexes_of(detail: dict | None) -> list[dict]:
+    """Complex tal como se hicieron (V8.7): nombre, repeticiones de cada movimiento, intervalo y cargas por serie."""
+    out = []
+    for c in (detail or {}).get("complexes") or []:
+        if not isinstance(c, dict) or not c.get("name"):
+            continue
+        loads = [x for x in c.get("loads_kg") or [] if isinstance(x, (int, float)) and not isinstance(x, bool)]
+        reps = c.get("reps") if isinstance(c.get("reps"), dict) else {}
+        scheme = "+".join(_fmt_n(v) for v in reps.values() if isinstance(v, (int, float)))
+        out.append({"name": str(c["name"]), "approach": bool(c.get("approach")), "scheme": scheme or None,
+                    "interval": _interval(c.get("interval_seconds")), "loads": loads,
+                    "sets": int(c["sets"]) if isinstance(c.get("sets"), int) else len(loads) or None,
+                    "top": max(loads) if loads else None})
+    return out
+
+
 def _fmt_n(v) -> str:
     return f"{v:g}".replace(".", ",") if isinstance(v, (int, float)) else str(v)
 
@@ -62,6 +95,26 @@ def _round_series(detail: dict) -> dict | None:
     return None
 
 
+UPPER = {"db", "kb", "s2oh", "hspu", "t2b", "c2b", "du", "wb"}
+
+
+def _totals(perf: dict) -> list[str]:
+    """Totales declarados del metcon («120 cal», «1.400 m», «160 DB hang clean S2OH»), tal como constan (V8.7)."""
+    tot = perf.get("totals") if isinstance(perf.get("totals"), dict) else {}
+    out = []
+    for k, v in tot.items():
+        if not isinstance(v, (int, float)) or isinstance(v, bool) or v <= 0:
+            continue
+        if k == "calories":
+            out.append(f"{_fmt_n(v)} cal")
+        elif k in ("run_m", "distance_m"):
+            out.append(f"{v:,.0f}".replace(",", ".") + " m" + (" de carrera" if k == "run_m" else ""))
+        elif k.endswith("_reps"):
+            words = [w.upper() if w in UPPER else w for w in k[:-5].split("_")]
+            out.append(f"{_fmt_n(v)} {' '.join(words)}")
+    return out if len(out) >= 2 else []
+
+
 def metcon_card(act: dict, block: dict) -> dict:
     d = block.get("detail_json") or {}
     perf = d.get("performed") if isinstance(d.get("performed"), dict) else {}
@@ -83,13 +136,21 @@ def metcon_card(act: dict, block: dict) -> dict:
     result, timing = [], []
     if perf.get("rounds_complete") is not None:
         txt = f'{perf["rounds_complete"]} rondas'
-        if perf.get("extra_reps"):
+        if perf.get("extra_distance_m") and perf.get("extra_reps"):  # V8.7: p. ej. 6 rondas + 200 m + 10 wall balls
+            txt += f' + {_fmt_n(perf["extra_distance_m"])} m + {perf["extra_reps"]} reps'
+        elif perf.get("extra_reps"):
             txt += f' + {perf["extra_reps"]} reps'
         elif perf.get("extra_distance_m"):
             txt += f' + {_fmt_n(perf["extra_distance_m"])} m de {perf.get("extra_exercise") or "la siguiente estación"}'
         result.append(txt)
     elif d.get("rounds_completed") is not None:
         result.append(f'{d["rounds_completed"]} rondas')
+    elif isinstance(perf.get("rounds"), int) and not isinstance(perf.get("rounds"), bool):
+        # V8.7: EMOM / E3MO3M por rondas (no AMRAP): «8 de 8 rondas completas»
+        n = perf["rounds"]
+        done = perf.get("all_rounds_completed")
+        result.append(f"{n} de {n} rondas completas" if done is True else f"{n} rondas, alguna incompleta" if done is False
+                      else f"{n} rondas")
     if perf.get("completed") and not result:
         result.append("completado")
     if perf.get("total_reps") is not None:
@@ -112,8 +173,8 @@ def metcon_card(act: dict, block: dict) -> dict:
     minutes = d.get("recorded_garmin_minutes") if isinstance(d.get("recorded_garmin_minutes"), (int, float)) else act.get("recorded_minutes")
     return {
         "date": act["date"], "activity_id": str(act.get("activity_id") or ""), "format": str(fmt),
-        "partner": bool(d.get("partner_workout")), "title": (block.get("activity") or "")[:90],
-        "prescription": presc, "result": " · ".join(result) or None, "timing": timing,
+        "partner": bool(d.get("partner_workout")), "title": clip(block.get("activity"), 90),
+        "prescription": presc, "result": " · ".join(result) or None, "totals": _totals(perf), "timing": timing,
         "rpe": d.get("rpe") if isinstance(d.get("rpe"), (int, float)) else act.get("rpe_used"),
         "minutes": round(float(minutes), 1) if isinstance(minutes, (int, float)) else None,
         "rounds": _round_series(d), "note": note,
@@ -135,29 +196,51 @@ def _compress(sets: list[dict]) -> str:
     return " · ".join(out)
 
 
-def lift_sessions(entries: dict[str, dict], rpe_map: dict[str, float], olympic: bool, limit: int = 12) -> list[dict]:
-    """Sesiones de fuerza (olympic=False) u halterofilia (olympic=True) con sus ejercicios, de más reciente a más antigua."""
+def olympic_sessions(entries: dict[str, dict]) -> set[str]:
+    """V8.7: qué sesiones van enteras a Halterofilia (por su nombre en la hoja y sus ejercicios), sin partirlas."""
+    from .session_kind import is_olympic_session
+    by: dict[str, dict] = {}
+    for e in entries.values():
+        g = by.setdefault(str(e["activity_id"]), {"title": e.get("activity") or "", "names": []})
+        g["names"].append(e["exercise"])
+    return {aid for aid, g in by.items() if is_olympic_session(g["title"], g["names"])}
+
+
+def lift_sessions(entries: dict[str, dict], rpe_map: dict[str, float], olympic: bool, limit: int = 12,
+                  complexes: dict[str, list] | None = None) -> list[dict]:
+    """Sesiones de fuerza (olympic=False) u halterofilia (olympic=True) con sus ejercicios, de más reciente a más antigua.
+    V8.7: la sesión va entera a un lado u otro (un complex con front squat no se parte) y lleva sus complex si constan."""
+    oly = olympic_sessions(entries)
     by: dict[tuple[str, str], dict] = {}
     for e in entries.values():
-        if is_olympic(e["exercise"]) != olympic:
+        if (str(e["activity_id"]) in oly) != olympic:
             continue
-        s = by.setdefault((e["date"], e["activity_id"]), {"date": e["date"], "activity_id": e["activity_id"], "title": e["activity"],
-                                                          "rpe": rpe_map.get(e["activity_id"]), "exercises": []})
+        s = by.setdefault((e["date"], e["activity_id"]), {"date": e["date"], "activity_id": e["activity_id"], "title": clip(e["activity"], 140),
+                                                          "rpe": rpe_map.get(e["activity_id"]), "exercises": [],
+                                                          "complexes": (complexes or {}).get(str(e["activity_id"])) or []})
         s["exercises"].append({"name": e["exercise"], "unit": e["unit_label"], "top_load": e["top_load"], "top_reps": e["top_reps"],
                                "sets": _compress(e["sets"]), "work_sets": e["work_sets"], "volume": e["volume"],
-                               "volume_complete": e["volume_complete"], "rpe": e.get("rpe")})
+                               "volume_complete": e["volume_complete"], "rpe": e.get("rpe"),
+                               "reps": sum(x["reps"] * int(x.get("count") or 1) for x in e["sets"])})
+    for s in by.values():
+        bar = [x for x in s["exercises"] if x["unit"] == "barra"]
+        s["total_reps"] = round(sum(x["reps"] for x in s["exercises"]))
+        s["bar_volume"] = round(sum(x["volume"] for x in bar)) if bar else None
+        s["bar_volume_complete"] = all(x["volume_complete"] for x in bar)
     out = sorted(by.values(), key=lambda s: (s["date"], s["activity_id"]), reverse=True)
     return out[:limit]
 
 
 def weekly_volume(entries: dict[str, dict], olympic: bool, today: str, weeks: int = 6) -> list[dict]:
-    """Volumen mínimo verificado de barra (kg·reps con carga registrada) por semana natural, incluida la actual."""
+    """Volumen mínimo verificado de barra (kg·reps con carga registrada) por semana natural, incluida la actual.
+    V8.7: cada sesión suma entera a Fuerza o a Halterofilia, igual que en sus tarjetas."""
     t = _date.fromisoformat(today)
     monday = t - timedelta(days=t.weekday())
     starts = [monday - timedelta(weeks=i) for i in range(weeks - 1, -1, -1)]
     out = [{"start": s.isoformat(), "volume": 0.0, "sessions": set(), "complete": True} for s in starts]
+    oly = olympic_sessions(entries)
     for e in entries.values():
-        if is_olympic(e["exercise"]) != olympic or e["unit"] != "kg_total_barra":
+        if (str(e["activity_id"]) in oly) != olympic or e["unit"] != "kg_total_barra":
             continue
         d = _date.fromisoformat(e["date"])
         for w in out:
@@ -178,6 +261,7 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
     entries = entries or {}
     rpe_map = _rpe_by_activity(crossfit)
     metcons, other = [], []
+    cx: dict[str, list] = {}
     for act in crossfit.get("activities") or []:
         if not isinstance(act, dict) or not act.get("date"):
             continue
@@ -187,11 +271,13 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
                 continue
             if d.get("type") == "metcon":
                 metcons.append(metcon_card(act, block))
+            elif complexes_of(d):
+                cx.setdefault(str(act.get("activity_id") or ""), []).extend(complexes_of(d))
     metcons.sort(key=lambda m: (m["date"], m["activity_id"]), reverse=True)
     t = _date.fromisoformat(today)
     last7 = (t - timedelta(days=6)).isoformat()
-    fz = lift_sessions(entries, rpe_map, False)
-    hl = lift_sessions(entries, rpe_map, True)
+    fz = lift_sessions(entries, rpe_map, False, complexes=cx)
+    hl = lift_sessions(entries, rpe_map, True, complexes=cx)
     # V7.29: toda actividad sin tarjeta de fuerza, halterofilia o metcon sale en «Técnica y otras» (calentamientos,
     # técnica y sesiones sin detalle estructurado), para que ningún entrenamiento quede fuera de Entrenos.
     shown = {str(x["activity_id"]) for x in fz + hl + metcons}
@@ -204,7 +290,7 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
         d = b.get("detail_json") if isinstance(b.get("detail_json"), dict) else {}
         kind = d.get("type") if d.get("type") in SKIP_TYPES else "other"
         other.append({"date": act["date"], "activity_id": aid, "kind": kind,
-                      "title": (b.get("activity") or act.get("name") or "Sesión")[:90],
+                      "title": clip(b.get("activity") or act.get("name") or "Sesión", 90),
                       "rpe": act.get("rpe_used") if isinstance(act.get("rpe_used"), (int, float)) else None,
                       "minutes": act.get("recorded_minutes"), "note": (b.get("notes") or "")[:400]})
     mc7 = [m for m in metcons if m["date"] >= last7]

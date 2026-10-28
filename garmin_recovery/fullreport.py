@@ -20,6 +20,18 @@ MONTHS = ("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agost
           "octubre", "noviembre", "diciembre")
 BAR = "█"
 
+SHIFT_ES = {"MT": "MT (08–22)", "TN": "TN (15–08)", "free": "libre", "post-TN": "libre tras la noche", "unknown": "sin turno registrado"}
+
+
+def _shift_es(day: str, cal: dict) -> str:
+    """V8.7: en los meses confirmados un día sin turno es libre (antes salía «sin dato»), y en español."""
+    from . import shift_calendar
+    try:
+        c = {"days": (cal or {}).get("days") or {}, "confirmed_months": (cal or {}).get("confirmed_months") or []}
+        return SHIFT_ES.get(shift_calendar.resolve_day(day, c)["label"], "sin turno registrado")
+    except (ValueError, TypeError, KeyError):
+        return "sin turno registrado"
+
 
 def _read(root: Path, name: str):
     try:
@@ -120,7 +132,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     cf = _read(root, "crossfit_insights.json")
     ready = _read(root, "report_ready.json")
     cycles = _read(root, "report_cycles.json")
-    shifts = (_read(root, "shift_calendar.json").get("days")) or {}
+    shift_cal = _read(root, "shift_calendar.json")
     registry = {m.get("id"): m for m in dec.get("registry") or [] if isinstance(m, dict)}
     v2, hyb = registry.get("recovery_assessment_v2", {}), registry.get("readiness_hybrid", {})
     tr = _d(ext, "days", today, "training_readiness", default={}) or _d(_last_day(ext)[1], "training_readiness", default={})
@@ -182,7 +194,13 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     missed = (_d(result, "certificate", "execution_health", "missed_slots", default=[]) or [])
     if missed:
         add(f"\n⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: {', '.join(str(m)[5:16].replace('T', ' ') for m in missed)}.")
-    add("\nLa calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.")
+    newer = bool(cert.get("data_newer_than_certified_cycle"))
+    synced = str(cert.get("data_synced_at") or "")[11:16]
+    # V8.7: si los datos vienen de un Sync posterior al ciclo (p. ej. manual), se dice; antes se negaba siempre
+    add("\nLa calidad describe los datos disponibles, no el software. "
+        + (f"Incluye datos de un Sync posterior al ciclo{' (' + synced + ')' if synced else ''}, sin certificado de franja propio: "
+           "sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado."
+           if newer else "No se han incorporado mediciones posteriores al ciclo."))
     try:
         from . import source_health
         add(source_health.to_markdown(source_health.collect(root)).rstrip())
@@ -347,8 +365,13 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         peak = max(daily, key=lambda k: daily[k] or 0)
         if (daily[peak] or 0) > 0:
             add(f"\nEl {short_date(peak)} concentra la mayor carga sRPE de la semana. La relación con las señales de recuperación es descriptiva, no causal.")
-    if _num(_d(adv, "weekly_load", "monotony")) is not None and _d(adv, "weekly_load", "valid_for_interpretation"):
-        add(f"\nMonotonía {n(_d(adv, 'weekly_load', 'monotony'), 1)} · strain {n(_d(adv, 'weekly_load', 'strain'))} (descriptores de contexto, sin umbral médico).")
+    # V8.7: la misma monotonía y strain que el informe del ciclo y la app (carga de readiness_v3); la analítica avanzada
+    # usa otra desviación típica y daba otra cifra. Solo si falta, se recurre a ella.
+    mono, strain = _num(_d(result, "load", "monotony")), _num(_d(result, "load", "strain"))
+    if mono is None and _num(_d(adv, "weekly_load", "monotony")) is not None and _d(adv, "weekly_load", "valid_for_interpretation"):
+        mono, strain = _num(_d(adv, "weekly_load", "monotony")), _num(_d(adv, "weekly_load", "strain"))
+    if mono is not None:
+        add(f"\nMonotonía {n(mono, 2)} · strain {n(strain)} (descriptores de contexto, sin umbral médico).")
 
     # 6 ------------------------------------------------------------------
     add("\n## 6. Fuerza, halterofilia y metcons\n")
@@ -413,7 +436,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     # 7 ------------------------------------------------------------------
     add("\n## 7. Balance y orientación\n")
     tomorrow = (date.fromisoformat(today) + timedelta(days=1)).isoformat()
-    add(f"Turno: hoy {shifts.get(today, 'sin dato')}, mañana {shifts.get(tomorrow, 'sin dato')}.")
+    add(f"Turno: hoy {_shift_es(today, shift_cal)}, mañana {_shift_es(tomorrow, shift_cal)}.")
     good, bad = [], []
     sh_ = _num(cur.get("sleep_hours"))
     if sh_ is not None and _num(_d(base, "sleep_hours", "median")) and sh_ >= _d(base, "sleep_hours", "median"):

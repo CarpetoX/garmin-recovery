@@ -8,19 +8,21 @@ from datetime import date, timedelta
 import math
 
 PATTERNS = {
+    # V8.7: los olímpicos primero (un squat clean es halterofilia, no sentadilla) y los tirones con sus nombres habituales
+    'olympic_lift': ('clean', 'snatch', 'jerk', 'arrancada', 'cargada', 'envion', 'envión'),
     'hinge': ('peso muerto', 'deadlift', 'rdl', 'romanian deadlift', 'good morning', 'kettlebell swing'),
     'squat': ('sentadilla', 'squat', 'thruster', 'wall ball', 'goblet squat',
               'prensa horizontal', 'prensa de piernas', 'prensa inclinada', 'leg press'),
     'knee_flexion': ('curl femoral', 'curl de isquios', 'leg curl', 'hamstring curl'),
-    'chest_isolation': ('aperturas de pecho', 'chest fly', 'pec deck', 'crossover'),
+    'chest_isolation': ('aperturas', 'chest fly', 'pec deck', 'crossover'),
+    'biceps_isolation': ('curl de bíceps', 'curl bíceps', 'curl de biceps', 'curl biceps', 'bicep curl', 'biceps curl', 'curl martillo'),
     'triceps_isolation': ('tríceps', 'triceps', 'pressdown', 'extensión de codo'),
     'horizontal_push': ('bench press', 'press banca', 'press de pecho', 'press inclinado',
                         'press superinclinado', 'chest press', 'push-up', 'flexion',
                         'floor press', 'fondos de pecho', 'chest dips'),
-    'vertical_push': ('shoulder press', 'strict press', 'push press', 'press militar', 'jerk'),
-    'vertical_pull': ('pull-up', 'dominada', 'chest-to-bar', 'toes-to-bar'),
-    'horizontal_pull': ('remo', 'bent-over row', 'barbell row', 'dumbbell row'),
-    'olympic_lift': ('clean', 'snatch', 'arrancada', 'cargada'),
+    'vertical_push': ('shoulder press', 'strict press', 'push press', 'press militar'),
+    'vertical_pull': ('pull-up', 'pull up', 'pullup', 'chin up', 'chin-up', 'dominada', 'chest-to-bar', 'jalón', 'lat pulldown'),
+    'horizontal_pull': ('remo', 'ring row', 'bent-over row', 'barbell row', 'dumbbell row'),
     'single_leg': ('lunge', 'zancada', 'split squat', 'step-up'),
     'core': ('sit-up', 'situp', 'plank', 'plancha', 'abdominales', 'hollow'),
 }
@@ -146,7 +148,7 @@ def analyze(activities, as_of):
                 e1rm_min, top_kg, top_reps = epley_lower_bound(exercise.get('sets', []), equipment)
                 peak_load = None
                 for item in exercise.get('sets', []):
-                    if not isinstance(item, dict): continue
+                    if not isinstance(item, dict) or item.get('bar_empty'): continue  # V8.7: barra vacía fuera, como en la app
                     count = num(item.get('count'))
                     count = int(count) if count is not None and count >= 1 and count.is_integer() else 1
                     total_sets += count

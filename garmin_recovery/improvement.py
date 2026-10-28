@@ -50,7 +50,28 @@ def _finding(key, area, severity, observed, why, action, evidence=""):
             "evidence": evidence}
 
 
-def _hrv(trend, today):
+def _hrv(trend, today, comp=None):
+    # V8.7: la misma media de 7 días y la misma base que la puntuación y la app (media de ln(rMSSD)); antes esta regla
+    # usaba la media aritmética y podía decir «estable» mientras la app marcaba la HRV por debajo de lo normal.
+    c = comp if isinstance(comp, dict) else {}
+    roll, base = _num(c.get("rolling_ms")), _num(c.get("baseline_ms"))
+    if roll is not None and base and (c.get("n_rolling") or 0) >= 4:
+        d = (roll / base - 1) * 100
+        lo, hi = _num(c.get("normal_low_ms")), _num(c.get("normal_high_ms"))
+        band = f"; tu rango normal es {_f(lo, 1)}–{_f(hi, 1)} ms" if lo is not None and hi is not None else ""
+        obs = (f"HRV media de los últimos {c.get('n_rolling')} días: {_f(roll, 1)} ms frente a tu base de {_f(base)} ms "
+               f"({'+' if d > 0 else ''}{_f(d)} %){band}. Es la misma media (logarítmica) que usa la puntuación.")
+        below = lo is not None and roll < lo
+        if d <= -10 or (below and d <= -5):
+            return _finding("hrv", "HRV", 3, obs, "Una HRV sostenida por debajo de tu referencia suele acompañar a más fatiga o menos descanso.",
+                            "Baja la intensidad unos días, protege el sueño y reevalúa en una semana.", obs)
+        if d <= -5 or below:
+            return _finding("hrv", "HRV", 2, obs, "Tendencia algo por debajo de tu referencia.",
+                            "Evita acumular días muy exigentes seguidos y vigila el sueño.", obs)
+        if d >= 5:
+            return _finding("hrv", "HRV", 0, obs, "Tendencia por encima de tu referencia: buena señal de recuperación.",
+                            "Puedes sostener la carga actual si el sueño acompaña.", obs)
+        return _finding("hrv", "HRV", 0, obs, "Estable respecto a tu referencia.", "Sin cambios necesarios.", obs)
     rows = [t for t in trend if t["date"] <= today and _num(t.get("hrv_ms")) is not None]
     recent, prior = [t["hrv_ms"] for t in rows[-7:]], [t["hrv_ms"] for t in rows[:-7]]
     if len(recent) < 4 or len(prior) < 8:
@@ -261,7 +282,7 @@ def analyze(root, result: dict, crossfit: dict | None = None) -> dict:
     trend = [t for t in result.get("trend_28d") or [] if isinstance(t, dict)]
     sessions = [s for s in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(s, dict)]
     coverage = _num((result.get("load") or {}).get("srpe_coverage_28d_pct"))
-    items = [_hrv(trend, today), _rhr(trend, today), _sleep(trend, today, _ext_days(root)), _regularity(root, today),
+    items = [_hrv(trend, today, ((result.get("readiness") or {}).get("components") or {}).get("hrv")), _rhr(trend, today), _sleep(trend, today, _ext_days(root)), _regularity(root, today),
              _intensity(sessions, today, coverage), _response(trend, sessions, today), _strength(crossfit),
              _logging(root, trend, sessions, today)]
     findings = [f for f in items if f]

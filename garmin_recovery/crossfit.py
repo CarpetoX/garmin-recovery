@@ -143,7 +143,8 @@ def sets_volume(obj):
         if not isinstance(sets, list):
             continue
         for item in sets:
-            if not isinstance(item, dict):
+            # V8.7: la barra vacía de calentamiento no cuenta, igual que en la app (antes el informe daba otra cifra)
+            if not isinstance(item, dict) or item.get('bar_empty'):
                 continue
             count = number(item.get('count'))
             count = int(count) if count is not None and count >= 1 and count.is_integer() else 1

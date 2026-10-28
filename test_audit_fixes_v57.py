@@ -104,7 +104,8 @@ class ValidatorFixes(unittest.TestCase):
         window = [s for s in self.result["sessions_28d"]
                   if s["date"] >= (date.fromisoformat(self.result["date"]) - timedelta(days=13)).isoformat() and s.get("load")]
         svg = chart_sessions(self.result["sessions_28d"], self.result["date"])
-        legend = sum(1 for c in ("WOD", "Fuerza", "Halterofilia", "Técnica", "Sin detalle") if f">{c}<" in svg)
+        from garmin_recovery.report import CATEGORY_COLORS  # V8.7: incluye «Calentamiento»
+        legend = sum(1 for c in CATEGORY_COLORS if f">{c}<" in svg)
         shapes = svg.count('<path d="M') + svg.count("<rect x=") - legend
         self.assertEqual(shapes, len(window))
 

@@ -100,7 +100,7 @@ def _progression_html(prog: dict | None, kind: str | None = None) -> str:
     stats = ""
     if summ.get("available"):
         stats = (f'<p class="pg-sum"><b>{summ["up"]}</b> ▲ suben · <b>{summ["flat"]}</b> = igual · <b>{summ["down"]}</b> ▼ bajan'
-                 f'<small>mejor carga frente a la sesión anterior, {summ["comparable"]} ejercicios repetidos</small></p>')
+                 f'<small>mejor carga frente a la sesión anterior, {summ["comparable"]} ejercicios repetidos' + (f' de {kind}' if kind else '') + '</small></p>')
     else:
         stats = '<p class="pg-sum"><small>Aún no hay ningún ejercicio repetido en dos sesiones con cargas registradas.</small></p>'
     once_html = ""
@@ -169,6 +169,11 @@ def _hr_slot(activity_id) -> str:
     return f'<div class="hrmini" data-id="{_esc(activity_id)}" hidden></div>' if activity_id else ""
 
 
+def _thou(v) -> str:
+    """Miles con punto, como en el informe («2.529»); antes la app escribía «2529»."""
+    return f"{round(v):,}".replace(",", ".")
+
+
 def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
     if not sessions:
         return f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">{_esc(empty)}</p></section>'
@@ -177,13 +182,30 @@ def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
         rows = ""
         for e in s["exercises"]:
             name = e["name"][:1].upper() + e["name"][1:]
-            vol = (f'{_kg(round(e["volume"]))} kg' + ("" if e["volume_complete"] else "*")) if e["unit"] == "barra" else ""
+            vol = (f'{_thou(e["volume"])} kg' + ("" if e["volume_complete"] else "*")) if e["unit"] == "barra" else ""
             rows += (f'<li><div class="lf-top"><span class="lf-name">{_esc(name)}<small>{_esc(e["unit"])}</small></span>'
                      f'<span class="lf-best">{_kg(e["top_load"])} kg<small>× {_kg(e["top_reps"])}</small></span></div>'
                      f'<p class="lf-sets">{_esc(e["sets"])}</p>'
                      f'<p class="lf-meta">{e["work_sets"]} series' + (f' · volumen {vol}' if vol else "") + "</p></li>")
+        body = f'<ul class="clean">{rows}</ul>'
+        if s.get("complexes"):
+            # V8.7: la sesión se ve como se entrenó (complex con sus cargas); el desglose por movimiento queda plegado
+            cx = ""
+            for c in s["complexes"]:
+                small = " · ".join(x for x in (c.get("scheme") and f'{c["scheme"]} por serie', c.get("interval")) if x)
+                loads = " · ".join(_kg(v) for v in c["loads"])
+                cx += (f'<li class="lf-cx{" appr" if c["approach"] else ""}"><div class="lf-top"><span class="lf-name">{_esc(c["name"])}'
+                       f'<small>{_esc(small)}</small></span>'
+                       + (f'<span class="lf-best">{_kg(c["top"])} kg<small>{c["sets"]} series</small></span>' if c.get("top") is not None else "")
+                       + f'</div><p class="lf-sets">{_esc(loads)} kg</p></li>')
+            n_sets = sum(c["sets"] or 0 for c in s["complexes"])
+            meta = [f"{n_sets} series de complex", f'{_kg(s["total_reps"])} repeticiones']
+            if s.get("bar_volume") is not None:
+                meta.append(f'volumen {_thou(s["bar_volume"])} kg de barra' + ("" if s.get("bar_volume_complete") else "*"))
+            body = (f'<ul class="clean">{cx}</ul><p class="lf-meta lf-tot">{_esc(" · ".join(meta))}</p>'
+                    f'<details class="lf-ex"><summary>Por movimiento ({len(s["exercises"])})</summary>{body}</details>')
         cards += (f'<article class="lf"><header><b>{_day_name(s["date"])}</b>{_rpe_pill(s["rpe"])}</header>'
-                  f'<p class="lf-title">{_esc(s["title"])}</p><ul class="clean">{rows}</ul>{_hr_slot(s.get("activity_id"))}</article>')
+                  f'<p class="lf-title">{_esc(s["title"])}</p>{body}{_hr_slot(s.get("activity_id"))}</article>')
     return (f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">series como repeticiones @ kg · «3× 8 @ 60» = tres series · mejor serie a la derecha</p>{cards}'
             '<p class="pg-note">Solo se muestra lo confirmado en el registro de cada sesión; las barras vacías de calentamiento no cuentan. '
             '* volumen mínimo: alguna serie sin carga.</p></section>')
@@ -217,6 +239,7 @@ def _metcons_html(metcons: list[dict]) -> str:
                   + f'</span><span class="mc-date">{_day_name(m["date"])}</span>{_rpe_pill(m["rpe"])}</header>'
                   + (f'<ul class="mc-presc clean">{presc}</ul>' if presc else "")
                   + (f'<p class="mc-res">{_esc(m["result"])}</p>' if m["result"] else '<p class="mc-res none">Resultado no registrado</p>')
+                  + (f'<p class="mc-tot">{_esc(" · ".join(m["totals"]))}</p>' if m.get("totals") else "")
                   + (f'<div class="chips">{times}</div>' if times else "") + rounds
                   + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + _hr_slot(m.get("activity_id")) + "</article>")
     return ('<section class="card"><h2>Metcons</h2><p class="h2sub">fórmula, resultado y tiempos tal como constan · el cronómetro oficial y el reloj se muestran por separado</p>'
@@ -258,10 +281,10 @@ def _training_html(tb: dict | None, prog: dict | None) -> str:
             '<button role="tab" data-pane="sesiones" aria-selected="false">Todas</button></div></section>')
     fz, hl = tb.get("fuerza") or {}, tb.get("halterofilia") or {}
     panes = {
-        "fuerza": (_weekly_html(fz.get("weekly"), "Volumen de fuerza", "barra, por semana")
+        "fuerza": (_weekly_html(fz.get("weekly"), "Volumen de fuerza", "barra, por semana · solo sesiones de fuerza; la halterofilia tiene su gráfico")
                    + _progression_html(prog, "fuerza")
                    + _lifts_html(fz.get("sessions"), "Sesiones de fuerza", "Aún no hay sesiones de fuerza con cargas registradas.")),
-        "halterofilia": (_weekly_html(hl.get("weekly"), "Volumen de halterofilia", "barra, por semana")
+        "halterofilia": (_weekly_html(hl.get("weekly"), "Volumen de halterofilia", "barra, por semana · sesiones de halterofilia enteras, con sus complex")
                          + _progression_html(prog, "halterofilia")
                          + _lifts_html(hl.get("sessions"), "Sesiones de halterofilia", "Aún no hay sesiones de halterofilia con cargas registradas.")),
         "metcons": _metcons_html(tb.get("metcons") or []),
@@ -439,6 +462,10 @@ def render(result: dict, extras: dict | None = None) -> str:
         data["training_effect"] = extras["garmin_insights"]["training_effect"]
     if extras.get("web_failures"):
         data["web_failures"] = extras["web_failures"]
+    from .report import categorize  # V8.7: la tabla de sesiones muestra el tipo de la app, no el de Garmin («HIIT»)
+    for key in ("sessions_28d", "recent_sessions"):
+        if isinstance(data.get(key), list):
+            data[key] = [dict(x, category=categorize(x)) if isinstance(x, dict) else x for x in data[key]]
     data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
     payload = json.dumps(data, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
