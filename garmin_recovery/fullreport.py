@@ -373,6 +373,14 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     if mono is not None:
         add(f"\nMonotonía {n(mono, 2)} · strain {n(strain)} (descriptores de contexto, sin umbral médico).")
 
+    try:  # V8.8: carreras, con su comparación
+        from . import running
+        run = running.load(root, result)
+        if run.get("available"):
+            add("\n### Carrera\n\n" + running.to_markdown(run))
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("running", exc)
+
     # 6 ------------------------------------------------------------------
     add("\n## 6. Fuerza, halterofilia y metcons\n")
     lo = (date.fromisoformat(today) - timedelta(days=6)).isoformat()

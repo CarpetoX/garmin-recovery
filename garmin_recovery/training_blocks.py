@@ -281,12 +281,18 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
     # V7.29: toda actividad sin tarjeta de fuerza, halterofilia o metcon sale en «Técnica y otras» (calentamientos,
     # técnica y sesiones sin detalle estructurado), para que ningún entrenamiento quede fuera de Entrenos.
     shown = {str(x["activity_id"]) for x in fz + hl + metcons}
+    runs7, run_ids = 0, []
     for act in crossfit.get("activities") or []:
         aid = str((act or {}).get("activity_id") or "") if isinstance(act, dict) else ""
         if not aid or aid in shown or not act.get("date"):
             continue
         blocks = [b for b in act.get("manual_blocks") or [] if isinstance(b, dict)]
         b = blocks[0] if blocks else {}
+        from .session_kind import categorize
+        if categorize(b.get("activity"), act.get("name")) == "Carrera":  # V8.8: las carreras tienen su pestaña
+            runs7 += act["date"] >= (_date.fromisoformat(today) - timedelta(days=6)).isoformat()
+            run_ids.append(aid)
+            continue
         d = b.get("detail_json") if isinstance(b.get("detail_json"), dict) else {}
         kind = d.get("type") if d.get("type") in SKIP_TYPES else "other"
         other.append({"date": act["date"], "activity_id": aid, "kind": kind,
@@ -301,10 +307,12 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
         "fuerza": {"sessions": fz, "weekly": fv},
         "halterofilia": {"sessions": hl, "weekly": hv},
         "metcons": metcons, "otros": sorted(other, key=lambda o: (o["date"], o["activity_id"]), reverse=True),
+        "carrera_ids": run_ids,  # V8.8: su tarjeta está en la pestaña Carrera (running.py)
         "summary7": {
             "fuerza": len({s["activity_id"] for s in fz if s["date"] >= last7}),
             "halterofilia": len({s["activity_id"] for s in hl if s["date"] >= last7}),
-            "metcons": len(mc7), "otros": len([o for o in other if o["date"] >= last7]), "metcon_rpe_mean": round(sum(rp) / len(rp), 1) if rp else None,
+            "metcons": len(mc7), "otros": len([o for o in other if o["date"] >= last7]), "carrera": runs7,
+            "metcon_rpe_mean": round(sum(rp) / len(rp), 1) if rp else None,
             "barbell_volume_kg": fv[-1]["volume"] + hv[-1]["volume"] if fv and hv else None,
         },
     }

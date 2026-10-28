@@ -270,3 +270,11 @@ Medido el 26/10/2026: ~4.250 min/mes, sobre todo porque tras el sueño hay ~10 c
 - **Web:** un despliegue de Pages cancelado porque llegó otro más nuevo ya no cuenta como fallo del ciclo (`cycle_delivery.find_pages_run`).
 - **Cifras iguales en todas partes:** la HRV de 7 días del análisis de mejora usa la media de ln(rMSSD) y la base de la puntuación; el informe completo toma la monotonía y el strain de `readiness_v3.json`; la barra vacía de calentamiento no suma volumen en ningún sitio; la tabla de patrones cuenta las series declaradas (también las de peso corporal) y reconoce tirones, bíceps, aperturas y levantamientos olímpicos.
 - **Textos:** el informe completo dice cuándo incluye datos de un Sync posterior al ciclo; en los meses confirmados un día sin turno es «libre» y el plan va en español; los nombres largos se recortan con «…» en una palabra.
+
+## V8.8 — Carrera aparte, con todos los datos de Garmin
+
+- **Tipo «Carrera»** (`session_kind`): «Carrera - 8 km» o una actividad de carrera sin fila en la hoja. Un WOD con carrera sigue siendo WOD.
+- **Historial propio** (`running_history.json`, paso `garmin_recovery.garmin_runs` en la cadena Heart Rate): carreras de 120 días desde Garmin Connect con distancia, tiempos, velocidad y ritmo ajustado a pendiente, FC y zonas, cadencia, zancada, oscilación y ratio vertical, contacto con el suelo, desnivel, potencia, calorías, efecto de entrenamiento, carga, VO2max y km/5 km más rápidos, más los parciales por km (una llamada por carrera nueva, máx. 6 por ejecución). Se conserva entre ejecuciones, porque Intervals solo tiene actividades desde el 6/10/2026. Nunca rompe la cadena.
+- **`running.py`** une Garmin e Intervals por el ID de Garmin (Garmin manda; Intervals añade carga, TRIMP y desacople) y calcula ritmo, metros por latido (m/min ÷ FC) y desacople aeróbico por parciales. Compara cada carrera con la anterior de distancia parecida (±25 %, desde 3 km). Descarta fragmentos de menos de 1 km.
+- **App:** pestaña «Carrera» en Entrenos (tabla comparativa, ficha por carrera con parciales plegados y curva de FC) y recuento en «Últimos 7 días»; las carreras salen de «Técnica y otras». **Informe completo:** apartado «Carrera» al final de la sección 5.
+- En el móvil, las seis pestañas de Entrenos ocupan dos filas.
