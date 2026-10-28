@@ -45,7 +45,7 @@ Siempre `"schema_version":1`, `"source":"user_in_chat"`, `"type"` (`strength`, `
 - **metcon:** `format` (AMRAP, EMOM, For Time, 21-15-9…), `duration_minutes` o `time_cap_*`, `prescribed_round:[{name, reps, load_kg}]`, `performed:{rounds_complete, extra_reps, totals}`; en For Time, `finish_time_seconds`.
 - **mixed_strength:** `blocks:[{name, rpe, exercises|working_sets}]`.
 - **warmup / skill:** `exercise`, `rpe`, `notes`.
-- **aerobic** (carrera, V8.8): `exercise` («carrera»), `rpe`, `distance_km` dictada y, si se quiere, `recorded_distance_km` y `recorded_garmin_minutes`. Nombre en la columna C: `Carrera - 8 km`. El ritmo, la cadencia, la zancada, el desnivel y los parciales los pone Garmin solo; no se dictan.
+- **aerobic** (carrera, V8.8): `exercise` («carrera»), `rpe`, `distance_km` dictada y, si se quiere, `recorded_distance_km` y `recorded_garmin_minutes`. Nombre en la columna C: `Carrera - 8 km`. El ritmo, la cadencia, la zancada, el desnivel y los parciales los pone Garmin solo; no se dictan. Si la carrera solo está en Garmin (anterior al 6/10/2026, sin ID de Intervals), su RPE no va en la hoja —una fila sin actividad de Intervals detiene la cadena—: se guarda en `manual_run_overrides.json` por ID de Garmin.
 
 Ejemplo mínimo (metcon):
 

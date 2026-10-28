@@ -109,6 +109,27 @@ class Runs(unittest.TestCase):
         self.assertIn("Frente a la del 04/10", md)
 
 
+class GarminOnlyRpe(unittest.TestCase):
+    """V8.8.2: una carrera que solo está en Garmin toma su RPE de manual_run_overrides.json; la hoja manda."""
+
+    def test_override_fills_missing_rpe(self):
+        hist = {"runs": {"24605352759": garmin_runs.summarize_run(GARMIN_RAW)}}
+        man = {"24605352759": {"rpe": 8, "label": "Carrera - 8 km"}}
+        r = running.build(hist, [], "2026-10-28", overrides=man)["runs"][0]
+        self.assertEqual((r["rpe"], r["title"], r["rpe_source"]), (8, "Carrera - 8 km", "manual_run_overrides.json"))
+
+    def test_sheet_wins(self):
+        r = running.build(None, [INTERVALS_TODAY], "2026-10-28", {"i202804127": 7},
+                          overrides={"24882628767": {"rpe": 9}})["runs"][0]
+        self.assertEqual(r["rpe"], 7)
+
+    def test_repo_file_is_valid(self):
+        import json
+        from pathlib import Path
+        data = json.loads((Path(__file__).resolve().parent / "manual_run_overrides.json").read_text(encoding="utf-8"))
+        self.assertTrue(all(isinstance(v.get("rpe"), (int, float)) and 0 <= v["rpe"] <= 10 for v in data["runs"].values()))
+
+
 class RunKind(unittest.TestCase):
     def test_run_is_its_own_type(self):
         self.assertEqual(categorize("Carrera - 8 km"), "Carrera")
