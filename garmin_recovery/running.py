@@ -92,7 +92,7 @@ def _splits(raw: list) -> list[dict]:
     out = []
     for s in raw or []:
         dist, secs = _num(s.get("distance_m")), _num(s.get("moving_s")) or _num(s.get("duration_s"))
-        if not dist or not secs:
+        if not dist or not secs or dist < 100:  # el resto de unos metros al parar el reloj no es un parcial
             continue
         out.append({"lap": s.get("lap"), "distance_m": round(dist), "seconds": round(secs, 1),
                     "pace_s_km": round(secs / (dist / 1000), 1), "avg_hr": _num(s.get("avg_hr")),

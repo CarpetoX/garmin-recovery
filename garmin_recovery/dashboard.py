@@ -270,8 +270,9 @@ def _runs_html(run: dict | None) -> str:
              '<th class="num">Ritmo</th><th class="num">FC</th><th class="num">m/latido</th>'
              f'<th class="num">RPE</th></tr></thead><tbody>{rows}</tbody></table></div>'
              '<p class="pg-note">Ritmo en min/km sobre el tiempo en movimiento. Metros por latido = velocidad (m/min) ÷ FC media: '
-             'a más metros por latido, mismo ritmo con menos pulsaciones. Compara carreras parecidas; el calor, el desnivel, '
-             'el cansancio previo o el sensor también influyen.</p></section>')
+             'a más metros por latido, mismo ritmo con menos pulsaciones. Desacople aeróbico: cuánto cae la relación ritmo/FC '
+             'de la primera mitad a la segunda; en una carrera progresiva sube de forma natural. Compara carreras parecidas; '
+             'el calor, el desnivel, el cansancio previo o el sensor también influyen.</p></section>')
     cards = ""
     for r in runs:
         stats = [("Distancia", num(r.get("distance_km"), 2, " km")), ("Tiempo", duration_text(r.get("moving_s"))),
