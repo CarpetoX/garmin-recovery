@@ -95,6 +95,8 @@ class Runs(unittest.TestCase):
         self.assertEqual(running.decoupling_from_splits(running._splits(_splits([(300, 150)] * 4))), 0.0)
         self.assertGreater(running.decoupling_from_splits(running._splits(_splits([(300, 150), (300, 150), (300, 160), (300, 162)]))), 5)
         self.assertIsNone(running.decoupling_from_splits(running._splits(_splits([(300, 150)] * 3))))
+        tail = running._splits([{"distance_m": 1000, "moving_s": 300, "avg_hr": 150}, {"distance_m": 15, "moving_s": 7, "avg_hr": 177}])
+        self.assertEqual(len(tail), 1)  # el resto de 15 m al parar el reloj no es un parcial
 
     def test_card_and_report(self):
         from garmin_recovery.dashboard import _runs_html
