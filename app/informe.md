@@ -1,6 +1,6 @@
 # Informe de seguimiento · 28/10/2026
 
-`GR-2026-10-28-1648-21e598` · cita este identificador al reenviar el informe.
+`GR-2026-10-28-1728-f69041` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,21 +55,21 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-28-1345-cdda5b (28/10 13:45):
-- Sesiones nuevas desde entonces: **1** (carga +45).
+Frente al informe GR-2026-10-28-1648-21e598 (28/10 16:48):
+- Sesiones con RPE: 13 → 14.
 
 ## Actividad de hoy
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 28/10 15:38 | Sin detalle | Orense Carrera | 41 | 45 | 157 / 177 | — | — |
+| 28/10 15:38 | Carrera | Carrera - 8 km | 41 | 45 | 157 / 177 | 7,0 | 288 |
 | 28/10 10:21 | Halterofilia | Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk | 56 | 25 | 123 / 153 | 7,5 | 419 |
 | 28/10 09:36 | WOD | WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump | 25 | 28 | 157 / 192 | 9,0 | 221 |
 | 28/10 09:22 | Calentamiento | Calentamiento - WOD E3MO3M | 14 | 6 | 122 / 162 | — | — |
 
 **¿Encaja con la decisión?** ⚠️ RPE 9,0 supera el máximo recomendado (7): reduce o cambia la sesión restante.
 
-**Carga 7 días:** 232 en 12 sesiones (+100 % vs. semana previa) · sRPE 1.678 · monotonía 0,70.
+**Carga 7 días:** 232 en 12 sesiones (+100 % vs. semana previa) · sRPE 1.966 · monotonía 0,69.
 
 ## Gráficas
 
@@ -95,7 +95,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i202804127** (28/10 15:38, Sin detalle, 41 min, carga 45) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -124,16 +123,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-28-1648-21e598`
+- **Identificador del informe:** `GR-2026-10-28-1728-f69041`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-28-1645 · datos sincronizados a las 16:47
-- **Antigüedad:** fin del sueño hace 8,1 h ✓ · última HRV hace 9,5 h ✓ · última FC hace 6 min ✓ · último Body Battery hace 9 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/14 (+7 sin RPE por diseño: calentamiento/técnica) (sin RPE: 28/10 15:38)
+- **Ciclo:** 2026-10-28-1645 · datos sincronizados a las 17:27 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 8,7 h ✓ · última HRV hace 10,2 h ✓ · última FC hace 16 min ✓ · último Body Battery hace 16 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/14 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-28 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-28 17:28 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

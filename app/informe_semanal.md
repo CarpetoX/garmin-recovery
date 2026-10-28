@@ -1,6 +1,6 @@
 # Resumen semanal · 22/10–28/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-28-1648-21e598`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-28-1728-f69041`)._
 
 ## En una frase
 
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 12 | 9 |
 | Minutos | 382 | 226 |
 | Carga (Intervals) | 232 | 116 |
-| sRPE (RPE × min) | 1678 | 1016 |
+| sRPE (RPE × min) | 1966 | 1016 |
 
-Monotonía 0,70 · strain 1174 · ACWR — · RPE registrado en 7/12 sesiones.
+Monotonía 0,69 · strain 1348 · ACWR — · RPE registrado en 8/12 sesiones.
 
 **Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7).
 
@@ -92,7 +92,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 7/12.
+- Sesiones con RPE: 8/12.
 
 ## Validación de modelos
 
