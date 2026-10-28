@@ -1,29 +1,28 @@
-<!-- cycle_id: 2026-10-27-2245 -->
-**En breve:** día verde y bien recuperado; la HRV de la semana sigue por debajo de tu rango, así que conviene dosificar lo duro.
-🟢 Recuperación oficial 88/100, confianza alta
-🌙 Sueño 8,2 h, puntuación 89
-🏋️ Carga: 8 sesiones en 7 días (128, −30 % vs. semana previa)
-❤️ HRV media de 7 días 47 ms, por debajo de tu rango normal (54–62 ms)
-Orientación: hoy ya entrenaste; mañana libre y el jueves hay TN. Duerme 7,5 h esta noche.
+<!-- cycle_id: 2026-10-28-0830 -->
+**En breve:** hoy toca entrenar con control: la recuperación baja respecto a ayer.
 
-## Qué explica la puntuación
-- ↓ HRV 7 días 47,2 ms (−19 % vs. base 58 ms), aunque anoche fue 65 ms.
-- ↑ Sueño 8,23 h, puntuación 89; FC en reposo 56 lpm (= mediana), nocturna 58,7 (−3,3).
-- ↑ Estrés Garmin ayer 23 (mediana 38).
+🟢 Recuperación oficial 52/100 (confianza alta); ayer 88 (−36).
+🌙 Sueño 7,0 h, puntuación 72.
+🏋️ Carga: 8 sesiones en 7 días, esfuerzo percibido 1037,5 (+10 % de carga vs. semana previa).
+❤️ Alerta: HRV 43 ms, media de 7 días 49,4 ms (−13 % vs. tu base).
+Orientación: día libre; RPE máx. 7, volumen 70–80 %, sin fallo ni WOD máximos. Mañana turno de noche.
 
-## Carga reciente
-Hoy: WOD AMRAP 15 min (RPE 8,0) y fuerza de piernas. sRPE 7 días 1.038, monotonía 0,49. Según el análisis por reglas, 15 de 25 sesiones con RPE fueron ≥ 8 (60 %) y hubo 5 veces dos días duros seguidos; tras sesiones ≥ 8 la HRV siguiente fue 50 ms frente a 55 ms (pocos días, descriptivo).
+**Qué explica la puntuación.** La HRV (43 ms; rango normal 53–61) y la FC en reposo (60 lpm, +4 sobre tu mediana) empujan a la baja; el sueño es algo corto (deuda 0,5 h) y el estrés de ayer (31) acompaña a favor. Faltan sensaciones en Intervals.
 
-## 3 prioridades
-1. **Espaciar lo duro:** intercalar RPE 5–6 entre sesiones exigentes, ≥ 48 h entre esfuerzos máximos.
-2. **Sueño:** acostarte 30–45 min antes, sobre todo antes de la TN del jueves.
-3. **Registrar sensaciones** en Intervals (0 de los últimos 14 días): sin ellas el modelo solo ve la parte objetiva.
+**Carga reciente.** Ayer: WOD AMRAP 15 min a RPE 8 y fuerza de piernas; antes, pecho a RPE 7. Monotonía 0,49 (baja). Del informe completo: 60 % de sesiones con RPE ≥ 8 y 5 casos de dos días duros seguidos.
 
-## Plan de 7 días (respeta la decisión verde, RPE máx. 9)
-- **Mié 28 (libre):** moderada, RPE ≤ 7.
-- **Jue 29 (TN):** si entrenas, por la mañana y moderado.
-- **Vie 30 (post-TN):** descanso; prioriza dormir.
-- **Sáb 31 (libre):** sesión exigente si la decisión de ese día lo permite.
-- **Dom 1/11 (MT):** movilidad o descanso.
+**3 prioridades**
+1. Sueño: adelantar 30–45 min la hora de acostarte, con siesta corta antes del turno de noche.
+2. Intensidad: intercalar RPE 5–6 entre las duras, ≥ 48 h entre esfuerzos máximos.
+3. Registrar sensaciones y RPE a diario para afinar el modelo.
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
+**Plan 7 días** (la decisión del día manda)
+- Mié 28: moderada, RPE ≤ 7, técnica y fuerza submáxima.
+- Jue 29 (TN): si entrenas, por la mañana y moderado.
+- Vie 30 (post-TN): descanso, dormir.
+- Sáb 31: libre; única sesión exigente si la HRV se recupera.
+- Dom 01 (MT): movilidad suave.
+- Lun 02 (TN): moderada por la mañana.
+- Mar 03 (post-TN): descanso.
+
+_Herramienta de entrenamiento; no es un diagnóstico médico._
