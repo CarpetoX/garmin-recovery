@@ -27,7 +27,9 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
     if sessions and today:
         last = sessions[-1]
         rpe = last.get("rpe")
-        label = str(last.get("name") or last.get("type") or "Sesión")
+        from .session_kind import categorize  # V8.7: el tipo de la hoja («Halterofilia»), no el nombre de Garmin («HIIT»)
+        kind = categorize(last.get("label"), last.get("name"))
+        label = kind if kind != "Sin detalle" else str(last.get("name") or last.get("type") or "Sesión")
         na = rpe is None and bool(last.get("rpe_na"))
         chips.append({"id": "ultimo", "label": "Último entreno",
                       "value": label + (f" · RPE {_n(rpe)}" if rpe is not None else " · no lleva RPE" if na else " · sin RPE"),
@@ -58,6 +60,6 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
     s = (progression or {}).get("summary") if isinstance(progression, dict) else None
     if isinstance(s, dict) and s.get("available"):
         chips.append({"id": "progresion", "label": "Progresión de cargas", "value": f"{s['up']} ▲ · {s['flat']} = · {s['down']} ▼",
-                      "sub": f"{s['comparable']} ejercicios repetidos, frente a la sesión anterior",
+                      "sub": f"{s['comparable']} ejercicios repetidos (fuerza y halterofilia), frente a la sesión anterior",
                       "tone": "good" if s["up"] > s["down"] else "warning" if s["down"] > s["up"] else "neutral"})
     return chips

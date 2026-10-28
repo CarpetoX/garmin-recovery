@@ -261,3 +261,12 @@ Medido el 26/10/2026: ~4.250 min/mes, sobre todo porque tras el sueño hay ~10 c
 
 - El cron «30 8» de GitHub llega cada día entre las 12:20 y las 15:30. Si el ciclo de las 08:30 de hoy ya está en `report_cycles.json`, `garmin_recovery.sync_guard` lo detecta y el Sync se cancela a sí mismo (aparece como «cancelled» con la anotación «Sync de respaldo innecesario»); la cadena no arranca porque Heart solo sigue a un Sync con éxito. Si el ciclo no consta (Apps Script caído), el respaldo sincroniza como siempre.
 - El certificador deja el motivo de un «NOT READY» o de una excepción como anotación de GitHub (`Certificado no emitido`, `Certificador: excepción`), legible por la API sin descargar los logs.
+
+## V8.7 — Sesiones enteras, complex y cifras únicas
+
+- **Tipo de sesión, una sola regla** (`garmin_recovery.session_kind`, usada por los informes, la app y el esfuerzo relativo): manda el prefijo del nombre de la hoja. Un WOD o metcon es WOD aunque lleve hang clean o squat snatch; «Calentamiento - WOD…» es Calentamiento (categoría nueva); una sesión de halterofilia va entera a Halterofilia, también su front squat; «Fuerza - Squat snatch» es halterofilia; el resto de «Fuerza - …», fuerza.
+- **Entrenos no parte sesiones:** Fuerza y Halterofilia (tarjetas, recuentos de 7 días y volumen semanal) se deciden por sesión. Si el detalle trae `complexes`, la tarjeta los muestra como se entrenaron (repeticiones por serie, intervalo y cargas) y el desglose por movimiento queda plegado.
+- **Metcons:** EMOM/E3MO3M por rondas muestran «8 de 8 rondas completas»; un AMRAP con distancia y repeticiones extra, las dos («6 rondas + 200 m + 10 reps»); los totales declarados salen en una línea.
+- **Web:** un despliegue de Pages cancelado porque llegó otro más nuevo ya no cuenta como fallo del ciclo (`cycle_delivery.find_pages_run`).
+- **Cifras iguales en todas partes:** la HRV de 7 días del análisis de mejora usa la media de ln(rMSSD) y la base de la puntuación; el informe completo toma la monotonía y el strain de `readiness_v3.json`; la barra vacía de calentamiento no suma volumen en ningún sitio; la tabla de patrones cuenta las series declaradas (también las de peso corporal) y reconoce tirones, bíceps, aperturas y levantamientos olímpicos.
+- **Textos:** el informe completo dice cuándo incluye datos de un Sync posterior al ciclo; en los meses confirmados un día sin turno es «libre» y el plan va en español; los nombres largos se recortan con «…» en una palabra.

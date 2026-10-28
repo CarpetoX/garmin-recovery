@@ -16,6 +16,9 @@ MIN_GAP_DAYS = 2
 DAYS = ("lun", "mar", "mié", "jue", "vie", "sáb", "dom")
 
 
+SHIFT_ES = {"free": "libre", "post-TN": "tras TN", "unknown": "sin registrar"}  # V8.7: la tabla, en español
+
+
 def _num(v):
     return v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
 
@@ -73,6 +76,6 @@ KIND_ES = {"hard": "🔥 Exigente", "moderate": "🟡 Moderada", "light": "🟢 
 def to_markdown(rows: list[dict]) -> str:
     lines = ["| Día | Turno | Sesión sugerida | Motivo |", "|---|---|---|---|"]
     for r in rows:
-        lines.append(f"| {r['dow']} {r['date'][8:]}/{r['date'][5:7]} | {r['shift']} | {KIND_ES[r['kind']]} | {r['why']} |")
+        lines.append(f"| {r['dow']} {r['date'][8:]}/{r['date'][5:7]} | {SHIFT_ES.get(r['shift'], r['shift'])} | {KIND_ES[r['kind']]} | {r['why']} |")
     return "\n".join(lines) + ("\n\nPlan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separadas ≥ 48 h, solo en días libres). "
                               "Se recalcula en cada informe y la decisión del día manda sobre él.")

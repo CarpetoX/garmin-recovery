@@ -41,8 +41,11 @@ def web_stage(pages_run: dict | None) -> dict:
     st, concl = pages_run.get("status"), pages_run.get("conclusion")
     if st != "completed":
         return {"state": "pending", "note": "despliegue en curso", "run_id": pages_run.get("id")}
-    return {"state": "ok" if concl == "success" else "failed", "conclusion": concl, "run_id": pages_run.get("id"),
-            "at": pages_run.get("updated_at")}
+    out = {"state": "ok" if concl == "success" else "failed", "conclusion": concl, "run_id": pages_run.get("id"),
+           "at": pages_run.get("updated_at")}
+    if pages_run.get("superseded_runs"):
+        out["note"] = "un despliegue anterior se canceló porque llegó este más nuevo: no es un fallo"
+    return out
 
 
 def notify_from_log(text: str | None) -> dict:
@@ -110,7 +113,10 @@ def api_text(url: str, token: str) -> str:
 
 
 def find_pages_run(runs: list, after: datetime) -> dict | None:
-    """Primer despliegue de Pages creado desde el cierre de CrossFit (el más antiguo posterior)."""
+    """Primer despliegue de Pages creado desde el cierre de CrossFit (el más antiguo posterior).
+
+    V8.7: Pages cancela un despliegue cuando llega otro más nuevo (``cancel-in-progress``); eso no es un fallo. Si el
+    primero se canceló y hay uno posterior, cuenta el posterior (y se anota cuántos sustituyó)."""
     cands = []
     for r in runs:
         try:
@@ -119,7 +125,12 @@ def find_pages_run(runs: list, after: datetime) -> dict | None:
             continue
         if created >= after:
             cands.append((created, r))
-    return min(cands, key=lambda x: x[0])[1] if cands else None
+    cands.sort(key=lambda x: x[0])
+    for i, (_, r) in enumerate(cands):
+        superseded = r.get("status") == "completed" and r.get("conclusion") == "cancelled" and i < len(cands) - 1
+        if not superseded:
+            return dict(r, superseded_runs=i) if i else r
+    return cands[-1][1] if cands else None
 
 
 def main(root: str = ".", fetch_json=api_json, fetch_text=api_text, sleep=time.sleep, wait_s: int = 300) -> int:

@@ -83,7 +83,7 @@ $('meters').innerHTML = Object.entries(C).map(([k, c]) => `
   const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : 'sin registro'}"></i>`).join('');
   $('rings').innerHTML =
     `<div class="card ring-card"><div class="rw">${ring(sl, tone(sl))}<div class="ring-num">${fmt(sl)}</div></div><div class="ring-label">Sueño</div><div class="ring-sub">${fmt(S.hours, 1)} h · puntuación</div></div>` +
-    `<div class="card ring-card"><div class="rw">${ring(hv, tone(hv))}<div class="ring-num">${fmt(hv)}</div></div><div class="ring-label">HRV</div><div class="ring-sub">${fmt(H.today_ms)} ms hoy</div></div>` +
+    `<div class="card ring-card"><div class="rw">${ring(hv, tone(hv))}<div class="ring-num">${fmt(hv)}</div></div><div class="ring-label">HRV</div><div class="ring-sub">${fmt(H.today_ms)} ms hoy · puntuación</div></div>` +
     `<div class="card ring-card"><div class="bars7" role="img" aria-label="sRPE de los últimos 7 días">${bars}</div><div class="ring-num">${fmt(L.week_srpe)}</div><div class="ring-label">Carga 7 días</div><div class="ring-sub">sRPE · ${L.week_sessions} sesiones</div></div>`;
 })();
 
@@ -278,7 +278,7 @@ const effFlag = id => { const e = EFF[id]; return e && e.flag ? e : null; };
 // ♥ que late a la FC media de la sesión (un latido = 60 / FC segundos)
 const beat = hr => `<span class="hrmark${hr > 0 ? ' beat' : ''}" aria-hidden="true"${hr > 0 ? ` style="--beat:${(60 / hr).toFixed(3)}s"` : ''}>♥</span>`;
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(s.category && s.category !== 'Sin detalle' ? s.category : typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 
 // ---------- Detalle de FC de una sesión ----------
@@ -408,7 +408,7 @@ if (cal && T.length) {
       (d.shift ? ` · turno ${esc(shiftEs(d.shift))}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
       (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
       (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td>${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
+        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td class="cal-name">${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
         : '<br><span class="weight">Sin sesiones registradas.</span>');
   };
   cal.addEventListener('click', ev => { const b = ev.target.closest('button[data-i]'); if (b) show(+b.dataset.i); });
