@@ -133,7 +133,6 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     ready = _read(root, "report_ready.json")
     cycles = _read(root, "report_cycles.json")
     shift_cal = _read(root, "shift_calendar.json")
-    shifts = (shift_cal.get("days")) or {}
     registry = {m.get("id"): m for m in dec.get("registry") or [] if isinstance(m, dict)}
     v2, hyb = registry.get("recovery_assessment_v2", {}), registry.get("readiness_hybrid", {})
     tr = _d(ext, "days", today, "training_readiness", default={}) or _d(_last_day(ext)[1], "training_readiness", default={})
