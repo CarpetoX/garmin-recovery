@@ -39,12 +39,13 @@ Hoja de Google «RPE CrossFit - Registro», pestaña **`RPE`**, columnas A–H (
 
 ## Detalle JSON (esquema v1)
 
-Siempre `"schema_version":1`, `"source":"user_in_chat"`, `"type"` (`strength`, `metcon`, `mixed_strength`, `warmup`, `skill`), `"garmin_activity_id"`, `"rpe"` y `"recorded_garmin_minutes"` cuando se conozcan.
+Siempre `"schema_version":1`, `"source":"user_in_chat"`, `"type"` (`strength`, `metcon`, `mixed_strength`, `warmup`, `skill`, `aerobic`), `"garmin_activity_id"`, `"rpe"` y `"recorded_garmin_minutes"` cuando se conozcan.
 
 - **strength:** `exercises:[{name, load_unit, sets:[{reps, load_kg, interval_seconds?}]}]`; series repetidas con `count`. Opcional: `total_sets`, `total_reps`, `bodyweight_kg_morning`, `notes`.
 - **metcon:** `format` (AMRAP, EMOM, For Time, 21-15-9…), `duration_minutes` o `time_cap_*`, `prescribed_round:[{name, reps, load_kg}]`, `performed:{rounds_complete, extra_reps, totals}`; en For Time, `finish_time_seconds`.
 - **mixed_strength:** `blocks:[{name, rpe, exercises|working_sets}]`.
 - **warmup / skill:** `exercise`, `rpe`, `notes`.
+- **aerobic** (carrera, V8.8): `exercise` («carrera»), `rpe`, `distance_km` dictada y, si se quiere, `recorded_distance_km` y `recorded_garmin_minutes`. Nombre en la columna C: `Carrera - 8 km`. El ritmo, la cadencia, la zancada, el desnivel y los parciales los pone Garmin solo; no se dictan.
 
 Ejemplo mínimo (metcon):
 

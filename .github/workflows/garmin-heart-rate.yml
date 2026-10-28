@@ -43,7 +43,7 @@ jobs:
           path: .lineage_parent
 
       - name: Validar sintaxis Garmin
-        run: python -m py_compile garmin_recovery/garmin_metrics.py garmin_recovery/garmin_activity_metrics.py garmin_recovery/garmin_hr_timeline.py garmin_recovery/garmin_hrv_timeline.py garmin_recovery/garmin_sleep_history.py
+        run: python -m py_compile garmin_recovery/garmin_metrics.py garmin_recovery/garmin_activity_metrics.py garmin_recovery/garmin_runs.py garmin_recovery/garmin_hr_timeline.py garmin_recovery/garmin_hrv_timeline.py garmin_recovery/garmin_sleep_history.py
 
       - name: Instalar Garmin Connect
         run: python -m pip install --disable-pip-version-check 'garminconnect==0.3.17'
@@ -54,6 +54,7 @@ jobs:
         run: |
           python -m garmin_recovery.garmin_metrics
           python -m garmin_recovery.garmin_activity_metrics
+          python -m garmin_recovery.garmin_runs  # V8.8: historial de carreras con todos sus datos (nunca falla la cadena)
           python -m garmin_recovery.garmin_hr_timeline
           python -m garmin_recovery.garmin_hrv_timeline
           python -m garmin_recovery.garmin_sleep_history
@@ -65,7 +66,7 @@ jobs:
           git config user.name 'Garmin Recovery Bot'
           git config user.email 'actions@github.com'
 
-          for f in garmin_heart_rate.json garmin_hr_timeline.json garmin_hrv_timeline.json garmin_sleep_history.json daily_summary.json weekly_summary.json garmin_status.json garmin_stress.json garmin_body_battery.json garmin_extended.json; do
+          for f in garmin_heart_rate.json garmin_hr_timeline.json garmin_hrv_timeline.json garmin_sleep_history.json daily_summary.json weekly_summary.json garmin_status.json garmin_stress.json garmin_body_battery.json garmin_extended.json running_history.json; do
             if [ -f "$f" ]; then git add -- "$f"; fi
           done
 

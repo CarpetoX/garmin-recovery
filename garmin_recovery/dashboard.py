@@ -246,6 +246,73 @@ def _metcons_html(metcons: list[dict]) -> str:
             + chart + cards + '<p class="pg-note">Los metcons no son comparables entre sí salvo que repitan formato y ejercicios.</p></section>')
 
 
+def _runs_html(run: dict | None) -> str:
+    """V8.8: carreras con todos los datos de Garmin e Intervals, tabla para compararlas y parciales por km."""
+    from .running import pace_text, duration_text
+    runs = (run or {}).get("runs") or []
+    if not runs:
+        return ('<section class="card"><h2>Carrera</h2><p class="h2sub">Aún no hay carreras registradas. Aparecerán con '
+                'todos los datos de Garmin (ritmo, cadencia, zancada, desnivel, parciales por km).</p></section>')
+
+    def num(v, d=0, unit=""):
+        if v is None:
+            return "—"
+        return (f"{v:.{d}f}".replace(".", ",") if d else f"{round(v):d}") + unit
+    summ = run.get("summary") or {}
+    rows = "".join(
+        f'<tr><td>{_ddmm(r["date"])}</td><td class="num">{num(r.get("distance_km"), 2)}</td>'
+        f'<td class="num">{pace_text(r.get("pace_s_km"))}</td><td class="num">{num(r.get("avg_hr"))}</td>'
+        f'<td class="num">{num(r.get("m_per_beat"), 2)}</td>'
+        f'<td class="num">{_kg(r["rpe"]) if isinstance(r.get("rpe"), (int, float)) else "—"}</td></tr>' for r in runs)
+    head = (f'<section class="card"><h2>Carrera</h2><p class="h2sub">{summ.get("count", 0)} carreras · {num(summ.get("km"), 1)} km '
+            f'desde el {_ddmm(summ["since"])} · datos de Garmin e Intervals</p>' if summ.get("since") else '<section class="card"><h2>Carrera</h2>')
+    head += ('<div class="scroll"><table class="rn-tab"><thead><tr><th>Fecha</th><th class="num">km</th>'
+             '<th class="num">Ritmo</th><th class="num">FC</th><th class="num">m/latido</th>'
+             f'<th class="num">RPE</th></tr></thead><tbody>{rows}</tbody></table></div>'
+             '<p class="pg-note">Ritmo en min/km sobre el tiempo en movimiento. Metros por latido = velocidad (m/min) ÷ FC media: '
+             'a más metros por latido, mismo ritmo con menos pulsaciones. Compara carreras parecidas; el calor, el desnivel, '
+             'el cansancio previo o el sensor también influyen.</p></section>')
+    cards = ""
+    for r in runs:
+        stats = [("Distancia", num(r.get("distance_km"), 2, " km")), ("Tiempo", duration_text(r.get("moving_s"))),
+                 ("Ritmo medio", pace_text(r.get("pace_s_km")) + " /km"),
+                 ("Ritmo ajustado a pendiente", pace_text(r.get("gap_pace_s_km")) + " /km" if r.get("gap_pace_s_km") else None),
+                 ("FC media · máx.", f'{num(r.get("avg_hr"))} · {num(r.get("max_hr"))} lpm' if r.get("avg_hr") else None),
+                 ("Metros por latido", num(r.get("m_per_beat"), 2) if r.get("m_per_beat") else None),
+                 ("Desacople aeróbico", num(r.get("decoupling_pct"), 1, " %") if r.get("decoupling_pct") is not None else None),
+                 ("Cadencia", num(r.get("cadence_spm"), 0, " ppm") if r.get("cadence_spm") else None),
+                 ("Zancada", num(r.get("stride_m"), 2, " m") if r.get("stride_m") else None),
+                 ("Oscilación vertical", num(r.get("vertical_oscillation_cm"), 1, " cm") if r.get("vertical_oscillation_cm") else None),
+                 ("Ratio vertical", num(r.get("vertical_ratio_pct"), 1, " %") if r.get("vertical_ratio_pct") else None),
+                 ("Contacto con el suelo", num(r.get("ground_contact_ms"), 0, " ms") if r.get("ground_contact_ms") else None),
+                 ("Desnivel", f'+{num(r.get("elev_gain_m"))} / −{num(r.get("elev_loss_m"))} m' if r.get("elev_gain_m") is not None else None),
+                 ("Potencia media", num(r.get("avg_power_w"), 0, " W") if r.get("avg_power_w") else None),
+                 ("Km más rápido", pace_text(r.get("fastest_1k_s")) if r.get("fastest_1k_s") else None),
+                 ("Calorías", num(r.get("calories"), 0, " kcal") if r.get("calories") else None),
+                 ("Carga", " · ".join(x for x in (f'Garmin {num(r["garmin_load"])}' if r.get("garmin_load") else None,
+                                                  f'Intervals {num(r["intervals_load"])}' if r.get("intervals_load") else None,
+                                                  f'TRIMP {num(r["trimp"])}' if r.get("trimp") else None) if x) or None),
+                 ("VO2max (Garmin)", num(r.get("vo2max"), 0) if r.get("vo2max") else None)]
+        if not r.get("intervals_id") and (r.get("aerobic_te") is not None):  # sin FC de Intervals: el efecto va aquí
+            stats.append(("Efecto aeróbico · anaeróbico", f'{num(r.get("aerobic_te"), 1)} · {num(r.get("anaerobic_te"), 1)}'
+                          + (f' ({r["te_label"]})' if r.get("te_label") else "")))
+        grid = "".join(f'<div><dt>{_esc(k)}</dt><dd>{_esc(v)}</dd></div>' for k, v in stats if v and v not in ("—", "— /km"))
+        cmp_ = f'<p class="rn-cmp">{_esc(r["comparison"]["text"])}</p>' if r.get("comparison") else ""
+        splits = ""
+        if r.get("splits"):
+            srows = "".join(f'<tr><td>{i + 1}</td><td class="num">{num(x["distance_m"] / 1000, 2)}</td><td class="num">{pace_text(x["pace_s_km"])}</td>'
+                            f'<td class="num">{num(x.get("avg_hr"))}</td><td class="num">{num(x.get("cadence_spm"))}</td>'
+                            f'<td class="num">{num(x.get("elev_gain_m"))}</td></tr>' for i, x in enumerate(r["splits"]))
+            splits = (f'<details class="lf-ex"><summary>Parciales ({len(r["splits"])})</summary><div class="scroll"><table class="rn-tab">'
+                      '<thead><tr><th>#</th><th class="num">km</th><th class="num">Ritmo</th><th class="num">FC</th>'
+                      f'<th class="num">Cadencia</th><th class="num">+m</th></tr></thead><tbody>{srows}</tbody></table></div></details>')
+        src = " + ".join(r.get("sources") or [])
+        cards += (f'<article class="lf rn"><header><b>{_day_name(r["date"])}</b>{_rpe_pill(r.get("rpe"))}</header>'
+                  f'<p class="lf-title">{_esc(r.get("title"))}{" · " + _esc(r["start_local"][11:16]) if r.get("start_local") else ""}'
+                  f'{" · " + _esc(src) if src else ""}</p><dl class="rn-grid">{grid}</dl>{cmp_}{splits}{_hr_slot(r.get("intervals_id"))}</article>')
+    return head + f'<section class="card"><h2>Carreras</h2>{cards}</section>'
+
+
 KIND_ES = {"warmup": "Calentamiento", "skill": "Técnica", "other": "Sin detalle estructurado"}
 
 
@@ -264,19 +331,21 @@ def _others_html(others: list[dict]) -> str:
             '«RPE —» = sesión sin puntuar</p>' + cards + '<p class="pg-note">Cuentan en la carga y en la FC; no entran en las comparaciones de fuerza ni de metcons.</p></section>')
 
 
-def _training_html(tb: dict | None, prog: dict | None) -> str:
+def _training_html(tb: dict | None, prog: dict | None, running: dict | None = None) -> str:
     """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones."""
     if not isinstance(tb, dict):
         return _progression_html(prog)
     s = tb.get("summary7") or {}
     chips = (f'<li><b>{s.get("fuerza", 0)}</b><span>fuerza</span></li><li><b>{s.get("halterofilia", 0)}</b><span>halterofilia</span></li>'
-             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li><li><b>{s.get("otros", 0)}</b><span>técnica y otras</span></li>'
+             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li><li><b>{s.get("carrera", 0)}</b><span>carrera</span></li>'
+             f'<li><b>{s.get("otros", 0)}</b><span>técnica y otras</span></li>'
              f'<li><b>{_kg(s["metcon_rpe_mean"]) if s.get("metcon_rpe_mean") is not None else "—"}</b><span>RPE medio metcons</span></li>')
     head = (f'<section class="card tbhead"><h2>Últimos 7 días</h2><ul class="tbsum">{chips}</ul>'
             '<div class="seg" role="tablist" aria-label="Tipo de entrenamiento">'
             '<button role="tab" data-pane="fuerza" aria-selected="true">Fuerza</button>'
             '<button role="tab" data-pane="halterofilia" aria-selected="false">Halterofilia</button>'
             '<button role="tab" data-pane="metcons" aria-selected="false">Metcons</button>'
+            '<button role="tab" data-pane="carrera" aria-selected="false">Carrera</button>'
             '<button role="tab" data-pane="otros" aria-selected="false">Técnica</button>'
             '<button role="tab" data-pane="sesiones" aria-selected="false">Todas</button></div></section>')
     fz, hl = tb.get("fuerza") or {}, tb.get("halterofilia") or {}
@@ -288,6 +357,7 @@ def _training_html(tb: dict | None, prog: dict | None) -> str:
                          + _progression_html(prog, "halterofilia")
                          + _lifts_html(hl.get("sessions"), "Sesiones de halterofilia", "Aún no hay sesiones de halterofilia con cargas registradas.")),
         "metcons": _metcons_html(tb.get("metcons") or []),
+        "carrera": _runs_html(running),
         "otros": _others_html(tb.get("otros") or []),
     }
     return head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
@@ -719,7 +789,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             "hoy": full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": _weight_html(extras.get("weight")) + calendar_html + week_html
                           + '<section class="grid cols-2">' + _load_balance_html((extras.get("garmin_insights") or {}).get("load_balance")) + _vo2_html((extras.get("garmin_insights") or {}).get("vo2max")) + '</section>',
-            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression")),
+            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression"), extras.get("running")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 

@@ -189,6 +189,11 @@ def _live_extras(root: Path, result: dict) -> dict:
         out["training_blocks"] = training_blocks.build(cf, built["entries"], today)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:progression", exc)
+    try:  # V8.8: carreras con todos los datos de Garmin e Intervals y su comparación
+        from . import running
+        out["running"] = running.load(root, result)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:running", exc)
     try:
         from . import weight
         reg = json.loads((root / "peso_registro.json").read_text(encoding="utf-8")) if (root / "peso_registro.json").exists() else None

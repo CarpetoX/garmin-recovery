@@ -6,6 +6,7 @@ La hoja nombra cada actividad como «Tipo - formato o ejercicios» (REGISTRO_ENT
 * **Calentamiento** y **Técnica**: por su nombre, aunque el texto mencione el WOD que preparan.
 * **Halterofilia**: la sesión entera, con todos sus ejercicios (también el front squat de un complex); nunca se parte.
 * **Fuerza**: salvo que la sesión sea de levantamientos olímpicos (p. ej. «Fuerza - Squat snatch»), que es halterofilia.
+* **Carrera** (V8.8): «Carrera - 8 km» o una actividad de carrera de Garmin sin fila en la hoja; un WOD con carrera es WOD.
 
 Sin prefijo reconocible se decide por palabras: formato de WOD → WOD; movimiento olímpico → Halterofilia; ejercicio
 de fuerza → Fuerza; técnica o movilidad → Técnica; si no, «Sin detalle».
@@ -22,10 +23,12 @@ STRENGTH = re.compile(r"\b(fuerza|sentadilla|squat|peso muerto|deadlift|press|ba
                       r"|curl|remo|zancadas?)\b")
 TECHNIQUE = re.compile(r"\b(tecnica|skill|movilidad)\b")
 WARMUP = re.compile(r"\b(calentamiento|warm ?up)\b")
+RUN = re.compile(r"\b(carrera|correr|running|rodaje|trote|run)\b")
+RUN_SPORTS = {"Run", "TrailRun", "VirtualRun", "Treadmill", "running", "trail_running", "treadmill_running"}
 PREFIX = {"calentamiento": "Calentamiento", "warmup": "Calentamiento", "warm": "Calentamiento",
           "tecnica": "Técnica", "skill": "Técnica", "movilidad": "Técnica",
-          "wod": "WOD", "metcon": "WOD", "halterofilia": "Halterofilia"}
-KINDS = ("WOD", "Fuerza", "Halterofilia", "Técnica", "Calentamiento", "Sin detalle")
+          "wod": "WOD", "metcon": "WOD", "halterofilia": "Halterofilia", "carrera": "Carrera", "rodaje": "Carrera"}
+KINDS = ("WOD", "Fuerza", "Halterofilia", "Carrera", "Técnica", "Calentamiento", "Sin detalle")
 
 
 def _head(label: str) -> str:
@@ -35,8 +38,9 @@ def _head(label: str) -> str:
     return words[0] if words else ""
 
 
-def categorize(label=None, name=None, exercises=()) -> str:
-    """Tipo de la sesión a partir de su nombre en la hoja (``label``), el de Garmin (``name``) y sus ejercicios."""
+def categorize(label=None, name=None, exercises=(), sport=None) -> str:
+    """Tipo de la sesión a partir de su nombre en la hoja (``label``), el de Garmin (``name``), sus ejercicios y el
+    deporte de Intervals/Garmin (``sport``, p. ej. «Run»)."""
     lab = str(label or "")
     olympic_ex = any(OLYMPIC.search(norm(e)) for e in exercises or () if e)
     head = _head(lab)
@@ -47,6 +51,8 @@ def categorize(label=None, name=None, exercises=()) -> str:
     text = norm(f"{lab} {name or ''}")
     if WOD.search(text):
         return "WOD"
+    if RUN.search(text) or (not lab and str(sport or "") in RUN_SPORTS):
+        return "Carrera"
     if OLYMPIC.search(text) or olympic_ex:
         return "Halterofilia"
     if STRENGTH.search(text):
