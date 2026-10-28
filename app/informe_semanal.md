@@ -1,6 +1,6 @@
 # Resumen semanal · 22/10–28/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-28-1257-91d341`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-28-1345-cdda5b`)._
 
 ## En una frase
 
@@ -49,7 +49,7 @@ HRV de 7 días hoy: 49,4 ms (rango normal 52,9–61,4 ms). Turnos: MT, TN.
 | Fecha | Ejercicio | Carga máx. declarada | Mejor serie | 1RM mín. | Series |
 |---|---|--:|--:|--:|--:|
 | 23/10 | chin up lastrado | 15,0 kg | — | — | 4/4 |
-| 26/10 | press banca | 90,0 kg | 90 × 6 | 108,0 kg | 8/8 |
+| 26/10 | press banca | 90,0 kg | 90 × 6 | 108,0 kg | 7/7 |
 | 26/10 | press banca inclinado con mancuernas | 67,0 kg | 67 × 7 | 82,6 kg | 4/4 |
 | 26/10 | press superinclinado isolateral | 50,0 kg | — | — | 4/4 |
 | 26/10 | aperturas en banco inclinado con mancuernas | 32,0 kg | 32 × 10 | 42,7 kg | 4/4 |

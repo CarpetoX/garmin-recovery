@@ -1,6 +1,6 @@
 # Informe de seguimiento · 28/10/2026
 
-`GR-2026-10-28-1257-91d341` · cita este identificador al reenviar el informe.
+`GR-2026-10-28-1345-cdda5b` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,20 +55,16 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-28-1242-99d554 (28/10 12:42):
-- Sesiones con RPE: 11 → 13.
+Frente al informe GR-2026-10-28-1257-91d341 (28/10 12:57):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
 | 28/10 10:21 | Halterofilia | Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk | 56 | 25 | 123 / 153 | 7,5 | 419 |
-| 28/10 09:36 | Halterofilia | WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump | 25 | 28 | 157 / 192 | 9,0 | 221 |
-| 28/10 09:22 | WOD | Calentamiento - WOD E3MO3M | 14 | 6 | 122 / 162 | — | — |
-
-- ⚠️ Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk: RPE alto para tu FC: te costó más de lo habitual en este tipo de sesión.
-
-_RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
+| 28/10 09:36 | WOD | WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump | 25 | 28 | 157 / 192 | 9,0 | 221 |
+| 28/10 09:22 | Calentamiento | Calentamiento - WOD E3MO3M | 14 | 6 | 122 / 162 | — | — |
 
 **¿Encaja con la decisión?** ⚠️ RPE 9,0 supera el máximo recomendado (7): reduce o cambia la sesión restante.
 
@@ -111,7 +107,7 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 | 28/10 | split jerk | barra | 100,0 kg con barra | 100 × 1 | 100,0 kg | 938 kg | 13/13 | 7,5 |
 | 27/10 | DB split squat | mancuernas (par) | 60,0 kg total (2 × 30,0 kg) | — | — | 2.160 kg | 3/3 | — |
 | 27/10 | ring row feet elevated | peso corporal | peso corporal | — | — | — | —/3 | — |
-| 26/10 | press banca | barra | 90,0 kg con barra | 90 × 6 | 108,0 kg | 5.220 kg | 8/8 | 7,0 |
+| 26/10 | press banca | barra | 90,0 kg con barra | 90 × 6 | 108,0 kg | 4.620 kg | 7/7 | 7,0 |
 | 26/10 | press banca inclinado con mancuernas | mancuernas (par) | 67,0 kg total (2 × 33,5 kg) | 67 × 7 | 82,6 kg | 1.930 kg | 4/4 | 7,0 |
 | 26/10 | press superinclinado isolateral | máquina de discos | 50,0 kg total (dos lados) | — | — | 1.600 kg | 4/4 | 7,0 |
 | 26/10 | aperturas en banco inclinado con mancuernas | mancuernas (par) | 32,0 kg total (2 × 16,0 kg) | 32 × 10 | 42,7 kg | 1.088 kg | 4/4 | 7,0 |
@@ -126,16 +122,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-28-1257-91d341`
+- **Identificador del informe:** `GR-2026-10-28-1345-cdda5b`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-28-0830 · datos sincronizados a las 12:57 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 4,2 h ✓ · última HRV hace 5,7 h ✓ · última FC hace 8 min ✓ · último Body Battery hace 13 min ✓
+- **Ciclo:** 2026-10-28-0830 · datos sincronizados a las 13:44 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 5,0 h ✓ · última HRV hace 6,5 h ✓ · última FC hace 10 min ✓ · último Body Battery hace 34 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-28 12:57 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-28 13:45 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

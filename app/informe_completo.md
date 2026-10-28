@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Miércoles, 28 de octubre de 2026 · 12:57 · `GR-2026-10-28-1257-91d341`
+Miércoles, 28 de octubre de 2026 · 13:45 · `GR-2026-10-28-1345-cdda5b`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -34,7 +34,7 @@ Carga 7 días|11 sesiones|sRPE 1678|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (13:44), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -131,7 +131,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 104,2 lpm | 65,7 lpm |
+| Hoy* | 99,3 lpm | 65,7 lpm |
 | 3 días | 89,0 lpm | 60,5 lpm |
 | 7 días | 80,1 lpm | 64,5 lpm |
 | 28 días | 83,2 lpm | 64,2 lpm |
@@ -151,8 +151,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 29, máximo 86.
-- Body Battery: último valor 34/100, medido a las 12:45.
+- Estrés medio: 30, máximo 86.
+- Body Battery: último valor 33/100, medido a las 13:12.
 - Recuperación de FC a 1 min tras el ejercicio: 4 observaciones recientes, mediana 17,5 lpm (insuficientes para una tendencia robusta).
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -201,7 +201,7 @@ Contraste Garmin ↔ Intervals: las 11 actividades de Garmin de los últimos 7 d
 | sRPE por duración registrada | 1677 |
 | TRIMP | 305,4 |
 | Carga de actividades (Intervals) | 187 |
-| Volumen externo mínimo verificado | 8868 kg |
+| Volumen externo mínimo verificado | 8268 kg |
 
 El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, mancuernas y máquinas.
 
@@ -221,11 +221,11 @@ El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, m
 
 El 26 oct concentra la mayor carga sRPE de la semana. La relación con las señales de recuperación es descriptiva, no causal.
 
-Monotonía 0,8 · strain 1275 (descriptores de contexto, sin umbral médico).
+Monotonía 0,70 · strain 1174 (descriptores de contexto, sin umbral médico).
 
 ## 6. Fuerza, halterofilia y metcons
 
-- **28 oct — Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + s…** · RPE 7,5 · volumen de barra cuantificado 2529 kg · FC media 123 / máx. 153 lpm · TRIMP 41 · ⚠️ RPE alto para tu FC: te costó más de lo habitual en este tipo de sesión
+- **28 oct — Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + s…** · RPE 7,5 · volumen de barra cuantificado 2529 kg · FC media 123 / máx. 153 lpm · TRIMP 41
   Halterofilia después del WOD. Calentamiento con barra vacía. Aproximación: 3 series del complex squat clean + front squat + split jerk con 40, 50 y 60 kg en 3 minutos. Complex squat clean + front squat + split jerk (4 x 1, cada 1'): 60, 65, 68 y 70 kg. Complex 2 squat clean + split jerk (3 x 1, cada 1'30"): 75, 80 y 85 kg. Complex squat clean + split jerk (3 x 1, cada 1'30"): 90, 95 y 100 kg. 36 repeticiones y 2.529…
 - **28 oct — WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump** · RPE 9 · FC media 157 / máx. 192 lpm · TRIMP 46
   E3MO3M de 8 rondas (una cada 3'): 15 cal alternando SkiErg y Assault Bike según la ronda + 20 DB hang clean + shoulder to overhead con una mancuerna de 22,5 kg alternando brazos + 15 box jumps a 60 cm. 8 rondas completas (confirmado): 120 cal, 160 hang clean + S2OH y 120 box jumps. RPE 9. Garmin 24,6 min.
@@ -235,11 +235,11 @@ Monotonía 0,8 · strain 1275 (descriptores de contexto, sin umbral médico).
   AMRAP 15': 200 m carrera + 12 wall balls 9 kg + 9 pull-ups. Resultado 6 rondas + 200 m + 10 wall balls (1.400 m de carrera, 82 wall balls, 54 pull-ups). RPE 8. Garmin 15,4 min.
 - **27 oct — Fuerza - DB split squat / ring row feet elevated** · FC media 115 / máx. 162 lpm · TRIMP 15
   Calentamiento + fuerza cada 2'30" x 3 series: DB split squat 3x12 (6 con cada pierna, confirmado) con 30 kg por mancuerna (60 kg en total) y ring row feet elevated 3x12 con peso corporal. Garmin 24,0 min (incluye calentamiento). Sin RPE: sesión no puntuada por decisión del atleta.
-- **26 oct — Fuerza - pecho: press banca, inclinados, aperturas, bíceps y abdominales** · RPE 7 · volumen de barra cuantificado 5220 kg · FC media 109 / máx. 135 lpm · TRIMP 39
-  Press banca: 30x20 (barra vacía), 15x40, 15x60, 10x60, 10x70, 8x80, 6x90, 8x80 kg; volumen de barra 5.220 kg. Press inclinado mancuernas 2x8 con 31 kg y 2x7 con 33,5 kg por mancuerna. Press superinclinado isolateral 1x10 20 kg, 2x8 25 kg y 1x10 20 kg por lado. Aperturas en banco inclinado 1x10 y 3x8 con 16 kg por mancuerna. Curl bíceps máquina unilateral 1x8 10 kg y 3x8 15 kg por lado. Isolateral y curl con ambos br…
+- **26 oct — Fuerza - pecho: press banca, inclinados, aperturas, bíceps y abdominales** · RPE 7 · volumen de barra cuantificado 4620 kg · FC media 109 / máx. 135 lpm · TRIMP 39
+  Press banca: 30x20 (barra vacía), 15x40, 15x60, 10x60, 10x70, 8x80, 6x90, 8x80 kg; volumen de barra 4.620 kg sin la serie de barra vacía (5.220 kg con ella). Press inclinado mancuernas 2x8 con 31 kg y 2x7 con 33,5 kg por mancuerna. Press superinclinado isolateral 1x10 20 kg, 2x8 25 kg y 1x10 20 kg por lado. Aperturas en banco inclinado 1x10 y 3x8 con 16 kg por mancuerna. Curl bíceps máquina unilateral 1x8 10 kg y 3x…
 - **26 oct — Técnica - toes to bar** · FC media 119 / máx. 160 lpm · TRIMP 36
   Técnica de toes to bar de 47 min. Series y repeticiones no indicadas. Garmin 47,1 min. Sin RPE: sesión no puntuada por decisión del atleta.
-- **26 oct — WOD AMRAP 12 min - squat snatch / burpee over bar / toes to bar** · RPE 8 · FC media 143 / máx. 176 lpm · TRIMP 28
+- **26 oct — WOD AMRAP 12 min - squat snatch / burpee over bar / toes to bar** · RPE 8 · FC media 143 / máx. 176 lpm · TRIMP 28 · ⚠️ RPE alto para tu FC: te costó más de lo habitual en este tipo de sesión
   AMRAP 12': 6 squat snatch 50 kg + 9 burpees over the barbell + 12 toes to bar. Resultado 4 rondas + 6 squat snatch + 4 burpees = 118 repeticiones (30 snatch, 40 burpees, 48 T2B). RPE 8. Dictado como «emom» y con Garmin 12:10; Intervals registra 19,9 min (emparejado por orden: segunda actividad del día). Registrado como AMRAP según la pizarra.
 - **26 oct — Fuerza - Squat snatch** · RPE 7 · volumen de barra cuantificado 1119 kg · FC media 125 / máx. 159 lpm · TRIMP 22
   Calentamiento general + halterofilia. Aproximación 5 min de barra vacía (20 kg) a 50 kg, sin desglose. EMOM 9' 3x3/3x2/3x1: 3x50, 3x55, 3x60, 2x65, 2x68, 2x70, 1x70, 1x73, 1x75 kg. 18 repeticiones, volumen 1.119 kg. RPE 7 de todo el bloque. Garmin 24,5 min.
@@ -254,15 +254,17 @@ RPE frente a FC: se marcan las sesiones cuyo esfuerzo relativo, ln(sRPE / carga 
 
 | Patrón | 7 d: bloques · series | 7 d: barra (kg) | 28 d: bloques · series | 28 d: barra (kg) |
 |---|---|---|---|---|
-| Pecho (aislamiento) | — | — | 1 · 4 | — |
-| Core | 1 · 0 | — | 2 · 0 | — |
-| Bisagra de cadera | — | — | 1 · 2 | 0 (parcial) |
-| Empuje horizontal | 3 · 16 | 5.220 | 7 · 32 | 5.220 |
+| Bíceps (aislamiento) | 1 · 4 | — | 1 · 4 | — |
+| Pecho (aislamiento) | 1 · 4 | — | 2 · 8 | — |
+| Core | 1 · 4 | — | 2 · 8 | — |
+| Bisagra de cadera | — | — | 1 · 4 | 0 (parcial) |
+| Tirón horizontal | 1 · 3 | — | 2 · 7 | — |
+| Empuje horizontal | 3 · 15 | 4.620 | 7 · 35 | 4.620 |
 | Flexión de rodilla | — | — | 4 · 24 | — |
-| other | 5 · 12 | — | 6 · 12 | — |
-| Sentadilla | 4 · 32 | 2.710 | 14 · 99 | 17.028 |
+| Halterofilia | 3 · 35 | 3.235 | 7 · 56 | 5.163 |
+| Sentadilla | 2 · 10 | 413 | 8 · 54 | 12.403 |
 | Tríceps (aislamiento) | — | — | 1 · 4 | — |
-| Empuje vertical | 1 · 13 | 938 | 1 · 13 | 938 |
+| Tirón vertical | 2 · 8 | — | 2 · 8 | — |
 
 Solo series declaradas; «+» indica bloques sin número de series. El volumen en kg cuenta únicamente barra con carga total y volumen completo; no se suma entre equipos. Un patrón sin registros no demuestra que no se entrenara.
 
@@ -290,7 +292,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 
 ## 7. Balance y orientación
 
-Turno: hoy sin dato, mañana TN.
+Turno: hoy libre, mañana TN (15–08).
 - Señales favorables: duración del sueño igual o superior a tu referencia.
 - Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada.
 
@@ -308,13 +310,13 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 
 | # | Área | Qué muestran tus datos | Qué hacer |
 |---|---|---|---|
-| 1 | Sueño | Media de 7 noches: 8,1 h (necesidad configurada 7,5 h); 1 de 7 noches más de media hora por debajo; deuda acumulada 3,4 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). | Adelanta la hora de acostarte 30–45 min esta semana, sobre todo antes de un turno. |
-| 2 | Distribución de la intensidad | 16 de 27 sesiones con RPE registrado fueron de RPE ≥ 8 (59 %); 6 veces hubo dos días duros seguidos. | Intercala sesiones de RPE 5–6 entre las duras y deja ≥ 48 h entre dos esfuerzos máximos. |
-| 3 | Respuesta a las sesiones duras | HRV la mañana siguiente: 49 ms tras sesión de RPE ≥ 8 (n=10) frente a 55 ms tras las demás (n=3); diferencia -6 ms. | Tras un día muy duro, planifica el siguiente suave. |
+| 1 | HRV | HRV media de los últimos 7 días: 49,4 ms frente a tu base de 57 ms (-13 %); tu rango normal es 52,9–61,4 ms. Es la misma media (logarítmica) que usa la puntuación. | Baja la intensidad unos días, protege el sueño y reevalúa en una semana. |
+| 2 | Sueño | Media de 7 noches: 8,1 h (necesidad configurada 7,5 h); 1 de 7 noches más de media hora por debajo; deuda acumulada 3,4 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). | Adelanta la hora de acostarte 30–45 min esta semana, sobre todo antes de un turno. |
+| 3 | Distribución de la intensidad | 16 de 27 sesiones con RPE registrado fueron de RPE ≥ 8 (59 %); 6 veces hubo dos días duros seguidos. | Intercala sesiones de RPE 5–6 entre las duras y deja ≥ 48 h entre dos esfuerzos máximos. |
 
 ### Detalle por área
 
-- ✅ **HRV.** HRV media de los últimos 7 días: 54 ms frente a una referencia de 56 ms (-4 %). Estable respecto a tu referencia.
+- 🔴 **HRV.** HRV media de los últimos 7 días: 49,4 ms frente a tu base de 57 ms (-13 %); tu rango normal es 52,9–61,4 ms. Es la misma media (logarítmica) que usa la puntuación. Una HRV sostenida por debajo de tu referencia suele acompañar a más fatiga o menos descanso.
 - ✅ **FC en reposo.** FC en reposo de los últimos 7 días: 56,3 lpm frente a 57,0 de referencia (-0,7 lpm). En línea con tu referencia.
 - ⚠️ **Sueño.** Media de 7 noches: 8,1 h (necesidad configurada 7,5 h); 1 de 7 noches más de media hora por debajo; deuda acumulada 3,4 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
 - ✅ **Regularidad del sueño.** Hora de acostarte (mediana 00:12) con una variación típica de ±62 min en 14 noches; 2 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
@@ -354,13 +356,13 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| mié 28/10 | free | 🟢 Suave / movilidad | ya has entrenado hoy |
+| mié 28/10 | libre | 🟢 Suave / movilidad | ya has entrenado hoy |
 | jue 29/10 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
-| vie 30/10 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
-| sáb 31/10 | free | 🟡 Moderada | día libre; ya hay 3 sesiones duras en los últimos 7 días |
+| vie 30/10 | tras TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
+| sáb 31/10 | libre | 🟡 Moderada | día libre; ya hay 3 sesiones duras en los últimos 7 días |
 | dom 01/11 | MT | 🟢 Suave / movilidad | turno largo: movilidad o descanso |
 | lun 02/11 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
-| mar 03/11 | post-TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
+| mar 03/11 | tras TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
 
 Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separadas ≥ 48 h, solo en días libres). Se recalcula en cada informe y la decisión del día manda sobre él.
 
@@ -380,4 +382,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-28-0830 · generado 28/10/2026 12:57 Europe/Madrid · certificado READY · sync_run_id 40650680078.
+Traza: cierre matinal · ciclo 2026-10-28-0830 · generado 28/10/2026 13:45 Europe/Madrid · certificado READY · sync_run_id 40650680078.
