@@ -1,10 +1,10 @@
 # Resumen semanal · 22/10–28/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-28-1242-99d554`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-28-1257-91d341`)._
 
 ## En una frase
 
-- 11 sesiones (+2); HRV de 7 días por debajo de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (3 de 4 días entrenados comprobados).
+- 11 sesiones (+2); HRV de 7 días por debajo de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; 1 de 4 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: verde 3 · ámbar 3 · rojo 1.
 
 ## Gráficas de la semana
@@ -28,9 +28,11 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 11 | 9 |
 | Minutos | 341 | 226 |
 | Carga (Intervals) | 187 | 116 |
-| sRPE (RPE × min) | 1038 | 1016 |
+| sRPE (RPE × min) | 1678 | 1016 |
 
-Monotonía — · strain — · ACWR — · RPE registrado en 5/11 sesiones.
+Monotonía 0,70 · strain 1174 · ACWR — · RPE registrado en 7/11 sesiones.
+
+**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7).
 
 ## Recuperación
 
@@ -54,6 +56,9 @@ HRV de 7 días hoy: 49,4 ms (rango normal 52,9–61,4 ms). Turnos: MT, TN.
 | 26/10 | curl de bíceps en máquina unilateral | 15,0 kg | — | — | 4/4 |
 | 26/10 | squat snatch | 75,0 kg | 75 × 1 | 75,0 kg | 9/9 |
 | 27/10 | DB split squat | 60,0 kg | — | — | 3/3 |
+| 28/10 | squat clean | 100,0 kg | 100 × 1 | 100,0 kg | 13/13 |
+| 28/10 | front squat | 70,0 kg | 70 × 1 | 70,0 kg | 7/7 |
+| 28/10 | split jerk | 100,0 kg | 100 × 1 | 100,0 kg | 13/13 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
@@ -86,10 +91,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 5/11.
+- Sesiones con RPE: 7/11.
 
 ## Validación de modelos
 
-Acumulando datos: 4/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 5/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._

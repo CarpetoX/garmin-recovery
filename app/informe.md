@@ -1,6 +1,6 @@
 # Informe de seguimiento · 28/10/2026
 
-`GR-2026-10-28-1242-99d554` · cita este identificador al reenviar el informe.
+`GR-2026-10-28-1257-91d341` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,23 +55,24 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-28-0833-36b4c5 (28/10 08:33):
-- Oficial v2: 52 → 58 (+6).
-- v3: 66 → 68 (+2).
-- Nueva noche registrada: HRV 43 → 43 ms, sueño 7,03 → 8,55 h, FC reposo 60 → 60 lpm.
-- Sesiones nuevas desde entonces: **3** (carga +59).
+Frente al informe GR-2026-10-28-1242-99d554 (28/10 12:42):
+- Sesiones con RPE: 11 → 13.
 
 ## Actividad de hoy
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 28/10 10:21 | Sin detalle | HIIT | 56 | 25 | 123 / 153 | — | — |
-| 28/10 09:36 | Sin detalle | HIIT | 25 | 28 | 157 / 192 | — | — |
-| 28/10 09:22 | Sin detalle | HIIT | 14 | 6 | 122 / 162 | — | — |
+| 28/10 10:21 | Halterofilia | Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk | 56 | 25 | 123 / 153 | 7,5 | 419 |
+| 28/10 09:36 | Halterofilia | WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump | 25 | 28 | 157 / 192 | 9,0 | 221 |
+| 28/10 09:22 | WOD | Calentamiento - WOD E3MO3M | 14 | 6 | 122 / 162 | — | — |
 
-**¿Encaja con la decisión?** La actividad de hoy (carga 59, RPE máx. 0,0) encaja con la decisión.
+- ⚠️ Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk: RPE alto para tu FC: te costó más de lo habitual en este tipo de sesión.
 
-**Carga 7 días:** 187 en 11 sesiones (+61 % vs. semana previa) · sRPE 1.038 · monotonía —.
+_RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
+
+**¿Encaja con la decisión?** ⚠️ RPE 9,0 supera el máximo recomendado (7): reduce o cambia la sesión restante.
+
+**Carga 7 días:** 187 en 11 sesiones (+61 % vs. semana previa) · sRPE 1.678 · monotonía 0,70.
 
 ## Gráficas
 
@@ -97,9 +98,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i202655556** (28/10 09:22, Sin detalle, 14 min, carga 6) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i202655592** (28/10 09:36, Sin detalle, 25 min, carga 28) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i202685333** (28/10 10:21, Sin detalle, 56 min, carga 25) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -108,6 +106,9 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 28/10 | squat clean | barra | 100,0 kg con barra | 100 × 1 | 100,0 kg | 1.178 kg | 13/13 | 7,5 |
+| 28/10 | front squat | barra | 70,0 kg con barra | 70 × 1 | 70,0 kg | 413 kg | 7/7 | 7,5 |
+| 28/10 | split jerk | barra | 100,0 kg con barra | 100 × 1 | 100,0 kg | 938 kg | 13/13 | 7,5 |
 | 27/10 | DB split squat | mancuernas (par) | 60,0 kg total (2 × 30,0 kg) | — | — | 2.160 kg | 3/3 | — |
 | 27/10 | ring row feet elevated | peso corporal | peso corporal | — | — | — | —/3 | — |
 | 26/10 | press banca | barra | 90,0 kg con barra | 90 × 6 | 108,0 kg | 5.220 kg | 8/8 | 7,0 |
@@ -117,9 +118,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 | 26/10 | curl de bíceps en máquina unilateral | máquina de placas | 15,0 kg indicados en máquina | — | — | 440 kg | 4/4 | 7,0 |
 | 26/10 | sit-ups | peso corporal | peso corporal | — | — | — | —/4 | 7,0 |
 | 26/10 | squat snatch | barra | 75,0 kg con barra | 75 × 1 | 75,0 kg | 1.119 kg | 9/9 | 7,0 |
-| 23/10 | chin up lastrado | sin especificar | 15,0 kg (unidad sin especificar) | — | — | 225 kg | 4/4 | — |
-| 23/10 | isometric pull up | sin especificar | — | — | — | — (parcial) | —/4 | — |
-| 20/10 | DB split squat | mancuernas (par) | 45,0 kg total (2 × 22,5 kg) | 45 × 10 | 60,0 kg | 1.800 kg | 4/4 | — |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -128,16 +126,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-28-1242-99d554`
+- **Identificador del informe:** `GR-2026-10-28-1257-91d341`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-28-0830 · datos sincronizados a las 12:41 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 4,0 h ✓ · última HRV hace 5,4 h ✓ · última FC hace 7 min ✓ · último Body Battery hace 13 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 11/14 (+6 sin RPE por diseño: calentamiento/técnica) (sin RPE: 28/10 09:22, 28/10 09:36, 28/10 10:21)
+- **Ciclo:** 2026-10-28-0830 · datos sincronizados a las 12:57 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 4,2 h ✓ · última HRV hace 5,7 h ✓ · última FC hace 8 min ✓ · último Body Battery hace 13 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-28 12:42 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-28 12:57 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

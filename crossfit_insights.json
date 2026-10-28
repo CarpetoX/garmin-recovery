@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-28T12:42:34.804372+01:00",
+  "generated_at": "2026-10-28T12:57:47.524345+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
-  "sheet_rows_loaded": 32,
+  "sheet_rows_loaded": 35,
   "sheet_fetch_policy": "same_advanced_run_sha256_snapshot",
-  "sheet_latest_date": "2026-10-27",
+  "sheet_latest_date": "2026-10-28",
   "latest_activity_date": "2026-10-28",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.",
@@ -614,7 +614,7 @@
         "intervals_training_load": 59.0,
         "garmin_activity_load": 239.9,
         "trimp": 97.2,
-        "session_rpe_load": 0
+        "session_rpe_load": 640.6
       },
       "baseline_previous_3d": {
         "hrv": 18.03,
@@ -673,7 +673,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-10-28T12:42:14.481074+01:00",
+    "generated_at": "2026-10-28T12:57:26.871351+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "yellow",
@@ -792,26 +792,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-10-28T08:44:00+01:00",
-            "age_minutes": 238.2,
+            "age_minutes": 253.4,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-10-28T07:16:20+01:00",
-            "age_minutes": 325.9,
+            "age_minutes": 341.1,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
             "state": "recent",
-            "measured_at": "2026-10-28T12:36:00+01:00",
-            "age_minutes": 6.2,
+            "measured_at": "2026-10-28T12:50:00+01:00",
+            "age_minutes": 7.4,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
             "state": "recent",
-            "measured_at": "2026-10-28T12:30:00+01:00",
-            "age_minutes": 12.2,
+            "measured_at": "2026-10-28T12:45:00+01:00",
+            "age_minutes": 12.4,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -843,8 +843,8 @@
           "easy_aerobic": "light_to_moderate_by_perceived_effort",
           "mobility": "usual_light_mobility"
         },
-        "recent_sessions_with_declared_rpe": 4,
-        "recent_high_rpe_sessions": 2,
+        "recent_sessions_with_declared_rpe": 6,
+        "recent_high_rpe_sessions": 3,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
     },
@@ -860,14 +860,335 @@
       "date": "2026-10-28",
       "context": "free",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk",
+          "rpe": 7.5,
+          "notes": "Halterofilia después del WOD. Calentamiento con barra vacía. Aproximación: 3 series del complex squat clean + front squat + split jerk con 40, 50 y 60 kg en 3 minutos. Complex squat clean + front squat + split jerk (4 x 1, cada 1'): 60, 65, 68 y 70 kg. Complex 2 squat clean + split jerk (3 x 1, cada 1'30\"): 75, 80 y 85 kg. Complex squat clean + split jerk (3 x 1, cada 1'30\"): 90, 95 y 100 kg. 36 repeticiones y 2.529 kg de volumen de barra (2.079 kg en las series de trabajo + 450 kg de aproximación). RPE máximo 7,5. Garmin 55,9 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "garmin_activity_id": "i202685333",
+            "rpe": 7.5,
+            "rpe_scope": "máximo de la sesión",
+            "recorded_garmin_minutes": 55.85,
+            "context": "después del WOD E3MO3M (i202655592)",
+            "warmup": {
+              "bar_empty": true,
+              "bar_kg": null
+            },
+            "complexes": [
+              {
+                "name": "Aproximación: squat clean + front squat + split jerk",
+                "approach": true,
+                "sets": 3,
+                "interval_seconds": 60,
+                "reps": {
+                  "squat clean": 1,
+                  "front squat": 1,
+                  "split jerk": 1
+                },
+                "loads_kg": [
+                  40,
+                  50,
+                  60
+                ]
+              },
+              {
+                "name": "Complex squat clean + front squat + split jerk (4 x 1)",
+                "sets": 4,
+                "interval_seconds": 60,
+                "reps": {
+                  "squat clean": 1,
+                  "front squat": 1,
+                  "split jerk": 1
+                },
+                "loads_kg": [
+                  60,
+                  65,
+                  68,
+                  70
+                ]
+              },
+              {
+                "name": "Complex 2 squat clean + split jerk (3 x 1)",
+                "sets": 3,
+                "interval_seconds": 90,
+                "reps": {
+                  "squat clean": 2,
+                  "split jerk": 1
+                },
+                "loads_kg": [
+                  75,
+                  80,
+                  85
+                ]
+              },
+              {
+                "name": "Complex squat clean + split jerk (3 x 1)",
+                "sets": 3,
+                "interval_seconds": 90,
+                "reps": {
+                  "squat clean": 1,
+                  "split jerk": 1
+                },
+                "loads_kg": [
+                  90,
+                  95,
+                  100
+                ]
+              }
+            ],
+            "exercises": [
+              {
+                "name": "squat clean",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 40,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 50,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 65,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 68,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 70,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 75,
+                    "interval_seconds": 90,
+                    "complex": "Complex 2 squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 80,
+                    "interval_seconds": 90,
+                    "complex": "Complex 2 squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 2,
+                    "load_kg": 85,
+                    "interval_seconds": 90,
+                    "complex": "Complex 2 squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 90,
+                    "interval_seconds": 90,
+                    "complex": "Complex squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 95,
+                    "interval_seconds": 90,
+                    "complex": "Complex squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 100,
+                    "interval_seconds": 90,
+                    "complex": "Complex squat clean + split jerk (3 x 1)"
+                  }
+                ]
+              },
+              {
+                "name": "front squat",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 40,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 50,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 65,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 68,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 70,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  }
+                ]
+              },
+              {
+                "name": "split jerk",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 40,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 50,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Aproximación: squat clean + front squat + split jerk",
+                    "approach": true
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 65,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 68,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 70,
+                    "interval_seconds": 60,
+                    "complex": "Complex squat clean + front squat + split jerk (4 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 75,
+                    "interval_seconds": 90,
+                    "complex": "Complex 2 squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 90,
+                    "complex": "Complex 2 squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 90,
+                    "complex": "Complex 2 squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 90,
+                    "interval_seconds": 90,
+                    "complex": "Complex squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 95,
+                    "interval_seconds": 90,
+                    "complex": "Complex squat clean + split jerk (3 x 1)"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 100,
+                    "interval_seconds": 90,
+                    "complex": "Complex squat clean + split jerk (3 x 1)"
+                  }
+                ]
+              }
+            ],
+            "total_reps": 36,
+            "working_reps": 27,
+            "volume_kg": 2529,
+            "working_volume_kg": 2079,
+            "approach_volume_kg": 450,
+            "top_set_kg": 100,
+            "notes": "Aproximación = 3 series del complex squat clean + front squat + split jerk con 40, 50 y 60 kg en 3 minutos (confirmado por el atleta el 28/10/2026); incluida en el volumen y marcada como aproximación. Cada ejercicio del complex se registra por separado con la carga de la serie. Peso de la barra vacía no indicado. RPE 7,5 = máximo de la sesión. Sesión hecha después del WOD."
+          },
+          "minimum_verified_volume_kg": 2529.0,
+          "volume_complete": true,
+          "structured_sets_known": 33,
+          "structured_sets_total": 33
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 7.5,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 55.85,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 418.9,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -891,14 +1212,77 @@
       "date": "2026-10-28",
       "context": "free",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump",
+          "rpe": 9.0,
+          "notes": "E3MO3M de 8 rondas (una cada 3'): 15 cal alternando SkiErg y Assault Bike según la ronda + 20 DB hang clean + shoulder to overhead con una mancuerna de 22,5 kg alternando brazos + 15 box jumps a 60 cm. 8 rondas completas (confirmado): 120 cal, 160 hang clean + S2OH y 120 box jumps. RPE 9. Garmin 24,6 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "metcon",
+            "format": "E3MO3M",
+            "garmin_activity_id": "i202655592",
+            "interval_seconds": 180,
+            "rounds": 8,
+            "duration_minutes": 24,
+            "rpe": 9,
+            "recorded_garmin_minutes": 24.63,
+            "prescribed_round": [
+              {
+                "name": "calorías SkiErg / Assault Bike",
+                "calories": 15,
+                "board_calories": "15/12",
+                "machines": [
+                  "SkiErg",
+                  "Assault Bike"
+                ],
+                "alternation": "una máquina por ronda",
+                "first_machine": null
+              },
+              {
+                "name": "DB hang clean + shoulder to overhead",
+                "reps": 20,
+                "load_kg": 22.5,
+                "load_unit": "kg_una_mancuerna",
+                "implements": 1,
+                "load_per_dumbbell_kg": 22.5,
+                "alternating_arms": true
+              },
+              {
+                "name": "box jump",
+                "reps": 15,
+                "box_height_cm": 60
+              }
+            ],
+            "performed": {
+              "rounds": 8,
+              "all_rounds_completed": true,
+              "totals": {
+                "calories": 120,
+                "skierg_calories": 60,
+                "assault_bike_calories": 60,
+                "db_hang_clean_s2oh_reps": 160,
+                "box_jump_reps": 120
+              },
+              "db_volume_kg": 3600
+            },
+            "notes": "15 cal por ronda y 8 rondas completas, confirmado por el atleta el 28/10/2026. No consta con qué máquina empezó. Mancuerna única alternando brazos."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 9.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 24.63,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 221.7,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -922,8 +1306,29 @@
       "date": "2026-10-28",
       "context": "free",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Calentamiento - WOD E3MO3M",
+          "rpe": null,
+          "notes": "Calentamiento para el WOD E3MO3M, sin desglose. Garmin 13,8 min. Sin RPE: sesión no puntuada por decisión del atleta.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "warmup",
+            "exercise": "calentamiento para el WOD E3MO3M",
+            "garmin_activity_id": "i202655556",
+            "rpe": null,
+            "recorded_garmin_minutes": 13.82,
+            "notes": "Sin desglose de ejercicios. Sin RPE: sesión no puntuada por decisión del atleta."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
       "rpe_used": null,
       "rpe_interval": null,
@@ -3975,6 +4380,81 @@
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
+        "date": "2026-10-28",
+        "activity_id": "i202685333",
+        "exercise": "squat clean",
+        "movement_pattern": "squat",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 1178.0,
+        "known_sets": 13,
+        "total_sets": 13,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 100.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 100.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 100.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 7.5,
+        "pain": null
+      },
+      {
+        "date": "2026-10-28",
+        "activity_id": "i202685333",
+        "exercise": "front squat",
+        "movement_pattern": "squat",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 413.0,
+        "known_sets": 7,
+        "total_sets": 7,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 70.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 70.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 70.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 7.5,
+        "pain": null
+      },
+      {
+        "date": "2026-10-28",
+        "activity_id": "i202685333",
+        "exercise": "split jerk",
+        "movement_pattern": "vertical_push",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 938.0,
+        "known_sets": 13,
+        "total_sets": 13,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 100.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 100.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 100.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 7.5,
+        "pain": null
+      },
+      {
         "date": "2026-10-27",
         "activity_id": "i202206047",
         "exercise": "DB split squat",
@@ -4828,10 +5308,18 @@
     "movement_pattern_load": {
       "7d": {
         "squat": {
-          "verified_volume_kg": 3279.0,
-          "known_sets": 12,
-          "total_sets": 12,
-          "sessions": 2,
+          "verified_volume_kg": 4870.0,
+          "known_sets": 32,
+          "total_sets": 32,
+          "sessions": 4,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "vertical_push": {
+          "verified_volume_kg": 938.0,
+          "known_sets": 13,
+          "total_sets": 13,
+          "sessions": 1,
           "volume_complete": true,
           "mixed_equipment_caution": true
         },
@@ -4862,10 +5350,18 @@
       },
       "28d": {
         "squat": {
-          "verified_volume_kg": 25637.0,
-          "known_sets": 79,
-          "total_sets": 79,
-          "sessions": 12,
+          "verified_volume_kg": 27228.0,
+          "known_sets": 99,
+          "total_sets": 99,
+          "sessions": 14,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "vertical_push": {
+          "verified_volume_kg": 938.0,
+          "known_sets": 13,
+          "total_sets": 13,
+          "sessions": 1,
           "volume_complete": true,
           "mixed_equipment_caution": true
         },
@@ -4929,6 +5425,22 @@
     },
     "movement_pattern_load_by_equipment": {
       "7d": {
+        "squat:barbell": {
+          "verified_volume_kg": 2710.0,
+          "known_sets": 29,
+          "external_sets_expected": 29,
+          "total_sets": 29,
+          "sessions": 3,
+          "volume_complete": true
+        },
+        "vertical_push:barbell": {
+          "verified_volume_kg": 938.0,
+          "known_sets": 13,
+          "external_sets_expected": 13,
+          "total_sets": 13,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "squat:dumbbell_pair": {
           "verified_volume_kg": 2160.0,
           "known_sets": 3,
@@ -4993,14 +5505,6 @@
           "sessions": 1,
           "volume_complete": true
         },
-        "squat:barbell": {
-          "verified_volume_kg": 1119.0,
-          "known_sets": 9,
-          "external_sets_expected": 9,
-          "total_sets": 9,
-          "sessions": 1,
-          "volume_complete": true
-        },
         "other:unspecified": {
           "verified_volume_kg": 225.0,
           "known_sets": 4,
@@ -5011,6 +5515,22 @@
         }
       },
       "28d": {
+        "squat:barbell": {
+          "verified_volume_kg": 17028.0,
+          "known_sets": 84,
+          "external_sets_expected": 84,
+          "total_sets": 84,
+          "sessions": 10,
+          "volume_complete": true
+        },
+        "vertical_push:barbell": {
+          "verified_volume_kg": 938.0,
+          "known_sets": 13,
+          "external_sets_expected": 13,
+          "total_sets": 13,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "squat:dumbbell_pair": {
           "verified_volume_kg": 3960.0,
           "known_sets": 7,
@@ -5073,14 +5593,6 @@
           "external_sets_expected": 0,
           "total_sets": 8,
           "sessions": 2,
-          "volume_complete": true
-        },
-        "squat:barbell": {
-          "verified_volume_kg": 15437.0,
-          "known_sets": 64,
-          "external_sets_expected": 64,
-          "total_sets": 64,
-          "sessions": 8,
           "volume_complete": true
         },
         "other:unspecified": {
@@ -5167,6 +5679,17 @@
   "training_extensions": {
     "metcon_exposure": {
       "entries": [
+        {
+          "date": "2026-10-28",
+          "activity_id": "i202655592",
+          "movement": "box jump",
+          "verified_reps": 120,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 24.63
+        },
         {
           "date": "2026-10-27",
           "activity_id": "i202211970",
@@ -5346,6 +5869,11 @@
       ],
       "movement_work": {
         "7d": {
+          "box jump": {
+            "reps": 170,
+            "distance_m": 0.0,
+            "entries": 2
+          },
           "carrera": {
             "reps": 0,
             "distance_m": 1400.0,
@@ -5375,14 +5903,14 @@
             "reps": 50,
             "distance_m": 0.0,
             "entries": 1
-          },
-          "box jump": {
-            "reps": 50,
-            "distance_m": 0.0,
-            "entries": 1
           }
         },
         "28d": {
+          "box jump": {
+            "reps": 170,
+            "distance_m": 0.0,
+            "entries": 2
+          },
           "carrera": {
             "reps": 0,
             "distance_m": 3600.0,
@@ -5412,11 +5940,6 @@
             "reps": 95,
             "distance_m": 0.0,
             "entries": 2
-          },
-          "box jump": {
-            "reps": 50,
-            "distance_m": 0.0,
-            "entries": 1
           },
           "squat clean": {
             "reps": 24,
@@ -6042,7 +6565,7 @@
             "intervals_training_load": 59.0,
             "garmin_activity_load": 239.9,
             "trimp": 97.2,
-            "session_rpe_load": 0
+            "session_rpe_load": 640.6
           },
           "baseline_previous_3d": {
             "hrv": 18.03,
@@ -6099,20 +6622,20 @@
       "window_summaries": {
         "recent_7d": {
           "sessions": 11,
-          "sessions_with_rpe": 5,
-          "high_rpe_sessions": 3,
+          "sessions_with_rpe": 7,
+          "high_rpe_sessions": 4,
           "recorded_duration_minutes": 341.1,
           "sessions_with_duration": 11,
-          "srpe_from_recorded_duration": 1036.3,
-          "srpe_sessions": 5,
-          "minimum_recorded_external_volume_kg": 6339.0,
-          "strength_blocks_with_quantified_weight": 2,
-          "strength_blocks_missing_quantified_weight": 6,
+          "srpe_from_recorded_duration": 1676.9,
+          "srpe_sessions": 7,
+          "minimum_recorded_external_volume_kg": 8868.0,
+          "strength_blocks_with_quantified_weight": 3,
+          "strength_blocks_missing_quantified_weight": 8,
           "garmin_intervals_load_separate": 187.0,
           "intervals_load_sessions": 11,
           "trimp_separate": 305.4,
           "trimp_sessions": 11,
-          "mean_recorded_rpe": 7.7
+          "mean_recorded_rpe": 7.86
         },
         "previous_7d": {
           "sessions": 9,
@@ -6133,20 +6656,20 @@
         },
         "recent_28d": {
           "sessions": 35,
-          "sessions_with_rpe": 25,
-          "high_rpe_sessions": 15,
+          "sessions_with_rpe": 27,
+          "high_rpe_sessions": 16,
           "recorded_duration_minutes": 957.8,
           "sessions_with_duration": 35,
-          "srpe_from_recorded_duration": 4452.5,
-          "srpe_sessions": 25,
-          "minimum_recorded_external_volume_kg": 21687.0,
-          "strength_blocks_with_quantified_weight": 9,
-          "strength_blocks_missing_quantified_weight": 23,
+          "srpe_from_recorded_duration": 5093.1,
+          "srpe_sessions": 27,
+          "minimum_recorded_external_volume_kg": 24216.0,
+          "strength_blocks_with_quantified_weight": 10,
+          "strength_blocks_missing_quantified_weight": 25,
           "garmin_intervals_load_separate": 521.0,
           "intervals_load_sessions": 35,
           "trimp_separate": 844.8,
           "trimp_sessions": 35,
-          "mean_recorded_rpe": 7.4
+          "mean_recorded_rpe": 7.46
         }
       },
       "daily_chart_7d": [
@@ -6195,27 +6718,27 @@
         {
           "date": "2026-10-28",
           "sessions": 3,
-          "mean_recorded_rpe": null,
+          "mean_recorded_rpe": 8.25,
           "recorded_minutes": 94.3,
-          "srpe_from_recorded_duration": 0.0
+          "srpe_from_recorded_duration": 640.6
         }
       ],
       "latest_session": {
         "date": "2026-10-28",
         "activity_id": "i202685333",
         "name": "HIIT",
-        "rpe": null,
+        "rpe": 7.5,
         "recorded_minutes": 55.85,
         "heart_rate": {
           "average": 123.0,
           "max": 153.0
         },
-        "manual_blocks_recorded": 0
+        "manual_blocks_recorded": 1
       },
       "previous_week_context": {
         "sufficient_for_descriptive_comparison": true,
         "session_count_change": 2,
-        "mean_rpe_change": 0.28,
+        "mean_rpe_change": 0.44,
         "note": "El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento."
       },
       "benchmark_comparisons": [],
@@ -6252,36 +6775,25 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-10-28T12:42:34.804372+01:00",
+    "checked_at": "2026-10-28T12:57:47.524345+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-28",
     "latest_activity_age_days": 0,
-    "sheet_rows": 32,
-    "manual_coverage_7d_pct": 72.7,
-    "flags": [
-      {
-        "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 3,
-        "ids": [
-          "i202685333",
-          "i202655592",
-          "i202655556"
-        ]
-      }
-    ],
+    "sheet_rows": 35,
+    "manual_coverage_7d_pct": 100.0,
+    "flags": [],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
   },
   "weekly_report": {
     "window_start": "2026-10-22",
     "window_end": "2026-10-28",
     "activities": 11,
-    "activities_with_manual_sheet_match": 8,
-    "activities_missing_manual_match": 3,
-    "mean_rpe": 7.7,
-    "recorded_srpe_sum": 1036.3,
+    "activities_with_manual_sheet_match": 11,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 7.86,
+    "recorded_srpe_sum": 1676.9,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 6339.0,
+    "minimum_verified_strength_volume_kg": 8868.0,
     "strength_blocks_with_missing_weights": 0,
     "readiness_latest": {
       "score": 74,
@@ -6315,19 +6827,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-10-28T12:42:34.804372+01:00",
+    "checked_at": "2026-10-28T12:57:47.524345+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-28T12:41:22.560669+01:00",
+        "generated_at": "2026-10-28T12:56:40.842131+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-10-28T12:41:43.842345+01:00",
+        "generated_at": "2026-10-28T12:57:01.087902+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -6341,28 +6853,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-10-28T12:42:12.156960+01:00",
+        "generated_at": "2026-10-28T12:57:26.368374+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-10-28T12:42:12.156960+01:00",
+        "generated_at": "2026-10-28T12:57:26.368374+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-10-28T12:41:22.560669+01:00",
+        "generated_at": "2026-10-28T12:56:40.842131+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-10-28T12:41:43.842345+01:00",
+        "generated_at": "2026-10-28T12:57:01.087902+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
