@@ -79,10 +79,24 @@ def split_ids(rows) -> set[str]:
 
 
 def hr_in(curve: dict | None, start: float, end: float) -> dict | None:
-    """FC media y máxima del tramo a partir de la curva de Intervals ([[segundo, lpm], …])."""
+    """FC media y máxima del tramo a partir de la curva de Intervals ([[segundo, lpm], …]).
+
+    El tramo se dicta con el cronómetro de Garmin (sin pausas) y la curva va en tiempo total: los huecos de la
+    curva (pausas) se descuentan para que los dos relojes coincidan.
+    """
     pts = (curve or {}).get("points") if isinstance(curve, dict) else None
-    vals = [p[1] for p in pts or [] if isinstance(p, (list, tuple)) and len(p) >= 2
-            and isinstance(p[0], (int, float)) and isinstance(p[1], (int, float)) and start <= p[0] <= end]
+    pts = [p for p in pts or [] if isinstance(p, (list, tuple)) and len(p) >= 2
+           and isinstance(p[0], (int, float)) and isinstance(p[1], (int, float))]
+    if not pts:
+        return None
+    step = _num((curve or {}).get("step_s")) or 10
+    vals, moving, prev = [], pts[0][0], pts[0][0]
+    for t, hr in ((p[0], p[1]) for p in pts):
+        dt = t - prev
+        moving += dt if dt <= step * 1.5 else step  # hueco = pausa: el cronómetro solo avanza un paso
+        prev = t
+        if start <= moving <= end:
+            vals.append(hr)
     if len(vals) < 3:
         return None
     return {"average": sum(vals) / len(vals), "max": max(vals)}

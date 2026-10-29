@@ -35,6 +35,12 @@ class Segments(unittest.TestCase):
         bad = [ROWS[0], dict(ROWS[1], **{"Detalle JSON": "{}"})]
         self.assertEqual(segments.split_ids(bad), set())
 
+    def test_hr_in_skips_pauses(self):
+        # pausa de 370 s a los 2100 s: el tramo 2420–2656 del cronómetro está en 2790–3026 de la curva
+        pts = [[t, 100] for t in range(0, 2110, 10)] + [[t, 170 if t >= 2790 else 100] for t in range(2470, 3040, 10)]
+        self.assertEqual(segments.hr_in({"step_s": 10, "points": pts}, 2420, 2656)["max"], 170)
+        self.assertGreater(segments.hr_in({"step_s": 10, "points": pts}, 2420, 2656)["average"], 160)
+
     def test_hr_in_segment(self):
         curve = {"points": [[t, 100 if t < 2420 else 170] for t in range(0, 3000, 10)]}
         self.assertEqual(segments.hr_in(curve, 2420, 2656), {"average": 170, "max": 170})
