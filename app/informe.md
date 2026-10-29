@@ -1,6 +1,6 @@
 # Informe matutino · 29/10/2026
 
-`GR-2026-10-29-0833-89bae5` · cita este identificador al reenviar el informe.
+`GR-2026-10-29-0856-3f64e6` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -12,7 +12,7 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 4 | 0–50 % | 35 ms | 60 lpm | 7,08 h | 1/100 |
+| 4 | 0–50 % | 35 ms | 60 lpm | 7,55 h | 1/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
@@ -20,7 +20,7 @@
 |---|--:|---|---|
 | Recuperación oficial | 39 | rojo | oficial |
 | Híbrido Garmin + local | 32 | rojo | salvaguarda |
-| Modelo experimental | — | pendiente | sombra |
+| Modelo experimental | 57 | ámbar | sombra |
 | Modelo de compatibilidad | 49 | rojo | compatibilidad |
 | Garmin Training Readiness | 1 | — | contexto |
 
@@ -54,27 +54,23 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-28-2248-ec57ae (28/10 22:48):
-- **Decisión:** ámbar → **rojo**.
-- Oficial v2: 58 → 39 (-19).
-- Híbrido: 74 → 32 (-42).
-- Nueva noche registrada: HRV 43 → 35 ms, sueño 8,55 → 7,08 h, FC reposo 60 → 60 lpm.
-- Sesiones con RPE: 14 → 12.
+Frente al informe GR-2026-10-29-0833-89bae5 (29/10 08:33):
+- Nueva noche registrada: HRV 35 → 35 ms, sueño 7,08 → 7,55 h, FC reposo 60 → 60 lpm.
 
 ## Qué ha cambiado respecto a tu línea base
 
 - **HRV:** 35 ms esta noche (-38 % vs. base 56 ms); media de 7 días 46,8 ms, por debajo de tu rango normal (52–60 ms).
-- **FC:** reposo 60 lpm (+4 vs. mediana 56); nocturna 70,6 lpm (+8,1).
-- **Sueño:** 7,08 h, puntuación 41; deuda 0,4 h en 3 noches frente a 7,5 h de necesidad.
+- **FC:** reposo 60 lpm (+4 vs. mediana 56); nocturna 71,0 lpm (+8,5).
+- **Sueño:** 7,55 h, puntuación 42; deuda 0,0 h en 3 noches frente a 7,5 h de necesidad.
 - **Estrés Garmin ayer:** 41 de media (tu mediana 38).
 
 **Señales coincidentes:** 3 de 4 señales en contra (Variabilidad cardiaca (HRV), FC en reposo y nocturna, Sueño). Sin datos: Carga de entrenamiento, Sensaciones (Intervals).
 
 ## Incertidumbre
 
-- Confianza de los datos: **baja** (sueño de hoy sin confirmar)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
-- El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+- Confianza de los datos: **alta**
+- Confianza de la recomendación: **media** (línea base de 27 noches (alta desde 28))
+- El modelo experimental (ámbar) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 ## Plan del día
 
@@ -127,16 +123,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-29-0833-89bae5`
+- **Identificador del informe:** `GR-2026-10-29-0856-3f64e6`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-29-0830 · datos sincronizados a las 08:32
-- **Antigüedad:** fin del sueño hace 23 min ✓ · última HRV hace 27 min ✓ · última FC hace 6 min ✓ · último Body Battery hace 16 min ✓
+- **Ciclo:** 2026-10-29-0830-post-sleep · datos sincronizados a las 08:55
+- **Antigüedad:** fin del sueño hace 45 min ✓ · última HRV hace 50 min ✓ · última FC hace 6 min ✓ · último Body Battery hace 38 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 12/12 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-29 08:33 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-29 08:56 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
