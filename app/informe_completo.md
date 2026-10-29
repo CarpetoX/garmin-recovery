@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Jueves, 29 de octubre de 2026 · 11:18 · `GR-2026-10-29-1118-7a5a12`
+Jueves, 29 de octubre de 2026 · 12:03 · `GR-2026-10-29-1203-8d23aa`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|13 sesiones|sRPE 1986|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (11:17), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (12:02), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -133,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 90,4 lpm | 71,0 lpm |
+| Hoy* | 88,7 lpm | 71,0 lpm |
 | 3 días | 95,5 lpm | 65,2 lpm |
 | 7 días | 84,5 lpm | 65,2 lpm |
 | 28 días | 83,4 lpm | 63,6 lpm |
@@ -153,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 37, máximo 81.
-- Body Battery: último valor 24/100, medido a las 10:39.
+- Estrés medio: 38, máximo 81.
+- Body Battery: último valor 23/100, medido a las 11:12.
 - Recuperación de FC a 1 min tras el ejercicio: 5 observaciones recientes, mediana 19,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -242,6 +242,8 @@ Metros por latido = velocidad (m/min) ÷ FC media. Comparaciones descriptivas en
   Técnica de handstand push-up progresando hasta HSPU en déficit con un disco de 20 y otro de 10 por lado. Minutos 0:00–40:20 de la actividad de Garmin (grabada junto al WOD). Sin RPE: sesión no puntuada por decisión del atleta.
 - **29 oct — WOD 21-15-9 - push press 50 kg / butterfly pull-up** · RPE 5
   For Time, cap 9': 21 push press 50 kg + 18 butterfly pull-ups, 15 + 12, 9 + 6. Completado en 3:54 (oficial). 81 repeticiones (45 push press, 36 butterfly). Tramo 40:20–44:16 de la actividad de Garmin. RPE 5.
+- **29 oct — Hito - primer bar muscle up**
+  Primer bar muscle up conseguido: 4 en total, sin enlazar (singles). Hecho fuera del WOD y del resto del entrenamiento; misma actividad de Garmin, sin tramo propio. Sin RPE: no puntuado.
 - **28 oct — Carrera - 8 km** · RPE 7 · FC media 157 / máx. 177 lpm · TRIMP 77
   Carrera de 8 km (Garmin 8,02 km en 41,3 min, ritmo medio 5:09 min/km calculado). RPE 7. Cuarta sesión del día, tras el WOD y la halterofilia de la mañana.
 - **28 oct — Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + s…** · RPE 7,5 · volumen de barra cuantificado 2529 kg · FC media 123 / máx. 153 lpm · TRIMP 41
@@ -313,7 +315,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 
 Turno: hoy TN (15–08), mañana libre tras la noche.
 - Señales favorables: duración del sueño igual o superior a tu referencia.
-- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (1/100); Body Battery bajo (24/100).
+- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (1/100); Body Battery bajo (23/100).
 
 ### Recomendaciones
 
@@ -401,4 +403,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-29-0830-post-sleep · generado 29/10/2026 11:18 Europe/Madrid · certificado READY · sync_run_id 40838497063.
+Traza: informe de tarde · ciclo 2026-10-29-0830-post-sleep · generado 29/10/2026 12:03 Europe/Madrid · certificado READY · sync_run_id 40838497063.
