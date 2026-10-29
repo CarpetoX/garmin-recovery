@@ -75,7 +75,11 @@ def split_ids(rows) -> set[str]:
     for r in rows or []:
         if isinstance(r, dict) and str(r.get("ID actividad") or "").strip():
             by.setdefault(str(r["ID actividad"]).strip(), []).append(r)
-    return {k for k, v in by.items() if len(v) > 1 and all(segment(r.get("Detalle JSON")) for r in v)}
+    def ok(r):  # V8.11: un hito o una parte fuera de la grabación («outside_segments») no necesita tramo
+        d = _detail(r.get("Detalle JSON"))
+        return segment(d) or (d.get("outside_segments") is True and _num(r.get("RPE")) is None)
+    return {k for k, v in by.items() if len(v) > 1 and all(ok(r) for r in v)
+            and any(segment(r.get("Detalle JSON")) for r in v)}
 
 
 def hr_in(curve: dict | None, start: float, end: float) -> dict | None:

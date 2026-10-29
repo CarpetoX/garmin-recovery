@@ -329,11 +329,13 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str, cu
         for b in act.get("manual_blocks") or []:
             d = b.get("detail_json") if isinstance(b, dict) and isinstance(b.get("detail_json"), dict) else {}
             seg = segment(d)
-            if seg and d.get("type") in SKIP_TYPES:
+            outside = d.get("outside_segments") is True  # V8.11: hito o parte fuera de los tramos
+            if (seg or outside) and d.get("type") in SKIP_TYPES:
                 other.append({"date": act["date"], "activity_id": aid, "kind": d["type"],
                               "title": clip(b.get("activity") or "Sesión", 90),
                               "rpe": b.get("rpe") if isinstance(b.get("rpe"), (int, float)) else None,
-                              "minutes": round((seg[1] - seg[0]) / 60, 1), "segment": True,
+                              "minutes": round((seg[1] - seg[0]) / 60, 1) if seg else None, "segment": bool(seg),
+                              "milestone": clip(d["milestone"], 90) if isinstance(d.get("milestone"), str) else None,
                               "note": (b.get("notes") or "")[:400]})
     mc7 = [m for m in metcons if m["date"] >= last7]
     rp = [m["rpe"] for m in mc7 if isinstance(m["rpe"], (int, float))]

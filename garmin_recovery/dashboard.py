@@ -328,7 +328,9 @@ def _others_html(others: list[dict]) -> str:
                 if o.get("minutes") is not None else "")
         cards += (f'<article class="mc"><header><span class="mc-fmt">{_esc(KIND_ES.get(o["kind"], "Sesión"))}</span>'
                   f'<span class="mc-date">{_day_name(o["date"])}</span>{_rpe_pill(o["rpe"])}</header>'
-                  f'<p class="lf-title">{_esc(o["title"])}</p>' + (f'<div class="chips">{mins}</div>' if mins else "")
+                  f'<p class="lf-title">{_esc(o["title"])}</p>'
+                  + (f'<p class="hito"><span aria-hidden="true">🏅</span> {_esc(o["milestone"])}</p>' if o.get("milestone") else "")
+                  + (f'<div class="chips">{mins}</div>' if mins else "")
                   + (f'<p class="pg-note">{_esc(o["note"])}</p>' if o.get("note") else "") + _hr_slot(o.get("activity_id")) + "</article>")
     return ('<section class="card"><h2>Técnica y otras</h2><p class="h2sub">calentamientos, técnica y sesiones sin ejercicios estructurados · '
             '«RPE —» = sesión sin puntuar</p>' + cards + '<p class="pg-note">Cuentan en la carga y en la FC; no entran en las comparaciones de fuerza ni de metcons.</p></section>')

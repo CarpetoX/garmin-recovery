@@ -46,6 +46,27 @@ class Segments(unittest.TestCase):
         self.assertEqual(segments.hr_in(curve, 2420, 2656), {"average": 170, "max": 170})
 
 
+class Milestone(unittest.TestCase):  # V8.11: hito fuera de los tramos en la misma actividad
+    HITO = {"Fecha": "2026-10-29", "ID actividad": AID, "Actividad": "Hito - primer bar muscle up", "RPE": "",
+            "Detalle JSON": json.dumps({"type": "skill", "rpe": None, "outside_segments": True, "milestone": "Primer bar muscle up"})}
+
+    def test_split_and_srpe_unchanged(self):
+        rows = ROWS + [self.HITO]
+        self.assertEqual(segments.split_ids(rows), {AID})
+        self.assertEqual(segments.scored_seconds_from_rows(rows, AID), 236)
+
+    def test_outside_rows_alone_are_not_a_split(self):
+        self.assertEqual(segments.split_ids([self.HITO, self.HITO]), set())
+
+    def test_listed_with_badge(self):
+        d = json.loads(self.HITO["Detalle JSON"])
+        cf = {"activities": [{"activity_id": AID, "date": "2026-10-29", "manual_blocks": [
+            {"activity": ROWS[1]["Actividad"], "rpe": 5, "detail_json": WOD},
+            {"activity": self.HITO["Actividad"], "rpe": None, "detail_json": d}]}]}
+        o = training_blocks.build(cf, {}, "2026-10-29")["otros"]
+        self.assertEqual([(x["milestone"], x["minutes"]) for x in o], [("Primer bar muscle up", None)])
+
+
 class Sessions(unittest.TestCase):
     def test_srpe_uses_wod_segment_and_label_joins_parts(self):
         inputs = {"activities": [{"id": AID, "start_date_local": "2026-10-29T09:00:00", "moving_time": 3300}],
