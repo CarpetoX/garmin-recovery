@@ -215,6 +215,13 @@ def main():
         if feedback_value is None:
             continue
 
+        if raw_remote_rows:  # V8.10: actividad partida en tramos → el sRPE usa solo los tramos con RPE
+            from garmin_recovery.segments import scored_seconds_from_rows, split_ids
+            if activity_id in split_ids(raw_remote_rows):
+                scored = scored_seconds_from_rows(raw_remote_rows, activity_id)
+                if scored:
+                    activity["scored_seconds"] = scored
+
         if interval_value is None:
             activity["session_rpe"] = feedback_value
             injected += 1

@@ -189,6 +189,9 @@ def main():
         minutes=round(seconds/60,2) if seconds is not None else None
         rpes=[x['rpe'] for x in manual if x['rpe'] is not None]
         rpe=(rpes[0] if len(set(rpes))==1 else None) if rpes else (number(a.get('icu_rpe')) or number(a.get('session_rpe')))
+        from .segments import scored_seconds
+        scored=scored_seconds([(x['rpe'],x['detail']) for x in manual]) if len(manual)>1 else None  # V8.10: tramos
+        srpe_minutes=round(scored/60,2) if scored else minutes
         blocks=[]
         for x in manual:
             vol,complete,known,total=sets_volume(x['detail'])
@@ -202,14 +205,14 @@ def main():
             'rpe_interval':number(a.get('icu_rpe')) or number(a.get('session_rpe')),
             'rpe_disagreement':bool(rpes and (number(a.get('icu_rpe')) or number(a.get('session_rpe'))) is not None and any(abs(x-(number(a.get('icu_rpe')) or number(a.get('session_rpe'))))>0.01 for x in rpes)),
             'recorded_minutes':minutes,
-            'srpe_using_recorded_minutes':round(rpe*minutes,1) if rpe is not None and minutes is not None and not (len(set(rpes))>1) else None,
-            'srpe_caveat':'Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.',
+            'srpe_using_recorded_minutes':round(rpe*srpe_minutes,1) if rpe is not None and srpe_minutes is not None and not (len(set(rpes))>1) else None,
+            'srpe_caveat':('Solo los tramos con RPE declarados en la hoja.' if scored else 'Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.'),
             'external_work':{'distance_m':number(a.get('distance')),'reps':None,'strength_volume_kg':None},
             'internal_load_not_additive':{'trimp':number(a.get('trimp')),
                  'intervals_load':number(a.get('icu_training_load')),'hr_load':number(a.get('hr_load'))},
             'heart_rate':{'average':number(a.get('average_heartrate')),'max':number(a.get('max_heartrate'))},
             'efficiency':'insufficient_matched_repeated_workouts',
-            'neuromuscular_fatigue':'not_directly_measured'})
+            'neuromuscular_fatigue':'not_directly_measured'} | ({'scored_minutes':round(scored/60,2)} if scored else {}))
     ctx=advanced.get('baselines_by_context',{})
     counts={k:v.get('days') for k,v in ctx.items() if isinstance(v,dict)} if isinstance(ctx,dict) else {}
     out={'generated_at':now.isoformat(),'source_measurement_note':'La generación del JSON no es hora de medición',

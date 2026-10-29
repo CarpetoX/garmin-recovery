@@ -225,10 +225,11 @@ def _metcons_html(metcons: list[dict]) -> str:
         presc = "".join(f"<li>{_esc(x)}</li>" for x in m["prescription"])
         times = "".join(f'<span class="rx-chip">{_esc(t)}</span>' for t in m["timing"])
         if m["minutes"] is not None:
-            times += f'<span class="rx-chip">{_kg(m["minutes"])} min grabados</span>'
+            times += f'<span class="rx-chip">{_kg(round(m["minutes"], 1))} min {"del tramo" if m.get("segment") else "grabados"}</span>'
         hr = m.get("hr") or {}
         if hr.get("average") and hr.get("max"):
-            times += f'<span class="rx-chip hrchip">FC {_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>'
+            times += (f'<span class="rx-chip hrchip">FC {"del tramo " if m.get("segment") else ""}'
+                      f'{_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>')
         rounds = ""
         if m["rounds"]:
             vals = m["rounds"]["values"]
@@ -323,7 +324,8 @@ def _others_html(others: list[dict]) -> str:
         return '<section class="card"><h2>Técnica y otras</h2><p class="h2sub">Sin calentamientos ni sesiones de técnica registrados.</p></section>'
     cards = ""
     for o in others:
-        mins = f'<span class="rx-chip">{_kg(round(o["minutes"], 1))} min grabados</span>' if o.get("minutes") is not None else ""
+        mins = (f'<span class="rx-chip">{_kg(round(o["minutes"], 1))} min {"del tramo" if o.get("segment") else "grabados"}</span>'
+                if o.get("minutes") is not None else "")
         cards += (f'<article class="mc"><header><span class="mc-fmt">{_esc(KIND_ES.get(o["kind"], "Sesión"))}</span>'
                   f'<span class="mc-date">{_day_name(o["date"])}</span>{_rpe_pill(o["rpe"])}</header>'
                   f'<p class="lf-title">{_esc(o["title"])}</p>' + (f'<div class="chips">{mins}</div>' if mins else "")

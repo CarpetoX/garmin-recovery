@@ -186,7 +186,9 @@ def _live_extras(root: Path, result: dict) -> dict:
         built = progression.build(hist, cf)
         out["progression"] = {"items": built["items"], "summary": built["summary"]}
         from . import training_blocks
-        out["training_blocks"] = training_blocks.build(cf, built["entries"], today)
+        curves_path = root / "activity_hr_curves.json"  # V8.10: FC de cada tramo
+        curves = (json.loads(curves_path.read_text(encoding="utf-8")) or {}).get("activities") if curves_path.exists() else None
+        out["training_blocks"] = training_blocks.build(cf, built["entries"], today, curves if isinstance(curves, dict) else None)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:progression", exc)
     try:  # V8.8: carreras con todos los datos de Garmin e Intervals y su comparación

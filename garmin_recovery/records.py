@@ -93,8 +93,15 @@ def build_sessions(inputs: dict) -> list[dict]:
         feedback = {}
     unscored = declared_unscored(inputs.get("feedback"))
     # V8.5: las filas sin RPE no llegan a «activities», pero su nombre sí está en la hoja (p. ej. «Técnica - toes to bar»)
-    sheet_names = {str(r.get("ID actividad")): r.get("Actividad") for r in ((inputs.get("feedback") or {}).get("source_rows_AH") or [])
+    sheet_rows = (inputs.get("feedback") or {}).get("source_rows_AH") or []
+    sheet_names = {str(r.get("ID actividad")): r.get("Actividad") for r in sheet_rows
                    if isinstance(r, dict) and r.get("ID actividad") and r.get("Actividad")}
+    # V8.10: actividad de Garmin partida en tramos (varias filas con el mismo ID): nombre de todas las partes
+    from .segments import scored_seconds_from_rows, split_ids
+    split = split_ids(sheet_rows)
+    split_names = {aid: " + ".join(str(r["Actividad"]) for r in sheet_rows if isinstance(r, dict)
+                                   and str(r.get("ID actividad") or "").strip() == aid and r.get("Actividad"))
+                   for aid in split}
     sessions = []
     for act in inputs.get("activities") or []:
         if not isinstance(act, dict) or not act.get("id"):
@@ -110,18 +117,20 @@ def build_sessions(inputs: dict) -> list[dict]:
         rpe = None if clear else num(fb.get("rpe"), 0, 10)
         if rpe is None and not clear:
             rpe = num(act.get("icu_rpe"), 0, 10)
-        srpe = round(rpe * minutes, 1) if rpe is not None and minutes else None
+        scored = scored_seconds_from_rows(sheet_rows, act["id"]) if str(act["id"]) in split else None
+        srpe_min = round(scored / 60, 2) if scored else minutes  # V8.10: solo los tramos con RPE
+        srpe = round(rpe * srpe_min, 1) if rpe is not None and srpe_min else None
         sessions.append(({"_clear": ["rpe", "srpe"]} if clear else {}) | ({"rpe_na": True} if rpe is None and str(act["id"]) in unscored else {}) | {
             "id": str(act["id"]), "date": day, "start_local": start or None,
             "type": act.get("type"), "name": act.get("name"),
-            "label": fb.get("activity") or sheet_names.get(str(act["id"])) or None,
+            "label": split_names.get(str(act["id"])) or fb.get("activity") or sheet_names.get(str(act["id"])) or None,
             "duration_min": minutes,
             "load": num(act.get("icu_training_load"), 0, 2000),
             "trimp": num(act.get("trimp"), 0, 2000),
             "avg_hr": num(act.get("average_heartrate"), 30, 230),
             "max_hr": num(act.get("max_heartrate"), 30, 240),
             "rpe": rpe, "srpe": srpe,
-        })
+        } | ({"scored_min": round(scored / 60, 1)} if scored else {}))
     sessions.sort(key=lambda s: (s["date"], s["start_local"] or ""))
     return sessions
 

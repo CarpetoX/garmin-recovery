@@ -31,7 +31,9 @@ def analyze(rows, activities, advanced, now, sheet_source, sheet_error):
     manual_week = [a for a in week if a.get('manual_match') == 'sheet_id']
     missing_manual = [str(a.get('activity_id')) for a in week if a.get('manual_match') == 'unmatched']
     sheet_ids = [str(r.get('ID actividad', '')).strip() for r in rows if r.get('ID actividad')]
-    duplicates = sorted(k for k, v in Counter(sheet_ids).items() if v > 1)
+    from .segments import split_ids  # V8.10: varias filas con tramos declarados = actividad partida a propósito
+    split = split_ids(rows)
+    duplicates = sorted(k for k, v in Counter(sheet_ids).items() if v > 1 and k not in split)
     rpe_vals = [a.get('rpe_used') for a in week if isinstance(a.get('rpe_used'), (int, float))]
     strength = []
     for a in week:

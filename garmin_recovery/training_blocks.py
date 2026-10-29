@@ -123,7 +123,8 @@ def _totals(perf: dict) -> list[str]:
     return out if len(out) >= 2 else []
 
 
-def metcon_card(act: dict, block: dict) -> dict:
+def metcon_card(act: dict, block: dict, curves: dict | None = None) -> dict:
+    from .segments import hr_in, mmss, segment
     d = block.get("detail_json") or {}
     perf = d.get("performed") if isinstance(d.get("performed"), dict) else {}
     fmt = d.get("format") or "Metcon"
@@ -178,20 +179,27 @@ def metcon_card(act: dict, block: dict) -> dict:
         timing.append(f'Reloj {_mmss(d["garmin_recorded_seconds"])}')
     if cap:
         timing.append(f"Cap {cap}")
+    seg = segment(d)  # V8.10: el WOD es un tramo de una actividad de Garmin más larga
+    if seg:
+        timing.append(f"Tramo {mmss(seg[0])}–{mmss(seg[1])} del reloj")
     note = None
     if perf.get("partial_round_exercise_breakdown_confirmed") is False:
         note = "El desglose de las repeticiones extra no está confirmado."
     elif perf.get("completed") and perf.get("exact_finish_time_minutes") is None and not official:
         note = "Tiempo exacto de finalización no registrado."
     minutes = d.get("recorded_garmin_minutes") if isinstance(d.get("recorded_garmin_minutes"), (int, float)) else act.get("recorded_minutes")
+    hr = act.get("heart_rate") if isinstance(act.get("heart_rate"), dict) else None
+    if seg:
+        minutes = (seg[1] - seg[0]) / 60
+        hr = hr_in((curves or {}).get(str(act.get("activity_id") or "")), *seg)  # sin curva: no se usa la FC de toda la sesión
     return {
         "date": act["date"], "activity_id": str(act.get("activity_id") or ""), "format": str(fmt),
         "partner": bool(d.get("partner_workout")), "title": clip(block.get("activity"), 90),
         "prescription": presc, "result": " · ".join(result) or None, "totals": _totals(perf), "timing": timing,
         "rpe": d.get("rpe") if isinstance(d.get("rpe"), (int, float)) else act.get("rpe_used"),
         "minutes": round(float(minutes), 1) if isinstance(minutes, (int, float)) else None,
-        "rounds": _round_series(d), "note": note,
-        "hr": act.get("heart_rate") if isinstance(act.get("heart_rate"), dict) else None,
+        "rounds": _round_series(d), "note": note, "segment": bool(seg),
+        "hr": hr,
     }
 
 
@@ -269,7 +277,7 @@ def weekly_volume(entries: dict[str, dict], olympic: bool, today: str, weeks: in
     return res
 
 
-def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) -> dict:
+def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str, curves: dict | None = None) -> dict:
     crossfit = crossfit or {}
     entries = entries or {}
     rpe_map = _rpe_by_activity(crossfit)
@@ -283,7 +291,7 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
             if not isinstance(d, dict):
                 continue
             if d.get("type") == "metcon":
-                metcons.append(metcon_card(act, block))
+                metcons.append(metcon_card(act, block, curves))
             elif complexes_of(d):
                 cx.setdefault(str(act.get("activity_id") or ""), []).extend(complexes_of(d))
     metcons.sort(key=lambda m: (m["date"], m["activity_id"]), reverse=True)
@@ -312,6 +320,21 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str) ->
                       "title": clip(b.get("activity") or act.get("name") or "Sesión", 90),
                       "rpe": act.get("rpe_used") if isinstance(act.get("rpe_used"), (int, float)) else None,
                       "minutes": act.get("recorded_minutes"), "note": (b.get("notes") or "")[:400]})
+    # V8.10: la parte de técnica o calentamiento de una actividad partida en tramos sale también en «Técnica y otras»
+    from .segments import segment
+    for act in crossfit.get("activities") or []:
+        aid = str((act or {}).get("activity_id") or "") if isinstance(act, dict) else ""
+        if aid not in shown:
+            continue
+        for b in act.get("manual_blocks") or []:
+            d = b.get("detail_json") if isinstance(b, dict) and isinstance(b.get("detail_json"), dict) else {}
+            seg = segment(d)
+            if seg and d.get("type") in SKIP_TYPES:
+                other.append({"date": act["date"], "activity_id": aid, "kind": d["type"],
+                              "title": clip(b.get("activity") or "Sesión", 90),
+                              "rpe": b.get("rpe") if isinstance(b.get("rpe"), (int, float)) else None,
+                              "minutes": round((seg[1] - seg[0]) / 60, 1), "segment": True,
+                              "note": (b.get("notes") or "")[:400]})
     mc7 = [m for m in metcons if m["date"] >= last7]
     rp = [m["rpe"] for m in mc7 if isinstance(m["rpe"], (int, float))]
     fv = weekly_volume(entries, False, today)
