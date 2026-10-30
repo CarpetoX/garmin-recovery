@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T08:33:15.091303+01:00",
+  "generated_at": "2026-10-30T09:35:53.588738+01:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "pending",
   "status": "unavailable",
@@ -111,19 +111,19 @@
         "sleep_hrv": {
           "state": "recent",
           "measured_at": "2026-10-30T04:51:20+01:00",
-          "age_minutes": 221.9,
+          "age_minutes": 284.6,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
-          "state": "recent",
+          "state": "delayed",
           "measured_at": "2026-10-30T08:04:00+01:00",
-          "age_minutes": 29.3,
+          "age_minutes": 91.9,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "delayed",
+          "state": "old_measurement",
           "measured_at": "2026-10-30T05:42:00+01:00",
-          "age_minutes": 171.3,
+          "age_minutes": 233.9,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -136,6 +136,7 @@
       "invalid_core_episode": false,
       "live_data_limited": true,
       "limited_live_metrics": [
+        "heart_rate_live",
         "body_battery_live"
       ],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
