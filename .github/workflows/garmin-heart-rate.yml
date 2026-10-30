@@ -34,7 +34,7 @@ jobs:
       - name: V2.9 - Descargar filiacion del Sync que disparo Garmin FC
         if: github.event_name == 'workflow_run'
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: garmin-lineage-v29
           repository: ${{ github.repository }}
@@ -102,7 +102,7 @@ jobs:
 
       - name: V2.9 - Conservar filiacion por 14 dias
         continue-on-error: true
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: garmin-lineage-v29
           path: .lineage_current/pipeline_lineage_v29.json

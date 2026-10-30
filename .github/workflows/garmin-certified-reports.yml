@@ -42,7 +42,7 @@ jobs:
             python -m garmin_recovery.cycle_report_batch --ledger report_cycles.json --outdir certified_cycle_reports_v386
           fi
       - name: Upload reports and quarantine manifest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: garmin-certified-reports-manual-v388-${{ github.run_id }}
           path: certified_cycle_reports_v386/
