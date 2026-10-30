@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Viernes, 30 de octubre de 2026 · 11:46 · `GR-2026-10-30-1146-200eb9`
+Viernes, 30 de octubre de 2026 · 12:51 · `GR-2026-10-30-1251-ee7350`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|11 sesiones|sRPE 1892|unavailable
 | Confianza de recuperación | low |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (11:45), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (12:50), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -78,7 +78,7 @@ La HRV está 5 % por debajo de su mediana; la FC en reposo está 2 lpm por debaj
 | Modelo de compatibilidad | 🟡 58/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 1/100 | contexto |
 | Tiempo de recuperación Garmin | 58,6 h | contexto |
-| Índice personal experimental | 11/100 | provisional |
+| Índice personal experimental | 12/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -144,7 +144,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 35, máximo 74.
-- Body Battery: último valor 5/100, medido a las 05:42 (hace 6 h 04 min: no es una medición nueva).
+- Body Battery: último valor 5/100, medido a las 05:42 (hace 7 h 09 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 5 observaciones recientes, mediana 19,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -388,4 +388,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **🔴
 
 ---
 
-Traza: cierre matinal · ciclo 2026-10-30-0830 · generado 30/10/2026 11:46 Europe/Madrid · certificado READY · sync_run_id 41020673103.
+Traza: cierre matinal · ciclo 2026-10-30-0830 · generado 30/10/2026 12:51 Europe/Madrid · certificado READY · sync_run_id 41020673103.

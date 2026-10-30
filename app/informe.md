@@ -1,6 +1,6 @@
-# Informe matutino · 30/10/2026
+# Informe de seguimiento · 30/10/2026
 
-`GR-2026-10-30-1146-200eb9` · cita este identificador al reenviar el informe.
+`GR-2026-10-30-1251-ee7350` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
 
@@ -37,7 +37,7 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## Cómo ajustar tu sesión de hoy
 
-<details open><summary>Reglas por tipo de sesión</summary>
+<details><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
@@ -56,35 +56,30 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-30-1041-a4c519 (30/10 10:41):
+Frente al informe GR-2026-10-30-1146-200eb9 (30/10 11:46):
 - Sin cambios en los datos.
 
-## Qué ha cambiado respecto a tu línea base
+## Actividad de hoy
 
-- **HRV:** 53 ms esta noche (-7 % vs. base 57 ms); media de 7 días 45,8 ms, por debajo de tu rango normal (53–61 ms).
-- **FC:** reposo 54 lpm (-2 vs. mediana 56); nocturna 65,0 lpm (+2,5).
-- **Estrés Garmin ayer:** 41 de media (tu mediana 38).
+_Sin sesiones registradas._
 
-**Señales coincidentes:** 1 de 3 señales en contra (Variabilidad cardiaca (HRV)). Sin datos: Sueño, Carga de entrenamiento, Sensaciones (Intervals).
+**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
 
-## Incertidumbre
+**Carga 7 días:** 218 en 11 sesiones (+80 % vs. semana previa) · sRPE 1.892 · monotonía 0,65.
 
-- Confianza de los datos: **baja** (faltan datos de hoy: sleep_hours; sueño de hoy sin confirmar)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
-- El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+## Gráficas
 
-## Plan del día
+![RPE frente al máximo del día](charts/rpe.svg)
 
-- Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos. RPE ≤ 4, volumen 0–50 %.
-- Post-turno de noche: prioriza dormir; cualquier sesión, suave.
+![Carga](charts/load.svg)
 
-## Tendencias
+![Sesiones](charts/sessions.svg)
 
-![Disponibilidad](charts/readiness.svg)
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
 
 ## Recuperación: tendencias de 28 días
 
-<details open><summary>HRV, FC y sueño</summary>
+<details><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -124,16 +119,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-30-1146-200eb9`
+- **Identificador del informe:** `GR-2026-10-30-1251-ee7350`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-30-0830 · datos sincronizados a las 11:45 · Sync fuera de franja
-- **Antigüedad:** fin del sueño sin marca ! · última HRV hace 6,9 h ✓ · última FC hace 3,7 h ! · último Body Battery hace 6,1 h !
+- **Ciclo:** 2026-10-30-0830 · datos sincronizados a las 12:50 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV hace 8,0 h ✓ · última FC hace 4,8 h ! · último Body Battery hace 7,2 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 11:46 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 12:51 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
