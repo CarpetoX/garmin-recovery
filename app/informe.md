@@ -1,6 +1,8 @@
 # Informe matutino · 30/10/2026
 
-`GR-2026-10-30-0833-396253` · cita este identificador al reenviar el informe.
+`GR-2026-10-30-0936-6332fa` · cita este identificador al reenviar el informe.
+
+> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -54,9 +56,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-29-2248-f4be13 (29/10 22:48):
-- Híbrido: 32 → 35 (+3).
-- Nueva noche registrada: HRV 35 → 53 ms, sueño 7,55 → — h, FC reposo 60 → 54 lpm.
+Frente al informe GR-2026-10-30-0833-396253 (30/10 08:33):
+- Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -123,16 +124,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-30-0833-396253`
+- **Identificador del informe:** `GR-2026-10-30-0936-6332fa`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-30-0830 · datos sincronizados a las 08:32
-- **Antigüedad:** fin del sueño sin marca ! · última HRV hace 3,7 h ✓ · última FC hace 30 min ✓ · último Body Battery hace 2,9 h ✓
+- **Ciclo:** 2026-10-30-0830 · datos sincronizados a las 09:35 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV hace 4,8 h ✓ · última FC hace 1,5 h ✓ · último Body Battery hace 3,9 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 08:33 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 09:36 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

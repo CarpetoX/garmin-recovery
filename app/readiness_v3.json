@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-10-30T08:33:41.180392+01:00",
+  "generated_at": "2026-10-30T09:36:18.176786+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-30",
   "decision": {
@@ -277,16 +277,16 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-10-30T08:33:41.180392+01:00",
+    "generated_at": "2026-10-30T09:36:18.176786+01:00",
     "cycle": {
       "cycle_id": "2026-10-30-0830",
       "slot_at": "2026-10-30T08:30:00+01:00",
       "status": "ready",
       "verified_at": "2026-10-30T08:33:40.251779+01:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-10-30T08:32:46.381928+01:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-10-30T09:35:28.837612+01:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 41020673103,
@@ -319,46 +319,46 @@
       },
       "sleep_hrv": {
         "measured_at": "2026-10-30T04:51:20+01:00",
-        "age_minutes": 222.0,
+        "age_minutes": 285.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
         "measured_at": "2026-10-30T08:04:00+01:00",
-        "age_minutes": 30.0,
+        "age_minutes": 92.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-10-30T05:42:00+01:00",
-        "age_minutes": 172.0,
-        "state": "reciente",
+        "age_minutes": 234.0,
+        "state": "antigua",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-10-30T07:33:13.497519+00:00",
+      "fetched_at": "2026-10-30T08:35:52.929114+00:00",
       "latest_date": "2026-10-29",
       "rows_sha256": "57227c7b267a137b",
-      "advanced_run_id": "41020769695"
+      "advanced_run_id": "41027500126"
     },
     "source_sha256": {
       "wellness.json": "31053d66fe8ac1df",
-      "garmin_hrv_timeline.json": "e0fb88ed09a07c2e",
-      "garmin_sleep_history.json": "de5272533d3a8802",
-      "garmin_extended.json": "64ca78f41dc940cd",
-      "garmin_heart_rate.json": "6011bed11bafc6e2",
-      "garmin_stress.json": "92fc9d12a7731f1e",
-      "garmin_body_battery.json": "e42ab16ef4b9ef82",
+      "garmin_hrv_timeline.json": "e0947eeeb8d51272",
+      "garmin_sleep_history.json": "3713945951b2cac9",
+      "garmin_extended.json": "66200bdb1e07749e",
+      "garmin_heart_rate.json": "74c0a0bcae06e288",
+      "garmin_stress.json": "860b75418192f59e",
+      "garmin_body_battery.json": "2ddb586ee964157e",
       "activities.json": "1d119b2e77fdfe51",
-      "training_feedback.json": "d159e319948aca9c",
+      "training_feedback.json": "d27d61b231c27d80",
       "shift_calendar.json": "49abff935151d5fc",
-      "morning_sleep_status.json": "ec78f93c61b810da",
-      "recovery_assessment.json": "0c6181c83434c75e",
+      "morning_sleep_status.json": "783c35b305001dd4",
+      "recovery_assessment.json": "93f9cbd2069fccbc",
       "report_ready.json": "58dab1e356cc553f",
-      "garmin_hr_timeline.json": "80c4bc5d55aff96f",
-      "daily_summary.json": "d8b4883a92df00ac",
-      "workflow_health.json": "5fc2776b3df6ed43",
+      "garmin_hr_timeline.json": "1417eb74f44e8096",
+      "daily_summary.json": "52156cc46911feb0",
+      "workflow_health.json": "e5be4713db15b5b4",
       "recovery.csv": "f338c615715e2ddd"
     },
     "consistency_v3_v2": {
@@ -383,7 +383,7 @@
     },
     "execution_health": {
       "status": "attention",
-      "checked_at": "2026-10-30T06:49:23.488180+01:00",
+      "checked_at": "2026-10-30T08:33:54.154275+01:00",
       "alerts": [
         {
           "code": "cron_missed_dispatch_recovered",
@@ -406,8 +406,10 @@
       "status": "no_verificable_en_etapa_de_datos",
       "detail": "Este certificado acredita datos preparados, no la recepción del informe. ChatGPT no devuelve acuse; la rutina de Claude registra el ID de sesión en el paso V5.1."
     },
-    "status": "ok",
-    "issues": []
+    "status": "con_avisos",
+    "issues": [
+      "mediciones no recientes: body_battery_live"
+    ]
   },
   "training_integrity": {
     "window_days": 14,
