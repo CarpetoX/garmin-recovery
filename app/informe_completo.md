@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Viernes, 30 de octubre de 2026 · 19:17 · `GR-2026-10-30-1917-b71212`
+Viernes, 30 de octubre de 2026 · 20:14 · `GR-2026-10-30-2014-d57df1`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|13 sesiones|sRPE 1980|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (19:10), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (20:10), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -125,7 +125,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 77,4 lpm | 69,1 lpm |
+| Hoy* | 77,7 lpm | 69,1 lpm |
 | 3 días | 86,3 lpm | 68,5 lpm |
 | 7 días | 84,2 lpm | 66,1 lpm |
 | 28 días | 83,5 lpm | 63,9 lpm |
@@ -145,8 +145,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 37, máximo 78.
-- Body Battery: último valor 13/100, medido a las 18:27.
+- Estrés medio: 37, máximo 99.
+- Body Battery: último valor 11/100, medido a las 19:18.
 - Recuperación de FC a 1 min tras el ejercicio: 5 observaciones recientes, mediana 19,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -306,12 +306,12 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy libre tras la noche, mañana libre.
-- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (1/100); Body Battery bajo (13/100).
+- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (1/100); Body Battery bajo (11/100).
 
 ### Recomendaciones
 
 1. **Prioriza recuperar** — Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -394,4 +394,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-30-1645 · generado 30/10/2026 19:17 Europe/Madrid · certificado READY · sync_run_id 41083856274.
+Traza: informe de tarde · ciclo 2026-10-30-1645 · generado 30/10/2026 20:14 Europe/Madrid · certificado READY · sync_run_id 41083856274.
