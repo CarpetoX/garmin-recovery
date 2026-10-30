@@ -202,6 +202,23 @@ def _live_extras(root: Path, result: dict) -> dict:
         out["weight"] = weight.build(reg, today)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:weight", exc)
+    try:  # V8.13: benchmarks, máximos estimados, gimnasia e historial de carga
+        from . import athlete_progress
+        out["athlete_progress"] = athlete_progress.build(root, today)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:athlete_progress", exc)
+    try:  # V8.13: intensidad semanal, recuperación según el turno y contexto de hoy
+        from . import recovery_context
+        out["recovery_context"] = recovery_context.build(root, result)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:recovery_context", exc)
+    try:  # V8.13: actividades que parecen tener dos partes
+        from . import athlete_progress, split_detect
+        curves_path = root / "activity_hr_curves.json"
+        curves = (json.loads(curves_path.read_text(encoding="utf-8")) or {}).get("activities") if curves_path.exists() else None
+        out["splits"] = split_detect.propose(curves, athlete_progress.sheet_rows(root), today)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:splits", exc)
     try:
         sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
         out["plan"] = improvement._plan(root, result, today, sessions)
