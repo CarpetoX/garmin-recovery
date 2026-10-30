@@ -336,10 +336,12 @@ def _others_html(others: list[dict]) -> str:
             '«RPE —» = sesión sin puntuar</p>' + cards + '<p class="pg-note">Cuentan en la carga y en la FC; no entran en las comparaciones de fuerza ni de metcons.</p></section>')
 
 
-def _training_html(tb: dict | None, prog: dict | None, running: dict | None = None) -> str:
-    """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones."""
+def _training_html(tb: dict | None, prog: dict | None, running: dict | None = None, athlete: dict | None = None,
+                   splits: list | None = None) -> str:
+    """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones · Progreso."""
+    from . import dashboard_v813 as v813
     if not isinstance(tb, dict):
-        return _progression_html(prog)
+        return _progression_html(prog) + v813.progress_pane(athlete)
     s = tb.get("summary7") or {}
     chips = (f'<li><b>{s.get("fuerza", 0)}</b><span>fuerza</span></li><li><b>{s.get("halterofilia", 0)}</b><span>halterofilia</span></li>'
              f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li><li><b>{s.get("carrera", 0)}</b><span>carrera</span></li>'
@@ -352,6 +354,7 @@ def _training_html(tb: dict | None, prog: dict | None, running: dict | None = No
             '<button role="tab" data-pane="metcons" aria-selected="false">Metcons</button>'
             '<button role="tab" data-pane="carrera" aria-selected="false">Carrera</button>'
             '<button role="tab" data-pane="otros" aria-selected="false">Técnica</button>'
+            '<button role="tab" data-pane="progreso" aria-selected="false">Progreso</button>'
             '<button role="tab" data-pane="sesiones" aria-selected="false">Todas</button></div></section>')
     fz, hl = tb.get("fuerza") or {}, tb.get("halterofilia") or {}
     panes = {
@@ -364,8 +367,9 @@ def _training_html(tb: dict | None, prog: dict | None, running: dict | None = No
         "metcons": _metcons_html(tb.get("metcons") or []),
         "carrera": _runs_html(running),
         "otros": _others_html(tb.get("otros") or []),
+        "progreso": v813.progress_pane(athlete),
     }
-    return head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
+    return v813.splits_html(splits) + head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
 
 
 def _weight_svg(points: list[dict]) -> str:
@@ -793,13 +797,16 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             '<div class="chart" id="c-rpe"></div></div>'
             '<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
             f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
+    from . import dashboard_v813 as _v813
     # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
     return {"banner": "",
             "hoytop": top_block, "cambios": changes,
-            "hoy": full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
-            "tendencias": _weight_html(extras.get("weight")) + calendar_html + week_html
+            "hoy": _v813.today_html(extras.get("recovery_context")) + full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
+            "tendencias": _v813.load_history_html(extras.get("athlete_progress")) + _weight_html(extras.get("weight")) + calendar_html + week_html
+                          + '<section class="grid cols-2">' + _v813.intensity_html(extras.get("recovery_context")) + _v813.day_types_html(extras.get("recovery_context")) + '</section>'
                           + '<section class="grid cols-2">' + _load_balance_html((extras.get("garmin_insights") or {}).get("load_balance")) + _vo2_html((extras.get("garmin_insights") or {}).get("vo2max")) + '</section>',
-            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression"), extras.get("running")),
+            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression"), extras.get("running"),
+                                       extras.get("athlete_progress"), extras.get("splits")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 
