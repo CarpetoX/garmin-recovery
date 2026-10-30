@@ -190,7 +190,7 @@ jobs:
       - name: Generate certified reports (artifact only)
         run: python -m garmin_recovery.cycle_report_batch --ledger report_cycles.json --outdir certified_cycle_reports_v386
       - name: Upload reports and quarantine manifest
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: garmin-certified-reports-v388-${{ github.run_id }}
           path: certified_cycle_reports_v386/
