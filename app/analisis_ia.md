@@ -1,34 +1,33 @@
-<!-- cycle_id: 2026-10-30-0830 -->
-**En breve:** hoy toca priorizar la recuperación; el dato de sueño aún no está confirmado.
-🟢 Recuperación oficial: pendiente (sin sueño confirmado); confianza baja
-🌙 Sueño: sin dato de duración todavía; puntuación 29
-🏋️ Carga 7 días: 218 en 11 sesiones (+80 % vs. semana previa)
-❤️ Alerta: HRV media de 7 días 45,8 ms, un 20 % bajo tu base (rango normal 53–61 ms)
-Orientación: tras el turno de noche, duerme; si te mueves, movilidad o zona 2 suave (RPE ≤ 4, volumen 0–50 %).
+<!-- cycle_id: 2026-10-30-0830-post-sleep -->
+**En breve:** recuperación baja hoy; toca descansar y moverse suave.
+🟢 Recuperación oficial 19/100, confianza alta.
+🌙 Sueño 4,2 h, puntuación 53.
+🏋️ Carga 7 días: 218 en 11 sesiones (+80 % vs. semana previa).
+❤️ Alerta: HRV media 7 días 43 ms, un 25 % bajo tu base (57 ms).
+Orientación: sin turno registrado hoy; solo movilidad o zona 2 suave (RPE ≤ 4) y recupera sueño.
 
 ## Qué explica la puntuación
-- ↓ HRV: 53 ms esta noche (−7 % vs. base 57), pero la media de 7 días (45,8 ms) está bajo el rango normal.
-- → FC en reposo 54 lpm (−2 vs. mediana); nocturna 65,0 lpm (+2,5).
-- ↓ Sueño: puntuación 29, deuda de 2 noches; la duración de hoy no consta.
-- → Estrés Garmin ayer: 41 (mediana 38).
-
-El modelo experimental está pendiente y la oficial no puntúa; manda el híbrido (35, rojo). No se autoriza intensidad alta.
+- HRV hoy 34 ms; media 7 días 43 ms frente a rango normal 53,0–61,3 ms: suprimida.
+- Sueño 4,18 h con 3,3 h de deuda en 3 noches (necesidad 7,5 h); sueño diurno tras turno.
+- FC en reposo 54 lpm (−2 vs. mediana), pero FC nocturna 69,1 lpm frente a 62,5 de base.
+- Estrés Garmin de ayer 41 (mediana 38): neutro. El modelo experimental (52, ámbar) es más permisivo; manda la decisión conservadora (rojo).
 
 ## Carga reciente
-Semana con 11 sesiones, sRPE 1.891,9 y monotonía 0,65. Según el análisis por reglas, 16 de 29 sesiones recientes fueron de RPE ≥ 8 (55 %) y la HRV del día siguiente fue 48 ms tras ellas frente a 54 ms tras las demás (pocos días; no prueba causa). Últimas sesiones con RPE: 28/10 → 7,5; 26/10 → 7,0.
+11 sesiones, sRPE 1.892, monotonía 0,65. Últimas: 29/10 técnica + WOD (RPE 5), 28/10 carrera 8 km (RPE 7), 28/10 halterofilia (RPE 7,5). El análisis por reglas señala que el 55 % de las sesiones con RPE fueron ≥ 8 y hubo 6 veces dos días duros seguidos.
 
-## Tres prioridades
-1. **HRV y sueño:** proteger el sueño tras el TN y recuperar la deuda antes de volver a la intensidad.
-2. **Distribución de la intensidad:** intercalar RPE 5–6 entre las duras, ≥ 48 h entre esfuerzos máximos.
-3. **Sensaciones:** registrar fatiga, agujetas, estrés, ánimo y motivación en Intervals (0 de 14 días).
+## 3 prioridades
+1. **HRV:** bajar intensidad unos días y reevaluar en una semana.
+2. **Sueño:** acostarte 30–45 min antes, sobre todo antes de un turno; hoy, dormir.
+3. **Distribución de intensidad:** intercalar RPE 5–6 entre sesiones duras, ≥ 48 h entre esfuerzos máximos. Registra además las sensaciones en Intervals.icu (0 de 14 días).
 
-## Plan de 7 días (sujeto a que el sueño confirme recuperación)
-- **Vie 30:** dormir; movilidad o zona 2 30–40 min, RPE ≤ 4.
-- **Sáb 31:** suave (técnica, RPE ≤ 5) si el sueño y la HRV mejoran.
-- **Dom 1 (MT):** descanso o movilidad; cena y cama pronto.
-- **Lun 2 (TN):** sin entrenar; siesta antes del turno.
-- **Mar 3:** post-TN, solo sueño y movilidad.
-- **Mié 4:** una sesión de fuerza moderada (RPE 6–7) si la HRV vuelve al rango 53–61 ms.
-- **Jue 5:** suave; si todo va bien, primera sesión dura después, no antes.
+## Plan 7 días (sujeto a la decisión diaria)
+- **Vie 30:** descanso o movilidad/zona 2 30–40 min, RPE ≤ 4.
+- **Sáb 31:** si HRV y sueño mejoran, técnica y fuerza submáxima, RPE ≤ 6; si no, repetir suave.
+- **Dom 1 (MT):** solo suave, RPE ≤ 5.
+- **Lun 2 (TN):** movilidad corta; protege la siesta.
+- **Mar 3:** zona 2 o técnica, RPE 5–6.
+- **Mié 4:** única sesión exigente (RPE 7–8) solo si la decisión no es roja.
+- **Jue 5:** suave y balance de la semana.
+Sueño: objetivo 7,5 h cada noche.
 
 _Herramienta de entrenamiento; no es un diagnóstico médico._
