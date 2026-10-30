@@ -1,8 +1,6 @@
 # Informe de seguimiento · 30/10/2026
 
-`GR-2026-10-30-1648-0fc773` · cita este identificador al reenviar el informe.
-
-> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
+`GR-2026-10-30-1917-b71212` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -56,16 +54,24 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-30-1501-a37244 (30/10 15:01):
-- Sin cambios en los datos.
+Frente al informe GR-2026-10-30-1648-0fc773 (30/10 16:48):
+- Sesiones nuevas desde entonces: **2** (carga +22).
+- Sesiones con RPE: 13 → 14.
 
 ## Actividad de hoy
 
-_Sin sesiones registradas._
+| Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
+|---|---|---|--:|--:|--:|--:|--:|
+| 30/10 17:49 | WOD | WOD 4 Rounds For Time - DB snatch / step up DB / burpee over DB | 11 | 13 | 157 / 182 | 8,0 | 88 |
+| 30/10 17:19 | Fuerza | Fuerza - chin up lastrado 5x4 + isometric pull up 5x10" | 25 | 9 | 111 / 146 | — | — |
 
-**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
+- ⚠️ WOD 4 Rounds For Time - DB snatch / step up DB / burpee over DB: RPE bajo para tu FC: la FC fue alta para el esfuerzo que marcaste.
 
-**Carga 7 días:** 218 en 11 sesiones (+80 % vs. semana previa) · sRPE 1.892 · monotonía 0,65.
+_RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
+
+**¿Encaja con la decisión?** ⚠️ RPE 8,0 supera el máximo recomendado (4): reduce o cambia la sesión restante.
+
+**Carga 7 días:** 240 en 13 sesiones (+98 % vs. semana previa) · sRPE 1.980 · monotonía 0,69.
 
 ## Gráficas
 
@@ -99,6 +105,8 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 30/10 | chin up lastrado | sin especificar | 15,0 kg (unidad sin especificar) | — | — | 220 kg | 5/5 | — |
+| 30/10 | isometric pull up | sin especificar | — | — | — | — (parcial) | —/5 | — |
 | 28/10 | squat clean | barra | 100,0 kg con barra | 100 × 1 | 100,0 kg | 1.178 kg | 13/13 | 7,5 |
 | 28/10 | front squat | barra | 70,0 kg con barra | 70 × 1 | 70,0 kg | 413 kg | 7/7 | 7,5 |
 | 28/10 | split jerk | barra | 100,0 kg con barra | 100 × 1 | 100,0 kg | 938 kg | 13/13 | 7,5 |
@@ -109,8 +117,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 | 26/10 | press superinclinado isolateral | máquina de discos | 50,0 kg total (dos lados) | — | — | 1.600 kg | 4/4 | 7,0 |
 | 26/10 | aperturas en banco inclinado con mancuernas | mancuernas (par) | 32,0 kg total (2 × 16,0 kg) | 32 × 10 | 42,7 kg | 1.088 kg | 4/4 | 7,0 |
 | 26/10 | curl de bíceps en máquina unilateral | máquina de placas | 15,0 kg indicados en máquina | — | — | 440 kg | 4/4 | 7,0 |
-| 26/10 | sit-ups | peso corporal | peso corporal | — | — | — | —/4 | 7,0 |
-| 26/10 | squat snatch | barra | 75,0 kg con barra | 75 × 1 | 75,0 kg | 1.119 kg | 9/9 | 7,0 |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -119,16 +125,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-30-1648-0fc773`
+- **Identificador del informe:** `GR-2026-10-30-1917-b71212`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-30-1645 · datos sincronizados a las 16:47
-- **Antigüedad:** fin del sueño hace 3,2 h ✓ · última HRV hace 3,2 h ✓ · última FC hace 46 min ✓ · último Body Battery hace 3,3 h !
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
+- **Ciclo:** 2026-10-30-1645 · datos sincronizados a las 19:10 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 5,7 h ✓ · última HRV hace 5,7 h ✓ · última FC hace 44 min ✓ · último Body Battery hace 51 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/14 (+8 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 19:17 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
