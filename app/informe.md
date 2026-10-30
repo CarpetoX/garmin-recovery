@@ -1,6 +1,6 @@
 # Informe matutino · 30/10/2026
 
-`GR-2026-10-30-0936-6332fa` · cita este identificador al reenviar el informe.
+`GR-2026-10-30-1041-a4c519` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
 
@@ -56,7 +56,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-30-0833-396253 (30/10 08:33):
+Frente al informe GR-2026-10-30-0936-6332fa (30/10 09:36):
 - Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
@@ -124,16 +124,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-30-0936-6332fa`
+- **Identificador del informe:** `GR-2026-10-30-1041-a4c519`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-30-0830 · datos sincronizados a las 09:35 · Sync fuera de franja
-- **Antigüedad:** fin del sueño sin marca ! · última HRV hace 4,8 h ✓ · última FC hace 1,5 h ✓ · último Body Battery hace 3,9 h !
+- **Ciclo:** 2026-10-30-0830 · datos sincronizados a las 10:40 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV hace 5,8 h ✓ · última FC hace 2,6 h ✓ · último Body Battery hace 5,0 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 09:36 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-30 10:41 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
