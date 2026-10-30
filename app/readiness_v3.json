@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-10-30T12:51:26.035818+01:00",
+  "generated_at": "2026-10-30T13:56:08.697448+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-10-30",
   "decision": {
@@ -47,7 +47,7 @@
         "version": "V2.2",
         "role": "salvaguarda",
         "used_in_decision": true,
-        "score": 35,
+        "score": 23,
         "zone": "red",
         "state": null,
         "confidence": "high",
@@ -71,8 +71,8 @@
         "version": "V2.2",
         "role": "compatibilidad",
         "used_in_decision": false,
-        "score": 58,
-        "zone": "yellow",
+        "score": 38,
+        "zone": "red",
         "state": null,
         "confidence": "low",
         "rule": "Puntuación heredada; el propio repo indica no usarla para decidir."
@@ -137,8 +137,8 @@
     "drivers": [
       {
         "component": "hrv",
-        "z": -1.0065405796223945,
-        "text": "HRV 53 ms hoy; media 7 días −20 % vs. tu base (por debajo de tu rango normal)"
+        "z": -2.7586535282358935,
+        "text": "HRV 34 ms hoy; media 7 días −25 % vs. tu base (por debajo de tu rango normal)"
       },
       {
         "component": "stress",
@@ -155,17 +155,17 @@
       "hrv": {
         "n_baseline": 28,
         "n_rolling": 7,
-        "today_ms": 53.0,
-        "z": -1.0065405796223945,
+        "today_ms": 34.0,
+        "z": -2.7586535282358935,
         "baseline_ms": 57.0,
-        "rolling_ms": 45.8,
+        "rolling_ms": 43.0,
         "normal_low_ms": 53.0,
         "normal_high_ms": 61.3,
-        "today_vs_baseline_pct": -7.0,
-        "rolling_vs_baseline_pct": -19.7,
+        "today_vs_baseline_pct": -40.3,
+        "rolling_vs_baseline_pct": -24.6,
         "band": "suprimida",
-        "cv_7d_pct": 12.51,
-        "score": 62.4,
+        "cv_7d_pct": 12.9,
+        "score": 40.5,
         "weight": 0.3,
         "label": "Variabilidad cardiaca (HRV)"
       },
@@ -185,7 +185,7 @@
       "sleep": {
         "z": null,
         "hours": null,
-        "sleep_score": 29.0,
+        "sleep_score": 53.0,
         "need_hours": 7.5,
         "debt_hours": 0.0,
         "debt_nights": 2,
@@ -277,7 +277,7 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-10-30T12:51:26.035818+01:00",
+    "generated_at": "2026-10-30T13:56:08.697448+01:00",
     "cycle": {
       "cycle_id": "2026-10-30-0830",
       "slot_at": "2026-10-30T08:30:00+01:00",
@@ -285,7 +285,7 @@
       "verified_at": "2026-10-30T08:33:40.251779+01:00",
       "scheduled_cycle_today": true,
       "data_newer_than_certified_cycle": true,
-      "data_synced_at": "2026-10-30T12:50:33.380334+01:00",
+      "data_synced_at": "2026-10-30T13:55:26.378282+01:00",
       "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
@@ -318,55 +318,55 @@
         "basis": null
       },
       "sleep_hrv": {
-        "measured_at": "2026-10-30T04:51:20+01:00",
-        "age_minutes": 480.0,
+        "measured_at": "2026-10-30T13:36:20+01:00",
+        "age_minutes": 20.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-10-30T08:04:00+01:00",
-        "age_minutes": 287.0,
-        "state": "antigua",
+        "measured_at": "2026-10-30T13:46:00+01:00",
+        "age_minutes": 10.0,
+        "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
-        "measured_at": "2026-10-30T05:42:00+01:00",
-        "age_minutes": 429.0,
-        "state": "antigua",
+        "measured_at": "2026-10-30T13:30:00+01:00",
+        "age_minutes": 26.0,
+        "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-10-30T11:51:00.245477+00:00",
+      "fetched_at": "2026-10-30T12:55:49.196550+00:00",
       "latest_date": "2026-10-29",
       "rows_sha256": "57227c7b267a137b",
-      "advanced_run_id": "41051008339"
+      "advanced_run_id": "41059074744"
     },
     "source_sha256": {
-      "wellness.json": "6d181b7d136a6c0b",
-      "garmin_hrv_timeline.json": "e4e6d66d3d0f0551",
-      "garmin_sleep_history.json": "0a6fc53f8826ebda",
-      "garmin_extended.json": "436def1c39699818",
-      "garmin_heart_rate.json": "a5d3a9f5cc7527b5",
-      "garmin_stress.json": "70546ea47ffec0ec",
-      "garmin_body_battery.json": "9a9511ab7be3a581",
+      "wellness.json": "835f20294c1e13d1",
+      "garmin_hrv_timeline.json": "66ab65b2a3877350",
+      "garmin_sleep_history.json": "0bb19f01d4b1a88a",
+      "garmin_extended.json": "916002f1950c503a",
+      "garmin_heart_rate.json": "4943d215d69cdcf4",
+      "garmin_stress.json": "24178d5ef0785d6a",
+      "garmin_body_battery.json": "eb3650e9234b6830",
       "activities.json": "1d119b2e77fdfe51",
-      "training_feedback.json": "b148d3ae168a3226",
+      "training_feedback.json": "c1861b0ba926ad6b",
       "shift_calendar.json": "49abff935151d5fc",
-      "morning_sleep_status.json": "5d1f9ace6fed7a6c",
-      "recovery_assessment.json": "417bd9df4db8d16d",
+      "morning_sleep_status.json": "207f5e5e4500b73c",
+      "recovery_assessment.json": "40300f4a3101c892",
       "report_ready.json": "58dab1e356cc553f",
-      "garmin_hr_timeline.json": "282bded80b63995b",
-      "daily_summary.json": "5f32104bf446b93a",
+      "garmin_hr_timeline.json": "5518ce637cd2452e",
+      "daily_summary.json": "21601a5f1f02cf82",
       "workflow_health.json": "e5be4713db15b5b4",
-      "recovery.csv": "d65f253797a77d4f"
+      "recovery.csv": "499202edce53d1c6"
     },
     "consistency_v3_v2": {
       "status": "ok",
       "checks": {
         "hrv_ms": {
-          "v3": 53.0,
-          "v2": 53.0,
+          "v3": 34.0,
+          "v2": 34.0,
           "ok": true
         },
         "resting_hr": {
@@ -406,10 +406,8 @@
       "status": "no_verificable_en_etapa_de_datos",
       "detail": "Este certificado acredita datos preparados, no la recepción del informe. ChatGPT no devuelve acuse; la rutina de Claude registra el ID de sesión en el paso V5.1."
     },
-    "status": "con_avisos",
-    "issues": [
-      "mediciones no recientes: heart_rate_live, body_battery_live"
-    ]
+    "status": "ok",
+    "issues": []
   },
   "training_integrity": {
     "window_days": 14,
@@ -1269,14 +1267,14 @@
       "score": null,
       "zone": "unavailable",
       "state": "pending",
-      "hrv_ms": 53.0,
-      "hrv_rolling_ms": 45.8,
+      "hrv_ms": 34.0,
+      "hrv_rolling_ms": 43.0,
       "hrv_low_ms": 53.0,
       "hrv_high_ms": 61.3,
       "resting_hr": 54.0,
       "night_hr": 65.0,
       "sleep_hours": null,
-      "sleep_score": 29.0,
+      "sleep_score": 53.0,
       "load": 0.0,
       "srpe": null,
       "sessions": 0,
@@ -1286,9 +1284,9 @@
       "ctl": 9.0,
       "atl": 26.0,
       "v2_score": null,
-      "hybrid_score": 35,
+      "hybrid_score": 23,
       "decision_zone": "red",
-      "deep_min": 2.0,
+      "deep_min": 0.0,
       "rem_min": 0.0,
       "sleep_context": null,
       "stress_avg_full": 35.0
