@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Viernes, 30 de octubre de 2026 · 20:14 · `GR-2026-10-30-2014-d57df1`
+Viernes, 30 de octubre de 2026 · 22:48 · `GR-2026-10-30-2248-fcbc1a`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|13 sesiones|sRPE 1980|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-10-30-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-10-30-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 19/100 (oficial, confianza high). Híbrido: 29/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 4 h 11 min, puntuación 53/100.
 - ❤️ **Principal alerta:** HRV 34 ms, 39,3 % por debajo de tu mediana de 28 días; FC nocturna 69,1 lpm (6,9 sobre la mediana).
@@ -23,18 +23,18 @@ Carga 7 días|13 sesiones|sRPE 1980|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-10-30-1645 |
+| Ciclo | 2026-10-30-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:48:11 |
+| Certificado generado | 22:48:17 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (20:10), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
 ### Fuentes de datos
 
@@ -78,7 +78,7 @@ La HRV está 39 % por debajo de su mediana; la FC en reposo está 2 lpm por deba
 | Modelo de compatibilidad | 🔴 48/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 1/100 | contexto |
 | Tiempo de recuperación Garmin | 62,5 h | contexto |
-| Índice personal experimental | 12/100 | provisional |
+| Índice personal experimental | 11/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (ámbar) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -125,7 +125,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 77,7 lpm | 69,1 lpm |
+| Hoy* | 77,2 lpm | 69,1 lpm |
 | 3 días | 86,3 lpm | 68,5 lpm |
 | 7 días | 84,2 lpm | 66,1 lpm |
 | 28 días | 83,5 lpm | 63,9 lpm |
@@ -146,7 +146,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 37, máximo 99.
-- Body Battery: último valor 11/100, medido a las 19:18.
+- Body Battery: último valor 7/100, medido a las 22:18.
 - Recuperación de FC a 1 min tras el ejercicio: 5 observaciones recientes, mediana 19,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -306,7 +306,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy libre tras la noche, mañana libre.
-- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (1/100); Body Battery bajo (11/100).
+- Señales adversas: HRV baja respecto a tu historial; FC nocturna elevada; Training Readiness de Garmin bajo (1/100); Body Battery bajo (7/100).
 
 ### Recomendaciones
 
@@ -394,4 +394,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-10-30-1645 · generado 30/10/2026 20:14 Europe/Madrid · certificado READY · sync_run_id 41083856274.
+Traza: cierre nocturno · ciclo 2026-10-30-2245 · generado 30/10/2026 22:48 Europe/Madrid · certificado READY · sync_run_id 41133540425.
