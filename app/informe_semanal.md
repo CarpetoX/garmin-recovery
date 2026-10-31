@@ -1,10 +1,10 @@
 # Resumen semanal · 25/10–31/10
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-31-1205-16b393`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-10-31-1250-933d03`)._
 
 ## En una frase
 
-- 16 sesiones (+7); HRV de 7 días por debajo de tu rango normal; 1 de 7 noches con datos por debajo de 7,5 h de sueño; 3 de 5 días comprobados por encima del RPE máximo.
+- 16 sesiones (+7); HRV de 7 días por debajo de tu rango normal; 1 de 7 noches con datos por debajo de 7,5 h de sueño; 4 de 6 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: verde 2 · ámbar 2 · rojo 3.
 
 ## Gráficas de la semana
@@ -28,11 +28,11 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 16 | 9 |
 | Minutos | 467 | 230 |
 | Carga (Intervals) | 275 | 121 |
-| sRPE (RPE × min) | 1980 | 887 |
+| sRPE (RPE × min) | 2195 | 887 |
 
-Monotonía 0,69 · strain 1373 · ACWR — · RPE registrado en 9/16 sesiones.
+Monotonía 0,80 · strain 1761 · ACWR — · RPE registrado en 11/16 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4).
+**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7).
 
 ## Recuperación
 
@@ -91,10 +91,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 9/16.
+- Sesiones con RPE: 11/16.
 
 ## Validación de modelos
 
-Acumulando datos: 6/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 7/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._
