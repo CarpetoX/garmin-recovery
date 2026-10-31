@@ -1,6 +1,6 @@
 # Informe de seguimiento · 31/10/2026
 
-`GR-2026-10-31-1250-933d03` · cita este identificador al reenviar el informe.
+`GR-2026-10-31-1648-91882e` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,8 +55,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-10-31-1205-16b393 (31/10 12:05):
-- Sesiones con RPE: 14 → 16.
+Frente al informe GR-2026-10-31-1250-933d03 (31/10 12:50):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
@@ -122,16 +122,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-10-31-1250-933d03`
+- **Identificador del informe:** `GR-2026-10-31-1648-91882e`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-10-31-0830 · datos sincronizados a las 12:49 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 3,8 h ✓ · última HRV hace 3,8 h ✓ · última FC hace 14 min ✓ · último Body Battery hace 23 min ✓
+- **Ciclo:** 2026-10-31-1645 · datos sincronizados a las 16:47
+- **Antigüedad:** fin del sueño hace 7,8 h ✓ · última HRV hace 7,8 h ✓ · última FC hace 26 min ✓ · último Body Battery hace 33 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+9 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-31 12:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-10-31 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
