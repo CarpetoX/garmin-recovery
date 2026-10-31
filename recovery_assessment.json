@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T16:47:46.885344+01:00",
+  "generated_at": "2026-10-31T22:47:54.624179+01:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "assessed",
   "status": "green",
@@ -109,7 +109,8 @@
     "subjective_values_exported": false,
     "intensity_guardrail": "use_v22_guidance",
     "reason_codes": [
-      "post_night_shift"
+      "post_night_shift",
+      "live_measurement_uncertain"
     ],
     "baseline_caution": "standard",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -118,26 +119,26 @@
         "confirmed_sleep": {
           "state": "recent",
           "measured_at": "2026-10-31T09:03:09+01:00",
-          "age_minutes": 464.6,
+          "age_minutes": 824.8,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
           "state": "recent",
           "measured_at": "2026-10-31T09:00:13+01:00",
-          "age_minutes": 467.6,
+          "age_minutes": 827.7,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
-          "state": "recent",
-          "measured_at": "2026-10-31T16:22:00+01:00",
-          "age_minutes": 25.8,
+          "state": "old_measurement",
+          "measured_at": "2026-10-31T19:00:00+01:00",
+          "age_minutes": 227.9,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "recent",
-          "measured_at": "2026-10-31T16:15:00+01:00",
-          "age_minutes": 32.8,
+          "state": "old_measurement",
+          "measured_at": "2026-10-31T18:57:00+01:00",
+          "age_minutes": 230.9,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -148,8 +149,11 @@
         }
       },
       "invalid_core_episode": false,
-      "live_data_limited": false,
-      "limited_live_metrics": [],
+      "live_data_limited": true,
+      "limited_live_metrics": [
+        "heart_rate_live",
+        "body_battery_live"
+      ],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
     },
     "sleep_fragmentation": {
