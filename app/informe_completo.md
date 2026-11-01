@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Domingo, 1 de noviembre de 2026 · 08:33 · `GR-2026-11-01-0833-3dd272`
+Domingo, 1 de noviembre de 2026 · 16:48 · `GR-2026-11-01-1648-e22c96`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -13,7 +13,7 @@ Carga 7 días|16 sesiones|sRPE 2195|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-01-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-01-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🟡 **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 60/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 7 h 25 min, puntuación 81/100.
 - ❤️ **Principal alerta:** HRV 58 ms, 9,4 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|16 sesiones|sRPE 2195|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-01-0830 |
+| Ciclo | 2026-11-01-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:02 |
+| Certificado generado | 16:48:15 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -78,7 +78,7 @@ La HRV está 9 % por encima de su mediana; la FC en reposo está 2 lpm por debaj
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 1/100 | contexto |
 | Tiempo de recuperación Garmin | 75,8 h | contexto |
-| Índice personal experimental | 55/100 | provisional |
+| Índice personal experimental | 54/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora.
 
@@ -90,7 +90,6 @@ Modelo experimental: 66 → 74 (yellow → green). Cambios notables frente a aye
 - FC en reposo: 59 → 55 lpm (favorable)
 - FC nocturna: 64,6 → 60,8 lpm (favorable)
 - Sueño: 9,3 → 7,4 h (desfavorable)
-- Estrés medio: 34 → 15 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -133,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 83,7 lpm | 60,8 lpm |
+| Hoy* | 76,9 lpm | 60,8 lpm |
 | 3 días | 78,7 lpm | 64,4 lpm |
 | 7 días | 84,1 lpm | 63,6 lpm |
 | 28 días | 83,0 lpm | 64,0 lpm |
@@ -153,8 +152,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 15, máximo 78.
-- Body Battery: último valor 80/100, medido a las 07:36.
+- Estrés medio: 27, máximo 93.
+- Body Battery: último valor 43/100, medido a las 15:15 (hace 1 h 33 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 5 observaciones recientes, mediana 19,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -409,4 +408,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-01-0830 · generado 01/11/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 41285148795.
+Traza: informe de tarde · ciclo 2026-11-01-1645 · generado 01/11/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 41322946208.
