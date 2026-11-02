@@ -378,6 +378,14 @@ def patch_hybrid(hybrid, assessment):
     ) if v is not None), None)
     if raw is None:
         return hybrid
+    # V8.9: los topes de Garmin del propio híbrido se respetan. Antes se recalculaba desde la puntuación previa a ellos
+    # (p. ej. Garmin 15 → híbrido limitado a 49, rojo; aquí volvía a 61, ámbar) y la regla «Garmin < 35 fuerza rojo»
+    # no se cumplía.
+    applied = set(hybrid.get('guardrails_applied') or [])
+    if 'garmin_score_below_35_forces_red' in applied:
+        raw = min(raw, 49)
+    elif applied & {'garmin_low_prevents_green', 'recovery_time_24h_or_more_prevents_green'}:
+        raw = min(raw, 74)
     hybrid['score_before_recovery_guardrail'] = int(raw)
     state = assessment.get('state')
     confidence = assessment.get('confidence')

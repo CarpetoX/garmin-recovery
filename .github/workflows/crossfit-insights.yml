@@ -136,6 +136,11 @@ jobs:
       - name: Pruebas de regresión V2.4
         run: python -m garmin_recovery.pipeline_regression_tests --stage crossfit
 
+      # V8.9: copias pequeñas del registro (últimas 72 h completas + índice) para lectores que no abren archivos de > 1 MB.
+      - name: V8.9 - Copias ligeras del registro de ciclos
+        continue-on-error: true
+        run: python -m garmin_recovery.ledger_light
+
       # V8.4: ¿hay algo nuevo que publicar? Las cadenas repetidas tras el sueño sin cambios no lanzan monitor, web ni rutina.
       - name: V8.4 - Control de publicación (solo si hay cambios)
         id: gate
@@ -154,6 +159,7 @@ jobs:
           done
           [ ! -d app/charts ] || git add app/charts
           [ ! -f report_cycles.json ] || git add report_cycles.json
+          for f in report_cycles_recent.json report_cycles_index.json; do [ ! -f "$f" ] || git add "$f"; done
           [ ! -f report_ready.json ] || git add report_ready.json
           # V3.3: informe requerido tras validacion, no es opcional.
           git add training_trends_v31.json
