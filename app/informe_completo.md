@@ -1,9 +1,9 @@
 # Garmin Recovery · Cierre matinal
 
-Lunes, 2 de noviembre de 2026 · 08:33 · `GR-2026-11-02-0833-1c48b8`
+Lunes, 2 de noviembre de 2026 · 08:56 · `GR-2026-11-02-0856-90e477`
 
 ```cards
-Decisión|Pendiente de datos|RPE máx. 6|unavailable
+Decisión|Entrenar con control|RPE máx. 7|yellow
 Recuperación oficial|85/100|confianza high|green
 HRV|49 ms|-8 % vs mediana|yellow
 Sueño|7 h 28 min|puntuación 75|unavailable
@@ -13,23 +13,23 @@ Carga 7 días|12 sesiones|sRPE 1375|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-02-0830 validado; 4 de 4 procesos finalizados correctamente.
-- ⚪ **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 66/100. **Decisión: Pendiente de datos**, RPE máx. 6.
+- 🟢 **Certificación:** ciclo 2026-11-02-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
+- 🟡 **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 66/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 7 h 28 min, puntuación 75/100.
 - ❤️ **Principal alerta:** HRV 49 ms, 7,5 % por debajo de tu mediana de 28 días.
-- 🏋️ **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+- 🏋️ **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
 
 ## 1. Certificación y calidad
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-02-0830 |
+| Ciclo | 2026-11-02-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:40 |
+| Certificado generado | 08:56:17 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -56,7 +56,7 @@ _Un retraso de un día es normal a primera hora; se avisa por GitHub si Interval
 |---|---|---|---|
 | HRV | 49 ms | 53 ms | 27 |
 | FC en reposo | 57 lpm | 57 lpm | 28 |
-| FC nocturna | 63,2 lpm | 62,5 lpm | 28 |
+| FC nocturna | 63,3 lpm | 62,5 lpm | 28 |
 | Duración del sueño | 7 h 28 min | 7 h 28 min | 28 |
 | Puntuación de sueño | 75 | 76 | 26 |
 
@@ -74,11 +74,13 @@ La HRV está 8 % por debajo de su mediana; la FC en reposo coincide con su media
 |---|---|---|
 | Recuperación oficial | 🟢 85/100 | oficial |
 | Híbrido Garmin + local | 🟡 66/100 | salvaguarda |
-| Modelo experimental | — | sombra |
+| Modelo experimental | 🟢 71/100 | sombra |
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 15/100 | contexto |
 | Tiempo de recuperación Garmin | 51,0 h | contexto |
 | Índice personal experimental | 21/100 | provisional |
+
+_Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora.
 
 **Qué ha cambiado desde ayer**
 
@@ -130,8 +132,8 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 74,1 lpm | 63,2 lpm |
-| 3 días | 78,3 lpm | 63,0 lpm |
+| Hoy* | 70,7 lpm | 63,3 lpm |
+| 3 días | 78,3 lpm | 63,1 lpm |
 | 7 días | 82,6 lpm | 64,6 lpm |
 | 28 días | 82,4 lpm | 64,1 lpm |
 
@@ -314,7 +316,7 @@ Turno: hoy TN (15–08), mañana libre tras la noche.
 
 ### Recomendaciones
 
-1. **Pendiente de datos** — Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+1. **Entrenar con control** — Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
 2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
@@ -372,7 +374,7 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| lun 02/11 | TN | 🟢 Suave / movilidad | la decisión de hoy limita la intensidad |
+| lun 02/11 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
 | mar 03/11 | tras TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
 | mié 04/11 | libre | 🔥 Exigente | día libre con margen para una sesión exigente |
 | jue 05/11 | libre | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
@@ -384,7 +386,7 @@ Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separada
 
 ### Reglas para los próximos 7 días
 
-1. **Hoy:** respeta la decisión del día (Pendiente de datos, RPE máx. 6).
+1. **Hoy:** respeta la decisión del día (Entrenar con control, RPE máx. 7).
 2. **Esfuerzos máximos:** como mucho 2–3 sesiones de RPE ≥ 8 en la semana y separadas ≥ 48 h.
 3. **Sueño:** suma 30–45 min cada noche en lugar de una sola noche larga; antes de un turno de noche, siesta corta.
 4. **Registro:** fatiga, agujetas y ánimo cada mañana en Intervals; RPE de cada sesión el mismo día.
@@ -394,8 +396,8 @@ _Los puntos 2 y 3 son criterios generales de entrenamiento y descanso, no una pr
 
 ## Conclusión
 
-Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ Pendiente de datos**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
+Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 Entrenar con control**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-02-0830 · generado 02/11/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 41406894558.
+Traza: cierre matinal · ciclo 2026-11-02-0830-post-sleep · generado 02/11/2026 08:56 Europe/Madrid · certificado READY · sync_run_id 41409361320.
