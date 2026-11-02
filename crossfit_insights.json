@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T22:47:59.899554+01:00",
+  "generated_at": "2026-11-02T08:33:29.756624+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
@@ -17,13 +17,13 @@
       "La respuesta 24-48 h no demuestra causalidad"
     ]
   },
-  "context_today": "MT",
+  "context_today": "TN",
   "context_baseline_days": {
     "overall": 28,
-    "post-TN": 7,
     "free": 12,
-    "MT": 4,
-    "TN": 5
+    "MT": 5,
+    "TN": 5,
+    "post-TN": 6
   },
   "response_24_48h": [
     {
@@ -763,11 +763,11 @@
           "physiological_cost_signal": "none"
         },
         "48h": {
-          "hrv_pct": null,
-          "nighttime_hr_delta": null,
-          "resting_hr_delta": null,
-          "sleep_hours_delta": null,
-          "sleep_score_delta": null,
+          "hrv_pct": 43.5,
+          "nighttime_hr_delta": -5.9,
+          "resting_hr_delta": -3.0,
+          "sleep_hours_delta": -0.09,
+          "sleep_score_delta": 22.0,
           "adverse_signals": [],
           "physiological_cost_signal": "none"
         }
@@ -775,12 +775,12 @@
     }
   ],
   "readiness_hybrid": {
-    "score": 60,
-    "raw_score_before_guardrails": 60,
+    "score": 66,
+    "raw_score_before_guardrails": 66,
     "status": "yellow",
     "recommended_volume": "individualizar; evitar sesión máxima sin confirmar",
     "recommendation": "moderate",
-    "garmin_score": 1,
+    "garmin_score": 15,
     "garmin_level": "POOR",
     "local_score": 100,
     "local_confidence": "high",
@@ -789,20 +789,20 @@
       "local": 0.6
     },
     "source_mode": "hybrid",
-    "recovery_time_hours": 75.8,
+    "recovery_time_hours": 51.0,
     "guardrails_applied": [
       "garmin_score_below_35_forces_red",
       "recovery_time_24h_or_more_prevents_green",
       "recovery_reliability_gate"
     ],
     "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-    "score_before_recovery_guardrail": 60,
+    "score_before_recovery_guardrail": 66,
     "intensity_guidance": "Evaluación provisional o limitada: adaptar carga a síntomas, calentamiento y RPE.",
     "confidence": "high",
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-01T22:47:44.015834+01:00",
+    "generated_at": "2026-11-02T08:33:10.154622+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "green",
@@ -812,18 +812,18 @@
     "missing_essential": [],
     "fresh_sources": true,
     "context": "night_sleep",
-    "work_shift_context": "MT",
+    "work_shift_context": "TN",
     "sleep_context": "night_sleep",
     "current": {
-      "date": "2026-11-01",
-      "hrv_ms": 58.0,
-      "sleep_hours": 7.42,
-      "sleep_score": 81.0,
-      "resting_hr": 55.0,
-      "night_hr": 60.8,
+      "date": "2026-11-02",
+      "hrv_ms": 49.0,
+      "sleep_hours": 7.46,
+      "sleep_score": 75.0,
+      "resting_hr": 57.0,
+      "night_hr": 63.2,
       "sleep_context": "night_sleep",
-      "sleep_start_local": "2026-11-01T00:06:53+01:00",
-      "sleep_end_local": "2026-11-01T07:34:53+01:00",
+      "sleep_start_local": "2026-11-02T00:30:17+01:00",
+      "sleep_end_local": "2026-11-02T08:24:06+01:00",
       "sources": {
         "hrv_ms": "garmin_hrv_timeline",
         "sleep_hours": "garmin_sleep_history",
@@ -836,51 +836,51 @@
       "hrv_ms": {
         "n": 27,
         "median": 53.0,
-        "last7_mean": 47.0,
+        "last7_mean": 52.57,
         "scope": "overall"
       },
       "sleep_hours": {
         "n": 28,
-        "median": 7.38,
-        "last7_mean": 7.69,
+        "median": 7.46,
+        "last7_mean": 7.66,
         "scope": "overall"
       },
       "sleep_score": {
         "n": 26,
-        "median": 69.5,
-        "last7_mean": 67.86,
+        "median": 76.0,
+        "last7_mean": 73.43,
         "scope": "overall"
       },
       "resting_hr": {
         "n": 28,
         "median": 57.0,
-        "last7_mean": 56.86,
+        "last7_mean": 56.43,
         "scope": "overall"
       },
       "night_hr": {
         "n": 28,
-        "median": 62.6,
-        "last7_mean": 66.44,
+        "median": 62.55,
+        "last7_mean": 63.79,
         "scope": "overall"
       }
     },
     "metrics_used": [
       {
         "metric": "hrv_ms",
-        "value": 58.0,
+        "value": 49.0,
         "reference": 53.0,
-        "change_pct": 9.4
+        "change_pct": -7.5
       },
       {
         "metric": "resting_hr",
-        "value": 55.0,
+        "value": 57.0,
         "reference": 57.0,
-        "delta_bpm": -2.0
+        "delta_bpm": 0.0
       },
       {
         "metric": "sleep_hours",
-        "value": 7.42,
-        "reference": 7.38
+        "value": 7.46,
+        "reference": 7.46
       }
     ],
     "warnings": [],
@@ -892,19 +892,19 @@
     ],
     "v23": {
       "version": "2.3.1",
-      "shift_context": "MT",
+      "shift_context": "TN",
       "sleep_integrity": {
         "main_sleep_confirmed": true,
-        "main_sleep_minutes": 445,
+        "main_sleep_minutes": 448,
         "unconfirmed_separate_events": 0,
         "unconfirmed_separate_minutes": 0,
-        "overlapping_body_battery_events": 1,
+        "overlapping_body_battery_events": 0,
         "minutes_added_to_sleep": 0,
         "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
       },
       "sleep_score_provenance": {
-        "confirmed_sleep_score": 81.0,
-        "readiness_sleep_field": 81.0,
+        "confirmed_sleep_score": 75.0,
+        "readiness_sleep_field": 75.0,
         "status": "close_values",
         "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
       },
@@ -918,27 +918,27 @@
         "sources": {
           "confirmed_sleep": {
             "state": "recent",
-            "measured_at": "2026-11-01T07:34:53+01:00",
-            "age_minutes": 912.9,
+            "measured_at": "2026-11-02T08:24:06+01:00",
+            "age_minutes": 9.1,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
-            "measured_at": "2026-11-01T07:30:14+01:00",
-            "age_minutes": 917.5,
+            "measured_at": "2026-11-02T08:20:14+01:00",
+            "age_minutes": 12.9,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
             "state": "recent",
-            "measured_at": "2026-11-01T21:42:00+01:00",
-            "age_minutes": 65.7,
+            "measured_at": "2026-11-02T08:22:00+01:00",
+            "age_minutes": 11.2,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
             "state": "recent",
-            "measured_at": "2026-11-01T21:36:00+01:00",
-            "age_minutes": 71.7,
+            "measured_at": "2026-11-02T08:12:00+01:00",
+            "age_minutes": 21.2,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -970,8 +970,8 @@
           "easy_aerobic": "usual_program_if_well",
           "mobility": "usual_program_if_well"
         },
-        "recent_sessions_with_declared_rpe": 3,
-        "recent_high_rpe_sessions": 2,
+        "recent_sessions_with_declared_rpe": 2,
+        "recent_high_rpe_sessions": 1,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
     },
@@ -5184,7 +5184,7 @@
     }
   ],
   "muscle_load": {
-    "as_of_date": "2026-11-01",
+    "as_of_date": "2026-11-02",
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
@@ -6174,10 +6174,10 @@
           "mixed_equipment_caution": true
         },
         "olympic_lift": {
-          "verified_volume_kg": 3235.0,
-          "known_sets": 35,
-          "total_sets": 35,
-          "sessions": 3,
+          "verified_volume_kg": 2116.0,
+          "known_sets": 26,
+          "total_sets": 26,
+          "sessions": 2,
           "volume_complete": true,
           "mixed_equipment_caution": true
         },
@@ -6193,38 +6193,6 @@
           "verified_volume_kg": 0.0,
           "known_sets": 0,
           "total_sets": 3,
-          "sessions": 1,
-          "volume_complete": false,
-          "mixed_equipment_caution": true
-        },
-        "horizontal_push": {
-          "verified_volume_kg": 8150.0,
-          "known_sets": 15,
-          "total_sets": 15,
-          "sessions": 3,
-          "volume_complete": true,
-          "mixed_equipment_caution": true
-        },
-        "chest_isolation": {
-          "verified_volume_kg": 1088.0,
-          "known_sets": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true,
-          "mixed_equipment_caution": true
-        },
-        "biceps_isolation": {
-          "verified_volume_kg": 440.0,
-          "known_sets": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true,
-          "mixed_equipment_caution": true
-        },
-        "core": {
-          "verified_volume_kg": 0.0,
-          "known_sets": 0,
-          "total_sets": 4,
           "sessions": 1,
           "volume_complete": false,
           "mixed_equipment_caution": true
@@ -6332,11 +6300,11 @@
           "volume_complete": false
         },
         "olympic_lift:barbell": {
-          "verified_volume_kg": 3235.0,
-          "known_sets": 35,
-          "external_sets_expected": 35,
-          "total_sets": 35,
-          "sessions": 3,
+          "verified_volume_kg": 2116.0,
+          "known_sets": 26,
+          "external_sets_expected": 26,
+          "total_sets": 26,
+          "sessions": 2,
           "volume_complete": true
         },
         "squat:barbell": {
@@ -6360,54 +6328,6 @@
           "known_sets": 0,
           "external_sets_expected": 0,
           "total_sets": 3,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "horizontal_push:barbell": {
-          "verified_volume_kg": 4620.0,
-          "known_sets": 7,
-          "external_sets_expected": 7,
-          "total_sets": 7,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "horizontal_push:dumbbell_pair": {
-          "verified_volume_kg": 1930.0,
-          "known_sets": 4,
-          "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "horizontal_push:plate_loaded_machine": {
-          "verified_volume_kg": 1600.0,
-          "known_sets": 4,
-          "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "chest_isolation:dumbbell_pair": {
-          "verified_volume_kg": 1088.0,
-          "known_sets": 4,
-          "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "biceps_isolation:machine_stack": {
-          "verified_volume_kg": 440.0,
-          "known_sets": 4,
-          "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "core:bodyweight": {
-          "verified_volume_kg": 0.0,
-          "known_sets": 0,
-          "external_sets_expected": 0,
-          "total_sets": 4,
           "sessions": 1,
           "volume_complete": true
         }
@@ -6843,16 +6763,6 @@
           },
           "wall ball": {
             "reps": 82,
-            "distance_m": 0.0,
-            "entries": 1
-          },
-          "squat snatch": {
-            "reps": 30,
-            "distance_m": 0.0,
-            "entries": 1
-          },
-          "toes-to-bar": {
-            "reps": 48,
             "distance_m": 0.0,
             "entries": 1
           }
@@ -7687,11 +7597,11 @@
               "physiological_cost_signal": "none"
             },
             "48h": {
-              "hrv_pct": null,
-              "nighttime_hr_delta": null,
-              "resting_hr_delta": null,
-              "sleep_hours_delta": null,
-              "sleep_score_delta": null,
+              "hrv_pct": 43.5,
+              "nighttime_hr_delta": -5.9,
+              "resting_hr_delta": -3.0,
+              "sleep_hours_delta": -0.09,
+              "sleep_score_delta": 22.0,
               "adverse_signals": [],
               "physiological_cost_signal": "none"
             }
@@ -7700,10 +7610,10 @@
       ],
       "available_context_baseline_days": {
         "overall": 28,
-        "post-TN": 7,
         "free": 12,
-        "MT": 4,
-        "TN": 5
+        "MT": 5,
+        "TN": 5,
+        "post-TN": 6
       },
       "recorded_activities_by_shift_context": {
         "free": 21,
@@ -7719,41 +7629,41 @@
     },
     "performance_report": {
       "status": "descriptive_ready",
-      "as_of_date": "2026-11-01",
+      "as_of_date": "2026-11-02",
       "window_summaries": {
         "recent_7d": {
-          "sessions": 16,
-          "sessions_with_rpe": 11,
-          "high_rpe_sessions": 5,
-          "recorded_duration_minutes": 467.3,
-          "sessions_with_duration": 16,
-          "srpe_from_recorded_duration": 2193.8,
-          "srpe_sessions": 11,
-          "minimum_recorded_external_volume_kg": 8268.0,
-          "strength_blocks_with_quantified_weight": 3,
-          "strength_blocks_missing_quantified_weight": 15,
-          "garmin_intervals_load_separate": 275.0,
-          "intervals_load_sessions": 16,
-          "trimp_separate": 451.0,
-          "trimp_sessions": 16,
-          "mean_recorded_rpe": 7.41
+          "sessions": 12,
+          "sessions_with_rpe": 8,
+          "high_rpe_sessions": 4,
+          "recorded_duration_minutes": 306.0,
+          "sessions_with_duration": 12,
+          "srpe_from_recorded_duration": 1374.6,
+          "srpe_sessions": 8,
+          "minimum_recorded_external_volume_kg": 2529.0,
+          "strength_blocks_with_quantified_weight": 1,
+          "strength_blocks_missing_quantified_weight": 13,
+          "garmin_intervals_load_separate": 200.0,
+          "intervals_load_sessions": 12,
+          "trimp_separate": 325.7,
+          "trimp_sessions": 12,
+          "mean_recorded_rpe": 7.44
         },
         "previous_7d": {
           "sessions": 8,
-          "sessions_with_rpe": 4,
-          "high_rpe_sessions": 4,
-          "recorded_duration_minutes": 164.1,
+          "sessions_with_rpe": 5,
+          "high_rpe_sessions": 3,
+          "recorded_duration_minutes": 236.7,
           "sessions_with_duration": 8,
-          "srpe_from_recorded_duration": 396.4,
-          "srpe_sessions": 4,
-          "minimum_recorded_external_volume_kg": 1350.0,
+          "srpe_from_recorded_duration": 1019.1,
+          "srpe_sessions": 5,
+          "minimum_recorded_external_volume_kg": 5739.0,
           "strength_blocks_with_quantified_weight": 2,
           "strength_blocks_missing_quantified_weight": 6,
-          "garmin_intervals_load_separate": 97.0,
+          "garmin_intervals_load_separate": 125.0,
           "intervals_load_sessions": 8,
-          "trimp_separate": 155.5,
+          "trimp_separate": 200.9,
           "trimp_sessions": 8,
-          "mean_recorded_rpe": 8.38
+          "mean_recorded_rpe": 7.7
         },
         "recent_28d": {
           "sessions": 42,
@@ -7774,13 +7684,6 @@
         }
       },
       "daily_chart_7d": [
-        {
-          "date": "2026-10-26",
-          "sessions": 4,
-          "mean_recorded_rpe": 7.33,
-          "recorded_minutes": 161.3,
-          "srpe_from_recorded_duration": 819.2
-        },
         {
           "date": "2026-10-27",
           "sessions": 2,
@@ -7822,6 +7725,13 @@
           "mean_recorded_rpe": null,
           "recorded_minutes": 0,
           "srpe_from_recorded_duration": 0
+        },
+        {
+          "date": "2026-11-02",
+          "sessions": 0,
+          "mean_recorded_rpe": null,
+          "recorded_minutes": 0,
+          "srpe_from_recorded_duration": 0
         }
       ],
       "latest_session": {
@@ -7838,8 +7748,8 @@
       },
       "previous_week_context": {
         "sufficient_for_descriptive_comparison": true,
-        "session_count_change": 8,
-        "mean_rpe_change": -0.97,
+        "session_count_change": 4,
+        "mean_rpe_change": -0.26,
         "note": "El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento."
       },
       "benchmark_comparisons": [],
@@ -7876,33 +7786,33 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-11-01T22:47:59.899554+01:00",
+    "checked_at": "2026-11-02T08:33:29.756624+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-10-31",
-    "latest_activity_age_days": 1,
+    "latest_activity_age_days": 2,
     "sheet_rows": 44,
     "manual_coverage_7d_pct": 100.0,
     "flags": [],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
   },
   "weekly_report": {
-    "window_start": "2026-10-26",
-    "window_end": "2026-11-01",
-    "activities": 16,
-    "activities_with_manual_sheet_match": 16,
+    "window_start": "2026-10-27",
+    "window_end": "2026-11-02",
+    "activities": 12,
+    "activities_with_manual_sheet_match": 12,
     "activities_missing_manual_match": 0,
-    "mean_rpe": 7.41,
-    "recorded_srpe_sum": 2193.8,
+    "mean_rpe": 7.44,
+    "recorded_srpe_sum": 1374.6,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 8268.0,
+    "minimum_verified_strength_volume_kg": 2529.0,
     "strength_blocks_with_missing_weights": 0,
     "readiness_latest": {
-      "score": 60,
-      "raw_score_before_guardrails": 60,
+      "score": 66,
+      "raw_score_before_guardrails": 66,
       "status": "yellow",
       "recommended_volume": "individualizar; evitar sesión máxima sin confirmar",
       "recommendation": "moderate",
-      "garmin_score": 1,
+      "garmin_score": 15,
       "garmin_level": "POOR",
       "local_score": 100,
       "local_confidence": "high",
@@ -7911,14 +7821,14 @@
         "local": 0.6
       },
       "source_mode": "hybrid",
-      "recovery_time_hours": 75.8,
+      "recovery_time_hours": 51.0,
       "guardrails_applied": [
         "garmin_score_below_35_forces_red",
         "recovery_time_24h_or_more_prevents_green",
         "recovery_reliability_gate"
       ],
       "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-      "score_before_recovery_guardrail": 60,
+      "score_before_recovery_guardrail": 66,
       "intensity_guidance": "Evaluación provisional o limitada: adaptar carga a síntomas, calentamiento y RPE.",
       "confidence": "high",
       "recovery_assessment_state": "assessed"
@@ -7928,54 +7838,54 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-11-01T22:47:59.899554+01:00",
+    "checked_at": "2026-11-02T08:33:29.756624+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-01T22:47:01.469990+01:00",
+        "generated_at": "2026-11-02T08:32:12.573029+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-11-01T22:47:20.249547+01:00",
+        "generated_at": "2026-11-02T08:32:40.728001+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
         "garmin_status": "success",
         "latest_date_markers": {
-          "latest_stress_date": "2026-11-01",
-          "latest_body_battery_date": "2026-11-01",
-          "latest_extended_date": "2026-11-01",
-          "latest_heart_rate_date": "2026-11-01"
+          "latest_stress_date": "2026-11-02",
+          "latest_body_battery_date": "2026-11-02",
+          "latest_extended_date": "2026-11-02",
+          "latest_heart_rate_date": "2026-11-02"
         }
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-11-01T22:47:43.524492+01:00",
-        "age_hours": 0.0,
+        "generated_at": "2026-11-02T08:33:09.503636+01:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-11-01T22:47:43.524492+01:00",
-        "age_hours": 0.0,
+        "generated_at": "2026-11-02T08:33:09.503636+01:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-01T22:47:01.469990+01:00",
+        "generated_at": "2026-11-02T08:32:12.573029+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-11-01T22:47:20.249547+01:00",
+        "generated_at": "2026-11-02T08:32:40.728001+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
@@ -7995,7 +7905,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.7,
+    "generation_skew_minutes": 0.9,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
