@@ -1,10 +1,10 @@
 # Resumen semanal · 27/10–02/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-02-1331-e1327f`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-02-1336-1317b9`)._
 
 ## En una frase
 
-- 14 sesiones (+6); HRV de 7 días por debajo de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; 4 de 5 días comprobados por encima del RPE máximo.
+- 14 sesiones (+6); HRV de 7 días por debajo de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 6 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: verde 1 · ámbar 4 · rojo 2.
 
 ## Gráficas de la semana
@@ -28,11 +28,11 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 14 | 8 |
 | Minutos | 400 | 237 |
 | Carga (Intervals) | 244 | 125 |
-| sRPE (RPE × min) | 1375 | 1020 |
+| sRPE (RPE × min) | 1458 | 1020 |
 
-Monotonía 0,59 · strain 813 · ACWR 0,96 · RPE registrado en 8/14 sesiones.
+Monotonía 0,64 · strain 932 · ACWR 1,01 · RPE registrado en 9/14 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7).
+**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 7).
 
 ## Recuperación
 
@@ -53,6 +53,9 @@ HRV de 7 días hoy: 46,4 ms (rango normal 51,9–60,4 ms). Turnos: TN, MT, TN.
 | 28/10 | front squat | 70,0 kg | 70 × 1 | 70,0 kg | 7/7 |
 | 28/10 | split jerk | 100,0 kg | 100 × 1 | 100,0 kg | 13/13 |
 | 30/10 | chin up lastrado | 15,0 kg | — | — | 5/5 |
+| 02/11 | clean pull | 90,0 kg | 90 × 1 | 90,0 kg | 8/8 |
+| 02/11 | hang power clean | 90,0 kg | 90 × 1 | 90,0 kg | 8/8 |
+| 02/11 | power clean | 90,0 kg | 90 × 1 | 90,0 kg | 8/8 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
@@ -85,10 +88,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 8/14.
+- Sesiones con RPE: 9/14.
 
 ## Validación de modelos
 
-Acumulando datos: 7/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 8/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._

@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-02T13:31:00.162073+01:00",
+  "generated_at": "2026-11-02T13:36:22.352241+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
-  "sheet_rows_loaded": 44,
+  "sheet_rows_loaded": 47,
   "sheet_fetch_policy": "same_advanced_run_sha256_snapshot",
-  "sheet_latest_date": "2026-10-31",
+  "sheet_latest_date": "2026-11-02",
   "latest_activity_date": "2026-11-02",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.",
@@ -780,7 +780,7 @@
         "intervals_training_load": 44.0,
         "garmin_activity_load": 111.6,
         "trimp": 66.3,
-        "session_rpe_load": 0
+        "session_rpe_load": 82.5
       },
       "baseline_previous_3d": {
         "hrv": 49.0,
@@ -839,7 +839,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-02T13:30:33.496123+01:00",
+    "generated_at": "2026-11-02T13:36:05.727192+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "green",
@@ -956,26 +956,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-11-02T08:24:06+01:00",
-            "age_minutes": 306.5,
+            "age_minutes": 312.0,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-11-02T08:20:14+01:00",
-            "age_minutes": 310.3,
+            "age_minutes": 315.9,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
             "state": "recent",
             "measured_at": "2026-11-02T13:22:00+01:00",
-            "age_minutes": 8.6,
+            "age_minutes": 14.1,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
             "state": "recent",
             "measured_at": "2026-11-02T12:09:00+01:00",
-            "age_minutes": 81.6,
+            "age_minutes": 87.1,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -1007,7 +1007,7 @@
           "easy_aerobic": "usual_program_if_well",
           "mobility": "usual_program_if_well"
         },
-        "recent_sessions_with_declared_rpe": 2,
+        "recent_sessions_with_declared_rpe": 3,
         "recent_high_rpe_sessions": 1,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
@@ -1024,8 +1024,30 @@
       "date": "2026-11-02",
       "context": "TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Técnica - handstand push-up",
+          "rpe": null,
+          "notes": "Técnica de handstand push-up, toda la sesión. Series y repeticiones no indicadas. Garmin 50,5 min. Sin RPE: sesión no puntuada por decisión del atleta.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "skill",
+            "exercise": "handstand push-up",
+            "garmin_activity_id": "i204708747",
+            "rpe": null,
+            "recorded_garmin_minutes": 50.5,
+            "performed": true,
+            "notes": "Sin series ni repeticiones declaradas. Sin RPE: sesión no puntuada por decisión del atleta."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
       "rpe_used": null,
       "rpe_interval": null,
@@ -1055,15 +1077,309 @@
       "date": "2026-11-02",
       "context": "TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Halterofilia - complex clean pull + hang power clean + power clean",
+          "rpe": null,
+          "notes": "Calentamiento y aproximación desde barra vacía hasta 60 kg, sin desglose. Complex 1+1+1 EMOM 4' (4 x 1): 60, 70, 75 y 80 kg. Mismo complex cada 1'15\" (4 x 1): 80, 85, 85 y 90 kg. 24 repeticiones y 1.875 kg de volumen de trabajo. Tramo 0:00–32:30 de la actividad de Garmin. Sin RPE: sesión no puntuada por decisión del atleta.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "garmin_activity_id": "i204694109",
+            "segment": {
+              "start_s": 0,
+              "end_s": 1950
+            },
+            "rpe": null,
+            "warmup": {
+              "from_bar_empty": true,
+              "bar_kg": 20,
+              "to_kg": 60,
+              "sets_breakdown_confirmed": false
+            },
+            "complexes": [
+              {
+                "name": "Complex clean pull + hang power clean + power clean (EMOM 4')",
+                "sets": 4,
+                "interval_seconds": 60,
+                "reps": {
+                  "clean pull": 1,
+                  "hang power clean": 1,
+                  "power clean": 1
+                },
+                "loads_kg": [
+                  60,
+                  70,
+                  75,
+                  80
+                ]
+              },
+              {
+                "name": "Complex clean pull + hang power clean + power clean (cada 1'15\")",
+                "sets": 4,
+                "interval_seconds": 75,
+                "reps": {
+                  "clean pull": 1,
+                  "hang power clean": 1,
+                  "power clean": 1
+                },
+                "loads_kg": [
+                  80,
+                  85,
+                  85,
+                  90
+                ]
+              }
+            ],
+            "exercises": [
+              {
+                "name": "clean pull",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 70,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 75,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 90,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  }
+                ]
+              },
+              {
+                "name": "hang power clean",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 70,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 75,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 90,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  }
+                ]
+              },
+              {
+                "name": "power clean",
+                "load_unit": "kg_total_barra",
+                "sets": [
+                  {
+                    "reps": 1,
+                    "load_kg": 60,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 70,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 75,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 60,
+                    "complex": "Complex clean pull + hang power clean + power clean (EMOM 4')"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 80,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 85,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  },
+                  {
+                    "reps": 1,
+                    "load_kg": 90,
+                    "interval_seconds": 75,
+                    "complex": "Complex clean pull + hang power clean + power clean (cada 1'15\")"
+                  }
+                ]
+              }
+            ],
+            "total_reps": 24,
+            "working_reps": 24,
+            "volume_kg": 1875,
+            "working_volume_kg": 1875,
+            "top_set_kg": 90,
+            "notes": "Reparto de las 8 cargas 4+4 confirmado por el atleta. Aproximación de barra vacía a 60 kg sin desglose; no incluida en el volumen. Tramo hasta el 32:30, confirmado por el atleta. Sin RPE: sesión no puntuada por decisión del atleta."
+          },
+          "minimum_verified_volume_kg": 1875.0,
+          "volume_complete": true,
+          "structured_sets_known": 24,
+          "structured_sets_total": 24
+        },
+        {
+          "activity": "WOD 4 Rounds For Time - double under / med ball sit-up / hang power clean",
+          "rpe": 7.5,
+          "notes": "4 RFT, time cap 11': 50 double unders + 20 sit-ups con balón 9 kg + 15 hang power clean 45 kg. No completado: 3 rondas + 31 double unders = 286 repeticiones (181 DU, 60 sit-ups, 45 HPC). RPE 7,5. Tramo 32:30–43:30 de la actividad de Garmin (confirmado por el atleta).",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "metcon",
+            "format": "4 Rounds For Time",
+            "garmin_activity_id": "i204694109",
+            "segment": {
+              "start_s": 1950,
+              "end_s": 2610
+            },
+            "time_cap_minutes": 11,
+            "rpe": 7.5,
+            "recorded_garmin_minutes": 11.0,
+            "prescribed_round": [
+              {
+                "name": "double under",
+                "reps": 50
+              },
+              {
+                "name": "med ball sit-up",
+                "reps": 20,
+                "load_kg": 9,
+                "load_unit": "kg_balon"
+              },
+              {
+                "name": "hang power clean",
+                "reps": 15,
+                "load_kg": 45,
+                "load_unit": "kg_total_barra"
+              }
+            ],
+            "performed": {
+              "completed": false,
+              "rounds_complete": 3,
+              "extra_reps": 31,
+              "extra_exercise": "double under",
+              "partial_round": [
+                {
+                  "name": "double under",
+                  "reps": 31
+                }
+              ],
+              "total_reps": 286,
+              "totals": {
+                "double_under_reps": 181,
+                "med_ball_sit_up_reps": 60,
+                "hang_power_clean_reps": 45
+              },
+              "hang_power_clean_volume_kg": 2025
+            },
+            "notes": "Tramo 32:30–43:30 confirmado por el atleta (primero dictó 42:30)."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 7.5,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 43.62,
-      "srpe_using_recorded_minutes": null,
-      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "srpe_using_recorded_minutes": 82.5,
+      "srpe_caveat": "Solo los tramos con RPE declarados en la hoja.",
       "external_work": {
         "distance_m": null,
         "reps": null,
@@ -1079,7 +1395,8 @@
         "max": 177.0
       },
       "efficiency": "insufficient_matched_repeated_workouts",
-      "neuromuscular_fatigue": "not_directly_measured"
+      "neuromuscular_fatigue": "not_directly_measured",
+      "scored_minutes": 11.0
     },
     {
       "activity_id": "i203859247",
@@ -5287,6 +5604,81 @@
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
+        "date": "2026-11-02",
+        "activity_id": "i204694109",
+        "exercise": "clean pull",
+        "movement_pattern": "olympic_lift",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 625.0,
+        "known_sets": 8,
+        "total_sets": 8,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 90.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 90.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 90.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": null,
+        "pain": null
+      },
+      {
+        "date": "2026-11-02",
+        "activity_id": "i204694109",
+        "exercise": "hang power clean",
+        "movement_pattern": "olympic_lift",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 625.0,
+        "known_sets": 8,
+        "total_sets": 8,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 90.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 90.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 90.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": null,
+        "pain": null
+      },
+      {
+        "date": "2026-11-02",
+        "activity_id": "i204694109",
+        "exercise": "power clean",
+        "movement_pattern": "olympic_lift",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 625.0,
+        "known_sets": 8,
+        "total_sets": 8,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 90.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 90.0,
+        "top_set_reps": 1,
+        "e1rm_min_kg": 90.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": null,
+        "pain": null
+      },
+      {
         "date": "2026-10-30",
         "activity_id": "i203615275",
         "exercise": "chin up lastrado",
@@ -6264,20 +6656,20 @@
     ],
     "movement_pattern_load": {
       "7d": {
+        "olympic_lift": {
+          "verified_volume_kg": 3991.0,
+          "known_sets": 50,
+          "total_sets": 50,
+          "sessions": 5,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
         "vertical_pull": {
           "verified_volume_kg": 220.0,
           "known_sets": 5,
           "total_sets": 10,
           "sessions": 2,
           "volume_complete": false,
-          "mixed_equipment_caution": true
-        },
-        "olympic_lift": {
-          "verified_volume_kg": 2116.0,
-          "known_sets": 26,
-          "total_sets": 26,
-          "sessions": 2,
-          "volume_complete": true,
           "mixed_equipment_caution": true
         },
         "squat": {
@@ -6298,20 +6690,20 @@
         }
       },
       "28d": {
+        "olympic_lift": {
+          "verified_volume_kg": 7038.0,
+          "known_sets": 80,
+          "total_sets": 80,
+          "sessions": 10,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
         "vertical_pull": {
           "verified_volume_kg": 445.0,
           "known_sets": 9,
           "total_sets": 18,
           "sessions": 4,
           "volume_complete": false,
-          "mixed_equipment_caution": true
-        },
-        "olympic_lift": {
-          "verified_volume_kg": 5163.0,
-          "known_sets": 56,
-          "total_sets": 56,
-          "sessions": 7,
-          "volume_complete": true,
           "mixed_equipment_caution": true
         },
         "squat": {
@@ -6390,6 +6782,14 @@
     },
     "movement_pattern_load_by_equipment": {
       "7d": {
+        "olympic_lift:barbell": {
+          "verified_volume_kg": 3991.0,
+          "known_sets": 50,
+          "external_sets_expected": 50,
+          "total_sets": 50,
+          "sessions": 5,
+          "volume_complete": true
+        },
         "vertical_pull:unspecified": {
           "verified_volume_kg": 220.0,
           "known_sets": 5,
@@ -6397,14 +6797,6 @@
           "total_sets": 10,
           "sessions": 2,
           "volume_complete": false
-        },
-        "olympic_lift:barbell": {
-          "verified_volume_kg": 2116.0,
-          "known_sets": 26,
-          "external_sets_expected": 26,
-          "total_sets": 26,
-          "sessions": 2,
-          "volume_complete": true
         },
         "squat:barbell": {
           "verified_volume_kg": 413.0,
@@ -6432,6 +6824,14 @@
         }
       },
       "28d": {
+        "olympic_lift:barbell": {
+          "verified_volume_kg": 7038.0,
+          "known_sets": 80,
+          "external_sets_expected": 80,
+          "total_sets": 80,
+          "sessions": 10,
+          "volume_complete": true
+        },
         "vertical_pull:unspecified": {
           "verified_volume_kg": 445.0,
           "known_sets": 9,
@@ -6439,14 +6839,6 @@
           "total_sets": 18,
           "sessions": 4,
           "volume_complete": false
-        },
-        "olympic_lift:barbell": {
-          "verified_volume_kg": 5163.0,
-          "known_sets": 56,
-          "external_sets_expected": 56,
-          "total_sets": 56,
-          "sessions": 7,
-          "volume_complete": true
         },
         "squat:barbell": {
           "verified_volume_kg": 12403.0,
@@ -6596,6 +6988,39 @@
   "training_extensions": {
     "metcon_exposure": {
       "entries": [
+        {
+          "date": "2026-11-02",
+          "activity_id": "i204694109",
+          "movement": "double under",
+          "verified_reps": 181,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": 11.0,
+          "recorded_garmin_minutes": 11.0
+        },
+        {
+          "date": "2026-11-02",
+          "activity_id": "i204694109",
+          "movement": "med ball sit-up",
+          "verified_reps": 60,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": 11.0,
+          "recorded_garmin_minutes": 11.0
+        },
+        {
+          "date": "2026-11-02",
+          "activity_id": "i204694109",
+          "movement": "hang power clean",
+          "verified_reps": 45,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": 11.0,
+          "recorded_garmin_minutes": 11.0
+        },
         {
           "date": "2026-10-30",
           "activity_id": "i203623693",
@@ -6830,6 +7255,21 @@
       ],
       "movement_work": {
         "7d": {
+          "double under": {
+            "reps": 181,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "med ball sit-up": {
+            "reps": 60,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "hang power clean": {
+            "reps": 45,
+            "distance_m": 0.0,
+            "entries": 1
+          },
           "step up con mancuerna": {
             "reps": 45,
             "distance_m": 0.0,
@@ -6867,6 +7307,21 @@
           }
         },
         "28d": {
+          "double under": {
+            "reps": 181,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "med ball sit-up": {
+            "reps": 60,
+            "distance_m": 0.0,
+            "entries": 1
+          },
+          "hang power clean": {
+            "reps": 45,
+            "distance_m": 0.0,
+            "entries": 1
+          },
           "step up con mancuerna": {
             "reps": 45,
             "distance_m": 0.0,
@@ -7713,7 +8168,7 @@
             "intervals_training_load": 44.0,
             "garmin_activity_load": 111.6,
             "trimp": 66.3,
-            "session_rpe_load": 0
+            "session_rpe_load": 82.5
           },
           "baseline_previous_3d": {
             "hrv": 49.0,
@@ -7769,15 +8224,15 @@
       "window_summaries": {
         "recent_7d": {
           "sessions": 14,
-          "sessions_with_rpe": 8,
+          "sessions_with_rpe": 9,
           "high_rpe_sessions": 4,
           "recorded_duration_minutes": 400.2,
           "sessions_with_duration": 14,
-          "srpe_from_recorded_duration": 1374.6,
-          "srpe_sessions": 8,
-          "minimum_recorded_external_volume_kg": 2529.0,
-          "strength_blocks_with_quantified_weight": 1,
-          "strength_blocks_missing_quantified_weight": 13,
+          "srpe_from_recorded_duration": 1457.1,
+          "srpe_sessions": 9,
+          "minimum_recorded_external_volume_kg": 4404.0,
+          "strength_blocks_with_quantified_weight": 2,
+          "strength_blocks_missing_quantified_weight": 15,
           "garmin_intervals_load_separate": 244.0,
           "intervals_load_sessions": 14,
           "trimp_separate": 392.0,
@@ -7803,15 +8258,15 @@
         },
         "recent_28d": {
           "sessions": 44,
-          "sessions_with_rpe": 32,
+          "sessions_with_rpe": 33,
           "high_rpe_sessions": 18,
           "recorded_duration_minutes": 1224.3,
           "sessions_with_duration": 44,
-          "srpe_from_recorded_duration": 5704.1,
-          "srpe_sessions": 32,
-          "minimum_recorded_external_volume_kg": 23216.0,
-          "strength_blocks_with_quantified_weight": 10,
-          "strength_blocks_missing_quantified_weight": 34,
+          "srpe_from_recorded_duration": 5786.6,
+          "srpe_sessions": 33,
+          "minimum_recorded_external_volume_kg": 25091.0,
+          "strength_blocks_with_quantified_weight": 11,
+          "strength_blocks_missing_quantified_weight": 36,
           "garmin_intervals_load_separate": 679.0,
           "intervals_load_sessions": 44,
           "trimp_separate": 1095.3,
@@ -7865,9 +8320,9 @@
         {
           "date": "2026-11-02",
           "sessions": 2,
-          "mean_recorded_rpe": null,
+          "mean_recorded_rpe": 7.5,
           "recorded_minutes": 94.2,
-          "srpe_from_recorded_duration": 0.0
+          "srpe_from_recorded_duration": 82.5
         }
       ],
       "latest_session": {
@@ -7880,7 +8335,7 @@
           "average": 107.0,
           "max": 139.0
         },
-        "manual_blocks_recorded": 0
+        "manual_blocks_recorded": 1
       },
       "previous_week_context": {
         "sufficient_for_descriptive_comparison": true,
@@ -7922,35 +8377,25 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-11-02T13:31:00.162073+01:00",
+    "checked_at": "2026-11-02T13:36:22.352241+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-11-02",
     "latest_activity_age_days": 0,
-    "sheet_rows": 44,
-    "manual_coverage_7d_pct": 85.7,
-    "flags": [
-      {
-        "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 2,
-        "ids": [
-          "i204708747",
-          "i204694109"
-        ]
-      }
-    ],
+    "sheet_rows": 47,
+    "manual_coverage_7d_pct": 100.0,
+    "flags": [],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
   },
   "weekly_report": {
     "window_start": "2026-10-27",
     "window_end": "2026-11-02",
     "activities": 14,
-    "activities_with_manual_sheet_match": 12,
-    "activities_missing_manual_match": 2,
+    "activities_with_manual_sheet_match": 14,
+    "activities_missing_manual_match": 0,
     "mean_rpe": 7.44,
-    "recorded_srpe_sum": 1374.6,
+    "recorded_srpe_sum": 1457.1,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 2529.0,
+    "minimum_verified_strength_volume_kg": 4404.0,
     "strength_blocks_with_missing_weights": 0,
     "readiness_latest": {
       "score": 61,
@@ -7984,20 +8429,20 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-11-02T13:31:00.162073+01:00",
+    "checked_at": "2026-11-02T13:36:22.352241+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-02T13:29:35.942657+01:00",
+        "generated_at": "2026-11-02T13:35:23.613661+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-11-02T13:29:56.118533+01:00",
-        "age_hours": 0.02,
+        "generated_at": "2026-11-02T13:35:42.177696+01:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
         "garmin_status": "success",
@@ -8010,29 +8455,29 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-11-02T13:30:32.534763+01:00",
-        "age_hours": 0.01,
+        "generated_at": "2026-11-02T13:36:05.382321+01:00",
+        "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-11-02T13:30:32.534763+01:00",
-        "age_hours": 0.01,
+        "generated_at": "2026-11-02T13:36:05.382321+01:00",
+        "age_hours": 0.0,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-02T13:29:35.942657+01:00",
+        "generated_at": "2026-11-02T13:35:23.613661+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-11-02T13:29:56.118533+01:00",
-        "age_hours": 0.02,
+        "generated_at": "2026-11-02T13:35:42.177696+01:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
@@ -8051,7 +8496,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.9,
+    "generation_skew_minutes": 0.7,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
