@@ -1,9 +1,9 @@
 # Garmin Recovery · Informe de tarde
 
-Lunes, 2 de noviembre de 2026 · 16:48 · `GR-2026-11-02-1648-34b68c`
+Lunes, 2 de noviembre de 2026 · 18:10 · `GR-2026-11-02-1810-c13aee`
 
 ```cards
-Decisión|Entrenar con control|RPE máx. 7|yellow
+Decisión|Prioriza recuperar|RPE máx. 4|red
 Recuperación oficial|85/100|confianza high|green
 HRV|49 ms|-8 % vs mediana|yellow
 Sueño|7 h 28 min|puntuación 75|unavailable
@@ -14,10 +14,10 @@ Carga 7 días|14 sesiones|sRPE 1458|unavailable
 ## Resumen ejecutivo
 
 - 🟢 **Certificación:** ciclo 2026-11-02-1645 validado; 4 de 4 procesos finalizados correctamente.
-- 🟡 **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 61/100. **Decisión: Entrenar con control**, RPE máx. 7.
+- 🔴 **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 49/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 7 h 28 min, puntuación 75/100.
 - ❤️ **Principal alerta:** HRV 49 ms, 7,5 % por debajo de tu mediana de 28 días.
-- 🏋️ **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
+- 🏋️ **Qué hacer:** Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
 
 ## 1. Certificación y calidad
 
@@ -34,7 +34,7 @@ Carga 7 días|14 sesiones|sRPE 1458|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (18:09), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -73,14 +73,14 @@ La HRV está 8 % por debajo de su mediana; la FC en reposo coincide con su media
 | Modelo | Resultado | Papel |
 |---|---|---|
 | Recuperación oficial | 🟢 85/100 | oficial |
-| Híbrido Garmin + local | 🟡 61/100 | salvaguarda |
+| Híbrido Garmin + local | 🔴 49/100 | salvaguarda |
 | Modelo experimental | 🟢 71/100 | sombra |
 | Modelo de compatibilidad | 🟢 91/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 15/100 | contexto |
 | Tiempo de recuperación Garmin | 51,0 h | contexto |
-| Índice personal experimental | 21/100 | provisional |
+| Índice personal experimental | 9/100 | provisional |
 
-_Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora.
+_Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 **Qué ha cambiado desde ayer**
 
@@ -131,7 +131,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 89,0 lpm | 63,3 lpm |
+| Hoy* | 88,8 lpm | 63,3 lpm |
 | 3 días | 78,3 lpm | 63,1 lpm |
 | 7 días | 82,6 lpm | 64,6 lpm |
 | 28 días | 82,4 lpm | 64,1 lpm |
@@ -151,8 +151,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 28, máximo 96.
-- Body Battery: último valor 38/100, medido a las 15:30.
+- Estrés medio: 33, máximo 96.
+- Body Battery: último valor 28/100, medido a las 17:57.
 - Recuperación de FC a 1 min tras el ejercicio: 6 observaciones recientes, mediana 20,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -324,7 +324,7 @@ Turno: hoy TN (15–08), mañana libre tras la noche.
 
 ### Recomendaciones
 
-1. **Entrenar con control** — Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
+1. **Prioriza recuperar** — Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
 2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
@@ -394,7 +394,7 @@ Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separada
 
 ### Reglas para los próximos 7 días
 
-1. **Hoy:** respeta la decisión del día (Entrenar con control, RPE máx. 7).
+1. **Hoy:** respeta la decisión del día (Prioriza recuperar, RPE máx. 4).
 2. **Esfuerzos máximos:** como mucho 2–3 sesiones de RPE ≥ 8 en la semana y separadas ≥ 48 h.
 3. **Sueño:** suma 30–45 min cada noche en lugar de una sola noche larga; antes de un turno de noche, siesta corta.
 4. **Registro:** fatiga, agujetas y ánimo cada mañana en Intervals; RPE de cada sesión el mismo día.
@@ -404,8 +404,8 @@ _Los puntos 2 y 3 son criterios generales de entrenamiento y descanso, no una pr
 
 ## Conclusión
 
-Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 Entrenar con control**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
+Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 Prioriza recuperar**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-02-1645 · generado 02/11/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 41474957685.
+Traza: informe de tarde · ciclo 2026-11-02-1645 · generado 02/11/2026 18:10 Europe/Madrid · certificado READY · sync_run_id 41474957685.

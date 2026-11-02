@@ -1,25 +1,25 @@
 # Informe de seguimiento · 02/11/2026
 
-`GR-2026-11-02-1648-34b68c` · cita este identificador al reenviar el informe.
+`GR-2026-11-02-1810-c13aee` · cita este identificador al reenviar el informe.
 
-> **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
+> **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
-> **Por qué:** lo marca Híbrido Garmin + local (61); señales: HRV 49 ms hoy; media 7 días −17 % vs. tu base (por debajo de tu rango normal) · FC en reposo 57 lpm (+1 vs. tu mediana).
+> **Por qué:** lo marca Híbrido Garmin + local (49); señales: HRV 49 ms hoy; media 7 días −17 % vs. tu base (por debajo de tu rango normal) · FC en reposo 57 lpm (+1 vs. tu mediana).
 >
-> **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
+> **Qué hacer:** Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
 
-## 🟠 Decisión: ámbar — Entrenar con control
+## 🔴 Decisión: rojo — Prioriza recuperar
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 7 | 70–80 % | 49 ms | 57 lpm | 7,46 h | 15/100 |
+| 4 | 0–50 % | 49 ms | 57 lpm | 7,46 h | 15/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
 | Recuperación oficial | 85 | verde | oficial |
-| Híbrido Garmin + local | 61 | ámbar | salvaguarda |
+| Híbrido Garmin + local | 49 | rojo | salvaguarda |
 | Modelo experimental | 71 | verde | sombra |
 | Modelo de compatibilidad | 91 | verde | compatibilidad |
 | Garmin Training Readiness | 15 | — | contexto |
@@ -30,9 +30,8 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## En el box hoy
 
-- Halterofilia técnica al ≤ 80 % de tus cargas habituales, sin singles pesados.
-- Fuerza submáxima: deja 2–3 repeticiones en reserva, sin series al fallo.
-- WOD a ritmo controlado (sin all-out ni lucha contra el cap); recorta un 20–30 % de volumen.
+- Sin WOD ni cargas pesadas: movilidad, técnica con PVC o barra vacía.
+- Si te mueves, zona 2 suave en remo, bici o caminata (30–40 min, poder hablar).
 
 ## Cómo ajustar tu sesión de hoy
 
@@ -42,12 +41,12 @@ Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción ha
 
 | Tipo | Ajuste de hoy | RPE máx. |
 |---|---|--:|
-| Fuerza | **Reducir:** −25 % de series; cargas al 90 % de lo habitual; 2–3 repeticiones en reserva, sin fallo. | 7 |
-| Halterofilia | **Reducir:** −25 % de series; cargas al 80 % de lo habitual; técnica, sin singles pesados. | 7 |
-| WOD | **Reducir:** −20–30 % de volumen o tiempo; ritmo controlado, sin all-out; escala cargas un 10–20 %. | 7 |
-| Técnica | **Reducir:** según lo planificado, sin buscar intensidad. | 7 |
-| Aeróbico | **Reducir:** según lo planificado, sin buscar intensidad. | 7 |
-| Movilidad | **Reducir:** según lo planificado, sin buscar intensidad. | 7 |
+| Fuerza | **Sustituir:** Técnica del patrón con barra vacía o PVC (15–20 min) + movilidad. Sin cargas. | 4 |
+| Halterofilia | **Sustituir:** Técnica con PVC o barra vacía (15–20 min): posiciones y recepciones. Sin cargas. | 4 |
+| WOD | **Sustituir:** Zona 2 suave 30–40 min (remo, bici o caminata), pudiendo hablar. | 4 |
+| Técnica | **Reducir:** Técnica ligera ≤ 15 min, sin fatiga. | 4 |
+| Aeróbico | **Reducir:** Zona 2 suave ≤ 40 min. | 4 |
+| Movilidad | **Mantener:** Movilidad tal como está planificada. | 4 |
 
 _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg. Para ajustar una sesión concreta, pregunta con este informe._
 
@@ -55,8 +54,9 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-02-1336-1317b9 (02/11 13:36):
-- Sin cambios en los datos.
+Frente al informe GR-2026-11-02-1648-34b68c (02/11 16:48):
+- **Decisión:** ámbar → **rojo**.
+- Híbrido: 61 → 49 (-12).
 
 ## Actividad de hoy
 
@@ -69,7 +69,7 @@ Frente al informe GR-2026-11-02-1336-1317b9 (02/11 13:36):
 
 _RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
 
-**¿Encaja con la decisión?** ⚠️ RPE 7,5 supera el máximo recomendado (7): reduce o cambia la sesión restante.
+**¿Encaja con la decisión?** ⚠️ RPE 7,5 supera el máximo recomendado (4): reduce o cambia la sesión restante.
 
 **Carga 7 días:** 244 en 14 sesiones (+95 % vs. semana previa) · sRPE 1.458 · monotonía 0,64.
 
@@ -125,16 +125,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-02-1648-34b68c`
+- **Identificador del informe:** `GR-2026-11-02-1810-c13aee`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-02-1645 · datos sincronizados a las 16:47
-- **Antigüedad:** fin del sueño hace 8,4 h ✓ · última HRV hace 8,5 h ✓ · última FC hace 67 min ✓ · último Body Battery hace 79 min ✓
+- **Ciclo:** 2026-11-02-1645 · datos sincronizados a las 18:09 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 9,8 h ✓ · última HRV hace 9,8 h ✓ · última FC hace 7 min ✓ · último Body Battery hace 14 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/14 (+8 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-02 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-02 18:10 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

@@ -1,11 +1,11 @@
 # Resumen semanal · 27/10–02/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-02-1648-34b68c`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-02-1810-c13aee`)._
 
 ## En una frase
 
 - 14 sesiones (+6); HRV de 7 días por debajo de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 6 días comprobados por encima del RPE máximo.
-- Decisión registrada en 7/7 días: verde 1 · ámbar 4 · rojo 2.
+- Decisión registrada en 7/7 días: verde 1 · ámbar 3 · rojo 3.
 
 ## Gráficas de la semana
 
@@ -32,7 +32,7 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 
 Monotonía 0,64 · strain 932 · ACWR 1,01 · RPE registrado en 9/14 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 7).
+**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 4).
 
 ## Recuperación
 
