@@ -1,6 +1,6 @@
 # Informe de seguimiento · 02/11/2026
 
-`GR-2026-11-02-1336-1317b9` · cita este identificador al reenviar el informe.
+`GR-2026-11-02-1648-34b68c` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,8 +55,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-02-1331-e1327f (02/11 13:31):
-- Sesiones con RPE: 13 → 14.
+Frente al informe GR-2026-11-02-1336-1317b9 (02/11 13:36):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
@@ -125,16 +125,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-02-1336-1317b9`
+- **Identificador del informe:** `GR-2026-11-02-1648-34b68c`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-02-0830-post-sleep · datos sincronizados a las 13:35 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 5,2 h ✓ · última HRV hace 5,3 h ✓ · última FC hace 14 min ✓ · último Body Battery hace 87 min ✓
+- **Ciclo:** 2026-11-02-1645 · datos sincronizados a las 16:47
+- **Antigüedad:** fin del sueño hace 8,4 h ✓ · última HRV hace 8,5 h ✓ · última FC hace 67 min ✓ · último Body Battery hace 79 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/14 (+8 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-02 13:36 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-02 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
