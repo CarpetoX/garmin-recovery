@@ -1,29 +1,29 @@
-<!-- cycle_id: 2026-11-02-0830 -->
-**En breve:** faltan datos de hoy: sesión ligera y sin intensidad alta hasta confirmar el sueño.
-🟢 Recuperación oficial 85/100, confianza baja (igual que ayer)
-🌙 Sueño 7,5 h, puntuación 75
-🏋️ Carga: 12 sesiones en 7 días, 200 de carga, sin saltos de ritmo (ACWR 0,96)
-❤️ Alerta: HRV media de 7 días 46,4 ms, por debajo de tu rango normal (51,9–60,4)
-Orientación: hoy turno de noche; si entrenas, antes del turno, corto, RPE ≤ 6.
+<!-- cycle_id: 2026-11-02-0830-post-sleep -->
+**En breve:** recuperación oficial buena, pero la decisión del día es ámbar: entrenar con control.
+🟢 Recuperación oficial 85/100 (confianza alta)
+🌙 Sueño 7,46 h, puntuación 75
+🏋️ Carga: 12 sesiones en 7 días, sRPE 1375 (+60 % de carga vs. semana previa)
+❤️ HRV media 7 días 46,4 ms, por debajo de tu rango normal (51,9–60,4 ms)
+Orientación: hoy turno de noche; si entrenas, antes del turno, corto, RPE ≤ 7 y volumen 70–80 %.
 
-**Qué explica la puntuación.** La decisión del día es «pendiente» (la más conservadora): el sueño de hoy aún no está confirmado como dato completo, así que no se autoriza intensidad alta. La puntuación oficial (85) y el híbrido (66, ámbar) no coinciden del todo. La HRV de hoy (49 ms) está un 12 % bajo tu base (56) y la media de 7 días un 17 %; la FC en reposo (57) está 1 lpm sobre tu mediana, y el estrés de ayer (32) es favorable.
+**Qué explica la puntuación.** La puntuación oficial es verde (85), pero el híbrido con Garmin (66, Training Readiness 15) marca ámbar y manda por ser el más conservador; el modelo experimental (71) es verde. El freno principal es la HRV (49 ms hoy; media 7 días −17 % vs. base 56 ms). FC en reposo 57 lpm (+1), sueño y estrés (32 vs. mediana 38) están en línea o a favor.
 
-**Carga reciente.** 12 sesiones y 1.375 de sRPE en 7 días (+60 % de carga frente a la semana anterior), monotonía 0,59. Las últimas fueron WODs con RPE 7–8 el 30 y 31/10. Según el análisis por reglas, 18 de 32 sesiones fueron RPE ≥ 8 (56 %).
+**Carga reciente.** Monotonía 0,59, ACWR 0,96, todas las sesiones con RPE. La semana pasada hubo 16 sesiones (sRPE 2195) frente a 8 la anterior: subida brusca, coherente con la HRV baja. Últimas sesiones duras: WOD RPE 8 y 7 (31/10), WOD RPE 8 (30/10).
 
-**Prioridades**
-1. **HRV:** baja la intensidad unos días y reevalúa en una semana.
-2. **Sueño:** acuéstate 30–45 min antes, sobre todo antes de un turno; deuda acumulada 3,4 h.
-3. **Distribución:** intercala sesiones RPE 5–6 entre las duras, con ≥ 48 h entre esfuerzos máximos; registra sensaciones en Intervals (0 de 14 días).
+**3 prioridades**
+1. **HRV:** bajar intensidad unos días y reevaluar en una semana.
+2. **Sueño:** adelantar 30–45 min la hora de acostarse, sobre todo antes de un turno; siesta corta antes de TN.
+3. **Distribución de la intensidad:** 18 de 32 sesiones con RPE ≥ 8 (56 %); intercalar RPE 5–6 y dejar ≥ 48 h entre esfuerzos máximos.
 
-**Plan de 7 días** (sujeto a que la decisión mejore)
-- Lun 02 (TN): movilidad/técnica ligera, RPE ≤ 6.
-- Mar 03 (tras TN): descanso y sueño.
-- Mié 04 (libre): sesión exigente solo si la HRV y la decisión lo permiten.
-- Jue 05 (libre): moderada.
-- Vie 06 (MT): movilidad o descanso.
-- Sáb 07 (TN): moderada por la mañana.
-- Dom 08: suave o descanso.
+**Plan de 7 días** (la decisión del día manda)
+- **Lun 02 (TN):** técnica/fuerza submáxima por la mañana, RPE ≤ 7, sin fallo.
+- **Mar 03 (tras TN):** descanso; prioriza dormir.
+- **Mié 04 (libre):** única sesión exigente de la semana si la HRV mejora; si no, moderada.
+- **Jue 05 (libre):** moderada, RPE 5–6.
+- **Vie 06 (MT):** movilidad o descanso.
+- **Sáb 07 (TN):** moderada por la mañana.
+- **Dom 08 (tras TN):** descanso.
 
-Informe completo: https://github.com/CarpetoX/garmin-recovery/blob/main/app/informe.md
+Registra sensaciones en Intervals.icu: hoy faltan y afinarían el modelo.
 
-_Herramienta de entrenamiento; no es un diagnóstico médico._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
