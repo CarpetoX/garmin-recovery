@@ -1,10 +1,10 @@
 # Resumen semanal · 28/10–03/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-03-1648-d9c8db`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-03-1957-2b18ab`)._
 
 ## En una frase
 
-- 12 sesiones (+4); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 5 días comprobados por encima del RPE máximo.
+- 14 sesiones (+6); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 5 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: ámbar 3 · rojo 4.
 
 ## Gráficas de la semana
@@ -25,12 +25,12 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| Sesiones | 12 | 8 |
-| Minutos | 361 | 247 |
-| Carga (Intervals) | 217 | 128 |
+| Sesiones | 14 | 8 |
+| Minutos | 406 | 247 |
+| Carga (Intervals) | 249 | 128 |
 | sRPE (RPE × min) | 1334 | 1038 |
 
-Monotonía 0,57 · strain 761 · ACWR 0,97 · RPE registrado en 8/12 sesiones.
+Monotonía 0,57 · strain 761 · ACWR 0,97 · RPE registrado en 8/14 sesiones.
 
 **Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 4).
 
@@ -39,7 +39,7 @@ Monotonía 0,57 · strain 761 · ACWR 0,97 · RPE registrado en 8/12 sesiones.
 | | Esta semana | Semana previa |
 |---|--:|--:|
 | HRV media | 44,0 ms | 51,9 ms |
-| FC en reposo media | 58,0 lpm | 56,4 lpm |
+| FC en reposo media | 57,9 lpm | 56,4 lpm |
 | Sueño medio | 7,09 h | 7,01 h |
 
 HRV de 7 días hoy: 43,3 ms (rango normal 52,4–62,0 ms). Turnos: TN, MT, TN.
@@ -88,7 +88,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 8/12.
+- Sesiones con RPE: 8/14.
 
 ## Validación de modelos
 
