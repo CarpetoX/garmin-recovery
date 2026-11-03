@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-03T19:57:16.576050+01:00",
+  "generated_at": "2026-11-03T22:49:06.227355+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
-  "sheet_rows_loaded": 47,
+  "sheet_rows_loaded": 49,
   "sheet_fetch_policy": "same_advanced_run_sha256_snapshot",
-  "sheet_latest_date": "2026-11-02",
+  "sheet_latest_date": "2026-11-03",
   "latest_activity_date": "2026-11-03",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.",
@@ -822,7 +822,7 @@
         "intervals_training_load": 32.0,
         "garmin_activity_load": 209.7,
         "trimp": 50.5,
-        "session_rpe_load": 0
+        "session_rpe_load": 143.6
       },
       "baseline_previous_3d": {
         "hrv": 49.02,
@@ -881,7 +881,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-03T19:56:56.654289+01:00",
+    "generated_at": "2026-11-03T22:48:29.509824+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "red",
@@ -996,7 +996,8 @@
       "intensity_guardrail": "avoid_maximum",
       "reason_codes": [
         "post_night_shift",
-        "short_sleep"
+        "short_sleep",
+        "live_measurement_uncertain"
       ],
       "baseline_caution": "day_sleep_baseline_not_mature",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -1005,26 +1006,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-11-03T13:02:01+01:00",
-            "age_minutes": 414.9,
+            "age_minutes": 586.5,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-11-03T13:00:15+01:00",
-            "age_minutes": 416.7,
+            "age_minutes": 588.2,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
             "state": "recent",
-            "measured_at": "2026-11-03T19:38:00+01:00",
-            "age_minutes": 18.9,
+            "measured_at": "2026-11-03T21:44:00+01:00",
+            "age_minutes": 64.5,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "recent",
-            "measured_at": "2026-11-03T19:24:00+01:00",
-            "age_minutes": 32.9,
+            "state": "delayed",
+            "measured_at": "2026-11-03T20:18:00+01:00",
+            "age_minutes": 150.5,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -1035,8 +1036,10 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": false,
-        "limited_live_metrics": [],
+        "live_data_limited": true,
+        "limited_live_metrics": [
+          "body_battery_live"
+        ],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -1056,8 +1059,8 @@
           "easy_aerobic": "optional_easy_only_if_alert_and_symptoms_allow",
           "mobility": "optional_light_mobility"
         },
-        "recent_sessions_with_declared_rpe": 1,
-        "recent_high_rpe_sessions": 0,
+        "recent_sessions_with_declared_rpe": 2,
+        "recent_high_rpe_sessions": 1,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
     },
@@ -1073,14 +1076,63 @@
       "date": "2026-11-03",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "WOD AMRAP 15 min - carrera / DB snatch / burpee over DB",
+          "rpe": 8.5,
+          "notes": "AMRAP 15': 200 m carrera + 20 dumbbell snatch con 22,5 kg + 10 burpees over DB. Resultado: 5 rondas completas (1.000 m de carrera, 100 DB snatch, 50 burpees over DB); repeticiones extra tras la 5.ª ronda no indicadas. RPE 8,5. Garmin 16,9 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "metcon",
+            "format": "AMRAP",
+            "garmin_activity_id": "i205321919",
+            "duration_minutes": 15,
+            "rpe": 8.5,
+            "recorded_garmin_minutes": 16.93,
+            "prescribed_round": [
+              {
+                "name": "carrera",
+                "distance_m": 200
+              },
+              {
+                "name": "dumbbell snatch",
+                "reps": 20,
+                "load_kg": 22.5,
+                "load_unit": "kg_una_mancuerna",
+                "board_load": "22.5/15 kg"
+              },
+              {
+                "name": "burpee over DB",
+                "reps": 10
+              }
+            ],
+            "performed": {
+              "rounds_complete": 5,
+              "extra_reps": null,
+              "totals": {
+                "run_m": 1000,
+                "db_snatch_reps": 100,
+                "burpee_over_db_reps": 50
+              },
+              "db_volume_kg": 2250
+            },
+            "notes": "Totales de las 5 rondas completas; repeticiones extra no indicadas. Mancuerna única de 22,5 kg; brazos no indicados."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 8.5,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 16.93,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 143.9,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -1104,8 +1156,35 @@
       "date": "2026-11-03",
       "context": "post-TN",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Técnica - comba: double unders, crossover single unders y crossover double unders",
+          "rpe": null,
+          "notes": "Calentamiento + técnica de comba: double unders, crossover single unders y crossover double unders. Primera vez que consigue crossover single unders y crossover double unders. Series y repeticiones no indicadas; los single unders de la pizarra no se mencionaron. Garmin 28,8 min. Sin RPE: sesión no puntuada por decisión del atleta.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "skill",
+            "exercise": "comba: double unders, crossover single unders, crossover double unders",
+            "garmin_activity_id": "i205312875",
+            "rpe": null,
+            "recorded_garmin_minutes": 28.78,
+            "includes_warmup": true,
+            "performed": true,
+            "milestones": [
+              "primer crossover single under",
+              "primer crossover double under"
+            ],
+            "notes": "Incluye calentamiento. Series y repeticiones no indicadas. Sin RPE: sesión no puntuada por decisión del atleta."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
       "rpe_used": null,
       "rpe_interval": null,
@@ -7076,6 +7155,28 @@
     "metcon_exposure": {
       "entries": [
         {
+          "date": "2026-11-03",
+          "activity_id": "i205321919",
+          "movement": "carrera",
+          "verified_reps": null,
+          "verified_distance_m": 1000.0,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 16.93
+        },
+        {
+          "date": "2026-11-03",
+          "activity_id": "i205321919",
+          "movement": "burpee over DB",
+          "verified_reps": 50,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 16.93
+        },
+        {
           "date": "2026-11-02",
           "activity_id": "i204694109",
           "movement": "double under",
@@ -7342,6 +7443,16 @@
       ],
       "movement_work": {
         "7d": {
+          "carrera": {
+            "reps": 0,
+            "distance_m": 1000.0,
+            "entries": 1
+          },
+          "burpee over db": {
+            "reps": 86,
+            "distance_m": 0.0,
+            "entries": 2
+          },
           "double under": {
             "reps": 181,
             "distance_m": 0.0,
@@ -7359,11 +7470,6 @@
           },
           "step up con mancuerna": {
             "reps": 45,
-            "distance_m": 0.0,
-            "entries": 1
-          },
-          "burpee over db": {
-            "reps": 36,
             "distance_m": 0.0,
             "entries": 1
           },
@@ -7384,6 +7490,16 @@
           }
         },
         "28d": {
+          "carrera": {
+            "reps": 0,
+            "distance_m": 4600.0,
+            "entries": 4
+          },
+          "burpee over db": {
+            "reps": 86,
+            "distance_m": 0.0,
+            "entries": 2
+          },
           "double under": {
             "reps": 181,
             "distance_m": 0.0,
@@ -7404,11 +7520,6 @@
             "distance_m": 0.0,
             "entries": 1
           },
-          "burpee over db": {
-            "reps": 36,
-            "distance_m": 0.0,
-            "entries": 1
-          },
           "push press": {
             "reps": 45,
             "distance_m": 0.0,
@@ -7423,11 +7534,6 @@
             "reps": 170,
             "distance_m": 0.0,
             "entries": 2
-          },
-          "carrera": {
-            "reps": 0,
-            "distance_m": 3600.0,
-            "entries": 3
           },
           "wall ball": {
             "reps": 82,
@@ -8287,7 +8393,7 @@
             "intervals_training_load": 32.0,
             "garmin_activity_load": 209.7,
             "trimp": 50.5,
-            "session_rpe_load": 0
+            "session_rpe_load": 143.6
           },
           "baseline_previous_3d": {
             "hrv": 49.02,
@@ -8343,20 +8449,20 @@
       "window_summaries": {
         "recent_7d": {
           "sessions": 14,
-          "sessions_with_rpe": 8,
-          "high_rpe_sessions": 3,
+          "sessions_with_rpe": 9,
+          "high_rpe_sessions": 4,
           "recorded_duration_minutes": 406.5,
           "sessions_with_duration": 14,
-          "srpe_from_recorded_duration": 1334.1,
-          "srpe_sessions": 8,
+          "srpe_from_recorded_duration": 1478.0,
+          "srpe_sessions": 9,
           "minimum_recorded_external_volume_kg": 4404.0,
           "strength_blocks_with_quantified_weight": 2,
-          "strength_blocks_missing_quantified_weight": 13,
+          "strength_blocks_missing_quantified_weight": 15,
           "garmin_intervals_load_separate": 249.0,
           "intervals_load_sessions": 14,
           "trimp_separate": 398.2,
           "trimp_sessions": 14,
-          "mean_recorded_rpe": 7.38
+          "mean_recorded_rpe": 7.5
         },
         "previous_7d": {
           "sessions": 8,
@@ -8377,20 +8483,20 @@
         },
         "recent_28d": {
           "sessions": 44,
-          "sessions_with_rpe": 31,
-          "high_rpe_sessions": 17,
+          "sessions_with_rpe": 32,
+          "high_rpe_sessions": 18,
           "recorded_duration_minutes": 1213.7,
           "sessions_with_duration": 44,
-          "srpe_from_recorded_duration": 5498.6,
-          "srpe_sessions": 31,
+          "srpe_from_recorded_duration": 5642.5,
+          "srpe_sessions": 32,
           "minimum_recorded_external_volume_kg": 25091.0,
           "strength_blocks_with_quantified_weight": 11,
-          "strength_blocks_missing_quantified_weight": 34,
+          "strength_blocks_missing_quantified_weight": 36,
           "garmin_intervals_load_separate": 678.0,
           "intervals_load_sessions": 44,
           "trimp_separate": 1092.6,
           "trimp_sessions": 44,
-          "mean_recorded_rpe": 7.48
+          "mean_recorded_rpe": 7.52
         }
       },
       "daily_chart_7d": [
@@ -8439,27 +8545,27 @@
         {
           "date": "2026-11-03",
           "sessions": 2,
-          "mean_recorded_rpe": null,
+          "mean_recorded_rpe": 8.5,
           "recorded_minutes": 45.7,
-          "srpe_from_recorded_duration": 0.0
+          "srpe_from_recorded_duration": 143.9
         }
       ],
       "latest_session": {
         "date": "2026-11-03",
         "activity_id": "i205321919",
         "name": "HIIT",
-        "rpe": null,
+        "rpe": 8.5,
         "recorded_minutes": 16.93,
         "heart_rate": {
           "average": 152.0,
           "max": 178.0
         },
-        "manual_blocks_recorded": 0
+        "manual_blocks_recorded": 1
       },
       "previous_week_context": {
         "sufficient_for_descriptive_comparison": true,
         "session_count_change": 6,
-        "mean_rpe_change": -0.32,
+        "mean_rpe_change": -0.2,
         "note": "El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento."
       },
       "benchmark_comparisons": [],
@@ -8496,33 +8602,23 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-11-03T19:57:16.576050+01:00",
+    "checked_at": "2026-11-03T22:49:06.227355+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-11-03",
     "latest_activity_age_days": 0,
-    "sheet_rows": 47,
-    "manual_coverage_7d_pct": 85.7,
-    "flags": [
-      {
-        "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 2,
-        "ids": [
-          "i205321919",
-          "i205312875"
-        ]
-      }
-    ],
+    "sheet_rows": 49,
+    "manual_coverage_7d_pct": 100.0,
+    "flags": [],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
   },
   "weekly_report": {
     "window_start": "2026-10-28",
     "window_end": "2026-11-03",
     "activities": 14,
-    "activities_with_manual_sheet_match": 12,
-    "activities_missing_manual_match": 2,
-    "mean_rpe": 7.38,
-    "recorded_srpe_sum": 1334.1,
+    "activities_with_manual_sheet_match": 14,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 7.5,
+    "recorded_srpe_sum": 1478.0,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
     "minimum_verified_strength_volume_kg": 4404.0,
     "strength_blocks_with_missing_weights": 0,
@@ -8558,19 +8654,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-11-03T19:57:16.576050+01:00",
+    "checked_at": "2026-11-03T22:49:06.227355+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-03T19:54:49.269159+01:00",
-        "age_hours": 0.04,
+        "generated_at": "2026-11-03T22:47:10.387132+01:00",
+        "age_hours": 0.03,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-11-03T19:55:51.953187+01:00",
+        "generated_at": "2026-11-03T22:47:49.943010+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -8584,28 +8680,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-11-03T19:56:55.454548+01:00",
+        "generated_at": "2026-11-03T22:48:28.871123+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-11-03T19:56:55.454548+01:00",
+        "generated_at": "2026-11-03T22:48:28.871123+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-03T19:54:49.269159+01:00",
-        "age_hours": 0.04,
+        "generated_at": "2026-11-03T22:47:10.387132+01:00",
+        "age_hours": 0.03,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-11-03T19:55:51.953187+01:00",
+        "generated_at": "2026-11-03T22:47:49.943010+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
@@ -8625,7 +8721,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 2.1,
+    "generation_skew_minutes": 1.3,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false

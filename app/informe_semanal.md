@@ -1,10 +1,10 @@
 # Resumen semanal · 28/10–03/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-03-1957-2b18ab`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-03-2249-8fa3a0`)._
 
 ## En una frase
 
-- 14 sesiones (+6); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 5 días comprobados por encima del RPE máximo.
+- 14 sesiones (+6); HRV de 7 días por debajo de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; 6 de 6 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: ámbar 3 · rojo 4.
 
 ## Gráficas de la semana
@@ -28,11 +28,11 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 14 | 8 |
 | Minutos | 406 | 247 |
 | Carga (Intervals) | 249 | 128 |
-| sRPE (RPE × min) | 1334 | 1038 |
+| sRPE (RPE × min) | 1478 | 1038 |
 
-Monotonía 0,57 · strain 761 · ACWR 0,97 · RPE registrado en 8/14 sesiones.
+Monotonía 0,65 · strain 961 · ACWR 1,05 · RPE registrado en 9/14 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 4).
+**Días por encima del RPE máximo de la decisión:** 28/10 (RPE 9,0 > 7), 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 4), 03/11 (RPE 8,5 > 4).
 
 ## Recuperación
 
@@ -60,7 +60,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**19 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**20 de 21** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -84,14 +84,15 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 02/11 | 22:45 | 22:47 | 22:48 | 21 min ✓ |
 | 03/11 | 08:30 | 08:32 | 08:33 | 32 min ✓ |
 | 03/11 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
+| 03/11 | 22:45 | 22:47 | 22:49 | 21 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 8/14.
+- Sesiones con RPE: 9/14.
 
 ## Validación de modelos
 
-Acumulando datos: 8/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 9/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._
