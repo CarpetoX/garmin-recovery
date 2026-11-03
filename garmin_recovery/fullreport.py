@@ -244,7 +244,8 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         add("\n_Divergencia entre modelos:_ " + _clean(dv if isinstance(dv, str) else " ".join(str(x) for x in (dv if isinstance(dv, list) else [dv])), 300))
     try:
         from . import why_changed
-        add("\n**Qué ha cambiado desde ayer**\n\n" + why_changed.to_markdown(why_changed.compute(result.get("trend_28d") or [], today)))
+        wc = why_changed.compute(result.get("trend_28d") or [], today)
+        add(f"\n**{why_changed.heading(wc)}**\n\n" + why_changed.to_markdown(wc))
     except Exception as exc:  # noqa: BLE001 — bloque opcional
         optional_blocks.failed("why_changed", exc)
     add("\nLas puntuaciones no son equivalentes entre sí. La decisión es la zona más conservadora entre el modelo oficial, el híbrido y el experimental; "
