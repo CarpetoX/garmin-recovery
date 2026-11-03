@@ -9869,49 +9869,100 @@
       }
     },
     "2026-11-03": {
-      "generated_at": "2026-11-03T12:50:24.760126+01:00",
-      "training_readiness": null,
-      "recovery_time": null,
+      "generated_at": "2026-11-03T13:55:25.357122+01:00",
+      "training_readiness": {
+        "score": 1,
+        "level": "POOR",
+        "timestamp_local": "2026-11-03T13:07:06.0",
+        "input_context": "AFTER_WAKEUP_RESET",
+        "feedback_short": "TIME_TO_SLOW_DOWN",
+        "feedback_long": "POOR_HRV_UNBALANCED",
+        "sleep_score": 49,
+        "sleep_factor_percent": 34,
+        "sleep_factor_feedback": "POOR",
+        "recovery_time_minutes": 1850,
+        "recovery_time_hours": 30.8,
+        "recovery_time_factor_percent": 50,
+        "recovery_time_feedback": "MODERATE",
+        "recovery_time_change_phrase": null,
+        "acwr_factor_percent": 84,
+        "acwr_factor_feedback": "GOOD",
+        "hrv_factor_percent": 64,
+        "hrv_factor_feedback": "MODERATE",
+        "stress_history_factor_percent": 70,
+        "stress_history_factor_feedback": "GOOD"
+      },
+      "recovery_time": {
+        "minutes": 1850,
+        "hours": 30.8,
+        "factor_percent": 50,
+        "feedback": "MODERATE",
+        "change_phrase": null
+      },
       "hrv_status": {
-        "last_night_avg": null,
-        "weekly_avg": 44,
-        "last_night_5_min_high": null,
+        "last_night_avg": 40,
+        "weekly_avg": 43,
+        "last_night_5_min_high": 62,
         "status": "UNBALANCED",
         "feedback": "HRV_UNBALANCED_7",
         "baseline": {
           "low_upper": 38,
           "balanced_low": 45,
           "balanced_upper": 85,
-          "marker_value": 0.23805237
+          "marker_value": 0.22662354
         },
-        "sleep_start_local": null,
-        "sleep_end_local": null,
-        "reading_count": 0
+        "sleep_start_local": "2026-11-03T07:35:00.0",
+        "sleep_end_local": "2026-11-03T13:02:01.0",
+        "reading_count": 60
       },
       "sleep_detail": {
-        "sleep_hours": null,
-        "nap_minutes": null,
-        "deep_minutes": null,
-        "light_minutes": null,
-        "rem_minutes": null,
-        "awake_minutes": null,
-        "sleep_start_local": null,
-        "sleep_end_local": null,
-        "sleep_window_confirmed": null,
+        "sleep_hours": 5.15,
+        "nap_minutes": 0.0,
+        "deep_minutes": 66.0,
+        "light_minutes": 244.0,
+        "rem_minutes": 0.0,
+        "awake_minutes": 18.0,
+        "sleep_start_local": 1793691300000,
+        "sleep_end_local": 1793710921000,
+        "sleep_window_confirmed": true,
         "avg_sleep_hrv": null,
         "avg_spo2": null,
-        "avg_respiration": null,
-        "lowest_respiration": null,
-        "highest_respiration": null,
+        "avg_respiration": 15.0,
+        "lowest_respiration": 7.0,
+        "highest_respiration": 19.0,
         "score_components": {
-          "overall": null,
-          "total_duration": null,
-          "stress": null,
-          "awake_count": null,
-          "rem_percentage": null,
-          "restlessness": null,
-          "light_percentage": null,
-          "deep_percentage": null
+          "overall": {
+            "value": 49,
+            "qualifier": "POOR"
+          },
+          "total_duration": {
+            "value": null,
+            "qualifier": "POOR"
+          },
+          "stress": {
+            "value": null,
+            "qualifier": "POOR"
+          },
+          "awake_count": {
+            "value": null,
+            "qualifier": "FAIR"
+          },
+          "rem_percentage": {
+            "value": 0,
+            "qualifier": "POOR"
+          },
+          "restlessness": {
+            "value": null,
+            "qualifier": "FAIR"
+          },
+          "light_percentage": {
+            "value": 79,
+            "qualifier": "FAIR"
+          },
+          "deep_percentage": {
+            "value": 21,
+            "qualifier": "EXCELLENT"
+          }
         }
       },
       "training_status": {
@@ -9977,13 +10028,46 @@
         "metricsTrainingLoadBalanceDTOMap.3639504748.trainingBalanceFeedbackPhrase": "BALANCED"
       },
       "body_battery_events": {
-        "event_count": 0,
+        "event_count": 1,
         "event_type_counts": {},
-        "events": []
+        "events": [
+          {
+            "event.eventType": "SLEEP",
+            "event.eventStartTimeGmt": "2026-11-03T06:56:33.0",
+            "event.durationInMilliseconds": 18300000,
+            "event.bodyBatteryImpact": 24,
+            "event.feedbackType": "NONE",
+            "activityName": null,
+            "activityType": null,
+            "activityId": null,
+            "stressValuesArray[0][0]": 1793688840000,
+            "stressValuesArray[0][1]": 53,
+            "stressValuesArray[1][0]": 1793689020000,
+            "stressValuesArray[1][1]": 43,
+            "stressValuesArray[2][0]": 1793689200000,
+            "stressValuesArray[2][1]": 40,
+            "stressValuesArray[3][0]": 1793689380000,
+            "stressValuesArray[3][1]": 41,
+            "stressValuesArray[4][0]": 1793689560000,
+            "stressValuesArray[4][1]": 53,
+            "stressValuesArray[5][0]": 1793689740000,
+            "stressValuesArray[5][1]": 49,
+            "stressValuesArray[6][0]": 1793689920000,
+            "stressValuesArray[6][1]": 46,
+            "stressValuesArray[7][0]": 1793690100000,
+            "stressValuesArray[7][1]": 47,
+            "stressValuesArray[8][0]": 1793690280000,
+            "stressValuesArray[8][1]": 46,
+            "stressValuesArray[9][0]": 1793690460000,
+            "stressValuesArray[9][1]": 46,
+            "stressValuesArray[10][0]": 1793690640000,
+            "stressValuesArray[10][1]": 42
+          }
+        ]
       },
       "availability": {
-        "training_readiness": false,
-        "recovery_time": false,
+        "training_readiness": true,
+        "recovery_time": true,
         "hrv_status": true,
         "sleep_detail": true,
         "training_status": true,
@@ -10001,5 +10085,5 @@
       }
     }
   },
-  "generated_at": "2026-11-03T12:50:27.149585+01:00"
+  "generated_at": "2026-11-03T13:55:27.445937+01:00"
 }
