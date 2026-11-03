@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Martes, 3 de noviembre de 2026 · 11:46 · `GR-2026-11-03-1146-1af92f`
+Martes, 3 de noviembre de 2026 · 12:51 · `GR-2026-11-03-1251-bee2d1`
 
 ```cards
 Decisión|Pendiente de datos|RPE máx. 6|unavailable
@@ -33,7 +33,7 @@ Carga 7 días|12 sesiones|sRPE 1334|unavailable
 | Confianza de recuperación | low |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (11:45), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (12:50), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -77,7 +77,7 @@ la FC en reposo está 3 lpm por encima.
 | Modelo de compatibilidad | 🟡 74/100 | compatibilidad |
 | Garmin Training Readiness | — | contexto |
 | Tiempo de recuperación Garmin | — | contexto |
-| Índice personal experimental | 38/100 | provisional |
+| Índice personal experimental | 45/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -126,7 +126,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 74,7 lpm | — |
+| Hoy* | 72,9 lpm | — |
 | 3 días | 81,0 lpm | 62,1 lpm |
 | 7 días | 81,9 lpm | 65,6 lpm |
 | 28 días | 82,1 lpm | 64,2 lpm |
@@ -146,8 +146,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 39, máximo 85.
-- Body Battery: último valor 5/100, medido a las 04:48 (hace 6 h 58 min: no es una medición nueva).
+- Estrés medio: 37, máximo 85.
+- Body Battery: último valor 23/100, medido a las 11:42.
 - Recuperación de FC a 1 min tras el ejercicio: 6 observaciones recientes, mediana 20,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -310,7 +310,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy libre tras la noche, mañana libre.
-- Señales adversas: Body Battery bajo (5/100).
+- Señales adversas: Body Battery bajo (23/100).
 
 ### Recomendaciones
 
@@ -398,4 +398,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ 
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-03-0830 · generado 03/11/2026 11:46 Europe/Madrid · certificado READY · sync_run_id 41596938574.
+Traza: cierre matinal · ciclo 2026-11-03-0830 · generado 03/11/2026 12:51 Europe/Madrid · certificado READY · sync_run_id 41596938574.
