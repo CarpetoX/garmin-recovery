@@ -1,26 +1,32 @@
-<!-- cycle_id: 2026-11-03-0830 -->
-**En breve:** hoy no hay datos de sueño ni HRV confirmados: se trabaja suave hasta que lleguen.
-🟢 Recuperación oficial pendiente (ayer 85/100); confianza baja.
+<!-- cycle_id: 2026-11-03-0830-post-sleep -->
+**En breve:** hoy toca recuperar: sueño corto tras el turno de noche y HRV baja.
+🟢 Recuperación oficial 31/100 (zona roja); confianza alta.
+🌙 Sueño 5,2 h, puntuación 49.
 🏋️ Carga 7 días: 217 en 12 sesiones (+69,5 % vs. semana previa).
-❤️ FC en reposo 60 lpm, +4 sobre tu mediana (56).
-Orientación: tras el turno de noche, prioriza dormir; solo técnica ligera o movilidad (RPE ≤ 6).
+❤️ Alerta: HRV 40 ms hoy; media 7 días 43,3 ms (−24 % vs. tu base).
+Orientación: tras el turno de noche, descansa; si te mueves, movilidad o zona 2 suave (RPE ≤ 4, volumen 0–50 %).
 
-**Qué explica la puntuación.** No hay HRV ni sueño de hoy, así que la puntuación oficial queda pendiente y no se autoriza intensidad alta. La señal disponible es la FC en reposo (60 lpm, +4 vs. mediana); el estrés de Garmin de ayer (37) está en tu normalidad (38). El análisis por reglas marca HRV media de 7 días en 48 ms frente a 53 ms de referencia (−10 %) y deuda de sueño de 3,4 h.
+## Qué explica la puntuación
+- ↓ Sueño: 5,15 h frente a 7,5 h de necesidad; deuda 2,5 h en 3 noches.
+- ↓ HRV: 7 días 43,3 ms, por debajo de tu rango normal (52,4–62,0 ms).
+- ↓ FC en reposo 61 lpm (+5 vs. tu mediana); nocturna 68,2 (+6,3).
+- → Estrés Garmin ayer 37 (mediana 38); carga ACWR 0,97.
 
-**Carga reciente.** 217 de carga y sRPE 1334 en 12 sesiones, con monotonía 0,57 y ACWR 0,97. El 55 % de las sesiones con RPE fueron ≥ 8 y hubo 7 veces dos días duros seguidos.
+## Carga reciente
+12 sesiones y sRPE 1.334 en 7 días, monotonía 0,57. La subida es notable, aunque la carga crónica aún es baja (CTL 10,4). Según las reglas, 17 de 31 sesiones fueron RPE ≥ 8 (55 %), con 7 veces dos días duros seguidos.
 
-**Prioridades**
-1. **Sueño:** recupera la deuda (3,4 h); acuéstate 30–45 min antes, sobre todo antes de un turno.
-2. **Distribución de intensidad:** intercala RPE 5–6 entre las duras, ≥ 48 h entre esfuerzos máximos.
-3. **HRV y sensaciones:** reevalúa la HRV tras sincronizar el sueño y registra fatiga, agujetas, estrés, ánimo y motivación en Intervals (0 de 14 días).
+## 3 prioridades
+1. **Sueño:** adelanta la hora de acostarte 30–45 min y haz siesta corta antes de un turno de noche.
+2. **Intensidad:** intercala RPE 5–6 entre las sesiones duras; ≥ 48 h entre esfuerzos máximos.
+3. **Registro:** anota fatiga, agujetas, estrés, ánimo y motivación en Intervals (hoy faltan) y reevalúa la HRV en 7 días.
 
-**Plan 7 días** (sujeto a que la decisión salga verde tras confirmar el sueño)
-- Hoy (mar): dormir; técnica ligera/movilidad, RPE ≤ 6.
-- Mié: si el sueño y la HRV se confirman, fuerza moderada RPE ≤ 7; si no, Zona 2 30–40 min.
-- Jue: suave (Zona 2 o movilidad), RPE 5–6.
-- Vie (MT el 06/11): sesión corta y ligera antes del turno.
-- Sáb (TN el 07/11): descanso o movilidad; siesta/sueño prioritario.
-- Dom: Zona 2 suave y sueño de recuperación.
-- Lun: sesión dura (RPE 8) solo si HRV y FC en reposo están en rango.
+## Plan de 7 días (la decisión del día manda)
+- mar 03: movilidad/descanso, prioriza dormir.
+- mié 04 (libre): sesión exigente solo si la HRV y el sueño mejoran; si no, moderada.
+- jue 05 (libre): moderada.
+- vie 06 (MT): movilidad o descanso.
+- sáb 07 (TN): si entrenas, por la mañana y moderado.
+- dom 08: descanso, dormir.
+- lun 09 (libre): exigente, si la recuperación acompaña.
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
+_Informe: https://github.com/CarpetoX/garmin-recovery/blob/main/app/informe.md. Herramienta de entrenamiento; no es un diagnóstico médico._
