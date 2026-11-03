@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T13:55:50.335016+01:00",
+  "generated_at": "2026-11-03T16:47:59.011864+01:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "assessed",
   "status": "red",
@@ -114,7 +114,8 @@
     "intensity_guardrail": "avoid_maximum",
     "reason_codes": [
       "post_night_shift",
-      "short_sleep"
+      "short_sleep",
+      "live_measurement_uncertain"
     ],
     "baseline_caution": "day_sleep_baseline_not_mature",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -123,26 +124,26 @@
         "confirmed_sleep": {
           "state": "recent",
           "measured_at": "2026-11-03T13:02:01+01:00",
-          "age_minutes": 53.8,
+          "age_minutes": 226.0,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
           "state": "recent",
           "measured_at": "2026-11-03T13:00:15+01:00",
-          "age_minutes": 55.6,
+          "age_minutes": 227.7,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
-          "state": "recent",
+          "state": "old_measurement",
           "measured_at": "2026-11-03T13:04:00+01:00",
-          "age_minutes": 51.8,
+          "age_minutes": 224.0,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "recent",
+          "state": "old_measurement",
           "measured_at": "2026-11-03T13:00:00+01:00",
-          "age_minutes": 55.8,
+          "age_minutes": 228.0,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -153,8 +154,11 @@
         }
       },
       "invalid_core_episode": false,
-      "live_data_limited": false,
-      "limited_live_metrics": [],
+      "live_data_limited": true,
+      "limited_live_metrics": [
+        "heart_rate_live",
+        "body_battery_live"
+      ],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
     },
     "sleep_fragmentation": {
