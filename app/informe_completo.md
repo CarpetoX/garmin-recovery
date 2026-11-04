@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Miércoles, 4 de noviembre de 2026 · 09:06 · `GR-2026-11-04-0906-b484f4`
+Miércoles, 4 de noviembre de 2026 · 09:26 · `GR-2026-11-04-0926-cdc86c`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|10 sesiones|sRPE 549|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-04-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-04-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 68/100 (oficial, confianza high). Híbrido: 49/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 9 h 06 min, puntuación 75/100.
 - ❤️ **Principal alerta:** HRV 44 ms, 13,7 % por debajo de tu mediana de 28 días; FC nocturna 67,3 lpm (4,3 sobre la mediana).
@@ -23,18 +23,18 @@ Carga 7 días|10 sesiones|sRPE 549|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-04-0830 |
+| Ciclo | 2026-11-04-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:15 |
+| Certificado generado | 09:26:08 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (09:05), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
 ### Fuentes de datos
 
@@ -74,13 +74,13 @@ La HRV está 14 % por debajo de su mediana; la FC en reposo está 3 lpm por enci
 |---|---|---|
 | Recuperación oficial | 🟡 68/100 | oficial |
 | Híbrido Garmin + local | 🔴 49/100 | salvaguarda |
-| Modelo experimental | — | sombra |
+| Modelo experimental | 🟡 68/100 | sombra |
 | Modelo de compatibilidad | 🟡 74/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 1/100 | contexto |
 | Tiempo de recuperación Garmin | 55,9 h | contexto |
 | Índice personal experimental | 44/100 | provisional |
 
-_Divergencia entre modelos:_ El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+_Divergencia entre modelos:_ El modelo experimental (ámbar) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 **Qué ha cambiado frente a tu última noche comparable (02/11)**
 
@@ -402,4 +402,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-04-0830 · generado 04/11/2026 09:06 Europe/Madrid · certificado READY · sync_run_id 41792908029.
+Traza: cierre matinal · ciclo 2026-11-04-0830-post-sleep · generado 04/11/2026 09:26 Europe/Madrid · certificado READY · sync_run_id 41799320540.

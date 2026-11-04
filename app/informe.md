@@ -1,6 +1,6 @@
 # Informe matutino · 04/11/2026
 
-`GR-2026-11-04-0906-b484f4` · cita este identificador al reenviar el informe.
+`GR-2026-11-04-0926-cdc86c` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -20,7 +20,7 @@
 |---|--:|---|---|
 | Recuperación oficial | 68 | ámbar | oficial |
 | Híbrido Garmin + local | 49 | rojo | salvaguarda |
-| Modelo experimental | — | pendiente | sombra |
+| Modelo experimental | 68 | ámbar | sombra |
 | Modelo de compatibilidad | 74 | ámbar | compatibilidad |
 | Garmin Training Readiness | 1 | — | contexto |
 
@@ -54,10 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-04-0833-58aacf (04/11 08:33):
-- **Decisión:** pendiente → **rojo**.
-- Híbrido: 74 → 49 (-25).
-- Nueva noche registrada: HRV — → 44 ms, sueño — → 9,10 h, FC reposo 61 → 60 lpm.
+Frente al informe GR-2026-11-04-0906-b484f4 (04/11 09:06):
+- Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -70,9 +68,9 @@ Frente al informe GR-2026-11-04-0833-58aacf (04/11 08:33):
 
 ## Incertidumbre
 
-- Confianza de los datos: **baja** (sueño de hoy sin confirmar)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
-- El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+- Confianza de los datos: **alta**
+- Confianza de la recomendación: **media** (modelo experimental aún sin validar frente a tu rendimiento real (modo sombra))
+- El modelo experimental (ámbar) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 ## Plan del día
 
@@ -124,16 +122,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-04-0906-b484f4`
+- **Identificador del informe:** `GR-2026-11-04-0926-cdc86c`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-04-0830 · datos sincronizados a las 09:05 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 20 min ✓ · última HRV hace 21 min ✓ · última FC hace 6 min ✓ · último Body Battery hace 24 min ✓
+- **Ciclo:** 2026-11-04-0830-post-sleep · datos sincronizados a las 09:25
+- **Antigüedad:** fin del sueño hace 39 min ✓ · última HRV hace 41 min ✓ · última FC hace 26 min ✓ · último Body Battery hace 44 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 14/14 (+8 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-04 09:06 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-04 09:26 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
