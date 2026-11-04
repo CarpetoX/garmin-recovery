@@ -1,6 +1,6 @@
 # Resumen semanal · 29/10–04/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-04-1648-7ec0d6`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-04-1732-97c616`)._
 
 ## En una frase
 
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 14 | 12 |
 | Minutos | 461 | 382 |
 | Carga (Intervals) | 221 | 232 |
-| sRPE (RPE × min) | 752 | 1966 |
+| sRPE (RPE × min) | 1045 | 1966 |
 
-Monotonía 1,28 · strain 962 · ACWR 0,51 · RPE registrado en 7/14 sesiones.
+Monotonía 0,88 · strain 922 · ACWR 0,68 · RPE registrado en 8/14 sesiones.
 
 **Días por encima del RPE máximo de la decisión:** 29/10 (RPE 5,0 > 4), 30/10 (RPE 8,0 > 4), 31/10 (RPE 8,0 > 7), 02/11 (RPE 7,5 > 4), 03/11 (RPE 8,5 > 4), 04/11 (RPE 6,5 > 4).
 
@@ -52,6 +52,11 @@ HRV de 7 días hoy: 43,4 ms (rango normal 50,7–61,8 ms). Turnos: TN, MT, TN.
 | 02/11 | clean pull | 90,0 kg | 90 × 1 | 90,0 kg | 8/8 |
 | 02/11 | hang power clean | 90,0 kg | 90 × 1 | 90,0 kg | 8/8 |
 | 02/11 | power clean | 90,0 kg | 90 × 1 | 90,0 kg | 8/8 |
+| 04/11 | press banca | 90,0 kg | 90 × 6 | 108,0 kg | 7/7 |
+| 04/11 | press banca inclinado con mancuernas | 67,0 kg | 67 × 8 | 84,9 kg | 4/4 |
+| 04/11 | press superinclinado isolateral | 50,0 kg | — | — | 4/4 |
+| 04/11 | aperturas en banco inclinado con mancuernas | 32,0 kg | 32 × 10 | 42,7 kg | 4/4 |
+| 04/11 | curl de bíceps en máquina unilateral | 15,0 kg | — | — | 4/4 |
 | 04/11 | squat clean | 103,0 kg | 103 × 1 | 103,0 kg | 10/10 |
 | 04/11 | split jerk | 103,0 kg | 103 × 1 | 103,0 kg | 10/10 |
 
@@ -87,7 +92,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 7/14.
+- Sesiones con RPE: 8/14.
 
 ## Validación de modelos
 
