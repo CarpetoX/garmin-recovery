@@ -1,6 +1,6 @@
 # Resumen semanal · 30/10–05/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-05-0906-e00318`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-05-1648-5b9310`)._
 
 ## En una frase
 
@@ -64,7 +64,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**18 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**19 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -87,6 +87,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 04/11 | 16:45 | 16:47 | 16:48 | 21 min ✓ |
 | 04/11 | 22:45 | 22:47 | 22:48 | 22 min ✓ |
 | 05/11 | 08:30 | 08:32 | 08:33 | 32 min ✓ |
+| 05/11 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
 
 ## Calidad de los datos
 
