@@ -16,15 +16,17 @@ FILE = "descansos_registro.json"
 def load(root: str | Path) -> dict | None:
     p = Path(root) / FILE
     try:
-        return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+        data = json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
     except (OSError, ValueError):
         return None
+    return data if isinstance(data, dict) else None  # una lista o un texto por error de edición no rompe la cadena
 
 
 def confirmed(registro: dict | None, today: str) -> dict[str, dict]:
     """Fecha → entrada, solo fechas válidas que no son futuras."""
     out = {}
-    for e in (registro or {}).get("entries") or []:
+    entries = registro.get("entries") if isinstance(registro, dict) else None
+    for e in entries if isinstance(entries, list) else []:
         if not isinstance(e, dict):
             continue
         d = str(e.get("date") or "")[:10]

@@ -23,3 +23,10 @@ def test_missing_file_is_empty(tmp_path):
     assert rest_days.load(tmp_path) is None
     s = rest_days.summary(None, "2026-11-05")
     assert s["last7"] == 0 and s["dates_28d"] == [] and s["today"] is False
+
+
+def test_malformed_file_never_breaks(tmp_path):
+    (tmp_path / rest_days.FILE).write_text("[1, 2]", encoding="utf-8")
+    assert rest_days.load(tmp_path) is None
+    assert rest_days.summary([1, 2], "2026-11-05")["last28"] == 0
+    assert rest_days.summary({"entries": "x"}, "2026-11-05")["last28"] == 0
