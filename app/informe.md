@@ -1,8 +1,6 @@
 # Informe matutino · 05/11/2026
 
-`GR-2026-11-05-0833-26d6d5` · cita este identificador al reenviar el informe.
-
-> ⚠️ Certificado con avisos: mediciones no recientes: confirmed_sleep.
+`GR-2026-11-05-0906-e00318` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -22,7 +20,7 @@
 |---|--:|---|---|
 | Recuperación oficial | 85 | verde | oficial |
 | Híbrido Garmin + local | 49 | rojo | salvaguarda |
-| Modelo experimental | — | pendiente | sombra |
+| Modelo experimental | 73 | verde | sombra |
 | Modelo de compatibilidad | 91 | verde | compatibilidad |
 | Garmin Training Readiness | 1 | — | contexto |
 
@@ -56,9 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-04-2248-f72743 (04/11 22:48):
-- Oficial v2: 68 → 85 (+17).
-- Nueva noche registrada: HRV 44 → 51 ms, sueño 9,10 → 8,20 h, FC reposo 60 → 57 lpm.
+Frente al informe GR-2026-11-05-0833-26d6d5 (05/11 08:33):
+- Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -71,9 +68,9 @@ Frente al informe GR-2026-11-04-2248-f72743 (04/11 22:48):
 
 ## Incertidumbre
 
-- Confianza de los datos: **baja** (sueño de hoy sin confirmar)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
-- El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+- Confianza de los datos: **alta**
+- Confianza de la recomendación: **media** (modelo experimental aún sin validar frente a tu rendimiento real (modo sombra))
+- El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 ## Plan del día
 
@@ -125,16 +122,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-05-0833-26d6d5`
+- **Identificador del informe:** `GR-2026-11-05-0906-e00318`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-05-0830 · datos sincronizados a las 08:32
-- **Antigüedad:** fin del sueño hace -54 min ! · última HRV hace 8 min ✓ · última FC hace 7 min ✓ · último Body Battery hace 24 min ✓
+- **Ciclo:** 2026-11-05-0830-post-sleep · datos sincronizados a las 09:05
+- **Antigüedad:** fin del sueño hace 39 min ✓ · última HRV hace 41 min ✓ · última FC hace 6 min ✓ · último Body Battery hace 57 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+10 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-05 08:33 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-05 09:06 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

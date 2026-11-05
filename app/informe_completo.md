@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Jueves, 5 de noviembre de 2026 · 08:33 · `GR-2026-11-05-0833-26d6d5`
+Jueves, 5 de noviembre de 2026 · 09:06 · `GR-2026-11-05-0906-e00318`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|13 sesiones|sRPE 1026|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-05-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-05-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 49/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 8 h 12 min, puntuación 81/100.
 - ❤️ **Principal alerta:** HRV 51 ms, 0,0 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|13 sesiones|sRPE 1026|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-05-0830 |
+| Ciclo | 2026-11-05-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:33:15 |
+| Certificado generado | 09:06:23 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -74,13 +74,13 @@ La HRV está 0 % por encima de su mediana; la FC en reposo coincide con su media
 |---|---|---|
 | Recuperación oficial | 🟢 85/100 | oficial |
 | Híbrido Garmin + local | 🔴 49/100 | salvaguarda |
-| Modelo experimental | — | sombra |
+| Modelo experimental | 🟢 73/100 | sombra |
 | Modelo de compatibilidad | 🟢 91/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 1/100 | contexto |
 | Tiempo de recuperación Garmin | 73,8 h | contexto |
-| Índice personal experimental | 60/100 | provisional |
+| Índice personal experimental | 59/100 | provisional |
 
-_Divergencia entre modelos:_ El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+_Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 **Qué ha cambiado desde ayer**
 
@@ -90,7 +90,6 @@ Modelo experimental: 68 → 73 (yellow → green). Cambios notables frente a aye
 - FC en reposo: 60 → 57 lpm (favorable)
 - FC nocturna: 67,3 → 64,0 lpm (favorable)
 - Sueño: 9,1 → 8,2 h (desfavorable)
-- Estrés medio: 31 → 22 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -98,7 +97,16 @@ Las puntuaciones no son equivalentes entre sí. La decisión es la zona más con
 
 ## 3. Sueño y recuperación nocturna
 
-No consta un episodio de sueño confirmado en los datos de este ciclo.
+Episodio confirmado: 4 de noviembre de 2026, 23:54 → 5 de noviembre de 2026, 08:27.
+
+| Dato | Valor |
+|---|---|
+| Duración efectiva | 8 h 12 min |
+| Puntuación | 81/100 |
+| Sueño profundo | 1 h 27 min |
+| Sueño REM | 1 h 24 min |
+
+El REM representa un 17 % y el sueño profundo un 18 % del episodio.
 
 ![Sueño por noche frente a tu necesidad](charts/sleep.svg)
 
@@ -124,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | — | 64,0 lpm |
+| Hoy* | 91,4 lpm | 64,0 lpm |
 | 3 días | 81,5 lpm | 66,3 lpm |
 | 7 días | 80,4 lpm | 65,1 lpm |
 | 28 días | 82,4 lpm | 64,5 lpm |
@@ -144,7 +152,7 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 22, máximo 67.
+- Estrés medio: 24, máximo 93.
 - Body Battery: último valor 74/100, medido a las 08:09.
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 21,0 lpm.
 
@@ -334,7 +342,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 - 🔴 **HRV.** HRV media de los últimos 7 días: 45,8 ms frente a tu base de 56 ms (-18 %); tu rango normal es 50,7–61,8 ms. Es la misma media (logarítmica) que usa la puntuación. Una HRV sostenida por debajo de tu referencia suele acompañar a más fatiga o menos descanso.
 - ✅ **FC en reposo.** FC en reposo de los últimos 7 días: 57,4 lpm frente a 57,0 de referencia (+0,4 lpm). En línea con tu referencia.
 - ⚠️ **Sueño.** Media de 7 noches: 8,2 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 5,8 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
-- ✅ **Regularidad del sueño.** Hora de acostarte (mediana 00:10) con una variación típica de ±62 min en 14 noches; 3 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
+- ✅ **Regularidad del sueño.** Hora de acostarte (mediana 00:00) con una variación típica de ±62 min en 14 noches; 3 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
 - ⚠️ **Distribución de la intensidad.** 17 de 32 sesiones con RPE registrado fueron de RPE ≥ 8 (53 %); 6 veces hubo dos días duros seguidos. Una parte alta de sesiones muy duras, sobre todo en días consecutivos, deja poco margen de recuperación y limita la mejora.
 - ✅ **Respuesta a las sesiones duras.** HRV la mañana siguiente: 48 ms tras sesión de RPE ≥ 8 (n=12) frente a 48 ms tras las demás (n=6); diferencia -0 ms. Es una relación descriptiva con pocos días, no demuestra causa.
 - ✅ **Fuerza.** Mejor valor registrado en 28 días: peso muerto 198 kg; sentadilla trasera 185 kg; squat clean 110 kg. Es un mínimo estimado (Epley sin RIR) o la carga máxima declarada: solo se comparan series con las mismas repeticiones.
@@ -397,4 +405,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-05-0830 · generado 05/11/2026 08:33 Europe/Madrid · certificado READY · sync_run_id 41987873236.
+Traza: cierre matinal · ciclo 2026-11-05-0830-post-sleep · generado 05/11/2026 09:06 Europe/Madrid · certificado READY · sync_run_id 41991770910.
