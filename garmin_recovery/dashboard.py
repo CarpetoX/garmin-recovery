@@ -793,7 +793,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     top_block = _signals_html(extras.get("signals")) + glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
-            'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
+            'anillo rojo = por encima del máximo · desc. = descanso confirmado por ti · toca un día para ver el detalle</p>'
             '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
             '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>')
     week_html = ('<section class="grid cols-2" id="semana"><div class="card"><h2>RPE frente al máximo del día</h2>'

@@ -80,7 +80,7 @@ $('meters').innerHTML = Object.entries(C).map(([k, c]) => `
       `<circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * v / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 32 32)"/></svg>`; };
     const hv = H.score, sl = S.sleep_score;
   const last7 = T.slice(-7), mx = Math.max(1, ...last7.map(t => t.srpe || 0));
-  const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : 'sin registro'}"></i>`).join('');
+  const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : (t.rest_confirmed ? 'descanso' : 'sin registro')}"></i>`).join('');
   $('rings').innerHTML =
     `<div class="card ring-card"><div class="rw">${ring(sl, tone(sl))}<div class="ring-num">${fmt(sl)}</div></div><div class="ring-label">Sueño</div><div class="ring-sub">${fmt(S.hours, 1)} h · puntuación</div></div>` +
     `<div class="card ring-card"><div class="rw">${ring(hv, tone(hv))}<div class="ring-num">${fmt(hv)}</div></div><div class="ring-label">HRV</div><div class="ring-sub">${fmt(H.today_ms)} ms hoy · puntuación</div></div>` +
@@ -399,7 +399,7 @@ if (cal && T.length) {
   T.forEach((d, i) => {
     const z = d.decision_zone || d.zone || 'unavailable', r = RPE[d.date] || {};
     const cls = `z-${String(z).replace(/[^a-z_]/g, '')}${d.decision_zone ? '' : ' v3'}${r.over ? ' over' : ''}`;
-    html += `<button class="${cls}" data-i="${i}" aria-label="${esc(d.date)}"><span class="dn">${+d.date.slice(8)}</span>${r.rpe != null ? `<b>${fmt(r.rpe)}</b>` : (d.sessions ? '•' : '')}</button>`;
+    html += `<button class="${cls}" data-i="${i}" aria-label="${esc(d.date)}"><span class="dn">${+d.date.slice(8)}</span>${r.rpe != null ? `<b>${fmt(r.rpe)}</b>` : (d.sessions ? '•' : (d.rest_confirmed ? '<b class="rest">desc.</b>' : ''))}</button>`;
   });
   cal.innerHTML = html;
   const show = i => {
@@ -411,7 +411,7 @@ if (cal && T.length) {
       (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
       (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
         ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td class="cal-name">${esc(x.label || x.name || '')}${mres(x.id)}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
-        : '<br><span class="weight">Sin sesiones registradas.</span>');
+        : (d.rest_confirmed ? '<br><span class="weight">Descanso confirmado por ti.</span>' : '<br><span class="weight">Sin sesiones registradas (descanso no confirmado).</span>'));
   };
   cal.addEventListener('click', ev => { const b = ev.target.closest('button[data-i]'); if (b) show(+b.dataset.i); });
   show(T.length - 1);

@@ -328,8 +328,14 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     add("\n## 5. Rendimiento CrossFit\n")
     wr = cf.get("weekly_report") or {}
     sess7 = [s for s in result.get("sessions_28d") or [] if isinstance(s, dict) and (s.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=6)).isoformat()]
+    rest = result.get("rest_days") or {}
+    rest_set = set(rest.get("dates_28d") or [])
     add(f"Última actividad registrada: {short_date(cf['latest_activity_date']) if cf.get('latest_activity_date') else '—'}. "
-        "Un día sin registro no demuestra que fuera de descanso.")
+        f"Descansos confirmados por ti: {rest.get('last7', 0)} en 7 días y {rest.get('last28', 0)} en 28. "
+        "Un día sin registro y sin confirmar no demuestra que fuera de descanso.")
+    if rest.get("conflicts"):
+        add("Días confirmados como descanso que tienen sesiones sincronizadas (no cuentan como descanso): "
+            + ", ".join(short_date(d) for d in rest["conflicts"]) + ".")
     try:
         from . import activity_crosscheck
         add("\n" + activity_crosscheck.to_markdown(activity_crosscheck.compute(
@@ -361,7 +367,7 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
         for day in sorted(daily):
             v = daily[day]
             bar = BAR * max(1, round((v or 0) / top * 12)) if (v or 0) > 0 else "—"
-            add(f"{short_date(day):<7}{bar:<14}{n(v) if (v or 0) > 0 else 'sin registro'}")
+            add(f"{short_date(day):<7}{bar:<14}{n(v) if (v or 0) > 0 else ('descanso' if day in rest_set else 'sin registro')}")
         add("```")
         peak = max(daily, key=lambda k: daily[k] or 0)
         if (daily[peak] or 0) > 0:
