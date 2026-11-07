@@ -1,11 +1,11 @@
 # Resumen semanal · 01/11–07/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-07-0941-060842`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-07-1001-274604`)._
 
 ## En una frase
 
 - 8 sesiones (−8); HRV de 7 días dentro de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; 3 de 3 días comprobados por encima del RPE máximo.
-- Decisión registrada en 7/7 días: ámbar 1 · rojo 5 · pendiente 1.
+- Decisión registrada en 7/7 días: ámbar 2 · rojo 5.
 
 ## Gráficas de la semana
 
