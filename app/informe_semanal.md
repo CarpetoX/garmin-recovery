@@ -1,6 +1,6 @@
 # Resumen semanal · 01/11–07/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-07-0833-680336`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-07-0906-b11873`)._
 
 ## En una frase
 
