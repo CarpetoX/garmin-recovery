@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Domingo, 8 de noviembre de 2026 · 12:52 · `GR-2026-11-08-1252-fb2aaa`
+Domingo, 8 de noviembre de 2026 · 16:48 · `GR-2026-11-08-1648-1ffd2f`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,8 +13,8 @@ Carga 7 días|9 sesiones|sRPE 1114|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-08-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
-- 🔴 **Recuperación:** 58/100 (oficial, confianza high). Híbrido: 41/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
+- 🟢 **Certificación:** ciclo 2026-11-08-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🔴 **Recuperación:** 58/100 (oficial, confianza high). Híbrido: 47/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 5 h 45 min, puntuación 55/100.
 - ❤️ **Principal alerta:** HRV 47 ms, 7,8 % por debajo de tu mediana de 28 días.
 - 🏋️ **Qué hacer:** Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
@@ -23,13 +23,13 @@ Carga 7 días|9 sesiones|sRPE 1114|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-08-0830-post-sleep |
+| Ciclo | 2026-11-08-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 12:52:41 |
+| Certificado generado | 16:48:05 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -73,12 +73,12 @@ La HRV está 8 % por debajo de su mediana; la FC en reposo está 1 lpm por debaj
 | Modelo | Resultado | Papel |
 |---|---|---|
 | Recuperación oficial | 🟡 58/100 | oficial |
-| Híbrido Garmin + local | 🔴 41/100 | salvaguarda |
+| Híbrido Garmin + local | 🔴 47/100 | salvaguarda |
 | Modelo experimental | 🟡 69/100 | sombra |
 | Modelo de compatibilidad | 🟡 50/100 | compatibilidad |
-| Garmin Training Readiness | ⚪ 27/100 | contexto |
-| Tiempo de recuperación Garmin | 7,0 h | contexto |
-| Índice personal experimental | 67/100 | provisional |
+| Garmin Training Readiness | ⚪ 42/100 | contexto |
+| Tiempo de recuperación Garmin | 4,0 h | contexto |
+| Índice personal experimental | 70/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (ámbar) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -89,7 +89,7 @@ Hoy dormiste de día tras el turno de noche: se compara con tu último sueño tr
 - HRV: 40 → 47 ms (favorable)
 - FC en reposo: 60 → 56 lpm (favorable)
 - FC nocturna: 68,2 → 62,6 lpm (favorable)
-- Estrés medio: 37 → 26 (favorable)
+- Estrés medio: 37 → 24 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -132,7 +132,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 71,7 lpm | 62,6 lpm |
+| Hoy* | 68,5 lpm | 62,6 lpm |
 | 3 días | 72,9 lpm | 60,6 lpm |
 | 7 días | 80,7 lpm | 63,5 lpm |
 | 28 días | 82,2 lpm | 64,2 lpm |
@@ -152,8 +152,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 26, máximo 84.
-- Body Battery: último valor 52/100, medido a las 12:03.
+- Estrés medio: 24, máximo 93.
+- Body Battery: último valor 56/100, medido a las 13:30 (hace 3 h 18 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 21,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -309,7 +309,6 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy libre tras la noche, mañana libre.
-- Señales adversas: Training Readiness de Garmin bajo (27/100).
 
 ### Recomendaciones
 
@@ -397,4 +396,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-08-0830-post-sleep · generado 08/11/2026 12:52 Europe/Madrid · certificado READY · sync_run_id 42477574512.
+Traza: informe de tarde · ciclo 2026-11-08-1645 · generado 08/11/2026 16:48 Europe/Madrid · certificado READY · sync_run_id 42496534763.
