@@ -1,14 +1,14 @@
-<!-- cycle_id: 2026-11-08-0830-post-sleep -->
-**En breve:** hoy toca recuperar; el sueño tras el turno de noche fue corto.
+<!-- cycle_id: 2026-11-08-1645 -->
+**En breve:** hoy toca recuperar; el sueño tras el turno de noche fue corto y la HRV sigue baja.
 🟢 Recuperación oficial 58/100 (ámbar), confianza alta; +10 frente a ayer (48).
 🌙 Sueño 5,8 h, puntuación 55.
 🏋️ Carga: 9 sesiones en 7 días, un 37,5 % menos que la semana previa.
 ❤️ Alerta: HRV media 7 días 49,3 ms, por debajo de tu rango normal (50,7–61,8).
 Orientación: día libre tras el turno; movilidad o zona 2 suave (RPE ≤ 4), sin cargas.
 
-**Qué explica la puntuación.** Tiran hacia abajo el sueño (deuda 1,8 h en 3 noches) y la HRV (−12 % vs. tu base de 56 ms). FC en reposo (56 lpm), carga (ACWR 0,83) y estrés de Garmin (27, mediana 37) son neutros o favorables. La zona roja la marca el modelo híbrido (41, con Garmin Readiness 27); el experimental (69, ámbar) es más permisivo y se aplica el más conservador.
+**Qué explica la puntuación.** Tiran hacia abajo el sueño (deuda 1,8 h en 3 noches) y la HRV (−12 % vs. tu base de 56 ms). FC en reposo (56 lpm), carga (ACWR 0,83) y estrés de Garmin (27, mediana 37) son neutros o favorables. La zona roja la marca el modelo híbrido (47, con Garmin Readiness 42); el experimental (69, ámbar) es más permisivo y se aplica el más conservador.
 
-**Carga reciente.** sRPE semanal 1.114, monotonía 0,78. Última sesión: fuerza de pierna (7/11, RPE 6,5). 15 de 29 sesiones fueron RPE ≥ 8 (52 %), con dos días duros seguidos en 6 ocasiones.
+**Carga reciente.** sRPE semanal 1.114, monotonía 0,78. Sin sesiones hoy; la última fue fuerza de pierna (7/11, RPE 6,5). 15 de 29 sesiones fueron RPE ≥ 8 (52 %), con dos días duros seguidos en 6 ocasiones.
 
 **Prioridades**
 1. HRV: baja intensidad unos días y reevalúa en una semana.
