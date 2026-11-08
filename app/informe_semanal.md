@@ -1,6 +1,6 @@
 # Resumen semanal · 02/11–08/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-08-1147-513cdc`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-08-1252-fb2aaa`)._
 
 ## En una frase
 
@@ -40,7 +40,7 @@ Monotonía 0,78 · strain 869 · ACWR 0,83 · RPE registrado en 5/9 sesiones.
 |---|--:|--:|
 | HRV media | 49,9 ms | 52,6 ms |
 | FC en reposo media | 57,4 lpm | 56,4 lpm |
-| Sueño medio | 7,09 h | 7,66 h |
+| Sueño medio | 7,41 h | 7,66 h |
 
 HRV de 7 días hoy: 49,3 ms (rango normal 50,7–61,8 ms). Turnos: TN, MT, TN.
 
