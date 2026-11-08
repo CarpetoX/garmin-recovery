@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-08T08:32:46.552769+01:00",
+  "generated_at": "2026-11-08T09:37:55.133883+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-11-08",
   "decision": {
@@ -268,16 +268,16 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-11-08T08:32:46.552769+01:00",
+    "generated_at": "2026-11-08T09:37:55.133883+01:00",
     "cycle": {
       "cycle_id": "2026-11-08-0830",
       "slot_at": "2026-11-08T08:30:00+01:00",
       "status": "ready",
       "verified_at": "2026-11-08T08:32:45.520895+01:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-11-08T08:32:05.237967+01:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-11-08T09:37:00.861579+01:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 42459156396,
@@ -316,40 +316,40 @@
       },
       "heart_rate_live": {
         "measured_at": "2026-11-08T05:56:00+01:00",
-        "age_minutes": 157.0,
-        "state": "reciente",
+        "age_minutes": 222.0,
+        "state": "antigua",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-11-08T05:51:00+01:00",
-        "age_minutes": 162.0,
-        "state": "reciente",
+        "age_minutes": 227.0,
+        "state": "antigua",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-08T07:32:26.636088+00:00",
+      "fetched_at": "2026-11-08T08:37:29.631494+00:00",
       "latest_date": "2026-11-07",
       "rows_sha256": "5d4c83c5750724b9",
-      "advanced_run_id": "42459204934"
+      "advanced_run_id": "42463714566"
     },
     "source_sha256": {
       "wellness.json": "ee4832211d4bc404",
-      "garmin_hrv_timeline.json": "318b2d9d9fd4c504",
-      "garmin_sleep_history.json": "e272aaca84fdddd3",
-      "garmin_extended.json": "66591090ac1185fe",
-      "garmin_heart_rate.json": "a4071b513eb763e1",
-      "garmin_stress.json": "06d64af8ace790ac",
-      "garmin_body_battery.json": "bdcf8101c006f15b",
+      "garmin_hrv_timeline.json": "7735f78ed9cf7350",
+      "garmin_sleep_history.json": "4be4f6a23bc1c1d8",
+      "garmin_extended.json": "344b1839ce512b36",
+      "garmin_heart_rate.json": "ae9b2c4a76ea0985",
+      "garmin_stress.json": "5f477c3bde94db3a",
+      "garmin_body_battery.json": "d7dc92cadd99066c",
       "activities.json": "f9e9b137d080d998",
-      "training_feedback.json": "7e58601c9212516e",
+      "training_feedback.json": "feef6c3b10b95008",
       "shift_calendar.json": "49abff935151d5fc",
-      "morning_sleep_status.json": "6a952e7c17dbeec4",
-      "recovery_assessment.json": "0ef807be52653d8b",
+      "morning_sleep_status.json": "fbcaab746b544cc6",
+      "recovery_assessment.json": "450217de693d16c9",
       "report_ready.json": "572c8621a3c8857a",
-      "garmin_hr_timeline.json": "9353f3283dc168a6",
-      "daily_summary.json": "0ab72e07d8eecb1e",
-      "workflow_health.json": "232e1a036f650bb8",
+      "garmin_hr_timeline.json": "dca8afc3b2173f04",
+      "daily_summary.json": "f51d5c0dc090d1c1",
+      "workflow_health.json": "cf16d309e7019991",
       "recovery.csv": "d2e4bbdca84c8558"
     },
     "consistency_v3_v2": {
@@ -374,7 +374,7 @@
     },
     "execution_health": {
       "status": "attention",
-      "checked_at": "2026-11-08T07:00:21.060005+01:00",
+      "checked_at": "2026-11-08T08:33:02.009430+01:00",
       "alerts": [
         {
           "code": "no_recent_successful_scheduled_run",
@@ -402,8 +402,10 @@
       "status": "no_verificable_en_etapa_de_datos",
       "detail": "Este certificado acredita datos preparados, no la recepción del informe. ChatGPT no devuelve acuse; la rutina de Claude registra el ID de sesión en el paso V5.1."
     },
-    "status": "ok",
-    "issues": []
+    "status": "con_avisos",
+    "issues": [
+      "mediciones no recientes: heart_rate_live, body_battery_live"
+    ]
   },
   "training_integrity": {
     "window_days": 14,
