@@ -1,6 +1,6 @@
 # Informe de seguimiento · 09/11/2026
 
-`GR-2026-11-09-1359-2f454b` · cita este identificador al reenviar el informe.
+`GR-2026-11-09-1648-d301f0` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
@@ -54,21 +54,20 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-09-0852-4d7050 (09/11 08:52):
-- Híbrido: 92 → 88 (-4).
-- Sesiones nuevas desde entonces: **3** (carga +47).
+Frente al informe GR-2026-11-09-1359-2f454b (09/11 13:59):
+- Sesiones con RPE: 13 → 15.
 
 ## Actividad de hoy
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 9/11 10:29 | Sin detalle | HIIT | 42 | 13 | 108 / 139 | — | — |
-| 9/11 09:55 | Sin detalle | HIIT | 9 | 11 | 157 / 188 | — | — |
-| 9/11 09:16 | Sin detalle | HIIT | 39 | 23 | 128 / 171 | — | — |
+| 9/11 10:29 | Técnica | Técnica - handstand push-ups en déficit | 42 | 13 | 108 / 139 | — | — |
+| 9/11 09:55 | WOD | WOD 20-15-10-5 - power snatch / chest to bar | 9 | 11 | 157 / 188 | 8,5 | 76 |
+| 9/11 09:16 | Halterofilia | Fuerza - power snatch 5x5 | 39 | 23 | 128 / 171 | 7,0 | 274 |
 
-**¿Encaja con la decisión?** La actividad de hoy (carga 47, RPE máx. 0,0) encaja con la decisión.
+**¿Encaja con la decisión?** La actividad de hoy (carga 47, RPE máx. 8,5) encaja con la decisión.
 
-**Carga 7 días:** 175 en 10 sesiones (-28 % vs. semana previa) · sRPE 1.031 · monotonía —.
+**Carga 7 días:** 175 en 10 sesiones (-28 % vs. semana previa) · sRPE 1.381 · monotonía 0,93.
 
 ## Gráficas
 
@@ -94,9 +93,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i207696610** (9/11 09:16, Sin detalle, 39 min, carga 23) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i207699384** (9/11 09:55, Sin detalle, 9 min, carga 11) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i207722998** (9/11 10:29, Sin detalle, 42 min, carga 13) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -105,6 +101,7 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 9/11 | power snatch | barra | 60,0 kg con barra | 60 × 5 | 70,0 kg | 1.250 kg | 5/5 | 7,0 |
 | 7/11 | air squat | peso corporal | peso corporal | — | — | — | —/1 | 6,5 |
 | 7/11 | sentadilla con safety bar | barra | 153,0 kg con barra | 133 × 8 | 168,5 kg | 6.462 kg | 8/8 | 6,5 |
 | 7/11 | sentadilla péndulo | máquina de placas | 70,0 kg indicados en máquina | — | — | 1.760 kg | 4/4 | 6,5 |
@@ -116,7 +113,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 | 4/11 | press superinclinado isolateral | máquina de discos | 50,0 kg total (dos lados) | — | — | 1.800 kg | 4/4 | 4,0 |
 | 4/11 | aperturas en banco inclinado con mancuernas | mancuernas (par) | 32,0 kg total (2 × 16,0 kg) | 32 × 10 | 42,7 kg | 1.280 kg | 4/4 | 4,0 |
 | 4/11 | curl de bíceps en máquina unilateral | máquina de placas | 15,0 kg indicados en máquina | — | — | 510 kg | 4/4 | 4,0 |
-| 4/11 | sit-ups | peso corporal | peso corporal | — | — | — | —/4 | 4,0 |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -125,16 +121,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-09-1359-2f454b`
+- **Identificador del informe:** `GR-2026-11-09-1648-d301f0`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-09-0830-post-sleep · datos sincronizados a las 13:58 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 5,7 h ✓ · última HRV hace 5,7 h ✓ · última FC hace 36 min ✓ · último Body Battery hace 66 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/16 (+8 sin RPE por diseño: calentamiento/técnica) (sin RPE: 9/11 09:16, 9/11 09:55, 9/11 10:29)
+- **Ciclo:** 2026-11-09-1645 · datos sincronizados a las 16:47
+- **Antigüedad:** fin del sueño hace 8,5 h ✓ · última HRV hace 8,6 h ✓ · última FC hace 2,1 h ✓ · último Body Battery hace 2,1 h ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+9 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-09 13:59 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-09 16:48 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
