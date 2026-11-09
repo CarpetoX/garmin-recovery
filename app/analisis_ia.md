@@ -1,27 +1,27 @@
-<!-- cycle_id: 2026-11-09-0830 -->
-**En breve:** faltan datos para confirmar el sueño de hoy: hoy, nada de intensidad alta.
-🟢 Recuperación oficial 85/100, confianza baja (ayer 58: +27)
+<!-- cycle_id: 2026-11-09-0830-post-sleep -->
+**En breve:** día verde: recuperación sólida, con la HRV algo baja como único aviso.
+🟢 Recuperación oficial 85/100, confianza alta
 🌙 Sueño 8,75 h, puntuación 83
-🏋️ Carga: 7 sesiones en 7 días, 128 de carga (−47 % vs. semana previa)
-❤️ HRV media 7 días 49,3 ms, por debajo de tu rango normal (51–61 ms)
-Orientación: día libre de turno; técnica ligera, movilidad o Zona 2 suave, RPE ≤ 6.
+🏋️ Carga: 7 sesiones en 7 días, 128 de carga (−47,5 % vs. semana previa)
+❤️ Alerta: HRV media 7 días 49,3 ms, por debajo de tu rango normal (50,6–60,9 ms)
+Orientación: día libre; sesión completa posible (RPE ≤ 9) si el calentamiento responde.
 
-## Qué explica la puntuación
-La noche ha sido buena (8,75 h, FC reposo 54 lpm, −2 vs. mediana) y el estrés de ayer fue bajo (23 frente a 37). Lo que frena es la HRV: 49,3 ms de media, un 11 % bajo tu base. Como el sueño aún no está confirmado, la decisión queda pendiente.
+**Qué explica la puntuación.** Sueño largo (8,75 h) y FC en reposo de 54 lpm (−2 vs. mediana) y estrés de ayer bajo (23 vs. 37) sostienen el verde. La HRV (49 ms hoy; −11 % vs. tu base) es lo único que resta. La deuda de sueño es de 1,8 h en 3 noches. El modelo experimental (75) coincide en verde, aunque su confianza es media porque aún no está validado.
 
-## Carga reciente
-La semana baja respecto a la anterior (128 frente a 244), con ACWR 0,76 y monotonía 0,7. Última sesión: fuerza de pierna el 7/11, RPE 6,5. El 52 % de tus sesiones con RPE fueron ≥ 8, con 6 casos de dos días duros seguidos.
+**Carga reciente.** 7 sesiones en 7 días, sRPE 1031, monotonía 0,7, ACWR 0,76: carga baja frente a las semanas previas (02/11: sRPE 1114; 26/10: 2195). Últimas sesiones: fuerza de pierna 07/11 (RPE 6,5) y fuerza de pecho 04/11 (RPE 4). El 52 % de las sesiones con RPE fue ≥ 8 y hubo 6 veces dos días duros seguidos.
 
-## 3 prioridades
-1. **HRV:** bajar intensidad unos días y reevaluar en una semana.
-2. **Sueño:** deuda acumulada 4,1 h; acuesta 30–45 min antes, sobre todo antes de un TN (12/11).
-3. **Distribución:** intercala RPE 5–6 entre las duras, ≥ 48 h entre esfuerzos máximos. Registra sensaciones en Intervals (0 de 14 días).
+**3 prioridades**
+1. **HRV:** vigila la tendencia; si sigue bajo el rango, limita los esfuerzos máximos.
+2. **Sueño:** adelanta la hora de acostarte 30–45 min, sobre todo antes de un TN.
+3. **Intensidad:** intercala RPE 5–6 entre las sesiones duras y deja ≥ 48 h entre esfuerzos máximos. Registra sensaciones en Intervals (0 de 14 días).
 
-## Plan 7 días
-- **Lun 9:** técnica ligera/movilidad, RPE ≤ 6.
-- **Mar 10:** Zona 2 30–40 min o fuerza suave si el sueño se confirma.
-- **Mié 11 (MT):** descanso o movilidad.
-- **Jue 12 (TN):** sin entrenar; prioriza la siesta.
-- **Vie 13:** recuperación, RPE ≤ 5.
-- **Sáb 14:** una sesión dura (RPE 7–8) solo si HRV vuelve a su rango.
-- **Dom 15:** suave, Zona 2.
+**Plan de 7 días** (máx. 3 sesiones RPE ≥ 8)
+- Lun 09: exigente, RPE ≤ 9, si el calentamiento responde.
+- Mar 10: moderada.
+- Mié 11 (MT): movilidad o descanso.
+- Jue 12 (TN): moderada por la mañana; siesta corta antes del turno.
+- Vie 13 (tras TN): descanso y sueño.
+- Sáb 14: exigente.
+- Dom 15: moderada.
+
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
