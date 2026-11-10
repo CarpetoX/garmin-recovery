@@ -102,7 +102,8 @@ def test_load_relation_needs_seven_days(tmp_path):
     trend = []
     for d in range(1, 11):
         day = f"2026-11-{d:02d}"
-        sn.record(tmp_path, day, {"cansancio": "Cansado" if d % 2 else "Fresco", "agujetas": "Nada", "estres": "Bajo", "animo": "Bueno"})
+        sn.record(tmp_path, day, {"sueno": "Bien", "cansancio": "Cansado" if d % 2 else "Fresco", "agujetas": "Nada", "molestias": "Ninguna",
+                                  "estres": "Bajo", "animo": "Bueno", "motivacion": "Normal"})
         trend.append({"date": day, "srpe": 600 if d % 2 == 0 else 100})
     lr = sn.analysis(sn.load(tmp_path), "2026-11-10", trend)["load_relation"]
     assert lr and lr["pairs"] == 9 and lr["after_high"] < lr["after_low"]
@@ -114,3 +115,27 @@ def test_panel_card_escapes():
                                "observations": ["<script>x</script>"]})
     assert "Sensaciones de hoy" in html and "<b>rodilla" not in html and "<script>x" not in html and "l2" in html
     assert d._sensations_html(None) == ""
+
+
+def test_reliability_and_odd_zones(tmp_path):
+    from garmin_recovery import sensations as sn
+    assert sn.zones_of({"zonas": "Rodilla"}) == ["Rodilla"] and sn.zones_of({"zonas": 3}) == [] and sn.zones_of({"zonas": [None, 4, "Hombro"]}) == ["Hombro"]
+    e = sn._migrate({"motivacion": {"level": 1, "label": "Normal"}, "animo": {"level": 0, "label": "Con muchas ganas"}})
+    assert "animo" not in e and e["motivacion"]["label"] == "Normal"
+    full = {"sueno": "Bien", "cansancio": "Cansado", "agujetas": "Moderadas", "molestias": "Leves", "estres": "Bajo", "animo": "Bueno",
+            "motivacion": "Con muchas ganas"}
+    for d in range(1, 12):  # 11 días previos tranquilos
+        sn.record(tmp_path, f"2026-10-{d:02d}", dict(full, cansancio="Fresco", agujetas="Nada"))
+    sn.record(tmp_path, "2026-10-12", full, moment="después del entreno")
+    (tmp_path / sn.FILE).write_text((tmp_path / sn.FILE).read_text(encoding="utf-8").replace('"Rodilla"', '"x"'), encoding="utf-8")
+    an = sn.analysis(sn.load(tmp_path), "2026-10-12", [{"date": "2026-10-12", "sleep_score": 45}], "green")
+    t = " ".join(o["text"] for o in an["observations"])
+    assert "Peor que tu normalidad" in t and "cansancio" in t and "agujetas" in t
+    assert "Garmin puntúa el sueño en 45" in t and "después de entrenar" in t and an["calibration"]["personal"] is True
+    try:
+        sn.record(tmp_path, "2026-10-13", full, moment="por la tarde")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("momento desconocido")
+    assert set(sn.QUESTIONS) == {k for k, _, _ in sn.ITEMS}

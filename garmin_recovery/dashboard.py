@@ -219,7 +219,8 @@ def _sensations_html(st: dict | None) -> str:
     cls = "good" if (idx or 0) >= 70 else "warning" if (idx or 0) >= 50 else "critical"
     chips = "".join(f'<span class="sens-chip l{int(c["level"])}">{_esc(c["name"])}: {_esc(c["label"])}</span>'
                     for c in st.get("items") or [] if isinstance(c.get("level"), int))
-    zones = (" · 📍 " + ", ".join(_esc(z) for z in st.get("zones") or [])) if st.get("zones") else ""
+    zl = [z for z in st.get("zones") if isinstance(z, str)] if isinstance(st.get("zones"), list) else []
+    zones = (" · 📍 " + ", ".join(_esc(z) for z in zl)) if zl else ""
     obs = "".join(f"<li>{_esc(o)}</li>" for o in (st.get("observations") or [])[:3])
     return ('<section class="card sens-card"><h2>Sensaciones de hoy</h2>'
             + (f'<p class="sens-idx"><b class="{cls}-ink">{idx}</b> índice de bienestar (0–100){zones}</p>' if idx is not None else "")

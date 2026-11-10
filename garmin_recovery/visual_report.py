@@ -435,7 +435,7 @@ def build(root: str | Path = ".") -> str:
     if todays:
         chips = "".join(f'<div class="sv"><span class="sv-q">{esc(name)}</span><span class="sv-a {_ans(todays, k, labels)[0]}">'
                         f'{esc(_ans(todays, k, labels)[1])}</span></div>' for k, name, labels in _sn.ITEMS)
-        zones_html = ('<p class="zones">📍 ' + ", ".join(esc(z) for z in todays.get("zonas") or []) + '</p>') if todays.get("zonas") else ""
+        zones_html = ('<p class="zones">📍 ' + ", ".join(esc(z) for z in _sn.zones_of(todays)) + '</p>') if _sn.zones_of(todays) else ""
         idx = an.get("today")
         idx_html = (f'<div class="wb"><span class="wb-v {"ok" if idx >= 70 else "warn" if idx >= 50 else "bad"}">{idx}</span>'
                     f'<span class="wb-l">índice de bienestar<small>0–100 · media 14 días {num(an.get("mean14"))}</small></span></div>'

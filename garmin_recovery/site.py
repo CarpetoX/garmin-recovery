@@ -288,7 +288,7 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         if _e:
             _an = _sn.analysis(_sv, result["date"], result.get("trend_28d"), (result.get("decision") or {}).get("zone"))
             extras["sensations_today"] = {
-                "index": _an.get("today"), "zones": _e.get("zonas") or [],
+                "index": _an.get("today"), "zones": _sn.zones_of(_e),
                 "items": [{"name": n, "label": labels[_sn.level(_e, k)], "level": _sn.level(_e, k)}
                           for k, n, labels in _sn.ITEMS if _sn.level(_e, k) is not None],
                 "observations": [o["text"] for o in _an.get("observations") or []]}
