@@ -219,8 +219,8 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     alerts = ""
     if is_post_tn:
         alerts += ('<div class="alert warn"><b>Hoy es día post-TN.</b> '
-                   + (f'En tus {ptn["days"]} días post-TN la recuperación media es {num(ptn["score"])} (frente a {num(ptn["rest_score"])} el resto) '
-                      f'y entrenas a RPE {num(ptn["rpe"], 1)}. ' if ptn else "")
+                   + (f'En tus días post-TN la recuperación media es {num(ptn["score"])} ({ptn["days"]} días; el resto, {num(ptn["rest_score"])}) '
+                      f'y entrenas a RPE {num(ptn["rpe"], 1)} ({ptn["rpe_sessions"]} sesiones). ' if ptn else "")
                    + 'Mejor técnica, aeróbico suave o siesta antes de entrenar; deja lo intenso para mañana.</div>')
     if dl.get("status") == "due":
         alerts += (f'<div class="alert info"><b>Considera una semana de descarga.</b> Llevas {dl["run"]} semanas completas seguidas sin una '
@@ -356,13 +356,13 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                   + '<p class="muted">Última medición sincronizada, no en directo.</p>')
     ptn_rows = "".join(
         f'<tr><th>{MES[int(r["month"][5:7]) - 1]} {r["month"][:4]}</th><td>{num(r["post"]["score"])}</td><td>{num(r["rest"]["score"])}</td>'
-        f'<td>{num(r["post"]["rpe"], 1)}</td><td>{num(r["rest"]["rpe"], 1)}</td><td>{r["post"]["days_scored"]}</td></tr>' for r in ptn_months)
+        f'<td>{num(r["post"]["rpe"], 1)}</td><td>{num(r["rest"]["rpe"], 1)}</td><td>{r["post"]["days_scored"]} / {r["post"]["sessions"]}</td></tr>' for r in ptn_months)
     ptn_card = card("¿Cómo entreno tras el turno de noche?",
-                    (takeaway(f'Tras un TN tu recuperación media es <b>{num(ptn["score"])}</b> (resto de días {num(ptn["rest_score"])}), '
-                              f'pero entrenas a RPE <b>{num(ptn["rpe"], 1)}</b>. Mejor sesiones suaves esos días.', "warn")
+                    (takeaway(f'Tras un TN tu recuperación media es <b>{num(ptn["score"])}</b> ({ptn["days"]} días; resto {num(ptn["rest_score"])}), '
+                              f'pero entrenas a RPE <b>{num(ptn["rpe"], 1)}</b> ({ptn["rpe_sessions"]} sesiones). Mejor sesiones suaves esos días.', "warn")
                      if ptn and (ptn["score"] or 0) < (ptn["rest_score"] or 0) else "")
-                    + ('<table class="tbl"><thead><tr><th>Mes</th><th>Recup. post-TN</th><th>Recup. resto</th><th>RPE post-TN</th><th>RPE resto</th><th>días</th></tr></thead>'
-                       f'<tbody>{ptn_rows}</tbody></table><p class="muted">Recuperación oficial media y RPE medio de las sesiones de esos días; '
+                    + ('<table class="tbl"><thead><tr><th>Mes</th><th>Recup. post-TN</th><th>Recup. resto</th><th>RPE post-TN</th><th>RPE resto</th><th>días / ses.</th></tr></thead>'
+                       f'<tbody>{ptn_rows}</tbody></table><p class="muted">Recuperación oficial media (días con puntuación) y RPE medio de las sesiones con RPE de esos días; '
                        'mes a mes para ver si el cambio funciona. Describe, no prueba causa.</p>' if ptn_rows else
                        '<p class="muted">Aún no hay días post-TN con datos.</p>'))
     tab_rec = '<div class="grid">' + models + sleep + "</div>" + hrv + ptn_card + '<div class="grid">' + shift_card + energy + "</div>"
@@ -449,11 +449,13 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     t_rows = ""
     for r in tsum:
         chg = ""
-        if r["change"] is not None:
+        if r["change"] == 0:
+            chg = '<span class="down">igual</span>'
+        elif r["change"] is not None:
             sign = "−" if r["change"] < 0 else "+"
             mag = co.fmt_value(abs(r["change"]), r["unit"])
             chg = f'<span class="{"up" if r["improved"] else "down"}">{sign}{esc(mag)} {"mejor" if r["improved"] else "peor" if r["improved"] is False else ""}</span>'
-        t_rows += (f'<div class="mx1"><div><b>{esc(r["name"])}</b><small>{esc(r["scaled"] or "Rx")} · {r["count"]} vez{"es" if r["count"] != 1 else ""} · '
+        t_rows += (f'<div class="mx1"><div><b>{esc(r["name"])}</b><small>{esc(r["scaled"] or "Rx")} · {r["count"]} {"vez" if r["count"] == 1 else "veces"} · '
                    f'última {ddmm(r["last_date"])}{" · <em class=due>toca repetirlo</em>" if r["due"] else ""}</small></div><span></span>'
                    f'<div class="mx1-v">{esc(co.fmt_value(r["last"], r["unit"]))}{chg}</div></div>')
     battery = "".join(f'<li><b>{esc(n)}</b> · {esc(d)}</li>' for n, _, _, d in co.TESTS.values())

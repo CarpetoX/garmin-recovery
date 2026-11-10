@@ -40,9 +40,11 @@ def test_post_tn_months():
     ctx = {"2026-10-03": "post-TN", "2026-10-10": "post-TN", "2026-10-20": "post-TN"}
     sess = [_s("2026-10-03", 9), _s("2026-10-04", 7)]
     m = co.post_tn_months(daily, sess, lambda d: ctx.get(d, "libre"))
-    assert m[0]["post"] == {"days_scored": 3, "score": 45, "rpe": 9.0, "sessions": 1} and m[0]["rest"]["score"] == 75
+    p0 = m[0]["post"]
+    assert {k: p0[k] for k in ("days_scored", "score", "rpe", "sessions")} == {"days_scored": 3, "score": 45, "rpe": 9.0, "sessions": 1}
+    assert m[0]["rest"]["score"] == 75
     t = co.post_tn_today(m)
-    assert t == {"days": 3, "score": 45.0, "rpe": 9.0, "rest_score": 75.0}
+    assert t == {"days": 3, "score": 45.0, "rpe": 9.0, "rpe_sessions": 1, "rest_score": 75.0, "rest_days": 2}
 
 
 def test_tests_registry(tmp_path: Path):
@@ -63,3 +65,18 @@ def test_tests_registry(tmp_path: Path):
         raise AssertionError(bad)
     (tmp_path / co.TESTS_FILE).write_text(json.dumps({"entries": [{"test": "fran", "date": "mal", "value": 1}, "x"]}), encoding="utf-8")
     assert co.load_tests(tmp_path) == []
+
+
+def test_pooled_means_use_raw_values_and_odd_tests(tmp_path: Path):
+    months = [{"month": "a", "post": {"days_scored": 2, "score": 45, "score_sum": 89, "rpe": None, "sessions": 0, "rpe_sum": 0},
+               "rest": {"days_scored": 1, "score": 71, "score_sum": 71, "rpe": None, "sessions": 0, "rpe_sum": 0}},
+              {"month": "b", "post": {"days_scored": 1, "score": 50, "score_sum": 50, "rpe": 8.5, "sessions": 2, "rpe_sum": 17},
+               "rest": {"days_scored": 2, "score": 72, "score_sum": 143, "rpe": None, "sessions": 0, "rpe_sum": 0}}]
+    t = co.post_tn_today(months)
+    assert t["score"] == 46.3 and t["rest_score"] == 71.3 and t["rpe"] == 8.5 and t["rpe_sessions"] == 2
+    (tmp_path / co.TESTS_FILE).write_text(json.dumps({"entries": [
+        {"test": "fran", "date": "2026-11-01T09:00", "value": 300, "scaled": ["x"]},
+        {"test": "fran", "date": "2026-11-20", "value": "inf"}, {"test": "fran", "date": "2026-11-21", "value": 300}]}), encoding="utf-8")
+    s = co.tests_summary(co.load_tests(tmp_path), "2026-11-30")
+    assert len(s) == 1 and s[0]["count"] == 2 and s[0]["change"] == 0 and s[0]["improved"] is None
+

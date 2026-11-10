@@ -46,7 +46,7 @@ def load_sessions(root: str | Path) -> list[dict]:
         return []
     out = []
     for r in rows:
-        if str(r.get("removed") or "0") not in ("0", "", "0.0") or not _d(r.get("date")):
+        if str(r.get("removed") or "").strip().lower() in ("1", "1.0", "true", "yes") or not _d(r.get("date")):
             continue
         out.append({"id": r.get("id"), "date": _d(r["date"]), "label": r.get("label") or r.get("name"),
                     "minutes": _f(r.get("duration_min")), "trimp": _f(r.get("trimp")), "rpe": _f(r.get("rpe")), "srpe": _f(r.get("srpe"))})
@@ -145,7 +145,8 @@ def post_tn_months(daily: dict[str, dict], sessions: list[dict], context_of) -> 
         for k in ("post", "rest"):
             g = months[m][k]
             row[k] = {"days_scored": len(g["score"]), "score": round(sum(g["score"]) / len(g["score"])) if g["score"] else None,
-                      "rpe": round(sum(g["rpe"]) / len(g["rpe"]), 1) if g["rpe"] else None, "sessions": len(g["rpe"])}
+                      "rpe": round(sum(g["rpe"]) / len(g["rpe"]), 1) if g["rpe"] else None, "sessions": len(g["rpe"]),
+                      "score_sum": sum(g["score"]), "rpe_sum": sum(g["rpe"])}  # sumas sin redondear para juntar meses
         if row["post"]["days_scored"] or row["post"]["sessions"]:
             out.append(row)
     return out
@@ -153,17 +154,15 @@ def post_tn_months(daily: dict[str, dict], sessions: list[dict], context_of) -> 
 
 def post_tn_today(months: list[dict]) -> dict | None:
     """Resumen de todos los meses para el aviso de hoy (solo si hay al menos 3 días post-TN con puntuación)."""
-    sc = [(r["post"]["score"], r["post"]["days_scored"]) for r in months if r["post"]["score"] is not None]
-    rp = [(r["post"]["rpe"], r["post"]["sessions"]) for r in months if r["post"]["rpe"] is not None]
-    rs = [(r["rest"]["score"], r["rest"]["days_scored"]) for r in months if r["rest"]["score"] is not None]
-    n = sum(k for _, k in sc)
+    def pooled(group, total, count):
+        n = sum(r[group][count] for r in months)
+        return (round(sum(r[group][total] for r in months) / n, 1) if n else None), n
+    score, n = pooled("post", "score_sum", "days_scored")
     if n < 3:
         return None
-
-    def wavg(xs):
-        tot = sum(k for _, k in xs)
-        return round(sum(v * k for v, k in xs) / tot, 1) if tot else None
-    return {"days": n, "score": wavg(sc), "rpe": wavg(rp), "rest_score": wavg(rs)}
+    rpe, n_rpe = pooled("post", "rpe_sum", "sessions")
+    rest, n_rest = pooled("rest", "score_sum", "days_scored")
+    return {"days": n, "score": score, "rpe": rpe, "rpe_sessions": n_rpe, "rest_score": rest, "rest_days": n_rest}
 
 
 # ---------------------------------------------------------------- tests
@@ -187,14 +186,20 @@ def load_tests(root: str | Path) -> list[dict]:
     except (OSError, ValueError):
         return []
     e = data.get("entries") if isinstance(data, dict) else None
-    return [x for x in e if isinstance(x, dict) and x.get("test") in TESTS and _d(x.get("date")) and _f(x.get("value")) is not None] \
-        if isinstance(e, list) else []
+    if not isinstance(e, list):
+        return []
+    out = []
+    for x in e:
+        v = _f(x.get("value")) if isinstance(x, dict) else None
+        if isinstance(x, dict) and x.get("test") in TESTS and _d(x.get("date")) and v is not None and abs(v) < 1e7:
+            out.append(dict(x, date=_d(x["date"]), value=v, scaled=x.get("scaled") if isinstance(x.get("scaled"), str) else ""))
+    return out
 
 
 def record_test(root: str | Path, day: str, test: str, value: float, note: str | None = None, scaled: str | None = None) -> dict:
     if test not in TESTS:
         raise ValueError(f"test desconocido: {test}")
-    if not _d(day) or _f(value) is None:
+    if not _d(day) or _f(value) is None or abs(_f(value)) >= 1e7:
         raise ValueError("fecha o valor no válidos")
     p = Path(root) / TESTS_FILE
     try:
@@ -203,7 +208,7 @@ def record_test(root: str | Path, day: str, test: str, value: float, note: str |
             raise ValueError
     except (OSError, ValueError):
         data = {"_comentario": "Tests de referencia periódicos (cada 6–8 semanas). Tiempos en segundos, cargas en kg.", "entries": []}
-    entry = {"date": day, "test": test, "value": float(value)}
+    entry = {"date": _d(day), "test": test, "value": float(value)}
     if scaled:
         entry["scaled"] = scaled  # p. ej. «thrusters 35 kg»: solo se compara con la misma versión
     if note:
