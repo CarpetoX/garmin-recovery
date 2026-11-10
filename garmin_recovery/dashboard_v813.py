@@ -36,21 +36,49 @@ def benchmarks_html(items: list | None) -> str:
 
 
 def maxes_html(items: list | None) -> str:
-    esc, kg, ddmm, _ = _h()
+    esc, kg, ddmm, svg = _h()
     if not items:
         return ""
     rows = ""
     for m in items:
+        ser = m.get("series") or []
+        spark = svg([{"date": x["date"], "top_load": x["e1rm"]} for x in ser]) if len(ser) >= 2 else ""
+        last = (f'<br><small>última sesión {kg(ser[-1]["e1rm"])} · {ddmm(ser[-1]["date"])}'
+                + (f' ({"+" if m["delta"] > 0 else ""}{kg(m["delta"])} vs. anterior)' if m.get("delta") else "") + "</small>") if len(ser) >= 2 else ""
         src = m["e1rm_from"]
         frm = f'{kg(src["load"])} × {kg(src["reps"])} · {ddmm(src["date"])}' if src["reps"] > 1 else f'single · {ddmm(src["date"])}'
         single = f'{kg(m["single"])}<br><small>{ddmm(m["single_date"])}</small>' if m["single"] is not None else "—"
         rows += (f'<tr><td>{esc(m["name"][:1].upper() + m["name"][1:])}<br><small>{esc(frm)}</small></td>'
-                 f'<td class="num"><b>{kg(m["e1rm"])}</b></td><td class="num">{single}</td></tr>')
+                 f'<td class="num"><b>{kg(m["e1rm"])}</b>{last}</td><td>{spark}</td><td class="num">{single}</td></tr>')
     return ('<section class="card" id="maximos" aria-label="Máximos estimados"><h2>Máximos estimados</h2>'
             '<p class="h2sub">1RM mínimo por Epley con series de 1–10 repeticiones · comparable entre sesiones con esquemas distintos (10x2, singles, EMOM)</p>'
-            '<div class="scroll"><table><tr><th>Ejercicio</th><th>1RM est. kg</th><th>Single kg</th></tr>'
+            '<div class="scroll"><table><tr><th>Ejercicio</th><th>1RM est. kg</th><th>Por sesión</th><th>Single kg</th></tr>'
             f'{rows}</table></div><p class="pg-note">Es una estimación por repeticiones, no un máximo probado; con series cerca del fallo '
-            'se acerca más. No se usa el RPE para estimarlo.</p></section>')
+            'se acerca más; una sesión de volumen (8–10 repeticiones lejos del fallo) sale más baja sin que hayas perdido fuerza. '
+            'No se usa el RPE para estimarlo.</p></section>')
+
+
+def skill_groups_html(groups: list | None) -> str:
+    """V8.16: una ficha por habilidad (HSPU, comba, muscle up…) con sesiones, hitos y la evolución del nivel declarado."""
+    esc, _, ddmm, _ = _h()
+    if not groups:
+        return ""
+    out = ""
+    for g in groups:
+        hitos = "".join(f'<li><span aria-hidden="true">🏅</span> {esc(h["title"])} · {ddmm(h["date"])}</li>' for h in g.get("hitos") or [])
+        levels = "".join(f'<li>{ddmm(x["date"])} · {esc(x["level"])}</li>' for x in (g.get("levels") or [])[-5:])
+        n = g.get("sessions") or 0
+        sub = (f'{n} sesión de técnica' if n == 1 else f'{n} sesiones de técnica' if n else 'sin sesiones de técnica registradas') \
+            + f' · desde {ddmm(g["first"])}'
+        now = esc(g["level"]) if g.get("level") else ("🏅 " + esc(g["hitos"][-1]["title"]) if g.get("hitos") else "—")
+        out += (f'<details class="pg"><summary><span class="pg-name">{esc(g["skill"])}<small>{esc(sub)}</small></span>'
+                f'<span class="pg-now"><small>{now}</small></span></summary><div class="pg-body">'
+                + (f'<p class="mc-cap">Nivel por sesión</p><ul class="clean">{levels}</ul>' if levels else "")
+                + (f'<p class="mc-cap">Hitos</p><ul class="clean">{hitos}</ul>' if hitos else "")
+                + (('<p class="pg-note">Aún no hay nivel declarado: al dictar técnica, dime el déficit, la banda o las '
+                    'repeticiones máximas y aparecerá aquí.</p>') if not levels and n else "") + '</div></details>')
+    return ('<section class="card" id="habilidades" aria-label="Habilidades"><h2>Habilidades</h2>'
+            '<p class="h2sub">cada habilidad con su evolución y sus hitos · solo lo que has declarado</p>' + out + '</section>')
 
 
 def skills_html(items: list | None) -> str:
@@ -69,7 +97,8 @@ def skills_html(items: list | None) -> str:
 def progress_pane(ap: dict | None) -> str:
     if not isinstance(ap, dict):
         return ""
-    return benchmarks_html(ap.get("benchmarks")) + maxes_html(ap.get("maxes")) + skills_html(ap.get("skills"))
+    return (benchmarks_html(ap.get("benchmarks")) + maxes_html(ap.get("maxes"))
+            + skill_groups_html(ap.get("skill_groups")) + skills_html(ap.get("skills")))
 
 
 def intensity_html(rc: dict | None) -> str:

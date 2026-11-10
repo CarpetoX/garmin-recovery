@@ -7,7 +7,6 @@ git config user.name "Garmin Recovery Bot"
 git config user.email "actions@github.com"
 
 git add recovery.csv wellness.json activities.csv activities.json daily_summary.json weekly_summary.json intervals_status.json
-if [ -f sync_origin_ledger.json ]; then git add sync_origin_ledger.json; fi
 
 if git diff --cached --quiet; then
   echo "Sin cambios de Intervals que publicar."

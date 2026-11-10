@@ -56,16 +56,35 @@ def record(origin: dict, run_id: str, now: datetime, path: str | Path = FILE) ->
     return True
 
 
+def from_lineage(path: str | Path) -> tuple[dict | None, str]:
+    """(origen verificado, run_id) del Sync raíz según la filiación de la cadena; (None, "") si no consta."""
+    try:
+        lin = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None, ""
+    root = lin.get("root") if isinstance(lin, dict) else None
+    if not isinstance(root, dict):
+        return None, ""
+    origin = root.get("origin_v291") if isinstance(root.get("origin_v291"), dict) else None
+    return origin, str(root.get("run_id") or "")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument("--origin-file", default=".garmin_origin_v291.json")
     p.add_argument("--out", default=FILE)
+    p.add_argument("--from-lineage", default=None,
+                   help="V8.16: filiación de la cadena; anota el Sync raíz desde el paso CrossFit, sin commit propio en el Sync")
     a = p.parse_args(argv)
-    try:
-        origin = json.loads(Path(a.origin_file).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        origin = None
-    wrote = record(origin, os.environ.get("GITHUB_RUN_ID", ""), datetime.now(timezone.utc), a.out)
+    if a.from_lineage:
+        origin, run_id = from_lineage(a.from_lineage)
+    else:
+        try:
+            origin = json.loads(Path(a.origin_file).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            origin = None
+        run_id = os.environ.get("GITHUB_RUN_ID", "")
+    wrote = record(origin, run_id, datetime.now(timezone.utc), a.out)
     print(json.dumps({"sync_origin_ledger": "recorded" if wrote else "not_verified_skipped"}))
 
 
