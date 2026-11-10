@@ -1,6 +1,6 @@
 # Informe de seguimiento · 10/11/2026
 
-`GR-2026-11-10-1335-e46623` · cita este identificador al reenviar el informe.
+`GR-2026-11-10-1350-55ccf8` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
@@ -54,9 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-10-1333-b440ba (10/11 13:33):
-- v3: 75 → 73 (-2).
-- Sesiones con RPE: 14 → 16.
+Frente al informe GR-2026-11-10-1335-e46623 (10/11 13:35):
+- Sin cambios en los datos.
 
 ## Actividad de hoy
 
@@ -126,16 +125,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-10-1335-e46623`
+- **Identificador del informe:** `GR-2026-11-10-1350-55ccf8`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-10-0830-post-sleep · datos sincronizados a las 13:34 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 4,8 h ✓ · última HRV hace 5,2 h ✓ · última FC hace 28 min ✓ · último Body Battery hace 33 min ✓
+- **Ciclo:** 2026-11-10-0830-post-sleep · datos sincronizados a las 13:50 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 5,0 h ✓ · última HRV hace 5,5 h ✓ · última FC hace 43 min ✓ · último Body Battery hace 48 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+9 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-10 13:35 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-10 13:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
