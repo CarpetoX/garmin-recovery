@@ -1,6 +1,6 @@
 # Resumen semanal · 04/11–10/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-10-1712-9dd215`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-10-2249-1d58c1`)._
 
 ## En una frase
 
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 12 | 14 |
 | Minutos | 504 | 406 |
 | Carga (Intervals) | 231 | 249 |
-| sRPE (RPE × min) | 1812 | 1478 |
+| sRPE (RPE × min) | 2300 | 1478 |
 
-Monotonía 1,02 · strain 1857 · ACWR 1,20 · RPE registrado en 7/12 sesiones.
+Monotonía 0,85 · strain 1957 · ACWR 1,41 · RPE registrado en 8/12 sesiones.
 
 **Días por encima del RPE máximo de la decisión:** 04/11 (RPE 6,5 > 4).
 
@@ -61,6 +61,12 @@ HRV de 7 días hoy: 51,1 ms (rango normal 50,3–60,1 ms). Turnos: MT, TN.
 | 07/11 | curl femoral tumbado | 67,0 kg | — | — | 4/4 |
 | 07/11 | curl femoral de pie unilateral | 35,0 kg | — | — | 8/8 |
 | 09/11 | power snatch | 60,0 kg | 60 × 5 | 70,0 kg | 5/5 |
+| 10/11 | press banca | 100,0 kg | 90 × 6 | 108,0 kg | 8/8 |
+| 10/11 | press inclinado con mancuernas | 67,0 kg | 67 × 8 | 84,9 kg | 4/4 |
+| 10/11 | press superinclinado isolateral | 50,0 kg | — | — | 4/4 |
+| 10/11 | aperturas de pecho en máquina sentado | 50,0 kg | — | — | 4/4 |
+| 10/11 | curl bíceps máquina unilateral | 15,0 kg | — | — | 4/4 |
+| 10/11 | abdominales en máquina | 45,0 kg | — | — | 4/4 |
 | 10/11 | sentadilla trasera | 140,0 kg | 140 × 6 | 168,0 kg | 7/7 |
 | 10/11 | peso muerto piernas rígidas con mancuernas | 65,0 kg | — | — | 4/4 |
 
@@ -68,7 +74,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**20 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**21 de 21** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -92,11 +98,12 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 09/11 | 22:45 | 22:47 | 22:47 | 22 min ✓ |
 | 10/11 | 08:30 | 08:32 | 08:32 | 32 min ✓ |
 | 10/11 | 16:45 | 16:48 | 16:49 | 20 min ✓ |
+| 10/11 | 22:45 | 22:48 | 22:49 | 21 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 7/12.
+- Sesiones con RPE: 8/12.
 
 ## Validación de modelos
 
