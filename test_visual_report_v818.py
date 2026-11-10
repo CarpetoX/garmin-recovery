@@ -27,7 +27,7 @@ def _root(tmp: Path) -> Path:
 def test_page_has_sections_and_escapes(tmp_path):
     html = vr.build(_root(tmp_path))
     for text in ("Cierre nocturno", "Decisión del día", "Recuperación por modelo", "Sueño", "HRV y frecuencia cardiaca",
-                 "Carga", "Entrenamiento de hoy", "Sensaciones", "Turnos", "MT 08:00–22:00", "desc.", "Cansado; agujetas en piernas"):
+                 "Carga", "Entrenamiento de hoy", "Sensaciones", "Turnos", "MT 08:00–22:00", "«D» = descanso confirmado", "Cansado; agujetas en piernas"):
         assert text in html, text
     assert "<script>alert" not in html and "Listo <b>" not in html and "WOD <i>" not in html and "E2MO2M <b>" not in html
 
