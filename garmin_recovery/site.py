@@ -281,6 +281,13 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         except Exception as exc:  # noqa: BLE001 — un día con datos raros no debe romper la web
             optional_blocks.failed(f"web:dia {o['date']}", exc)
             extras["days"] = [x for x in extras["days"] if x["date"] != o["date"]]
+    visual_html = None
+    try:  # V8.18: informe visual del ciclo; el botón del panel solo aparece si se generó
+        from .visual_report import build as build_visual
+        visual_html = build_visual(root)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:informe_visual", exc)
+    extras["visual_report"] = bool(visual_html)
     extras["web_failures"] = optional_blocks.failures()  # se muestran al pie de la web (V7.24)
     (out / "index.html").write_text(render(result, extras), encoding="utf-8")
     (out / "estado_web.json").write_text(json.dumps({"optional_failures": optional_blocks.failures()}, ensure_ascii=False, indent=1),
@@ -307,5 +314,7 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
             optional_blocks.failed("web:informe_interactivo", exc)
             html_full = page(full_md)
         (out / "informe_completo.html").write_text(html_full, encoding="utf-8")
+    if visual_html:
+        (out / "informe_visual.html").write_text(visual_html, encoding="utf-8")
     return {"out": str(out), "history": len(extras["history"]), "date": result["date"],
             "generated_at": result.get("generated_at")}

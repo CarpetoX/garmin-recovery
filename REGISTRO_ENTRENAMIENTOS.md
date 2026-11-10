@@ -71,3 +71,17 @@ Cuando el atleta dicte o muestre una pesada: añade una fila en la pestaña **`P
 ## Días de descanso
 
 Cuando el atleta diga que un día ha sido de descanso («hoy descanso»): añade una entrada en `descansos_registro.json` del repositorio (`{"date": "AAAA-MM-DD", "source": "dictado en el chat", "registered": "<hoy>", "note": "..."}`), sin fila en la hoja RPE (no hay ID de actividad). Solo esos días cuentan como descanso en la app y los informes; un día sin registro sigue sin demostrar descanso. Si ese día acaba teniendo sesiones sincronizadas, la app lo marca como conflicto y no lo cuenta: pregunta al atleta.
+
+## Encuesta de sensaciones
+
+Cuando el atleta pida la encuesta («encuesta de sensaciones») o cuente cómo llega, pregúntale con opciones cerradas y guarda la respuesta en `sensaciones_registro.json` con `garmin_recovery.sensations.record(root, fecha, respuestas, time="HH:MM", note=...)`:
+
+| Pregunta | Clave | Opciones (nivel 0 → 3) |
+|---|---|---|
+| ¿Cómo de cansado te notas? | `cansancio` | Fresco · Algo cansado · Cansado · Muy cansado |
+| ¿Agujetas o dolor muscular? | `agujetas` | Nada · Leves · Moderadas · Fuertes |
+| ¿Cómo está tu estrés? | `estres` | Bajo · Normal · Alto · Muy alto |
+| ¿Ánimo y ganas de entrenar? | `animo` | Con muchas ganas · Normal · Pocas ganas · Sin ganas |
+
+Una encuesta por momento del día (si se repite a la misma hora, se sustituye). Se ve en el informe visual (sección Sensaciones: hoy y matriz de 14 días). Es descriptiva: no entra en los modelos de recuperación. Lo que diga sobre una sesión concreta sigue yendo en la columna «Sensaciones» de la hoja RPE.
+
