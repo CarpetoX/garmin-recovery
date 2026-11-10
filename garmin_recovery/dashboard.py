@@ -212,20 +212,43 @@ def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
 
 
 def _similar_html(m: dict) -> str:
-    """V8.15: WODs parecidos o repetidos, con su resultado y RPE tal como constan."""
+    """V8.17: el WOD más parecido, lado a lado: resultado, tiempo y RPE en barras; movimientos comunes y distintos."""
     sim = m.get("similar") or []
     if not sim:
         return ""
-    rows = ""
-    for o in sim:
-        tag = "Repetido" if o.get("repeat") else "Parecido"
-        bits = [b for b in (o.get("result"), " · ".join(o.get("timing") or [])) if b]
-        rows += (f'<li><span class="rx-chip">{tag}</span> <b>{_esc(_ddmm(o["date"]))}</b> · {_esc(o.get("format") or "")}'
-                 + (f' · RPE {_kg(o["rpe"])}' if isinstance(o.get("rpe"), (int, float)) else "")
-                 + (f'<br><span class="mc-sim-res">{_esc(" · ".join(bits))}</span>' if bits else "")
-                 + f'<br><span class="mc-sim-res">Comparten: {_esc(", ".join(o.get("shared") or []))}</span></li>')
-    return ('<div class="mc-sim"><p class="mc-cap">Para comparar</p><ul class="clean">' + rows + '</ul>'
-            '<p class="pg-note">Orientativo: formato, cargas y variantes cambian el esfuerzo.</p></div>')
+    o = sim[0]
+
+    def clock(timing):
+        return next((t.split(" ", 1)[1] for t in timing or [] if t.startswith("Oficial ")), None)
+
+    def rpe_bar(v):
+        if not isinstance(v, (int, float)):
+            return '<span class="cmp-na">—</span>'
+        return (f'<span class="cmp-bar"><i style="width:{max(0, min(10, v)) * 10:.0f}%"></i></span>'
+                f'<b class="cmp-num">{_kg(v)}</b>')
+
+    def chips(items, cls):
+        return "".join(f'<span class="cmp-chip {cls}">{_esc(x)}</span>' for x in items)
+
+    def short(card):  # un For Time se resume en su tiempo oficial; un AMRAP, en rondas + reps
+        t = clock(card.get("timing"))
+        if t:
+            return t
+        res = str(card.get("result") or "").split(" · ")[0]
+        return res if res and res != "completado" else (card.get("result") or "—")
+
+    rows = [("Formato", _esc(m.get("format") or "—"), _esc(o.get("format") or "—")),
+            ("Resultado", _esc(short(m)), _esc(short(o)))]
+    body = "".join(f'<tr><th scope="row">{k}</th><td>{a}</td><td>{b}</td></tr>' for k, a, b in rows)
+    body += f'<tr><th scope="row">RPE</th><td>{rpe_bar(m.get("rpe"))}</td><td>{rpe_bar(o.get("rpe"))}</td></tr>'
+    diff = ""
+    if o.get("only_this") or o.get("only_other"):
+        diff = ('<p class="cmp-diff">' + (f'Solo este: {chips(o.get("only_this") or [], "this")} ' if o.get("only_this") else "")
+                + (f'Solo el {_esc(_ddmm(o["date"]))}: {chips(o.get("only_other") or [], "other")}' if o.get("only_other") else "")
+                + "</p>")
+    head = ("Mismo WOD que el " if o.get("repeat") else "Se parece al ") + _esc(_ddmm(o["date"]))
+    return (f'<div class="cmp"><p class="cmp-h">{head}<span class="cmp-common">{chips(o.get("shared") or [], "both")}</span></p>'
+            f'<table class="cmp-t"><tr><th></th><th>Este</th><th>{_esc(_ddmm(o["date"]))}</th></tr>{body}</table>{diff}</div>')
 
 
 def _metcons_html(metcons: list[dict]) -> str:
