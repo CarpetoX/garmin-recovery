@@ -125,7 +125,7 @@ def line_chart(rows: list[dict], series: list[tuple[str, str, str]], band: tuple
     if ref is not None:
         g += (f'<line class="ref" x1="{L}" x2="{W - R}" y1="{Y(ref):.1f}" y2="{Y(ref):.1f}"/>'
               f'<text class="tick" x="{W - R + 4}" y="{Y(ref) + 4:.1f}">{esc(ref_label)}</text>')
-    for k, name, cls in series:
+    for k, _name, cls in series:
         p = [r for r in rows if _fnum(r.get(k)) is not None]
         if len(p) < 2:
             continue
