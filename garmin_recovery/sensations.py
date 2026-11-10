@@ -37,6 +37,20 @@ QUESTIONS = {
 }
 MOMENTS = ("antes del entreno", "después del entreno", "sin entreno")
 
+# V9: preguntas de contexto. Ayudan a explicar el día, pero NO entran en el índice de bienestar (no son estado físico).
+# Nivel 0 = lo mejor. «rendimiento» solo se pregunta si ya entrenó.
+CONTEXT = [
+    ("alimentacion", "Alimentación de ayer", "¿Cómo comiste ayer (cantidad y calidad)?",
+     ["Bien", "Normal", "Regular", "Mal"], ["Suficiente y de calidad", "Lo habitual", "Poco o desordenado", "Muy poco o muy mal"]),
+    ("hidratacion", "Hidratación de ayer", "¿Cuánto bebiste ayer?",
+     ["Bien", "Normal", "Poco", "Muy poco"], ["Bebí de sobra", "Lo habitual", "Menos de lo normal", "Casi nada"]),
+    ("alcohol", "Alcohol ayer", "¿Tomaste alcohol ayer?",
+     ["Nada", "Una bebida", "Dos o tres", "Más de tres"], ["Sin alcohol", "Una cerveza o copa", "Dos o tres bebidas", "Más de tres bebidas"]),
+    ("rendimiento", "Rendimiento percibido hoy", "¿Cómo te salió el entreno de hoy frente a lo que esperabas?",
+     ["Mejor de lo esperado", "Como esperaba", "Peor de lo esperado", "Mucho peor"],
+     ["Me sentí fuerte y rápido", "Normal para mí", "Me costó más de lo normal", "Muy por debajo de lo normal"]),
+]
+
 
 def load(root: str | Path) -> list[dict]:
     try:
@@ -101,6 +115,12 @@ def record(root: str | Path, day: str, answers: dict[str, str], time: str | None
     entry: dict = {"date": day, "source": "encuesta en el chat"}
     if time:
         entry["time"] = time
+    for key, _, _q, labels, _d in CONTEXT:
+        if key in answers:
+            lab = answers[key]
+            if lab not in labels:
+                raise ValueError(f"respuesta desconocida para {key}: {lab}")
+            entry[key] = {"level": labels.index(lab), "label": lab}
     for key, _, labels in ITEMS:
         if key in answers:
             lab = answers[key]
@@ -212,6 +232,12 @@ def analysis(entries: list[dict], today: str, trend: list[dict] | None = None, z
                 obs.append({"level": "info", "text": f"Sientes que dormiste bien, pero Garmin puntúa el sueño en {sc:g}."})
             elif ls >= 2 and sc >= 80:
                 obs.append({"level": "info", "text": f"Sientes que dormiste mal, aunque Garmin puntúa el sueño en {sc:g}."})
+        ctx = {k: level(e, k) for k, *_ in CONTEXT}
+        flags = [n.lower() for k, n, *_ in CONTEXT if k != "rendimiento" and (ctx.get(k) or 0) >= 2]
+        if flags:
+            obs.append({"level": "info", "text": "Contexto a tener en cuenta: " + ", ".join(flags) + " por debajo de lo habitual."})
+        if (ctx.get("rendimiento") or 0) >= 2 and zone == "green":
+            obs.append({"level": "warn", "text": "El entreno te salió peor de lo esperado aunque los modelos daban verde."})
         if e.get("moment") == "después del entreno":
             obs.append({"level": "info", "text": "Encuesta respondida después de entrenar: el cansancio y las agujetas incluyen la sesión de hoy."})
         if idx_today is not None and mean14 is not None and abs(idx_today - mean14) >= 15:

@@ -76,7 +76,7 @@ MANIFEST = {
 }
 
 SERVICE_WORKER = """// Red primero (siempre el último informe, sin usar la caché HTTP de 10 min de GitHub Pages); sin red, la última copia guardada.
-const CACHE = 'garmin-recovery-v2';
+const CACHE = 'garmin-recovery-v3';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE))); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('garmin-recovery-') && k !== CACHE).map(k => caches.delete(k))))); self.clients.claim(); });
@@ -302,7 +302,15 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         optional_blocks.failed("web:informe_visual", exc)
     extras["visual_report"] = bool(visual_html)
     extras["web_failures"] = optional_blocks.failures()  # se muestran al pie de la web (V7.24)
-    (out / "index.html").write_text(render(result, extras), encoding="utf-8")
+    classic = render(result, extras)
+    (out / "panel_completo.html").write_text(classic, encoding="utf-8")  # V9: el panel anterior, con todo y la pestaña Sistema
+    try:  # V9: portada rediseñada; si fallara, la portada es el panel completo
+        from .panel_v9 import render as render_v9
+        index_html = render_v9(root, result, extras)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:panel_v9", exc)
+        index_html = classic
+    (out / "index.html").write_text(index_html, encoding="utf-8")
     (out / "estado_web.json").write_text(json.dumps({"optional_failures": optional_blocks.failures()}, ensure_ascii=False, indent=1),
                                          encoding="utf-8")
     (out / "manifest.webmanifest").write_text(json.dumps(MANIFEST, ensure_ascii=False, indent=1), encoding="utf-8")

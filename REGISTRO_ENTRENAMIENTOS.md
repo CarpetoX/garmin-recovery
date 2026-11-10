@@ -94,7 +94,17 @@ Para que sea fiable, **siempre las mismas preguntas, con el mismo texto y en el 
 - **Momento:** guardar `moment` = `antes del entreno`, `después del entreno` o `sin entreno`. Lo más fiable es responder por la mañana, antes de entrenar; si responde tras la sesión, se marca y la lectura lo advierte.
 - **Completa:** las 7 preguntas siempre; el índice solo se calcula con la encuesta completa. Zonas solo si hay agujetas o molestias (respuesta libre, `zones=[...]`).
 - **No mostrar** las respuestas de días anteriores antes de contestar (evita anclarse).
-- **Tandas:** 1) sueño, cansancio, agujetas, molestias; 2) estrés, ánimo, ganas; 3) zonas si procede.
+- **Cuándo:** al meter el entrenamiento del día, lanzarla siempre completa (salvo que ya exista la de ese día).
+- **Tandas:** 1) sueño, cansancio, agujetas, molestias; 2) estrés, ánimo, ganas, zonas (si hay agujetas o molestias); 3) contexto: alimentación, hidratación, alcohol y, si ya entrenó, rendimiento percibido.
+
+Preguntas de **contexto** (`sensations.CONTEXT`): ayudan a explicar el día y aparecen en la lectura, pero **no entran en el índice de bienestar**:
+
+| Pregunta (texto exacto) | Clave | Opciones (nivel 0 → 3) · descripción |
+|---|---|---|
+| ¿Cómo comiste ayer (cantidad y calidad)? | `alimentacion` | Bien («Suficiente y de calidad») · Normal («Lo habitual») · Regular («Poco o desordenado») · Mal («Muy poco o muy mal») |
+| ¿Cuánto bebiste ayer? | `hidratacion` | Bien («Bebí de sobra») · Normal («Lo habitual») · Poco («Menos de lo normal») · Muy poco («Casi nada») |
+| ¿Tomaste alcohol ayer? | `alcohol` | Nada («Sin alcohol») · Una bebida («Una cerveza o copa») · Dos o tres («Dos o tres bebidas») · Más de tres («Más de tres bebidas») |
+| ¿Cómo te salió el entreno de hoy frente a lo que esperabas? | `rendimiento` | Mejor de lo esperado («Me sentí fuerte y rápido») · Como esperaba («Normal para mí») · Peor de lo esperado («Me costó más de lo normal») · Mucho peor («Muy por debajo de lo normal») |
 - **Normalidad personal:** con 10 encuestas, la lectura compara cada respuesta con tu media y desviación (no con umbrales fijos); antes, se indica «calibrando». También señala si el sueño percibido no coincide con la puntuación de Garmin.
 
 Una encuesta por momento del día (si se repite a la misma hora, se sustituye). Se ve en el informe visual (sección Sensaciones: hoy y matriz de 14 días). Es descriptiva: no entra en los modelos de recuperación. Lo que diga sobre una sesión concreta sigue yendo en la columna «Sensaciones» de la hoja RPE.
