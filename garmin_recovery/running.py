@@ -152,8 +152,10 @@ def compare(cur: dict, prev: dict) -> dict:
             "d_hr": d_hr, "d_m_per_beat": d_eff, "d_cadence": d_cad, "text": text}
 
 
-def build(history: dict | None, activities: list | None, today: str, rpe: dict | None = None, labels: dict | None = None) -> dict:
-    """``rpe`` y ``labels``: {id de Intervals: RPE / nombre en la hoja}."""
+def build(history: dict | None, activities: list | None, today: str, rpe: dict | None = None, labels: dict | None = None,
+          overrides: dict | None = None) -> dict:
+    """``rpe`` y ``labels``: {id de Intervals: RPE / nombre en la hoja}. ``overrides``: {id de Garmin: {rpe, label}} para
+    carreras que solo están en Garmin (``manual_run_overrides.json``)."""
     runs: dict[str, dict] = {}
     for gid, g in ((history or {}).get("runs") or {}).items():
         if isinstance(g, dict):
@@ -180,6 +182,11 @@ def build(history: dict | None, activities: list | None, today: str, rpe: dict |
         iid = r.get("intervals_id")
         r["rpe"] = (rpe or {}).get(iid) if iid else None
         r["title"] = (labels or {}).get(iid) or r.get("name") or "Carrera"
+        man = (overrides or {}).get(str(r.get("garmin_id") or key)) or {}
+        if r["rpe"] is None and isinstance(man.get("rpe"), (int, float)):  # V8.8.2: carrera solo de Garmin; la hoja manda
+            r["rpe"], r["rpe_source"] = man["rpe"], "manual_run_overrides.json"
+        if man.get("label") and not (labels or {}).get(iid):
+            r["title"] = man["label"]
         out.append(r)
     out.sort(key=lambda x: x.get("start_local") or x["date"])
     for i, r in enumerate(out):
@@ -221,8 +228,10 @@ def load(root, result: dict) -> dict:
                 rpe_map[str(x["id"])] = x["rpe"]
             if x.get("label"):
                 labels[str(x["id"])] = x["label"]
+    man = read("manual_run_overrides.json", {})
     return build(read("running_history.json", None), acts if isinstance(acts, list) else [],
-                 str((result or {}).get("date") or date.today().isoformat()), rpe_map, labels)
+                 str((result or {}).get("date") or date.today().isoformat()), rpe_map, labels,
+                 (man.get("runs") if isinstance(man, dict) else None) or {})
 
 
 def to_markdown(run: dict, limit: int = 6) -> str:
