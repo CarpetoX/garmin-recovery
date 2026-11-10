@@ -307,5 +307,10 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
             optional_blocks.failed("web:informe_interactivo", exc)
             html_full = page(full_md)
         (out / "informe_completo.html").write_text(html_full, encoding="utf-8")
+    try:  # V8.18: informe visual del ciclo (gráficas, sensaciones y decisión)
+        from .visual_report import build as build_visual
+        (out / "informe_visual.html").write_text(build_visual(root), encoding="utf-8")
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:informe_visual", exc)
     return {"out": str(out), "history": len(extras["history"]), "date": result["date"],
             "generated_at": result.get("generated_at")}
