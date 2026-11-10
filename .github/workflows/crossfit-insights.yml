@@ -37,7 +37,7 @@ jobs:
       - name: V2.9 - Descargar cadena exacta del run Advanced
         if: github.event_name == 'workflow_run'
         continue-on-error: true
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: garmin-lineage-v29
           repository: ${{ github.repository }}
