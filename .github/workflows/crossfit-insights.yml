@@ -60,6 +60,8 @@ jobs:
           mkdir -p .lineage_current
           python -m garmin_recovery.pipeline_lineage --stage crossfit --out .lineage_current/pipeline_lineage_v29.json
           cp .lineage_current/pipeline_lineage_v29.json pipeline_lineage_v29.json
+          # V8.16: anota el Sync raíz si Apps Script lo lanzó con firma verificada (va en el commit de esta etapa)
+          python -m garmin_recovery.sync_origin_ledger --from-lineage pipeline_lineage_v29.json || true
 
       - name: V3.0 - Auditar contratos JSON sin alterar las fuentes
         continue-on-error: true
@@ -165,6 +167,7 @@ jobs:
           git add training_trends_v31.json
           [ ! -f schema_health_v30.json ] || git add schema_health_v30.json
           [ ! -f pipeline_lineage_v29.json ] || git add pipeline_lineage_v29.json
+          [ ! -f sync_origin_ledger.json ] || git add sync_origin_ledger.json
           [ ! -f publish_gate.json ] || git add publish_gate.json
           if ! git diff --cached --quiet; then
             git commit -m 'Update CrossFit insights and report readiness V2.4.6'

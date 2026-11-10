@@ -108,12 +108,16 @@ def estimated_max(entries) -> list[dict]:
             continue  # un complex no es un levantamiento aislado: Epley no aplica
         cur = by.setdefault(name, {"name": name, "e1rm": None, "e1rm_from": None, "single": None, "single_date": None, "sessions": set()})
         cur["sessions"].add(e.get("date"))
+        per = cur.setdefault("per_date", {})
         for s in e.get("sets") or []:
             w, reps = _num(s.get("load")), _num(s.get("reps"))
             if not w or not reps or reps < 1:
                 continue
             if reps <= EPLEY_MAX_REPS:
                 est = w * (1 + reps / 30) if reps > 1 else w
+                d = str(e.get("date") or "")[:10]
+                if d and est > per.get(d, 0):
+                    per[d] = est
                 if cur["e1rm"] is None or est > cur["e1rm"]:
                     cur["e1rm"], cur["e1rm_from"] = est, {"date": e.get("date"), "load": w, "reps": reps}
             if reps == 1 and (cur["single"] is None or w > cur["single"]):
@@ -124,6 +128,9 @@ def estimated_max(entries) -> list[dict]:
             continue
         c["e1rm"] = round(c["e1rm"] * 2) / 2  # al medio kilo
         c["sessions"] = len(c["sessions"])
+        # V8.16: mejor 1RM estimado de cada sesión, para ver la tendencia aunque cambien series y repeticiones
+        c["series"] = [{"date": d, "e1rm": round(v * 2) / 2} for d, v in sorted((c.pop("per_date", None) or {}).items())]
+        c["delta"] = (c["series"][-1]["e1rm"] - c["series"][-2]["e1rm"]) if len(c["series"]) >= 2 else None
         out.append(c)
     out.sort(key=lambda c: -c["e1rm"])
     return out
@@ -139,17 +146,84 @@ def skills(rows: list[dict]) -> list[dict]:
     for r in rows:
         d = r["detail"]
         m_h, m_t = _HITO.match(r["name"]), _TECH.match(r["name"])
+        for ms in d.get("milestones") if isinstance(d.get("milestones"), list) else []:  # V8.16: varios hitos en una sesión
+            if isinstance(ms, str) and ms.strip():
+                out.append({"date": r["date"], "kind": "hito", "title": ms.strip()[:1].upper() + ms.strip()[1:], "sub": "",
+                            "skill": skill_of(ms)})
         if d.get("milestone") or m_h:
             perf = d.get("performed") if isinstance(d.get("performed"), dict) else {}
             reps = _num(perf.get("reps"))
             sub = (f"{reps:g} repeticiones" if reps else "") + (" enlazadas" if perf.get("unbroken") else " sueltas" if reps and perf.get("unbroken") is False else "")
-            out.append({"date": r["date"], "kind": "hito", "title": d.get("milestone") or m_h.group(1), "sub": sub.strip()})
+            title = d.get("milestone") or m_h.group(1)
+            out.append({"date": r["date"], "kind": "hito", "title": title, "sub": sub.strip(),
+                        "skill": skill_of(d.get("exercise") or title)})
         elif m_t or d.get("type") == "skill":
             ex = d.get("exercise") or (m_t.group(1) if m_t else r["name"])
-            prog = d.get("progression")
             out.append({"date": r["date"], "kind": "tecnica", "title": str(ex)[:1].upper() + str(ex)[1:],
-                        "sub": f"progresión: {prog}" if isinstance(prog, str) and prog else ""})
-    out.sort(key=lambda x: (x["date"], x["kind"] == "hito"), reverse=True)
+                        "sub": level_of(d), "skill": skill_of(ex)})
+    seen, uniq = set(), []  # V8.16: un hito declarado en «milestone» y en «milestones» cuenta una vez
+    for x in out:
+        k = (x["date"], x["kind"], x["title"].lower())
+        if k not in seen:
+            seen.add(k)
+            uniq.append(x)
+    uniq.sort(key=lambda x: (x["date"], x["kind"] == "hito"), reverse=True)
+    return uniq
+
+
+SKILLS = [("Pino caminando", r"handstand walk|pino caminando"), ("Pino estático", r"handstand hold|pino est"),
+          ("Handstand push-up", r"handstand|hspu"), ("Bar muscle up", r"bar muscle|\bbmu\b"),
+          ("Ring muscle up", r"ring muscle"), ("Toes to bar", r"toes[ -]?to[ -]?bar|t2b"),
+          ("Comba", r"double[ -]?under|crossover|comba|single[ -]?under|jump rope|saltar a la comba"), ("Pistol", r"pistol"),
+          ("Rope climb", r"rope climb|trepa|cuerda")]
+
+
+def skill_of(text) -> str:
+    """Habilidad a la que pertenece un ejercicio o hito (agrupa «HSPU», «HSPU en déficit»…)."""
+    t = str(text or "").lower()
+    for name, rx in SKILLS:
+        if re.search(rx, t):
+            return name
+    t = t.strip()
+    return t[:1].upper() + t[1:] if t else "Otra"
+
+
+def level_of(d: dict) -> str:
+    """Nivel declarado en una sesión de técnica: déficit, repeticiones máximas o progresión, tal como constan."""
+    bits = []
+    deficit = d.get("deficit") if isinstance(d.get("deficit"), dict) else None
+    if deficit:
+        label = deficit.get("label") or " + ".join(f'disco {p["load_kg"]:g} kg' for p in deficit.get("plates") or []
+                                                    if isinstance(p, dict) and _num(p.get("load_kg")) is not None)
+        if label:
+            bits.append(f"déficit {label}")
+    reps = _num(d.get("max_reps_declared"))
+    if reps:
+        bits.append(f"hasta {reps:g} repeticiones")
+    prog = d.get("progression")
+    if isinstance(prog, str) and prog.strip():
+        bits.append(f"progresión: {prog.strip()}")
+    return " · ".join(bits)
+
+
+def skill_groups(items: list[dict]) -> list[dict]:
+    """Resumen por habilidad: sesiones, primera y última fecha, hitos y último nivel declarado."""
+    groups: dict[str, dict] = {}
+    for x in sorted(items, key=lambda i: i["date"]):
+        g = groups.setdefault(x.get("skill") or x["title"], {"skill": x.get("skill") or x["title"], "sessions": set(),
+                                                             "first": x["date"], "last": x["date"], "hitos": [], "level": None,
+                                                             "level_date": None, "levels": []})
+        g["last"] = x["date"]
+        if x["kind"] == "hito":
+            if not any(h["date"] == x["date"] and h["title"].lower() == x["title"].lower() for h in g["hitos"]):
+                g["hitos"].append({"date": x["date"], "title": x["title"]})
+        else:
+            g["sessions"].add(x["date"])
+            if x.get("sub"):
+                g["level"], g["level_date"] = x["sub"], x["date"]
+                g["levels"].append({"date": x["date"], "level": x["sub"]})
+    out = [dict(g, sessions=len(g["sessions"])) for g in groups.values()]
+    out.sort(key=lambda g: g["last"], reverse=True)
     return out
 
 
@@ -171,5 +245,6 @@ def build(root: str | Path, today: str) -> dict:
     hist = _read(root / "exercise_history.json") or {}
     acts = _read(root / "activities.json")
     dates = [str(a.get("date") or a.get("start_date_local") or "")[:10] for a in acts if isinstance(a, dict)] if isinstance(acts, list) else []
-    return {"benchmarks": benchmarks(rows), "maxes": estimated_max(hist.get("entries")), "skills": skills(rows),
-            "load_history": load_history(dates, today)}
+    sk = skills(rows)
+    return {"benchmarks": benchmarks(rows), "maxes": estimated_max(hist.get("entries")), "skills": sk,
+            "skill_groups": skill_groups(sk), "load_history": load_history(dates, today)}

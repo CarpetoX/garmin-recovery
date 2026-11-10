@@ -42,3 +42,17 @@ def test_verified_dispatch_counts_as_apps_script():
     assert len(b["recovered_by_manual"]) == 3 and b["dispatch_origin_verified"] is False
     c = m.audit_slots(now, runs)
     assert c["dispatch_origin_verified"] is False and len(c["recovered_by_manual"]) == 4
+
+
+def test_from_lineage_reads_root_origin(tmp_path):
+    lin = tmp_path / "lin.json"
+    lin.write_text('{"root": {"run_id": 42775896737, "origin_v291": {"source_verified": true, '
+                   '"origin_source": "apps_script_backup", "cycle_id": "2026-11-10-0830"}}}', encoding="utf-8")
+    origin, run_id = led.from_lineage(lin)
+    assert run_id == "42775896737" and origin["source_verified"] is True
+    out = tmp_path / "l.json"
+    led.main(["--from-lineage", str(lin), "--out", str(out)])
+    assert led.verified_run_ids(led.load(out)) == {"42775896737"}
+    bad = tmp_path / "bad.json"
+    bad.write_text("[]", encoding="utf-8")
+    assert led.from_lineage(bad) == (None, "") and led.from_lineage(tmp_path / "missing.json") == (None, "")
