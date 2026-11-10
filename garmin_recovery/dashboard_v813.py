@@ -46,8 +46,10 @@ def maxes_html(items: list | None) -> str:
         last = (f'<br><small>última sesión {kg(ser[-1]["e1rm"])} · {ddmm(ser[-1]["date"])}'
                 + (f' ({"+" if m["delta"] > 0 else ""}{kg(m["delta"])} vs. anterior)' if m.get("delta") else "") + "</small>") if len(ser) >= 2 else ""
         src = m["e1rm_from"]
-        frm = f'{kg(src["load"])} × {kg(src["reps"])} · {ddmm(src["date"])}' if src["reps"] > 1 else f'single · {ddmm(src["date"])}'
-        single = f'{kg(m["single"])}<br><small>{ddmm(m["single_date"])}</small>' if m["single"] is not None else "—"
+        when = ddmm(src["date"]) if src.get("date") else "—"
+        frm = f'{kg(src["load"])} × {kg(src["reps"])} · {when}' if src["reps"] > 1 else f'single · {when}'
+        single = (f'{kg(m["single"])}<br><small>{ddmm(m["single_date"]) if m.get("single_date") else "—"}</small>'
+                  if m["single"] is not None else "—")
         rows += (f'<tr><td>{esc(m["name"][:1].upper() + m["name"][1:])}<br><small>{esc(frm)}</small></td>'
                  f'<td class="num"><b>{kg(m["e1rm"])}</b>{last}</td><td>{spark}</td><td class="num">{single}</td></tr>')
     return ('<section class="card" id="maximos" aria-label="Máximos estimados"><h2>Máximos estimados</h2>'

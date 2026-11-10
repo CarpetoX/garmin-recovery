@@ -161,14 +161,21 @@ def skills(rows: list[dict]) -> list[dict]:
             ex = d.get("exercise") or (m_t.group(1) if m_t else r["name"])
             out.append({"date": r["date"], "kind": "tecnica", "title": str(ex)[:1].upper() + str(ex)[1:],
                         "sub": level_of(d), "skill": skill_of(ex)})
-    out.sort(key=lambda x: (x["date"], x["kind"] == "hito"), reverse=True)
-    return out
+    seen, uniq = set(), []  # V8.16: un hito declarado en «milestone» y en «milestones» cuenta una vez
+    for x in out:
+        k = (x["date"], x["kind"], x["title"].lower())
+        if k not in seen:
+            seen.add(k)
+            uniq.append(x)
+    uniq.sort(key=lambda x: (x["date"], x["kind"] == "hito"), reverse=True)
+    return uniq
 
 
-SKILLS = [("Handstand push-up", r"handstand|hspu"), ("Bar muscle up", r"bar muscle|\bbmu\b"),
+SKILLS = [("Pino caminando", r"handstand walk|pino caminando"), ("Pino estático", r"handstand hold|pino est"),
+          ("Handstand push-up", r"handstand|hspu"), ("Bar muscle up", r"bar muscle|\bbmu\b"),
           ("Ring muscle up", r"ring muscle"), ("Toes to bar", r"toes[ -]?to[ -]?bar|t2b"),
-          ("Comba", r"double[ -]?under|crossover|comba|single[ -]?under"), ("Pistol", r"pistol"),
-          ("Pino caminando", r"handstand walk|pino caminando"), ("Rope climb", r"rope|cuerda")]
+          ("Comba", r"double[ -]?under|crossover|comba|single[ -]?under|jump rope|saltar a la comba"), ("Pistol", r"pistol"),
+          ("Rope climb", r"rope climb|trepa|cuerda")]
 
 
 def skill_of(text) -> str:
@@ -208,7 +215,8 @@ def skill_groups(items: list[dict]) -> list[dict]:
                                                              "level_date": None, "levels": []})
         g["last"] = x["date"]
         if x["kind"] == "hito":
-            g["hitos"].append({"date": x["date"], "title": x["title"]})
+            if not any(h["date"] == x["date"] and h["title"].lower() == x["title"].lower() for h in g["hitos"]):
+                g["hitos"].append({"date": x["date"], "title": x["title"]})
         else:
             g["sessions"].add(x["date"])
             if x.get("sub"):
