@@ -88,14 +88,13 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150, verified_run_id
             uncovered.append(slot.isoformat())
     state = ('attention' if uncovered else 'recovered' if recovered else
              'ok' if slots else 'awaiting_next_due_slot')
-    return {
+    out = {
         'state': state, 'due': len(slots), 'matched': len(matched),
         'recovered_count': len(recovered), 'recovered': recovered,
         'recovered_by_apps_script': recovered_apps,  # legacy event-based alias, NOT verified caller
         'recovered_by_repository_dispatch_unverified': recovered_apps,
         'recovered_by_manual': recovered_manual,  # legado: etiqueta basada solo en evento
         'recovered_by_unattributed': recovered_manual,
-        'recovered_by_apps_script_verified': recovered_verified,  # V8.15: firma HMAC comprobada en el run
         'dispatch_caller_verified': (bool(recovered) and len(recovered_verified) == len(recovered)) if recovered else None,
         'cron_missed': recovered + uncovered, 'uncovered': uncovered,
         'missed': uncovered,  # compatibility with V2.3.1 consumers
@@ -109,6 +108,9 @@ def audit_slots(now, runs, lookback_hours=28, grace_minutes=150, verified_run_id
         'note': ('repository_dispatch is compatible with Apps Script but sender unverified; '
                  'workflow_dispatch caller unverified; only schedule confirms GitHub cron.'),
     }
+    if recovered_verified:  # V8.15: firma HMAC comprobada en el run; solo se añade si hay alguno (salida estable)
+        out['recovered_by_apps_script_verified'] = recovered_verified
+    return out
 
 
 def gate_status(now, path='report_ready.json'):
@@ -262,9 +264,8 @@ def enhance_monitor(base, now, repo, token, fetcher):
                            else 'workflow_dispatch_caller_unverified'
                            if slots.get('recovered_by_unattributed') else 'unknown')
         severity = 'warning' if slots.get('recovered_by_manual') else 'info'
-        alerts.append({'severity': severity, 'code': 'cron_missed_dispatch_recovered',
+        alert = {'severity': severity, 'code': 'cron_missed_dispatch_recovered',
                        'slots': slots.get('recovered'),
-                       'slots_apps_script_verified': slots.get('recovered_by_apps_script_verified') or [],
                        'dispatch_origin': dispatch_origin,
                        'dispatch_origin_verified': all_verified,
                        'dispatch_caller_verified': all_verified,
@@ -272,7 +273,10 @@ def enhance_monitor(base, now, repo, token, fetcher):
                        'note': ('Apps Script lanzó cada franja con firma verificada; solo falló el cron de GitHub, '
                                 'que es de respaldo.' if all_verified else
                                 'El tipo workflow_dispatch no distingue Apps Script de '
-                                'una persona; ningún actor está certificado.')})
+                                'una persona; ningún actor está certificado.')}
+        if slots.get('recovered_by_apps_script_verified'):
+            alert['slots_apps_script_verified'] = slots['recovered_by_apps_script_verified']
+        alerts.append(alert)
     elif slots.get('state') == 'attention':
         alerts.append({'severity': 'warning', 'code': 'sync_slot_not_recovered',
                        'slots': slots.get('uncovered'), 'cron_missed': slots.get('cron_missed')})

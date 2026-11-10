@@ -32,9 +32,9 @@ FAMILIES: list[tuple[str, str]] = [
     ("sit-up", r"sit[ -]?up|abdominal"),
     ("v-sit", r"v[ -]?sit"),
     ("double unders", r"double[ -]?under|comba"),
-    ("carrera", r"carrera|run\b|running"),
-    ("remo", r"remo|row(?!.*ring)|rower"),
-    ("skierg", r"ski"),
+    ("carrera", r"carrera|\brun(ning)?\b"),
+    ("remo", r"\bremo\b|(?<!ring )(?<!over )(?<!upright )\brow(er|ing)?\b"),
+    ("skierg", r"\bski(erg|\b)"),
     ("bici", r"bike|bici|assault|echo"),
     ("farmer", r"farmer"),
 ]
