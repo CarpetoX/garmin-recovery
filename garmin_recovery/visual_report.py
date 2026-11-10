@@ -421,36 +421,63 @@ def build(root: str | Path = ".") -> str:
                   f'<p class="sub">{len(sess)} sesiones · {num(sum(s.get("duration_min") or 0 for s in sess), 1)} min grabados · toca una sesión para ver el detalle</p>'
                   + (srows or '<p class="muted">Sin sesiones registradas hoy.</p>') + "</section>")
 
-    # ---------- sensaciones: encuesta diaria + lo dictado con cada sesión
+    # ---------- sensaciones: encuesta diaria completa, índice de bienestar y lectura descriptiva
     from . import sensations as _sn
     survey = _sn.load(root)
     win = _sn.window(survey, today, 14)
     todays = _sn.by_date(survey, today).get(today)
+    an = _sn.analysis(survey, today, trend, zone)
     lvl_cls = ["l0", "l1", "l2", "l3"]
+
+    def _ans(e, k, labels):
+        lv = _sn.level(e, k)
+        return (lvl_cls[lv], labels[lv]) if lv is not None else ("na", "—")
     if todays:
-        chips = "".join(
-            f'<div class="sv"><span class="sv-q">{esc(name)}</span><span class="sv-a {lvl_cls[_sn.level(todays, k)] if _sn.level(todays, k) is not None else "na"}">'
-            f'{esc(labels[_sn.level(todays, k)] if _sn.level(todays, k) is not None else "—")}</span></div>' for k, name, labels in _sn.ITEMS)
+        chips = "".join(f'<div class="sv"><span class="sv-q">{esc(name)}</span><span class="sv-a {_ans(todays, k, labels)[0]}">'
+                        f'{esc(_ans(todays, k, labels)[1])}</span></div>' for k, name, labels in _sn.ITEMS)
+        zones_html = ('<p class="zones">📍 ' + ", ".join(esc(z) for z in _sn.zones_of(todays)) + '</p>') if _sn.zones_of(todays) else ""
+        idx = an.get("today")
+        idx_html = (f'<div class="wb"><span class="wb-v {"ok" if idx >= 70 else "warn" if idx >= 50 else "bad"}">{idx}</span>'
+                    f'<span class="wb-l">índice de bienestar<small>0–100 · media 14 días {num(an.get("mean14"))}</small></span></div>'
+                    if idx is not None else "")
         survey_html = (f'<p class="sub">Encuesta de hoy{(" · " + esc(todays.get("time"))) if todays.get("time") else ""}</p>'
-                       f'<div class="svs">{chips}</div>' + (f'<p class="sens">💬 {esc(todays.get("note"))}</p>' if todays.get("note") else ""))
+                       + idx_html + f'<div class="svs">{chips}</div>' + zones_html
+                       + (f'<p class="sens">💬 {esc(todays.get("note"))}</p>' if todays.get("note") else ""))
     else:
-        survey_html = ('<p class="hint">Hoy no has respondido la encuesta. Pídemela en el chat («encuesta de sensaciones») '
-                       'o dime cómo llegas al dictar el entreno.</p>')
+        survey_html = ('<p class="hint">Hoy no has respondido la encuesta. Te la mando cuando me dictes el entreno, '
+                       'o pídemela en el chat («encuesta de sensaciones»).</p>')
+    obs = an.get("observations") or []
+    lr = an.get("load_relation")
+    reading = ""
+    if obs or lr:
+        reading = ('<h3>Lectura</h3><ul class="obs">'
+                   + "".join(f'<li class="o-{esc(o["level"])}">{esc(o["text"])}</li>' for o in obs)
+                   + (f'<li class="o-info">Tras días de carga alta (sRPE &gt; {num(lr["threshold_srpe"])}) tu bienestar medio es '
+                      f'{lr["after_high"]}; tras días más suaves, {lr["after_low"]} ({lr["pairs"]} días). Es descriptivo, no prueba causa.</li>' if lr else "")
+                   + '</ul>')
+    elif todays:
+        reading = '<p class="muted">Con más días de encuesta aparecerán tendencias y la relación con tu carga (a partir de 7 días).</p>'
     grid = ""
     if any(r[k] is not None for r in win for k, _, _ in _sn.ITEMS):
         head_row = "".join(f'<span class="mx-d">{DIA[_date.fromisoformat(r["date"]).weekday()][0]}<br>{_date.fromisoformat(r["date"]).day}</span>' for r in win)
         rows_m = "".join(f'<span class="mx-q">{esc(name)}</span>' + "".join(
             f'<span class="mx-c {lvl_cls[r[k]] if r[k] is not None else "na"}" title="{esc(labels[r[k]] if r[k] is not None else "sin encuesta")}"></span>'
             for r in win) for k, name, labels in _sn.ITEMS)
-        grid = ('<h3>Últimos 14 días</h3><div class="mx" style="grid-template-columns:5.5em repeat(14,1fr)"><span></span>'
+        grid = ('<h3>Últimos 14 días</h3><div class="mx" style="grid-template-columns:7.5em repeat(14,1fr)"><span></span>'
                 + head_row + rows_m + '</div><div class="legend"><span><i class="sw l0"></i>bien</span><span><i class="sw l1"></i>leve</span>'
                 '<span><i class="sw l2"></i>moderado</span><span><i class="sw l3"></i>alto</span><span><i class="sw na"></i>sin encuesta</span></div>')
+    bd_s = _sn.by_date(survey, today)
+    idx_rows = [{"date": r["date"], "wb": _sn.wellbeing(bd_s.get(r["date"])), "rec": r.get("v2_score")} for r in trend]
+    idx_chart = ""
+    if sum(1 for r in idx_rows if r["wb"] is not None) >= 2:
+        idx_chart = ('<h3>Bienestar frente a recuperación oficial, 28 días</h3>'
+                     + line_chart(idx_rows, [("wb", "Bienestar (encuesta)", "s4"), ("rec", "Recuperación oficial", "s1")], h=140))
     sens = _sensations(cf, today)
     sens_rows = "".join(f'<li><span class="s-d">{ddmm(x["date"])}</span><span>{esc(x["text"])}'
                         f'<small>{esc(x.get("activity") or "")}{(" · RPE " + num(x["rpe"], 1)) if _fnum(x.get("rpe")) is not None else ""}</small></span></li>'
                         for x in sens[:8])
     sens_card = ('<section class="card"><h2>Sensaciones</h2><p class="sub">lo que tú dices, sin modelos · no entra en la puntuación de recuperación</p>'
-                 + survey_html + grid
+                 + survey_html + reading + grid + idx_chart
                  + (f'<h3>Dictadas con el entreno · 28 días</h3><ul class="sens-l">{sens_rows}</ul>' if sens_rows else "")
                  + "</section>")
 
@@ -537,6 +564,10 @@ i.ok{background:var(--ok)}i.warn{background:var(--warn)}i.bad{background:var(--b
 .mx-c{display:block;height:16px;border-radius:4px}.l0{background:var(--ok)}.l1{background:var(--light)}.l2{background:var(--warn)}.l3{background:var(--bad)}
 .mx-c.na,.sw.na{background:var(--surface-2);border:1px dashed var(--line)}
 .sv-a.l0,.sv-a.l1,.sv-a.l2,.sv-a.l3{background:none}
+.wb{display:flex;align-items:center;gap:12px;margin:0 0 10px}.wb-v{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.wb-v.ok{color:var(--ok)}.wb-v.warn{color:var(--warn)}.wb-v.bad{color:var(--bad)}.wb-l{font-size:13px;font-weight:600}.wb-l small{display:block;font-weight:400;color:var(--text-3);font-size:12px}
+.zones{margin:8px 0 0;font-size:13px}.obs{margin:0;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.obs .o-bad::marker{color:var(--bad)}.obs .o-warn::marker{color:var(--warn)}.obs .o-info::marker{color:var(--s1)}
 .shifts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.shifts>div{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.shifts small{color:var(--text-3);font-size:11px}
 .trace{font-size:12px;color:var(--text-3);padding:4px 2px}.trace a{color:var(--s1)}.trace p{margin:2px 0}
 @media (max-width:480px){.hb{grid-template-columns:7em 1fr 2.4em}.hb-sub{margin-left:7.6em}.s-b{padding-left:0}h1{font-size:24px}}

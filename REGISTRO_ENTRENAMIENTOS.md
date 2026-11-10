@@ -78,12 +78,24 @@ Cuando el atleta diga que un día ha sido de descanso («hoy descanso»): añade
 
 Pregúntale con opciones cerradas y guarda la respuesta en `sensaciones_registro.json` con `garmin_recovery.sensations.record(root, fecha, respuestas, time="HH:MM", note=...)`:
 
-| Pregunta | Clave | Opciones (nivel 0 → 3) |
+Para que sea fiable, **siempre las mismas preguntas, con el mismo texto y en el mismo orden** (`sensations.QUESTIONS`), con la etiqueta de cada opción y su descripción como ancla:
+
+| Pregunta (texto exacto) | Clave | Opciones (nivel 0 → 3) · descripción |
 |---|---|---|
-| ¿Cómo de cansado te notas? | `cansancio` | Fresco · Algo cansado · Cansado · Muy cansado |
-| ¿Agujetas o dolor muscular? | `agujetas` | Nada · Leves · Moderadas · Fuertes |
-| ¿Cómo está tu estrés? | `estres` | Bajo · Normal · Alto · Muy alto |
-| ¿Ánimo y ganas de entrenar? | `animo` | Con muchas ganas · Normal · Pocas ganas · Sin ganas |
+| ¿Cómo sientes que dormiste anoche? | `sueno` | Muy bien («Descansado, sin despertares») · Bien («Bien, algún despertar») · Regular («Regular, me cuesta arrancar») · Mal («Mal, apenas descansé») |
+| Antes de entrenar hoy (o ahora, si no entrenas), ¿cuánta fatiga general notas? | `cansancio` | Fresco («Ninguna, fresco») · Algo cansado («Ligera, no afecta») · Cansado («Clara, me pesa») · Muy cansado («Mucha, agotado») |
+| ¿Agujetas o dolor muscular? | `agujetas` | Nada («Ninguna») · Leves («Se notan, no molestan») · Moderadas («Molestan al moverme») · Fuertes («Limitan el movimiento») |
+| ¿Molestias en articulaciones o tendones (no agujetas)? | `molestias` | Ninguna («Ninguna») · Leves («Se notan, no limitan») · Moderadas («Limitan algún ejercicio») · Fuertes («Duelen al entrenar») |
+| ¿Estrés de trabajo o vida hoy? | `estres` | Bajo («Bajo, tranquilo») · Normal («Normal») · Alto («Alto, me pesa») · Muy alto («Muy alto, me desborda») |
+| ¿Ánimo en general (aparte del entreno)? | `animo` | Muy bueno («Muy bueno») · Bueno («Bueno») · Regular («Regular») · Malo («Malo») |
+| ¿Ganas de entrenar hoy? | `motivacion` | Con muchas ganas («Muchas») · Normal («Normales») · Pocas ganas («Pocas») · Sin ganas («Ninguna») |
+
+- **Periodo de referencia:** cómo estaba **antes de entrenar hoy** (o ahora si no entrena); el sueño, la última noche. Nunca «en general».
+- **Momento:** guardar `moment` = `antes del entreno`, `después del entreno` o `sin entreno`. Lo más fiable es responder por la mañana, antes de entrenar; si responde tras la sesión, se marca y la lectura lo advierte.
+- **Completa:** las 7 preguntas siempre; el índice solo se calcula con la encuesta completa. Zonas solo si hay agujetas o molestias (respuesta libre, `zones=[...]`).
+- **No mostrar** las respuestas de días anteriores antes de contestar (evita anclarse).
+- **Tandas:** 1) sueño, cansancio, agujetas, molestias; 2) estrés, ánimo, ganas; 3) zonas si procede.
+- **Normalidad personal:** con 10 encuestas, la lectura compara cada respuesta con tu media y desviación (no con umbrales fijos); antes, se indica «calibrando». También señala si el sueño percibido no coincide con la puntuación de Garmin.
 
 Una encuesta por momento del día (si se repite a la misma hora, se sustituye). Se ve en el informe visual (sección Sensaciones: hoy y matriz de 14 días). Es descriptiva: no entra en los modelos de recuperación. Lo que diga sobre una sesión concreta sigue yendo en la columna «Sensaciones» de la hoja RPE.
 

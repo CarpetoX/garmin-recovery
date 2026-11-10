@@ -211,6 +211,23 @@ def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
             '* volumen mínimo: alguna serie sin carga.</p></section>')
 
 
+def _sensations_html(st: dict | None) -> str:
+    """V8.19: resumen de la encuesta de sensaciones de hoy en la portada; el detalle está en el informe visual."""
+    if not st:
+        return ""
+    idx = st.get("index")
+    cls = "good" if (idx or 0) >= 70 else "warning" if (idx or 0) >= 50 else "critical"
+    chips = "".join(f'<span class="sens-chip l{int(c["level"])}">{_esc(c["name"])}: {_esc(c["label"])}</span>'
+                    for c in st.get("items") or [] if isinstance(c.get("level"), int))
+    zl = [z for z in st.get("zones") if isinstance(z, str)] if isinstance(st.get("zones"), list) else []
+    zones = (" · 📍 " + ", ".join(_esc(z) for z in zl)) if zl else ""
+    obs = "".join(f"<li>{_esc(o)}</li>" for o in (st.get("observations") or [])[:3])
+    return ('<section class="card sens-card"><h2>Sensaciones de hoy</h2>'
+            + (f'<p class="sens-idx"><b class="{cls}-ink">{idx}</b> índice de bienestar (0–100){zones}</p>' if idx is not None else "")
+            + f'<div class="sens-chips">{chips}</div>' + (f'<ul class="sens-obs">{obs}</ul>' if obs else "")
+            + '<p class="pg-note">Lo que tú dices; no entra en la puntuación de recuperación. Detalle y 14 días en el informe visual.</p></section>')
+
+
 def _similar_html(m: dict) -> str:
     """V8.17: el WOD más parecido, lado a lado: resultado, tiempo y RPE en barras; movimientos comunes y distintos."""
     sim = m.get("similar") or []
@@ -850,7 +867,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
     return {"banner": "",
             "hoytop": top_block, "cambios": changes,
-            "hoy": _v813.today_html(extras.get("recovery_context")) + full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
+            "hoy": _v813.today_html(extras.get("recovery_context")) + _sensations_html(extras.get("sensations_today")) + full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
             "tendencias": _v813.load_history_html(extras.get("athlete_progress")) + _weight_html(extras.get("weight")) + calendar_html + week_html
                           + '<section class="grid cols-2">' + _v813.intensity_html(extras.get("recovery_context")) + _v813.day_types_html(extras.get("recovery_context")) + '</section>'
                           + '<section class="grid cols-2">' + _load_balance_html((extras.get("garmin_insights") or {}).get("load_balance")) + _vo2_html((extras.get("garmin_insights") or {}).get("vo2max")) + '</section>',
