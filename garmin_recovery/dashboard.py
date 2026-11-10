@@ -707,9 +707,12 @@ def _changes_html(c: dict | None, official: tuple | None = None, trend: list | N
         chip = "" if delta is None else (f"{delta:+.{i['dec']}f}".replace(".", ",").replace("-", "−") + (i["unit"] or ""))
         cards.append((i["label"], f(i["to"], i["dec"]), i["unit"].strip(), chip, i["favorable"], _spark(last7(keys.get(i["label"], "")), i["favorable"]),
                       (delta or 0) >= 0))
+    label = c.get("compare_label") or "ayer"
+    note = (f'<p class="chg-note">Hoy dormiste de día tras el turno de noche: se compara con {_esc(label)}, '
+            'no con la noche anterior, porque un sueño de día y uno de noche no son comparables.</p>' if c.get("basis") == "day_sleep" else "")
     if not cards:
         return ('<section class="card chg" id="cambios" aria-label="Cambios recientes"><h2>Cambios recientes</h2>'
-                '<p class="h2sub">Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p></section>')
+                f'{note}<p class="h2sub">Ningún indicador cambió lo bastante frente a {_esc(label)} como para destacarlo.</p></section>')
     body = "".join(
         f"<div class='chg-card {'pos' if ok else 'neg'}'><div class='chg-top'><span class='chg-l'>{_esc(lab)}</span>"
         f"<i class='chg-ar' aria-hidden='true'>{'↑' if up else '↓'}</i></div>"
@@ -717,8 +720,8 @@ def _changes_html(c: dict | None, official: tuple | None = None, trend: list | N
         f"<div class='chg-bot'><span class='chg-chip'>{_esc(chip)}</span>{sp}</div></div>"
         for lab, val, unit, chip, ok, sp, up in cards)
     return ('<section class="card chg" id="cambios" aria-label="Cambios recientes"><h2>Cambios recientes</h2>'
-            '<p class="h2sub">hoy frente a ayer · verde = favorable, rojo = desfavorable · curva = últimos 7 días · diferencias observadas, no causas</p>'
-            f'<div class="chg-grid">{body}</div></section>')
+            f'{note}<p class="h2sub">hoy frente a {_esc(label)} · verde = favorable, rojo = desfavorable · curva = últimos 7 días · '
+            f'diferencias observadas, no causas</p><div class="chg-grid">{body}</div></section>')
 
 
 def _extra_sections(result: dict, extras: dict | None = None) -> dict:
@@ -760,8 +763,11 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
                  '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     from .brief import official_change
-    changes = _changes_html(extras.get("changes"), official_change(result.get("trend_28d") or [], result.get("date") or ""),
-                           result.get("trend_28d") or [])
+    ch = extras.get("changes") or {}
+    # V8.10: la recuperación oficial se compara con el mismo día que el resto de tarjetas (p. ej. el último sueño tras TN)
+    official = ((ch["official_from"], ch["official_to"]) if ch.get("official_from") is not None and ch.get("official_to") is not None
+                else official_change(result.get("trend_28d") or [], result.get("date") or ""))
+    changes = _changes_html(extras.get("changes"), official, result.get("trend_28d") or [])
     try:
         from . import brief
         sents = brief.compose(result, extras.get("tonight"))
@@ -787,7 +793,7 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
     top_block = _signals_html(extras.get("signals")) + glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
-            'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
+            'anillo rojo = por encima del máximo · desc. = descanso confirmado por ti · toca un día para ver el detalle</p>'
             '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
             '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>')
     week_html = ('<section class="grid cols-2" id="semana"><div class="card"><h2>RPE frente al máximo del día</h2>'
