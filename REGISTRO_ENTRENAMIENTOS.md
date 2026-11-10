@@ -109,3 +109,18 @@ Preguntas de **contexto** (`sensations.CONTEXT`): ayudan a explicar el día y ap
 
 Una encuesta por momento del día (si se repite a la misma hora, se sustituye). Se ve en el informe visual (sección Sensaciones: hoy y matriz de 14 días). Es descriptiva: no entra en los modelos de recuperación. Lo que diga sobre una sesión concreta sigue yendo en la columna «Sensaciones» de la hoja RPE.
 
+## Tests de referencia
+
+Cada 6–8 semanas, el atleta repite pruebas fijas para medir progreso real. Cuando diga un resultado («test Fran 4:12», «remo 500 m 1:38», «3RM sentadilla 150»), guárdalo con `garmin_recovery.coaching.record_test(root, fecha, test, valor, note=..., scaled=...)` en `tests_registro.json` y confírmalo; también puede ir su fila normal en la hoja RPE si es una sesión de Garmin.
+
+| Clave | Prueba | Valor |
+|---|---|---|
+| `fran` | 21-15-9 thrusters 43 kg + dominadas | segundos |
+| `grace` | 30 clean & jerk 61 kg | segundos |
+| `helen` | 3 rondas: 400 m carrera, 21 swings 24 kg, 12 dominadas | segundos |
+| `remo_500` | 500 m de remo | segundos |
+| `dominadas_max` | dominadas estrictas seguidas | repeticiones |
+| `sentadilla_3rm` / `peso_muerto_3rm` / `banca_3rm` | 3 repeticiones máximas | kg |
+
+Si se hace con otra carga o variante, guárdalo con `scaled` («thrusters 35 kg»): solo se compara con la misma versión. El panel (Progreso) muestra la última marca, el cambio frente a la anterior y avisa cuando toca repetir (≥ 56 días).
+

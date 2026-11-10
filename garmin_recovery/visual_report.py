@@ -391,7 +391,7 @@ def build(root: str | Path = ".") -> str:
 
     # ---------- carga
     def label(r):
-        return "desc." if r.get("rest_confirmed") else "—"
+        return "D" if r.get("rest_confirmed") else "—"
     ts = ext.get("training_status") or {}
 
     def tsv(suffix):
@@ -399,7 +399,7 @@ def build(root: str | Path = ".") -> str:
     lb = [("Aeróbica baja", tsv("monthlyLoadAerobicLow"), tsv("monthlyLoadAerobicLowTargetMin"), tsv("monthlyLoadAerobicLowTargetMax")),
           ("Aeróbica alta", tsv("monthlyLoadAerobicHigh"), tsv("monthlyLoadAerobicHighTargetMin"), tsv("monthlyLoadAerobicHighTargetMax")),
           ("Anaeróbica", tsv("monthlyLoadAnaerobic"), tsv("monthlyLoadAnaerobicTargetMin"), tsv("monthlyLoadAnaerobicTargetMax"))]
-    load_card = ('<section class="card"><h2>Carga</h2><p class="sub">sRPE diario (RPE × minutos) · «desc.» = descanso confirmado · «—» = sin registro</p>'
+    load_card = ('<section class="card"><h2>Carga</h2><p class="sub">sRPE diario (RPE × minutos) · «D» = descanso confirmado · «—» = sin registro</p>'
                  + day_bars(trend[-14:], "srpe", label=label, h=150)
                  + f'<div class="kv"><span>7 días <b>{num(load.get("week_srpe"))}</b> sRPE</span><span>{num(load.get("week_sessions"))} sesiones</span>'
                  f'<span>ACWR <b>{num(load.get("acwr"), 2)}</b></span><span>monotonía <b>{num(load.get("monotony"), 2)}</b></span></div>'

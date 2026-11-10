@@ -11,6 +11,7 @@ import re
 from datetime import date as _date, timedelta
 from pathlib import Path
 
+from . import coaching as co
 from . import sensations as sn
 from .visual_report import (MES, ZONE, _bb_points, _day, _fnum, _iso, _load, _ms_local, _sessions_today, bars_h,
                             bb_curve, day_bars, ddmm, esc, hhmm, line_chart, num, stacked)
@@ -136,13 +137,18 @@ def _ses(n, zero: str = "sin sesiones") -> str:
 def _week_bars(weeks: list[dict]) -> str:
     if not weeks:
         return '<p class="muted">Aún no hay semanas completas en la ventana de datos.</p>'
-    hi = max(w["srpe"] for w in weeks) or 1
+    hi = max((w.get("total", w.get("srpe")) or 0) for w in weeks) or 1
     rows = ""
     for w in weeks:
         m = _date.fromisoformat(w["monday"])
-        rows += (f'<div class="wk"><span class="wk-l">{m.day} {MES[m.month - 1]}</span><span class="wk-t"><i style="width:{w["srpe"] / hi * 100:.1f}%"></i></span>'
-                 f'<span class="wk-v">{num(w["srpe"])}</span><span class="wk-s">{_ses(w["sessions"])} · {w["days"]} días entrenados · {w["hard"]} con RPE ≥ 8</span></div>')
-    return f'<div class="wks">{rows}</div>'
+        off = w.get("official", w.get("srpe")) or 0
+        est = w.get("estimated") or 0
+        rows += (f'<div class="wk"><span class="wk-l">{m.day} {MES[m.month - 1]}</span><span class="wk-t"><i style="width:{off / hi * 100:.1f}%"></i>'
+                 f'<i class="est" style="width:{est / hi * 100:.1f}%"></i></span><span class="wk-v">{num(off + est)}</span>'
+                 f'<span class="wk-s">{_ses(w["sessions"])} · {w["days"]} días · {w["hard"]} con RPE ≥ 8'
+                 + (f' · {num(est)} estimada' if est else "") + '</span></div>')
+    return (f'<div class="wks">{rows}</div><p class="legend"><span><i class="sw s1b"></i>con RPE (sRPE)</span>'
+            '<span><i class="sw estb"></i>estimada (sin RPE)</span></p>')
 
 
 def _metcon_compare(m: dict) -> str:
@@ -202,6 +208,23 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     an = sn.analysis(survey, today, trend, zone)
     load = result.get("load") or {}
     t = _date.fromisoformat(today)
+    # criterio sobre el historial completo (V9.1)
+    hist = co.load_sessions(root)
+    est_ratio = co.srpe_trimp_ratio(hist)
+    weeks = co.complete_weeks(co.with_estimate(hist, est_ratio), today)
+    dl = co.deload(weeks)
+    ptn_months = co.post_tn_months(co.load_daily(root), hist, lambda d: context_of(d, cal))
+    ptn = co.post_tn_today(ptn_months)
+    is_post_tn = context_of(today, cal) == "post-TN"
+    alerts = ""
+    if is_post_tn:
+        alerts += ('<div class="alert warn"><b>Hoy es día post-TN.</b> '
+                   + (f'En tus {ptn["days"]} días post-TN la recuperación media es {num(ptn["score"])} (frente a {num(ptn["rest_score"])} el resto) '
+                      f'y entrenas a RPE {num(ptn["rpe"], 1)}. ' if ptn else "")
+                   + 'Mejor técnica, aeróbico suave o siesta antes de entrenar; deja lo intenso para mañana.</div>')
+    if dl.get("status") == "due":
+        alerts += (f'<div class="alert info"><b>Considera una semana de descarga.</b> Llevas {dl["run"]} semanas completas seguidas sin una '
+                   f'semana ligera (≤ {num(dl["threshold"])} de carga, el 70 % de tu media). Orientativo, no un límite.</div>')
 
     # =================== HOY
     hero = (f'<section class="card hero z-{zc[1]}"><div class="hero-top"><div><p class="eyebrow">Qué hacer hoy</p>'
@@ -287,7 +310,7 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                     + (f'<ul class="sess-l">{lines}</ul>' if lines else '<p class="muted">Sin sesiones registradas hoy.</p>')
                     + f'<div class="shifts"><div><span class="s-d">Hoy</span>{shift(t)}</div><div><span class="s-d">Mañana</span>{shift(t + timedelta(days=1))}</div>'
                       f'<div><span class="s-d">Pasado</span>{shift(t + timedelta(days=2))}</div></div>')
-    tab_hoy = hero + '<div class="grid">' + normal_card + '<div class="col">' + sens_card + load_card + "</div></div>" + day_card
+    tab_hoy = hero + alerts + '<div class="grid">' + normal_card + '<div class="col">' + sens_card + load_card + "</div></div>" + day_card
 
     # =================== RECUPERACIÓN
     hyb, pri = aa.get("readiness_hybrid") or {}, aa.get("personal_recovery_index") or {}
@@ -331,21 +354,37 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                   takeaway(f'Body Battery {num(bbp[-1][1] if bbp else None)} a las {last_dt.strftime("%H:%M") if last_dt else "—"} · '
                            f'estrés medio {num(st.get("avgStressLevel"))}, máximo {num(st.get("maxStressLevel"))}.') + bb_curve(vals, w=420)
                   + '<p class="muted">Última medición sincronizada, no en directo.</p>')
-    tab_rec = '<div class="grid">' + models + sleep + "</div>" + hrv + '<div class="grid">' + shift_card + energy + "</div>"
+    ptn_rows = "".join(
+        f'<tr><th>{MES[int(r["month"][5:7]) - 1]} {r["month"][:4]}</th><td>{num(r["post"]["score"])}</td><td>{num(r["rest"]["score"])}</td>'
+        f'<td>{num(r["post"]["rpe"], 1)}</td><td>{num(r["rest"]["rpe"], 1)}</td><td>{r["post"]["days_scored"]}</td></tr>' for r in ptn_months)
+    ptn_card = card("¿Cómo entreno tras el turno de noche?",
+                    (takeaway(f'Tras un TN tu recuperación media es <b>{num(ptn["score"])}</b> (resto de días {num(ptn["rest_score"])}), '
+                              f'pero entrenas a RPE <b>{num(ptn["rpe"], 1)}</b>. Mejor sesiones suaves esos días.', "warn")
+                     if ptn and (ptn["score"] or 0) < (ptn["rest_score"] or 0) else "")
+                    + ('<table class="tbl"><thead><tr><th>Mes</th><th>Recup. post-TN</th><th>Recup. resto</th><th>RPE post-TN</th><th>RPE resto</th><th>días</th></tr></thead>'
+                       f'<tbody>{ptn_rows}</tbody></table><p class="muted">Recuperación oficial media y RPE medio de las sesiones de esos días; '
+                       'mes a mes para ver si el cambio funciona. Describe, no prueba causa.</p>' if ptn_rows else
+                       '<p class="muted">Aún no hay días post-TN con datos.</p>'))
+    tab_rec = '<div class="grid">' + models + sleep + "</div>" + hrv + ptn_card + '<div class="grid">' + shift_card + energy + "</div>"
 
     # =================== ENTRENOS
-    weeks = complete_weeks(result.get("sessions_28d") or [], today)
     wk_tk = ""
     if len(weeks) >= 2:
         a, b = weeks[-1], weeks[-2]
-        wk_tk = takeaway(f'Última semana completa: {a["sessions"]} sesiones y {num(a["srpe"])} de sRPE; la anterior, {b["sessions"]} y {num(b["srpe"])}.')
+        wk_tk = takeaway(f'Última semana completa: {a["sessions"]} sesiones y {num(a["total"])} de carga; la anterior, {b["sessions"]} y {num(b["total"])}.')
+    dl_txt = ({"due": f'<p class="alert info"><b>Semana de descarga recomendable:</b> {dl.get("run")} semanas seguidas por encima de {num(dl.get("threshold"))}.</p>',
+               "ok": f'<p class="muted">Última semana ligera (≤ {num(dl.get("threshold"))}): {ddmm(dl.get("last_light")) if dl.get("last_light") else "ninguna en el historial"}. '
+                     f'Se sugiere descarga tras {co.HEAVY_RUN} semanas seguidas sin una ligera.</p>'}.get(dl.get("status"), '<p class="muted">Aún no hay 4 semanas completas para valorar la descarga.</p>'))
+    ratio_txt = (f'Las sesiones sin RPE se estiman con su TRIMP × {num(est_ratio["ratio"], 1)} (tu relación mediana sRPE/TRIMP en {est_ratio["n"]} sesiones).'
+                 if est_ratio else "Aún no hay sesiones suficientes con RPE y TRIMP para estimar la carga de las sesiones sin RPE.")
 
     def rest_label(r):
-        return "desc." if r.get("rest_confirmed") else "—"
+        return "D" if r.get("rest_confirmed") else "—"
     train_load = card("¿Cómo se reparte mi carga?",
                       day_bars(trend[-14:], "srpe", label=rest_label, h=170, w=420)
-                      + "<h3>Semanas completas (lunes a domingo)</h3>" + wk_tk + _week_bars(weeks),
-                      "sRPE = RPE × minutos (solo sesiones con RPE) · «desc.» descanso confirmado · «—» sin registro")
+                      + "<h3>Semanas completas (lunes a domingo)</h3>" + wk_tk + _week_bars(weeks) + dl_txt
+                      + f'<p class="muted">{ratio_txt}</p>',
+                      "sRPE = RPE × minutos (solo sesiones con RPE) · «D» descanso confirmado · «—» sin registro")
     by_day: dict[str, list] = {}
     for s in result.get("sessions_28d") or []:
         if isinstance(s, dict) and _iso(s.get("date")) and _iso(s["date"]) > (t - timedelta(days=7)).isoformat() and not s.get("removed"):
@@ -406,7 +445,23 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                line_chart(wb28, [("wb", "Bienestar (encuesta)", "s4"), ("rec", "Recuperación oficial", "s1")], h=170, w=420)
                if sum(1 for r in wb28 if r["wb"] is not None) >= 2 else
                '<p class="muted">Aparecerá cuando haya al menos dos días con encuesta completa.</p>', "28 días")
-    tab_pro = '<div class="grid">' + maxes + skills + "</div>" + '<div class="grid">' + weight + wbc + "</div>"
+    tsum = co.tests_summary(co.load_tests(root), today)
+    t_rows = ""
+    for r in tsum:
+        chg = ""
+        if r["change"] is not None:
+            sign = "−" if r["change"] < 0 else "+"
+            mag = co.fmt_value(abs(r["change"]), r["unit"])
+            chg = f'<span class="{"up" if r["improved"] else "down"}">{sign}{esc(mag)} {"mejor" if r["improved"] else "peor" if r["improved"] is False else ""}</span>'
+        t_rows += (f'<div class="mx1"><div><b>{esc(r["name"])}</b><small>{esc(r["scaled"] or "Rx")} · {r["count"]} vez{"es" if r["count"] != 1 else ""} · '
+                   f'última {ddmm(r["last_date"])}{" · <em class=due>toca repetirlo</em>" if r["due"] else ""}</small></div><span></span>'
+                   f'<div class="mx1-v">{esc(co.fmt_value(r["last"], r["unit"]))}{chg}</div></div>')
+    battery = "".join(f'<li><b>{esc(n)}</b> · {esc(d)}</li>' for n, _, _, d in co.TESTS.values())
+    tests = card("¿Mejoro en las pruebas de referencia?",
+                 (t_rows or '<p class="hint">Aún no hay tests. Cada 6–8 semanas, haz uno o varios de esta batería y dímelo («test Fran 4:12») para comparar de verdad.</p>')
+                 + f'<details><summary>La batería de tests</summary><ul class="obs">{battery}</ul></details>',
+                 "lo único que demuestra progreso: repetir la misma prueba")
+    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + '<div class="grid">' + skills + weight + "</div>" + wbc)
 
     # =================== montaje
     cert_ok = ready.get("status") == "ready"
@@ -466,7 +521,10 @@ CSS = """
 .mx1{display:grid;grid-template-columns:1fr 120px 5.5em;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.mx1:first-of-type{border-top:0}
 .mx1 small{display:block;color:var(--text-3);font-size:12px}.mx1-v{text-align:right;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .mx1-v span{display:block;font-size:12px}.mx1-v .up{color:var(--ok)}.mx1-v .down{color:var(--text-3)}
-.spark{width:120px;height:40px}.sk{padding:8px 0;border-top:1px solid var(--line)}.sk:first-of-type{border-top:0}.sk small{display:block;color:var(--text-3);font-size:12px}.sk p{margin:4px 0;font-size:13px}
+.spark{width:120px;height:40px}
+.alert{margin:0;padding:10px 14px;border-radius:12px;font-size:14px;border:1px solid var(--line)}.alert.warn{background:var(--warn-w)}.alert.info{background:var(--surface-2)}
+.wk-t{display:flex}.wk-t i:first-child{border-radius:6px 0 0 6px}.wk-t i.est{background:var(--s1);opacity:.35;border-radius:0 6px 6px 0}.sw.s1b{background:var(--s1)}.sw.estb{background:var(--s1);opacity:.35}
+em.due{color:var(--warn);font-style:normal;font-weight:600}.card details summary{cursor:pointer;color:var(--s1);font-weight:600;font-size:13px;margin-top:8px}.sk{padding:8px 0;border-top:1px solid var(--line)}.sk:first-of-type{border-top:0}.sk small{display:block;color:var(--text-3);font-size:12px}.sk p{margin:4px 0;font-size:13px}
 @media (max-width:480px){.big3 b{font-size:18px}.big3 div{padding:6px 8px}.mx1{grid-template-columns:1fr 5.5em;grid-template-areas:"n v" "s s"}
 .mx1>div:first-child{grid-area:n}.mx1 .spark{grid-area:s;width:100%;height:44px}.mx1-v{grid-area:v}}
 @media print{.tabs{display:none}.pane[hidden]{display:flex}}
