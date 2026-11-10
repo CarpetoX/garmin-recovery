@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Martes, 10 de noviembre de 2026 · 09:27 · `GR-2026-11-10-0927-07b225`
+Martes, 10 de noviembre de 2026 · 13:33 · `GR-2026-11-10-1333-b440ba`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -8,7 +8,7 @@ Recuperación oficial|85/100|confianza high|green
 HRV|51 ms|0 % vs mediana|green
 Sueño|8 h 44 min|puntuación 79|unavailable
 FC en reposo|57 lpm|mediana 57|unavailable
-Carga 7 días|8 sesiones|sRPE 1238|unavailable
+Carga 7 días|11 sesiones|sRPE 1238|unavailable
 ```
 
 ## Resumen ejecutivo
@@ -34,14 +34,14 @@ Carga 7 días|8 sesiones|sRPE 1238|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (13:32), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
 | Fuente | Último dato | Estado |
 |---|---|---|
 | Intervals.icu · bienestar (HRV, FC reposo, sueño) | 2026-11-10 | 🟢 al día |
-| Intervals.icu · actividades | 2026-11-09 | 🟢 descarga correcta (2026-11-10) |
+| Intervals.icu · actividades | 2026-11-10 | 🟢 descarga correcta (2026-11-10) |
 | Garmin · FC diurna y nocturna | 2026-11-10 | 🟢 al día |
 | Garmin · estrés | 2026-11-10 | 🟢 al día |
 | Garmin · Body Battery | 2026-11-10 | 🟢 al día |
@@ -78,14 +78,13 @@ La HRV está 0 % por encima de su mediana; la FC en reposo coincide con su media
 | Modelo de compatibilidad | 🟢 91/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 65/100 | contexto |
 | Tiempo de recuperación Garmin | 17,5 h | contexto |
-| Índice personal experimental | 84/100 | provisional |
+| Índice personal experimental | 85/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
 Modelo experimental: 75 → 75 (green → green). Cambios notables frente a ayer:
 
 - FC en reposo: 54 → 57 lpm (desfavorable)
-- Estrés medio: 29 → 19 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -128,7 +127,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 64,3 lpm | 61,8 lpm |
+| Hoy* | 103,5 lpm | 61,8 lpm |
 | 3 días | 73,2 lpm | 62,7 lpm |
 | 7 días | 77,6 lpm | 62,8 lpm |
 | 28 días | 81,8 lpm | 64,5 lpm |
@@ -148,8 +147,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 19, máximo 57.
-- Body Battery: último valor 83/100, medido a las 08:00.
+- Estrés medio: 23, máximo 94.
+- Body Battery: último valor 52/100, medido a las 13:03.
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 21,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -176,9 +175,9 @@ Solo descriptivo: sirve para ver si la zona se corresponde con tu recuperación 
 
 ## 5. Rendimiento CrossFit
 
-Última actividad registrada: 9 nov. Descansos confirmados por ti: 2 en 7 días y 2 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
+Última actividad registrada: 10 nov. Descansos confirmados por ti: 2 en 7 días y 2 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
 
-Contraste Garmin ↔ Intervals: las 8 actividades de Garmin de los últimos 7 días constan también en Intervals.
+Contraste Garmin ↔ Intervals: las 11 actividades de Garmin de los últimos 7 días constan también en Intervals.
 
 ![Sesiones de los últimos 14 días](charts/sessions.svg)
 
@@ -190,19 +189,19 @@ Contraste Garmin ↔ Intervals: las 8 actividades de Garmin de los últimos 7 d�
 
 | Métrica | Resultado |
 |---|---|
-| Sesiones registradas | 8 |
+| Sesiones registradas | 11 |
 | Días con actividad | 3 |
 | RPE medio | 6,50 |
 | Sesiones de RPE ≥ 8 | 1 |
-| Minutos grabados (Garmin) | 340,3 min |
+| Minutos grabados (Garmin) | 434,6 min |
 | sRPE por duración registrada | 1238 |
-| TRIMP | 235,0 |
-| Carga de actividades (Intervals) | 143 |
+| TRIMP | 347,7 |
+| Carga de actividades (Intervals) | 209 |
 | Volumen externo mínimo verificado | 15.443 kg |
 
 El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, mancuernas y máquinas.
 
-Últimos 28 días: 43 sesiones, RPE medio 7,36, TRIMP 1137,7 y 1306,7 minutos grabados.
+Últimos 28 días: 46 sesiones, RPE medio 7,36, TRIMP 1250,4 y 1401,0 minutos grabados.
 
 ### sRPE diario registrado
 
@@ -218,7 +217,7 @@ El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, m
 
 El 4 nov concentra la mayor carga sRPE de la semana. La relación con las señales de recuperación es descriptiva, no causal.
 
-Monotonía 0,79 · strain 974 (descriptores de contexto, sin umbral médico).
+Monotonía 0,85 · strain 1052 (descriptores de contexto, sin umbral médico).
 
 ### Carrera
 
@@ -329,7 +328,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 - ⚠️ **Distribución de la intensidad.** 15 de 29 sesiones con RPE registrado fueron de RPE ≥ 8 (52 %); 5 veces hubo dos días duros seguidos. Una parte alta de sesiones muy duras, sobre todo en días consecutivos, deja poco margen de recuperación y limita la mejora.
 - ✅ **Respuesta a las sesiones duras.** HRV la mañana siguiente: 47 ms tras sesión de RPE ≥ 8 (n=11) frente a 46 ms tras las demás (n=5); diferencia +1 ms. Es una relación descriptiva con pocos días, no demuestra causa.
 - ✅ **Fuerza.** Mejor valor registrado en 28 días: peso muerto 198 kg; sentadilla trasera 185 kg; sentadilla con safety bar 168 kg. Es un mínimo estimado (Epley sin RIR) o la carga máxima declarada: solo se comparan series con las mismas repeticiones.
-- ⚠️ **Registro de sensaciones.** Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en 0 de los últimos 14 días. Las sensaciones son el contraste más barato frente a los números del reloj: sin ellas, la app solo ve la parte objetiva. Además: 0 sesiones de 28 días sin RPE y HRV con dato en 14 de 14 días.
+- ⚠️ **Registro de sensaciones.** Sensaciones (fatiga, agujetas, estrés, ánimo, motivación) registradas en 0 de los últimos 14 días. Las sensaciones son el contraste más barato frente a los números del reloj: sin ellas, la app solo ve la parte objetiva. Además: 3 sesiones de 28 días sin RPE y HRV con dato en 14 de 14 días.
 
 ### Constancia semanal (últimas 4 semanas)
 
@@ -338,7 +337,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 | 19/10 | 8 | 3 | 396 |
 | 26/10 | 16 | 6 | 2195 |
 | 02/11 | 9 | 4 | 1114 |
-| 09/11 | 3 | 1 | 350 |
+| 09/11 | 6 | 2 | 350 |
 
 _La semana en curso está incompleta; compara solo semanas completas._
 
@@ -352,8 +351,8 @@ _La semana en curso está incompleta; compara solo semanas completas._
 | FC en reposo | 56,4 (7 d) | 57,4 (7 d) | ≈ +1,0 lpm | 55,5 (2 d) | `▇▄█▁` |
 | Sueño | 7,7 (7 d) | 7,4 (7 d) | ≈ −0,3 h | 8,7 (2 d) | `▁▄▃█` |
 | Puntuación de sueño | 73 (7 d) | 73 (7 d) | ≈ −1 | 81 (2 d) | `▁▅▅█` |
-| Sesiones | 16 | 9 | −7 | 3 |  |
-| Días con actividad | 6 | 4 | −2 | 1 |  |
+| Sesiones | 16 | 9 | −7 | 6 |  |
+| Días con actividad | 6 | 4 | −2 | 2 |  |
 | sRPE total | 2195 | 1114 | −1081 (−49 %) | 350 | `▁█▄▁` |
 
 _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» sin datos suficientes._
@@ -362,7 +361,7 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| mar 10/11 | libre | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
+| mar 10/11 | libre | 🟢 Suave / movilidad | ya has entrenado hoy |
 | mié 11/11 | MT | 🟢 Suave / movilidad | turno largo: movilidad o descanso |
 | jue 12/11 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
 | vie 13/11 | tras TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
@@ -388,4 +387,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-10-0830-post-sleep · generado 10/11/2026 09:27 Europe/Madrid · certificado READY · sync_run_id 42782661706.
+Traza: informe de tarde · ciclo 2026-11-10-0830-post-sleep · generado 10/11/2026 13:33 Europe/Madrid · certificado READY · sync_run_id 42782661706.
