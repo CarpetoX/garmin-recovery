@@ -67,3 +67,7 @@ Registro de entrenamientos: cuando el usuario cuente un entrenamiento o un RPE, 
 ## Peso corporal
 
 Cuando el atleta dicte o muestre una pesada: añade una fila en la pestaña **`Peso`** (Fecha, Hora, Peso kg, Grasa %, Músculo kg, Agua %, Fuente, Notas) y una entrada en `peso_registro.json` del repositorio (la app lee de ahí). Solo valores reales; lo calculado a partir de diferencias se marca como `derivado`.
+
+## Días de descanso
+
+Cuando el atleta diga que un día ha sido de descanso («hoy descanso»): añade una entrada en `descansos_registro.json` del repositorio (`{"date": "AAAA-MM-DD", "source": "dictado en el chat", "registered": "<hoy>", "note": "..."}`), sin fila en la hoja RPE (no hay ID de actividad). Solo esos días cuentan como descanso en la app y los informes; un día sin registro sigue sin demostrar descanso. Si ese día acaba teniendo sesiones sincronizadas, la app lo marca como conflicto y no lo cuenta: pregunta al atleta.

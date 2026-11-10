@@ -91,6 +91,9 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
                            "decision_zone": today_row["decision_zone"]})
     if write:
         write_table(root / cfg["history_dir"] / "daily.csv", daily, DAILY_FIELDS, "date")
+    from . import rest_days  # V8.14: descansos confirmados por el atleta
+    rest_reg = rest_days.load(root)
+    rest_days.annotate(series, rest_reg, today)
     integrity = training_integrity(sessions, inputs.get("feedback") or {}, today)
     from .planned import load_planned, plan_block
     plan_rows, plan_source = load_planned(root)
@@ -109,6 +112,7 @@ def run(root: str | Path = ".", now: datetime | None = None, write: bool = True)
         "history": {"days": len(daily), "first_date": dates[0] if dates else None,
                     "last_date": dates[-1] if dates else None, "sessions": len(sessions)},
         "trend_28d": series, "recent_sessions": recent_sessions,
+        "rest_days": rest_days.summary(rest_reg, today, list(sessions.values())),
         # Todas las sesiones de los últimos 28 días (para gráficas; recent_sessions es solo la tabla)
         "sessions_28d": sorted((s_ for s_ in sessions.values()
                                 if (s_.get("date") or "") >= (date.fromisoformat(today) - timedelta(days=27)).isoformat()),

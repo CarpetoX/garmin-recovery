@@ -278,3 +278,12 @@ Medido el 26/10/2026: ~4.250 min/mes, sobre todo porque tras el sueño hay ~10 c
 - **`running.py`** une Garmin e Intervals por el ID de Garmin (Garmin manda; Intervals añade carga, TRIMP y desacople) y calcula ritmo, metros por latido (m/min ÷ FC) y desacople aeróbico por parciales. Compara cada carrera con la anterior de distancia parecida (±25 %, desde 3 km). Descarta fragmentos de menos de 1 km.
 - **App:** pestaña «Carrera» en Entrenos (tabla comparativa, ficha por carrera con parciales plegados y curva de FC) y recuento en «Últimos 7 días»; las carreras salen de «Técnica y otras». **Informe completo:** apartado «Carrera» al final de la sección 5.
 - En el móvil, las seis pestañas de Entrenos ocupan dos filas.
+
+## V8.9 — Salvaguarda del híbrido y copias ligeras del registro
+
+- **Híbrido:** `reliability.patch_hybrid` recalculaba la puntuación desde la cifra anterior a los topes de Garmin, así que «Garmin < 35 fuerza rojo» no se cumplía (2/11: Garmin 15 → híbrido 49 rojo → volvía a 61 ámbar; también 31/10 y 1/11). Ahora parte de la puntuación ya limitada (≤ 49 si Garmin < 35; ≤ 74 si Garmin < 50 o recuperación ≥ 24 h).
+- **Registro de ciclos legible por cualquier herramienta:** `report_cycles.json` sigue siendo el original completo y sin pérdidas (V2.8), pero pasa de 4 MB y la API de GitHub entrega vacío cualquier archivo de más de 1 MB. `garmin_recovery.ledger_light` (paso de CrossFit, no bloqueante, solo lectura) escribe `report_cycles_recent.json` (ciclos de las últimas 72 h completos, con instantánea y huella, < 0,9 MB) y `report_cycles_index.json` (todos los ciclos sin instantánea). Verifica cada huella antes de copiar; si una falla, no escribe nada. Copia por días: rama `garmin-v296-shadow`, `mirror/archive/shards/AAAA-MM-DD/0001.json`.
+
+## V8.10 — «Cambios recientes» tras un turno de noche
+
+Antes, si el sueño de hoy era de día (después de un TN), el bloque «Cambios recientes» desaparecía con un motivo engañoso («el día anterior no tiene una medición completa»). Ahora `why_changed` compara sueño con sueño del mismo tipo: un sueño de día tras TN con el último sueño de día tras TN de las tres últimas semanas, y una noche normal con la última noche normal aunque ayer durmieras de día. La tarjeta y el informe completo dicen con qué fecha se compara. La recuperación oficial se compara con ese mismo día.
