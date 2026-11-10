@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Martes, 10 de noviembre de 2026 · 13:50 · `GR-2026-11-10-1350-55ccf8`
+Martes, 10 de noviembre de 2026 · 14:10 · `GR-2026-11-10-1410-727a0a`
 
 ```cards
 Decisión|Listo para entrenar|RPE máx. 9|green
@@ -34,7 +34,7 @@ Carga 7 días|11 sesiones|sRPE 1812|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (13:50), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (14:10), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -78,7 +78,7 @@ La HRV está 0 % por encima de su mediana; la FC en reposo coincide con su media
 | Modelo de compatibilidad | 🟢 91/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 65/100 | contexto |
 | Tiempo de recuperación Garmin | 17,5 h | contexto |
-| Índice personal experimental | 85/100 | provisional |
+| Índice personal experimental | 84/100 | provisional |
 
 **Qué ha cambiado desde ayer**
 
@@ -127,7 +127,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 103,5 lpm | 61,8 lpm |
+| Hoy* | 100,8 lpm | 61,8 lpm |
 | 3 días | 73,2 lpm | 62,7 lpm |
 | 7 días | 77,6 lpm | 62,8 lpm |
 | 28 días | 81,8 lpm | 64,5 lpm |
@@ -147,8 +147,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 23, máximo 94.
-- Body Battery: último valor 52/100, medido a las 13:03.
+- Estrés medio: 25, máximo 97.
+- Body Battery: último valor 48/100, medido a las 13:51.
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 21,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -399,4 +399,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 L
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-10-0830-post-sleep · generado 10/11/2026 13:50 Europe/Madrid · certificado READY · sync_run_id 42782661706.
+Traza: informe de tarde · ciclo 2026-11-10-0830-post-sleep · generado 10/11/2026 14:10 Europe/Madrid · certificado READY · sync_run_id 42782661706.
