@@ -70,7 +70,7 @@ class Web(unittest.TestCase):
             e = hr_curves.entry(act(sid, "2026-10-18"), payload())
             Path(tmp, "activity_hr_curves.json").write_text(json.dumps({"step_s": 10, "activities": {sid: e}}), encoding="utf-8")
             info = site.build_site(tmp, Path(tmp, "_site"), history=False)
-            html = (Path(info["out"]) / "index.html").read_text(encoding="utf-8")
+            html = (Path(info["out"]) / "panel_completo.html").read_text(encoding="utf-8")
             self.assertIn('id="hrdetail"', html)
             self.assertIn('"hr_curves"', html)
             self.assertIn("showHr", html)

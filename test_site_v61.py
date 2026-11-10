@@ -58,7 +58,11 @@ class BuildSite(unittest.TestCase):
             out = Path(info["out"])
             for f in ("index.html", "manifest.webmanifest", "sw.js", "icon-192.png", "icon-512.png", "icon-180.png", ".nojekyll"):
                 self.assertTrue((out / f).exists(), f)
-            html = (out / "index.html").read_text(encoding="utf-8")
+            v9 = (out / "index.html").read_text(encoding="utf-8")  # V9: portada nueva
+            for txt in ('class="tabs"', 'id="p-hoy"', 'id="p-progreso"', "¿Cómo estás frente a tu normal?", 'rel="manifest"', "serviceWorker", "panel_completo.html"):
+                self.assertIn(txt, v9)
+            self.assertNotIn("{{", v9)
+            html = (out / "panel_completo.html").read_text(encoding="utf-8")
             for txt in ('rel="manifest"', "serviceWorker", 'id="cal"', 'id="c-rpe"', 'class="tabbar"', 'id="rings"', 'id="porque"', 'id="heroarc"', 'function smooth', 'id="weekload"', 'id="heat"', 'zdonut', 'id="c-stages"', 'id="r-hrv"'):
                 self.assertIn(txt, html)
             self.assertNotIn("{{", html)

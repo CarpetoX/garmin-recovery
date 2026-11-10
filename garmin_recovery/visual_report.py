@@ -124,12 +124,12 @@ def stacked(parts: list[tuple[str, float | None, str]]) -> str:
 
 
 def line_chart(rows: list[dict], series: list[tuple[str, str, str]], band: tuple[str, str] | None = None,
-               unit: str = "", h: int = 150, ref: float | None = None, ref_label: str = "") -> str:
+               unit: str = "", h: int = 150, ref: float | None = None, ref_label: str = "", w: int = 640) -> str:
     """Línea por días (eje x = fecha). series: (clave, nombre, clase)."""
     pts = [r for r in rows if any(_fnum(r.get(k)) is not None for k, _, _ in series)]
     if len(pts) < 2:
         return '<p class="muted">Sin datos suficientes.</p>'
-    W, L, R, T, B = 640, 38, 46, 10, 22
+    W, L, R, T, B = w, 38, 46, 10, 22
     vals = [r[k] for r in pts for k, _, _ in series if _fnum(r.get(k)) is not None]
     if band:
         vals += [r[x] for r in pts for x in band if _fnum(r.get(x)) is not None]
@@ -178,12 +178,12 @@ def line_chart(rows: list[dict], series: list[tuple[str, str, str]], band: tuple
 
 
 def day_bars(rows: list[dict], key: str, h: int = 140, label=None, cls_fn=None, ref: float | None = None,
-             ref_label: str = "") -> str:
+             ref_label: str = "", w: int = 640) -> str:
     """Barras por día con etiqueta debajo; label(r) devuelve el texto cuando no hay valor (p. ej. «desc.»)."""
     rows = [dict(r, date=_iso(r.get("date"))) for r in rows if _iso(r.get("date"))]
     if not rows:
         return '<p class="muted">Sin datos.</p>'
-    W, L, R, T, B = 640, 8, 40, 16, 34
+    W, L, R, T, B = w, 8, 40, 16, 34
     vals = [r[key] for r in rows if (_fnum(r.get(key)) or 0) > 0]
     hi = max(vals + ([ref] if ref else []) + [1])
     n = len(rows)
@@ -224,11 +224,11 @@ def range_bars(items: list[tuple[str, float | None, float | None, float | None]]
     return f'<div class="hbars">{rows}</div>'
 
 
-def bb_curve(values: list) -> str:
+def bb_curve(values: list, w: int = 640) -> str:
     pts = _bb_points(values)
     if len(pts) < 2:
         return '<p class="muted">Sin curva de Body Battery.</p>'
-    W, h, L, R, T, B = 640, 120, 30, 40, 10, 22
+    W, h, L, R, T, B = w, 120, 30, 40, 10, 22
     t0, t1 = pts[0][0], pts[-1][0]
     X = lambda t: L + (W - L - R) * ((t - t0) / max(1, t1 - t0))  # noqa: E731
     Y = lambda v: T + (h - T - B) * (1 - v / 100)  # noqa: E731
