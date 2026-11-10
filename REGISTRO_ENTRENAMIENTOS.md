@@ -40,7 +40,7 @@ Hoja de Google «RPE CrossFit - Registro», pestaña **`RPE`**, columnas A–H (
 - **RPE:** solo el que dice el atleta; si lo da por bloque, cada bloque con el suyo y en la columna D el del bloque principal. No estimar 1RM desde el RPE.
 - **Sesión sin puntuar:** si el atleta no quiere dar RPE (calentamiento, técnica o un bloque suave), la columna D queda vacía, `"rpe": null` en el JSON y las notas dicen «Sin RPE: sesión no puntuada por decisión del atleta». Nunca se pone 1 como marcador.
 - **Unilaterales:** confirmar con el atleta si la carga y las repeticiones son por pierna/brazo y si se hicieron ambos lados.
-- **Sensaciones diarias** (fatiga, agujetas, ánimo, estrés) no van a esta hoja: se registran en Intervals.icu (bienestar). La columna E es solo para lo previo a esa sesión.
+- **Sensaciones diarias** (cansancio, agujetas, estrés, ánimo) no van a esta hoja: se guardan con la encuesta de sensaciones en `sensaciones_registro.json` (ver abajo). La columna E es solo para lo previo a esa sesión.
 
 ## Detalle JSON (esquema v1)
 
@@ -74,7 +74,9 @@ Cuando el atleta diga que un día ha sido de descanso («hoy descanso»): añade
 
 ## Encuesta de sensaciones
 
-Cuando el atleta pida la encuesta («encuesta de sensaciones») o cuente cómo llega, pregúntale con opciones cerradas y guarda la respuesta en `sensaciones_registro.json` con `garmin_recovery.sensations.record(root, fecha, respuestas, time="HH:MM", note=...)`:
+**Cuándo:** cada vez que el atleta mande sus entrenamientos del día, si ese día aún no hay encuesta, envíale la encuesta en la misma respuesta en que empiezas a registrarlos (preguntas con opciones, no texto libre). También cuando la pida («encuesta de sensaciones») o cuente cómo llega. Una vez al día basta; en un día de descanso confirmado también se puede hacer.
+
+Pregúntale con opciones cerradas y guarda la respuesta en `sensaciones_registro.json` con `garmin_recovery.sensations.record(root, fecha, respuestas, time="HH:MM", note=...)`:
 
 | Pregunta | Clave | Opciones (nivel 0 → 3) |
 |---|---|---|
