@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 TITLE = "⚠️ Garmin Recovery: atención necesaria"
 TZ = ZoneInfo("Europe/Madrid")
 KEYS_RE = re.compile(r"<!-- garmin-keys:([^>]*) -->")
-SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:", "garmin", "garmin_token", "intervals"),
+SCOPES = {"chain": ("chain_failed", "validation", "stale", "missed:", "garmin", "garmin_token", "intervals", "sheet_dupes"),
           "watchdog": ("stale", "missed:", "garmin", "garmin_token", "intervals")}
 TOKEN_WARN_DAYS = 14
 
@@ -63,6 +63,14 @@ def problems(root: Path, now: datetime, scope: str = "chain", job_status: str = 
         if val.get("status") == "failed":
             out.append({"key": "validation", "text": "El informe de este ciclo **no se publicó** porque no pasó la validación; "
                         "sigue visible el anterior. Motivos: " + "; ".join(str(e) for e in (val.get("errors") or [])[:5])})
+    if scope == "chain" and ok_job:  # V8.15: la misma actividad apuntada dos veces en la hoja RPE
+        flags = ((_read(root / "crossfit_insights.json").get("data_quality") or {}).get("flags")) or []
+        for f in flags:
+            if isinstance(f, dict) and f.get("code") == "duplicate_sheet_ids" and f.get("ids"):
+                ids = [str(i) for i in f["ids"]][:10]
+                out.append({"key": "sheet_dupes", "text": "La hoja RPE tiene filas repetidas para la misma actividad: "
+                            + ", ".join(ids) + ". Revisa y borra la sobrante (si son tramos distintos, "
+                            "declara `segment` en el Detalle JSON de cada fila)."})
     data = _read(root / "app" / "readiness_v3.json")
     gen = _dt(data.get("generated_at"))
     if ok_job and (gen is None or now - gen > timedelta(hours=stale_hours)):

@@ -282,6 +282,7 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str, cu
     entries = entries or {}
     rpe_map = _rpe_by_activity(crossfit)
     metcons, other = [], []
+    details: dict[str, dict] = {}
     cx: dict[str, list] = {}
     for act in crossfit.get("activities") or []:
         if not isinstance(act, dict) or not act.get("date"):
@@ -291,10 +292,17 @@ def build(crossfit: dict | None, entries: dict[str, dict] | None, today: str, cu
             if not isinstance(d, dict):
                 continue
             if d.get("type") == "metcon":
-                metcons.append(metcon_card(act, block, curves))
+                card = metcon_card(act, block, curves)
+                card["key"] = f'{card["activity_id"]}#{len(metcons)}'
+                details[card["key"]] = d
+                metcons.append(card)
             elif complexes_of(d):
                 cx.setdefault(str(act.get("activity_id") or ""), []).extend(complexes_of(d))
     metcons.sort(key=lambda m: (m["date"], m["activity_id"]), reverse=True)
+    from .wod_compare import annotate  # V8.15: WODs parecidos y repetidos
+    annotate(metcons, details)
+    for m in metcons:
+        m.pop("key", None)
     t = _date.fromisoformat(today)
     last7 = (t - timedelta(days=6)).isoformat()
     fz = lift_sessions(entries, rpe_map, False, complexes=cx)

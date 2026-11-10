@@ -86,6 +86,12 @@ jobs:
       - name: Crear análisis profesional diario y semanal
         run: python -m garmin_recovery.sync_daily_analysis
 
+      # V8.15: deja constancia de que este Sync lo lanzó Apps Script con firma válida, para que el monitor no lo
+      # confunda con un lanzamiento sin firmar (la API de GitHub solo muestra «workflow_dispatch»).
+      - name: V8.15 - Anotar origen verificado del Sync
+        continue-on-error: true
+        run: python -m garmin_recovery.sync_origin_ledger --origin-file .garmin_origin_v291.json
+
       - name: Guardar datos de Intervals con reintentos
         shell: bash
         run: bash sync_publish.sh

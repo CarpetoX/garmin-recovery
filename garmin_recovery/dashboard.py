@@ -211,6 +211,23 @@ def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
             '* volumen mínimo: alguna serie sin carga.</p></section>')
 
 
+def _similar_html(m: dict) -> str:
+    """V8.15: WODs parecidos o repetidos, con su resultado y RPE tal como constan."""
+    sim = m.get("similar") or []
+    if not sim:
+        return ""
+    rows = ""
+    for o in sim:
+        tag = "Repetido" if o.get("repeat") else "Parecido"
+        bits = [b for b in (o.get("result"), " · ".join(o.get("timing") or [])) if b]
+        rows += (f'<li><span class="rx-chip">{tag}</span> <b>{_esc(_ddmm(o["date"]))}</b> · {_esc(o.get("format") or "")}'
+                 + (f' · RPE {_kg(o["rpe"])}' if isinstance(o.get("rpe"), (int, float)) else "")
+                 + (f'<br><span class="mc-sim-res">{_esc(" · ".join(bits))}</span>' if bits else "")
+                 + f'<br><span class="mc-sim-res">Comparten: {_esc(", ".join(o.get("shared") or []))}</span></li>')
+    return ('<div class="mc-sim"><p class="mc-cap">Para comparar</p><ul class="clean">' + rows + '</ul>'
+            '<p class="pg-note">Orientativo: formato, cargas y variantes cambian el esfuerzo.</p></div>')
+
+
 def _metcons_html(metcons: list[dict]) -> str:
     if not metcons:
         return '<section class="card"><h2>Metcons</h2><p class="h2sub">Aún no hay metcons registrados con detalle.</p></section>'
@@ -242,7 +259,7 @@ def _metcons_html(metcons: list[dict]) -> str:
                   + (f'<p class="mc-res">{_esc(m["result"])}</p>' if m["result"] else '<p class="mc-res none">Resultado no registrado</p>')
                   + (f'<p class="mc-tot">{_esc(" · ".join(m["totals"]))}</p>' if m.get("totals") else "")
                   + (f'<div class="chips">{times}</div>' if times else "") + rounds
-                  + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + _hr_slot(m.get("activity_id")) + "</article>")
+                  + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + _similar_html(m) + _hr_slot(m.get("activity_id")) + "</article>")
     return ('<section class="card"><h2>Metcons</h2><p class="h2sub">fórmula, resultado y tiempos tal como constan · el cronómetro oficial y el reloj se muestran por separado</p>'
             + chart + cards + '<p class="pg-note">Los metcons no son comparables entre sí salvo que repitan formato y ejercicios.</p></section>')
 
