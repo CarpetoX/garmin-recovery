@@ -397,6 +397,13 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
     except Exception as exc:  # noqa: BLE001 — bloque opcional
         optional_blocks.failed("session_effort", exc)
         effort = {}
+    try:  # V8.15: metcons parecidos o repetidos para comparar
+        from . import training_blocks as _tb
+        sim_by = {(m["activity_id"], m["title"]): m.get("similar") or []
+                  for m in _tb.build(cf, {}, today).get("metcons") or []}
+    except Exception as exc:  # noqa: BLE001 — bloque opcional
+        optional_blocks.failed("wod_compare", exc)
+        sim_by = {}
     shown = flagged = 0
     for a in cf.get("activities") or []:
         if not isinstance(a, dict) or (a.get("date") or "") < lo:
@@ -425,6 +432,14 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
             add(f"- {head}" + (" · " + " · ".join(x for x in bits if x) if any(bits) else ""))
             if b.get("notes"):
                 add(f"  {_clean(b['notes'])}")
+            if (b.get("detail_json") or {}).get("type") == "metcon":
+                from .training_blocks import clip as _clip
+                sims = sim_by.get((str(a.get("activity_id") or ""), _clip(b.get("activity"), 90))) or []
+                if sims:
+                    add("  Para comparar: " + "; ".join(
+                        f"{'repetido' if o.get('repeat') else 'parecido'} el {short_date(o['date'])} ({o.get('format') or 'metcon'}"
+                        + (f", RPE {n(o['rpe'], 1).replace(',0', '')}" if isinstance(o.get("rpe"), (int, float)) else "")
+                        + (f", {o['result']}" if o.get("result") else "") + ")" for o in sims) + ". Orientativo.")
             shown += 1
     if not shown:
         add("No hay sesiones con detalle registrado en los últimos 7 días.")
