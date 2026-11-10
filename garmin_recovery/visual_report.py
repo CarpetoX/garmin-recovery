@@ -456,7 +456,7 @@ def build(root: str | Path = ".") -> str:
 
     # ---------- turnos
     t = _date.fromisoformat(today)
-    hours = cal.get("shift_hours") or {}
+    hours = cal.get("shift_hours") if isinstance(cal.get("shift_hours"), dict) else {}
 
     def sh(d):
         code = _shift(cal, d.isoformat())
