@@ -9,7 +9,7 @@ Estas son las instrucciones que sigue la tarea programada «Informe Garmin Recov
 - La decisión del día es `app/readiness_v3.json → decision` (`zone`, `guidance`, `registry`, `divergence`): la más conservadora entre v2 oficial, híbrido y v3. Nunca uses `readiness.guidance` como decisión.
 - Si `readiness.state` es `pending` o el sueño no está confirmado (`morning_sleep_status.json`), dilo y no autorices intensidad alta.
 - La frescura se mide por las marcas de tiempo de las muestras, no por `generated_at`. Un día de FC parcial no es FC en reposo; un Body Battery con retraso no es una medición nueva.
-- No hay causalidad en las comparaciones; no presentes variaciones porcentuales entre semanas si la cobertura no está completa. Una sesión sin registro no demuestra un día de descanso.
+- No hay causalidad en las comparaciones; no presentes variaciones porcentuales entre semanas si la cobertura no está completa. Una sesión sin registro no demuestra un día de descanso; solo cuentan como descanso los días confirmados por el atleta (`app/readiness_v3.json → rest_days` y `trend_28d[].rest_confirmed`).
 - Si el informe tiene más de 90 minutos o la cadena falló (`report_ready.json`, `workflow_health.json`), empieza indicándolo.
 - No es un diagnóstico médico. La publicación del informe no prueba que se haya recibido una notificación.
 
@@ -27,6 +27,7 @@ Estas son las instrucciones que sigue la tarea programada «Informe Garmin Recov
 | FC diurna/nocturna y ventanas 3/7/28 d | `garmin_heart_rate.json` (`days`, `rolling`) |
 | Training Readiness y tiempo de recuperación Garmin | `garmin_extended.json` (`days → training_readiness`, `recovery_time`) |
 | Estrés y Body Battery | `garmin_stress.json`, `garmin_body_battery.json` |
+| Descansos confirmados por el atleta | `descansos_registro.json` (resumen en `app/readiness_v3.json → rest_days`) |
 | Entrenamientos, RPE, fuerza y WOD con detalle | `crossfit_insights.json` (`activities → manual_blocks → detail_json`, `weekly_report`, `muscle_load`, `training_extensions`) |
 | Turno de hoy y de mañana | `shift_calendar.json` (MT 08–22, TN 15–08) |
 
@@ -42,7 +43,7 @@ Título: **Garmin Recovery · <Cierre matinal | Informe de tarde | Cierre noctur
 2. **Recuperación fisiológica.** Tabla Hoy vs. referencia fusionada de 28 días (HRV, FC en reposo, FC nocturna, duración y puntuación del sueño) con una interpretación de 2 líneas. Tabla de modelos (v2, híbrido, v3 en pruebas, Garmin Training Readiness, tiempo de recuperación Garmin, índice personal experimental) con su papel; explica divergencias.
 3. **Sueño.** Episodio confirmado (inicio → fin), fases (profundo, REM, ligero y vigilia si constan; si no constan, no las calcules) y lectura breve. Sin siestas no confirmadas.
 4. **Frecuencia cardíaca y tendencias.** Tabla FC diurna/nocturna hoy, 3, 7 y 28 días (marca el día parcial). Cobertura histórica fusionada (HRV, sueño, puntuación, FC reposo, en días de 28). Estrés medio y máximo; Body Battery último valor con su hora y si tiene retraso.
-5. **Rendimiento CrossFit.** Última actividad registrada y huecos. Resumen de 7 días (sesiones, días con actividad, RPE medio, sesiones de RPE alto, minutos grabados, sRPE, TRIMP, carga, volumen mínimo verificado) y de 28 días. Gráfico de barras de texto con el sRPE diario de la semana (`—` sin registro). Cita el día de mayor carga.
+5. **Rendimiento CrossFit.** Última actividad registrada y huecos. Resumen de 7 días (sesiones, días con actividad, RPE medio, sesiones de RPE alto, minutos grabados, sRPE, TRIMP, carga, volumen mínimo verificado) y de 28 días. Gráfico de barras de texto con el sRPE diario de la semana (`descanso` si está confirmado, `—` sin registro). Indica cuántos descansos confirmados hay en 7 y 28 días. Cita el día de mayor carga.
 6. **Fuerza, halterofilia y metcons.** Por sesión de los últimos 7 días, con fecha, RPE y lo confirmado en `detail_json` (ejercicios, series, cargas); volumen de barra cuantificado; 1RM mínimo estimado solo si consta. Metcons: formato, RPE, resultado y tiempos tal cual constan; no atribuyas desgloses no confirmados y conserva la diferencia entre cronómetro oficial y reloj.
 7. **Balance y orientación.** Contexto laboral de hoy y de mañana, señales favorables y adversas, tres recomendaciones concretas según la hora y la decisión.
 
