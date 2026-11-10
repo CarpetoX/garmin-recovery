@@ -37,10 +37,46 @@ def test_missing_optional_files_still_render(tmp_path):
     (root / "crossfit_insights.json").unlink()
     (root / "shift_calendar.json").unlink()
     html = vr.build(root)
-    assert "Aún no hay sensaciones" in html and "libre" in html
+    assert "no has respondido la encuesta" in html and "libre" in html
 
 
 def test_helpers_are_safe():
     assert vr.num(None) == "—" and vr.num(float("nan")) == "—" and vr.num(1062.9) == "1.063" and vr.num(8.73, 1) == "8,7"
     assert "Sin datos" in vr.line_chart([], [("x", "X", "s1")]) and vr.bb_curve([]).startswith("<p")
     assert vr.ddmm("2026-11-10") == "mar 10 nov"
+
+
+def test_survey_section_and_bb_time(tmp_path):
+    from garmin_recovery import sensations as sn
+    root = _root(tmp_path)
+    sn.record(root, "2026-11-10", {"cansancio": "Cansado", "agujetas": "Moderadas", "estres": "Bajo", "animo": "Con muchas ganas"}, time="23:43")
+    (root / "garmin_body_battery.json").write_text(json.dumps({"days": {"2026-11-10": {
+        "charged": 56, "drained": 59, "endTimestampLocal": "2026-11-10T19:50:00.0",
+        "bodyBatteryValuesArray": [[1794265200000, 28], None, [1794335940000, 25, "x"], ["a", 3]]}}}), encoding="utf-8")
+    html = vr.build(root)
+    assert "Encuesta de hoy · 23:43" in html and "Moderadas" in html and "Con muchas ganas" in html and "Últimos 14 días" in html
+    assert "a las 19:39" in html  # hora de la última muestra en Madrid, no el fin del bloque
+
+
+def test_odd_values_do_not_crash(tmp_path):
+    root = _root(tmp_path)
+    rv3 = json.loads((root / "app" / "readiness_v3.json").read_text(encoding="utf-8"))
+    rv3["trend_28d"][0]["date"] = "2026-11-01T00:00"
+    rv3["trend_28d"][1]["srpe"] = -5
+    (root / "app" / "readiness_v3.json").write_text(json.dumps(rv3), encoding="utf-8")
+    (root / "shift_calendar.json").write_text(json.dumps({"days": {"2026-11-11": {"x": 1}}, "shift_hours": []}), encoding="utf-8")
+    (root / "recovery_assessment.json").write_text(json.dumps({"confidence": {"x": 1}}), encoding="utf-8")
+    assert "Turnos" in vr.build(root) and vr.num(-0.4) == "0"
+
+
+def test_sensations_record_rejects_unknown(tmp_path):
+    from garmin_recovery import sensations as sn
+    try:
+        sn.record(tmp_path, "2026-11-10", {"cansancio": "Reventado"})
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("debía rechazar una etiqueta desconocida")
+    sn.record(tmp_path, "2026-11-09", {"estres": "Alto"})
+    w = sn.window(sn.load(tmp_path), "2026-11-10", 3)
+    assert [r["estres"] for r in w] == [None, 2, None] and sn.by_date(sn.load(tmp_path), "2026-11-08") == {}

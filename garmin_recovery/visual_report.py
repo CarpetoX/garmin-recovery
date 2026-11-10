@@ -10,6 +10,9 @@ import html
 import json
 from datetime import date as _date, datetime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+TZ = ZoneInfo("Europe/Madrid")
 
 SLOTS = {"0830": "Cierre matinal", "1645": "Informe de tarde", "2245": "Cierre nocturno"}
 ZONE = {"green": ("verde", "ok"), "yellow": ("ámbar", "warn"), "red": ("rojo", "bad")}
@@ -45,6 +48,8 @@ def num(v, dec: int = 0) -> str:
     if not isinstance(v, (int, float)) or isinstance(v, bool) or v != v:
         return "—"
     s = f"{v:,.{dec}f}".replace(",", "§").replace(".", ",").replace("§", ".")
+    if s.lstrip("-").strip("0,.") == "":
+        s = s.lstrip("-")  # sin «-0»
     return s[:-2] if dec and s.endswith(",0") and dec == 1 else s
 
 
@@ -58,12 +63,37 @@ def ddmm(s) -> str:
 
 def hhmm(s) -> str:
     t = str(s or "")
-    return t[11:16] if len(t) >= 16 else "—"
+    return esc(t[11:16]) if len(t) >= 16 else "—"
 
 
 def zone_pill(zone, text=None) -> str:
     z = ZONE.get(zone or "", ("—", "na"))
     return f'<span class="pill {z[1]}">{esc(text or z[0])}</span>'
+
+
+def _iso(s) -> str | None:
+    """Fecha AAAA-MM-DD válida (acepta «2026-11-10T00:00»)."""
+    t = str(s or "")[:10]
+    try:
+        _date.fromisoformat(t)
+    except ValueError:
+        return None
+    return t
+
+
+def _ms_local(ms) -> datetime | None:
+    try:
+        return datetime.fromtimestamp(ms / 1000, tz=TZ)
+    except (TypeError, ValueError, OverflowError, OSError):
+        return None
+
+
+def _bb_points(values) -> list[tuple[float, float]]:
+    out = []
+    for e in values or []:
+        if isinstance(e, (list, tuple)) and len(e) >= 2 and _fnum(e[0]) is not None and _fnum(e[1]) is not None:
+            out.append((e[0], e[1]))
+    return out
 
 
 def _fnum(v):
@@ -108,6 +138,10 @@ def line_chart(rows: list[dict], series: list[tuple[str, str, str]], band: tuple
     lo, hi = min(vals), max(vals)
     pad = (hi - lo) * 0.12 or 1
     lo, hi = lo - pad, hi + pad
+    rows = [dict(r, date=_iso(r.get("date"))) for r in rows if _iso(r.get("date"))]
+    pts = [r for r in rows if any(_fnum(r.get(k)) is not None for k, _, _ in series)]
+    if len(pts) < 2:
+        return '<p class="muted">Sin datos suficientes.</p>'
     n = len(rows)
     X = lambda i: L + (W - L - R) * (i / max(1, n - 1))  # noqa: E731
     Y = lambda v: T + (h - T - B) * (1 - (v - lo) / (hi - lo))  # noqa: E731
@@ -146,10 +180,11 @@ def line_chart(rows: list[dict], series: list[tuple[str, str, str]], band: tuple
 def day_bars(rows: list[dict], key: str, h: int = 140, label=None, cls_fn=None, ref: float | None = None,
              ref_label: str = "") -> str:
     """Barras por día con etiqueta debajo; label(r) devuelve el texto cuando no hay valor (p. ej. «desc.»)."""
+    rows = [dict(r, date=_iso(r.get("date"))) for r in rows if _iso(r.get("date"))]
     if not rows:
         return '<p class="muted">Sin datos.</p>'
     W, L, R, T, B = 640, 8, 40, 16, 34
-    vals = [r[key] for r in rows if _fnum(r.get(key))]
+    vals = [r[key] for r in rows if (_fnum(r.get(key)) or 0) > 0]
     hi = max(vals + ([ref] if ref else []) + [1])
     n = len(rows)
     bw = (W - L - R) / n
@@ -162,7 +197,7 @@ def day_bars(rows: list[dict], key: str, h: int = 140, label=None, cls_fn=None, 
         x = L + i * bw
         v = _fnum(r.get(key))
         dd = _date.fromisoformat(r["date"])
-        if v:
+        if v and v > 0:
             bh = (h - T - B) * v / hi
             c = cls_fn(r) if cls_fn else "s1"
             g += (f'<rect class="bar {c}" x="{x + bw * 0.15:.1f}" y="{h - B - bh:.1f}" width="{bw * 0.7:.1f}" height="{bh:.1f}" rx="3"/>'
@@ -190,7 +225,7 @@ def range_bars(items: list[tuple[str, float | None, float | None, float | None]]
 
 
 def bb_curve(values: list) -> str:
-    pts = [(t, v) for t, v in (values or []) if _fnum(t) is not None and _fnum(v) is not None]
+    pts = _bb_points(values)
     if len(pts) < 2:
         return '<p class="muted">Sin curva de Body Battery.</p>'
     W, h, L, R, T, B = 640, 120, 30, 40, 10, 22
@@ -203,7 +238,8 @@ def bb_curve(values: list) -> str:
                 f'<text class="tick" x="{L - 6}" y="{Y(v) + 4:.1f}" text-anchor="end">{v}</text>' for v in (25, 50, 75))
     g += f'<polygon class="area" points="{area}"/><polyline class="ln s1" points="{line}"/>'
     for t, v in pts:
-        hh = datetime.fromtimestamp(t / 1000).strftime("%H:%M") if t > 1e11 else ""
+        dt = _ms_local(t) if t > 1e11 else None
+        hh = dt.strftime("%H:%M") if dt else ""
         g += f'<circle class="dot s1" cx="{X(t):.1f}" cy="{Y(v):.1f}" r="3"/>'
         if (t, v) in (pts[0], pts[-1]) or v == max(p[1] for p in pts):
             g += f'<text class="val" x="{X(t):.1f}" y="{Y(v) - 7:.1f}" text-anchor="middle">{v}</text>'
@@ -242,7 +278,8 @@ def _sensations(cf: dict, today: str, days: int = 28) -> list[dict]:
 
 
 def _shift(cal: dict, d: str) -> str | None:
-    return (cal.get("days") or {}).get(d) if isinstance(cal.get("days"), dict) else None
+    v = (cal.get("days") or {}).get(d) if isinstance(cal.get("days"), dict) else None
+    return v if isinstance(v, str) and v else None
 
 
 # ---------------------------------------------------------------- página
@@ -262,7 +299,7 @@ def build(root: str | Path = ".") -> str:
     cf, cal = _load(root, "crossfit_insights.json"), _load(root, "shift_calendar.json")
     dec = rv3.get("decision") or {}
     gd = dec.get("guidance") or {}
-    trend = [r for r in rv3.get("trend_28d") or [] if isinstance(r, dict) and r.get("date")]
+    trend = [dict(r, date=_iso(r.get("date"))) for r in rv3.get("trend_28d") or [] if isinstance(r, dict) and _iso(r.get("date"))]
     tday = next((r for r in trend if r["date"] == today), {})
     cur, base = ra.get("current") or {}, ra.get("baseline_28d") or {}
     hyb, pri = aa.get("readiness_hybrid") or {}, aa.get("personal_recovery_index") or {}
@@ -295,7 +332,7 @@ def build(root: str | Path = ".") -> str:
     # ---------- tiles
     hrv, hrv_med = _fnum(cur.get("hrv_ms")), _fnum((base.get("hrv_ms") or {}).get("median"))
     tiles = [
-        ("Recuperación oficial", f'{num(tday.get("v2_score"))}<small>/100</small>', f'confianza {esc({"high": "alta", "medium": "media", "low": "baja"}.get(ra.get("confidence"), ra.get("confidence") or "—"))}'),
+        ("Recuperación oficial", f'{num(tday.get("v2_score"))}<small>/100</small>', f'confianza {esc({"high": "alta", "medium": "media", "low": "baja"}.get(str(ra.get("confidence")), ra.get("confidence") if isinstance(ra.get("confidence"), str) else "—"))}'),
         ("Híbrido Garmin + local", f'{num(hyb.get("score"))}<small>/100</small>', f'Garmin {num(hyb.get("garmin_score"))} · local {num(hyb.get("local_score"))}'),
         ("Sueño", f'{num(cur.get("sleep_hours"), 1)}<small> h</small>', f'puntuación {num(cur.get("sleep_score"))} · mediana {num((base.get("sleep_hours") or {}).get("median"), 1)} h'),
         ("HRV", f'{num(hrv)}<small> ms</small>', f'mediana 28 d {num(hrv_med)} ms'),
@@ -343,11 +380,13 @@ def build(root: str | Path = ".") -> str:
 
     # ---------- estrés y body battery
     vals = bb.get("bodyBatteryValuesArray") or []
-    last_bb = vals[-1][1] if vals and isinstance(vals[-1], list) and len(vals[-1]) > 1 else None
+    bbp = _bb_points(vals)
+    last_bb = bbp[-1][1] if bbp else None
+    last_dt = _ms_local(bbp[-1][0]) if bbp else None
     bb_card = ('<section class="card"><h2>Estrés y Body Battery</h2>'
                f'<div class="kv"><span>Estrés medio <b>{num(st.get("avgStressLevel"))}</b></span><span>máximo <b>{num(st.get("maxStressLevel"))}</b></span>'
                f'<span>Body Battery +{num(bb.get("charged"))} / −{num(bb.get("drained"))}</span>'
-               f'<span>último <b>{num(last_bb)}</b> a las {hhmm(bb.get("endTimestampLocal"))}</span></div>'
+               f'<span>último <b>{num(last_bb)}</b> a las {last_dt.strftime("%H:%M") if last_dt else "—"}</span></div>'
                + bb_curve(vals) + '<p class="muted">Última medición sincronizada, no una lectura en directo.</p></section>')
 
     # ---------- carga
@@ -382,16 +421,37 @@ def build(root: str | Path = ".") -> str:
                   f'<p class="sub">{len(sess)} sesiones · {num(sum(s.get("duration_min") or 0 for s in sess), 1)} min grabados · toca una sesión para ver el detalle</p>'
                   + (srows or '<p class="muted">Sin sesiones registradas hoy.</p>') + "</section>")
 
-    # ---------- sensaciones
+    # ---------- sensaciones: encuesta diaria + lo dictado con cada sesión
+    from . import sensations as _sn
+    survey = _sn.load(root)
+    win = _sn.window(survey, today, 14)
+    todays = _sn.by_date(survey, today).get(today)
+    lvl_cls = ["l0", "l1", "l2", "l3"]
+    if todays:
+        chips = "".join(
+            f'<div class="sv"><span class="sv-q">{esc(name)}</span><span class="sv-a {lvl_cls[_sn.level(todays, k)] if _sn.level(todays, k) is not None else "na"}">'
+            f'{esc(labels[_sn.level(todays, k)] if _sn.level(todays, k) is not None else "—")}</span></div>' for k, name, labels in _sn.ITEMS)
+        survey_html = (f'<p class="sub">Encuesta de hoy{(" · " + esc(todays.get("time"))) if todays.get("time") else ""}</p>'
+                       f'<div class="svs">{chips}</div>' + (f'<p class="sens">💬 {esc(todays.get("note"))}</p>' if todays.get("note") else ""))
+    else:
+        survey_html = ('<p class="hint">Hoy no has respondido la encuesta. Pídemela en el chat («encuesta de sensaciones») '
+                       'o dime cómo llegas al dictar el entreno.</p>')
+    grid = ""
+    if any(r[k] is not None for r in win for k, _, _ in _sn.ITEMS):
+        head_row = "".join(f'<span class="mx-d">{DIA[_date.fromisoformat(r["date"]).weekday()][0]}<br>{_date.fromisoformat(r["date"]).day}</span>' for r in win)
+        rows_m = "".join(f'<span class="mx-q">{esc(name)}</span>' + "".join(
+            f'<span class="mx-c {lvl_cls[r[k]] if r[k] is not None else "na"}" title="{esc(labels[r[k]] if r[k] is not None else "sin encuesta")}"></span>'
+            for r in win) for k, name, labels in _sn.ITEMS)
+        grid = ('<h3>Últimos 14 días</h3><div class="mx" style="grid-template-columns:5.5em repeat(14,1fr)"><span></span>'
+                + head_row + rows_m + '</div><div class="legend"><span><i class="sw l0"></i>bien</span><span><i class="sw l1"></i>leve</span>'
+                '<span><i class="sw l2"></i>moderado</span><span><i class="sw l3"></i>alto</span><span><i class="sw na"></i>sin encuesta</span></div>')
     sens = _sensations(cf, today)
-    today_sens = [x for x in sens if x["date"] == today]
     sens_rows = "".join(f'<li><span class="s-d">{ddmm(x["date"])}</span><span>{esc(x["text"])}'
                         f'<small>{esc(x.get("activity") or "")}{(" · RPE " + num(x["rpe"], 1)) if _fnum(x.get("rpe")) is not None else ""}</small></span></li>'
-                        for x in sens[:10])
-    sens_card = ('<section class="card"><h2>Sensaciones</h2><p class="sub">cómo llegabas a entrenar, tal como lo dictaste · 28 días</p>'
-                 + ("" if today_sens else '<p class="hint">Hoy no hay sensaciones apuntadas. Cuando me dictes el entreno, dime también cómo llegas '
-                    '(cansancio, agujetas, sueño, ánimo, estrés) y lo guardo con la sesión.</p>')
-                 + (f'<ul class="sens-l">{sens_rows}</ul>' if sens_rows else '<p class="muted">Aún no hay sensaciones registradas en los últimos 28 días.</p>')
+                        for x in sens[:8])
+    sens_card = ('<section class="card"><h2>Sensaciones</h2><p class="sub">lo que tú dices, sin modelos · no entra en la puntuación de recuperación</p>'
+                 + survey_html + grid
+                 + (f'<h3>Dictadas con el entreno · 28 días</h3><ul class="sens-l">{sens_rows}</ul>' if sens_rows else "")
                  + "</section>")
 
     # ---------- turnos
@@ -402,7 +462,7 @@ def build(root: str | Path = ".") -> str:
         code = _shift(cal, d.isoformat())
         if not code:
             return '<span class="chip">libre</span>'
-        hh = hours.get(code) or {}
+        hh = hours.get(code) if isinstance(hours.get(code), dict) else {}
         return f'<span class="chip strong">{esc(code)} {esc(hh.get("start", ""))}–{esc(hh.get("end", ""))}</span>'
     shifts = ('<section class="card"><h2>Turnos</h2><div class="shifts">'
               + "".join(f'<div><span class="s-d">{lbl}</span>{sh(t + timedelta(days=i))}<small>{ddmm((t + timedelta(days=i)).isoformat())}</small></div>'
@@ -471,6 +531,12 @@ i.ok{background:var(--ok)}i.warn{background:var(--warn)}i.bad{background:var(--b
 .sens{color:var(--text)!important}.hint{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:13px;margin:0 0 10px}
 .sens-l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}.sens-l li{display:grid;grid-template-columns:6.5em 1fr;gap:8px;font-size:13px}
 .sens-l small{display:block;color:var(--text-3);font-size:12px}.s-d{color:var(--text-2);font-size:12px;text-transform:capitalize}
+.svs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.sv{display:flex;flex-direction:column;gap:2px;background:var(--surface-2);border-radius:10px;padding:8px 10px}
+.sv-q{font-size:12px;color:var(--text-2)}.sv-a{font-weight:700;font-size:14px}.sv-a.l0{color:var(--ok)}.sv-a.l1{color:var(--s1)}.sv-a.l2{color:var(--warn)}.sv-a.l3{color:var(--bad)}
+.mx{display:grid;gap:3px;align-items:center;font-size:11px}.mx-d{text-align:center;color:var(--text-3);line-height:1.1;text-transform:capitalize}.mx-q{color:var(--text-2);font-size:12px}
+.mx-c{display:block;height:16px;border-radius:4px}.l0{background:var(--ok)}.l1{background:var(--light)}.l2{background:var(--warn)}.l3{background:var(--bad)}
+.mx-c.na,.sw.na{background:var(--surface-2);border:1px dashed var(--line)}
+.sv-a.l0,.sv-a.l1,.sv-a.l2,.sv-a.l3{background:none}
 .shifts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.shifts>div{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.shifts small{color:var(--text-3);font-size:11px}
 .trace{font-size:12px;color:var(--text-3);padding:4px 2px}.trace a{color:var(--s1)}.trace p{margin:2px 0}
 @media (max-width:480px){.hb{grid-template-columns:7em 1fr 2.4em}.hb-sub{margin-left:7.6em}.s-b{padding-left:0}h1{font-size:24px}}

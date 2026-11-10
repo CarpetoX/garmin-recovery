@@ -799,12 +799,12 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
         week = ("<table><thead><tr><th></th><th class='num'>Esta semana</th><th class='num'>Semana previa</th></tr></thead><tbody>"
                 + "".join(f"<tr><td>{_esc(n)}</td><td class='num'>{f(a, d)}</td><td class='num'>{f(b, d)}</td></tr>"
                           for n, a, b, d in rows) + "</tbody></table>")
-    full_html = (('<a class="cta" href="informe_visual.html"><span class="cta-ico">📊</span>'
-                  '<span><strong>Abrir el informe visual</strong><small>decisión, gráficas, entrenos y sensaciones del ciclo</small></span>'
-                  '<span class="cta-go" aria-hidden="true">›</span></a>'
-                  '<a class="cta" href="informe_completo.html"><span class="cta-ico">📄</span>'
+    full_html = ((('<a class="cta" href="informe_visual.html"><span class="cta-ico">📊</span>'
+                   '<span><strong>Abrir el informe visual</strong><small>decisión, gráficas, entrenos y sensaciones del ciclo</small></span>'
+                   '<span class="cta-go" aria-hidden="true">›</span></a>') if extras.get("visual_report") else "")
+                 + '<a class="cta" href="informe_completo.html"><span class="cta-ico">📄</span>'
                   '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
-                  '<span class="cta-go" aria-hidden="true">›</span></a>') if extras.get("full_report") else "")
+                 '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     from .brief import official_change
     ch = extras.get("changes") or {}
     # V8.10: la recuperación oficial se compara con el mismo día que el resto de tarjetas (p. ej. el último sueño tras TN)
