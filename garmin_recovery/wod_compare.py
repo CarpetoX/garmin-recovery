@@ -116,10 +116,12 @@ def annotate(metcons: list[dict], details: dict[str, dict], limit: int = 3) -> l
             rep = is_repeat(sigs[i], sigs[j])
             s = 1.0 if rep else similarity(sigs[i], sigs[j])
             if s >= 0.5:
-                shared = sorted(set(sigs[i]["families"]) & set(sigs[j]["families"]))
+                fi, fj = set(sigs[i]["families"]), set(sigs[j]["families"])
+                shared = sorted(fi & fj)
                 cands.append({"date": o["date"], "activity_id": o.get("activity_id"), "format": o.get("format"),
                               "title": o.get("title"), "result": o.get("result"), "rpe": o.get("rpe"),
-                              "timing": o.get("timing") or [], "shared": shared, "score": round(s, 2), "repeat": rep})
+                              "timing": o.get("timing") or [], "shared": shared, "only_this": sorted(fi - fj),
+                              "only_other": sorted(fj - fi), "score": round(s, 2), "repeat": rep})
         cands.sort(key=lambda c: (c["repeat"], c["score"], c["date"]), reverse=True)
         m["similar"] = cands[:limit]
         m["repeat_of"] = [c["date"] for c in cands if c["repeat"]]

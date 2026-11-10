@@ -29,6 +29,7 @@ def test_annotate_marks_similar_and_repeat():
     a = cards[0]
     assert a["similar"][0]["activity_id"] == "d" and a["similar"][0]["repeat"] is True
     assert a["similar"][1]["activity_id"] == "b" and a["similar"][1]["shared"] == ["dominadas", "snatch"]
+    assert a["similar"][1]["only_other"] == ["wall ball"] and a["similar"][1]["only_this"] == []
     assert a["repeat_of"] == ["2026-11-20"] and cards[2]["similar"] == []
 
 
