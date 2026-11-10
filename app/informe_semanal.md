@@ -1,10 +1,10 @@
 # Resumen semanal · 04/11–10/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-10-1333-b440ba`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-10-1335-e46623`)._
 
 ## En una frase
 
-- 11 sesiones (−3); HRV de 7 días dentro de tu rango normal; 1 de 7 noches con datos por debajo de 7,5 h de sueño; 1 de 3 días comprobados por encima del RPE máximo.
+- 11 sesiones (−3); HRV de 7 días dentro de tu rango normal; 1 de 7 noches con datos por debajo de 7,5 h de sueño; 1 de 4 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: verde 2 · ámbar 1 · rojo 4.
 
 ## Gráficas de la semana
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 11 | 14 |
 | Minutos | 435 | 406 |
 | Carga (Intervals) | 209 | 249 |
-| sRPE (RPE × min) | 1238 | 1478 |
+| sRPE (RPE × min) | 1812 | 1478 |
 
-Monotonía — · strain — · ACWR 0,91 · RPE registrado en 5/11 sesiones.
+Monotonía 1,02 · strain 1857 · ACWR 1,20 · RPE registrado en 7/11 sesiones.
 
 **Días por encima del RPE máximo de la decisión:** 04/11 (RPE 6,5 > 4).
 
@@ -61,6 +61,8 @@ HRV de 7 días hoy: 51,1 ms (rango normal 50,3–60,1 ms). Turnos: MT, TN.
 | 07/11 | curl femoral tumbado | 67,0 kg | — | — | 4/4 |
 | 07/11 | curl femoral de pie unilateral | 35,0 kg | — | — | 8/8 |
 | 09/11 | power snatch | 60,0 kg | 60 × 5 | 70,0 kg | 5/5 |
+| 10/11 | sentadilla trasera | 140,0 kg | 140 × 6 | 168,0 kg | 7/7 |
+| 10/11 | peso muerto piernas rígidas con mancuernas | 65,0 kg | — | — | 4/4 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
@@ -93,10 +95,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 5/11.
+- Sesiones con RPE: 7/11.
 
 ## Validación de modelos
 
-Acumulando datos: 11/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 12/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._
