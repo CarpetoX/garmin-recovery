@@ -252,3 +252,38 @@ Las gráficas de series temporales (`chart()` en `dashboard.py`) dibujan una fra
 ## V7.23 — CSS y JS de la web en archivos propios
 
 El estilo y el script del panel viven en `garmin_recovery/web/dashboard.css` y `garmin_recovery/web/dashboard.js`. `dashboard.py` los incrusta al importar (`TEMPLATE`), así que la web sigue siendo un único HTML sin red y el resultado es idéntico al anterior (comprobado byte a byte con `build_site`). La CI revisa la sintaxis del JS con `node --check`. No usar marcadores `{{…}}` dentro de esos archivos.
+
+## V8.4 — Ahorro de minutos de Actions
+
+Medido el 26/10/2026: ~4.250 min/mes, sobre todo porque tras el sueño hay ~10 cadenas al día en vez de 3 y cada una lanzaba monitor, web y rutina de Claude. Ahora `garmin_recovery.publish_gate` (paso «Control de publicación» de CrossFit, antes del commit) compara la huella de lo visible (decisión, puntuación, estado del sueño, ciclo, sesiones de 3 días con su RPE) con la última publicación (`publish_gate.json`): si no cambió nada y no hay certificado nuevo, no se dispara el monitor (ni la web que cuelga de él) ni la rutina. Falla abierto. Pages cancela la publicación en curso si llega otra (`cancel-in-progress: true`). Los vigías del monitor (3 cron al día) siguen igual.
+
+## V8.6 — Sync de respaldo del cron y motivos del certificador
+
+- El cron «30 8» de GitHub llega cada día entre las 12:20 y las 15:30. Si el ciclo de las 08:30 de hoy ya está en `report_cycles.json`, `garmin_recovery.sync_guard` lo detecta y el Sync se cancela a sí mismo (aparece como «cancelled» con la anotación «Sync de respaldo innecesario»); la cadena no arranca porque Heart solo sigue a un Sync con éxito. Si el ciclo no consta (Apps Script caído), el respaldo sincroniza como siempre.
+- El certificador deja el motivo de un «NOT READY» o de una excepción como anotación de GitHub (`Certificado no emitido`, `Certificador: excepción`), legible por la API sin descargar los logs.
+
+## V8.7 — Sesiones enteras, complex y cifras únicas
+
+- **Tipo de sesión, una sola regla** (`garmin_recovery.session_kind`, usada por los informes, la app y el esfuerzo relativo): manda el prefijo del nombre de la hoja. Un WOD o metcon es WOD aunque lleve hang clean o squat snatch; «Calentamiento - WOD…» es Calentamiento (categoría nueva); una sesión de halterofilia va entera a Halterofilia, también su front squat; «Fuerza - Squat snatch» es halterofilia; el resto de «Fuerza - …», fuerza.
+- **Entrenos no parte sesiones:** Fuerza y Halterofilia (tarjetas, recuentos de 7 días y volumen semanal) se deciden por sesión. Si el detalle trae `complexes`, la tarjeta los muestra como se entrenaron (repeticiones por serie, intervalo y cargas) y el desglose por movimiento queda plegado.
+- **Metcons:** EMOM/E3MO3M por rondas muestran «8 de 8 rondas completas»; un AMRAP con distancia y repeticiones extra, las dos («6 rondas + 200 m + 10 reps»); los totales declarados salen en una línea.
+- **Web:** un despliegue de Pages cancelado porque llegó otro más nuevo ya no cuenta como fallo del ciclo (`cycle_delivery.find_pages_run`).
+- **Cifras iguales en todas partes:** la HRV de 7 días del análisis de mejora usa la media de ln(rMSSD) y la base de la puntuación; el informe completo toma la monotonía y el strain de `readiness_v3.json`; la barra vacía de calentamiento no suma volumen en ningún sitio; la tabla de patrones cuenta las series declaradas (también las de peso corporal) y reconoce tirones, bíceps, aperturas y levantamientos olímpicos.
+- **Textos:** el informe completo dice cuándo incluye datos de un Sync posterior al ciclo; en los meses confirmados un día sin turno es «libre» y el plan va en español; los nombres largos se recortan con «…» en una palabra.
+
+## V8.8 — Carrera aparte, con todos los datos de Garmin
+
+- **Tipo «Carrera»** (`session_kind`): «Carrera - 8 km» o una actividad de carrera sin fila en la hoja. Un WOD con carrera sigue siendo WOD.
+- **Historial propio** (`running_history.json`, paso `garmin_recovery.garmin_runs` en la cadena Heart Rate): carreras de 120 días desde Garmin Connect con distancia, tiempos, velocidad y ritmo ajustado a pendiente, FC y zonas, cadencia, zancada, oscilación y ratio vertical, contacto con el suelo, desnivel, potencia, calorías, efecto de entrenamiento, carga, VO2max y km/5 km más rápidos, más los parciales por km (una llamada por carrera nueva, máx. 6 por ejecución). Se conserva entre ejecuciones, porque Intervals solo tiene actividades desde el 6/10/2026. Nunca rompe la cadena.
+- **`running.py`** une Garmin e Intervals por el ID de Garmin (Garmin manda; Intervals añade carga, TRIMP y desacople) y calcula ritmo, metros por latido (m/min ÷ FC) y desacople aeróbico por parciales. Compara cada carrera con la anterior de distancia parecida (±25 %, desde 3 km). Descarta fragmentos de menos de 1 km.
+- **App:** pestaña «Carrera» en Entrenos (tabla comparativa, ficha por carrera con parciales plegados y curva de FC) y recuento en «Últimos 7 días»; las carreras salen de «Técnica y otras». **Informe completo:** apartado «Carrera» al final de la sección 5.
+- En el móvil, las seis pestañas de Entrenos ocupan dos filas.
+
+## V8.9 — Salvaguarda del híbrido y copias ligeras del registro
+
+- **Híbrido:** `reliability.patch_hybrid` recalculaba la puntuación desde la cifra anterior a los topes de Garmin, así que «Garmin < 35 fuerza rojo» no se cumplía (2/11: Garmin 15 → híbrido 49 rojo → volvía a 61 ámbar; también 31/10 y 1/11). Ahora parte de la puntuación ya limitada (≤ 49 si Garmin < 35; ≤ 74 si Garmin < 50 o recuperación ≥ 24 h).
+- **Registro de ciclos legible por cualquier herramienta:** `report_cycles.json` sigue siendo el original completo y sin pérdidas (V2.8), pero pasa de 4 MB y la API de GitHub entrega vacío cualquier archivo de más de 1 MB. `garmin_recovery.ledger_light` (paso de CrossFit, no bloqueante, solo lectura) escribe `report_cycles_recent.json` (ciclos de las últimas 72 h completos, con instantánea y huella, < 0,9 MB) y `report_cycles_index.json` (todos los ciclos sin instantánea). Verifica cada huella antes de copiar; si una falla, no escribe nada. Copia por días: rama `garmin-v296-shadow`, `mirror/archive/shards/AAAA-MM-DD/0001.json`.
+
+## V8.10 — «Cambios recientes» tras un turno de noche
+
+Antes, si el sueño de hoy era de día (después de un TN), el bloque «Cambios recientes» desaparecía con un motivo engañoso («el día anterior no tiene una medición completa»). Ahora `why_changed` compara sueño con sueño del mismo tipo: un sueño de día tras TN con el último sueño de día tras TN de las tres últimas semanas, y una noche normal con la última noche normal aunque ayer durmieras de día. La tarjeta y el informe completo dicen con qué fecha se compara. La recuperación oficial se compara con ese mismo día.

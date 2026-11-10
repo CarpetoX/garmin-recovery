@@ -12,7 +12,8 @@ LABELS = {"squat": "Sentadilla", "hinge": "Bisagra de cadera", "push": "Empuje",
           "chest_isolation": "Pecho (aislamiento)", "triceps_isolation": "Tríceps (aislamiento)",
           "biceps_isolation": "Bíceps (aislamiento)", "knee_flexion": "Flexión de rodilla",
           "knee_extension": "Extensión de rodilla", "lunge": "Zancada",
-          "carry": "Acarreo", "core": "Core", "olympic": "Halterofilia", "sin_clasificar": "Sin clasificar"}
+          "carry": "Acarreo", "core": "Core", "olympic": "Halterofilia", "olympic_lift": "Halterofilia",
+          "single_leg": "Unilateral de pierna", "other": "Otros", "sin_clasificar": "Sin clasificar"}
 
 
 def _n(v):
@@ -42,7 +43,8 @@ def compute(rows, today: str) -> dict:
                                 {"blocks": 0, "sets": 0, "sets_unknown": 0, "bar_kg": 0.0, "bar_partial": False, "days": set()})
             p["blocks"] += 1
             p["days"].add(r["date"])
-            ks = r.get("known_sets")
+            # V8.7: series declaradas (también las de peso corporal: 4 × 25 sit-ups son 4 series), no solo las que llevan kilos
+            ks = r.get("total_sets") if type(r.get("total_sets")) is int else r.get("known_sets")
             if type(ks) is int and ks >= 0:
                 p["sets"] += ks
             else:

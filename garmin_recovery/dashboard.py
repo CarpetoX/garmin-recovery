@@ -100,7 +100,7 @@ def _progression_html(prog: dict | None, kind: str | None = None) -> str:
     stats = ""
     if summ.get("available"):
         stats = (f'<p class="pg-sum"><b>{summ["up"]}</b> ▲ suben · <b>{summ["flat"]}</b> = igual · <b>{summ["down"]}</b> ▼ bajan'
-                 f'<small>mejor carga frente a la sesión anterior, {summ["comparable"]} ejercicios repetidos</small></p>')
+                 f'<small>mejor carga frente a la sesión anterior, {summ["comparable"]} ejercicios repetidos' + (f' de {kind}' if kind else '') + '</small></p>')
     else:
         stats = '<p class="pg-sum"><small>Aún no hay ningún ejercicio repetido en dos sesiones con cargas registradas.</small></p>'
     once_html = ""
@@ -169,6 +169,11 @@ def _hr_slot(activity_id) -> str:
     return f'<div class="hrmini" data-id="{_esc(activity_id)}" hidden></div>' if activity_id else ""
 
 
+def _thou(v) -> str:
+    """Miles con punto, como en el informe («2.529»); antes la app escribía «2529»."""
+    return f"{round(v):,}".replace(",", ".")
+
+
 def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
     if not sessions:
         return f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">{_esc(empty)}</p></section>'
@@ -177,13 +182,30 @@ def _lifts_html(sessions: list[dict], title: str, empty: str) -> str:
         rows = ""
         for e in s["exercises"]:
             name = e["name"][:1].upper() + e["name"][1:]
-            vol = (f'{_kg(round(e["volume"]))} kg' + ("" if e["volume_complete"] else "*")) if e["unit"] == "barra" else ""
+            vol = (f'{_thou(e["volume"])} kg' + ("" if e["volume_complete"] else "*")) if e["unit"] == "barra" else ""
             rows += (f'<li><div class="lf-top"><span class="lf-name">{_esc(name)}<small>{_esc(e["unit"])}</small></span>'
                      f'<span class="lf-best">{_kg(e["top_load"])} kg<small>× {_kg(e["top_reps"])}</small></span></div>'
                      f'<p class="lf-sets">{_esc(e["sets"])}</p>'
                      f'<p class="lf-meta">{e["work_sets"]} series' + (f' · volumen {vol}' if vol else "") + "</p></li>")
+        body = f'<ul class="clean">{rows}</ul>'
+        if s.get("complexes"):
+            # V8.7: la sesión se ve como se entrenó (complex con sus cargas); el desglose por movimiento queda plegado
+            cx = ""
+            for c in s["complexes"]:
+                small = " · ".join(x for x in (c.get("scheme") and f'{c["scheme"]} por serie', c.get("interval")) if x)
+                loads = " · ".join(_kg(v) for v in c["loads"])
+                cx += (f'<li class="lf-cx{" appr" if c["approach"] else ""}"><div class="lf-top"><span class="lf-name">{_esc(c["name"])}'
+                       f'<small>{_esc(small)}</small></span>'
+                       + (f'<span class="lf-best">{_kg(c["top"])} kg<small>{c["sets"]} series</small></span>' if c.get("top") is not None else "")
+                       + f'</div><p class="lf-sets">{_esc(loads)} kg</p></li>')
+            n_sets = sum(c["sets"] or 0 for c in s["complexes"])
+            meta = [f"{n_sets} series de complex", f'{_kg(s["total_reps"])} repeticiones']
+            if s.get("bar_volume") is not None:
+                meta.append(f'volumen {_thou(s["bar_volume"])} kg de barra' + ("" if s.get("bar_volume_complete") else "*"))
+            body = (f'<ul class="clean">{cx}</ul><p class="lf-meta lf-tot">{_esc(" · ".join(meta))}</p>'
+                    f'<details class="lf-ex"><summary>Por movimiento ({len(s["exercises"])})</summary>{body}</details>')
         cards += (f'<article class="lf"><header><b>{_day_name(s["date"])}</b>{_rpe_pill(s["rpe"])}</header>'
-                  f'<p class="lf-title">{_esc(s["title"])}</p><ul class="clean">{rows}</ul>{_hr_slot(s.get("activity_id"))}</article>')
+                  f'<p class="lf-title">{_esc(s["title"])}</p>{body}{_hr_slot(s.get("activity_id"))}</article>')
     return (f'<section class="card"><h2>{_esc(title)}</h2><p class="h2sub">series como repeticiones @ kg · «3× 8 @ 60» = tres series · mejor serie a la derecha</p>{cards}'
             '<p class="pg-note">Solo se muestra lo confirmado en el registro de cada sesión; las barras vacías de calentamiento no cuentan. '
             '* volumen mínimo: alguna serie sin carga.</p></section>')
@@ -203,10 +225,11 @@ def _metcons_html(metcons: list[dict]) -> str:
         presc = "".join(f"<li>{_esc(x)}</li>" for x in m["prescription"])
         times = "".join(f'<span class="rx-chip">{_esc(t)}</span>' for t in m["timing"])
         if m["minutes"] is not None:
-            times += f'<span class="rx-chip">{_kg(m["minutes"])} min grabados</span>'
+            times += f'<span class="rx-chip">{_kg(round(m["minutes"], 1))} min {"del tramo" if m.get("segment") else "grabados"}</span>'
         hr = m.get("hr") or {}
         if hr.get("average") and hr.get("max"):
-            times += f'<span class="rx-chip hrchip">FC {_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>'
+            times += (f'<span class="rx-chip hrchip">FC {"del tramo " if m.get("segment") else ""}'
+                      f'{_kg(round(hr["average"]))} / {_kg(round(hr["max"]))} lpm</span>')
         rounds = ""
         if m["rounds"]:
             vals = m["rounds"]["values"]
@@ -217,10 +240,79 @@ def _metcons_html(metcons: list[dict]) -> str:
                   + f'</span><span class="mc-date">{_day_name(m["date"])}</span>{_rpe_pill(m["rpe"])}</header>'
                   + (f'<ul class="mc-presc clean">{presc}</ul>' if presc else "")
                   + (f'<p class="mc-res">{_esc(m["result"])}</p>' if m["result"] else '<p class="mc-res none">Resultado no registrado</p>')
+                  + (f'<p class="mc-tot">{_esc(" · ".join(m["totals"]))}</p>' if m.get("totals") else "")
                   + (f'<div class="chips">{times}</div>' if times else "") + rounds
                   + (f'<p class="pg-note">{_esc(m["note"])}</p>' if m["note"] else "") + _hr_slot(m.get("activity_id")) + "</article>")
     return ('<section class="card"><h2>Metcons</h2><p class="h2sub">fórmula, resultado y tiempos tal como constan · el cronómetro oficial y el reloj se muestran por separado</p>'
             + chart + cards + '<p class="pg-note">Los metcons no son comparables entre sí salvo que repitan formato y ejercicios.</p></section>')
+
+
+def _runs_html(run: dict | None) -> str:
+    """V8.8: carreras con todos los datos de Garmin e Intervals, tabla para compararlas y parciales por km."""
+    from .running import pace_text, duration_text
+    runs = (run or {}).get("runs") or []
+    if not runs:
+        return ('<section class="card"><h2>Carrera</h2><p class="h2sub">Aún no hay carreras registradas. Aparecerán con '
+                'todos los datos de Garmin (ritmo, cadencia, zancada, desnivel, parciales por km).</p></section>')
+
+    def num(v, d=0, unit=""):
+        if v is None:
+            return "—"
+        return (f"{v:.{d}f}".replace(".", ",") if d else f"{round(v):d}") + unit
+    summ = run.get("summary") or {}
+    rows = "".join(
+        f'<tr><td>{_ddmm(r["date"])}</td><td class="num">{num(r.get("distance_km"), 2)}</td>'
+        f'<td class="num">{pace_text(r.get("pace_s_km"))}</td><td class="num">{num(r.get("avg_hr"))}</td>'
+        f'<td class="num">{num(r.get("m_per_beat"), 2)}</td>'
+        f'<td class="num">{_kg(r["rpe"]) if isinstance(r.get("rpe"), (int, float)) else "—"}</td></tr>' for r in runs)
+    head = (f'<section class="card"><h2>Carrera</h2><p class="h2sub">{summ.get("count", 0)} carreras · {num(summ.get("km"), 1)} km '
+            f'desde el {_ddmm(summ["since"])} · datos de Garmin e Intervals</p>' if summ.get("since") else '<section class="card"><h2>Carrera</h2>')
+    head += ('<div class="scroll"><table class="rn-tab"><thead><tr><th>Fecha</th><th class="num">km</th>'
+             '<th class="num">Ritmo</th><th class="num">FC</th><th class="num">m/latido</th>'
+             f'<th class="num">RPE</th></tr></thead><tbody>{rows}</tbody></table></div>'
+             '<p class="pg-note">Ritmo en min/km sobre el tiempo en movimiento. Metros por latido = velocidad (m/min) ÷ FC media: '
+             'a más metros por latido, mismo ritmo con menos pulsaciones. Desacople aeróbico: cuánto cae la relación ritmo/FC '
+             'de la primera mitad a la segunda; en una carrera progresiva sube de forma natural. Compara carreras parecidas; '
+             'el calor, el desnivel, el cansancio previo o el sensor también influyen.</p></section>')
+    cards = ""
+    for r in runs:
+        stats = [("Distancia", num(r.get("distance_km"), 2, " km")), ("Tiempo", duration_text(r.get("moving_s"))),
+                 ("Ritmo medio", pace_text(r.get("pace_s_km")) + " /km"),
+                 ("Ritmo ajustado a pendiente", pace_text(r.get("gap_pace_s_km")) + " /km" if r.get("gap_pace_s_km") else None),
+                 ("FC media · máx.", f'{num(r.get("avg_hr"))} · {num(r.get("max_hr"))} lpm' if r.get("avg_hr") else None),
+                 ("Metros por latido", num(r.get("m_per_beat"), 2) if r.get("m_per_beat") else None),
+                 ("Desacople aeróbico", num(r.get("decoupling_pct"), 1, " %") if r.get("decoupling_pct") is not None else None),
+                 ("Cadencia", num(r.get("cadence_spm"), 0, " ppm") if r.get("cadence_spm") else None),
+                 ("Zancada", num(r.get("stride_m"), 2, " m") if r.get("stride_m") else None),
+                 ("Oscilación vertical", num(r.get("vertical_oscillation_cm"), 1, " cm") if r.get("vertical_oscillation_cm") else None),
+                 ("Ratio vertical", num(r.get("vertical_ratio_pct"), 1, " %") if r.get("vertical_ratio_pct") else None),
+                 ("Contacto con el suelo", num(r.get("ground_contact_ms"), 0, " ms") if r.get("ground_contact_ms") else None),
+                 ("Desnivel", f'+{num(r.get("elev_gain_m"))} / −{num(r.get("elev_loss_m"))} m' if r.get("elev_gain_m") is not None else None),
+                 ("Potencia media", num(r.get("avg_power_w"), 0, " W") if r.get("avg_power_w") else None),
+                 ("Km más rápido", pace_text(r.get("fastest_1k_s")) if r.get("fastest_1k_s") else None),
+                 ("Calorías", num(r.get("calories"), 0, " kcal") if r.get("calories") else None),
+                 ("Carga", " · ".join(x for x in (f'Garmin {num(r["garmin_load"])}' if r.get("garmin_load") else None,
+                                                  f'Intervals {num(r["intervals_load"])}' if r.get("intervals_load") else None,
+                                                  f'TRIMP {num(r["trimp"])}' if r.get("trimp") else None) if x) or None),
+                 ("VO2max (Garmin)", num(r.get("vo2max"), 0) if r.get("vo2max") else None)]
+        if not r.get("intervals_id") and (r.get("aerobic_te") is not None):  # sin FC de Intervals: el efecto va aquí
+            stats.append(("Efecto aeróbico · anaeróbico", f'{num(r.get("aerobic_te"), 1)} · {num(r.get("anaerobic_te"), 1)}'
+                          + (f' ({r["te_label"]})' if r.get("te_label") else "")))
+        grid = "".join(f'<div><dt>{_esc(k)}</dt><dd>{_esc(v)}</dd></div>' for k, v in stats if v and v not in ("—", "— /km"))
+        cmp_ = f'<p class="rn-cmp">{_esc(r["comparison"]["text"])}</p>' if r.get("comparison") else ""
+        splits = ""
+        if r.get("splits"):
+            srows = "".join(f'<tr><td>{i + 1}</td><td class="num">{num(x["distance_m"] / 1000, 2)}</td><td class="num">{pace_text(x["pace_s_km"])}</td>'
+                            f'<td class="num">{num(x.get("avg_hr"))}</td><td class="num">{num(x.get("cadence_spm"))}</td>'
+                            f'<td class="num">{num(x.get("elev_gain_m"))}</td></tr>' for i, x in enumerate(r["splits"]))
+            splits = (f'<details class="lf-ex"><summary>Parciales ({len(r["splits"])})</summary><div class="scroll"><table class="rn-tab">'
+                      '<thead><tr><th>#</th><th class="num">km</th><th class="num">Ritmo</th><th class="num">FC</th>'
+                      f'<th class="num">Cadencia</th><th class="num">+m</th></tr></thead><tbody>{srows}</tbody></table></div></details>')
+        src = " + ".join(r.get("sources") or [])
+        cards += (f'<article class="lf rn"><header><b>{_day_name(r["date"])}</b>{_rpe_pill(r.get("rpe"))}</header>'
+                  f'<p class="lf-title">{_esc(r.get("title"))}{" · " + _esc(r["start_local"][11:16]) if r.get("start_local") else ""}'
+                  f'{" · " + _esc(src) if src else ""}</p><dl class="rn-grid">{grid}</dl>{cmp_}{splits}{_hr_slot(r.get("intervals_id"))}</article>')
+    return head + f'<section class="card"><h2>Carreras</h2>{cards}</section>'
 
 
 KIND_ES = {"warmup": "Calentamiento", "skill": "Técnica", "other": "Sin detalle estructurado"}
@@ -232,42 +324,52 @@ def _others_html(others: list[dict]) -> str:
         return '<section class="card"><h2>Técnica y otras</h2><p class="h2sub">Sin calentamientos ni sesiones de técnica registrados.</p></section>'
     cards = ""
     for o in others:
-        mins = f'<span class="rx-chip">{_kg(round(o["minutes"], 1))} min grabados</span>' if o.get("minutes") is not None else ""
+        mins = (f'<span class="rx-chip">{_kg(round(o["minutes"], 1))} min {"del tramo" if o.get("segment") else "grabados"}</span>'
+                if o.get("minutes") is not None else "")
         cards += (f'<article class="mc"><header><span class="mc-fmt">{_esc(KIND_ES.get(o["kind"], "Sesión"))}</span>'
                   f'<span class="mc-date">{_day_name(o["date"])}</span>{_rpe_pill(o["rpe"])}</header>'
-                  f'<p class="lf-title">{_esc(o["title"])}</p>' + (f'<div class="chips">{mins}</div>' if mins else "")
+                  f'<p class="lf-title">{_esc(o["title"])}</p>'
+                  + (f'<p class="hito"><span aria-hidden="true">🏅</span> {_esc(o["milestone"])}</p>' if o.get("milestone") else "")
+                  + (f'<div class="chips">{mins}</div>' if mins else "")
                   + (f'<p class="pg-note">{_esc(o["note"])}</p>' if o.get("note") else "") + _hr_slot(o.get("activity_id")) + "</article>")
     return ('<section class="card"><h2>Técnica y otras</h2><p class="h2sub">calentamientos, técnica y sesiones sin ejercicios estructurados · '
             '«RPE —» = sesión sin puntuar</p>' + cards + '<p class="pg-note">Cuentan en la carga y en la FC; no entran en las comparaciones de fuerza ni de metcons.</p></section>')
 
 
-def _training_html(tb: dict | None, prog: dict | None) -> str:
-    """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones."""
+def _training_html(tb: dict | None, prog: dict | None, running: dict | None = None, athlete: dict | None = None,
+                   splits: list | None = None) -> str:
+    """Entrenos: resumen de 7 días y un selector Fuerza · Halterofilia · Metcons · Sesiones · Progreso."""
+    from . import dashboard_v813 as v813
     if not isinstance(tb, dict):
-        return _progression_html(prog)
+        return _progression_html(prog) + v813.progress_pane(athlete)
     s = tb.get("summary7") or {}
     chips = (f'<li><b>{s.get("fuerza", 0)}</b><span>fuerza</span></li><li><b>{s.get("halterofilia", 0)}</b><span>halterofilia</span></li>'
-             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li><li><b>{s.get("otros", 0)}</b><span>técnica y otras</span></li>'
+             f'<li><b>{s.get("metcons", 0)}</b><span>metcons</span></li><li><b>{s.get("carrera", 0)}</b><span>carrera</span></li>'
+             f'<li><b>{s.get("otros", 0)}</b><span>técnica y otras</span></li>'
              f'<li><b>{_kg(s["metcon_rpe_mean"]) if s.get("metcon_rpe_mean") is not None else "—"}</b><span>RPE medio metcons</span></li>')
     head = (f'<section class="card tbhead"><h2>Últimos 7 días</h2><ul class="tbsum">{chips}</ul>'
             '<div class="seg" role="tablist" aria-label="Tipo de entrenamiento">'
             '<button role="tab" data-pane="fuerza" aria-selected="true">Fuerza</button>'
             '<button role="tab" data-pane="halterofilia" aria-selected="false">Halterofilia</button>'
             '<button role="tab" data-pane="metcons" aria-selected="false">Metcons</button>'
+            '<button role="tab" data-pane="carrera" aria-selected="false">Carrera</button>'
             '<button role="tab" data-pane="otros" aria-selected="false">Técnica</button>'
+            '<button role="tab" data-pane="progreso" aria-selected="false">Progreso</button>'
             '<button role="tab" data-pane="sesiones" aria-selected="false">Todas</button></div></section>')
     fz, hl = tb.get("fuerza") or {}, tb.get("halterofilia") or {}
     panes = {
-        "fuerza": (_weekly_html(fz.get("weekly"), "Volumen de fuerza", "barra, por semana")
+        "fuerza": (_weekly_html(fz.get("weekly"), "Volumen de fuerza", "barra, por semana · solo sesiones de fuerza; la halterofilia tiene su gráfico")
                    + _progression_html(prog, "fuerza")
                    + _lifts_html(fz.get("sessions"), "Sesiones de fuerza", "Aún no hay sesiones de fuerza con cargas registradas.")),
-        "halterofilia": (_weekly_html(hl.get("weekly"), "Volumen de halterofilia", "barra, por semana")
+        "halterofilia": (_weekly_html(hl.get("weekly"), "Volumen de halterofilia", "barra, por semana · sesiones de halterofilia enteras, con sus complex")
                          + _progression_html(prog, "halterofilia")
                          + _lifts_html(hl.get("sessions"), "Sesiones de halterofilia", "Aún no hay sesiones de halterofilia con cargas registradas.")),
         "metcons": _metcons_html(tb.get("metcons") or []),
+        "carrera": _runs_html(running),
         "otros": _others_html(tb.get("otros") or []),
+        "progreso": v813.progress_pane(athlete),
     }
-    return head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
+    return v813.splits_html(splits) + head + "".join(f'<div class="tbpane" data-pane="{k}"{"" if k == "fuerza" else " hidden"}>{v}</div>' for k, v in panes.items())
 
 
 def _weight_svg(points: list[dict]) -> str:
@@ -321,6 +423,99 @@ def _weight_html(wt: dict | None) -> str:
             'hidratación y entrenos. Descriptivo, sin causas; no es una valoración médica.</p></section>')
 
 
+def _resp_svg(series: list[dict], med) -> str:
+    vals = [x["value"] for x in series]
+    w, h, px, py = 300, 64, 6, 8
+    lo, hi = min(vals + ([med] if med else [])) - 1, max(vals + ([med] if med else [])) + 1
+    def X(i):
+        return px + i * (w - 2 * px) / max(len(vals) - 1, 1)
+    def Y(v):
+        return h - py - (v - lo) / (hi - lo) * (h - 2 * py)
+    out = ""
+    if med is not None:
+        out += (f'<rect x="0" y="{Y(med + 1):.1f}" width="{w}" height="{Y(med - 1) - Y(med + 1):.1f}" class="rs-band"/>'
+                f'<line x1="0" x2="{w}" y1="{Y(med):.1f}" y2="{Y(med):.1f}" class="rs-med"/>')
+    out += f'<polyline points="{" ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))}" class="pg-line rs-line"/>'
+    for i, x in enumerate(series):
+        hot = med is not None and x["value"] - med >= 2
+        out += (f'<circle cx="{X(i):.1f}" cy="{Y(x["value"]):.1f}" r="{3.6 if i == len(vals) - 1 else 2.4}" '
+                f'class="{"rs-hot" if hot else "rs-dot"}{" rs-last" if i == len(vals) - 1 else ""}"><title>{_ddmm(x["date"])}: {_kg(x["value"])} resp/min</title></circle>')
+    label = "Respiración nocturna: " + ", ".join(f'{_ddmm(x["date"])} {_kg(x["value"])}' for x in series[-7:])
+    return f'<svg class="rs-svg" viewBox="0 0 {w} {h}" preserveAspectRatio="none" role="img" aria-label="{_esc(label)}">{out}</svg>'
+
+
+def _respiration_html(r: dict | None) -> str:
+    """V8.1: respiración nocturna frente a tu normal (informativa: no cambia la puntuación)."""
+    if not isinstance(r, dict) or not r.get("available"):
+        return ""
+    med, d = r.get("median"), r.get("delta")
+    tone = {"alta_y_hrv_baja": "critical", "alta": "warning"}.get(r["state"], "good" if med is not None else "muted")
+    chip = {"alta_y_hrv_baja": "alta y con HRV baja", "alta": "más alta que tu normal", "normal": "en tu normal",
+            "sin_referencia": "sin referencia aún"}[r["state"]]
+    sub = (f'normal {_kg(med)} · {"+" if d > 0 else "−" if d < 0 else "±"}{_kg(abs(d))}' if med is not None else f'{r["n_base"]} noches de referencia')
+    when = "anoche" if r.get("is_today") else _ddmm(r["date"])
+    alert = ('<p class="rs-alert">Respiración alta y HRV baja a la vez: es la combinación que más se asocia a fatiga o a un '
+             'resfriado incipiente. Prioriza dormir y baja la intensidad.</p>') if r["state"] == "alta_y_hrv_baja" else ""
+    rng = (f'<p class="h2sub">mínima {_kg(r["lowest"])} · máxima {_kg(r["highest"])} resp/min durante la noche · banda = tu normal ±1 · '
+           f'punto naranja = +2 o más</p>') if r.get("lowest") is not None else ""
+    return (f'<section class="card tone-{tone}" id="respiracion"><h2>Respiración nocturna</h2>'
+            f'<div class="rs-top"><div class="tile"><div class="value">{_kg(r["value"])}<small>resp/min</small></div>'
+            f'<div class="delta">{when} · {sub}</div></div><span class="rs-chip">{chip}</span></div>'
+            f'{_resp_svg(r["series"], med)}{alert}{rng}</section>')
+
+
+LB_NAMES = {"aerobic_low": ("Aeróbica baja", "base · zonas 1–2"), "aerobic_high": ("Aeróbica alta", "tempo y umbral"),
+            "anaerobic": ("Anaeróbica", "esfuerzos máximos cortos")}
+
+
+def _load_balance_html(lb: dict | None) -> str:
+    if not isinstance(lb, dict) or not lb.get("available"):
+        return ""
+    top = max(max((p["target_max"] or 0), p["value"]) for p in lb["parts"]) * 1.12 or 1
+    rows = ""
+    for p in lb["parts"]:
+        name, sub = LB_NAMES[p["id"]]
+        lo, hi = p["target_min"] or 0, p["target_max"] or 0
+        st = "alto" if p["state"] == "alto" else "bajo" if p["state"] == "bajo" else "near" if p["near_top"] else "ok"
+        txt = {"alto": "por encima", "bajo": "por debajo", "near": "cerca del techo", "ok": "en rango"}[st]
+        rows += (f'<div class="lb-row"><div class="lb-h"><span>{name}<small>{sub}</small></span><b>{_kg(p["value"])}</b></div>'
+                 f'<div class="lb-track"><i class="lb-band" style="left:{lo / top * 100:.1f}%;width:{(hi - lo) / top * 100:.1f}%"></i>'
+                 f'<i class="lb-fill lb-{st}" style="width:{p["value"] / top * 100:.1f}%"></i></div>'
+                 f'<div class="lb-s">objetivo {_kg(lo)}–{_kg(hi)} · <span class="lb-t lb-{st}">{txt}</span></div></div>')
+    fb = f'<span class="rs-chip">{_esc(lb["feedback"])}</span>' if lb.get("feedback") else ""
+    return (f'<section class="card" id="equilibrio"><h2>Equilibrio de carga · 4 semanas</h2><div class="rs-top"><p class="lb-cap">Garmin · '
+            f'{_ddmm(lb["date"])}</p>{fb}</div>{rows}<p class="h2sub">banda = rango que Garmin recomienda para tu nivel · barra = tu carga de 4 semanas</p></section>')
+
+
+def _vo2_html(v: dict | None) -> str:
+    if not isinstance(v, dict) or not v.get("available"):
+        return ""
+    ch = v["change"]
+    trend = "estable" if abs(ch) < 0.5 else ("sube" if ch > 0 else "baja") + f" {_kg(abs(ch))}"
+    pts = [{"date": x["date"], "top_load": x["value"]} for x in v["series"]]
+    spark = _prog_svg(pts, big=True) if len(pts) >= 2 and len({x["value"] for x in v["series"]}) > 1 else ""
+    return (f'<section class="card" id="vo2max"><h2>VO2max</h2><div class="tile"><div class="value">{_kg(v["value"])}<small>ml/kg/min</small></div>'
+            f'<div class="delta">{trend} desde el {_ddmm(v["since"])}</div></div>{spark}'
+            '<p class="h2sub">estimación de Garmin · en HIIT y fuerza apenas se actualiza</p></section>')
+
+
+def _signals_html(sg: dict | None) -> str:
+    """V8.3: señales a favor y en contra cuando los modelos no coinciden (no cambia la decisión)."""
+    if not isinstance(sg, dict) or not sg.get("show") or not (sg.get("favorable") or sg.get("restrictive")):
+        return ""
+    def score(label, v, extra=""):
+        return f'<div class="sg-m"><b>{_esc(v if v is not None else "—")}</b><span>{label}{extra}</span></div>'
+    head = ('<div class="sg-models">' + score("oficial", sg.get("official")) + score("híbrido", sg.get("hybrid"))
+            + score("Garmin", sg.get("garmin"), f' · {_esc(sg["garmin_level"])}' if sg.get("garmin_level") else "") + "</div>")
+    def col(title, items, cls):
+        return (f'<div class="sg-col {cls}"><h3>{title}</h3><ul class="clean">'
+                + "".join(f"<li>{_esc(x)}</li>" for x in items) + "</ul></div>") if items else ""
+    body = '<div class="sg-cols">' + col("A favor", sg.get("favorable") or [], "fav") + col("En contra", sg.get("restrictive") or [], "res") + "</div>"
+    adv = f'<p class="sg-adv">{_esc(sg["advice"])}</p>' if sg.get("advice") else ""
+    why = f'<p class="h2sub">{_esc(sg["why"])}</p>' if sg.get("why") else ""
+    return f'<section class="card" id="senales"><h2>Señales a favor y en contra</h2>{head}{body}{adv}{why}</section>'
+
+
 def _glance_html(chips: list[dict] | None) -> str:
     if not chips:
         return ""
@@ -342,8 +537,19 @@ def render(result: dict, extras: dict | None = None) -> str:
         data["hr_curves"] = extras["hr_curves"]
     if extras.get("session_effort"):
         data["session_effort"] = extras["session_effort"]
+    if (extras.get("garmin_insights") or {}).get("training_effect"):
+        data["training_effect"] = extras["garmin_insights"]["training_effect"]
     if extras.get("web_failures"):
         data["web_failures"] = extras["web_failures"]
+    # V8.9: resultado de cada metcon (rondas y repeticiones) para la tabla de sesiones y el calendario
+    mres = {m["activity_id"]: m["result"] for m in (extras.get("training_blocks") or {}).get("metcons") or []
+            if isinstance(m, dict) and m.get("activity_id") and m.get("result")}
+    if mres:
+        data["metcon_results"] = mres
+    from .report import categorize  # V8.7: la tabla de sesiones muestra el tipo de la app, no el de Garmin («HIIT»)
+    for key in ("sessions_28d", "recent_sessions"):
+        if isinstance(data.get(key), list):
+            data[key] = [dict(x, category=categorize(x)) if isinstance(x, dict) else x for x in data[key]]
     data["_rpe_days"] = rpe_by_day(result.get("sessions_28d") or [], result.get("trend_28d") or [], result["date"], 28)
     payload = json.dumps(data, ensure_ascii=False, allow_nan=False).replace("</", "<\\/")
     rd = result["readiness"]
@@ -452,13 +658,16 @@ def _tonight_html(t: dict | None) -> str:
             f'<ul class="clean parts">{lis}</ul>{tip}</section>')
 
 
+SHIFT_ES = {"free": "libre", "post-TN": "tras TN", "unknown": "sin turno registrado", "MT": "MT", "TN": "TN"}
+
+
 def _plan_html(plan: list | None) -> str:
     if not plan:
         return ""
     kind = {"hard": ("Exigente", "k-hard"), "moderate": ("Moderada", "k-mod"), "light": ("Suave", "k-light"), "rest": ("Descanso", "k-rest")}
     items = "".join(
         f"<li class='{kind[r['kind']][1]}'><div class='pd'>{_esc(r['dow'])}<br><b>{_esc(r['date'][8:10])}</b></div>"
-        f"<div><b>{kind[r['kind']][0]}</b> · <span class='weight'>{_esc(r['shift'])}</span><br>"
+        f"<div><b>{kind[r['kind']][0]}</b> · <span class='weight'>{_esc(SHIFT_ES.get(r['shift'], r['shift']))}</span><br>"
         f"<span class='why'>{_esc(r['why'])}</span></div></li>" for r in plan)
     return ('<section class="card" id="plan" aria-label="Próximos 7 días"><h2>Próximos 7 días</h2>'
             '<p class="h2sub">plan orientativo por reglas: turnos, sesiones duras recientes y la decisión de hoy · '
@@ -498,9 +707,12 @@ def _changes_html(c: dict | None, official: tuple | None = None, trend: list | N
         chip = "" if delta is None else (f"{delta:+.{i['dec']}f}".replace(".", ",").replace("-", "−") + (i["unit"] or ""))
         cards.append((i["label"], f(i["to"], i["dec"]), i["unit"].strip(), chip, i["favorable"], _spark(last7(keys.get(i["label"], "")), i["favorable"]),
                       (delta or 0) >= 0))
+    label = c.get("compare_label") or "ayer"
+    note = (f'<p class="chg-note">Hoy dormiste de día tras el turno de noche: se compara con {_esc(label)}, '
+            'no con la noche anterior, porque un sueño de día y uno de noche no son comparables.</p>' if c.get("basis") == "day_sleep" else "")
     if not cards:
         return ('<section class="card chg" id="cambios" aria-label="Cambios recientes"><h2>Cambios recientes</h2>'
-                '<p class="h2sub">Ningún indicador cambió lo bastante frente a ayer como para destacarlo.</p></section>')
+                f'{note}<p class="h2sub">Ningún indicador cambió lo bastante frente a {_esc(label)} como para destacarlo.</p></section>')
     body = "".join(
         f"<div class='chg-card {'pos' if ok else 'neg'}'><div class='chg-top'><span class='chg-l'>{_esc(lab)}</span>"
         f"<i class='chg-ar' aria-hidden='true'>{'↑' if up else '↓'}</i></div>"
@@ -508,8 +720,8 @@ def _changes_html(c: dict | None, official: tuple | None = None, trend: list | N
         f"<div class='chg-bot'><span class='chg-chip'>{_esc(chip)}</span>{sp}</div></div>"
         for lab, val, unit, chip, ok, sp, up in cards)
     return ('<section class="card chg" id="cambios" aria-label="Cambios recientes"><h2>Cambios recientes</h2>'
-            '<p class="h2sub">hoy frente a ayer · verde = favorable, rojo = desfavorable · curva = últimos 7 días · diferencias observadas, no causas</p>'
-            f'<div class="chg-grid">{body}</div></section>')
+            f'{note}<p class="h2sub">hoy frente a {_esc(label)} · verde = favorable, rojo = desfavorable · curva = últimos 7 días · '
+            f'diferencias observadas, no causas</p><div class="chg-grid">{body}</div></section>')
 
 
 def _extra_sections(result: dict, extras: dict | None = None) -> dict:
@@ -551,8 +763,11 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
                  '<span><strong>Abrir el informe completo</strong><small>resumen, 7 secciones y recomendaciones</small></span>'
                  '<span class="cta-go" aria-hidden="true">›</span></a>' if extras.get("full_report") else "")
     from .brief import official_change
-    changes = _changes_html(extras.get("changes"), official_change(result.get("trend_28d") or [], result.get("date") or ""),
-                           result.get("trend_28d") or [])
+    ch = extras.get("changes") or {}
+    # V8.10: la recuperación oficial se compara con el mismo día que el resto de tarjetas (p. ej. el último sueño tras TN)
+    official = ((ch["official_from"], ch["official_to"]) if ch.get("official_from") is not None and ch.get("official_to") is not None
+                else official_change(result.get("trend_28d") or [], result.get("date") or ""))
+    changes = _changes_html(extras.get("changes"), official, result.get("trend_28d") or [])
     try:
         from . import brief
         sents = brief.compose(result, extras.get("tonight"))
@@ -575,10 +790,10 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
         optional_blocks.failed("web:glance", exc)
         glance_html = ""
     # el resumen de reglas solo es el respaldo cuando no hay resumen de Claude del ciclo vigente
-    top_block = glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
+    top_block = _signals_html(extras.get("signals")) + glance_html + changes + (ai_html or brief_html) + ('' if ai_html or (extras.get('changes') and extras['changes'].get('available')) else f'<section class="card" aria-label="Resumen de hoy"><h2>En tres líneas</h2>{summary}</section>')
     calendar_html = ('<section class="card" id="calendario" aria-label="Calendario"><h2>Últimas 4 semanas</h2>'
             '<p class="h2sub">color = decisión del día (o modelo experimental, atenuado, si no se guardó) · número = RPE máximo · '
-            'anillo rojo = por encima del máximo · toca un día para ver el detalle</p>'
+            'anillo rojo = por encima del máximo · desc. = descanso confirmado por ti · toca un día para ver el detalle</p>'
             '<div class="cal-head"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'
             '<div class="cal" id="cal"></div><div class="cal-detail" id="cal-detail"></div></section>')
     week_html = ('<section class="grid cols-2" id="semana"><div class="card"><h2>RPE frente al máximo del día</h2>'
@@ -588,12 +803,16 @@ def _extra_sections(result: dict, extras: dict | None = None) -> dict:
             '<div class="chart" id="c-rpe"></div></div>'
             '<div class="card"><h2>Esta semana</h2><p class="h2sub">últimos 7 días frente a los 7 anteriores · detalle en '
             f'<code>informe_semanal.md</code></p><div class="scroll">{week}</div></div></section>')
+    from . import dashboard_v813 as _v813
     # Una pestaña por pregunta: ¿qué hago hoy? · ¿cómo voy? · ¿qué he entrenado? · ¿funciona el sistema?
     return {"banner": "",
             "hoytop": top_block, "cambios": changes,
-            "hoy": full_html + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
-            "tendencias": _weight_html(extras.get("weight")) + calendar_html + week_html,
-            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression")),
+            "hoy": _v813.today_html(extras.get("recovery_context")) + full_html + _respiration_html((extras.get("garmin_insights") or {}).get("respiration")) + _tonight_html(extras.get("tonight")) + _plan_html(extras.get("plan")),
+            "tendencias": _v813.load_history_html(extras.get("athlete_progress")) + _weight_html(extras.get("weight")) + calendar_html + week_html
+                          + '<section class="grid cols-2">' + _v813.intensity_html(extras.get("recovery_context")) + _v813.day_types_html(extras.get("recovery_context")) + '</section>'
+                          + '<section class="grid cols-2">' + _load_balance_html((extras.get("garmin_insights") or {}).get("load_balance")) + _vo2_html((extras.get("garmin_insights") or {}).get("vo2max")) + '</section>',
+            "entrenos": _training_html(extras.get("training_blocks"), extras.get("progression"), extras.get("running"),
+                                       extras.get("athlete_progress"), extras.get("splits")),
             "sistema": _delivery_html(extras.get("delivery")) + _punctuality_html(extras.get("punctuality"))
                        + _days_html(extras.get("days")) + _history_html(extras.get("history"))}
 

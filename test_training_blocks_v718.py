@@ -97,6 +97,7 @@ class OthersPaneV729(unittest.TestCase):
         tb = training_blocks.build(cf, progression.build(hist, cf)["entries"], "2026-10-22")
         shown = {str(x["activity_id"]) for k in ("fuerza", "halterofilia") for x in tb[k]["sessions"]}
         shown |= {str(m["activity_id"]) for m in tb["metcons"]} | {o["activity_id"] for o in tb["otros"]}
+        shown |= set(tb.get("carrera_ids") or [])  # V8.8: las carreras van a su pestaña
         self.assertEqual({str(a["activity_id"]) for a in cf["activities"]} - shown, set())
         self.assertTrue(all(o["kind"] in ("warmup", "skill", "other") for o in tb["otros"]))
 

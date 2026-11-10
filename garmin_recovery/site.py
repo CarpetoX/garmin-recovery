@@ -186,15 +186,39 @@ def _live_extras(root: Path, result: dict) -> dict:
         built = progression.build(hist, cf)
         out["progression"] = {"items": built["items"], "summary": built["summary"]}
         from . import training_blocks
-        out["training_blocks"] = training_blocks.build(cf, built["entries"], today)
+        curves_path = root / "activity_hr_curves.json"  # V8.10: FC de cada tramo
+        curves = (json.loads(curves_path.read_text(encoding="utf-8")) or {}).get("activities") if curves_path.exists() else None
+        out["training_blocks"] = training_blocks.build(cf, built["entries"], today, curves if isinstance(curves, dict) else None)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:progression", exc)
+    try:  # V8.8: carreras con todos los datos de Garmin e Intervals y su comparación
+        from . import running
+        out["running"] = running.load(root, result)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:running", exc)
     try:
         from . import weight
         reg = json.loads((root / "peso_registro.json").read_text(encoding="utf-8")) if (root / "peso_registro.json").exists() else None
         out["weight"] = weight.build(reg, today)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:weight", exc)
+    try:  # V8.13: benchmarks, máximos estimados, gimnasia e historial de carga
+        from . import athlete_progress
+        out["athlete_progress"] = athlete_progress.build(root, today)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:athlete_progress", exc)
+    try:  # V8.13: intensidad semanal, recuperación según el turno y contexto de hoy
+        from . import recovery_context
+        out["recovery_context"] = recovery_context.build(root, result)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:recovery_context", exc)
+    try:  # V8.13: actividades que parecen tener dos partes
+        from . import athlete_progress, split_detect
+        curves_path = root / "activity_hr_curves.json"
+        curves = (json.loads(curves_path.read_text(encoding="utf-8")) or {}).get("activities") if curves_path.exists() else None
+        out["splits"] = split_detect.propose(curves, athlete_progress.sheet_rows(root), today)
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:splits", exc)
     try:
         sessions = [x for x in result.get("sessions_28d") or result.get("recent_sessions") or [] if isinstance(x, dict)]
         out["plan"] = improvement._plan(root, result, today, sessions)
@@ -228,6 +252,15 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
                 k: v for k, v in hc["activities"].items() if isinstance(v, dict) and v.get("available")}}
     except (OSError, ValueError):
         pass  # aún sin curvas: la tabla de sesiones funciona igual
+    try:
+        from . import garmin_insights
+        ext = json.loads((root / "garmin_extended.json").read_text(encoding="utf-8")) if (root / "garmin_extended.json").exists() else None
+        acts = json.loads((root / "activities.json").read_text(encoding="utf-8")) if (root / "activities.json").exists() else []
+        extras["garmin_insights"] = garmin_insights.build(ext, acts if isinstance(acts, list) else [], result.get("date"), result.get("trend_28d"))
+        from . import signals
+        extras["signals"] = signals.compute(result, ((ext or {}).get("days") or {}).get(result.get("date")))
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:garmin_insights", exc)
     try:
         from . import session_effort
         extras["session_effort"] = session_effort.load(root)

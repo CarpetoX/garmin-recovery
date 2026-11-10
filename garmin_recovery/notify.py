@@ -54,7 +54,8 @@ def rpe_pending_tip(result: dict, now: datetime) -> str | None:
     today = result.get("date") or now.date().isoformat()
     day = today if now.hour >= 12 else (datetime.fromisoformat(today) - timedelta(days=1)).date().isoformat()
     pending = [x for x in result.get("sessions_28d") or []
-               if isinstance(x, dict) and x.get("date") == day and x.get("rpe") is None and not x.get("removed")]
+               if isinstance(x, dict) and x.get("date") == day and x.get("rpe") is None and not x.get("removed")
+               and not x.get("rpe_na")]  # técnica y calentamientos no llevan RPE
     if not pending:
         return None
     n = len(pending)
@@ -109,12 +110,25 @@ def send(msg: dict, topic: str, server: str = "https://ntfy.sh", opener=urllib.r
         return r.status
 
 
+def failure_message(run_url: str | None, now: datetime | None = None) -> dict:
+    """V8.12: aviso cuando la cadena falla y no se publica informe (se conserva el anterior)."""
+    now = (now or datetime.now(TZ)).astimezone(TZ)
+    body = "La actualización de las " + now.strftime("%H:%M") + " falló y no se publicó informe nuevo; la app muestra el anterior."
+    return {"title": "Fallo en la actualización", "message": body, "priority": 4, "tags": ["warning"],
+            "click": run_url or SITE_URL}
+
+
 def main(root: str = ".") -> int:
     topic = (os.environ.get("NTFY_TOPIC") or "").strip()
     if not topic:
         print(json.dumps({"notify": "sin_tema"}))
         return 0
     try:
+        if (os.environ.get("CHAIN_STATUS") or "").strip().lower() == "failure":
+            status = send(failure_message(os.environ.get("RUN_URL")), topic,
+                          os.environ.get("NTFY_SERVER") or "https://ntfy.sh")
+            print(json.dumps({"notify": "fallo_enviado", "http": status}))
+            return 0
         msg = build_message(Path(root))
         if msg is None:
             print(json.dumps({"notify": "sin_informe_nuevo"}))

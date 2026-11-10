@@ -170,3 +170,20 @@ Las gráficas de Hoy, Tendencias y Entrenos se dibujan al entrar en pantalla (l�
 ## V8.0 — Rediseño oscuro tipo WHOOP
 
 Tema oscuro por defecto (fondo casi negro, cifras grandes, colores de zona vivos) con selector Oscuro / Claro / Automático en Sistema (se guarda en el móvil). Para tener menos letra sin perder información, las explicaciones de cada tarjeta (subtítulos, notas, lecturas, metodología) se pliegan bajo «Ver detalle» y las notas de cada sesión o día se abren al tocarlo («+ detalle»). Comprobado nodo a nodo: ningún texto desaparece, solo cambia de sitio. Palabras a la vista: Hoy 610 → 402, Tendencias 628 → 471, Entrenos 787 → 665.
+
+## V8.1 — Más datos de Garmin y explicaciones
+
+`garmin_recovery/garmin_insights.py` usa datos que ya se descargaban (`garmin_extended.json`) y no se mostraban:
+- **Respiración nocturna** (Hoy): valor de anoche frente a tu mediana; ≥ +2 resp/min se marca, y con HRV ≥ 15 % baja, aviso combinado. Informativa: no cambia la puntuación.
+- **Equilibrio de carga · 4 semanas** (Tendencias): aeróbica baja, alta y anaeróbica de Garmin con sus bandas objetivo; «cerca del techo» al 90 %.
+- **VO2max** (Tendencias) y su tendencia.
+- **Efecto de entrenamiento** aeróbico y anaeróbico (0–5) en cada tarjeta de Entrenos, enlazado por `external_id` de Garmin o por hora.
+
+Cada tarjeta tiene en «Ver detalle» un «Qué mide y cómo leerlo», y Sistema incluye el glosario «Qué significa cada dato». Connect+ no añade datos fisiológicos (solo presentación, IA y nutrición); el SpO2 nocturno no está activado en el reloj.
+
+## V8.5 — Auditoría de claridad
+
+- **Hoy llevas:** bajo la decisión, sesiones, minutos, RPE máximo y sRPE de hoy; si ya hubo una sesión dura (RPE ≥ 8) o se pasó el máximo, lo dice. Evita leer «intensidad alta permitida» igual a primera hora que tras cuatro sesiones.
+- **Cifras corregidas:** «Último entreno» mostraba 7 min en vez de 70 (redondeo); la técnica sin RPE salía como «HIIT» (ahora con su nombre de la hoja); la HRV de 7 días salía como 46 ms en la tarjeta y 50 ms en la gráfica (ahora la misma, sobre ln rMSSD).
+- **Textos:** turnos en español en el plan y en las gráficas (libre, tras TN); coma decimal en «Por qué esta puntuación»; «carga FC» frente a «sRPE»; «los 3 modelos de la app coinciden» (Garmin es contexto).
+- **Lecturas a la vista:** la conclusión de cada gráfica («↓ baja · últimos 7 días…», «125 esta semana · dentro de tu rango») ya no queda plegada en «Ver detalle».

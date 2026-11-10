@@ -23,6 +23,11 @@ Hoja de Google «RPE CrossFit - Registro», pestaña **`RPE`**, columnas A–H (
 
 1. **Identificar la actividad.** Busca las actividades de ese día (Intervals / `activities.csv` / `app/readiness_v3.json → sessions_28d`) y propón qué dictado corresponde a cada ID (hora, duración, tipo). Si hay duda, pregunta antes de escribir. Sin actividad sincronizada no se escribe: se espera al siguiente Sync.
 2. **Montar la fila** con las ocho columnas. El calentamiento, la técnica y cada bloque con RPE propio son filas aparte si Garmin los registra como actividades distintas.
+   **Si Garmin lo grabó todo en una sola actividad** (p. ej. técnica y después el WOD), se escribe una fila por parte **con el mismo ID** y, en el Detalle JSON de cada una, `"segment":{"start_s":…,"end_s":…}` con los segundos del cronómetro de Garmin, sin pausas (minuto 40:20 → `2420`). Todas las filas de ese ID llevan su tramo; la parte sin RPE va con la columna D vacía. Así el sRPE usa solo los tramos con RPE, el WOD muestra los minutos y la FC de su tramo, y el ID repetido no se avisa como duplicado (V8.10).
+   **Hitos** (primer bar muscle up, primer HSPU estricto…) hechos fuera del WOD y de la técnica pero el mismo día y sin actividad propia: fila más con el mismo ID, `Actividad` = `Hito - <logro>`, RPE vacío y en el JSON `"type":"skill","outside_segments":true,"milestone":"<logro>"` con `exercise`, `reps` y si fueron enlazados (`unbroken`). No lleva tramo ni cuenta en el sRPE; sale con 🏅 en «Técnica y otras» (V8.11).
+   **Benchmarks** (V8.13): si el atleta dice que una sesión o un single es benchmark (prueba de referencia), en el Detalle JSON va `"benchmark":"<nombre estable>"` (mismo nombre cada vez que se repita, p. ej. `"Chin up lastrado 1RM"`); para una carga máxima, `"benchmark_load_kg"`. Un WOD idéntico repetido (mismo nombre de actividad) ya sale solo en «Entrenos → Progreso».
+   **Tramos sugeridos** (V8.13): si «Entrenos» muestra «¿Dos partes en una actividad?», es una propuesta por la FC; solo se parte la actividad (filas con `segment`) cuando el atleta lo confirma.
+   **Foto de la pizarra**: el atleta la manda en el chat; Claude lee movimientos, formato, time cap y cargas prescritas y solo pregunta lo que no está en la foto (cargas reales, resultado, RPE).
 3. **Añadir al final** de la pestaña. Si ya existe una fila con ese ID, se actualiza esa fila tras avisar; nunca se borran filas.
 4. **Releer la fila escrita** y confirmar al atleta con un resumen de una línea. Recordar que entra en el informe del siguiente ciclo (Sync de las 08:30, 16:45 o 22:45; para el cierre nocturno, antes de las 22:45).
 
@@ -39,12 +44,13 @@ Hoja de Google «RPE CrossFit - Registro», pestaña **`RPE`**, columnas A–H (
 
 ## Detalle JSON (esquema v1)
 
-Siempre `"schema_version":1`, `"source":"user_in_chat"`, `"type"` (`strength`, `metcon`, `mixed_strength`, `warmup`, `skill`), `"garmin_activity_id"`, `"rpe"` y `"recorded_garmin_minutes"` cuando se conozcan.
+Siempre `"schema_version":1`, `"source":"user_in_chat"`, `"type"` (`strength`, `metcon`, `mixed_strength`, `warmup`, `skill`, `aerobic`), `"garmin_activity_id"`, `"rpe"` y `"recorded_garmin_minutes"` cuando se conozcan.
 
 - **strength:** `exercises:[{name, load_unit, sets:[{reps, load_kg, interval_seconds?}]}]`; series repetidas con `count`. Opcional: `total_sets`, `total_reps`, `bodyweight_kg_morning`, `notes`.
 - **metcon:** `format` (AMRAP, EMOM, For Time, 21-15-9…), `duration_minutes` o `time_cap_*`, `prescribed_round:[{name, reps, load_kg}]`, `performed:{rounds_complete, extra_reps, totals}`; en For Time, `finish_time_seconds`.
 - **mixed_strength:** `blocks:[{name, rpe, exercises|working_sets}]`.
 - **warmup / skill:** `exercise`, `rpe`, `notes`.
+- **aerobic** (carrera, V8.8): `exercise` («carrera»), `rpe`, `distance_km` dictada y, si se quiere, `recorded_distance_km` y `recorded_garmin_minutes`. Nombre en la columna C: `Carrera - 8 km`. El ritmo, la cadencia, la zancada, el desnivel y los parciales los pone Garmin solo; no se dictan.
 
 Ejemplo mínimo (metcon):
 
@@ -61,3 +67,7 @@ Registro de entrenamientos: cuando el usuario cuente un entrenamiento o un RPE, 
 ## Peso corporal
 
 Cuando el atleta dicte o muestre una pesada: añade una fila en la pestaña **`Peso`** (Fecha, Hora, Peso kg, Grasa %, Músculo kg, Agua %, Fuente, Notas) y una entrada en `peso_registro.json` del repositorio (la app lee de ahí). Solo valores reales; lo calculado a partir de diferencias se marca como `derivado`.
+
+## Días de descanso
+
+Cuando el atleta diga que un día ha sido de descanso («hoy descanso»): añade una entrada en `descansos_registro.json` del repositorio (`{"date": "AAAA-MM-DD", "source": "dictado en el chat", "registered": "<hoy>", "note": "..."}`), sin fila en la hoja RPE (no hay ID de actividad). Solo esos días cuentan como descanso en la app y los informes; un día sin registro sigue sin demostrar descanso. Si ese día acaba teniendo sesiones sincronizadas, la app lo marca como conflicto y no lo cuenta: pregunta al atleta.

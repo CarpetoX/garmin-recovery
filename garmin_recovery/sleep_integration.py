@@ -122,4 +122,11 @@ gate.compact_cycle_snapshot = snapshot
 gate.SLOTS = tuple((h, m, code, TARGETS.get(code, target)) for h, m, code, target in gate.SLOTS)
 
 if __name__ == '__main__':
-    raise SystemExit(gate.main())
+    try:
+        raise SystemExit(gate.main())
+    except Exception as exc:  # V8.6: deja el motivo visible en GitHub y conserva el fallo
+        import traceback
+        frame = traceback.extract_tb(exc.__traceback__)[-1]
+        print(f"::error title=Certificador: excepción::{type(exc).__name__}: {str(exc)[:200]} "
+              f"({frame.filename.rsplit('/', 1)[-1]}:{frame.lineno})")
+        raise

@@ -264,10 +264,13 @@ def activity_analysis(activities, extended, hrr_cache):
 
         rpe = rpe_of(activity)
 
+        # V8.10: si la actividad está partida en tramos, el sRPE usa solo los tramos con RPE
+        scored = num(activity.get("scored_seconds"))
+        srpe_min = round(scored / 60, 2) if scored else duration_min
         srpe = (
-            round(rpe * duration_min, 1)
+            round(rpe * srpe_min, 1)
             if rpe is not None
-            and duration_min is not None
+            and srpe_min is not None
             else None
         )
 

@@ -7,7 +7,10 @@ SHIFT_TEXT = {"MT": "mañana-tarde 08–22", "TN": "noche 15–08", "free": "lib
 
 
 def _n(v, d=1):
-    return f"{v:.{d}f}".rstrip("0").rstrip(".").replace(".", ",") if isinstance(v, (int, float)) else "—"
+    if not isinstance(v, (int, float)):
+        return "—"
+    s = f"{v:.{d}f}"
+    return (s.rstrip("0").rstrip(".") if "." in s else s).replace(".", ",")
 
 
 def _ago(day: str, today: str) -> str:
@@ -24,17 +27,23 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
     if sessions and today:
         last = sessions[-1]
         rpe = last.get("rpe")
-        label = str(last.get("name") or last.get("type") or "Sesión")
+        from .session_kind import categorize  # V8.7: el tipo de la hoja («Halterofilia»), no el nombre de Garmin («HIIT»)
+        kind = categorize(last.get("label"), last.get("name"))
+        label = kind if kind != "Sin detalle" else str(last.get("name") or last.get("type") or "Sesión")
+        na = rpe is None and bool(last.get("rpe_na"))
         chips.append({"id": "ultimo", "label": "Último entreno",
-                      "value": label + (f" · RPE {_n(rpe)}" if rpe is not None else " · sin RPE"),
+                      "value": label + (f" · RPE {_n(rpe)}" if rpe is not None else " · no lleva RPE" if na else " · sin RPE"),
                       "sub": f"{_ago(last['date'], today)}" + (f" · {_n(last.get('duration_min'), 0)} min" if last.get("duration_min") else ""),
-                      "tone": "warning" if (rpe is not None and rpe >= 9) or rpe is None else "neutral"})
+                      "tone": "warning" if (rpe is not None and rpe >= 9) or (rpe is None and not na) else "neutral"})
         week = [s for s in sessions if 0 <= (date.fromisoformat(today) - date.fromisoformat(s["date"][:10])).days <= 6]
-        if week:
-            miss = sum(1 for s in week if s.get("rpe") is None)
+        scored = [s for s in week if not s.get("rpe_na")]  # técnica y calentamientos no llevan RPE: no cuentan (V7.31)
+        if scored:
+            miss = sum(1 for s in scored if s.get("rpe") is None)
+            skipped = len(week) - len(scored)
             chips.append({"id": "registros", "label": "Registros de la semana",
-                          "value": f"{len(week) - miss} de {len(week)} con RPE",
-                          "sub": "al día" if not miss else f"faltan {miss}: dicta el RPE para completar la carga",
+                          "value": f"{len(scored) - miss} de {len(scored)} con RPE",
+                          "sub": (f"faltan {miss}: dicta el RPE para completar la carga" if miss else "al día")
+                                 + (f" · {skipped} sin RPE a propósito (técnica, calentamiento): no cuentan" if skipped else ""),
                           "tone": "good" if not miss else "warning"})
     load = result.get("load") if isinstance(result.get("load"), dict) else {}
     if load.get("week_sessions") is not None and load.get("week_load") is not None:
@@ -42,7 +51,7 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
         full = (load.get("coverage_days") or 0) >= 14 and (load.get("srpe_coverage_7d_pct") or 0) >= 90
         sub = (f"{change:+.0f} % de carga frente a la semana previa".replace(".", ",") if change is not None and full
                else "sin semana previa completa para comparar")
-        chips.append({"id": "semana", "label": "Últimos 7 días", "value": f"{int(load['week_sessions'])} sesiones · carga {_n(load['week_load'], 0)}",
+        chips.append({"id": "semana", "label": "Últimos 7 días", "value": f"{int(load['week_sessions'])} sesiones · carga FC {_n(load['week_load'], 0)}",
                       "sub": sub, "tone": "warning" if (change is not None and full and change >= 30) else "neutral"})
     if isinstance(shifts, dict) and (shifts.get("today") or shifts.get("tomorrow")):
         t, m = shifts.get("today") or "unknown", shifts.get("tomorrow") or "unknown"
@@ -51,6 +60,6 @@ def compose(result: dict, shifts: dict | None = None, progression: dict | None =
     s = (progression or {}).get("summary") if isinstance(progression, dict) else None
     if isinstance(s, dict) and s.get("available"):
         chips.append({"id": "progresion", "label": "Progresión de cargas", "value": f"{s['up']} ▲ · {s['flat']} = · {s['down']} ▼",
-                      "sub": f"{s['comparable']} ejercicios repetidos, frente a la sesión anterior",
+                      "sub": f"{s['comparable']} ejercicios repetidos (fuerza y halterofilia), frente a la sesión anterior",
                       "tone": "good" if s["up"] > s["down"] else "warning" if s["down"] > s["up"] else "neutral"})
     return chips

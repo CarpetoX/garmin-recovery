@@ -517,7 +517,10 @@ def _publish_post_sleep(chain, generated, now, output):
 # V7.28: GitHub puede tardar en marcar «completed» una ejecución que ya terminó (el 22/10/2026 un Sync acabado
 # siguió «in_progress» más de 30 min). Si la etapa anterior aún no consta como terminada, se reintenta en vez de
 # fallar el ciclo. No relaja ninguna comprobación: solo espera a que GitHub publique el estado real.
-RETRYABLE = {'advanced_missing_or_not_correlated', 'heart_missing_or_not_correlated', 'sync_missing_or_not_correlated'}
+# V8.12: el 30/10/2026 la propia ejecución CrossFit llegó sin estado «in_progress» y la API daba 502; ambos casos
+# son transitorios y se reintentan igual que la etapa anterior sin terminar.
+RETRYABLE = {'advanced_missing_or_not_correlated', 'heart_missing_or_not_correlated', 'sync_missing_or_not_correlated',
+             'crossfit_not_active_or_successful', 'github_api_error'}
 RETRY_DELAYS = (15, 30, 45, 60, 90)
 
 
@@ -540,13 +543,25 @@ def fetch_chain(repo, token, crossfit_id, advanced_id, fetch=None, sleep=None):
             print(f'Report gate: GitHub aún no publica la etapa anterior como terminada ({", ".join(problems)}); '
                   f'reintento {attempt}/{len(RETRY_DELAYS)} en {delay} s')
             sleep(delay)
-        crossfit = fetch(base + f'/actions/runs/{crossfit_id}', token)
-        # GitHub supplies the EXACT triggering Advanced Analytics run id.
-        advanced = fetch(base + f'/actions/runs/{advanced_id}', token)
-        chain, problems = validate_chain(crossfit, [advanced], runs(WORKFLOW['heart']), runs(WORKFLOW['sync']))
+        try:
+            crossfit = fetch(base + f'/actions/runs/{crossfit_id}', token)
+            # GitHub supplies the EXACT triggering Advanced Analytics run id.
+            advanced = fetch(base + f'/actions/runs/{advanced_id}', token)
+            heart_runs, sync_runs = runs(WORKFLOW['heart']), runs(WORKFLOW['sync'])
+        except (OSError, ValueError) as exc:  # HTTPError/URLError (502, timeout) o JSON roto: transitorio
+            chain, problems = None, ['github_api_error']
+            print(f'Report gate: error de la API de GitHub ({type(exc).__name__})')
+            continue
+        chain, problems = validate_chain(crossfit, [advanced], heart_runs, sync_runs)
         if not problems or not set(problems) <= RETRYABLE:
             break
     return chain, problems
+
+
+def _annotate(problems):
+    """V8.6: el motivo queda como anotación de GitHub, legible desde la API aunque no se puedan leer los logs."""
+    level = 'notice' if problems == ['sync_outside_report_slot'] else 'error'
+    print(f"::{level} title=Certificado no emitido::{', '.join(problems)}")
 
 
 def main():
@@ -559,10 +574,12 @@ def main():
     chain, problems = fetch_chain(repo, token, crossfit_id, advanced_id)
     if problems:
         print('Report gate: NOT READY: ' + ', '.join(problems))
+        _annotate(problems)
         return 0 if problems == ['sync_outside_report_slot'] else 1
     generated, problems = validate_files(chain)
     if problems:
         print('Report gate: NOT READY: ' + ', '.join(problems))
+        _annotate(problems)
         return 1
     output = Path('report_ready.json')
     _publish_post_sleep(chain, generated, datetime.now(TZ), output)

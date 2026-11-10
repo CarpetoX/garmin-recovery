@@ -101,6 +101,7 @@ footer{color:var(--text-3);font-size:12px;margin-top:24px;line-height:1.6}
 .cal button.over{box-shadow:inset 0 0 0 2px var(--critical)}
 .cal button.sel{outline:2px solid var(--series-1);outline-offset:1px}
 .cal button.empty-day{background:transparent;cursor:default}
+.cal button b.rest{font-weight:600;font-size:10px;color:var(--text-2)}
 .cal button b{font-weight:650}
 .cal-detail{margin-top:12px;font-size:14px;min-height:20px}
 .cal-detail table{margin-top:6px}
@@ -252,7 +253,7 @@ tr.clk{cursor:pointer}tr.clk:hover td,tr.clk:focus-visible td{background:var(--g
 @media (max-width:420px){.pg>summary{grid-template-columns:minmax(0,1fr) 84px auto}}
 /* ---- V7.16: de un vistazo ---- */
 /* V7.18 Entrenos: fuerza, halterofilia y metcons */
-.tbsum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:4px 0 14px;padding:0;list-style:none}
+.tbsum{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:4px 0 14px;padding:0;list-style:none}
 .tbsum li{background:var(--surface-2);border-radius:12px;padding:9px 6px;text-align:center}
 .tbsum b{display:block;font-size:20px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.1}
 .tbsum span{display:block;font-size:10.5px;overflow-wrap:anywhere;color:var(--text-2);margin-top:3px;line-height:1.2}
@@ -425,3 +426,71 @@ details.more .more-body .h2sub{font-size:12.5px;color:var(--text-2)}
 .tbsum span{text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;overflow-wrap:normal;hyphens:auto}
 .tbsum b{font-size:22px}
 @media (max-width:430px){.tbsum{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* V8.1 · respiración, equilibrio de carga, VO2max y efecto de entrenamiento */
+.rs-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rs-chip{font-size:12px;font-weight:650;padding:4px 10px;border-radius:999px;background:var(--glass-chip,var(--surface-2));white-space:nowrap}
+.tone-good .rs-chip{color:var(--good-ink)}.tone-warning .rs-chip{color:var(--warning-ink)}.tone-critical .rs-chip{color:var(--critical-ink)}
+.rs-svg{display:block;width:100%;height:64px;margin-top:8px}
+.rs-band{fill:var(--series-1-wash)}.rs-med{stroke:var(--text-3);stroke-dasharray:3 3;stroke-width:1}
+.rs-line{fill:none;stroke:var(--series-1);stroke-width:1.6;vector-effect:non-scaling-stroke}
+.rs-dot{fill:var(--series-1)}.rs-hot{fill:var(--series-2)}.rs-last{stroke:var(--surface);stroke-width:1.5}
+.rs-alert{margin:10px 0 0;padding:8px 10px;border-radius:10px;font-size:13px;background:rgba(255,77,94,.12);color:var(--critical-ink)}
+.lb-cap{margin:0;font-size:12px;color:var(--text-3)}
+.lb-row{margin-top:12px}.lb-h{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;font-weight:600}
+.lb-h small{display:block;font-size:11px;font-weight:500;color:var(--text-3)}.lb-h b{font-size:20px;font-variant-numeric:tabular-nums}
+.lb-track{position:relative;height:10px;border-radius:6px;background:var(--glass-chip,var(--surface-2));margin:6px 0 3px;overflow:hidden}
+.lb-band{position:absolute;top:0;bottom:0;background:rgba(47,224,122,.22)}
+.lb-fill{position:absolute;left:0;top:2px;bottom:2px;border-radius:4px;background:var(--series-1)}
+.lb-fill.lb-near,.lb-fill.lb-alto{background:var(--warning)}.lb-fill.lb-bajo{background:var(--muted)}
+.lb-s{font-size:11.5px;color:var(--text-3)}.lb-t.lb-near,.lb-t.lb-alto{color:var(--warning-ink);font-weight:650}.lb-t.lb-ok{color:var(--good-ink)}
+.te{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-top:6px;font-size:12px}
+.te-i{display:inline-flex;align-items:center;gap:6px}.te-n{color:var(--text-3)}
+.te-t{display:inline-block;width:46px;height:6px;border-radius:3px;background:var(--glass-chip,var(--surface-2));overflow:hidden}
+.te-t i{display:block;height:100%;background:var(--series-2)}.te-i b{font-variant-numeric:tabular-nums}.te-i small{color:var(--text-3)}
+.te-l{font-size:11px;padding:1px 8px;border-radius:999px;background:var(--glass-chip,var(--surface-2));color:var(--text-2)}
+.explain{font-size:13px;line-height:1.5;color:var(--text-2);background:var(--glass-chip,var(--surface-2));border-radius:10px;padding:8px 10px}
+.explain b{color:var(--text)}
+.gloss{margin:8px 0 0}.gloss dt{font-size:13px;font-weight:700;margin-top:10px}.gloss dd{margin:2px 0 0;font-size:13px;line-height:1.5;color:var(--text-2)}
+.te-cap{flex-basis:100%;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:650;color:var(--text-3)}
+/* V8.3 · señales a favor y en contra */
+.sg-models{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 12px}
+.sg-m{background:var(--glass-chip,var(--surface-2));border-radius:12px;padding:8px 6px;text-align:center}
+.sg-m b{display:block;font-size:22px;font-weight:720;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sg-m span{font-size:11px;color:var(--text-3)}
+.sg-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:520px){.sg-cols{grid-template-columns:1fr}}
+.sg-col h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 4px}
+.sg-col.fav h3{color:var(--good-ink)}.sg-col.res h3{color:var(--warning-ink)}
+.sg-col li{font-size:13px;line-height:1.4;padding:4px 0 4px 14px;position:relative;color:var(--text-2)}
+.sg-col li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%}
+.sg-col.fav li::before{background:var(--good)}.sg-col.res li::before{background:var(--warning)}
+.sg-adv{margin:10px 0 0;padding:8px 10px;border-radius:10px;font-size:13px;background:rgba(255,204,51,.10);color:var(--text)}
+/* V8.5 · lo que ya llevas hoy */
+.today-done{margin:10px 0 0;padding:8px 10px;border-radius:10px;font-size:13px;line-height:1.45;background:var(--glass-chip,var(--surface-2));color:var(--text-2)}
+.today-done b{color:var(--text)}.today-done.warn{box-shadow:inset 3px 0 0 var(--warning)}.today-done.neg{box-shadow:inset 3px 0 0 var(--critical)}
+/* V8.7: halterofilia por complex, totales de metcon y nombres que no se cortan */
+.lf-cx.appr .lf-name{color:var(--text-2);font-weight:500}
+.lf-tot{margin:6px 0 2px;font-size:12px;color:var(--text-2)}
+details.lf-ex{margin:2px 0 6px}details.lf-ex>summary{padding:6px 0;font-size:12px}
+details.lf-ex ul{margin-top:2px}
+.mc-tot{margin:-2px 0 6px;font-size:13px;color:var(--text-2);font-variant-numeric:tabular-nums}
+td.cal-name{white-space:normal;min-width:11em}
+/* V8.8: carrera */
+.rn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin:8px 0 6px}
+.rn-grid div{min-width:0}.rn-grid dt{font-size:11px;color:var(--text-3)}.rn-grid dd{margin:1px 0 0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.rn-cmp{margin:6px 0;font-size:13px;color:var(--text-2);line-height:1.45}
+.rn-tab td,.rn-tab th{padding:6px 7px}
+@media (max-width:430px){.seg{flex-wrap:wrap}.seg button{flex:1 0 30%}}  /* V8.8: seis pestañas en dos filas, sin scroll oculto */
+.sres{display:block;margin-top:2px;font-size:12px;font-weight:650;color:var(--text)}
+.hito{margin:4px 0 6px;font-size:14px;font-weight:650;color:var(--text)}
+/* V8.13: progreso, intensidad, turnos */
+.pg-note.warn{color:var(--warning-ink);font-weight:600}
+.timeline{margin:0;padding:0;list-style:none}
+.timeline li{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--line, rgba(127,127,127,.18))}
+.timeline li:first-child{border-top:0}
+.timeline .tl-date{font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;padding-top:1px}
+.timeline .tl-t{font-size:14px}.timeline .tl-t small{display:block;font-size:12px;color:var(--text-2);margin-top:2px}
+.timeline .tl-hito .tl-t{font-weight:650}
+tr.soft td{color:var(--text-2)}
+.soft-note{padding:10px 14px}.soft-note .pg-note{margin:0}
+/* V8.10: aviso de comparación tras turno de noche */
+.chg-note{margin:2px 0 8px;font-size:13px;color:var(--text-2);line-height:1.45}

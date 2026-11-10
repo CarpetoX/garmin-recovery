@@ -5,6 +5,7 @@ const $ = id => document.getElementById(id);
 const fmt = (v, d=0) => v == null || Number.isNaN(v) ? '—' : Number(v).toLocaleString('es-ES', {maximumFractionDigits:d, minimumFractionDigits:d});
 const sign = (v, d=0) => v == null ? '—' : (v > 0 ? '+' : '') + fmt(v, d);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shiftEs = t => ({free: 'libre', 'post-TN': 'tras TN', unknown: 'sin registrar'})[t] || t;
 const dshort = iso => { const [y,m,d] = iso.split('-'); return `${+d}/${+m}`; };
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const zoneTxt = {green:'verde', yellow:'ámbar', red:'rojo', unavailable:'pendiente'};
@@ -20,13 +21,28 @@ $('score').innerHTML = official.score == null ? '—' : `${fmt(official.score)}<
 (function(){ const a = $('heroarc'); if (!a) return; const c = 2 * Math.PI * 52, v = official.score == null ? 0 : Math.max(0, Math.min(100, official.score));
   a.style.strokeDasharray = c.toFixed(1); a.style.strokeDashoffset = c.toFixed(1);
   requestAnimationFrame(() => requestAnimationFrame(() => { a.style.strokeDashoffset = (c * (1 - v / 100)).toFixed(1); })); })();
-$('zone-label').textContent = DEC.guidance.label + (DEC.agreement === 'total' ? ' · modelos de acuerdo' : ' · regla conservadora');
+$('zone-label').textContent = DEC.guidance.label + (DEC.agreement === 'total' ? ' · los 3 modelos de la app coinciden' : ' · se aplica el modelo más prudente');
 const reasons = (R.reasons || []).map(r => r.split(':')[0].replace(/_/g,' '));
 const DC = R.data_confidence || {}, RC = R.recommendation_confidence || {};
 $('confidence').textContent = `Datos: confianza ${DC.level || '—'} · Recomendación: confianza ${RC.level || R.confidence}` + (reasons.length ? ` · ${reasons.join(', ')}` : '') + ` · historial ${D.history.days} días`;
 $('guidance').textContent = DEC.guidance.text;
 $('rx').innerHTML = `<span>RPE máx. <b>${DEC.guidance.rpe_max}</b></span><span>Volumen <b>${esc(DEC.guidance.volume)}</b></span>` +
   (DEC.agreement === 'total' ? '' : '<span class="warn-chip">⚠ Los modelos discrepan: se aplica el más prudente</span>');
+// V8.5: lo que ya llevas hoy, para que «intensidad permitida» no se lea igual a las 9:00 que tras cuatro sesiones
+(function(){
+  const day = (D.sessions_28d || []).filter(s => s.date === D.date && !s.removed);
+  if (!day.length) return;
+  const mins = day.reduce((a, s) => a + (s.duration_min || 0), 0);
+  const rp = day.map(s => s.rpe).filter(v => v != null), top = rp.length ? Math.max(...rp) : null;
+  const srpe = day.reduce((a, s) => a + (s.srpe || 0), 0), cap = DEC.guidance.rpe_max;
+  let msg = '', cls = '';
+  if (top != null && cap != null && top > cap) { msg = `Has pasado del máximo de hoy (RPE ${fmt(top, 1)} sobre ${cap}): el resto del día, recuperación.`; cls = 'neg'; }
+  else if (top != null && top >= 8) { msg = 'Ya has hecho una sesión dura hoy: lo que añadas, suave.'; cls = 'warn'; }
+  const el = document.createElement('p'); el.className = 'today-done ' + cls; el.id = 'hoy-llevas';
+  el.innerHTML = `<b>Hoy llevas</b> ${day.length} ${day.length === 1 ? 'sesión' : 'sesiones'} · ${fmt(mins)} min` +
+    (top != null ? ` · RPE máx. ${fmt(top, top % 1 ? 1 : 0)}` : '') + (srpe ? ` · sRPE ${fmt(srpe)}` : '') + (msg ? `<br>${msg}` : '');
+  $('rx').insertAdjacentElement('afterend', el);
+})();
 $('v3-title').textContent = `Modelo experimental (en pruebas) · ${R.score == null ? 'sin puntuación' : fmt(R.score) + '/100 · ' + zoneTxt[R.zone]}`;
 $('drivers').innerHTML = (R.drivers || []).map(d => {
   const cls = d.z <= -0.5 ? 'neg' : d.z >= 0.5 ? 'pos' : 'neu';
@@ -64,10 +80,10 @@ $('meters').innerHTML = Object.entries(C).map(([k, c]) => `
       `<circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * v / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 32 32)"/></svg>`; };
     const hv = H.score, sl = S.sleep_score;
   const last7 = T.slice(-7), mx = Math.max(1, ...last7.map(t => t.srpe || 0));
-  const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : 'sin registro'}"></i>`).join('');
+  const bars = last7.map(t => `<i style="height:${Math.max(3, Math.round((t.srpe || 0) / mx * 28))}px" title="${dshort(t.date)}: ${t.srpe ? fmt(t.srpe) : (t.rest_confirmed ? 'descanso' : 'sin registro')}"></i>`).join('');
   $('rings').innerHTML =
     `<div class="card ring-card"><div class="rw">${ring(sl, tone(sl))}<div class="ring-num">${fmt(sl)}</div></div><div class="ring-label">Sueño</div><div class="ring-sub">${fmt(S.hours, 1)} h · puntuación</div></div>` +
-    `<div class="card ring-card"><div class="rw">${ring(hv, tone(hv))}<div class="ring-num">${fmt(hv)}</div></div><div class="ring-label">HRV</div><div class="ring-sub">${fmt(H.today_ms)} ms hoy</div></div>` +
+    `<div class="card ring-card"><div class="rw">${ring(hv, tone(hv))}<div class="ring-num">${fmt(hv)}</div></div><div class="ring-label">HRV</div><div class="ring-sub">${fmt(H.today_ms)} ms hoy · puntuación</div></div>` +
     `<div class="card ring-card"><div class="bars7" role="img" aria-label="sRPE de los últimos 7 días">${bars}</div><div class="ring-num">${fmt(L.week_srpe)}</div><div class="ring-label">Carga 7 días</div><div class="ring-sub">sRPE · ${L.week_sessions} sesiones</div></div>`;
 })();
 
@@ -161,7 +177,7 @@ function chart(el, opt){
       const i = Math.max(0, Math.min(n - 1, Math.floor((px - m.l) / bw)));
       const d = T[i];
       xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('opacity', .5);
-      tip.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'short', day:'numeric', month:'short'})}</b>` + (d.shift ? ` · turno ${esc(d.shift)}` : '') + '<br>' + opt.tip(d);
+      tip.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'short', day:'numeric', month:'short'})}</b>` + (d.shift ? ` · turno ${esc(shiftEs(d.shift))}` : '') + '<br>' + opt.tip(d);
       tip.style.opacity = 1;
       const tw = tip.offsetWidth, th = tip.offsetHeight;
       let left = rect.left + window.scrollX + x(i) + 12; if (left + tw > window.scrollX + document.documentElement.clientWidth - 8) left = rect.left + window.scrollX + x(i) - tw - 12;
@@ -200,14 +216,15 @@ chart($('c-stages'), {label:'Sueño por fases', zero:true, refs:[{y:S.need_hours
 (function(){
   const avg = (arr, k) => { const v = arr.map(d => d[k]).filter(x => x != null); return v.length ? {m: v.reduce((a, b) => a + b, 0) / v.length, n: v.length} : null; };
   const read = (id, key, o) => { const el = $(id); if (!el) return;
-    const a = avg(T.slice(-7), key), b = avg(T, key);
+    let a = avg(T.slice(-7), key); const b = avg(T, key);
+    if (o.rolling) { const last = [...T].reverse().find(d => d[o.rolling] != null); if (last && a) a = {m: last[o.rolling], n: a.n}; }  // misma cifra que la tarjeta
     if (!a || !b || a.n < 4 || b.n < 10) { el.hidden = true; return; }
     const diff = a.m - b.m, dir = Math.abs(diff) < o.eps ? 0 : diff > 0 ? 1 : -1, good = dir === 0 ? null : (o.better === 0 ? null : dir === o.better);
     const cls = dir === 0 ? 'neu' : good === null ? 'neu' : good ? 'pos' : 'neg', arrow = dir === 0 ? '→' : dir > 0 ? '↑' : '↓';
     const word = dir === 0 ? 'estable' : dir > 0 ? 'sube' : 'baja';
     el.className = 'read ' + cls;
     el.innerHTML = `<b>${arrow} ${word}</b> · últimos 7 días ${fmt(a.m, o.dec)} ${o.unit} · media 28 días ${fmt(b.m, o.dec)} ${o.unit}`; };
-  read('r-hrv', 'hrv_ms', {eps: 1.5, dec: 0, unit: 'ms', better: 1});
+  read('r-hrv', 'hrv_ms', {eps: 1.5, dec: 0, unit: 'ms', better: 1, rolling: 'hrv_rolling_ms'});
   read('r-rhr', 'resting_hr', {eps: 0.8, dec: 1, unit: 'lpm', better: -1});
   read('r-sleep', 'sleep_hours', {eps: 0.25, dec: 1, unit: 'h', better: 1});
   read('r-load', 'load', {eps: 4, dec: 0, unit: '', better: 0});
@@ -257,11 +274,13 @@ const EFF = D.session_effort || {};
 const effTxt = {alto: 'RPE alto para tu FC', bajo: 'RPE bajo para tu FC'};
 const effTip = {alto: 'Te costó más de lo habitual para la FC registrada en este tipo de sesión.',
                 bajo: 'La FC fue alta para el esfuerzo que marcaste en este tipo de sesión.'};
+const MRES = D.metcon_results || {};  // V8.9: rondas y repeticiones de cada metcon
+const mres = id => MRES[id] ? `<span class="sres">${esc(MRES[id])}</span>` : '';
 const effFlag = id => { const e = EFF[id]; return e && e.flag ? e : null; };
 // ♥ que late a la FC media de la sesión (un latido = 60 / FC segundos)
 const beat = hr => `<span class="hrmark${hr > 0 ? ' beat' : ''}" aria-hidden="true"${hr > 0 ? ` style="--beat:${(60 / hr).toFixed(3)}s"` : ''}>♥</span>`;
 $('sessions').innerHTML = sess.length ? `<thead><tr><th>Fecha</th><th>Tipo</th><th>Sesión</th><th class="num">Min</th><th class="num">Carga</th><th class="num">FC media</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
+  sess.map(s => `<tr${hasCurve(s) ? ` class="clk" tabindex="0" role="button" data-id="${esc(s.id)}" aria-label="Ver la FC de la sesión"` : ''}><td>${dshort(s.date)} ${s.start_local ? s.start_local.slice(11,16) : ''}</td><td>${esc(s.category && s.category !== 'Sin detalle' ? s.category : typeEs(s.type))}</td><td>${hasCurve(s) ? beat(s.avg_hr) + ' ' : ''}${esc(s.label || s.name || '')}${mres(s.id)}${effFlag(s.id) ? ` <span class="effflag ${effFlag(s.id).flag}">${effTxt[effFlag(s.id).flag]}</span>` : ''}</td><td data-l="Min" class="num">${fmt(s.duration_min)}</td><td data-l="Carga" class="num">${fmt(s.load)}</td><td data-l="FC" class="num">${fmt(s.avg_hr)}</td><td data-l="RPE" class="num">${fmt(s.rpe,1)}</td><td data-l="sRPE" class="num">${fmt(s.srpe)}</td></tr>`).join('') + '</tbody>'
   : '<tbody><tr><td class="empty">Sin sesiones registradas</td></tr></tbody>';
 
 // ---------- Detalle de FC de una sesión ----------
@@ -308,6 +327,8 @@ function showHr(id, anchor) {
 }
 $('sessions').addEventListener('click', e => { const tr = e.target.closest('tr.clk'); if (tr) showHr(tr.dataset.id); });
 // V7.20: la FC de cada sesión en las tarjetas de fuerza, halterofilia y metcons
+const TE_TXT = v => v == null ? '—' : v < 1 ? 'sin efecto' : v < 2 ? 'leve' : v < 3 ? 'mantiene' : v < 4 ? 'mejora' : v < 5 ? 'mejora mucho' : 'sobrecarga';
+const teBar = (name, v) => `<span class="te-i"><span class="te-n">${name}</span><i class="te-t"><i style="width:${v == null ? 0 : Math.min(100, v / 5 * 100)}%"></i></i><b>${v == null ? '—' : fmt(v, 1)}</b><small>${TE_TXT(v)}</small></span>`;
 function miniHr(c) {
   const pts = c.points || [], W = 300, H = 46;
   if (pts.length < 2) return '';
@@ -320,6 +341,8 @@ document.querySelectorAll('.hrmini').forEach(el => {
   const id = el.dataset.id, c = HRC[id], e = effFlag(id);
   let h = '';
   if (c && c.available) h += `<button type="button" class="hrbtn" data-id="${esc(id)}" aria-label="Ver la curva de FC y las zonas de la sesión">${miniHr(c)}<span class="hrmeta">${beat(c.avg_hr)} FC media <b>${fmt(c.avg_hr)}</b> · máx. <b>${fmt(c.max_hr)}</b> lpm<span class="hrmore">curva y zonas ›</span></span></button>`;
+  const te = (D.training_effect || {})[id];  // V8.1: efecto de entrenamiento de Garmin (0–5)
+  if (te) h += `<div class="te" title="Efecto de entrenamiento de Garmin, de 0 a 5"><span class="te-cap">Efecto de entrenamiento</span>${teBar('Aeróbico', te.aerobic)}${teBar('Anaeróbico', te.anaerobic)}${te.label ? `<span class="te-l">${esc(te.label)}</span>` : ''}</div>`;
   if (e) h += `<p class="effflag ${e.flag}" title="${esc(effTip[e.flag])}">${effTxt[e.flag]}</p>`;
   if (h) { el.innerHTML = h; el.hidden = false; }
   if (c && c.available) { const chip = el.closest('article') && el.closest('article').querySelector('.hrchip'); if (chip) chip.remove(); }  // la FC ya va con su curva
@@ -338,7 +361,7 @@ $('compare').innerHTML = `<thead><tr><th>Modelo</th><th>Rol</th><th class="num">
   <tr><td>Monotonía / strain 7 días</td><td></td><td class="num">${fmt(L.monotony,2)} / ${fmt(L.strain)}</td><td colspan="2">monotonía &gt; 2 = carga poco variada</td></tr>
   <tr><td>Días seguidos entrenando</td><td></td><td class="num">${L.consecutive_training_days}</td><td colspan="2">—</td></tr></tbody>`;
 $('daily').innerHTML = `<thead><tr><th>Fecha</th><th>Turno</th><th class="num">Punt.</th><th class="num">HRV</th><th class="num">HRV 7d</th><th class="num">FC rep.</th><th class="num">Sueño h</th><th class="num">Carga</th></tr></thead><tbody>` +
-  T.slice().reverse().map(d => `<tr><td>${dshort(d.date)}</td><td>${esc(d.shift || '')}</td><td class="num">${fmt(d.score)}</td><td class="num">${fmt(d.hrv_ms)}</td><td class="num">${fmt(d.hrv_rolling_ms,1)}</td><td class="num">${fmt(d.resting_hr)}</td><td class="num">${fmt(d.sleep_hours,1)}</td><td class="num">${fmt(d.load)}</td></tr>`).join('') + '</tbody>';
+  T.slice().reverse().map(d => `<tr><td>${dshort(d.date)}</td><td>${esc(shiftEs(d.shift || ''))}</td><td class="num">${fmt(d.score)}</td><td class="num">${fmt(d.hrv_ms)}</td><td class="num">${fmt(d.hrv_rolling_ms,1)}</td><td class="num">${fmt(d.resting_hr)}</td><td class="num">${fmt(d.sleep_hours,1)}</td><td class="num">${fmt(d.load)}</td></tr>`).join('') + '</tbody>';
 
 const CE = D.certificate || {}, TI = D.training_integrity || {}, CY = CE.cycle || {};
 const okTxt = ok => ok ? '<span class="pos">✓</span>' : '<span class="neg">!</span>';
@@ -376,7 +399,7 @@ if (cal && T.length) {
   T.forEach((d, i) => {
     const z = d.decision_zone || d.zone || 'unavailable', r = RPE[d.date] || {};
     const cls = `z-${String(z).replace(/[^a-z_]/g, '')}${d.decision_zone ? '' : ' v3'}${r.over ? ' over' : ''}`;
-    html += `<button class="${cls}" data-i="${i}" aria-label="${esc(d.date)}"><span class="dn">${+d.date.slice(8)}</span>${r.rpe != null ? `<b>${fmt(r.rpe)}</b>` : (d.sessions ? '•' : '')}</button>`;
+    html += `<button class="${cls}" data-i="${i}" aria-label="${esc(d.date)}"><span class="dn">${+d.date.slice(8)}</span>${r.rpe != null ? `<b>${fmt(r.rpe)}</b>` : (d.sessions ? '•' : (d.rest_confirmed ? '<b class="rest">desc.</b>' : ''))}</button>`;
   });
   cal.innerHTML = html;
   const show = i => {
@@ -384,11 +407,11 @@ if (cal && T.length) {
     cal.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.i == i));
     const ss = SESS.filter(x => x.date === d.date);
     det.innerHTML = `<b>${new Date(d.date + 'T12:00').toLocaleDateString('es-ES',{weekday:'long', day:'numeric', month:'long'})}</b>` +
-      (d.shift ? ` · turno ${esc(d.shift)}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
+      (d.shift ? ` · turno ${esc(shiftEs(d.shift))}` : '') + `<br>Decisión: <b>${z ? zoneTxt[z] : '—'}</b>${d.decision_zone ? '' : ' (modelo experimental; decisión no guardada ese día)'}` +
       (r.cap != null ? ` · RPE máx. ${r.cap}` : '') + `<br>Sueño ${fmt(d.sleep_hours,1)} h · HRV ${fmt(d.hrv_ms)} ms · FC reposo ${fmt(d.resting_hr)} lpm` +
       (ss.length ? `<div class="scroll"><table><thead><tr><th>Hora</th><th>Sesión</th><th class="num">Min</th><th class="num">RPE</th><th class="num">sRPE</th></tr></thead><tbody>` +
-        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td>${esc(x.label || x.name || '')}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
-        : '<br><span class="weight">Sin sesiones registradas.</span>');
+        ss.map(x => `<tr><td>${x.start_local ? x.start_local.slice(11,16) : ''}</td><td class="cal-name">${esc(x.label || x.name || '')}${mres(x.id)}</td><td class="num">${fmt(x.duration_min)}</td><td class="num">${fmt(x.rpe,1)}</td><td class="num">${fmt(x.srpe)}</td></tr>`).join('') + '</tbody></table></div>'
+        : (d.rest_confirmed ? '<br><span class="weight">Descanso confirmado por ti.</span>' : '<br><span class="weight">Sin sesiones registradas (descanso no confirmado).</span>'));
   };
   cal.addEventListener('click', ev => { const b = ev.target.closest('button[data-i]'); if (b) show(+b.dataset.i); });
   show(T.length - 1);
@@ -436,7 +459,7 @@ $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días
 
 // ==== V8.0 · Menos texto a la vista: las explicaciones se pliegan bajo «Ver detalle» (no se borra nada) ====
 (function(){
-  const CARD_FOLD = '.h2sub, .pg-note, .marks-note, .tip-line, .read, .notes, .meta';
+  const CARD_FOLD = '.h2sub, .pg-note, .marks-note, .tip-line, .notes, .meta';  // las lecturas (.read) son la conclusión de cada gráfica: a la vista
   const ITEM_FOLD = '.why, .pg-note';
   const ITEM = 'article, .plan li, .plan-day, .cal-day';
   const keep = el => el.closest('#hrdetail, .tbhead, .hero, details.more, table, .tip, .hrmini') ||
@@ -486,4 +509,72 @@ $('footer').innerHTML = `<b>Metodología.</b> HRV en ln(rMSSD): media de 7 días
     try { localStorage.setItem('gr-theme', b.dataset.t); } catch (err) {}
     paint(); });
   paint();
+})();
+
+// ==== V8.1 · «Qué mide y cómo leerlo» en cada tarjeta (dentro de «Ver detalle») y glosario en Sistema ====
+(function(){
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const EXPLAIN = [
+    [/^Disponibilidad de hoy/, 'Puntuación oficial (0–100) de lo preparado que está tu cuerpo hoy: compara tu HRV, FC en reposo y nocturna, sueño, carga reciente y estrés con tu propia normalidad. La zona y los límites (RPE máximo y volumen) salen del más prudente de los tres modelos, así que un solo indicador malo puede bajarla aunque los demás estén bien.'],
+    [/^Señales a favor y en contra/, 'Aparece cuando los modelos no coinciden (por ejemplo, la recuperación oficial alta y el Training Readiness de Garmin bajo). Muestra qué señales de hoy son favorables y cuáles restrictivas, con sus cifras. No cambia la decisión: sirve para afinar la sesión, sobre todo cuanto más larga sea la columna «En contra».'],
+    [/^Cambios recientes/, 'Cada tarjeta compara el valor de hoy con el de ayer. La flecha va en verde si el cambio es bueno para la recuperación (HRV que sube, FC que baja…) y en rojo si es malo. La curva enseña los últimos 7 días para ver si es algo puntual o una tendencia.'],
+    [/^Resumen de hoy · Claude/, 'Texto redactado por Claude con las cifras del último ciclo certificado. No añade datos nuevos: interpreta los que ves en la app. Si el ciclo cambia, se marca como desactualizado.'],
+    [/^Hoy en breve|^En tres líneas/, 'Resumen automático por reglas a partir de la decisión del día; aparece cuando no hay resumen de Claude del ciclo vigente.'],
+    [/^Por qué esta puntuación/, 'Los factores que más han movido la puntuación de hoy, del que más pesa al que menos. ↓ empeora la recuperación, ↑ la mejora y → es neutro.'],
+    [/^Respiración nocturna/, 'Respiraciones por minuto mientras duermes, medidas por el reloj. Cambia muy poco de una noche a otra: una subida de 2 o más sobre tu normal suele anticipar fatiga, estrés, alcohol o un resfriado, sobre todo si a la vez baja la HRV. Es informativa: no cambia la puntuación.'],
+    [/^Esta noche/, 'Horas de sueño que conviene dormir esta noche: tu base (7,5 h) más un recargo por la carga de ayer y por la deuda de las últimas noches, menos las siestas que registró Garmin. Es una estimación orientativa.'],
+    [/^Próximos 7 días/, 'Plan por reglas según tus turnos y la decisión de hoy: como mucho 3 sesiones duras (RPE ≥ 8) a la semana, separadas 48 h y solo en días libres, y descanso después de un turno de noche. Se recalcula en cada informe.'],
+    [/^Peso/, 'Lecturas de la báscula Xiaomi que muestras o dictas. El peso varía 1–2 kg en el mismo día por comida, líquidos y entreno: compara solo lecturas hechas a la misma hora, mejor por la mañana en ayunas.'],
+    [/^Últimas 4 semanas/, 'Calendario de 28 días. El color es la decisión de cada día y el número, el RPE de la sesión más dura. Un anillo rojo marca que entrenaste por encima del máximo recomendado ese día. Toca un día para ver su detalle.'],
+    [/^Disponibilidad · 28 días/, 'Puntuación oficial de cada día. Las bandas de color son las zonas, las franjas tenues los turnos de noche y los triángulos los días con una sesión de RPE 8 o más. Sirve para ver cómo responde tu cuerpo a los bloques duros y a los turnos.'],
+    [/^Carga semanal/, 'Carga de los últimos 7 días frente a la habitual de las últimas 4 semanas (ACWR). Dentro de la banda verde la progresión es razonable. Muy por encima, la carga ha subido de golpe; muy por debajo, estás descargando.'],
+    [/^Mapa de 28 días/, 'Cada columna es un día y cada fila un componente: recuperación, sueño y carga. Verde es bueno, amarillo regular, rojo malo y gris sin dato. Ayuda a ver qué falla más a menudo.'],
+    [/^HRV nocturna/, 'Variabilidad de la frecuencia cardiaca durante el sueño (rMSSD, en ms). Una HRV más alta de lo normal suele indicar buena recuperación. Compárala siempre con tu propio rango (la banda) y fíjate en la media de 7 días: una noche suelta varía mucho por alcohol, cenas tarde o estrés.'],
+    [/^FC en reposo/, 'Pulsaciones más bajas en reposo (lpm). Si sube 5 o más sobre tu mediana varios días seguidos suele indicar fatiga, mal sueño, estrés o el inicio de una enfermedad. La FC nocturna es la media durante el sueño.'],
+    [/^Sueño por fases/, 'Profundo, REM y ligero estimados por Garmin a partir del movimiento y la FC. La duración total es fiable; el reparto entre fases es orientativo.'],
+    [/^Sueño/, 'Horas dormidas cada noche frente a tu necesidad configurada (7,5 h), contando el sueño de día tras un turno de noche. La deuda es lo que falta acumulado de las últimas noches.'],
+    [/^Carga diaria/, 'Carga cardiaca de cada día según Intervals.icu (TRIMP). ATL es la fatiga de los últimos 7 días y CTL la forma de las últimas 6 semanas; su diferencia (TSB, forma) indica si vienes cargado (negativo) o fresco (positivo).'],
+    [/^RPE frente al máximo/, 'La barra es el RPE de tu sesión más dura de cada día y la raya, el máximo que permitía la decisión de ese día. Una barra roja indica que entrenaste por encima de lo recomendado.'],
+    [/^Esta semana/, 'Totales de los últimos 7 días frente a los 7 anteriores. sRPE es la carga interna: RPE × minutos de cada sesión, sumado.'],
+    [/^Equilibrio de carga/, 'Garmin reparte tu carga de 4 semanas según la intensidad cardiaca: aeróbica baja (base, zonas 1–2), aeróbica alta (tempo y umbral) y anaeróbica (esfuerzos máximos cortos). La banda verde es el rango que recomienda para tu nivel. En CrossFit es normal tener mucha anaeróbica; si pasa del techo, conviene meter sesiones suaves y largas.'],
+    [/^VO2max/, 'Consumo máximo de oxígeno estimado por Garmin (ml/kg/min): mide tu capacidad aeróbica. Garmin lo calcula sobre todo en carreras y bici con GPS; en HIIT y fuerza apenas lo actualiza, por eso puede salir plano aunque mejores.'],
+    [/^Últimos 7 días/, 'Número de sesiones de cada tipo en la última semana y el RPE medio de los metcons.'],
+    [/^Volumen de/, 'Kilos levantados con barra cada semana (repeticiones × carga). Solo cuenta la barra con carga total; las mancuernas y las máquinas no se suman porque no son comparables.'],
+    [/^Progresión por ejercicio/, 'La mejor serie de cada ejercicio que repites, comparada con la sesión anterior: ▲ sube la carga o las repeticiones, = igual y ▼ baja. Solo compara series con las mismas repeticiones.'],
+    [/^Sesiones de (fuerza|halterofilia)/, 'Cada sesión con sus series («10 @ 60» = 10 repeticiones con 60 kg) y la mejor serie a la derecha. Debajo, la FC de la sesión y el efecto de entrenamiento de Garmin.'],
+    [/^Metcons/, 'Cada WOD con su formato, resultado y tiempos. El cronómetro oficial y el tiempo grabado por el reloj se guardan por separado. Solo se pueden comparar WOD que repiten formato y ejercicios.'],
+    [/^Técnica y otras/, 'Calentamientos, técnica y sesiones sin ejercicios estructurados. No llevan RPE ni cuentan como RPE pendiente, pero sí suman a la carga cardiaca.'],
+    [/^Sesiones de los últimos 28 días/, 'Todas las sesiones con su duración, carga cardiaca, FC media, RPE y sRPE (RPE × minutos). Toca una fila con ♥ para ver la curva de FC y las zonas.'],
+    [/^Ciclo completo/, 'Estado de la última cadena de datos: Sync (Intervals), FC (Garmin), Analítica, CrossFit, publicación de la web y aviso al móvil.'],
+    [/^Puntualidad/, 'Cada franja de Sync (08:30, 16:45 y 22:45) con la hora real del Sync y del informe. El margen es lo que sobró hasta la hora objetivo del informe.'],
+    [/^Modelo experimental/, 'Modelo v3 en pruebas. Se calcula en paralelo y entra en la decisión solo si es más prudente que el oficial. Cada barra es un componente con su peso entre paréntesis.'],
+  ];
+  const EXTRA = [
+    ['Efecto de entrenamiento', 'Escala de Garmin de 0 a 5 que indica cuánto mejora una sesión tu capacidad aeróbica y anaeróbica: 0–0,9 sin efecto · 1–1,9 leve · 2–2,9 mantiene · 3–3,9 mejora · 4–4,9 mejora mucho · 5 sobrecarga.'],
+    ['RPE', 'Esfuerzo percibido de la sesión de 0 a 10, el que dictas tú. La técnica y los calentamientos no lo llevan.'],
+    ['sRPE', 'Carga interna de Foster: RPE × minutos de la sesión. Refleja mejor que la FC la carga de la fuerza.'],
+    ['Body Battery', 'Energía estimada por Garmin (0–100) a partir de la HRV, el estrés y el sueño. Solo es una medición nueva cuando el reloj ha sincronizado.'],
+    ['Estrés medio', 'Índice de estrés de Garmin (0–100) calculado con la HRV durante el día. Por encima de tu media suele acompañar a peor recuperación.'],
+    ['Forma (TSB)', 'CTL − ATL: forma menos fatiga. Negativa = vienes cargado; positiva = fresco. Solo se interpreta con al menos 6 semanas de historial.'],
+  ];
+  const find = t => (EXPLAIN.find(([re]) => re.test(t)) || [])[1];
+  document.querySelectorAll('.card').forEach(card => {
+    if (card.id === 'hrdetail' || card.id === 'apariencia' || card.id === 'glosario') return;
+    const h = card.querySelector(':scope > h2, :scope h2');
+    const title = (h ? h.textContent : card.getAttribute('aria-label') || '').trim();
+    const txt = title && find(title);
+    if (!txt) return;
+    let d = card.querySelector(':scope > details.more');
+    if (!d) { d = document.createElement('details'); d.className = 'more'; d.innerHTML = '<summary>Ver detalle</summary><div class="more-body"></div>'; card.appendChild(d); }
+    const p = document.createElement('p'); p.className = 'explain'; p.innerHTML = '<b>Qué mide y cómo leerlo.</b> ' + esc(txt);
+    d.querySelector('.more-body').prepend(p);
+  });
+  const host = document.getElementById('tab-sistema'); if (!host) return;
+  const NAMES = ["Disponibilidad (puntuación de hoy)", "Señales a favor y en contra", "Cambios recientes", "Resumen de Claude", "Hoy en breve", "Por qué esta puntuación", "Respiración nocturna", "Esta noche (sueño necesario)", "Próximos 7 días", "Peso", "Últimas 4 semanas", "Disponibilidad · 28 días", "Carga semanal (ACWR)", "Mapa de 28 días", "HRV nocturna", "FC en reposo y nocturna", "Sueño por fases", "Sueño y deuda", "Carga diaria, ATL y CTL", "RPE frente al máximo del día", "Esta semana", "Equilibrio de carga · 4 semanas", "VO2max", "Últimos 7 días (Entrenos)", "Volumen de fuerza y halterofilia", "Progresión por ejercicio", "Sesiones de fuerza y halterofilia", "Metcons", "Técnica y otras", "Sesiones de los últimos 28 días", "Ciclo completo", "Puntualidad", "Modelo experimental"];
+  const names = EXPLAIN.map(([, t], i) => [NAMES[i] || '', t]);
+  const sec = document.createElement('section'); sec.className = 'card'; sec.id = 'glosario';
+  sec.innerHTML = '<h2>Qué significa cada dato</h2><details class="more"><summary>Ver glosario</summary><dl class="gloss">' +
+    names.concat(EXTRA).map(([n, t]) => `<dt>${esc(n)}</dt><dd>${esc(t)}</dd>`).join('') + '</dl></details>';
+  const ap = document.getElementById('apariencia');
+  host.insertBefore(sec, ap ? ap.nextSibling : host.firstChild);
 })();
