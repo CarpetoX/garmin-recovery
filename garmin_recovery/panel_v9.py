@@ -31,17 +31,23 @@ def _quantile(xs: list[float], q: float) -> float:
     return s[lo] + (s[hi] - s[lo]) * (pos - lo)
 
 
-def context_of(day: str, cal: dict) -> str:
-    """Contexto laboral de un día: TN, post-TN (día siguiente a un TN), MT o libre."""
-    days = cal.get("days") if isinstance(cal.get("days"), dict) else {}
-    code = days.get(day)
+def _cal(cal: dict) -> dict:
+    return {"days": cal.get("days") if isinstance(cal.get("days"), dict) else {},
+            "confirmed_months": [m for m in cal.get("confirmed_months") or [] if isinstance(m, str)]
+            if isinstance(cal.get("confirmed_months"), list) else []}
+
+
+def context_of(day: str, cal: dict) -> str | None:
+    """Contexto laboral con la regla de la app (shift_calendar.resolve_day): TN, MT, post-TN o libre.
+
+    Un MT tras un TN sigue siendo MT; un día de un mes sin confirmar es desconocido (None) y no cuenta como libre.
+    """
+    from .shift_calendar import resolve_day
     try:
-        prev = days.get((_date.fromisoformat(day) - timedelta(days=1)).isoformat())
-    except ValueError:
-        prev = None
-    if prev == "TN" and code != "TN":
-        return "post-TN"
-    return code if code in ("TN", "MT") else "libre"
+        label = resolve_day(day, _cal(cal))["label"]
+    except (TypeError, ValueError, KeyError):
+        return None
+    return {"free": "libre", "TN": "TN", "MT": "MT", "post-TN": "post-TN"}.get(label)
 
 
 CONTEXT_LABEL = {"TN": "días de TN", "post-TN": "días post-TN", "MT": "días de MT", "libre": "días libres"}
@@ -56,8 +62,8 @@ def normal_range(rows: list[dict], key: str, today: str, cal: dict | None = None
     out = {"n": len(xs), "p10": _quantile(xs, 0.1), "p50": _quantile(xs, 0.5), "p90": _quantile(xs, 0.9)}
     if cal:
         ctx = context_of(today, cal)
-        same = [r[key] for r in prev if context_of(r["date"], cal) == ctx]
-        if len(same) >= MIN_CONTEXT:
+        same = [r[key] for r in prev if ctx and context_of(r["date"], cal) == ctx]
+        if ctx and len(same) >= MIN_CONTEXT:
             out["context"] = {"label": CONTEXT_LABEL[ctx], "n": len(same), "p50": _quantile(same, 0.5)}
     return out
 
@@ -184,7 +190,7 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     st = _day(_load(root, "garmin_stress.json").get("days"), today)
     cf, cal = _load(root, "crossfit_insights.json"), _load(root, "shift_calendar.json")
     dec = result.get("decision") or {}
-    gd = dec.get("guidance") or {}
+    gd = dec.get("guidance") if isinstance(dec.get("guidance"), dict) else {}
     zone = dec.get("zone")
     zc = ZONE.get(zone or "", ("—", "na"))
     trend = [dict(r, date=_iso(r.get("date"))) for r in result.get("trend_28d") or [] if isinstance(r, dict) and _iso(r.get("date"))]
@@ -268,12 +274,13 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     hours = cal.get("shift_hours") if isinstance(cal.get("shift_hours"), dict) else {}
 
     def shift(d):
-        days = cal.get("days") if isinstance(cal.get("days"), dict) else {}
-        c = days.get(d.isoformat())
-        if not isinstance(c, str) or not c:
-            return '<span class="chip">libre</span>'
-        hh = hours.get(c) if isinstance(hours.get(c), dict) else {}
-        return f'<span class="chip strong">{esc(c)} {esc(hh.get("start", ""))}–{esc(hh.get("end", ""))}</span>'
+        ctx = context_of(d.isoformat(), cal)
+        if ctx in ("TN", "MT"):
+            hh = hours.get(ctx) if isinstance(hours.get(ctx), dict) else {}
+            return f'<span class="chip strong">{esc(ctx)} {esc(hh.get("start", ""))}–{esc(hh.get("end", ""))}</span>'
+        if ctx is None:
+            return '<span class="chip">sin confirmar</span>'
+        return f'<span class="chip">{"libre tras TN" if ctx == "post-TN" else "libre"}</span>'
     lead = ex.get("ai_lead") or []
     lead_html = f'<p class="lead">{esc(lead[0])}</p>' if lead and isinstance(lead[0], str) else ""
     day_card = card("Hoy y mañana", lead_html
@@ -292,11 +299,11 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     models = card("¿Qué dicen los modelos?", takeaway(f'Decide el más prudente: <b>{esc(zc[0])}</b>.')
                   + bars_h([("Oficial", v2, zcls(v2)), ("Híbrido", hyb.get("score"), zcls(hyb.get("score"))), ("Experimental", v3, zcls(v3)),
                             ("Índice personal", pri.get("score"), "s2"), ("Garmin Readiness", tr.get("score"), "s2")]),
-                  "0–100 · los dos primeros deciden; el resto es referencia")
+                  "0–100 · deciden oficial, híbrido y experimental (manda el más prudente); el resto es referencia")
     sd = ext.get("sleep_detail") or {}
     sl_rng = normal_range(trend, "sleep_hours", today, cal)
     sleep = card("¿He dormido lo suficiente?",
-                 takeaway(f'{num(cur.get("sleep_hours"), 1)} h ({hhmm(cur.get("sleep_start_local"))} → {hhmm(cur.get("sleep_end_local"))}), '
+                 takeaway(f'{num(tday.get("sleep_hours"), 1)} h ({hhmm(cur.get("sleep_start_local"))} → {hhmm(cur.get("sleep_end_local"))}), '
                           f'{verdict(tday.get("sleep_hours"), sl_rng, True)[1]}.')
                  + stacked([("Profundo", sd.get("deep_minutes"), "c-deep"), ("Ligero", sd.get("light_minutes"), "c-light"),
                             ("REM", sd.get("rem_minutes"), "c-rem"), ("Despierto", sd.get("awake_minutes"), "c-awake")])
@@ -371,7 +378,7 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     # =================== PROGRESO
     ap = ex.get("athlete_progress") or {}
     mx_rows = ""
-    for m in (ap.get("maxes") or [])[:8]:
+    for m in [x for x in ap.get("maxes") or [] if isinstance(x, dict)][:8]:
         ser = [(x.get("date"), x.get("e1rm")) for x in m.get("series") or [] if isinstance(x, dict)]
         dlt = m.get("delta")
         mx_rows += (f'<div class="mx1"><div><b>{esc(str(m.get("name", "")).capitalize())}</b><small>{_ses(m.get("sessions"))} · mejor {num(m.get("e1rm"), 1)} kg</small></div>'

@@ -302,14 +302,16 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         optional_blocks.failed("web:informe_visual", exc)
     extras["visual_report"] = bool(visual_html)
     extras["web_failures"] = optional_blocks.failures()  # se muestran al pie de la web (V7.24)
-    classic = render(result, extras)
-    (out / "panel_completo.html").write_text(classic, encoding="utf-8")  # V9: el panel anterior, con todo y la pestaña Sistema
+    index_html = None
     try:  # V9: portada rediseñada; si fallara, la portada es el panel completo
         from .panel_v9 import render as render_v9
         index_html = render_v9(root, result, extras)
     except Exception as exc:  # noqa: BLE001 — opcional
         optional_blocks.failed("web:panel_v9", exc)
-        index_html = classic
+    extras["web_failures"] = optional_blocks.failures()  # incluye un posible fallo de la portada nueva
+    classic = render(result, extras)
+    (out / "panel_completo.html").write_text(classic, encoding="utf-8")  # V9: el panel anterior, con todo y la pestaña Sistema
+    index_html = index_html or classic
     (out / "index.html").write_text(index_html, encoding="utf-8")
     (out / "estado_web.json").write_text(json.dumps({"optional_failures": optional_blocks.failures()}, ensure_ascii=False, indent=1),
                                          encoding="utf-8")

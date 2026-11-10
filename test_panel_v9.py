@@ -3,7 +3,7 @@ from pathlib import Path
 
 from garmin_recovery import panel_v9 as pv
 
-CAL = {"days": {"2026-11-03": "TN", "2026-11-11": "MT"}, "shift_hours": {"MT": {"start": "08:00", "end": "22:00"}}}
+CAL = {"days": {"2026-11-03": "TN", "2026-11-11": "MT"}, "confirmed_months": ["2026-11"], "shift_hours": {"MT": {"start": "08:00", "end": "22:00"}}}
 
 
 def _trend(n=20, today="2026-11-10"):
@@ -15,7 +15,9 @@ def _trend(n=20, today="2026-11-10"):
 
 def test_context_and_normal_range():
     assert pv.context_of("2026-11-03", CAL) == "TN" and pv.context_of("2026-11-04", CAL) == "post-TN"
-    assert pv.context_of("2026-11-11", CAL) == "MT" and pv.context_of("2026-11-12", CAL) == "libre" and pv.context_of("mal", CAL) == "libre"
+    assert pv.context_of("2026-11-11", CAL) == "MT" and pv.context_of("2026-11-12", CAL) == "libre" and pv.context_of("mal", CAL) is None
+    assert pv.context_of("2026-12-02", CAL) is None  # mes sin confirmar: desconocido, no libre
+    assert pv.context_of("2026-11-04", {"days": {"2026-11-03": "TN", "2026-11-04": "MT"}, "confirmed_months": ["2026-11"]}) == "MT"
     rng = pv.normal_range(_trend(), "hrv_ms", "2026-11-10", CAL)
     assert rng["n"] == 19 and rng["p10"] <= rng["p50"] <= rng["p90"] and rng["context"]["label"] == "días libres"
     assert pv.normal_range(_trend(5), "hrv_ms", "2026-11-10") is None  # pocos días: sin rango
@@ -41,7 +43,7 @@ def test_render_tabs_and_escaping(tmp_path: Path):
     result = {"date": "2026-11-10", "decision": {"zone": "green", "guidance": {"label": "<b>Listo</b>", "rpe_max": 9}, "crossfit": ["<i>x</i>"]},
               "trend_28d": _trend(28), "sessions_28d": [{"date": "2026-11-10", "label": "<script>s</script>", "srpe": 1, "rpe": 9}],
               "load": {"week_sessions": 3}}
-    html = pv.render(tmp_path, result, {"ai_lead": ["<em>lead</em>"], "athlete_progress": {"maxes": [{"name": "press <b>", "series": [], "sessions": 1}]}})
+    html = pv.render(tmp_path, result, {"ai_lead": ["<em>lead</em>"], "athlete_progress": {"maxes": ["x", {"name": "press <b>", "series": [], "sessions": 1}]}})
     for t in ('id="p-hoy"', 'id="p-recuperacion"', 'id="p-entrenos"', 'id="p-progreso"', "¿Cómo estás frente a tu normal?",
               "Mañana", "MT 08:00–22:00", "1 sesión", "panel_completo.html"):
         assert t in html, t
