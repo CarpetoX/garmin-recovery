@@ -49,7 +49,7 @@ def test_helpers_are_safe():
 def test_survey_section_and_bb_time(tmp_path):
     from garmin_recovery import sensations as sn
     root = _root(tmp_path)
-    sn.record(root, "2026-11-10", {"cansancio": "Cansado", "agujetas": "Moderadas", "estres": "Bajo", "animo": "Con muchas ganas"}, time="23:43")
+    sn.record(root, "2026-11-10", {"cansancio": "Cansado", "agujetas": "Moderadas", "estres": "Bajo", "motivacion": "Con muchas ganas"}, time="23:43")
     (root / "garmin_body_battery.json").write_text(json.dumps({"days": {"2026-11-10": {
         "charged": 56, "drained": 59, "endTimestampLocal": "2026-11-10T19:50:00.0",
         "bodyBatteryValuesArray": [[1794265200000, 28], None, [1794335940000, 25, "x"], ["a", 3]]}}}), encoding="utf-8")
@@ -80,3 +80,37 @@ def test_sensations_record_rejects_unknown(tmp_path):
     sn.record(tmp_path, "2026-11-09", {"estres": "Alto"})
     w = sn.window(sn.load(tmp_path), "2026-11-10", 3)
     assert [r["estres"] for r in w] == [None, 2, None] and sn.by_date(sn.load(tmp_path), "2026-11-08") == {}
+
+
+def test_full_survey_index_and_legacy(tmp_path):
+    from garmin_recovery import sensations as sn
+    (tmp_path / sn.FILE).write_text(json.dumps({"entries": [{"date": "2026-11-10", "time": "23:43",
+        "cansancio": {"level": 2, "label": "Cansado"}, "animo": {"level": 0, "label": "Con muchas ganas"}}]}), encoding="utf-8")
+    e = sn.load(tmp_path)[0]
+    assert e["motivacion"]["label"] == "Con muchas ganas" and "animo" not in e  # V8.18 → V8.19
+    full = sn.record(tmp_path, "2026-11-10", {"sueno": "Bien", "molestias": "Leves", "animo": "Bueno", "agujetas": "Moderadas", "estres": "Bajo"},
+                     time="23:43", zones=["Rodilla derecha", " "])
+    assert full["cansancio"]["level"] == 2 and full["motivacion"]["level"] == 0 and full["zonas"] == ["Rodilla derecha"]
+    assert sn.wellbeing(full) == 67 and sn.wellbeing({"estres": {"level": 0}}) is None
+    an = sn.analysis(sn.load(tmp_path), "2026-11-10", zone="green")
+    texts = " ".join(o["text"] for o in an["observations"])
+    assert an["today"] == 67 and "Rodilla derecha" in texts and "no coinciden" in texts and an["load_relation"] is None
+
+
+def test_load_relation_needs_seven_days(tmp_path):
+    from garmin_recovery import sensations as sn
+    trend = []
+    for d in range(1, 11):
+        day = f"2026-11-{d:02d}"
+        sn.record(tmp_path, day, {"cansancio": "Cansado" if d % 2 else "Fresco", "agujetas": "Nada", "estres": "Bajo", "animo": "Bueno"})
+        trend.append({"date": day, "srpe": 600 if d % 2 == 0 else 100})
+    lr = sn.analysis(sn.load(tmp_path), "2026-11-10", trend)["load_relation"]
+    assert lr and lr["pairs"] == 9 and lr["after_high"] < lr["after_low"]
+
+
+def test_panel_card_escapes():
+    from garmin_recovery import dashboard as d
+    html = d._sensations_html({"index": 67, "zones": ["<b>rodilla</b>"], "items": [{"name": "Cansancio", "label": "Cansado", "level": 2}],
+                               "observations": ["<script>x</script>"]})
+    assert "Sensaciones de hoy" in html and "<b>rodilla" not in html and "<script>x" not in html and "l2" in html
+    assert d._sensations_html(None) == ""

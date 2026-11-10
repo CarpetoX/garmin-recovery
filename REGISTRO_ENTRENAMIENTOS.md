@@ -80,10 +80,15 @@ Pregúntale con opciones cerradas y guarda la respuesta en `sensaciones_registro
 
 | Pregunta | Clave | Opciones (nivel 0 → 3) |
 |---|---|---|
+| ¿Cómo sientes que has dormido? | `sueno` | Muy bien · Bien · Regular · Mal |
 | ¿Cómo de cansado te notas? | `cansancio` | Fresco · Algo cansado · Cansado · Muy cansado |
 | ¿Agujetas o dolor muscular? | `agujetas` | Nada · Leves · Moderadas · Fuertes |
+| ¿Molestias en articulaciones o tendones? | `molestias` | Ninguna · Leves · Moderadas · Fuertes |
 | ¿Cómo está tu estrés? | `estres` | Bajo · Normal · Alto · Muy alto |
-| ¿Ánimo y ganas de entrenar? | `animo` | Con muchas ganas · Normal · Pocas ganas · Sin ganas |
+| ¿Cómo está tu ánimo en general? | `animo` | Muy bueno · Bueno · Regular · Malo |
+| ¿Ganas de entrenar? | `motivacion` | Con muchas ganas · Normal · Pocas ganas · Sin ganas |
+
+Más una pregunta de zonas (agujetas o molestias; respuesta libre, p. ej. «Rodilla derecha») que se guarda con `zones=[...]`. Se envía en dos tandas de preguntas con opciones (sueño, cansancio, agujetas, molestias; luego estrés, ánimo, ganas y zonas). Con al menos 4 respuestas se calcula un índice de bienestar 0–100 (100 = todo en lo mejor). La lectura del informe usa reglas fijas (molestias, agujetas varios días seguidos, cansancio con modelos en verde, pocas ganas) y solo relaciona bienestar y carga del día anterior con 7 o más días emparejados.
 
 Una encuesta por momento del día (si se repite a la misma hora, se sustituye). Se ve en el informe visual (sección Sensaciones: hoy y matriz de 14 días). Es descriptiva: no entra en los modelos de recuperación. Lo que diga sobre una sesión concreta sigue yendo en la columna «Sensaciones» de la hoja RPE.
 

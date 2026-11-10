@@ -281,6 +281,19 @@ def build_site(root: str | Path = ".", out: str | Path = "_site", history: bool 
         except Exception as exc:  # noqa: BLE001 — un día con datos raros no debe romper la web
             optional_blocks.failed(f"web:dia {o['date']}", exc)
             extras["days"] = [x for x in extras["days"] if x["date"] != o["date"]]
+    try:  # V8.19: encuesta de sensaciones de hoy para la portada
+        from . import sensations as _sn
+        _sv = _sn.load(root)
+        _e = _sn.by_date(_sv, result["date"]).get(result["date"])
+        if _e:
+            _an = _sn.analysis(_sv, result["date"], result.get("trend_28d"), (result.get("decision") or {}).get("zone"))
+            extras["sensations_today"] = {
+                "index": _an.get("today"), "zones": _e.get("zonas") or [],
+                "items": [{"name": n, "label": labels[_sn.level(_e, k)], "level": _sn.level(_e, k)}
+                          for k, n, labels in _sn.ITEMS if _sn.level(_e, k) is not None],
+                "observations": [o["text"] for o in _an.get("observations") or []]}
+    except Exception as exc:  # noqa: BLE001 — opcional
+        optional_blocks.failed("web:sensations", exc)
     visual_html = None
     try:  # V8.18: informe visual del ciclo; el botón del panel solo aparece si se generó
         from .visual_report import build as build_visual
