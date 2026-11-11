@@ -63,3 +63,18 @@ def test_garmin_performance_card():
     assert "5 km 23:00" in rows["Predicción de carrera"][0] and "Maratón 4:10:00" in rows["Predicción de carrera"][0]
     assert "<b>" not in rows["Resistencia (Endurance Score)"][1] and "Cuestas (Hill Score)" not in rows
     assert pv.garmin_performance({}) == []
+
+
+def test_garmin_performance_load_rows():
+    from garmin_recovery import panel_v9 as p
+    day = {"daily_training_status": {"x.acuteTrainingLoadDTO.dailyTrainingLoadAcute": 731, "x.acuteTrainingLoadDTO.dailyTrainingLoadChronic": 714,
+                                     "x.acuteTrainingLoadDTO.dailyAcuteChronicWorkloadRatio": 1.0, "x.acuteTrainingLoadDTO.acwrStatus": "OPTIMAL"},
+           "four_week_load_balance": {"m.1.monthlyLoadAnaerobic": 825, "m.1.monthlyLoadAnaerobicTargetMin": 0, "m.1.monthlyLoadAnaerobicTargetMax": 652,
+                                      "m.1.trainingBalanceFeedbackPhrase": "ANAEROBIC_FOCUS"},
+           "recovery_time": {"hours": 33.7}, "hrv_status": {"last_night_avg": 53, "weekly_avg": 52, "status": "BALANCED"},
+           "performance": {"lactate_threshold": {"power.functionalThresholdPower": 477, "power.powerToWeight": 5.42}}}
+    rows = {n: (v, d) for n, v, d in p.garmin_performance(day)}
+    assert rows["Carga aguda (7 d)"][0] == "731" and "óptimo" in rows["Carga aguda (7 d)"][1]
+    assert rows["Enfoque de carga (4 sem.)"][0] == "Enfoque anaeróbico" and "↑" in rows["Enfoque de carga (4 sem.)"][1]
+    assert rows["Potencia umbral (carrera)"][0] == "477 W"
+    assert rows["Estado VFC"][0] == "Equilibrado" and rows["Tiempo de recuperación"][0] == "34 h"
