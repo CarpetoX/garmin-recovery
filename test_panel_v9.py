@@ -50,3 +50,16 @@ def test_render_tabs_and_escaping(tmp_path: Path):
     for bad in ("<b>Listo</b>", "<i>x</i>", "<script>s</script>", "<em>lead</em>", "press <b>"):
         assert bad not in html, bad
     assert "{{" not in html
+
+
+def test_garmin_performance_card():
+    ext = {"training_status": {"a.b.vo2MaxPreciseValue": 51.2, "x.trainingStatusFeedbackPhrase": "MAINTAINING_1"},
+           "performance": {"endurance_score": {"overallScore": 6020, "classification": "<b>3</b>"}, "hill_score": None,
+                           "race_predictions": {"time5K": 1380, "timeMarathon": 15000}, "fitness_age": {"fitnessAge": 29.5, "chronologicalAge": 35},
+                           "intensity_minutes": {"weeklyGoal": 150, "moderateMinutes": 40, "vigorousMinutes": 60}}}
+    rows = {n: (v, d) for n, v, d in pv.garmin_performance(ext)}
+    assert rows["VO₂ máx."][0] == "51,2" and rows["Estado de entrenamiento"][0] == "Mantenimiento"
+    assert rows["Edad física"] == ("29,5", "edad real 35") and rows["Minutos de intensidad"][0] == "160"
+    assert "5 km 23:00" in rows["Predicción de carrera"][0] and "Maratón 4:10:00" in rows["Predicción de carrera"][0]
+    assert "<b>" not in rows["Resistencia (Endurance Score)"][1] and "Cuestas (Hill Score)" not in rows
+    assert pv.garmin_performance({}) == []

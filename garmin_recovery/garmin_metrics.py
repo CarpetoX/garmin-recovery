@@ -703,6 +703,19 @@ def main():
             extended_errors,
         )
 
+        # V9.2: métricas del panel de rendimiento de Garmin Connect (opcionales; un fallo no para el Sync)
+        performance = {}
+        for label, fetch in (
+            ("endurance_score", lambda: api.get_endurance_score(today_str)),
+            ("hill_score", lambda: api.get_hill_score(today_str)),
+            ("race_predictions", lambda: api.get_race_predictions()),
+            ("fitness_age", lambda: api.get_fitnessage_data(today_str)),
+            ("lactate_threshold", lambda: api.get_lactate_threshold(latest=True)),
+            ("intensity_minutes", lambda: api.get_intensity_minutes_data(today_str)),
+        ):
+            raw = call_optional(label, fetch, extended_errors)
+            performance[label] = select_scalars(raw, ("",), max_fields=80) if isinstance(raw, (dict, list)) else None
+
         readiness_summary = summarize_readiness(readiness_raw)
         hrv_summary = summarize_hrv(hrv_raw)
         sleep_summary = summarize_sleep(sleep_raw)
@@ -731,6 +744,7 @@ def main():
             "daily_training_status": daily_training_status_summary,
             "four_week_load_balance": load_balance_summary,
             "body_battery_events": bb_events_summary,
+            "performance": performance,
             "availability": {
                 "training_readiness": readiness_summary is not None,
                 "recovery_time": recovery_time is not None and recovery_time.get("minutes") is not None,
@@ -739,6 +753,7 @@ def main():
                 "training_status": training_status_summary is not None or daily_training_status_summary is not None,
                 "four_week_load_balance": load_balance_summary is not None,
                 "body_battery_events": bb_events_summary is not None,
+                **{f"performance_{k}": v is not None for k, v in performance.items()},
             },
             "fetch_errors": extended_errors,
         }
