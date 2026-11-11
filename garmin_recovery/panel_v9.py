@@ -212,7 +212,11 @@ def garmin_performance(ext: dict) -> list[tuple[str, str, str]]:
     fa = _pick(pf.get("fitness_age"), "fitnessAge") or _pick(ts, "fitnessAge")
     ca = _pick(pf.get("fitness_age"), "chronologicalAge")
     if _fnum(fa) is not None:
-        out.append(("Edad física", num(fa, 1), f"edad real {num(ca)}" if _fnum(ca) is not None else ""))
+        ach = _pick(pf.get("fitness_age"), "achievableFitnessAge")
+        det = [f"edad real {num(ca)}"] if _fnum(ca) is not None else []
+        if _fnum(ach) is not None:
+            det.append(f"alcanzable {num(ach, 1)}")
+        out.append(("Edad física", num(fa, 1), " · ".join(det)))
     es = _pick(pf.get("endurance_score"), "overallScore", "enduranceScore")
     if _fnum(es) is not None:
         cls = _pick(pf.get("endurance_score"), "classification")
@@ -228,6 +232,38 @@ def garmin_performance(ext: dict) -> list[tuple[str, str, str]]:
     lt = _pick(pf.get("lactate_threshold"), "heartRate", "lactateThresholdHeartRate", "hrValue")
     if _fnum(lt) is not None:
         out.append(("Umbral de lactato", f"{num(lt)} lpm", "carrera"))
+    ftp, pw = _pick(pf.get("lactate_threshold"), "functionalThresholdPower"), _pick(pf.get("lactate_threshold"), "powerToWeight")
+    if _fnum(ftp) is not None:
+        out.append(("Potencia umbral (carrera)", f"{num(ftp)} W", f"{num(pw, 1)} W/kg" if _fnum(pw) is not None else ""))
+    dts = ext.get("daily_training_status") or {}
+    acute, chronic = _pick(dts, "dailyTrainingLoadAcute"), _pick(dts, "dailyTrainingLoadChronic")
+    if _fnum(acute) is not None:
+        ratio = _pick(dts, "dailyAcuteChronicWorkloadRatio")
+        stt = {"OPTIMAL": "óptimo", "HIGH": "alto", "VERY_HIGH": "muy alto", "LOW": "bajo"}.get(str(_pick(dts, "acwrStatus") or "").upper(), "")
+        det = [f"crónica {num(chronic)}"] if _fnum(chronic) is not None else []
+        if _fnum(ratio) is not None:
+            det.append(f"ratio {num(ratio, 1)}" + (f" ({stt})" if stt else ""))
+        out.append(("Carga aguda (7 d)", num(acute), " · ".join(det)))
+    lb = ext.get("four_week_load_balance") or {}
+    parts = []
+    for name, key in (("aeróbica baja", "monthlyLoadAerobicLow"), ("aeróbica alta", "monthlyLoadAerobicHigh"), ("anaeróbica", "monthlyLoadAnaerobic")):
+        v, lo, hi = _pick(lb, key), _pick(lb, key + "TargetMin"), _pick(lb, key + "TargetMax")
+        if _fnum(v) is not None:
+            tag = " ↑" if _fnum(hi) is not None and _fnum(v) > _fnum(hi) else " ↓" if _fnum(lo) is not None and _fnum(v) < _fnum(lo) else ""
+            parts.append(f"{name} {num(v)}" + (f" ({num(lo)}–{num(hi)})" if _fnum(lo) is not None and _fnum(hi) is not None else "") + tag)
+    if parts:
+        ph = re.sub(r"_\d+$", "", str(_pick(lb, "trainingBalanceFeedbackPhrase") or "")).upper()
+        es_ph = {"BALANCED": "Equilibrado", "ANAEROBIC_FOCUS": "Enfoque anaeróbico", "AEROBIC_HIGH_FOCUS": "Enfoque aeróbico alto",
+                 "AEROBIC_LOW_FOCUS": "Enfoque aeróbico bajo", "ANAEROBIC_SHORTAGE": "Falta anaeróbica", "AEROBIC_HIGH_SHORTAGE": "Falta aeróbica alta",
+                 "AEROBIC_LOW_SHORTAGE": "Falta aeróbica baja"}.get(ph, ph.replace("_", " ").lower().capitalize() or "—")
+        out.append(("Enfoque de carga (4 sem.)", esc(es_ph), " · ".join(parts)))
+    rt = (ext.get("recovery_time") or {}).get("hours")
+    if _fnum(rt) is not None:
+        out.append(("Tiempo de recuperación", f"{num(rt)} h", "según Garmin"))
+    hv = ext.get("hrv_status") or {}
+    if _fnum(hv.get("last_night_avg")) is not None:
+        hst = {"BALANCED": "Equilibrado", "UNBALANCED": "Desequilibrado", "LOW": "Bajo", "POOR": "Bajo"}.get(str(hv.get("status") or "").upper(), esc(hv.get("status") or ""))
+        out.append(("Estado VFC", hst or "—", f'noche {num(hv.get("last_night_avg"))} ms · semana {num(hv.get("weekly_avg"))} ms'))
     im = pf.get("intensity_minutes")
     goal = _pick(im, "weekGoal", "weeklyGoal")
     mod = _pick(im, "weeklyModerate", "moderateMinutes", "moderateValue")
