@@ -230,8 +230,8 @@ def garmin_performance(ext: dict) -> list[tuple[str, str, str]]:
         out.append(("Umbral de lactato", f"{num(lt)} lpm", "carrera"))
     im = pf.get("intensity_minutes")
     goal = _pick(im, "weekGoal", "weeklyGoal")
-    mod = _pick(im, "moderateMinutes", "weeklyModerate", "moderateValue")
-    vig = _pick(im, "vigorousMinutes", "weeklyVigorous", "vigorousValue")
+    mod = _pick(im, "weeklyModerate", "moderateMinutes", "moderateValue")
+    vig = _pick(im, "weeklyVigorous", "vigorousMinutes", "vigorousValue")
     if _fnum(mod) is not None or _fnum(vig) is not None:
         tot = (_fnum(mod) or 0) + 2 * (_fnum(vig) or 0)
         out.append(("Minutos de intensidad", num(tot), (f"objetivo {num(goal)} · " if _fnum(goal) else "") + "moderados + 2 × vigorosos"))
