@@ -1,10 +1,10 @@
-<!-- cycle_id: 2026-11-11-0830 -->
+<!-- cycle_id: 2026-11-11-1645 -->
 **En breve:** recuperación buena, pero la decisión de hoy es entrenar con control; turno MT (08–22).
 🟢 Recuperación oficial 85/100, confianza alta (igual que ayer)
 🌙 Sueño 7,2 h, puntuación 80
 🏋️ Carga 7 días: 155 en 8 sesiones (−30 % vs. semana previa)
 ❤️ HRV 53 ms, dentro de tu rango normal (48–60 ms)
-Orientación: hoy RPE ≤ 7 y volumen 70–80 %; con turno MT, movilidad o sesión muy suave.
+Orientación: hoy RPE ≤ 7 y volumen 70–80 %; hoy no hay sesiones registradas y el turno MT acaba a las 22:00: si entrenas, solo movilidad o algo muy suave.
 
 **Qué explica la puntuación.** HRV de 7 días 52,4 ms (−3 % vs. base 54 ms), normal. FC en reposo 57 lpm (+1 vs. mediana), nocturna 60,3 lpm (−2,2). Sueño con deuda de 0,3 h en 3 noches. Estrés de Garmin ayer 33 (mediana 36). El único factor en contra es la carga (ACWR 1,24). La zona ámbar la marca la salvaguarda Garmin + local (74); el modelo experimental sería verde (74), pero se aplica el más conservador.
 
@@ -16,7 +16,7 @@ Orientación: hoy RPE ≤ 7 y volumen 70–80 %; con turno MT, movilidad o sesi�
 3. Sensaciones: registra fatiga, agujetas y ánimo en Intervals (0 de 14 días).
 
 **Plan 7 días**
-- mié 11 (MT): suave / movilidad, RPE ≤ 7.
+- mié 11 (MT): suave / movilidad, RPE ≤ 7 (sin sesiones registradas hoy).
 - jue 12 (TN): moderada por la mañana, si entrenas.
 - vie 13 (tras TN): descanso, prioriza dormir.
 - sáb 14 (libre): sesión exigente si la recuperación acompaña.
