@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Miércoles, 11 de noviembre de 2026 · 14:34 · `GR-2026-11-11-1434-e96282`
+Miércoles, 11 de noviembre de 2026 · 16:49 · `GR-2026-11-11-1649-b92962`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -13,7 +13,7 @@ Carga 7 días|8 sesiones|sRPE 1804|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-11-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-11-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🟡 **Recuperación:** 85/100 (oficial, confianza high). Híbrido: 74/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 7 h 11 min, puntuación 80/100.
 - ❤️ **Principal alerta:** HRV 53 ms, 3,9 % por encima de tu mediana de 28 días.
@@ -23,18 +23,18 @@ Carga 7 días|8 sesiones|sRPE 1804|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-11-0830 |
+| Ciclo | 2026-11-11-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:34:33 |
+| Certificado generado | 16:49:35 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (14:33), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
 ### Fuentes de datos
 
@@ -150,7 +150,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 29, máximo 84.
-- Body Battery: último valor 45/100, medido a las 14:15.
+- Body Battery: último valor 45/100, medido a las 14:15 (hace 2 h 35 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 21,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -395,4 +395,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-11-0830 · generado 11/11/2026 14:34 Europe/Madrid · certificado READY · sync_run_id 42980325795.
+Traza: informe de tarde · ciclo 2026-11-11-1645 · generado 11/11/2026 16:49 Europe/Madrid · certificado READY · sync_run_id 43051969105.
