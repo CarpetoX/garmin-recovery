@@ -181,6 +181,70 @@ def _spark(points: list[tuple[str, float]], w: int = 160, h: int = 40) -> str:
             f'<circle class="dot s1" cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3"/></svg>')
 
 
+def _pick(flat: dict | None, *suffixes: str):
+    """Primer valor cuyo nombre de campo (última parte de la ruta) coincide con alguno de los sufijos, sin distinguir mayúsculas."""
+    if not isinstance(flat, dict):
+        return None
+    for suf in suffixes:
+        for k, v in flat.items():
+            if str(k).rsplit(".", 1)[-1].lower() == suf.lower() and v not in (None, ""):
+                return v
+    return None
+
+
+def _hms(sec) -> str:
+    sec = _fnum(sec)
+    if sec is None or sec <= 0:
+        return "—"
+    sec = int(round(sec))
+    h, m, s_ = sec // 3600, sec % 3600 // 60, sec % 60
+    return f"{h}:{m:02d}:{s_:02d}" if h else f"{m}:{s_:02d}"
+
+
+def garmin_performance(ext: dict) -> list[tuple[str, str, str]]:
+    """(métrica, valor, detalle) de lo que Garmin publica en su panel de rendimiento; solo lo que haya llegado."""
+    ts = ext.get("training_status") or {}
+    pf = ext.get("performance") if isinstance(ext.get("performance"), dict) else {}
+    out = []
+    vo2 = _pick(ts, "vo2MaxPreciseValue", "vo2MaxValue")
+    if _fnum(vo2) is not None:
+        out.append(("VO₂ máx.", num(vo2, 1), "estimación de Garmin"))
+    fa = _pick(pf.get("fitness_age"), "fitnessAge") or _pick(ts, "fitnessAge")
+    ca = _pick(pf.get("fitness_age"), "chronologicalAge")
+    if _fnum(fa) is not None:
+        out.append(("Edad física", num(fa, 1), f"edad real {num(ca)}" if _fnum(ca) is not None else ""))
+    es = _pick(pf.get("endurance_score"), "overallScore", "enduranceScore")
+    if _fnum(es) is not None:
+        cls = _pick(pf.get("endurance_score"), "classification")
+        out.append(("Resistencia (Endurance Score)", num(es), f"clase {esc(cls)}" if cls not in (None, "") else ""))
+    hs = _pick(pf.get("hill_score"), "overallScore", "hillScore")
+    if _fnum(hs) is not None:
+        out.append(("Cuestas (Hill Score)", num(hs), ""))
+    rp = pf.get("race_predictions")
+    races = [(n, _pick(rp, k)) for n, k in (("5 km", "time5K"), ("10 km", "time10K"), ("Media", "timeHalfMarathon"), ("Maratón", "timeMarathon"))]
+    races = [(n, v) for n, v in races if _fnum(v)]
+    if races:
+        out.append(("Predicción de carrera", " · ".join(f"{n} {_hms(v)}" for n, v in races[:2]), " · ".join(f"{n} {_hms(v)}" for n, v in races[2:])))
+    lt = _pick(pf.get("lactate_threshold"), "heartRate", "lactateThresholdHeartRate", "hrValue")
+    if _fnum(lt) is not None:
+        out.append(("Umbral de lactato", f"{num(lt)} lpm", "carrera"))
+    im = pf.get("intensity_minutes")
+    goal = _pick(im, "weekGoal", "weeklyGoal")
+    mod = _pick(im, "weeklyModerate", "moderateMinutes", "moderateValue")
+    vig = _pick(im, "weeklyVigorous", "vigorousMinutes", "vigorousValue")
+    if _fnum(mod) is not None or _fnum(vig) is not None:
+        tot = (_fnum(mod) or 0) + 2 * (_fnum(vig) or 0)
+        out.append(("Minutos de intensidad", num(tot), (f"objetivo {num(goal)} · " if _fnum(goal) else "") + "moderados + 2 × vigorosos"))
+    st = _pick(ts, "trainingStatusFeedbackPhrase")
+    if st:
+        key = re.sub(r"_\d+$", "", str(st)).upper()
+        es_st = {"PRODUCTIVE": "Productivo", "MAINTAINING": "Mantenimiento", "RECOVERY": "Recuperación", "UNPRODUCTIVE": "Improductivo",
+                 "DETRAINING": "Pérdida de forma", "OVERREACHING": "Sobrecarga", "PEAKING": "En pico", "STRAINED": "Exigido",
+                 "NO_STATUS": "Sin estado"}.get(key, key.replace("_", " ").lower().capitalize())
+        out.append(("Estado de entrenamiento", esc(es_st), "según Garmin"))
+    return out
+
+
 # ---------------------------------------------------------------- página
 
 def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
@@ -463,7 +527,12 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                  (t_rows or '<p class="hint">Aún no hay tests. Cada 6–8 semanas, haz uno o varios de esta batería y dímelo («test Fran 4:12») para comparar de verdad.</p>')
                  + f'<details><summary>La batería de tests</summary><ul class="obs">{battery}</ul></details>',
                  "lo único que demuestra progreso: repetir la misma prueba")
-    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + '<div class="grid">' + skills + weight + "</div>" + wbc)
+    gp = garmin_performance(ext)
+    gp_card = card("¿Qué dice Garmin de mi forma física?",
+                   ('<div class="gp">' + "".join(f'<div class="gp-i"><span>{esc(n)}</span><b>{v}</b><small>{d}</small></div>' for n, v, d in gp) + "</div>"
+                    + '<p class="muted">Datos del panel de rendimiento de Garmin Connect, tal como los publica Garmin. Las predicciones de carrera y el umbral de lactato '
+                      'se basan en carrera, no en CrossFit.</p>') if gp else '<p class="muted">Aún no han llegado datos del panel de rendimiento de Garmin.</p>')
+    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + gp_card + '<div class="grid">' + skills + weight + "</div>" + wbc)
 
     # =================== montaje
     cert_ok = ready.get("status") == "ready"
@@ -524,6 +593,8 @@ CSS = """
 .mx1 small{display:block;color:var(--text-3);font-size:12px}.mx1-v{text-align:right;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .mx1-v span{display:block;font-size:12px}.mx1-v .up{color:var(--ok)}.mx1-v .down{color:var(--text-3)}
 .spark{width:120px;height:40px}
+.gp{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px}.gp-i{background:var(--surface-2);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.gp-i span{font-size:12px;color:var(--text-2)}.gp-i b{font-size:18px;font-variant-numeric:tabular-nums}.gp-i small{font-size:11px;color:var(--text-3)}
 .alert{margin:0;padding:10px 14px;border-radius:12px;font-size:14px;border:1px solid var(--line)}.alert.warn{background:var(--warn-w)}.alert.info{background:var(--surface-2)}
 .wk-t{display:flex}.wk-t i:first-child{border-radius:6px 0 0 6px}.wk-t i.est{background:var(--s1);opacity:.35;border-radius:0 6px 6px 0}.sw.s1b{background:var(--s1)}.sw.estb{background:var(--s1);opacity:.35}
 em.due{color:var(--warn);font-style:normal;font-weight:600}.card details summary{cursor:pointer;color:var(--s1);font-weight:600;font-size:13px;margin-top:8px}.sk{padding:8px 0;border-top:1px solid var(--line)}.sk:first-of-type{border-top:0}.sk small{display:block;color:var(--text-3);font-size:12px}.sk p{margin:4px 0;font-size:13px}
