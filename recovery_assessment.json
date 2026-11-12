@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T11:34:23.410269+01:00",
+  "generated_at": "2026-11-12T16:49:05.932104+01:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "assessed",
   "status": "green",
@@ -108,7 +108,9 @@
     "subjective_checkin": "not_provided",
     "subjective_values_exported": false,
     "intensity_guardrail": "use_v22_guidance",
-    "reason_codes": [],
+    "reason_codes": [
+      "live_measurement_uncertain"
+    ],
     "baseline_caution": "standard",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
     "measurement_provenance": {
@@ -116,26 +118,26 @@
         "confirmed_sleep": {
           "state": "recent",
           "measured_at": "2026-11-12T08:32:23+01:00",
-          "age_minutes": 182.0,
+          "age_minutes": 496.7,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
           "state": "recent",
           "measured_at": "2026-11-12T08:30:19+01:00",
-          "age_minutes": 184.1,
+          "age_minutes": 498.8,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
-          "state": "recent",
-          "measured_at": "2026-11-12T10:16:00+01:00",
-          "age_minutes": 78.4,
+          "state": "delayed",
+          "measured_at": "2026-11-12T14:28:00+01:00",
+          "age_minutes": 141.1,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "recent",
-          "measured_at": "2026-11-12T10:09:00+01:00",
-          "age_minutes": 85.4,
+          "state": "delayed",
+          "measured_at": "2026-11-12T14:24:00+01:00",
+          "age_minutes": 145.1,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -146,8 +148,11 @@
         }
       },
       "invalid_core_episode": false,
-      "live_data_limited": false,
-      "limited_live_metrics": [],
+      "live_data_limited": true,
+      "limited_live_metrics": [
+        "heart_rate_live",
+        "body_battery_live"
+      ],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
     },
     "sleep_fragmentation": {
@@ -167,8 +172,8 @@
         "easy_aerobic": "usual_program_if_well",
         "mobility": "usual_program_if_well"
       },
-      "recent_sessions_with_declared_rpe": 3,
-      "recent_high_rpe_sessions": 1,
+      "recent_sessions_with_declared_rpe": 4,
+      "recent_high_rpe_sessions": 2,
       "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
     }
   },
