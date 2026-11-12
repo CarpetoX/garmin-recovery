@@ -1,6 +1,6 @@
 # Informe matutino · 12/11/2026
 
-`GR-2026-11-12-0904-d8f4ce` · cita este identificador al reenviar el informe.
+`GR-2026-11-12-1134-7d19de` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
@@ -54,8 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-12-0834-08d671 (12/11 08:34):
-- **Decisión:** pendiente → **verde**.
+Frente al informe GR-2026-11-12-0904-d8f4ce (12/11 09:04):
+- Sesiones nuevas desde entonces: **2** (carga +29).
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -94,6 +94,8 @@ Frente al informe GR-2026-11-12-0834-08d671 (12/11 08:34):
 
 ## Acciones pendientes
 
+- Añade el RPE de la actividad **i209040432** (12/11 09:17, Sin detalle, 33 min, carga 13) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
+- Añade el RPE de la actividad **i209046349** (12/11 09:55, Sin detalle, 13 min, carga 16) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -122,16 +124,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-12-0904-d8f4ce`
+- **Identificador del informe:** `GR-2026-11-12-1134-7d19de`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-12-0830-post-sleep · datos sincronizados a las 09:04
-- **Antigüedad:** fin del sueño hace 33 min ✓ · última HRV hace 35 min ✓ · última FC hace 13 min ✓ · último Body Battery hace 38 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+8 sin RPE por diseño: calentamiento/técnica)
+- **Ciclo:** 2026-11-12-0830-post-sleep · datos sincronizados a las 11:33 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 3,0 h ✓ · última HRV hace 3,1 h ✓ · última FC hace 79 min ✓ · último Body Battery hace 86 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/15 (+8 sin RPE por diseño: calentamiento/técnica) (sin RPE: 12/11 09:17, 12/11 09:55)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-12 09:04 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-12 11:34 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
