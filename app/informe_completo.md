@@ -1,9 +1,9 @@
 # Garmin Recovery · Cierre matinal
 
-Jueves, 12 de noviembre de 2026 · 08:34 · `GR-2026-11-12-0834-08d671`
+Jueves, 12 de noviembre de 2026 · 09:04 · `GR-2026-11-12-0904-d8f4ce`
 
 ```cards
-Decisión|Pendiente de datos|RPE máx. 6|unavailable
+Decisión|Listo para entrenar|RPE máx. 9|green
 Recuperación oficial|88/100|confianza high|green
 HRV|66 ms|+29 % vs mediana|green
 Sueño|8 h 05 min|puntuación 90|unavailable
@@ -13,23 +13,23 @@ Carga 7 días|8 sesiones|sRPE 1804|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-12-0830 validado; 4 de 4 procesos finalizados correctamente.
-- ⚪ **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 88/100. **Decisión: Pendiente de datos**, RPE máx. 6.
+- 🟢 **Certificación:** ciclo 2026-11-12-0830-post-sleep validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 88/100. **Decisión: Listo para entrenar**, RPE máx. 9.
 - 🌙 **Sueño:** 8 h 05 min, puntuación 90/100.
 - ❤️ **Principal alerta:** HRV 66 ms, 29,4 % por encima de tu mediana de 28 días.
-- 🏋️ **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+- 🏋️ **Qué hacer:** Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 
 ## 1. Certificación y calidad
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-12-0830 |
+| Ciclo | 2026-11-12-0830-post-sleep |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:34:47 |
+| Certificado generado | 09:04:52 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -74,7 +74,7 @@ La HRV está 29 % por encima de su mediana; la FC en reposo está 2 lpm por deba
 |---|---|---|
 | Recuperación oficial | 🟢 88/100 | oficial |
 | Híbrido Garmin + local | 🟢 88/100 | salvaguarda |
-| Modelo experimental | — | sombra |
+| Modelo experimental | 🟢 79/100 | sombra |
 | Modelo de compatibilidad | 🟢 94/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 78/100 | contexto |
 | Tiempo de recuperación Garmin | 8,8 h | contexto |
@@ -96,7 +96,16 @@ Las puntuaciones no son equivalentes entre sí. La decisión es la zona más con
 
 ## 3. Sueño y recuperación nocturna
 
-No consta un episodio de sueño confirmado en los datos de este ciclo.
+Episodio confirmado: 12 de noviembre de 2026, 00:18 → 12 de noviembre de 2026, 08:32.
+
+| Dato | Valor |
+|---|---|
+| Duración efectiva | 8 h 05 min |
+| Puntuación | 90/100 |
+| Sueño profundo | 1 h 24 min |
+| Sueño REM | 1 h 43 min |
+
+El REM representa un 21 % y el sueño profundo un 17 % del episodio.
 
 ![Sueño por noche frente a tu necesidad](charts/sleep.svg)
 
@@ -122,7 +131,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 70,4 lpm | 59,3 lpm |
+| Hoy* | 74,5 lpm | 59,3 lpm |
 | 3 días | 81,4 lpm | 60,5 lpm |
 | 7 días | 75,8 lpm | 61,1 lpm |
 | 28 días | 81,0 lpm | 64,2 lpm |
@@ -305,7 +314,7 @@ Turno: hoy TN (15–08), mañana libre tras la noche.
 
 ### Recomendaciones
 
-1. **Pendiente de datos** — Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+1. **Listo para entrenar** — Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
 2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
@@ -325,7 +334,7 @@ Reglas explícitas sobre tus últimos 28 días, sin IA. Son criterios generales 
 - ✅ **HRV.** HRV media de los últimos 7 días: 54,4 ms frente a tu base de 53 ms (+3 %); tu rango normal es 47,2–59,5 ms. Es la misma media (logarítmica) que usa la puntuación. Estable respecto a tu referencia.
 - ✅ **FC en reposo.** FC en reposo de los últimos 7 días: 55,9 lpm frente a 57,0 de referencia (-1,1 lpm). En línea con tu referencia.
 - ✅ **Sueño.** Media de 7 noches: 8,2 h (necesidad configurada 7,5 h); 0 de 7 noches más de media hora por debajo; deuda acumulada 2,1 h (cuenta también el sueño diurno tras turno y descuenta las siestas registradas). El sueño es el principal factor de recuperación y de adaptación al entrenamiento.
-- ✅ **Regularidad del sueño.** Hora de acostarte (mediana 23:52) con una variación típica de ±32 min en 14 noches; 3 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
+- ✅ **Regularidad del sueño.** Hora de acostarte (mediana 23:52) con una variación típica de ±24 min en 14 noches; 3 turnos TN en los últimos 14 días. Un horario irregular reduce la calidad del sueño; con turnos rotativos es difícil, pero el ancla (hora de despertar o de la siesta) ayuda.
 - ⚠️ **Distribución de la intensidad.** 12 de 26 sesiones con RPE registrado fueron de RPE ≥ 8 (46 %); 5 veces hubo dos días duros seguidos. Una parte alta de sesiones muy duras, sobre todo en días consecutivos, deja poco margen de recuperación y limita la mejora.
 - ✅ **Respuesta a las sesiones duras.** HRV la mañana siguiente: 48 ms tras sesión de RPE ≥ 8 (n=11) frente a 46 ms tras las demás (n=5); diferencia +2 ms. Es una relación descriptiva con pocos días, no demuestra causa.
 - ✅ **Fuerza.** Mejor valor registrado en 28 días: peso muerto 198 kg; sentadilla trasera 185 kg; sentadilla con safety bar 168 kg. Es un mínimo estimado (Epley sin RIR) o la carga máxima declarada: solo se comparan series con las mismas repeticiones.
@@ -362,7 +371,7 @@ _Barras: ▁ valor más bajo, █ más alto de las últimas 4 semanas; «·» si
 
 | Día | Turno | Sesión sugerida | Motivo |
 |---|---|---|---|
-| jue 12/11 | TN | 🟢 Suave / movilidad | la decisión de hoy limita la intensidad |
+| jue 12/11 | TN | 🟡 Moderada | TN por la tarde: si entrenas, por la mañana y moderado |
 | vie 13/11 | tras TN | 🛌 Descanso | día posterior a una TN: prioriza dormir |
 | sáb 14/11 | libre | 🔥 Exigente | día libre con margen para una sesión exigente |
 | dom 15/11 | libre | 🟡 Moderada | día libre; sesión moderada para respetar el espaciado |
@@ -374,7 +383,7 @@ Plan orientativo por reglas (máx. 3 sesiones con RPE ≥ 8 por semana, separada
 
 ### Reglas para los próximos 7 días
 
-1. **Hoy:** respeta la decisión del día (Pendiente de datos, RPE máx. 6).
+1. **Hoy:** respeta la decisión del día (Listo para entrenar, RPE máx. 9).
 2. **Esfuerzos máximos:** como mucho 2–3 sesiones de RPE ≥ 8 en la semana y separadas ≥ 48 h.
 3. **Sueño:** suma 30–45 min cada noche en lugar de una sola noche larga; antes de un turno de noche, siesta corta.
 4. **Registro:** fatiga, agujetas y ánimo cada mañana en Intervals; RPE de cada sesión el mismo día.
@@ -384,8 +393,8 @@ _Los puntos 2 y 3 son criterios generales de entrenamiento y descanso, no una pr
 
 ## Conclusión
 
-Datos insuficientes para evaluar la recuperación de hoy: la decisión es **⚪ Pendiente de datos**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
+Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟢 Listo para entrenar**. No es un diagnóstico médico. Que el informe esté publicado no prueba que se haya leído una notificación.
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-12-0830 · generado 12/11/2026 08:34 Europe/Madrid · certificado READY · sync_run_id 43176081964.
+Traza: cierre matinal · ciclo 2026-11-12-0830-post-sleep · generado 12/11/2026 09:04 Europe/Madrid · certificado READY · sync_run_id 43179868315.
