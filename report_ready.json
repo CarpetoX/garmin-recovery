@@ -2,50 +2,50 @@
   "schema_version": 1,
   "gate_version": "2.4.8",
   "status": "ready",
-  "cycle_id": "2026-11-12-0830-post-sleep",
-  "slot_at": "2026-11-12T08:30:00+01:00",
-  "target_report_at": "after_confirmed_sleep",
+  "cycle_id": "2026-11-12-1645",
+  "slot_at": "2026-11-12T16:45:00+01:00",
+  "target_report_at": "17:10",
   "timezone": "Europe/Madrid",
-  "verified_at": "2026-11-12T09:04:52.825269+01:00",
+  "verified_at": "2026-11-12T16:49:31.471127+01:00",
   "chain": {
     "sync": {
-      "id": 43179868315,
+      "id": 43251710950,
       "event": "workflow_dispatch",
-      "started_at": "2026-11-12T09:03:35+01:00",
-      "finished_at": "2026-11-12T09:03:48+01:00",
+      "started_at": "2026-11-12T16:48:07+01:00",
+      "finished_at": "2026-11-12T16:48:23+01:00",
       "conclusion": "success"
     },
     "heart": {
-      "id": 43179907000,
+      "id": 43251768204,
       "event": "workflow_run",
-      "started_at": "2026-11-12T09:03:52+01:00",
-      "finished_at": "2026-11-12T09:04:20+01:00",
+      "started_at": "2026-11-12T16:48:27+01:00",
+      "finished_at": "2026-11-12T16:48:52+01:00",
       "conclusion": "success"
     },
     "advanced": {
-      "id": 43179975403,
+      "id": 43251848120,
       "event": "workflow_run",
-      "started_at": "2026-11-12T09:04:23+01:00",
-      "finished_at": "2026-11-12T09:04:37+01:00",
+      "started_at": "2026-11-12T16:48:55+01:00",
+      "finished_at": "2026-11-12T16:49:12+01:00",
       "conclusion": "success"
     },
     "crossfit": {
-      "id": 43180010326,
+      "id": 43251913994,
       "event": "workflow_run",
-      "started_at": "2026-11-12T09:04:39+01:00",
-      "finished_at": "2026-11-12T09:04:42+01:00",
+      "started_at": "2026-11-12T16:49:16+01:00",
+      "finished_at": "2026-11-12T16:49:19+01:00",
       "conclusion": "publishing_in_same_job"
     }
   },
   "source_generated_at": {
-    "daily_summary.json": "2026-11-12T09:03:44.087813+01:00",
-    "weekly_summary.json": "2026-11-12T09:03:44.087813+01:00",
-    "garmin_status.json": "2026-11-12T09:04:07.346575+01:00",
-    "garmin_heart_rate.json": "2026-11-12T09:04:07.346575+01:00",
-    "recovery_assessment.json": "2026-11-12T09:04:33.024796+01:00",
-    "advanced_analytics.json": "2026-11-12T09:04:32.724663+01:00",
-    "data_quality.json": "2026-11-12T09:04:32.724663+01:00",
-    "crossfit_insights.json": "2026-11-12T09:04:47.376097+01:00"
+    "daily_summary.json": "2026-11-12T16:48:16.497993+01:00",
+    "weekly_summary.json": "2026-11-12T16:48:16.497993+01:00",
+    "garmin_status.json": "2026-11-12T16:48:38.309794+01:00",
+    "garmin_heart_rate.json": "2026-11-12T16:48:38.309794+01:00",
+    "recovery_assessment.json": "2026-11-12T16:49:05.932104+01:00",
+    "advanced_analytics.json": "2026-11-12T16:49:05.047630+01:00",
+    "data_quality.json": "2026-11-12T16:49:05.047630+01:00",
+    "crossfit_insights.json": "2026-11-12T16:49:24.562700+01:00"
   },
   "measurement_provenance": {
     "confirmed_sleep": {
@@ -57,12 +57,12 @@
       "measured_at": "2026-11-12T08:30:19+01:00"
     },
     "heart_rate_live": {
-      "state": "recent",
-      "measured_at": "2026-11-12T08:52:00+01:00"
+      "state": "delayed",
+      "measured_at": "2026-11-12T14:28:00+01:00"
     },
     "body_battery_live": {
-      "state": "recent",
-      "measured_at": "2026-11-12T08:27:00+01:00"
+      "state": "delayed",
+      "measured_at": "2026-11-12T14:24:00+01:00"
     },
     "resting_hr_summary": {
       "state": "daily_summary_not_instantaneous",
@@ -84,20 +84,23 @@
   "live_sensor_quality": {
     "live_measurements": {
       "heart_rate_live": {
-        "state": "recent",
-        "measured_at": "2026-11-12T08:52:00+01:00",
-        "age_minutes_at_report": 12.9,
-        "source_state": "recent"
+        "state": "delayed",
+        "measured_at": "2026-11-12T14:28:00+01:00",
+        "age_minutes_at_report": 141.5,
+        "source_state": "delayed"
       },
       "body_battery_live": {
-        "state": "recent",
-        "measured_at": "2026-11-12T08:27:00+01:00",
-        "age_minutes_at_report": 37.9,
-        "source_state": "recent"
+        "state": "delayed",
+        "measured_at": "2026-11-12T14:24:00+01:00",
+        "age_minutes_at_report": 145.5,
+        "source_state": "delayed"
       }
     },
-    "not_confirmed_recent": [],
-    "interpretation": "available_recent",
+    "not_confirmed_recent": [
+      "heart_rate_live",
+      "body_battery_live"
+    ],
+    "interpretation": "caution",
     "note": "Data generation time never proves a new sensor reading. Sleep HRV is measured during sleep, not continuously."
   },
   "morning_sleep": {
@@ -105,12 +108,10 @@
     "is_definitive_source": true,
     "evidence_valid": true,
     "evidence_issues": [],
-    "generated_at": "2026-11-12T09:04:33.104548+01:00",
+    "generated_at": "2026-11-12T16:49:06.006448+01:00",
     "date": "2026-11-12",
     "sleep_end_local": "2026-11-12T08:32:23+01:00",
     "earliest_definitive_at": "2026-11-12T09:02:23+01:00"
   },
-  "physiological_report_status": "definitive",
-  "parent_cycle_id": "2026-11-12-0830",
-  "certificate_kind": "post_sleep_supplement"
+  "physiological_report_status": "not_evaluated_for_this_slot"
 }
