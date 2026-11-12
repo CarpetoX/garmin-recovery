@@ -1,49 +1,42 @@
 {
-  "checked_at": "2026-11-12T19:07:45.853717+01:00",
+  "checked_at": "2026-11-12T22:49:53.725178+01:00",
   "repository": "CarpetoX/garmin-recovery",
-  "status": "attention",
+  "status": "ok",
   "workflows": {
     "sync.yml": {
-      "last_completed_conclusion": "cancelled",
-      "last_completed_at": "2026-11-12T16:06:05Z",
-      "last_success_at": "2026-11-12T16:48:23+01:00",
-      "last_success_age_hours": 2.32,
-      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43254888582",
-      "latest_run_event": "schedule"
+      "last_completed_conclusion": "success",
+      "last_completed_at": "2026-11-12T21:48:22Z",
+      "last_success_at": "2026-11-12T22:48:22+01:00",
+      "last_success_age_hours": 0.03,
+      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43313795826",
+      "latest_run_event": "workflow_dispatch"
     },
     "garmin-heart-rate.yml": {
-      "last_completed_conclusion": "skipped",
-      "last_completed_at": "2026-11-12T16:06:18Z",
-      "last_success_at": "2026-11-12T16:48:52+01:00",
-      "last_success_age_hours": 2.31,
-      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43254971029",
+      "last_completed_conclusion": "success",
+      "last_completed_at": "2026-11-12T21:48:56Z",
+      "last_success_at": "2026-11-12T22:48:56+01:00",
+      "last_success_age_hours": 0.02,
+      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43313851996",
       "latest_run_event": "workflow_run"
     },
     "advanced-analytics-rpe.yml": {
-      "last_completed_conclusion": "skipped",
-      "last_completed_at": "2026-11-12T16:06:26Z",
-      "last_success_at": "2026-11-12T16:49:12+01:00",
-      "last_success_age_hours": 2.31,
-      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43255013606",
+      "last_completed_conclusion": "success",
+      "last_completed_at": "2026-11-12T21:49:20Z",
+      "last_success_at": "2026-11-12T22:49:20+01:00",
+      "last_success_age_hours": 0.01,
+      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43313942720",
       "latest_run_event": "workflow_run"
     },
     "crossfit-insights.yml": {
-      "last_completed_conclusion": "skipped",
-      "last_completed_at": "2026-11-12T16:08:22Z",
-      "last_success_at": "2026-11-12T16:49:41+01:00",
-      "last_success_age_hours": 2.3,
-      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43255036888",
+      "last_completed_conclusion": "success",
+      "last_completed_at": "2026-11-12T21:49:47Z",
+      "last_success_at": "2026-11-12T22:49:47+01:00",
+      "last_success_age_hours": 0.0,
+      "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43314006544",
       "latest_run_event": "workflow_run"
     }
   },
   "alerts": [
-    {
-      "severity": "warning",
-      "code": "latest_run_failed",
-      "workflow": "sync.yml",
-      "conclusion": "cancelled",
-      "url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43254888582"
-    },
     {
       "severity": "info",
       "code": "no_recent_successful_scheduled_run",
@@ -53,29 +46,11 @@
     },
     {
       "severity": "info",
-      "code": "latest_run_skipped",
-      "workflow": "garmin-heart-rate.yml",
-      "url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43254971029"
-    },
-    {
-      "severity": "info",
-      "code": "latest_run_skipped",
-      "workflow": "advanced-analytics-rpe.yml",
-      "url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43255013606"
-    },
-    {
-      "severity": "info",
-      "code": "latest_run_skipped",
-      "workflow": "crossfit-insights.yml",
-      "url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43255036888"
-    },
-    {
-      "severity": "info",
       "code": "cron_missed_dispatch_recovered",
       "slots": [
-        "2026-11-11T16:45:00+01:00",
         "2026-11-11T22:45:00+01:00",
-        "2026-11-12T08:30:00+01:00"
+        "2026-11-12T08:30:00+01:00",
+        "2026-11-12T16:45:00+01:00"
       ],
       "dispatch_origin": "apps_script_hmac_verified",
       "dispatch_origin_verified": true,
@@ -83,18 +58,11 @@
       "evidence_level": "hmac_verified_in_run",
       "note": "Apps Script lanzó cada franja con firma verificada; solo falló el cron de GitHub, que es de respaldo.",
       "slots_apps_script_verified": [
-        "2026-11-11T16:45:00+01:00",
         "2026-11-11T22:45:00+01:00",
-        "2026-11-12T08:30:00+01:00"
+        "2026-11-12T08:30:00+01:00",
+        "2026-11-12T16:45:00+01:00"
       ],
       "dispatch_actor_interpretation_v292": "not_proven_manual; see origin_monitor_v292 for current cycle proof"
-    },
-    {
-      "severity": "warning",
-      "code": "latest_pipeline_not_complete",
-      "stage": "sync",
-      "state": "failed",
-      "sync_run_id": 43254888582
     }
   ],
   "note": "pipeline_progress tracks the current Sync→Heart→Advanced→CrossFit chain; a previous successful stage is not presented as completion of a running cycle. report_cycles.json records readiness, NOT delivery receipts. V3.4: data-ready, performance JSON and ChatGPT delivery are independent states.",
@@ -104,9 +72,9 @@
     "matched": 0,
     "recovered_count": 3,
     "recovered": [
-      "2026-11-11T16:45:00+01:00",
       "2026-11-11T22:45:00+01:00",
-      "2026-11-12T08:30:00+01:00"
+      "2026-11-12T08:30:00+01:00",
+      "2026-11-12T16:45:00+01:00"
     ],
     "recovered_by_apps_script": [],
     "recovered_by_repository_dispatch_unverified": [],
@@ -114,9 +82,9 @@
     "recovered_by_unattributed": [],
     "dispatch_caller_verified": true,
     "cron_missed": [
-      "2026-11-11T16:45:00+01:00",
       "2026-11-11T22:45:00+01:00",
-      "2026-11-12T08:30:00+01:00"
+      "2026-11-12T08:30:00+01:00",
+      "2026-11-12T16:45:00+01:00"
     ],
     "uncovered": [],
     "missed": [],
@@ -138,9 +106,9 @@
     "effective_date": "2026-10-10",
     "note": "repository_dispatch is compatible with Apps Script but sender unverified; workflow_dispatch caller unverified; only schedule confirms GitHub cron.",
     "recovered_by_apps_script_verified": [
-      "2026-11-11T16:45:00+01:00",
       "2026-11-11T22:45:00+01:00",
-      "2026-11-12T08:30:00+01:00"
+      "2026-11-12T08:30:00+01:00",
+      "2026-11-12T16:45:00+01:00"
     ],
     "dispatch_classification_v292": "workflow_dispatch_without_proof_is_unattributed_not_manual",
     "legacy_recovered_by_manual_meaning": "unattributed_workflow_dispatch_events_not_confirmed_human_actions",
@@ -148,30 +116,51 @@
   },
   "delivery_gate": {
     "state": "ready",
-    "cycle_id": "2026-11-12-1645",
-    "last_verified_at": "2026-11-12T16:49:31.471127+01:00",
-    "age_hours": 2.3,
-    "last_sync_run_id": 43251710950,
+    "cycle_id": "2026-11-12-2245",
+    "last_verified_at": "2026-11-12T22:49:38.104606+01:00",
+    "age_hours": 0.0,
+    "last_sync_run_id": 43313795826,
     "report_delivered": "not_verified"
   },
   "pipeline_progress": {
-    "state": "failed",
-    "current_stage": "sync",
-    "sync_run_id": 43254888582,
-    "age_minutes": 122.1,
+    "state": "ready",
+    "age_minutes": 1.8,
+    "sync_run_id": 43313795826,
+    "current_stage": null,
     "stages": {
       "sync": {
-        "run_id": 43254888582,
+        "run_id": 43313795826,
         "status": "completed",
-        "conclusion": "cancelled",
-        "created_at": "2026-11-12T16:05:41Z",
-        "updated_at": "2026-11-12T16:06:05Z"
+        "conclusion": "success",
+        "created_at": "2026-11-12T21:48:05Z",
+        "updated_at": "2026-11-12T21:48:22Z"
+      },
+      "heart": {
+        "run_id": 43313851996,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-12T21:48:25Z",
+        "updated_at": "2026-11-12T21:48:56Z"
+      },
+      "advanced": {
+        "run_id": 43313942720,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-12T21:49:00Z",
+        "updated_at": "2026-11-12T21:49:20Z"
+      },
+      "crossfit": {
+        "run_id": 43314006544,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-11-12T21:49:23Z",
+        "updated_at": "2026-11-12T21:49:47Z"
       }
     }
   },
   "operational_quality_v28": {
     "version": "2.8",
-    "checked_at": "2026-11-12T19:07:45.853717+01:00",
+    "checked_at": "2026-11-12T22:49:53.725178+01:00",
     "observation_scope": "monitor_bounded_lookback; not 7d_or_28d_slo",
     "schedule_state": "recovered_without_automatic_cron_proof",
     "due_observed": 3,
@@ -180,53 +169,52 @@
     "cron_confirmed_pct": 0.0,
     "sync_started_or_recovered_pct": 100.0,
     "backup_sender_verified": null,
-    "last_sync_event": "schedule",
-    "last_sync_origin": "github_schedule",
-    "latest_chain_state": "failed",
-    "latest_chain_duration_minutes": null,
+    "last_sync_event": "workflow_dispatch",
+    "last_sync_origin": "workflow_dispatch_caller_unverified",
+    "latest_chain_state": "ready",
+    "latest_chain_duration_minutes": 1.7,
     "report_delivery_receipt": "unavailable",
     "confidence": "observed_window_only",
     "blockers": [
-      "github_schedule_not_verified",
-      "pipeline_incomplete_or_failed"
+      "github_schedule_not_verified"
     ],
     "origin_monitor_v292": {
-      "cycle_id": "2026-11-12-1645",
-      "status": "previous_cycle_only",
+      "cycle_id": "2026-11-12-2245",
+      "status": "verified_current_cycle",
       "source": "apps_script_backup",
       "source_verified": true,
       "proof": "sync_hmac_validated_v291",
-      "latest_pipeline_matches_certificate": false,
-      "sync_delay_minutes": 3.12,
-      "data_ready_delay_minutes": 4.52
+      "latest_pipeline_matches_certificate": true,
+      "sync_delay_minutes": 3.08,
+      "data_ready_delay_minutes": 4.64
     }
   },
   "origin_monitor_v292": {
     "version": "2.9.2",
-    "checked_at": "2026-11-12T18:08:01.743374+00:00",
-    "cycle_id": "2026-11-12-1645",
+    "checked_at": "2026-11-12T21:50:03.077489+00:00",
+    "cycle_id": "2026-11-12-2245",
     "origin": {
       "source": "apps_script_backup",
       "verified": true,
       "evidence": "sync_hmac_validated_v291",
       "event": "workflow_dispatch",
-      "cycle_id": "2026-11-12-1645"
+      "cycle_id": "2026-11-12-2245"
     },
     "lineage_complete_verified": true,
     "exact_links": 3,
     "punctuality": {
-      "sync_delay_minutes": 3.12,
-      "data_ready_delay_minutes": 4.52
+      "sync_delay_minutes": 3.08,
+      "data_ready_delay_minutes": 4.64
     },
     "data_ready": true,
     "chatgpt_delivery": "unconfirmed_without_receipt",
     "historical_7_28d_slo": "unavailable_without_complete_observation_window",
-    "status": "previous_cycle_only",
-    "latest_pipeline_matches_certificate": false
+    "status": "verified_current_cycle",
+    "latest_pipeline_matches_certificate": true
   },
   "report_status_v34": {
     "version": "3.4",
-    "checked_at": "2026-11-12T19:08:01.843561+01:00",
+    "checked_at": "2026-11-12T22:50:03.160854+01:00",
     "scheduled_slots": {
       "state": "recovered",
       "due_matured_count": 3,
@@ -235,37 +223,38 @@
       "note": "No inferir origen desde workflow_dispatch ni repository_dispatch."
     },
     "observed_pipeline": {
-      "state": "failed",
-      "sync_run_id": 43254888582,
+      "state": "completed_exact_chain",
+      "sync_run_id": 43313795826,
       "start_observed": true,
-      "four_stages_completed": false,
-      "exact_lineage_verified": false,
-      "evidence": "monitor_runs_only_or_unavailable",
+      "four_stages_completed": true,
+      "exact_lineage_verified": true,
+      "evidence": "github_run_ids_and_verified_lineage",
       "run_ids": {
-        "sync": 43254888582,
-        "heart": null,
-        "advanced": null,
-        "crossfit": null
+        "sync": 43313795826,
+        "heart": 43313851996,
+        "advanced": 43313942720,
+        "crossfit": 43314006544
       }
     },
     "launch_origin": {
-      "state": "github_schedule_observed",
-      "github_event": "schedule",
-      "verified_sender": true
+      "state": "apps_script_signed_verified",
+      "github_event": "workflow_dispatch",
+      "verified_sender": true,
+      "proof_cycle_id": "2026-11-12-2245"
     },
     "last_readiness_certificate": {
-      "cycle_id": "2026-11-12-1645",
+      "cycle_id": "2026-11-12-2245",
       "status": "data_ready",
-      "last_ready_at": "2026-11-12T16:49:31.471127+01:00",
+      "last_ready_at": "2026-11-12T22:49:38.104606+01:00",
       "notification_delivery": "unverified_no_chatgpt_receipt",
-      "corresponds_to_observed_pipeline": false,
-      "relationship": "previous_or_unmatched_certificate"
+      "corresponds_to_observed_pipeline": true,
+      "relationship": "same_verified_cycle"
     },
     "performance_report": {
-      "state": "present_but_not_attributable_to_observed_pipeline",
-      "verified_current_pipeline": false,
+      "state": "published_for_observed_pipeline",
+      "verified_current_pipeline": true,
       "report_version": "3.2",
-      "generated_at": "2026-11-12T15:49:24.817177+00:00",
+      "generated_at": "2026-11-12T21:49:31.570106+00:00",
       "crossfit_source_match": true,
       "note": "GitHub JSON publication, not ChatGPT message delivery."
     },
@@ -290,33 +279,30 @@
   },
   "monitor_v297": {
     "version": "2.9.7",
-    "checked_at": "2026-11-12T19:08:03.630988+01:00",
-    "cycle_id": "2026-11-12-1645",
+    "checked_at": "2026-11-12T22:50:04.245002+01:00",
+    "cycle_id": "2026-11-12-2245",
     "current_cycle": {
-      "state": "cycle_unverified",
-      "data_ready_verified": false,
-      "exact_chain_verified": false,
-      "origin": "unverified",
-      "origin_verified": false,
-      "origin_evidence": "certificate_or_exact_lineage_not_verified"
+      "state": "verified_ready",
+      "data_ready_verified": true,
+      "exact_chain_verified": true,
+      "origin": "apps_script_signed_verified",
+      "origin_verified": true,
+      "origin_evidence": "matching_v291_hmac_evidence"
     },
     "punctuality": {
-      "state": "not_assessable",
-      "slot_at": "2026-11-12T16:45:00+01:00",
-      "data_ready_at": "2026-11-12T16:49:31.471127+01:00",
-      "target_report_at": "2026-11-12T17:10:00+01:00",
-      "ready_before_target_minutes": null,
-      "sync_start_delay_from_slot_minutes": null,
+      "state": "on_time",
+      "slot_at": "2026-11-12T22:45:00+01:00",
+      "data_ready_at": "2026-11-12T22:49:38.104606+01:00",
+      "target_report_at": "2026-11-12T23:10:00+01:00",
+      "ready_before_target_minutes": 20.36,
+      "sync_start_delay_from_slot_minutes": 3.08,
       "minimum_buffer_warning_minutes": 5.0,
       "measures_data_readiness_not_chatgpt_delivery": true
     },
     "historical_alerts": {
-      "base_monitor_status": "attention",
+      "base_monitor_status": "ok",
       "prior_or_unattributed_alert_codes": [
         "cron_missed_dispatch_recovered",
-        "latest_pipeline_not_complete",
-        "latest_run_failed",
-        "latest_run_skipped",
         "no_recent_successful_scheduled_run"
       ],
       "current_slot_alert_codes": [],
