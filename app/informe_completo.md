@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Viernes, 13 de noviembre de 2026 · 09:34 · `GR-2026-11-13-0934-25518f`
+Viernes, 13 de noviembre de 2026 · 10:39 · `GR-2026-11-13-1039-aeb572`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|10 sesiones|sRPE 1909|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (09:33), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (10:38), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -154,7 +154,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 29, máximo 72.
-- Body Battery: último valor 22/100, medido a las 07:00 (hace 2 h 35 min: no es una medición nueva).
+- Body Battery: último valor 22/100, medido a las 07:00 (hace 3 h 40 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 23,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -404,4 +404,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-13-0830 · generado 13/11/2026 09:34 Europe/Madrid · certificado READY · sync_run_id 43386550789.
+Traza: cierre matinal · ciclo 2026-11-13-0830 · generado 13/11/2026 10:39 Europe/Madrid · certificado READY · sync_run_id 43386550789.
