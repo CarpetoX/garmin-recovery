@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Viernes, 13 de noviembre de 2026 · 11:44 · `GR-2026-11-13-1144-7c4887`
+Viernes, 13 de noviembre de 2026 · 12:49 · `GR-2026-11-13-1249-b09e50`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|10 sesiones|sRPE 1909|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (11:43), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (12:48), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -78,7 +78,7 @@ La HRV está 16 % por debajo de su mediana; la FC en reposo está 2 lpm por enci
 | Modelo de compatibilidad | 🔴 17/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 18/100 | contexto |
 | Tiempo de recuperación Garmin | 11,7 h | contexto |
-| Índice personal experimental | 41/100 | provisional |
+| Índice personal experimental | 45/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -133,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 70,3 lpm | 62,3 lpm |
+| Hoy* | 69,4 lpm | 62,3 lpm |
 | 3 días | 78,8 lpm | 60,0 lpm |
 | 7 días | 78,3 lpm | 61,1 lpm |
 | 28 días | 80,5 lpm | 64,1 lpm |
@@ -153,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 29, máximo 72.
-- Body Battery: último valor 22/100, medido a las 07:00 (hace 4 h 45 min: no es una medición nueva).
+- Estrés medio: 28, máximo 84.
+- Body Battery: último valor 35/100, medido a las 11:51.
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 23,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -316,7 +316,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 ## 7. Balance y orientación
 
 Turno: hoy libre tras la noche, mañana libre.
-- Señales adversas: HRV baja respecto a tu historial; Training Readiness de Garmin bajo (18/100); Body Battery bajo (22/100).
+- Señales adversas: HRV baja respecto a tu historial; Training Readiness de Garmin bajo (18/100).
 
 ### Recomendaciones
 
@@ -404,4 +404,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-13-0830 · generado 13/11/2026 11:44 Europe/Madrid · certificado READY · sync_run_id 43386550789.
+Traza: cierre matinal · ciclo 2026-11-13-0830 · generado 13/11/2026 12:49 Europe/Madrid · certificado READY · sync_run_id 43386550789.
