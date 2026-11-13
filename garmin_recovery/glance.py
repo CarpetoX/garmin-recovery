@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import date
 
-SHIFT_TEXT = {"MT": "mañana-tarde 08–22", "TN": "noche 15–08", "free": "libre", "post-TN": "libre tras la noche", "unknown": "sin registrar"}
+SHIFT_TEXT = {"MT": "mañana-tarde 08–22", "TN": "noche 15–08", "M": "mañana 08–15", "free": "libre", "post-TN": "libre tras la noche", "unknown": "sin registrar"}
 
 
 def _n(v, d=1):

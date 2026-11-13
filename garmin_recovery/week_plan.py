@@ -48,6 +48,8 @@ def plan(today: str, shifts: dict, sessions: list, zone: str | None, rpe_max, le
             kind, why = "moderate", "TN por la tarde: si entrenas, por la mañana y moderado"
         elif shift == "MT":
             kind, why = "light", "turno largo: movilidad o descanso"
+        elif shift == "M":
+            kind, why = "moderate", "turno de mañana (08–15): si entrenas, por la tarde y moderado"
         elif shift == "free":
             gap_ok = last_hard is None or (d - last_hard).days >= MIN_GAP_DAYS
             in_window = sum(1 for h in hard_days if d - timedelta(days=6) <= h < d)

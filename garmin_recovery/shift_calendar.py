@@ -12,10 +12,11 @@ from functools import lru_cache
 from pathlib import Path
 
 FILE = Path('shift_calendar.json')
-VALID_SHIFTS = {'MT', 'TN', 'free'}
+VALID_SHIFTS = {'MT', 'TN', 'M', 'free'}
 LEGACY = VALID_SHIFTS | {'post-TN'}
 HOURS = {'MT': {'start': '08:00', 'end': '22:00', 'end_day_offset': 0},
-         'TN': {'start': '15:00', 'end': '08:00', 'end_day_offset': 1}}
+         'TN': {'start': '15:00', 'end': '08:00', 'end_day_offset': 1},
+         'M': {'start': '08:00', 'end': '15:00', 'end_day_offset': 0}}
 
 
 def parse_day(value):
