@@ -49,7 +49,7 @@ def context_of(day: str, cal: dict) -> str | None:
         label = resolve_day(day, _cal(cal))["label"]
     except (TypeError, ValueError, KeyError):
         return None
-    return {"free": "libre", "TN": "TN", "MT": "MT", "post-TN": "post-TN"}.get(label)
+    return {"free": "libre", "TN": "TN", "MT": "MT", "M": "M", "post-TN": "post-TN"}.get(label)
 
 
 CONTEXT_LABEL = {"TN": "días de TN", "post-TN": "días post-TN", "MT": "días de MT", "libre": "días libres"}
@@ -434,7 +434,7 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
 
     def shift(d):
         ctx = context_of(d.isoformat(), cal)
-        if ctx in ("TN", "MT"):
+        if ctx in ("TN", "MT", "M"):
             hh = hours.get(ctx) if isinstance(hours.get(ctx), dict) else {}
             return f'<span class="chip strong">{esc(ctx)} {esc(hh.get("start", ""))}–{esc(hh.get("end", ""))}</span>'
         if ctx is None:

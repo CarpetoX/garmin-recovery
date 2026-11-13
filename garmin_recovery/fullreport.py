@@ -20,7 +20,7 @@ MONTHS = ("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agost
           "octubre", "noviembre", "diciembre")
 BAR = "█"
 
-SHIFT_ES = {"MT": "MT (08–22)", "TN": "TN (15–08)", "free": "libre", "post-TN": "libre tras la noche", "unknown": "sin turno registrado"}
+SHIFT_ES = {"MT": "MT (08–22)", "TN": "TN (15–08)", "M": "M (08–15)", "free": "libre", "post-TN": "libre tras la noche", "unknown": "sin turno registrado"}
 
 
 def _shift_es(day: str, cal: dict) -> str:

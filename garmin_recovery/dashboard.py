@@ -715,7 +715,7 @@ def _tonight_html(t: dict | None) -> str:
             f'<ul class="clean parts">{lis}</ul>{tip}</section>')
 
 
-SHIFT_ES = {"free": "libre", "post-TN": "tras TN", "unknown": "sin turno registrado", "MT": "MT", "TN": "TN"}
+SHIFT_ES = {"free": "libre", "post-TN": "tras TN", "unknown": "sin turno registrado", "MT": "MT", "TN": "TN", "M": "M (08–15)"}
 
 
 def _plan_html(plan: list | None) -> str:
