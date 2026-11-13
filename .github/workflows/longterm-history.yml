@@ -1,0 +1,71 @@
+name: Historial largo de Garmin
+
+# V9.4: rellena history/daily_longterm.csv (HRV, FC en reposo, sueño, estrés y Body Battery) desde marzo de 2026.
+# Solo a mano: descarga únicamente los días que faltan, así que se puede relanzar sin duplicar nada.
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        description: 'Primer día (AAAA-MM-DD)'
+        default: '2026-03-01'
+      end:
+        description: 'Último día (vacío = hace 2 días)'
+        default: ''
+      limit:
+        description: 'Máximo de días en esta ejecución'
+        default: '400'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garmin-longterm-history
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Instalar Garmin Connect
+        run: python -m pip install --disable-pip-version-check 'garminconnect==0.3.17'
+
+      - name: Descargar el historial que falta
+        env:
+          GARMIN_TOKENS_B64: ${{ secrets.GARMIN_TOKENS_B64 }}
+          START: ${{ inputs.start }}
+          END: ${{ inputs.end }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          args=(--start "$START" --limit "$LIMIT")
+          if [ -n "$END" ]; then args+=(--end "$END"); fi
+          python -m garmin_recovery.longterm_history "${args[@]}" | tee longterm_result.json
+          echo "### Historial largo" >> "$GITHUB_STEP_SUMMARY"
+          cat longterm_result.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Guardar con reintentos
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Garmin Recovery Bot'
+          git config user.email 'actions@github.com'
+          git add -- history/daily_longterm.csv
+          if git diff --cached --quiet; then echo 'Sin días nuevos.'; exit 0; fi
+          git commit -m 'Historial largo de Garmin'
+          for attempt in 1 2 3 4 5; do
+            if ! git pull --rebase origin main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
