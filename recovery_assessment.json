@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-11-13T12:49:30.348361+01:00",
+  "generated_at": "2026-11-13T13:54:27.947717+01:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "assessed",
   "status": "red",
-  "score": 36,
+  "score": 48,
   "confidence": "high",
   "reason": null,
   "missing_essential": [],
   "fresh_sources": true,
-  "context": "night_sleep",
+  "context": "day_sleep",
   "work_shift_context": "post-TN",
-  "sleep_context": "night_sleep",
+  "sleep_context": "day_sleep",
   "current": {
     "date": "2026-11-13",
-    "hrv_ms": 43.0,
-    "sleep_hours": 1.42,
-    "sleep_score": 28.0,
-    "resting_hr": 59.0,
-    "night_hr": 62.3,
-    "sleep_context": "night_sleep",
-    "sleep_start_local": "2026-11-13T03:39:50+01:00",
-    "sleep_end_local": "2026-11-13T05:16:50+01:00",
+    "hrv_ms": 53.0,
+    "sleep_hours": 4.36,
+    "sleep_score": 53.0,
+    "resting_hr": 56.0,
+    "night_hr": 62.1,
+    "sleep_context": "day_sleep",
+    "sleep_start_local": "2026-11-13T09:13:25+01:00",
+    "sleep_end_local": "2026-11-13T13:47:56+01:00",
     "sources": {
       "hrv_ms": "garmin_hrv_timeline",
       "sleep_hours": "garmin_sleep_history",
@@ -64,24 +64,23 @@
   "metrics_used": [
     {
       "metric": "hrv_ms",
-      "value": 43.0,
+      "value": 53.0,
       "reference": 51.0,
-      "change_pct": -15.7
+      "change_pct": 3.9
     },
     {
       "metric": "resting_hr",
-      "value": 59.0,
+      "value": 56.0,
       "reference": 57.0,
-      "delta_bpm": 2.0
+      "delta_bpm": -1.0
     },
     {
       "metric": "sleep_hours",
-      "value": 1.42,
+      "value": 4.36,
       "reference": 7.61
     }
   ],
   "warnings": [
-    "hrv_baja_10pct",
     "sueno_menor_5h",
     "sueno_baja_calidad"
   ],
@@ -96,16 +95,16 @@
     "shift_context": "post-TN",
     "sleep_integrity": {
       "main_sleep_confirmed": true,
-      "main_sleep_minutes": 85,
-      "unconfirmed_separate_events": 0,
-      "unconfirmed_separate_minutes": 0,
-      "overlapping_body_battery_events": 1,
+      "main_sleep_minutes": 262,
+      "unconfirmed_separate_events": 1,
+      "unconfirmed_separate_minutes": 97,
+      "overlapping_body_battery_events": 0,
       "minutes_added_to_sleep": 0,
       "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
     },
     "sleep_score_provenance": {
-      "confirmed_sleep_score": 28.0,
-      "readiness_sleep_field": 28.0,
+      "confirmed_sleep_score": 53.0,
+      "readiness_sleep_field": 53.0,
       "status": "close_values",
       "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
     },
@@ -114,35 +113,36 @@
     "intensity_guardrail": "avoid_maximum",
     "reason_codes": [
       "post_night_shift",
-      "short_sleep"
+      "short_sleep",
+      "unconfirmed_body_battery_sleep_event"
     ],
-    "baseline_caution": "standard",
+    "baseline_caution": "day_sleep_baseline_not_mature",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
     "measurement_provenance": {
       "sources": {
         "confirmed_sleep": {
           "state": "recent",
-          "measured_at": "2026-11-13T05:16:50+01:00",
-          "age_minutes": 452.7,
+          "measured_at": "2026-11-13T13:47:56+01:00",
+          "age_minutes": 6.5,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
           "state": "recent",
-          "measured_at": "2026-11-13T05:15:19+01:00",
-          "age_minutes": 454.2,
+          "measured_at": "2026-11-13T13:45:19+01:00",
+          "age_minutes": 9.1,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
           "state": "recent",
-          "measured_at": "2026-11-13T11:56:00+01:00",
-          "age_minutes": 53.5,
+          "measured_at": "2026-11-13T13:46:00+01:00",
+          "age_minutes": 8.5,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
           "state": "recent",
-          "measured_at": "2026-11-13T11:51:00+01:00",
-          "age_minutes": 58.5,
+          "measured_at": "2026-11-13T13:42:00+01:00",
+          "age_minutes": 12.5,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
