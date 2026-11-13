@@ -1,10 +1,10 @@
-# Resumen semanal · 06/11–12/11
+# Resumen semanal · 07/11–13/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-12-2249-cc2e37`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-13-0834-4c46ac`)._
 
 ## En una frase
 
-- 10 sesiones (−3); HRV de 7 días dentro de tu rango normal; 2 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (4 de 4 días entrenados comprobados).
+- 10 sesiones (−1); HRV de 7 días dentro de tu rango normal; 3 de 7 noches con datos por debajo de 7,5 h de sueño; ningún día por encima del RPE máximo (4 de 4 días entrenados comprobados).
 - Decisión registrada en 7/7 días: verde 3 · ámbar 2 · rojo 2.
 
 ## Gráficas de la semana
@@ -25,10 +25,10 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| Sesiones | 10 | 13 |
-| Minutos | 360 | 416 |
-| Carga (Intervals) | 184 | 209 |
-| sRPE (RPE × min) | 1909 | 1026 |
+| Sesiones | 10 | 11 |
+| Minutos | 360 | 380 |
+| Carga (Intervals) | 184 | 187 |
+| sRPE (RPE × min) | 1909 | 938 |
 
 Monotonía 0,71 · strain 1348 · ACWR 1,34 · RPE registrado en 7/10 sesiones.
 
@@ -36,11 +36,11 @@ Monotonía 0,71 · strain 1348 · ACWR 1,34 · RPE registrado en 7/10 sesiones.
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| HRV media | 54,9 ms | 46,4 ms |
-| FC en reposo media | 55,9 lpm | 57,4 lpm |
-| Sueño medio | 7,81 h | 7,27 h |
+| HRV media | 53,6 ms | 49,0 ms |
+| FC en reposo media | 56,0 lpm | 58,0 lpm |
+| Sueño medio | 6,93 h | 7,75 h |
 
-HRV de 7 días hoy: 54,4 ms (rango normal 47,2–59,5 ms). Turnos: MT, TN, MT, TN.
+HRV de 7 días hoy: 52,9 ms (rango normal 47,4–59,2 ms). Turnos: TN, MT, TN.
 
 ## Fuerza de la semana
 
@@ -66,13 +66,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**21 de 21** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**19 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
-| 06/11 | 08:30 | 08:32 | 08:33 | 32 min ✓ |
-| 06/11 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
-| 06/11 | 22:45 | 22:47 | 22:48 | 22 min ✓ |
 | 07/11 | 08:30 | 08:32 | 08:33 | 32 min ✓ |
 | 07/11 | 16:45 | 16:47 | 16:48 | 22 min ✓ |
 | 07/11 | 22:45 | 22:47 | 22:47 | 22 min ✓ |
@@ -91,6 +88,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 12/11 | 08:30 | 08:33 | 08:34 | 30 min ✓ |
 | 12/11 | 16:45 | 16:48 | 16:49 | 20 min ✓ |
 | 12/11 | 22:45 | 22:48 | 22:49 | 20 min ✓ |
+| 13/11 | 08:30 | 08:33 | 08:34 | 30 min ✓ |
 
 ## Calidad de los datos
 
