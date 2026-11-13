@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Viernes, 13 de noviembre de 2026 · 08:34 · `GR-2026-11-13-0834-4c46ac`
+Viernes, 13 de noviembre de 2026 · 09:34 · `GR-2026-11-13-0934-25518f`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -14,7 +14,7 @@ Carga 7 días|10 sesiones|sRPE 1909|unavailable
 ## Resumen ejecutivo
 
 - 🟢 **Certificación:** ciclo 2026-11-13-0830 validado; 4 de 4 procesos finalizados correctamente.
-- 🔴 **Recuperación:** 36/100 (oficial, confianza high). Híbrido: 20/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
+- 🔴 **Recuperación:** 36/100 (oficial, confianza high). Híbrido: 17/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 1 h 25 min, puntuación 28/100.
 - ❤️ **Principal alerta:** HRV 43 ms, 15,7 % por debajo de tu mediana de 28 días.
 - 🏋️ **Qué hacer:** Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
@@ -34,7 +34,7 @@ Carga 7 días|10 sesiones|sRPE 1909|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (09:33), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -73,12 +73,12 @@ La HRV está 16 % por debajo de su mediana; la FC en reposo está 2 lpm por enci
 | Modelo | Resultado | Papel |
 |---|---|---|
 | Recuperación oficial | 🔴 36/100 | oficial |
-| Híbrido Garmin + local | 🔴 20/100 | salvaguarda |
+| Híbrido Garmin + local | 🔴 17/100 | salvaguarda |
 | Modelo experimental | — | sombra |
-| Modelo de compatibilidad | 🔴 22/100 | compatibilidad |
+| Modelo de compatibilidad | 🔴 17/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 18/100 | contexto |
 | Tiempo de recuperación Garmin | 11,7 h | contexto |
-| Índice personal experimental | 42/100 | provisional |
+| Índice personal experimental | 41/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -154,7 +154,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 29, máximo 72.
-- Body Battery: último valor 22/100, medido a las 07:00 (hace 1 h 35 min: no es una medición nueva).
+- Body Battery: último valor 22/100, medido a las 07:00 (hace 2 h 35 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 23,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -404,4 +404,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-13-0830 · generado 13/11/2026 08:34 Europe/Madrid · certificado READY · sync_run_id 43386550789.
+Traza: cierre matinal · ciclo 2026-11-13-0830 · generado 13/11/2026 09:34 Europe/Madrid · certificado READY · sync_run_id 43386550789.
