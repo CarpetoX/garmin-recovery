@@ -12,6 +12,7 @@ from datetime import date as _date, timedelta
 from pathlib import Path
 
 from . import coaching as co
+from . import longterm_history as lh
 from . import sensations as sn
 from .visual_report import (MES, ZONE, _bb_points, _day, _fnum, _iso, _load, _ms_local, _sessions_today, bars_h,
                             bb_curve, day_bars, ddmm, esc, hhmm, line_chart, num, stacked)
@@ -279,6 +280,41 @@ def garmin_performance(ext: dict) -> list[tuple[str, str, str]]:
                  "NO_STATUS": "Sin estado"}.get(key, key.replace("_", " ").lower().capitalize())
         out.append(("Estado de entrenamiento", esc(es_st), "según Garmin"))
     return out
+
+
+def longterm_card(root, today: str) -> str:
+    """V9.4: medianas mensuales desde marzo (historial largo + daily.csv). Describe la evolución; no decide nada."""
+    months = lh.monthly(root)
+    cur = (today or "")[:7]
+
+    def mlabel(k: str) -> str:
+        return MES[int(k[5:7]) - 1] + (" (en curso)" if k == cur else "")
+
+    rows = ""
+    for f, name, unit, dec, higher in lh.METRICS:
+        pts = [(m["month"], m[f]) for m in months if m.get(f) is not None]
+        if len(pts) < 2:
+            continue
+        first, last = pts[0], pts[-1]
+        delta = last[1] - first[1]
+        better = None if round(delta, dec) == 0 else (delta > 0) == higher
+        chg = (f'<span class="{"up" if better else "down"}">{"+" if delta > 0 else ""}{num(delta, dec)} '
+               f'{"mejor" if better else "peor" if better is False else ""}</span>') if better is not None else '<span class="down">igual</span>'
+        rows += (f'<div class="mx1"><div><b>{esc(name)}</b><small>{esc(mlabel(first[0]))} → {esc(mlabel(last[0]))} · mediana mensual</small></div>'
+                 + _spark([(k + "-15", v) for k, v in pts]) + f'<div class="mx1-v">{num(last[1], dec)}{(" " + unit) if unit else ""}{chg}</div></div>')
+    if not rows:
+        return card("¿Cómo he cambiado mes a mes?",
+                    '<p class="muted">Aparecerá cuando se descargue el historial largo de Garmin (al menos dos meses con datos).</p>')
+    head = "".join(f"<th>{esc(n)}</th>" for _, n, *_ in lh.METRICS[:4])
+    body = "".join(f'<tr><td>{esc(MES[int(m["month"][5:7]) - 1])} {m["month"][2:4]}</td>'
+                   + "".join(f"<td>{num(m.get(f), d)}</td>" for f, _, _, d, _ in lh.METRICS[:4]) + f'<td>{m["days"]}</td></tr>'
+                   for m in months if any(m.get(f) is not None for f, *_ in lh.METRICS))
+    first_m = next((m["month"] for m in months if any(m.get(f) is not None for f, *_ in lh.METRICS)), None)
+    return card("¿Cómo he cambiado mes a mes?", rows
+                + f'<details><summary>Mes a mes</summary><table class="tbl"><thead><tr><th>Mes</th>{head}<th>días</th></tr></thead><tbody>{body}</tbody></table></details>'
+                + f'<p class="muted">Mediana de cada mes con al menos {lh.MIN_DAYS_PER_MONTH} días con dato; el sueño solo cuenta noches. '
+                  'El cambio compara el primer mes con el último; describe, no prueba causa.</p>',
+                f"desde {MES[int(first_m[5:7]) - 1]} {first_m[:4]}" if first_m else "")
 
 
 # ---------------------------------------------------------------- página
@@ -568,7 +604,7 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                    ('<div class="gp">' + "".join(f'<div class="gp-i"><span>{esc(n)}</span><b>{v}</b><small>{d}</small></div>' for n, v, d in gp) + "</div>"
                     + '<p class="muted">Datos del panel de rendimiento de Garmin Connect, tal como los publica Garmin. Las predicciones de carrera y el umbral de lactato '
                       'se basan en carrera, no en CrossFit.</p>') if gp else '<p class="muted">Aún no han llegado datos del panel de rendimiento de Garmin.</p>')
-    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + gp_card + '<div class="grid">' + skills + weight + "</div>" + wbc)
+    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + longterm_card(root, today) + gp_card + '<div class="grid">' + skills + weight + "</div>" + wbc)
 
     # =================== montaje
     cert_ok = ready.get("status") == "ready"
