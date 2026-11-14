@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-14T17:30:23.656670+01:00",
+  "checked_at": "2026-11-14T23:29:34.226410+01:00",
   "repository": "CarpetoX/garmin-recovery",
   "status": "attention",
   "workflows": {
@@ -7,7 +7,7 @@
       "last_completed_conclusion": "cancelled",
       "last_completed_at": "2026-11-14T14:23:06Z",
       "last_success_at": "2026-11-14T11:36:30+01:00",
-      "last_success_age_hours": 5.9,
+      "last_success_age_hours": 11.88,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43604537380",
       "latest_run_event": "schedule"
     },
@@ -15,7 +15,7 @@
       "last_completed_conclusion": "skipped",
       "last_completed_at": "2026-11-14T14:23:16Z",
       "last_success_at": "2026-11-14T11:36:55+01:00",
-      "last_success_age_hours": 5.89,
+      "last_success_age_hours": 11.88,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43604585136",
       "latest_run_event": "workflow_run"
     },
@@ -23,7 +23,7 @@
       "last_completed_conclusion": "skipped",
       "last_completed_at": "2026-11-14T14:23:19Z",
       "last_success_at": "2026-11-14T11:37:18+01:00",
-      "last_success_age_hours": 5.88,
+      "last_success_age_hours": 11.87,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43604600930",
       "latest_run_event": "workflow_run"
     },
@@ -31,7 +31,7 @@
       "last_completed_conclusion": "skipped",
       "last_completed_at": "2026-11-14T14:23:22Z",
       "last_success_at": "2026-11-14T11:37:42+01:00",
-      "last_success_age_hours": 5.88,
+      "last_success_age_hours": 11.86,
       "latest_run_url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43604605017",
       "latest_run_event": "workflow_run"
     }
@@ -45,11 +45,10 @@
       "url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43604537380"
     },
     {
-      "severity": "info",
+      "severity": "warning",
       "code": "no_recent_successful_scheduled_run",
       "workflow": "sync.yml",
-      "window_hours": 72,
-      "clarification": "data_recovered_by_dispatch; cron_still_unreliable"
+      "window_hours": 72
     },
     {
       "severity": "info",
@@ -70,24 +69,16 @@
       "url": "https://github.com/CarpetoX/garmin-recovery/actions/runs/43604605017"
     },
     {
-      "severity": "info",
-      "code": "cron_missed_dispatch_recovered",
+      "severity": "warning",
+      "code": "sync_slot_not_recovered",
       "slots": [
-        "2026-11-13T16:45:00+01:00",
-        "2026-11-13T22:45:00+01:00",
-        "2026-11-14T08:30:00+01:00"
+        "2026-11-14T16:45:00+01:00"
       ],
-      "dispatch_origin": "apps_script_hmac_verified",
-      "dispatch_origin_verified": true,
-      "dispatch_caller_verified": true,
-      "evidence_level": "hmac_verified_in_run",
-      "note": "Apps Script lanzó cada franja con firma verificada; solo falló el cron de GitHub, que es de respaldo.",
-      "slots_apps_script_verified": [
-        "2026-11-13T16:45:00+01:00",
+      "cron_missed": [
         "2026-11-13T22:45:00+01:00",
-        "2026-11-14T08:30:00+01:00"
-      ],
-      "dispatch_actor_interpretation_v292": "not_proven_manual; see origin_monitor_v292 for current cycle proof"
+        "2026-11-14T08:30:00+01:00",
+        "2026-11-14T16:45:00+01:00"
+      ]
     },
     {
       "severity": "warning",
@@ -95,16 +86,21 @@
       "stage": "sync",
       "state": "failed",
       "sync_run_id": 43604537380
+    },
+    {
+      "severity": "warning",
+      "code": "report_gate_not_current",
+      "last_due_slot": "2026-11-14T16:45:00+01:00",
+      "last_ready_cycle": "2026-11-14-0830-post-sleep"
     }
   ],
   "note": "pipeline_progress tracks the current Sync→Heart→Advanced→CrossFit chain; a previous successful stage is not presented as completion of a running cycle. report_cycles.json records readiness, NOT delivery receipts. V3.4: data-ready, performance JSON and ChatGPT delivery are independent states.",
   "schedule_v231": {
-    "state": "recovered",
+    "state": "attention",
     "due": 3,
     "matched": 0,
-    "recovered_count": 3,
+    "recovered_count": 2,
     "recovered": [
-      "2026-11-13T16:45:00+01:00",
       "2026-11-13T22:45:00+01:00",
       "2026-11-14T08:30:00+01:00"
     ],
@@ -114,12 +110,16 @@
     "recovered_by_unattributed": [],
     "dispatch_caller_verified": true,
     "cron_missed": [
-      "2026-11-13T16:45:00+01:00",
       "2026-11-13T22:45:00+01:00",
-      "2026-11-14T08:30:00+01:00"
+      "2026-11-14T08:30:00+01:00",
+      "2026-11-14T16:45:00+01:00"
     ],
-    "uncovered": [],
-    "missed": [],
+    "uncovered": [
+      "2026-11-14T16:45:00+01:00"
+    ],
+    "missed": [
+      "2026-11-14T16:45:00+01:00"
+    ],
     "manual_runs_counted_as_schedule": false,
     "dispatch_origin_verified": true,
     "grace_minutes": 150,
@@ -138,7 +138,6 @@
     "effective_date": "2026-10-10",
     "note": "repository_dispatch is compatible with Apps Script but sender unverified; workflow_dispatch caller unverified; only schedule confirms GitHub cron.",
     "recovered_by_apps_script_verified": [
-      "2026-11-13T16:45:00+01:00",
       "2026-11-13T22:45:00+01:00",
       "2026-11-14T08:30:00+01:00"
     ],
@@ -150,7 +149,7 @@
     "state": "ready",
     "cycle_id": "2026-11-14-0830-post-sleep",
     "last_verified_at": "2026-11-14T10:15:15.687185+01:00",
-    "age_hours": 7.25,
+    "age_hours": 13.24,
     "last_sync_run_id": 43579529807,
     "report_delivered": "not_verified"
   },
@@ -158,7 +157,7 @@
     "state": "failed",
     "current_stage": "sync",
     "sync_run_id": 43604537380,
-    "age_minutes": 127.8,
+    "age_minutes": 487.0,
     "stages": {
       "sync": {
         "run_id": 43604537380,
@@ -171,14 +170,14 @@
   },
   "operational_quality_v28": {
     "version": "2.8",
-    "checked_at": "2026-11-14T17:30:23.656670+01:00",
+    "checked_at": "2026-11-14T23:29:34.226410+01:00",
     "observation_scope": "monitor_bounded_lookback; not 7d_or_28d_slo",
-    "schedule_state": "recovered_without_automatic_cron_proof",
+    "schedule_state": "missed_uncovered",
     "due_observed": 3,
     "cron_confirmed": 0,
-    "recovered_unattributed": 3,
+    "recovered_unattributed": 2,
     "cron_confirmed_pct": 0.0,
-    "sync_started_or_recovered_pct": 100.0,
+    "sync_started_or_recovered_pct": 66.7,
     "backup_sender_verified": null,
     "last_sync_event": "schedule",
     "last_sync_origin": "github_schedule",
@@ -187,8 +186,8 @@
     "report_delivery_receipt": "unavailable",
     "confidence": "observed_window_only",
     "blockers": [
-      "github_schedule_not_verified",
-      "pipeline_incomplete_or_failed"
+      "pipeline_incomplete_or_failed",
+      "sync_slot_uncovered"
     ],
     "origin_monitor_v292": {
       "cycle_id": "2026-11-14-0830-post-sleep",
@@ -203,7 +202,7 @@
   },
   "origin_monitor_v292": {
     "version": "2.9.2",
-    "checked_at": "2026-11-14T16:30:34.645275+00:00",
+    "checked_at": "2026-11-14T22:29:46.455018+00:00",
     "cycle_id": "2026-11-14-0830-post-sleep",
     "origin": {
       "source": "unknown",
@@ -225,9 +224,9 @@
   },
   "report_status_v34": {
     "version": "3.4",
-    "checked_at": "2026-11-14T17:30:34.742298+01:00",
+    "checked_at": "2026-11-14T23:29:46.581158+01:00",
     "scheduled_slots": {
-      "state": "recovered",
+      "state": "attention",
       "due_matured_count": 3,
       "github_cron_matched_count": 0,
       "recovered_without_sender_proof": [],
@@ -289,7 +288,7 @@
   },
   "monitor_v297": {
     "version": "2.9.7",
-    "checked_at": "2026-11-14T17:30:35.786974+01:00",
+    "checked_at": "2026-11-14T23:29:47.850058+01:00",
     "cycle_id": "2026-11-14-0830-post-sleep",
     "current_cycle": {
       "state": "cycle_unverified",
@@ -315,11 +314,11 @@
         "latest_pipeline_not_complete",
         "latest_run_failed",
         "latest_run_skipped",
-        "no_recent_successful_scheduled_run"
+        "no_recent_successful_scheduled_run",
+        "report_gate_not_current",
+        "sync_slot_not_recovered"
       ],
-      "current_slot_alert_codes": [
-        "cron_missed_dispatch_recovered"
-      ],
+      "current_slot_alert_codes": [],
       "prior_alerts_not_automatically_resolved": true,
       "verified_recovered_incidents": null,
       "consecutive_automatic_successes": null,
