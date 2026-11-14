@@ -1,6 +1,6 @@
 # Informe matutino · 14/11/2026
 
-`GR-2026-11-14-0904-cadc6b` · cita este identificador al reenviar el informe.
+`GR-2026-11-14-0939-07868e` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
 
@@ -55,7 +55,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-14-0834-d59e7f (14/11 08:34):
+Frente al informe GR-2026-11-14-0904-cadc6b (14/11 09:04):
 - Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
@@ -120,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-14-0904-cadc6b`
+- **Identificador del informe:** `GR-2026-11-14-0939-07868e`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-14-0830 · datos sincronizados a las 09:03 · Sync fuera de franja
-- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 5,3 h ! · último Body Battery hace 5,4 h !
+- **Ciclo:** 2026-11-14-0830 · datos sincronizados a las 09:38 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 5,9 h ! · último Body Battery hace 6,0 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-14 09:04 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-14 09:39 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
