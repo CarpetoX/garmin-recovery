@@ -1,6 +1,6 @@
 # Informe matutino · 14/11/2026
 
-`GR-2026-11-14-0834-d59e7f` · cita este identificador al reenviar el informe.
+`GR-2026-11-14-0904-cadc6b` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
 
@@ -55,11 +55,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-13-2249-76ee0e (13/11 22:49):
-- **Decisión:** rojo → **pendiente**.
-- Híbrido: 45 → 74 (+29).
-- Nueva noche registrada: HRV 53 → — ms, sueño 4,83 → — h, FC reposo 56 → 57 lpm.
-- Sesiones con RPE: 15 → 13.
+Frente al informe GR-2026-11-14-0834-d59e7f (14/11 08:34):
+- Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -123,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-14-0834-d59e7f`
+- **Identificador del informe:** `GR-2026-11-14-0904-cadc6b`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-14-0830 · datos sincronizados a las 08:33
-- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 4,8 h ! · último Body Battery hace 4,9 h !
+- **Ciclo:** 2026-11-14-0830 · datos sincronizados a las 09:03 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 5,3 h ! · último Body Battery hace 5,4 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+7 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-14 08:34 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-14 09:04 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
