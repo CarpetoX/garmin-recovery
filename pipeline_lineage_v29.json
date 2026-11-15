@@ -3,10 +3,10 @@
   "version": "2.9",
   "status": "exact_chain_verified",
   "stage": "crossfit",
-  "run_id": 43706745253,
-  "parent_run_id": 43706723023,
+  "run_id": 43709651222,
+  "parent_run_id": 43709621836,
   "root": {
-    "run_id": 43706662287,
+    "run_id": 43709548198,
     "event": "workflow_dispatch",
     "origin_certainty": "apps_script_hmac_sha256_v291",
     "origin_v291": {
@@ -17,58 +17,58 @@
       "auth_method": "hmac_sha256_shared_secret_v291",
       "origin_source": "apps_script_backup",
       "cycle_id": "2026-11-15-0830",
-      "request_id": "7f5dfeab-4892-44ad-a4f3-28ac2b5b6a23",
-      "requested_at": "2026-11-15T10:58:55.356Z",
-      "checked_at": "2026-11-15T10:59:05.034349+00:00"
+      "request_id": "b457486b-901c-49d8-9e53-096cfd2a895c",
+      "requested_at": "2026-11-15T11:33:56.877Z",
+      "checked_at": "2026-11-15T11:34:18.505527+00:00"
     }
   },
   "stages": {
     "sync": {
-      "run_id": 43706662287,
+      "run_id": 43709548198,
       "event": "workflow_dispatch",
       "parent_run_id": null
     },
     "heart": {
-      "run_id": 43706682122,
+      "run_id": 43709581855,
       "event": "workflow_run",
-      "parent_run_id": 43706662287
+      "parent_run_id": 43709548198
     },
     "advanced": {
-      "run_id": 43706723023,
+      "run_id": 43709621836,
       "event": "workflow_run",
-      "parent_run_id": 43706682122
+      "parent_run_id": 43709581855
     },
     "crossfit": {
-      "run_id": 43706745253,
+      "run_id": 43709651222,
       "event": "workflow_run",
-      "parent_run_id": 43706723023
+      "parent_run_id": 43709621836
     }
   },
   "links": [
     {
       "from": "sync",
       "to": "heart",
-      "parent_run_id": 43706662287,
-      "child_run_id": 43706682122,
+      "parent_run_id": 43709548198,
+      "child_run_id": 43709581855,
       "evidence": "github_workflow_run_event"
     },
     {
       "from": "heart",
       "to": "advanced",
-      "parent_run_id": 43706682122,
-      "child_run_id": 43706723023,
+      "parent_run_id": 43709581855,
+      "child_run_id": 43709621836,
       "evidence": "github_workflow_run_event"
     },
     {
       "from": "advanced",
       "to": "crossfit",
-      "parent_run_id": 43706723023,
-      "child_run_id": 43706745253,
+      "parent_run_id": 43709621836,
+      "child_run_id": 43709651222,
       "evidence": "github_workflow_run_event"
     }
   ],
   "exact_link_count": 3,
   "complete_chain_verified": true,
   "note": "Exact parent link is from GITHUB_EVENT_PATH; further ancestors need matching previous-run artifact. No timestamp inference; no ChatGPT delivery acknowledgment.",
-  "generated_at": "2026-11-15T11:00:12.509885+00:00"
+  "generated_at": "2026-11-15T11:35:25.366516+00:00"
 }
