@@ -50,7 +50,7 @@ class NapTests(unittest.TestCase):
         api = FakeApi(NAP)
         res = gsh.collect(api, now=NOW, existing={})
         self.assertEqual(res["days"]["2026-11-15"]["nap_minutes"], 130)
-        self.assertEqual(res["days"]["2026-11-14"]["naps"], [])
+        self.assertNotIn("naps", res["days"].get("2026-11-14", {}))
         self.assertEqual(sum(1 for c in api.calls if c[0] == "naps"), 2)  # solo hoy y ayer
         bad = gsh.collect(FakeApi(fail=True), now=NOW, existing={"days": {"2026-11-15": {"naps": [{"minutes": 30}], "nap_minutes": 30}}})
         self.assertEqual(bad["days"]["2026-11-15"]["nap_minutes"], 30)  # un fallo no borra lo que había

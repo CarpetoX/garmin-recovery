@@ -183,12 +183,14 @@ def collect(api, now=None, existing=None, overrides=None):
                 unavailable.append(f'hrv:{key}')
         except Exception as exc:
             errors[f'hrv:{key}'] = f'{type(exc).__name__}: {exc}'
-        if d in days[:2]:  # V9.6: siestas solo de hoy y ayer (2 llamadas por ciclo)
+        fetch_naps = getattr(api, 'get_naps', None)
+        if fetch_naps is None and hasattr(api, 'connectapi'):
+            def fetch_naps(k):
+                return api.connectapi(f'/sleep-service/sleep/naps/{k}', params={'includeOverlaps': 'true'})
+        if fetch_naps is not None and d in days[:2]:  # V9.6: siestas solo de hoy y ayer (2 llamadas por ciclo)
             try:
-                fetch = getattr(api, 'get_naps', None)
-                raw_naps = fetch(key) if fetch else api.connectapi(f'/sleep-service/sleep/naps/{key}', params={'includeOverlaps': 'true'})
-                naps = extract_naps(raw_naps)
-                if naps or 'naps' not in old:
+                naps = extract_naps(fetch_naps(key))
+                if naps:  # sin siestas no se crea ni se borra nada
                     old['naps'] = naps
                     old['nap_minutes'] = sum(x['minutes'] for x in naps)
             except Exception as exc:
