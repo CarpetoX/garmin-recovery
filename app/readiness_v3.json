@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-15T18:46:55.513833+01:00",
+  "generated_at": "2026-11-15T22:50:13.022731+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-11-15",
   "decision": {
@@ -279,34 +279,34 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-11-15T18:46:55.513833+01:00",
+    "generated_at": "2026-11-15T22:50:13.022731+01:00",
     "cycle": {
-      "cycle_id": "2026-11-15-1645",
-      "slot_at": "2026-11-15T16:45:00+01:00",
+      "cycle_id": "2026-11-15-2245",
+      "slot_at": "2026-11-15T22:45:00+01:00",
       "status": "ready",
-      "verified_at": "2026-11-15T16:50:00.864736+01:00",
+      "verified_at": "2026-11-15T22:50:11.763669+01:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": true,
-      "data_synced_at": "2026-11-15T18:46:07.996099+01:00",
-      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
+      "data_newer_than_certified_cycle": false,
+      "data_synced_at": "2026-11-15T22:49:22.857441+01:00",
+      "note": null,
       "chain": {
         "sync": {
-          "run_id": 43731941147,
+          "run_id": 43765733815,
           "event": "workflow_dispatch",
           "conclusion": "success"
         },
         "heart": {
-          "run_id": 43731971544,
+          "run_id": 43765767242,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "advanced": {
-          "run_id": 43732017222,
+          "run_id": 43765826304,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "crossfit": {
-          "run_id": 43732043449,
+          "run_id": 43765852588,
           "event": "workflow_run",
           "conclusion": "publishing_in_same_job"
         }
@@ -315,51 +315,51 @@
     "data_age": {
       "confirmed_sleep": {
         "measured_at": "2026-11-15T11:50:00+01:00",
-        "age_minutes": 417.0,
+        "age_minutes": 660.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-11-15T11:40:20+01:00",
-        "age_minutes": 427.0,
+        "age_minutes": 670.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
         "measured_at": "2026-11-15T18:36:00+01:00",
-        "age_minutes": 11.0,
-        "state": "reciente",
+        "age_minutes": 254.0,
+        "state": "antigua",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-11-15T18:03:00+01:00",
-        "age_minutes": 44.0,
-        "state": "reciente",
+        "age_minutes": 287.0,
+        "state": "antigua",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-15T17:46:34.923374+00:00",
+      "fetched_at": "2026-11-15T21:49:51.601879+00:00",
       "latest_date": "2026-11-14",
       "rows_sha256": "feeea76f1c2955ae",
-      "advanced_run_id": "43742983895"
+      "advanced_run_id": "43765826304"
     },
     "source_sha256": {
       "wellness.json": "c9e3c994837644e9",
-      "garmin_hrv_timeline.json": "be64bf467ef186c3",
-      "garmin_sleep_history.json": "258f7d8dffc5218a",
-      "garmin_extended.json": "dadd6aaac42f9e0b",
-      "garmin_heart_rate.json": "bfe3d31ffb6a04f3",
-      "garmin_stress.json": "676844df5a0bc2ad",
-      "garmin_body_battery.json": "bbf0fa9ea0aba75f",
+      "garmin_hrv_timeline.json": "3dd9b08c6a622f4e",
+      "garmin_sleep_history.json": "8aea4af25d410673",
+      "garmin_extended.json": "a65787f946ed2c72",
+      "garmin_heart_rate.json": "aa1bbd59da48de00",
+      "garmin_stress.json": "a5efa68e71d0e6a0",
+      "garmin_body_battery.json": "7a134fa57f474003",
       "activities.json": "7b824b494dce9686",
-      "training_feedback.json": "50cfa046f31beb6a",
+      "training_feedback.json": "ac09a6763814f5e5",
       "shift_calendar.json": "218a0b4ac784d7db",
-      "morning_sleep_status.json": "da8174ee0b843c26",
-      "recovery_assessment.json": "f85cfdfb5d984f10",
-      "report_ready.json": "d1ee30cd0b0ce7b7",
-      "garmin_hr_timeline.json": "8ad09d9b5768904e",
-      "daily_summary.json": "e2af88629c134026",
+      "morning_sleep_status.json": "c2be0a53183d9064",
+      "recovery_assessment.json": "103ae7ac9dafa0ba",
+      "report_ready.json": "98eed53228cacc29",
+      "garmin_hr_timeline.json": "7408b25d4be34a01",
+      "daily_summary.json": "cf9264667434b9d6",
       "workflow_health.json": "c28a157310986f85",
       "recovery.csv": "dd0cb7070b2a6d16"
     },
@@ -411,6 +411,7 @@
     },
     "status": "con_avisos",
     "issues": [
+      "mediciones no recientes: heart_rate_live, body_battery_live",
       "1 franja(s) de Sync sin ejecutar ni recuperar"
     ]
   },
@@ -1322,7 +1323,7 @@
       "rem_min": 0.0,
       "sleep_context": "day_sleep",
       "stress_avg_full": 58.0,
-      "rest_confirmed": false
+      "rest_confirmed": true
     }
   ],
   "recent_sessions": [
@@ -1527,11 +1528,12 @@
     "dates_28d": [
       "2026-11-05",
       "2026-11-06",
-      "2026-11-11"
+      "2026-11-11",
+      "2026-11-15"
     ],
-    "last7": 1,
-    "last28": 3,
-    "today": false,
+    "last7": 2,
+    "last28": 4,
+    "today": true,
     "conflicts": [],
     "note": "Solo cuentan los días que el atleta confirma; un día sin registro no demuestra descanso."
   },

@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Domingo, 15 de noviembre de 2026 · 18:46 · `GR-2026-11-15-1846-ddfc1b`
+Domingo, 15 de noviembre de 2026 · 22:50 · `GR-2026-11-15-2250-140d7c`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|12 sesiones|sRPE 2140|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-15-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-15-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 14/100 (oficial, confianza medium). Híbrido: 11/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 4 h 01 min, puntuación 31/100.
 - ❤️ **Principal alerta:** HRV 30 ms, 36,2 % por debajo de tu mediana de 28 días; FC nocturna 74,2 lpm (10,7 sobre la mediana).
@@ -23,20 +23,20 @@ Carga 7 días|12 sesiones|sRPE 2140|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-15-1645 |
+| Ciclo | 2026-11-15-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:50:00 |
+| Certificado generado | 22:50:11 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | medium |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
 ⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 11-14 16:45.
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (18:46), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
 ### Fuentes de datos
 
@@ -157,7 +157,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 58, máximo 94.
-- Body Battery: último valor 5/100, medido a las 18:03.
+- Body Battery: último valor 5/100, medido a las 18:03 (hace 4 h 47 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -184,7 +184,7 @@ Solo descriptivo: sirve para ver si la zona se corresponde con tu recuperación 
 
 ## 5. Rendimiento CrossFit
 
-Última actividad registrada: 14 nov. Descansos confirmados por ti: 1 en 7 días y 3 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
+Última actividad registrada: 14 nov. Descansos confirmados por ti: 2 en 7 días y 4 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
 
 Contraste Garmin ↔ Intervals: las 12 actividades de Garmin de los últimos 7 días constan también en Intervals.
 
@@ -221,7 +221,7 @@ El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, m
 12 nov █             105
 13 nov ███           241
 14 nov ████          382
-15 nov —             sin registro
+15 nov —             descanso
 ```
 
 El 10 nov concentra la mayor carga sRPE de la semana. La relación con las señales de recuperación es descriptiva, no causal.
@@ -329,7 +329,7 @@ Turno: hoy libre, mañana MT (08–22).
 ### Recomendaciones
 
 1. **Prioriza recuperar** — Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -412,4 +412,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **🔴
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-15-1645 · generado 15/11/2026 18:46 Europe/Madrid · certificado READY · sync_run_id 43731941147.
+Traza: cierre nocturno · ciclo 2026-11-15-2245 · generado 15/11/2026 22:50 Europe/Madrid · certificado READY · sync_run_id 43765733815.
