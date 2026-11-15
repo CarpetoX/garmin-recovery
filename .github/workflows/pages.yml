@@ -44,7 +44,7 @@ jobs:
           python-version: '3.12'
       - name: Generar la web (panel, calendario, histórico, PWA)
         run: python -m garmin_recovery site --out _site
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
