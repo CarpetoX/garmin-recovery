@@ -1,6 +1,6 @@
 # Resumen semanal · 09/11–15/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-15-0022-4ec289`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-15-0834-08e903`)._
 
 ## En una frase
 
@@ -39,7 +39,7 @@ Monotonía 0,83 · strain 1778 · ACWR 1,46 · RPE registrado en 9/12 sesiones.
 | | Esta semana | Semana previa |
 |---|--:|--:|
 | HRV media | 55,3 ms | 49,9 ms |
-| FC en reposo media | 55,7 lpm | 57,4 lpm |
+| FC en reposo media | 56,3 lpm | 57,4 lpm |
 | Sueño medio | 7,76 h | 7,41 h |
 
 ## Fuerza de la semana
@@ -66,7 +66,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**16 de 18** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**17 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -88,6 +88,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 14/11 | 08:30 | 08:33 | 08:34 | 30 min ✓ |
 | 14/11 | 16:45 | — | sin informe | — |
 | 14/11 | 22:45 | 00:21 | 00:22 | -73 min ⚠️ tarde |
+| 15/11 | 08:30 | 08:34 | 08:34 | 30 min ✓ |
 
 ## Calidad de los datos
 
