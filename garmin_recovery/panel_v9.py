@@ -7,6 +7,7 @@ porcentajes entre ventanas incompletas. El panel anterior sigue disponible como 
 """
 from __future__ import annotations
 
+import json
 import re
 from datetime import date as _date, timedelta
 from pathlib import Path
@@ -282,6 +283,21 @@ def garmin_performance(ext: dict) -> list[tuple[str, str, str]]:
     return out
 
 
+def naps_line(root, today: str) -> str:
+    """V9.6: siestas de hoy según Garmin. Se muestran aparte: no suman al sueño ni a la recuperación."""
+    try:
+        day = (json.loads((Path(root) / "garmin_sleep_history.json").read_text(encoding="utf-8")).get("days") or {}).get(today) or {}
+    except (OSError, ValueError, AttributeError):
+        return ""
+    naps = [x for x in day.get("naps") or [] if isinstance(x, dict) and x.get("minutes")]
+    if not naps:
+        return ""
+    parts = [f'{hhmm(x.get("start_local"))} → {hhmm(x.get("end_local"))} ({int(x["minutes"]) // 60} h {int(x["minutes"]) % 60:02d} min)'
+             if x["minutes"] >= 60 else f'{hhmm(x.get("start_local"))} → {hhmm(x.get("end_local"))} ({int(x["minutes"])} min)' for x in naps]
+    return ('<p class="muted">Siesta' + ("s" if len(naps) > 1 else "") + " de hoy: " + esc("; ".join(parts))
+            + ". Va aparte: no suma al sueño de la noche ni cambia la recuperación.</p>")
+
+
 def longterm_card(root, today: str) -> str:
     """V9.4: medianas mensuales desde marzo (historial largo + daily.csv). Describe la evolución; no decide nada."""
     months = lh.monthly(root)
@@ -461,9 +477,11 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                   "0–100 · deciden oficial, híbrido y experimental (manda el más prudente); el resto es referencia")
     sd = ext.get("sleep_detail") or {}
     sl_rng = normal_range(trend, "sleep_hours", today, cal)
+    naps_html = naps_line(root, today)
     sleep = card("¿He dormido lo suficiente?",
                  takeaway(f'{num(tday.get("sleep_hours"), 1)} h ({hhmm(cur.get("sleep_start_local"))} → {hhmm(cur.get("sleep_end_local"))}), '
                           f'{verdict(tday.get("sleep_hours"), sl_rng, True)[1]}.')
+                 + naps_html
                  + stacked([("Profundo", sd.get("deep_minutes"), "c-deep"), ("Ligero", sd.get("light_minutes"), "c-light"),
                             ("REM", sd.get("rem_minutes"), "c-rem"), ("Despierto", sd.get("awake_minutes"), "c-awake")])
                  + "<h3>14 noches</h3>" + day_bars(trend[-14:], "sleep_hours", w=420, h=160, ref=sl_rng["p50"] if sl_rng else None, ref_label="mediana",
