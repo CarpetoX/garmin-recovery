@@ -108,6 +108,42 @@ def extract_sleep(raw, day, generated_at):
     }
 
 
+def _nap_time(v, local=False):
+    """Marca de tiempo de Garmin (ms epoch o ISO; sin zona = GMT, o Madrid si la clave es «local») → datetime en Madrid."""
+    if isinstance(v, (int, float)) and v > 10**11:
+        return datetime.fromtimestamp(v / 1000, tz=timezone.utc).astimezone(TZ)
+    if isinstance(v, str) and len(v) >= 16:
+        try:
+            dt = datetime.fromisoformat(v.replace('Z', '+00:00'))
+        except ValueError:
+            return None
+        return (dt if dt.tzinfo else dt.replace(tzinfo=TZ if local else timezone.utc)).astimezone(TZ)
+    return None
+
+
+def extract_naps(raw):
+    """V9.6: siestas de /sleep-service/sleep/naps. Solo describe; no entra en la recuperación.
+
+    Busca en cada elemento una clave de inicio y otra de fin (preferencia GMT) y descarta lo incoherente
+    (fin antes del inicio o más de 4 h)."""
+    items = raw if isinstance(raw, list) else (raw.get('naps') or raw.get('dailyNapDTOS') or []) if isinstance(raw, dict) else []
+    out = []
+    for it in items:
+        if not isinstance(it, dict):
+            continue
+        keys = sorted(it, key=lambda k: ('gmt' not in k.lower(), k))
+        start = next((_nap_time(it[k], 'local' in k.lower()) for k in keys if 'start' in k.lower() and _nap_time(it[k])), None)
+        end = next((_nap_time(it[k], 'local' in k.lower()) for k in keys if 'end' in k.lower() and _nap_time(it[k])), None)
+        if not start or not end:
+            continue
+        minutes = round((end - start).total_seconds() / 60)
+        if not 5 <= minutes <= 240:
+            continue
+        out.append({'start_local': start.isoformat(timespec='minutes'), 'end_local': end.isoformat(timespec='minutes'),
+                    'minutes': minutes, 'source': 'Garmin Connect siestas'})
+    return sorted(out, key=lambda x: x['start_local'])
+
+
 def choose_dates(today, rows, cursor):
     all_days = [today - timedelta(days=i) for i in range(RETENTION_DAYS)]
     missing = [d for d in all_days[2:] if not isinstance(rows.get(d.isoformat()), dict) or rows[d.isoformat()].get('sleep_hours') is None or rows[d.isoformat()].get('hrv_ms') is None]
@@ -147,6 +183,16 @@ def collect(api, now=None, existing=None, overrides=None):
                 unavailable.append(f'hrv:{key}')
         except Exception as exc:
             errors[f'hrv:{key}'] = f'{type(exc).__name__}: {exc}'
+        if d in days[:2]:  # V9.6: siestas solo de hoy y ayer (2 llamadas por ciclo)
+            try:
+                fetch = getattr(api, 'get_naps', None)
+                raw_naps = fetch(key) if fetch else api.connectapi(f'/sleep-service/sleep/naps/{key}', params={'includeOverlaps': 'true'})
+                naps = extract_naps(raw_naps)
+                if naps or 'naps' not in old:
+                    old['naps'] = naps
+                    old['nap_minutes'] = sum(x['minutes'] for x in naps)
+            except Exception as exc:
+                errors[f'naps:{key}'] = f'{type(exc).__name__}: {str(exc)[:160]}'
         fix = (overrides or {}).get(key)
         if isinstance(fix, dict) and fix:
             old.update({k: v for k, v in fix.items() if k != 'reason'})
