@@ -1,8 +1,6 @@
 # Informe matutino · 17/11/2026
 
-`GR-2026-11-17-0905-e4b58b` · cita este identificador al reenviar el informe.
-
-> ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
+`GR-2026-11-17-0940-b776a3` · cita este identificador al reenviar el informe.
 
 > **Hoy: ⚪ pendiente — Pendiente de datos.** RPE ≤ 6 · volumen según sensaciones.
 >
@@ -14,7 +12,7 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 6 | según sensaciones | — ms | 60 lpm | — h | —/100 |
+| 6 | según sensaciones | — ms | 48 lpm | — h | —/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
@@ -55,15 +53,15 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-17-0835-8a59c2 (17/11 08:35):
+Frente al informe GR-2026-11-17-0905-e4b58b (17/11 09:05):
 - Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
-- **FC:** reposo 60 lpm (+4 vs. mediana 56); nocturna — lpm (—).
+- **FC:** reposo 48 lpm (-8 vs. mediana 56); nocturna — lpm (—).
 - **Estrés Garmin ayer:** 22 de media (tu mediana 34).
 
-**Señales coincidentes:** 1 de 3 señales en contra (FC en reposo y nocturna); a favor: Estrés del día anterior (Garmin), Carga de entrenamiento. Sin datos: Variabilidad cardiaca (HRV), Sueño, Sensaciones (Intervals).
+**Señales coincidentes:** 0 de 3 señales en contra; a favor: FC en reposo y nocturna, Estrés del día anterior (Garmin), Carga de entrenamiento. Sin datos: Variabilidad cardiaca (HRV), Sueño, Sensaciones (Intervals).
 
 ## Incertidumbre
 
@@ -121,16 +119,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-17-0905-e4b58b`
+- **Identificador del informe:** `GR-2026-11-17-0940-b776a3`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-17-0830 · datos sincronizados a las 09:04 · Sync fuera de franja
-- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 7,9 h ! · último Body Battery hace 8,2 h !
+- **Ciclo:** 2026-11-17-0830 · datos sincronizados a las 09:39 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 36 min ✓ · último Body Battery hace 37 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 12/12 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-17 09:05 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-17 09:40 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
