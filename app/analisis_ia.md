@@ -1,29 +1,26 @@
 <!-- cycle_id: 2026-11-17-0830-post-sleep -->
-**En breve:** día verde, buena recuperación; entrena según lo planificado, pero hoy hay turno de noche.
-🟢 Recuperación oficial: 88/100 (confianza alta)
-🌙 Sueño: 7,9 h, puntuación 95
-🏋️ Carga: 5 sesiones en 7 días, carga baja frente a la semana previa (−67 %)
-❤️ HRV 86 ms y FC en reposo 48 lpm (−8 vs. tu mediana)
-Orientación: si entrenas, antes del turno, corto y sin máximos (RPE ≤ 9 permitido).
+**En breve:** estás bien recuperado y los datos acompañan; hoy toca turno de noche.
+🟢 Recuperación oficial 88/100, confianza alta
+🌙 Sueño 7,9 h, puntuación 95
+🏋️ Carga 7 días: 109 (−53 % vs. semana previa), 7 sesiones
+❤️ HRV 86 ms hoy; media 7 días dentro de tu rango normal
+Orientación: luz verde (RPE ≤ 9), pero con TN hoy: si entrenas, antes del turno, corto y sin máximos.
 
-## Qué explica la puntuación
-HRV de 7 días 57,1 ms, dentro de tu rango normal (47,7–58,8 ms); FC en reposo y nocturna por debajo de tu mediana; estrés de ayer 22 (mediana 34). Lo único que resta es la deuda de sueño (4,4 h en 3 noches). Oficial 88, híbrido 93 y experimental 84 coinciden en verde; la confianza de la recomendación es media porque el modelo experimental aún no está validado.
+**Qué explica la puntuación.** HRV 7 días 57,1 ms (+8 % vs. base 53; rango normal 47,7–58,8). FC en reposo 48 lpm (−8 vs. mediana) y nocturna 54 (−8,5). Estrés Garmin ayer 22 (mediana 34). El sueño es el único punto más flojo: deuda 4,4 h en 3 noches. Los tres modelos coinciden en verde (oficial 88, híbrido 93, experimental 84, confianza media por estar sin validar).
 
-## Carga reciente
-5 sesiones y sRPE 727 en 7 días, monotonía 0,68, ACWR 0,52: carga aguda baja respecto a la crónica. Últimas sesiones: fuerza RPE 6 (14/11), WOD RPE 8 y chin-up lastrado RPE 7 (13/11). Según el análisis por reglas, el 42 % de las sesiones con RPE fueron ≥ 8, con 5 casos de dos días duros seguidos.
+**Carga reciente.** Carga 109 frente a 231 la semana anterior, ACWR 0,52 (carga baja), sRPE 727. Hoy hay 2 HIIT sin RPE registrado (17/11 10:19 y 11:03). Sensaciones sin registrar en Intervals.
 
-## 3 prioridades
-1. **Sueño:** adelantar 30–45 min la hora de acostarte, sobre todo antes de un turno de noche.
-2. **Distribución de la intensidad:** intercalar sesiones RPE 5–6 y dejar ≥ 48 h entre esfuerzos máximos.
-3. **Sensaciones:** registrar fatiga, agujetas y ánimo en Intervals (0 de 14 días registrados).
+**Prioridades**
+1. **Sueño:** adelanta 30–45 min la hora de acostarte, sobre todo antes de un TN; la deuda de 4–5 h es lo que más frena.
+2. **Distribución de intensidad:** 11 de 26 sesiones con RPE fueron ≥ 8 (42 %) y hubo 5 dobles días duros; intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
+3. **Registro:** RPE de las dos sesiones de hoy y sensaciones (0 de 14 días).
 
-## Plan de 7 días (orientativo)
-- **Mar 17 (TN):** moderada antes del turno, RPE ≤ 7, sin máximos.
-- **Mié 18:** descanso; prioriza dormir tras la noche.
-- **Jue 19 (libre):** sesión exigente (fuerza/halterofilia), RPE hasta 9 si el calentamiento responde.
-- **Vie 20 (libre):** moderada, RPE 6–7.
-- **Sáb 21 (MT):** movilidad suave o descanso.
-- **Dom 22 (TN):** moderada por la mañana, sin máximos.
-- **Lun 23:** descanso y sueño.
+**Plan 7 días** (según la sección 8 del informe completo)
+- Mar 17 (TN): suave/movilidad, o fuerza corta antes del turno sin máximos.
+- Mié 18 (tras TN): descanso, prioriza dormir.
+- Jue 19 (libre): sesión exigente, si el calentamiento responde.
+- Vie 20 (libre): moderada.
+- Sáb 21 (MT): suave/movilidad.
+- Dom 22 (TN): moderada por la mañana.
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
+_Herramienta de entrenamiento, no es un diagnóstico médico._
