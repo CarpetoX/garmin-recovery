@@ -1,30 +1,30 @@
-# Cierre diario · 16/11/2026
+# Informe matutino · 17/11/2026
 
-`GR-2026-11-16-2250-d639e4` · cita este identificador al reenviar el informe.
+`GR-2026-11-17-0835-8a59c2` · cita este identificador al reenviar el informe.
 
-> ⚠️ Certificado con avisos: mediciones no recientes: body_battery_live.
+> ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
 
-> **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
+> **Hoy: ⚪ pendiente — Pendiente de datos.** RPE ≤ 6 · volumen según sensaciones.
 >
-> **Por qué:** lo marcan Recuperación oficial (81) y Híbrido Garmin + local (78) y Modelo experimental (71); señales: Estrés Garmin ayer 51 de media (tu mediana 34) · Sueño 6,5 h, puntuación 81, deuda 4,4 h en 3 noches.
+> **Por qué:** faltan datos de hoy (hrv_ms, sleep_hours).
 >
-> **Qué hacer:** Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien.
+> **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
 
-## 🟢 Decisión: verde — Listo para entrenar
+## ⚪ Decisión: pendiente — Pendiente de datos
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 9 | 100 % | 69 ms | 53 lpm | 6,55 h | 61/100 |
+| 6 | según sensaciones | — ms | 60 lpm | — h | —/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
-| Recuperación oficial | 81 | verde | oficial |
-| Híbrido Garmin + local | 78 | verde | salvaguarda |
-| Modelo experimental | 71 | verde | sombra |
-| Modelo de compatibilidad | 90 | verde | compatibilidad |
-| Garmin Training Readiness | 61 | — | contexto |
+| Recuperación oficial | — | pendiente | oficial |
+| Híbrido Garmin + local | 74 | ámbar | salvaguarda |
+| Modelo experimental | — | pendiente | sombra |
+| Modelo de compatibilidad | 74 | ámbar | compatibilidad |
+| Garmin Training Readiness | — | — | contexto |
 
 _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
 
@@ -32,23 +32,22 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## En el box hoy
 
-- Sesión planificada completa: halterofilia pesada, fuerza y WOD a intensidad alta si el calentamiento responde.
-- Calentamiento progresivo; si la barra va lenta en las aproximaciones, baja a la pauta ámbar.
+- Hasta tener datos: solo técnica ligera y movilidad; nada de intensidad alta.
 
 ## Cómo ajustar tu sesión de hoy
 
-<details><summary>Reglas por tipo de sesión</summary>
+<details open><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
 | Tipo | Ajuste de hoy | RPE máx. |
 |---|---|--:|
-| Fuerza | **Mantener:** Según lo planificado. | 9 |
-| Halterofilia | **Mantener:** Según lo planificado. | 9 |
-| WOD | **Mantener:** Según lo planificado. | 9 |
-| Técnica | **Mantener:** Según lo planificado. | 9 |
-| Aeróbico | **Mantener:** Según lo planificado. | 9 |
-| Movilidad | **Mantener:** Según lo planificado. | 9 |
+| Fuerza | **Sustituir:** Técnica del patrón con barra vacía o PVC (15–20 min) + movilidad. Sin cargas. | 6 |
+| Halterofilia | **Sustituir:** Técnica con PVC o barra vacía (15–20 min): posiciones y recepciones. Sin cargas. | 6 |
+| WOD | **Sustituir:** Zona 2 suave 30–40 min (remo, bici o caminata), pudiendo hablar. | 6 |
+| Técnica | **Reducir:** Técnica ligera ≤ 15 min, sin fatiga. Revisa de nuevo cuando se confirme el sueño. | 6 |
+| Aeróbico | **Reducir:** Zona 2 suave ≤ 40 min. Revisa de nuevo cuando se confirme el sueño. | 6 |
+| Movilidad | **Mantener:** Movilidad tal como está planificada. Revisa de nuevo cuando se confirme el sueño. | 6 |
 
 _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg. Para ajustar una sesión concreta, pregunta con este informe._
 
@@ -56,53 +55,36 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-16-1650-d239a2 (16/11 16:50):
-- Sin cambios en los datos.
+Frente al informe GR-2026-11-16-2250-d639e4 (16/11 22:50):
+- **Decisión:** verde → **pendiente**.
+- Híbrido: 78 → 74 (-4).
+- Nueva noche registrada: HRV 69 → — ms, sueño 6,55 → — h, FC reposo 53 → 60 lpm.
+- Sesiones con RPE: 13 → 12.
 
-## Balance del día
+## Qué ha cambiado respecto a tu línea base
 
-_Sin sesiones registradas._
+- **FC:** reposo 60 lpm (+4 vs. mediana 56); nocturna — lpm (—).
+- **Estrés Garmin ayer:** 22 de media (tu mediana 34).
 
-## Balance de la semana
+**Señales coincidentes:** 1 de 3 señales en contra (FC en reposo y nocturna); a favor: Estrés del día anterior (Garmin), Carga de entrenamiento. Sin datos: Variabilidad cardiaca (HRV), Sueño, Sensaciones (Intervals).
 
-- Carga 7 días: **165** en 9 sesiones (-6 % vs. semana previa).
-- sRPE 7 días 1.790 · monotonía 0,67 · strain 1.191.
-- Fatiga acumulada: ATL 21,0, CTL 12,1, TSB -8,9 (CTL insuficiente: la forma no se interpreta todavía).
+## Incertidumbre
 
-## Previsión orientativa para mañana
+- Confianza de los datos: **baja** (faltan datos de hoy: hrv_ms, sleep_hours; sueño de hoy sin confirmar)
+- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
 
-- Objetivo de sueño esta noche: **8,5 h** (necesidad + parte de la deuda de 4,4 h).
-- Mañana turno **TN**: si entrenas, antes del turno, corto y sin máximos.
-- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.
+## Plan del día
 
-## Gráficas
+- Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño. RPE ≤ 6, volumen según sensaciones.
+- Hoy turno de noche: si entrenas, que sea antes del turno, corto y sin máximos.
 
-![RPE frente al máximo del día](charts/rpe.svg)
-
-_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
-
-![Carga](charts/load.svg)
+## Tendencias
 
 ![Disponibilidad](charts/readiness.svg)
 
-## Validación de modelos
-
-_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
-
-**Acumulando datos: 15/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
-
-| Modelo | ρ esfuerzo | IC 90 % | Días |
-|---|--:|---|--:|
-| Oficial v2 | -0,16 | -0,57 a 0,30 | 15 |
-| Híbrido | -0,27 | -0,64 a 0,20 | 15 |
-| v3 (en pruebas) | -0,14 | -0,55 a 0,32 | 15 |
-| Decisión operativa | -0,27 | -0,64 a 0,20 | 15 |
-
-- Días entrenados con predicción: 16; por encima del RPE máximo del día: 8.
-
 ## Recuperación: tendencias de 28 días
 
-<details><summary>HRV, FC y sueño</summary>
+<details open><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -142,16 +124,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-16-2250-d639e4`
+- **Identificador del informe:** `GR-2026-11-17-0835-8a59c2`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-16-2245 · datos sincronizados a las 22:49
-- **Antigüedad:** fin del sueño hace 15,1 h ✓ · última HRV hace 15,1 h ✓ · última FC hace 14 min ✓ · último Body Battery hace 4,4 h !
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+6 sin RPE por diseño: calentamiento/técnica)
+- **Ciclo:** 2026-11-17-0830 · datos sincronizados a las 08:34
+- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 7,4 h ! · último Body Battery hace 7,7 h !
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 12/12 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-16 22:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-17 08:35 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
