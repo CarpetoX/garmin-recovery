@@ -1,10 +1,10 @@
 # Resumen semanal · 11/11–17/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-17-1258-654484`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-17-1650-ef6738`)._
 
 ## En una frase
 
-- 7 sesiones (−5); HRV de 7 días dentro de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; 1 de 3 días comprobados por encima del RPE máximo.
+- 7 sesiones (−5); HRV de 7 días dentro de tu rango normal; 4 de 7 noches con datos por debajo de 7,5 h de sueño; 1 de 4 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: verde 4 · ámbar 1 · rojo 2.
 
 ## Gráficas de la semana
@@ -28,9 +28,9 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 7 | 12 |
 | Minutos | 196 | 504 |
 | Carga (Intervals) | 109 | 231 |
-| sRPE (RPE × min) | 727 | 2300 |
+| sRPE (RPE × min) | 820 | 2300 |
 
-Monotonía — · strain — · ACWR 0,52 · RPE registrado en 4/7 sesiones.
+Monotonía 0,80 · strain 660 · ACWR 0,58 · RPE registrado en 5/7 sesiones.
 
 **Días por encima del RPE máximo de la decisión:** 13/11 (RPE 8,0 > 4).
 
@@ -59,7 +59,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**17 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**18 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -82,14 +82,15 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 16/11 | 16:45 | 16:49 | 16:50 | 19 min ✓ |
 | 16/11 | 22:45 | 22:49 | 22:50 | 20 min ✓ |
 | 17/11 | 08:30 | 08:34 | 08:35 | 30 min ✓ |
+| 17/11 | 16:45 | 16:49 | 16:50 | 19 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 4/7.
+- Sesiones con RPE: 5/7.
 
 ## Validación de modelos
 
-Acumulando datos: 15/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 16/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._

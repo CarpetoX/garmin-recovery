@@ -1,6 +1,6 @@
 # Informe de seguimiento · 17/11/2026
 
-`GR-2026-11-17-1258-654484` · cita este identificador al reenviar el informe.
+`GR-2026-11-17-1650-ef6738` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟢 verde — Listo para entrenar.** RPE ≤ 9 · volumen 100 %.
 >
@@ -54,19 +54,19 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-17-1015-824b84 (17/11 10:15):
-- Sesiones nuevas desde entonces: **2** (carga +32).
+Frente al informe GR-2026-11-17-1258-654484 (17/11 12:58):
+- Sesiones con RPE: 12 → 13.
 
 ## Actividad de hoy
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 17/11 11:03 | Sin detalle | HIIT | 10 | 14 | 167 / 178 | — | — |
-| 17/11 10:19 | Sin detalle | HIIT | 44 | 18 | 109 / 162 | — | — |
+| 17/11 11:03 | WOD | WOD For Time 50-40-30-20-10 - wall ball / DB snatch / C2B / DB thruster / devil press | 10 | 14 | 167 / 178 | 9,0 | 93 |
+| 17/11 10:19 | Técnica | Técnica - kipping y butterfly pull-up (+ calentamiento) | 44 | 18 | 109 / 162 | — | — |
 
-**¿Encaja con la decisión?** La actividad de hoy (carga 32, RPE máx. 0,0) encaja con la decisión.
+**¿Encaja con la decisión?** La actividad de hoy (carga 32, RPE máx. 9,0) encaja con la decisión.
 
-**Carga 7 días:** 109 en 7 sesiones (-53 % vs. semana previa) · sRPE 727 · monotonía —.
+**Carga 7 días:** 109 en 7 sesiones (-53 % vs. semana previa) · sRPE 820 · monotonía 0,80.
 
 ## Gráficas
 
@@ -92,8 +92,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i211142027** (17/11 10:19, Sin detalle, 44 min, carga 18) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i211147729** (17/11 11:03, Sin detalle, 10 min, carga 14) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -122,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-17-1258-654484`
+- **Identificador del informe:** `GR-2026-11-17-1650-ef6738`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-17-0830-post-sleep · datos sincronizados a las 12:57 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 3,6 h ✓ · última HRV hace 3,7 h ✓ · última FC hace 22 min ✓ · último Body Battery hace 25 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 12/14 (+5 sin RPE por diseño: calentamiento/técnica) (sin RPE: 17/11 10:19, 17/11 11:03)
+- **Ciclo:** 2026-11-17-1645 · datos sincronizados a las 16:49
+- **Antigüedad:** fin del sueño hace 7,5 h ✓ · última HRV hace 7,6 h ✓ · última FC hace 2,4 h ✓ · último Body Battery hace 2,4 h ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+6 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-17 12:58 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-17 16:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
