@@ -15,6 +15,7 @@ from .quality import certificate, training_integrity
 from .readiness import GUIDANCE, assess
 from .records import DAILY_FIELDS, build_day_records, build_sessions
 from .sources import load_inputs
+from .sleep_stages import check as stage_check
 
 
 def _write_json(path: Path, obj) -> None:
@@ -47,6 +48,7 @@ def trend(daily: dict, sessions: dict, end: str, cfg: dict, days: int = 28) -> l
             "v2_score": row.get("v2_score"), "hybrid_score": row.get("hybrid_score"),
             "decision_zone": row.get("decision_zone"),
             "deep_min": row.get("deep_min"), "rem_min": row.get("rem_min"),
+            "stages_flag": (stage_check(row.get("sleep_hours"), row.get("deep_min"), row.get("rem_min")) or {}).get("code"),
             "sleep_context": row.get("sleep_context"), "stress_avg_full": row.get("stress_avg"),
         })
     return out

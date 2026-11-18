@@ -264,7 +264,11 @@ def build_full_report(root, result: dict, report_id: str = "", charts_dir=None) 
             rows.append([label, hm(sday.get(key))])
         add("\n" + table(["Dato", "Valor"], rows))
         rem, tot_min = _num(sday.get("rem_minutes")), (total or 0) * 60
-        if rem is not None and tot_min:
+        from .sleep_stages import NOTE as stage_note, check as stage_check  # V9.7
+        st_flag = stage_check(total, sday.get("deep_minutes"), sday.get("rem_minutes"))
+        if st_flag:
+            add(f"\n⚠️ {st_flag['text']} {stage_note}")
+        elif rem is not None and tot_min:
             add(f"\nEl REM representa un {n(rem / tot_min * 100)} % y el sueño profundo un {n((_num(sday.get('deep_minutes')) or 0) / tot_min * 100)} % del episodio.")
         sp, sm = _num(cur.get("sleep_score")), _num(_d(base, "sleep_score", "median"))
         if total is not None and sp is not None and sm is not None and _num(_d(base, "sleep_hours", "median")):

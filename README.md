@@ -187,3 +187,12 @@ Cada tarjeta tiene en «Ver detalle» un «Qué mide y cómo leerlo», y Sistema
 - **Cifras corregidas:** «Último entreno» mostraba 7 min en vez de 70 (redondeo); la técnica sin RPE salía como «HIIT» (ahora con su nombre de la hoja); la HRV de 7 días salía como 46 ms en la tarjeta y 50 ms en la gráfica (ahora la misma, sobre ln rMSSD).
 - **Textos:** turnos en español en el plan y en las gráficas (libre, tras TN); coma decimal en «Por qué esta puntuación»; «carga FC» frente a «sRPE»; «los 3 modelos de la app coinciden» (Garmin es contexto).
 - **Lecturas a la vista:** la conclusión de cada gráfica («↓ baja · últimos 7 días…», «125 esta semana · dentro de tu rango») ya no queda plegada en «Ver detalle».
+
+## V9.7 — Plan del día, sueño dudoso, molestias y olímpicos
+
+- **¿Respeto el plan del día?** (Entrenos; `backtest.adherence`, en `model_validation.adherence`): días entrenados con RPE y decisión registrada antes de entrenar, cuántos superan el RPE máximo recomendado (y cuántos en rojo), y la recuperación oficial y la HRV de la mañana siguiente tras pasarse frente a tras respetarlo (con al menos 3 días por grupo). Coincidencias descriptivas: no prueban causa.
+- **Fases de sueño dudosas** (`sleep_stages.py`): 0 min de REM en ≥ 3 h, ninguna fase o más de la mitad en profundo se marcan como dudosas (`stages_suspect` en `garmin_sleep_history.json`, `stages_flag` en la tendencia). No se dibujan ni se comparan; se avisa de que la puntuación de Garmin puede estar penalizada. No cambia los modelos.
+- **¿Dónde tengo molestias?** (Recuperación; `discomfort.py`): las zonas de la encuesta agrupadas por articulación (7 y 28 días, nivel máximo) y las sesiones de ese día o de los 2 anteriores con movimientos que cargan la zona. Aviso en «¿Cómo te sientes?» si una zona se repite 3 de 7 días.
+- **Levantamientos olímpicos** (Progreso; `athlete_progress.olympic_lifts`): mejor carga real por número de repeticiones y por sesión, sin Epley; los complejos (3-position, «+», complex) aparte. Los olímpicos salen de «¿Me estoy haciendo más fuerte?».
+- **Monitor:** el Sync de respaldo del cron que se cancela solo (V8.6) porque Apps Script ya hizo la franja es `backup_sync_not_needed` (info), no un fallo.
+- Corregida la línea de las minigráficas de Progreso, que salía rellena de negro.

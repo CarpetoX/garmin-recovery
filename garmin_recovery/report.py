@@ -16,6 +16,8 @@ import json
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from .sleep_stages import check as stage_check
+
 # ---------------------------------------------------------------- utilidades
 ZONE_ES = {"green": "verde", "yellow": "ámbar", "red": "rojo", "unavailable": "pendiente"}
 ZONE_ICON = {"green": "🟢", "yellow": "🟠", "red": "🔴", "unavailable": "⚪"}
@@ -335,7 +337,8 @@ def chart_sleep(trend, need):
 def chart_sleep_stages(trend):
     """Sueño por noche: profundo, REM y resto (ligero y vigilia no se separan: el dato no existe)."""
     rows = [t for t in trend if _is_num(t.get("sleep_hours")) and _is_num(t.get("deep_min")) and _is_num(t.get("rem_min"))
-            and t.get("sleep_context") != "day_sleep"]
+            and t.get("sleep_context") != "day_sleep"
+            and not stage_check(t.get("sleep_hours"), t.get("deep_min"), t.get("rem_min"))]  # V9.7: fases dudosas fuera
     if len(rows) < 3:
         return None
     d = [t["date"] for t in rows]

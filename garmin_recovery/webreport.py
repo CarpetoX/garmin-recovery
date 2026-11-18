@@ -13,7 +13,7 @@ import re
 from . import mdhtml
 
 FIELDS = ("date", "hrv_ms", "hrv_low_ms", "hrv_high_ms", "hrv_rolling_ms", "resting_hr", "night_hr", "sleep_hours",
-          "sleep_context", "deep_min", "rem_min", "load", "srpe", "sessions", "atl", "ctl", "score", "v2_score",
+          "sleep_context", "deep_min", "rem_min", "stages_flag", "load", "srpe", "sessions", "atl", "ctl", "score", "v2_score",
           "hybrid_score", "decision_zone", "shift")
 INTERACTIVE = {"readiness.svg": "recovery", "hrv.svg": "hrv", "rhr.svg": "rhr", "sleep.svg": "sleep",
                "sleep_stages.svg": "stages", "load.svg": "load", "rpe.svg": "rpe"}
@@ -207,7 +207,7 @@ const CH={
  sleep:{label:'Sueño por noche',zero:1,refs:()=>[{y:NEED,t:'necesidad '+fmt(NEED,1)+' h'}],series:[{k:'sleep_hours',c:'--s1',n:'Horas',bar:1}],
   tip:d=>`Sueño <b>${fmt(d.sleep_hours,1)} h</b>`+(d.sleep_context==='day_sleep'?' (diurno)':'')+`<br>Necesidad ${fmt(NEED,1)} h`},
  stages:{label:'Sueño por fases',zero:1,stack:[{k:'deep_min',c:'--s1',n:'Profundo'},{k:'rem_min',c:'--s3',n:'REM'},{k:'rest',c:'--s4',n:'Resto (ligero y vigilia)'}],
-  prep:d=>{d.rest=d.sleep_hours!=null&&d.deep_min!=null&&d.rem_min!=null?Math.max(0,d.sleep_hours*60-d.deep_min-d.rem_min):null;return d},
+  prep:d=>{if(d.stages_flag){d.deep_min=null;d.rem_min=null}d.rest=d.sleep_hours!=null&&d.deep_min!=null&&d.rem_min!=null?Math.max(0,d.sleep_hours*60-d.deep_min-d.rem_min):null;return d},
   tip:d=>`Profundo <b>${hm(d.deep_min)}</b><br>REM <b>${hm(d.rem_min)}</b><br>Resto ${hm(d.rest)}<br>Total ${hm(d.sleep_hours==null?null:d.sleep_hours*60)}`},
  load:{label:'Carga diaria',zero:1,series:[{k:'srpe',c:'--s2',n:'sRPE del día',bar:1},{k:'atl',c:'--s1',n:'ATL (7 d)'},{k:'ctl',c:'--s3',n:'CTL (42 d)'}],
   tip:d=>`sRPE <b>${fmt(d.srpe)}</b> · ${d.sessions||0} sesión(es)<br>ATL ${fmt(d.atl,1)} · CTL ${fmt(d.ctl,1)}`},

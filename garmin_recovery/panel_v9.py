@@ -15,6 +15,8 @@ from pathlib import Path
 from . import coaching as co
 from . import longterm_history as lh
 from . import sensations as sn
+from . import discomfort as dsc
+from . import sleep_stages as sstages
 from .visual_report import (MES, ZONE, _bb_points, _day, _fnum, _iso, _load, _ms_local, _sessions_today, bars_h,
                             bb_curve, day_bars, ddmm, esc, hhmm, line_chart, num, stacked)
 from .visual_report import PAGE as _VR_PAGE
@@ -358,6 +360,8 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
     survey = sn.load(root)
     s_by = sn.by_date(survey, today)
     an = sn.analysis(survey, today, trend, zone)
+    zhist = dsc.zone_history(survey, today)  # V9.7: molestias por zona
+    an["observations"] = (an.get("observations") or []) + dsc.observation(zhist)
     load = result.get("load") or {}
     t = _date.fromisoformat(today)
     # criterio sobre el historial completo (V9.1)
@@ -476,14 +480,16 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                             ("Índice personal", pri.get("score"), "s2"), ("Garmin Readiness", tr.get("score"), "s2")]),
                   "0–100 · deciden oficial, híbrido y experimental (manda el más prudente); el resto es referencia")
     sd = ext.get("sleep_detail") or {}
+    st_flag = sstages.check(tday.get("sleep_hours"), sd.get("deep_minutes"), sd.get("rem_minutes"))  # V9.7
     sl_rng = normal_range(trend, "sleep_hours", today, cal)
     naps_html = naps_line(root, today)
     sleep = card("¿He dormido lo suficiente?",
                  takeaway(f'{num(tday.get("sleep_hours"), 1)} h ({hhmm(cur.get("sleep_start_local"))} → {hhmm(cur.get("sleep_end_local"))}), '
                           f'{verdict(tday.get("sleep_hours"), sl_rng, True)[1]}.')
                  + naps_html
-                 + stacked([("Profundo", sd.get("deep_minutes"), "c-deep"), ("Ligero", sd.get("light_minutes"), "c-light"),
-                            ("REM", sd.get("rem_minutes"), "c-rem"), ("Despierto", sd.get("awake_minutes"), "c-awake")])
+                 + (f'<p class="alert warn">{esc(st_flag["text"])} {esc(sstages.NOTE)}</p>' if st_flag else
+                    stacked([("Profundo", sd.get("deep_minutes"), "c-deep"), ("Ligero", sd.get("light_minutes"), "c-light"),
+                             ("REM", sd.get("rem_minutes"), "c-rem"), ("Despierto", sd.get("awake_minutes"), "c-awake")]))
                  + "<h3>14 noches</h3>" + day_bars(trend[-14:], "sleep_hours", w=420, h=160, ref=sl_rng["p50"] if sl_rng else None, ref_label="mediana",
                                                    cls_fn=lambda r: "warn" if (r.get("sleep_score") or 100) < 60 else "s1")
                  + '<p class="muted">Ámbar: puntuación de sueño por debajo de 60.</p>')
@@ -519,7 +525,26 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                        f'<tbody>{ptn_rows}</tbody></table><p class="muted">Recuperación oficial media (días con puntuación) y RPE medio de las sesiones con RPE de esos días; '
                        'mes a mes para ver si el cambio funciona. Describe, no prueba causa.</p>' if ptn_rows else
                        '<p class="muted">Aún no hay días post-TN con datos.</p>'))
-    tab_rec = '<div class="grid">' + models + sleep + "</div>" + hrv + ptn_card + '<div class="grid">' + shift_card + energy + "</div>"
+    # V9.7: molestias por zona, cruzadas con las sesiones que cargan esa zona
+    z_html = ""
+    zsess = dsc.sessions_from(cf, result.get("sessions_28d") or [])
+    for g in zhist[:4]:
+        ls = dsc.loading_sessions(g["joint"], g["dates"], zsess)
+        items = "".join(f'<li><span class="s-t">{ddmm(x["date"])}</span><span class="s-n">{esc(x["label"])}'
+                        f'<small>{esc(", ".join(x["moves"]))}</small></span>'
+                        + (f'<span class="pill {"bad" if x["rpe"] >= 9 else "warn" if x["rpe"] >= 7.5 else "ok"}">RPE {num(x["rpe"], 1)}</span>'
+                           if _fnum(x.get("rpe")) is not None else '<span class="pill na">sin RPE</span>') + "</li>" for x in ls[:6])
+        z_html += (f'<div class="sk"><b>{esc(g["label"])}</b><small>{g["days_7"]} de los últimos 7 días · {g["days_28"]} en 28 · '
+                   f'máximo {esc(g["max_label"].lower())} · última {ddmm(g["last"])}</small>'
+                   + (f'<p class="muted">Sesiones de ese día o de los 2 anteriores que cargan la zona:</p><ul class="sess-l">{items}</ul>' if items else "")
+                   + "</div>")
+    zone_card = card("¿Dónde tengo molestias?",
+                     (takeaway(esc(f'{zhist[0]["label"]}: {zhist[0]["days_7"]} de los últimos 7 días.'),
+                               "warn" if zhist[0]["days_7"] >= dsc.PERSISTENT_DAYS else "ok") + z_html
+                      + '<p class="muted">Zonas que marcas en la encuesta cuando tienes molestias. Coincidir con una sesión no prueba que la cause.</p>')
+                     if zhist else '<p class="muted">Sin molestias por zona en 28 días.</p>', "28 días · lo que dices en la encuesta")
+    tab_rec = ('<div class="grid">' + models + sleep + "</div>" + hrv + ptn_card + '<div class="grid">' + shift_card + energy + "</div>"
+               + zone_card)
 
     # =================== ENTRENOS
     wk_tk = ""
@@ -566,7 +591,37 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                        + f'</div><p class="met-r">{esc(str(m.get("result") or "—"))}</p>{_metcon_compare(m)}</div>' for m in mets)
     metcons = card("¿Cómo me fueron los WODs?", met_html or '<p class="muted">Sin metcons registrados.</p>',
                    "cada WOD con el más parecido que hayas hecho · orientativo")
-    tab_ent = train_load + '<div class="grid">' + sessions + metcons + "</div>"
+    # V9.7: ¿respeto la decisión del día? y qué marca el día siguiente
+    adh = (result.get("model_validation") or {}).get("adherence") or {}
+    adh_days = [x for x in adh.get("days") or [] if isinstance(x, dict)]
+    if adh_days:
+        ZES = {"green": "verde", "yellow": "ámbar", "red": "rojo"}
+        rows_a = "".join(
+            f'<tr><th>{ddmm(x["date"])}</th><td><span class="pill {ZONE.get(x.get("zone") or "", ("", "na"))[1]}">{esc(ZES.get(x.get("zone"), "—"))}</span></td>'
+            f'<td>{num(x.get("rpe_cap"))}</td><td{" class=bad" if x.get("over") else ""}>{num(x.get("max_rpe"), 1)}</td>'
+            f'<td>{num(x.get("next_v2"))}</td><td>{num(x.get("next_hrv"))}</td></tr>' for x in reversed(adh_days[-14:]))
+        cmp_txt = ""
+        if adh.get("next_v2_after_over") is not None and adh.get("next_v2_after_within") is not None:
+            cmp_txt = (f' Al día siguiente, la recuperación oficial media fue <b>{num(adh["next_v2_after_over"])}</b> tras pasarte y '
+                       f'<b>{num(adh["next_v2_after_within"])}</b> tras respetarlo; la HRV, {num(adh.get("next_hrv_after_over"))} y '
+                       f'{num(adh.get("next_hrv_after_within"))} ms.')
+        else:
+            cmp_txt = f' Para comparar el día siguiente hacen falta al menos {adh.get("min_group", 3)} días en cada grupo.'
+        adh_card = card("¿Respeto el plan del día?",
+                        takeaway(f'En {adh.get("window_days")} días entrenaste <b>{adh.get("trained_days")}</b> días con RPE; en '
+                                 f'<b>{adh.get("over")}</b> superaste el RPE máximo recomendado ({num(adh.get("over_pct"))} %), '
+                                 f'{adh.get("over_red")} de ellos en rojo.' + cmp_txt,
+                                 "warn" if (adh.get("over_pct") or 0) >= 40 else "ok")
+                        + '<table class="tbl"><thead><tr><th>Día</th><th>Decisión</th><th>RPE máx.</th><th>RPE real</th>'
+                          '<th>Recup. día sig.</th><th>HRV día sig.</th></tr></thead>'
+                        f'<tbody>{rows_a}</tbody></table>'
+                        + '<p class="muted">Solo días con la decisión registrada antes de entrenar. Si pasarte no empeora el día siguiente, '
+                          'quizá el rojo es demasiado prudente contigo; si lo empeora, acierta. Son coincidencias, no prueban causa: '
+                          'los días en rojo suelen ser tras un turno de noche y el siguiente suele ser de descanso.</p>',
+                        "RPE más alto del día frente al máximo recomendado")
+    else:
+        adh_card = card("¿Respeto el plan del día?", '<p class="muted">Aún no hay días con decisión previa al entreno y RPE.</p>')
+    tab_ent = train_load + adh_card + '<div class="grid">' + sessions + metcons + "</div>"
 
     # =================== PROGRESO
     ap = ex.get("athlete_progress") or {}
@@ -578,8 +633,27 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                     f'{_spark(ser)}<div class="mx1-v">{num(ser[-1][1] if ser else m.get("e1rm"), 1)}<small> kg</small>'
                     + (f'<span class="{"up" if dlt > 0 else "down"}">{"+" if dlt > 0 else ""}{num(dlt, 1)}</span>' if _fnum(dlt) else "") + "</div></div>")
     maxes = card("¿Me estoy haciendo más fuerte?", (mx_rows or '<p class="muted">Aún no hay series suficientes.</p>')
-                 + '<p class="muted">1RM estimado (Epley, series de 10 repeticiones o menos) de cada sesión; una sesión de volumen sale más baja sin perder fuerza.</p>',
+                 + '<p class="muted">1RM estimado (Epley, series de 10 repeticiones o menos) de cada sesión, sin los olímpicos (van aparte); una sesión de volumen sale más baja sin perder fuerza.</p>',
                  "último valor y cambio frente a la sesión anterior")
+    # V9.7: levantamientos olímpicos por carga real (sin Epley) y complejos aparte
+    ol_rows = ""
+    for o in [x for x in ap.get("olympic") or [] if isinstance(x, dict)][:10]:
+        b, last = o.get("best") or {}, o.get("last") or {}
+        is_cx = o.get("kind") == "complex"
+        reps_txt = "" if is_cx else " · ".join(f'{r["reps"]}×{num(r["load"], 1)}' for r in o.get("by_reps") or [])
+        ser = [(x.get("date"), x.get("load")) for x in o.get("series") or [] if isinstance(x, dict)]
+        last_txt = f'{num(last.get("load"), 1)} kg' + ("" if is_cx else f' × {last.get("reps")}')
+        ol_rows += (f'<div class="mx1"><div><b>{esc(str(o.get("name", "")).capitalize())}</b>'
+                    f'<small>{"complejo · " if is_cx else ""}{_ses(o.get("sessions"))} · mejor {num(b.get("load"), 1)} kg'
+                    + ("" if is_cx else f' × {b.get("reps")}') + f' ({ddmm(b.get("date"))})'
+                    + (f'<br>mejor por repeticiones: {esc(reps_txt)}' if reps_txt else "") + '</small></div>'
+                    f'{_spark(ser)}<div class="mx1-v">{esc(last_txt)}<small> {ddmm(last.get("date"))}</small>'
+                    + ('<span class="up">mejor marca</span>' if o.get("last_is_best") and o.get("sessions", 0) > 1 else "") + "</div></div>")
+    olympic = card("¿Cómo van mis levantamientos olímpicos?",
+                   (ol_rows + '<p class="muted">Carga real más alta de cada sesión (sin estimar el 1RM: en los olímpicos manda la técnica). '
+                    'Los complejos se comparan solo consigo mismos.</p>') if ol_rows else
+                   '<p class="muted">Aún no hay levantamientos olímpicos con cargas en la hoja.</p>',
+                   "última sesión y su mejor serie")
     sk_rows = ""
     for g in (ap.get("skill_groups") or [])[:8]:
         if not isinstance(g, dict):
@@ -622,7 +696,7 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                    ('<div class="gp">' + "".join(f'<div class="gp-i"><span>{esc(n)}</span><b>{v}</b><small>{d}</small></div>' for n, v, d in gp) + "</div>"
                     + '<p class="muted">Datos del panel de rendimiento de Garmin Connect, tal como los publica Garmin. Las predicciones de carrera y el umbral de lactato '
                       'se basan en carrera, no en CrossFit.</p>') if gp else '<p class="muted">Aún no han llegado datos del panel de rendimiento de Garmin.</p>')
-    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + longterm_card(root, today) + gp_card + '<div class="grid">' + skills + weight + "</div>" + wbc)
+    tab_pro = ('<div class="grid">' + maxes + tests + "</div>" + olympic + longterm_card(root, today) + gp_card + '<div class="grid">' + skills + weight + "</div>" + wbc)
 
     # =================== montaje
     cert_ok = ready.get("status") == "ready"
@@ -669,6 +743,7 @@ CSS = """
 .chip-l{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--surface-2)}
 .chip-l.l0{color:var(--ok)}.chip-l.l1{color:var(--s1)}.chip-l.l2{color:var(--warn)}.chip-l.l3{color:var(--bad)}
 .lead{margin:0 0 10px;font-size:14px}
+.tbl td.bad{color:var(--bad);font-weight:700}
 .sess-l{list-style:none;margin:0 0 12px;padding:0}.sess-l li{display:grid;grid-template-columns:3.2em 1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
 .day-h{margin:14px 0 2px;text-transform:capitalize}
 .wks{display:flex;flex-direction:column;gap:8px}.wk{display:grid;grid-template-columns:4.2em 1fr 3.4em;gap:4px 8px;align-items:center;font-size:13px}
@@ -682,7 +757,7 @@ CSS = """
 .mx1{display:grid;grid-template-columns:1fr 120px 5.5em;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.mx1:first-of-type{border-top:0}
 .mx1 small{display:block;color:var(--text-3);font-size:12px}.mx1-v{text-align:right;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .mx1-v span{display:block;font-size:12px}.mx1-v .up{color:var(--ok)}.mx1-v .down{color:var(--text-3)}
-.spark{width:120px;height:40px}
+.spark{width:120px;height:40px}.spark .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .gp{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px}.gp-i{background:var(--surface-2);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
 .gp-i span{font-size:12px;color:var(--text-2)}.gp-i b{font-size:18px;font-variant-numeric:tabular-nums}.gp-i small{font-size:11px;color:var(--text-3)}
 .alert{margin:0;padding:10px 14px;border-radius:12px;font-size:14px;border:1px solid var(--line)}.alert.warn{background:var(--warn-w)}.alert.info{background:var(--surface-2)}
