@@ -1,33 +1,26 @@
-<!-- cycle_id: 2026-11-18-1645 -->
-**En breve:** hoy toca recuperar: la señal más prudente manda aunque la puntuación oficial sea intermedia.
-🟢 Recuperación oficial 61/100 (confianza media)
-🌙 Sueño 5,2 h, puntuación 53
-🏋️ Carga 7 días: 155 en 10 sesiones
-❤️ Alerta principal: deuda de sueño de 3,2 h en 3 noches
-Orientación: hoy sin intensidad (RPE ≤ 4, volumen 0–50 %); mañana jueves libre, pero la sesión exigente depende de cómo duermas esta noche.
+<!-- cycle_id: 2026-11-18-2245 -->
+**En breve:** hoy toca recuperar; el sueño es el factor limitante.
+🟢 Recuperación oficial 61/100 (confianza media); hoy manda la salvaguarda, en rojo.
+🌙 Sueño 5,2 h, puntuación 53; deuda 3,2 h en 3 noches.
+🏋️ Carga 7 días: 155 en 10 sesiones; hoy WOD con RPE 9 y halterofilia con RPE 7.
+❤️ HRV 48 ms, media 7 días +6 % sobre tu base (rango normal); FC en reposo 52 lpm (-4).
+Orientación: esta noche prioriza dormir (objetivo 8,5 h); mañana, día libre, sesión suave solo si el sueño y la HRV acompañan.
 
-## Qué explica la puntuación
-- ↓ **Sueño**: 5,2 h frente a una necesidad de 7,5 h; es el factor que más pesa.
-- ↑ **HRV**: media de 7 días 56,3 ms (+6 % sobre tu base de 53), dentro del rango normal 47,8–58,8 ms; hoy 48 ms.
-- ↑ **FC en reposo**: 52 lpm, 4 por debajo de tu mediana. La nocturna, 64,1 lpm, está 1,6 por encima.
-- → **Estrés Garmin**: 34, igual que tu mediana.
+**Qué explica la puntuación.** El sueño (5,2 h, deuda 3,2 h) es lo único que pesa en contra. HRV (media 56,3 ms, rango 47,8–58,8), FC reposo y estrés (34, igual que tu mediana) están en orden. El experimental da 69 (ámbar); se aplica el rojo del híbrido (31, con Garmin Readiness 32).
 
-La decisión del día la marca el híbrido Garmin + local (31, rojo), con Garmin Training Readiness en 32. El modelo experimental (70, verde) es más permisivo, así que se aplica el más conservador.
+**Carga reciente.** sRPE 7 días 1.376, monotonía 0,94, ACWR 0,89; CTL 13,3 y ATL 25,6 (forma aún no interpretable). Hoy dos sesiones duras (RPE 7 y 9) con la decisión en rojo (máx. RPE 4): un exceso a compensar. Según el análisis por reglas, 13 de 29 sesiones fueron RPE ≥ 8 (45 %).
 
-## Carga reciente
-Carga 7 días 155, sRPE 820, ACWR 0,58 (carga aguda baja frente a la crónica). Hoy hubo 3 HIIT (18:17, 19:37 y 19:57; 48, 15 y 24 min) sin RPE registrado. Eso contradice la guía de hoy, así que conviene anotar cómo fueron. Monotonía no disponible.
+**3 prioridades**
+1. Sueño: 30–45 min más cada noche, no una sola noche larga; 8,5 h esta noche.
+2. Intensidad: intercalar RPE 5–6 entre las duras y ≥ 48 h entre esfuerzos máximos.
+3. Anotar sensaciones en Intervals cada mañana (0 de 14 días registrados).
 
-## 3 prioridades
-1. **Sueño**: la deuda sigue siendo lo principal. Esta noche objetivo 8,5 h; recupera 30–45 min por noche, no una noche larga.
-2. **Distribución de la intensidad**: 12 de 27 sesiones con RPE fueron ≥ 8 (44 %). Intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
-3. **Registro**: añade el RPE de las 3 sesiones de hoy y las sensaciones en Intervals (0 de los últimos 14 días).
+**Plan 7 días** (turnos: sáb 21 MT, dom 22 TN)
+- Jue 19: libre; movilidad o zona 2 suave (RPE ≤ 4) y siesta si hace falta; moderada solo si la decisión mejora.
+- Vie 20: libre; sesión exigente solo con decisión verde/ámbar y sueño recuperado.
+- Sáb 21 (MT): movilidad o descanso.
+- Dom 22 (TN): si entrenas, por la mañana y moderado.
+- Lun 23: tras TN, descanso y dormir.
+- Mar 24–mié 25: moderado y suave, según decisión diaria.
 
-## Plan de 7 días (orientativo, sujeto al sueño y a la decisión de cada mañana)
-- **Mié 18**: ya entrenado; solo movilidad y dormir pronto.
-- **Jue 19** (libre): si hay verde, sesión exigente; si no, moderada.
-- **Vie 20** (libre): moderada, RPE ≤ 7.
-- **Sáb 21** (MT): movilidad o descanso.
-- **Dom 22** (TN): si entrenas, por la mañana y moderado.
-- **Lun 23** (tras TN): descanso y prioridad al sueño.
-
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
+_Herramienta de entrenamiento; no es un diagnóstico médico._
