@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Miércoles, 18 de noviembre de 2026 · 09:35 · `GR-2026-11-18-0935-046d76`
+Miércoles, 18 de noviembre de 2026 · 10:40 · `GR-2026-11-18-1040-1751c3`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -14,7 +14,7 @@ Carga 7 días|7 sesiones|sRPE 820|unavailable
 ## Resumen ejecutivo
 
 - 🟢 **Certificación:** ciclo 2026-11-18-0830 validado; 4 de 4 procesos finalizados correctamente.
-- 🔴 **Recuperación:** 51/100 (oficial, confianza medium). Híbrido: 41/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
+- 🔴 **Recuperación:** 51/100 (oficial, confianza medium). Híbrido: 37/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 59 min, puntuación 29/100.
 - ❤️ **Principal alerta:** HRV 73 ms, 82,5 % por encima de tu mediana de 28 días.
 - 🏋️ **Qué hacer:** Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
@@ -34,7 +34,7 @@ Carga 7 días|7 sesiones|sRPE 820|unavailable
 | Confianza de recuperación | medium |
 | Calidad fisiológica de los datos | 74/100 (usable) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (09:34), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (10:39), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -73,9 +73,9 @@ La HRV está 82 % por encima de su mediana; la FC en reposo está 4 lpm por deba
 | Modelo | Resultado | Papel |
 |---|---|---|
 | Recuperación oficial | 🟡 51/100 | oficial |
-| Híbrido Garmin + local | 🔴 41/100 | salvaguarda |
+| Híbrido Garmin + local | 🔴 37/100 | salvaguarda |
 | Modelo experimental | — | sombra |
-| Modelo de compatibilidad | 🟡 52/100 | compatibilidad |
+| Modelo de compatibilidad | 🔴 45/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 25/100 | contexto |
 | Tiempo de recuperación Garmin | 13,8 h | contexto |
 | Índice personal experimental | 62/100 | provisional |
@@ -154,7 +154,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 33, máximo 90.
-- Body Battery: último valor 20/100, medido a las 07:12 (hace 2 h 23 min: no es una medición nueva).
+- Body Battery: último valor 20/100, medido a las 07:12 (hace 3 h 29 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -396,4 +396,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **🔴
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-18-0830 · generado 18/11/2026 09:35 Europe/Madrid · certificado READY · sync_run_id 44259830426.
+Traza: cierre matinal · ciclo 2026-11-18-0830 · generado 18/11/2026 10:40 Europe/Madrid · certificado READY · sync_run_id 44259830426.
