@@ -1,6 +1,6 @@
 # Cierre diario · 18/11/2026
 
-`GR-2026-11-18-2152-29fb27` · cita este identificador al reenviar el informe.
+`GR-2026-11-18-2250-e58ff6` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -20,7 +20,7 @@
 |---|--:|---|---|
 | Recuperación oficial | 61 | ámbar | oficial |
 | Híbrido Garmin + local | 31 | rojo | salvaguarda |
-| Modelo experimental | 70 | verde | sombra |
+| Modelo experimental | 69 | ámbar | sombra |
 | Modelo de compatibilidad | 31 | rojo | compatibilidad |
 | Garmin Training Readiness | 32 | — | contexto |
 
@@ -54,22 +54,27 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-18-1650-8ff0ca (18/11 16:50):
-- Híbrido: 35 → 31 (-4).
-- Sesiones nuevas desde entonces: **3** (carga +46).
+Frente al informe GR-2026-11-18-2152-29fb27 (18/11 21:52):
+- v3: 70 → 69 (-1).
+- Sesiones con RPE: 11 → 13.
 
 ## Balance del día
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 18/11 19:57 | Sin detalle | HIIT | 24 | 24 | 147 / 193 | — | — |
-| 18/11 19:37 | Sin detalle | HIIT | 15 | 5 | 105 / 149 | — | — |
-| 18/11 18:17 | Sin detalle | HIIT | 48 | 17 | 108 / 157 | — | — |
+| 18/11 19:57 | WOD | WOD EMOM 25' - DB deadlift / cal SkiErg-remo / DB push press / wall walk | 24 | 24 | 147 / 193 | 9,0 | 220 |
+| 18/11 19:37 | Calentamiento | Calentamiento - WOD | 15 | 5 | 105 / 149 | — | — |
+| 18/11 18:17 | Halterofilia | Halterofilia - 3-position squat snatch 5x1 + squat snatch 5x3 | 48 | 17 | 108 / 157 | 7,0 | 336 |
+
+- ⚠️ WOD EMOM 25' - DB deadlift / cal SkiErg-remo / DB push press / wall walk: RPE alto para tu FC: te costó más de lo habitual en este tipo de sesión.
+- ⚠️ Halterofilia - 3-position squat snatch 5x1 + squat snatch 5x3: RPE alto para tu FC: te costó más de lo habitual en este tipo de sesión.
+
+_RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
 
 ## Balance de la semana
 
 - Carga 7 días: **155** en 10 sesiones (0 % vs. semana previa).
-- sRPE 7 días 820 · monotonía — · strain —.
+- sRPE 7 días 1.376 · monotonía 0,94 · strain 1.295.
 - Fatiga acumulada: ATL 25,6, CTL 13,3, TSB -12,3 (CTL insuficiente: la forma no se interpreta todavía).
 
 ## Previsión orientativa para mañana
@@ -91,16 +96,16 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
 
-**Acumulando datos: 16/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
+**Acumulando datos: 17/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
 
 | Modelo | ρ esfuerzo | IC 90 % | Días |
 |---|--:|---|--:|
-| Oficial v2 | -0,19 | -0,58 a 0,26 | 16 |
-| Híbrido | -0,36 | -0,69 a 0,09 | 16 |
-| v3 (en pruebas) | -0,24 | -0,61 a 0,22 | 16 |
-| Decisión operativa | -0,32 | -0,66 a 0,13 | 16 |
+| Oficial v2 | -0,29 | -0,63 a 0,15 | 17 |
+| Híbrido | -0,45 | -0,74 a -0,02 | 17 |
+| v3 (en pruebas) | -0,26 | -0,61 a 0,18 | 17 |
+| Decisión operativa | -0,43 | -0,73 a -0,01 | 17 |
 
-- Días entrenados con predicción: 17; por encima del RPE máximo del día: 8.
+- Días entrenados con predicción: 18; por encima del RPE máximo del día: 9.
 
 ## Recuperación: tendencias de 28 días
 
@@ -116,9 +121,6 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i211772102** (18/11 18:17, Sin detalle, 48 min, carga 17) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i211789156** (18/11 19:37, Sin detalle, 15 min, carga 5) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i211802592** (18/11 19:57, Sin detalle, 24 min, carga 24) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -127,6 +129,8 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 18/11 | 3-position squat snatch | barra | 48,0 kg con barra | 48 × 3 | 52,8 kg | 642 kg | 5/5 | 7,0 |
+| 18/11 | squat snatch | barra | 63,0 kg con barra | 63 × 3 | 69,3 kg | 858 kg | 5/5 | 7,0 |
 | 14/11 | peso muerto | barra | 180,0 kg con barra | 180 × 3 | 198,0 kg | 8.800 kg | 10/10 | 6,0 |
 | 14/11 | peso muerto piernas semirrígidas con mancuernas | mancuernas (par) | 100,0 kg total (2 × 50,0 kg) | — | — | 3.984 kg | 4/4 | 6,0 |
 | 14/11 | jalón al pecho en polea agarre ancho | máquina de placas | 80,0 kg indicados en máquina | — | — | 2.520 kg | 4/4 | 6,0 |
@@ -137,8 +141,6 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 | 10/11 | press banca | barra | 100,0 kg con barra | 90 × 6 | 108,0 kg | 6.030 kg | 8/8 | 7,0 |
 | 10/11 | press inclinado con mancuernas | mancuernas (par) | 67,0 kg total (2 × 33,5 kg) | 67 × 8 | 84,9 kg | 2.104 kg | 4/4 | 7,0 |
 | 10/11 | press superinclinado isolateral | máquina de discos | 50,0 kg total (dos lados) | — | — | 1.680 kg | 4/4 | 7,0 |
-| 10/11 | aperturas de pecho en máquina sentado | máquina de placas | 50,0 kg indicados en máquina | — | — | 1.900 kg | 4/4 | 7,0 |
-| 10/11 | curl bíceps máquina unilateral | máquina de placas | 15,0 kg indicados en máquina | — | — | 540 kg | 4/4 | 7,0 |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -147,16 +149,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-18-2152-29fb27`
+- **Identificador del informe:** `GR-2026-11-18-2250-e58ff6`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-18-1645 · datos sincronizados a las 21:51 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 8,6 h ✓ · última HRV hace 9,1 h ✓ · última FC hace 45 min ✓ · último Body Battery hace 68 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 11/14 (+4 sin RPE por diseño: calentamiento/técnica) (sin RPE: 18/11 18:17, 18/11 19:37, 18/11 19:57)
+- **Ciclo:** 2026-11-18-2245 · datos sincronizados a las 22:49
+- **Antigüedad:** fin del sueño hace 9,6 h ✓ · última HRV hace 10,1 h ✓ · última FC hace 74 min ✓ · último Body Battery hace 77 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-18 21:52 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-18 22:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
