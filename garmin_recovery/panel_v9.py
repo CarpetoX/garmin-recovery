@@ -535,7 +535,9 @@ def render(root: str | Path, result: dict, extras: dict | None = None) -> str:
                         + (f'<span class="pill {"bad" if x["rpe"] >= 9 else "warn" if x["rpe"] >= 7.5 else "ok"}">RPE {num(x["rpe"], 1)}</span>'
                            if _fnum(x.get("rpe")) is not None else '<span class="pill na">sin RPE</span>') + "</li>" for x in ls[:6])
         z_html += (f'<div class="sk"><b>{esc(g["label"])}</b><small>{g["days_7"]} de los últimos 7 días · {g["days_28"]} en 28 · '
-                   f'máximo {esc(g["max_label"].lower())} · última {ddmm(g["last"])}</small>'
+                   f'máximo {esc(g["max_label"].lower())} · última {ddmm(g["last"])}'
+                   + (f' · {g["unsided_days"]} {"día" if g["unsided_days"] == 1 else "días"} sin indicar lado' if g.get("unsided_days") else "")
+                   + '</small>'
                    + (f'<p class="muted">Sesiones de ese día o de los 2 anteriores que cargan la zona:</p><ul class="sess-l">{items}</ul>' if items else "")
                    + "</div>")
     zone_card = card("¿Dónde tengo molestias?",

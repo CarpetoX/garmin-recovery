@@ -39,6 +39,7 @@ Hoja de Google «RPE CrossFit - Registro», pestaña **`RPE`**, columnas A–H (
 - **Unidad de carga explícita:** `kg_total_barra`, `kg_total_dos_mancuernas` (con `load_per_dumbbell_kg`), `kg_indicado_maquina`, `peso_corporal`. Las cargas de máquina no son comparables con la barra.
 - **RPE:** solo el que dice el atleta; si lo da por bloque, cada bloque con el suyo y en la columna D el del bloque principal. No estimar 1RM desde el RPE.
 - **Sesión sin puntuar:** si el atleta no quiere dar RPE (calentamiento, técnica o un bloque suave), la columna D queda vacía, `"rpe": null` en el JSON y las notas dicen «Sin RPE: sesión no puntuada por decisión del atleta». Nunca se pone 1 como marcador.
+- **Nombre del ejercicio del catálogo** (V9.8): usar el nombre canónico de `catalogo_ejercicios.json` (p. ej. «press inclinado con mancuernas», no «press banca inclinado con mancuernas»). Si el ejercicio no está, se usa el nombre dictado y, si es el mismo que uno del catálogo con otro nombre, se añade a sus `aliases`; si es distinto, se añade como ejercicio nuevo. El historial agrupa por el nombre canónico y conserva el original. Lastre: `lastre_kg`.
 - **Unilaterales:** confirmar con el atleta si la carga y las repeticiones son por pierna/brazo y si se hicieron ambos lados.
 - **Sensaciones diarias** (cansancio, agujetas, estrés, ánimo) no van a esta hoja: se guardan con la encuesta de sensaciones en `sensaciones_registro.json` (ver abajo). La columna E es solo para lo previo a esa sesión.
 
@@ -108,6 +109,9 @@ Preguntas de **contexto** (`sensations.CONTEXT`): ayudan a explicar el día y ap
 - **Normalidad personal:** con 10 encuestas, la lectura compara cada respuesta con tu media y desviación (no con umbrales fijos); antes, se indica «calibrando». También señala si el sueño percibido no coincide con la puntuación de Garmin.
 
 Una encuesta por momento del día (si se repite a la misma hora, se sustituye). Se ve en el informe visual (sección Sensaciones: hoy y matriz de 14 días). Es descriptiva: no entra en los modelos de recuperación. Lo que diga sobre una sesión concreta sigue yendo en la columna «Sensaciones» de la hoja RPE.
+
+
+**Zonas de molestia con lado (V9.8).** Si hay molestias, se ofrecen las zonas de `sensations.ZONE_OPTIONS` (rodilla derecha / izquierda, hombro derecho / izquierdo, codo, muñeca, tobillo, cadera, espalda baja, espalda alta, cuello) y, si el atleta dice otra, se guarda tal cual. `record()` normaliza «rodilla dcha» → «Rodilla derecha»; una articulación sin lado se queda sin lado y el panel la cuenta como «sin indicar lado».
 
 ## Tests de referencia
 
