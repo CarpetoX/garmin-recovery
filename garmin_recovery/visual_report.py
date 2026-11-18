@@ -354,11 +354,14 @@ def build(root: str | Path = ".") -> str:
 
     # ---------- sueño
     sleep_rows = trend[-14:]
+    from .sleep_stages import NOTE as stage_note, check as stage_check  # V9.7
+    st_flag = stage_check(cur.get("sleep_hours"), sd.get("deep_minutes"), sd.get("rem_minutes"))
     sleep_card = ('<section class="card"><h2>Sueño</h2>'
                   f'<p class="sub">{hhmm(cur.get("sleep_start_local"))} → {hhmm(cur.get("sleep_end_local"))} · '
                   f'{num(cur.get("sleep_hours"), 1)} h · puntuación {num(cur.get("sleep_score"))}</p>'
-                  + stacked([("Profundo", sd.get("deep_minutes"), "c-deep"), ("Ligero", sd.get("light_minutes"), "c-light"),
-                             ("REM", sd.get("rem_minutes"), "c-rem"), ("Despierto", sd.get("awake_minutes"), "c-awake")])
+                  + (f'<p class="muted">{esc(st_flag["text"])} {esc(stage_note)}</p>' if st_flag else
+                     stacked([("Profundo", sd.get("deep_minutes"), "c-deep"), ("Ligero", sd.get("light_minutes"), "c-light"),
+                              ("REM", sd.get("rem_minutes"), "c-rem"), ("Despierto", sd.get("awake_minutes"), "c-awake")]))
                   + '<h3>Horas por noche, 14 días</h3>'
                   + day_bars(sleep_rows, "sleep_hours", ref=_fnum((base.get("sleep_hours") or {}).get("median")), ref_label="mediana",
                              cls_fn=lambda r: "warn" if (r.get("sleep_score") or 100) < 60 else "s1")

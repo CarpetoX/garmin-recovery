@@ -36,6 +36,29 @@ def parsed_time(value):
     return datetime.fromisoformat(value.replace('Z', '+00:00')).astimezone(TZ)
 
 
+BACKUP_WINDOW_HOURS = 14  # el cron de GitHub llega hasta ~10 h tarde; la franja anterior de Apps Script cabe aquí
+
+
+def backup_not_needed(run, completed):
+    """V9.7: ¿es un Sync de respaldo (cron) cancelado porque ya había un Sync lanzado a mano o por Apps Script con éxito?
+
+    El guard de V8.6 cancela el cron cuando el ciclo ya está certificado. Eso no es un fallo: se reconoce
+    porque hay un Sync no programado con éxito en las 14 h anteriores al cron cancelado.
+    """
+    if run.get('event') != 'schedule' or run.get('conclusion') != 'cancelled':
+        return False
+    created = parsed_time(run.get('created_at'))
+    if created is None:
+        return False
+    for other in completed:
+        if other is run or other.get('event') == 'schedule' or other.get('conclusion') != 'success':
+            continue
+        t = parsed_time(other.get('created_at'))
+        if t is not None and timedelta(0) <= created - t <= timedelta(hours=BACKUP_WINDOW_HOURS):
+            return True
+    return False
+
+
 def monitor(now, repo, token, fetcher=fetch_runs):
     result = {
         'checked_at': now.isoformat(), 'repository': repo,
@@ -68,7 +91,14 @@ def monitor(now, repo, token, fetcher=fetch_runs):
                 'latest_run_url': latest.get('html_url') if latest else None,
                 'latest_run_event': latest.get('event') if latest else None,
             }
-            if latest and latest.get('conclusion') in ('failure', 'timed_out', 'cancelled', 'action_required'):
+            if workflow == 'sync.yml' and latest and backup_not_needed(latest, completed):
+                # V9.7: el Sync de respaldo del cron se cancela solo cuando Apps Script ya hizo la franja (V8.6).
+                result['alerts'].append({
+                    'severity': 'info', 'code': 'backup_sync_not_needed', 'workflow': workflow,
+                    'url': latest.get('html_url'),
+                    'note': 'Cron de respaldo cancelado a propósito: la franja ya la había hecho Apps Script.',
+                })
+            elif latest and latest.get('conclusion') in ('failure', 'timed_out', 'cancelled', 'action_required'):
                 result['alerts'].append({
                     'severity': 'warning', 'code': 'latest_run_failed',
                     'workflow': workflow, 'conclusion': latest['conclusion'],

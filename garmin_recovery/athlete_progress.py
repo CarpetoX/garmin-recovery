@@ -16,6 +16,10 @@ from datetime import date
 from pathlib import Path
 
 EPLEY_MAX_REPS = 10
+# V9.7: levantamientos olímpicos. Epley no sirve para ellos (la técnica limita antes que la fuerza): se siguen por la
+# mejor carga real a cada número de repeticiones, y los complejos aparte.
+OLYMPIC = re.compile(r"snatch|clean|jerk|arrancada|cargada|envi[oó]n", re.I)
+COMPLEX = re.compile(r"\+|complex|position|^\d+\s", re.I)
 LOAD_HISTORY_DAYS = 42
 
 
@@ -104,8 +108,8 @@ def estimated_max(entries) -> list[dict]:
         if not isinstance(e, dict) or e.get("unit") != "kg_total_barra":
             continue
         name = str(e.get("exercise") or "").strip().lower()
-        if not name or "+" in name or "complex" in name:
-            continue  # un complex no es un levantamiento aislado: Epley no aplica
+        if not name or "+" in name or "complex" in name or OLYMPIC.search(name):
+            continue  # un complex no es un levantamiento aislado y en los olímpicos Epley no aplica (V9.7: van en olympic_lifts)
         cur = by.setdefault(name, {"name": name, "e1rm": None, "e1rm_from": None, "single": None, "single_date": None, "sessions": set()})
         cur["sessions"].add(e.get("date"))
         per = cur.setdefault("per_date", {})
@@ -133,6 +137,52 @@ def estimated_max(entries) -> list[dict]:
         c["delta"] = (c["series"][-1]["e1rm"] - c["series"][-2]["e1rm"]) if len(c["series"]) >= 2 else None
         out.append(c)
     out.sort(key=lambda c: -c["e1rm"])
+    return out
+
+
+def olympic_lifts(entries) -> list[dict]:
+    """V9.7: por levantamiento olímpico (o complejo), la mejor carga real a cada número de repeticiones y por sesión.
+
+    Solo cargas con barra registradas en la hoja; sin estimaciones. Un «3-position», un «2 cleans + jerk» o un
+    «complex» se tratan como complejos: su carga no es comparable con el levantamiento suelto.
+    """
+    items = entries.values() if isinstance(entries, dict) else entries or []
+    by: dict[str, dict] = {}
+    for e in items:
+        if not isinstance(e, dict) or e.get("unit") != "kg_total_barra":
+            continue
+        name = str(e.get("exercise") or "").strip()
+        if not name or not OLYMPIC.search(name):
+            continue
+        key = name.lower()
+        cur = by.setdefault(key, {"name": name, "kind": "complex" if COMPLEX.search(name) else "lift", "best": None,
+                                  "by_reps": {}, "per_date": {}})
+        d = str(e.get("date") or "")[:10]
+        for s in e.get("sets") or []:
+            w, reps = _num(s.get("load")), _num(s.get("reps"))
+            if not w or not reps or reps < 1:
+                continue
+            r = int(reps)
+            br = cur["by_reps"].get(r)
+            if br is None or w > br["load"]:
+                cur["by_reps"][r] = {"load": w, "date": d}
+            if cur["best"] is None or w > cur["best"]["load"] or (w == cur["best"]["load"] and r > cur["best"]["reps"]):
+                cur["best"] = {"load": w, "reps": r, "date": d}
+            top = cur["per_date"].get(d)
+            if d and (top is None or w > top["load"] or (w == top["load"] and r > top["reps"])):
+                cur["per_date"][d] = {"date": d, "load": w, "reps": r}
+    out = []
+    for c in by.values():
+        if c["best"] is None:
+            continue
+        pdates = c.pop("per_date")
+        series = [pdates[d] for d in sorted(pdates)]
+        c["series"], c["sessions"] = series, len(series)
+        c["last"] = series[-1]
+        c["by_reps"] = [{"reps": r, **v} for r, v in sorted(c["by_reps"].items())]
+        c["last_is_best"] = c["last"]["load"] >= c["best"]["load"]
+        out.append(c)
+    out.sort(key=lambda c: (c["kind"] != "lift", -c["best"]["load"]))
     return out
 
 
@@ -246,5 +296,5 @@ def build(root: str | Path, today: str) -> dict:
     acts = _read(root / "activities.json")
     dates = [str(a.get("date") or a.get("start_date_local") or "")[:10] for a in acts if isinstance(a, dict)] if isinstance(acts, list) else []
     sk = skills(rows)
-    return {"benchmarks": benchmarks(rows), "maxes": estimated_max(hist.get("entries")), "skills": sk,
+    return {"benchmarks": benchmarks(rows), "maxes": estimated_max(hist.get("entries")), "olympic": olympic_lifts(hist.get("entries")), "skills": sk,
             "skill_groups": skill_groups(sk), "load_history": load_history(dates, today)}

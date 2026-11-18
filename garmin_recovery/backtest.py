@@ -160,6 +160,46 @@ def next_morning_feel(daily: dict, d: str):
     return sum(vals) / len(vals) if vals else None
 
 
+ADHERENCE_DAYS = 28
+ADHERENCE_MIN_GROUP = 3
+
+
+def adherence(usable: dict, predictions: dict, daily: dict, max_rpe: dict, today: str, days: int = ADHERENCE_DAYS) -> dict:
+    """V9.7: ¿respetas el RPE máximo de la decisión del día? y qué marca el día siguiente.
+
+    Solo días entrenados con RPE y con decisión registrada ANTES de entrenar. El día siguiente se describe con la
+    recuperación oficial (v2) y la HRV de la mañana siguiente. Describe coincidencias, no prueba causa.
+    """
+    since = (date.fromisoformat(today) - timedelta(days=days - 1)).isoformat()
+    rows = []
+    for d in sorted(usable):
+        cap, rpe = _f(usable[d].get("rpe_cap")), max_rpe.get(d)
+        if d < since or d > today or cap is None or rpe is None:
+            continue
+        nxt = (date.fromisoformat(d) + timedelta(days=1)).isoformat()
+        np_ = predictions.get(nxt) or {}
+        rows.append({"date": d, "zone": usable[d].get("decision_zone"), "rpe_cap": cap, "max_rpe": rpe,
+                     "over": rpe > cap, "excess": round(rpe - cap, 1) if rpe > cap else 0.0,
+                     "next_v2": _f(np_.get("v2_score")) if nxt <= today else None,
+                     "next_hrv": _f((daily.get(nxt) or {}).get("hrv_ms")) if nxt <= today else None})
+
+    def mean(xs):
+        xs = [x for x in xs if x is not None]
+        return round(sum(xs) / len(xs), 1) if len(xs) >= ADHERENCE_MIN_GROUP else None
+    over = [r for r in rows if r["over"]]
+    within = [r for r in rows if not r["over"]]
+    trained = len(rows)
+    return {
+        "window_days": days, "trained_days": trained, "over": len(over), "within": len(within),
+        "over_pct": round(len(over) / trained * 100) if trained else None,
+        "over_red": sum(1 for r in over if r["zone"] == "red"),
+        "next_v2_after_over": mean(r["next_v2"] for r in over), "next_v2_after_within": mean(r["next_v2"] for r in within),
+        "next_hrv_after_over": mean(r["next_hrv"] for r in over), "next_hrv_after_within": mean(r["next_hrv"] for r in within),
+        "min_group": ADHERENCE_MIN_GROUP, "days": rows,
+        "note": "Días entrenados con RPE y decisión previa al entreno. Coincidencias descriptivas: no prueban causa.",
+    }
+
+
 # ------------------------------------------------------------------ estadística
 def _ranks(xs):
     order = sorted(range(len(xs)), key=lambda i: xs[i])
@@ -251,6 +291,7 @@ def evaluate(predictions: dict, daily: dict, sessions: dict, today: str, cfg: di
         "expected_sign": "negativo", "min_days": need, "status": status, "verdict": verdict,
         "predictions": len(predictions), "first_prediction": min(predictions) if predictions else None,
         "training_days": len(trained_days), "days_over_cap": len(exceeded), "models": models,
+        "adherence": adherence(usable, predictions, daily, max_rpe, today),
         "paired": {"n": n_eff, "v2": e2, "v3": e3},
     }
 

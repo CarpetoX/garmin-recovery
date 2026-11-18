@@ -12,6 +12,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from . import sleep_stages as _stages
+
 TZ = ZoneInfo('Europe/Madrid')
 STORE = Path('garmin_sleep_history.json')
 OVERRIDES = Path('manual_sleep_overrides.json')
@@ -92,7 +94,7 @@ def extract_sleep(raw, day, generated_at):
     midpoint = begin + (finish - begin) / 2
     # Classification is context, never a claim that a shift actually occurred.
     daytime = 8 <= midpoint.hour < 18 or 6 <= begin.hour < 18
-    return {
+    out = {
         'date': day.isoformat() if isinstance(day, date) else str(day),
         'generated_at': generated_at,
         'source': 'Garmin Connect get_sleep_data',
@@ -106,6 +108,10 @@ def extract_sleep(raw, day, generated_at):
         'rem_minutes': round(n(dto.get('remSleepSeconds'), 0, 72000) / 60, 1) if n(dto.get('remSleepSeconds'), 0, 72000) is not None else None,
         'note': 'Duración efectiva del sueño Garmin; NO tiempo transcurrido entre acostarse y despertarse.',
     }
+    flag = _stages.check(out['sleep_hours'], out['deep_minutes'], out['rem_minutes'])  # V9.7
+    if flag:
+        out['stages_suspect'] = flag
+    return out
 
 
 def _nap_time(v, local=False):
