@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-18T22:50:13.626821+01:00",
+  "generated_at": "2026-11-18T23:15:05.576119+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
@@ -1243,7 +1243,7 @@
     "recovery_assessment_state": "provisional"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-18T22:49:42.327462+01:00",
+    "generated_at": "2026-11-18T23:14:43.512151+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "provisional",
     "status": "yellow",
@@ -1358,7 +1358,8 @@
       "reason_codes": [
         "post_night_shift",
         "short_sleep",
-        "unconfirmed_body_battery_sleep_event"
+        "unconfirmed_body_battery_sleep_event",
+        "live_measurement_uncertain"
       ],
       "baseline_caution": "standard",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -1367,26 +1368,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-11-18T13:15:00+01:00",
-            "age_minutes": 574.7,
+            "age_minutes": 599.7,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-11-18T12:45:21+01:00",
-            "age_minutes": 604.4,
+            "age_minutes": 629.4,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
-            "state": "recent",
+            "state": "delayed",
             "measured_at": "2026-11-18T21:36:00+01:00",
-            "age_minutes": 73.7,
+            "age_minutes": 98.7,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "recent",
+            "state": "delayed",
             "measured_at": "2026-11-18T21:33:00+01:00",
-            "age_minutes": 76.7,
+            "age_minutes": 101.7,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -1397,8 +1398,11 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": false,
-        "limited_live_metrics": [],
+        "live_data_limited": true,
+        "limited_live_metrics": [
+          "heart_rate_live",
+          "body_battery_live"
+        ],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -1616,7 +1620,7 @@
         {
           "activity": "Halterofilia - 3-position squat snatch 5x1 + squat snatch 5x3",
           "rpe": 7.0,
-          "notes": "Calentamiento + 3-position squat snatch cada 1'30\" (1 repetición = complejo de 3 snatch): calentamiento 5 con barra vacía, 1 a 30, 1 a 35, 1 a 38 kg (sin RPE); trabajo 38, 40, 43, 45 y 48 kg, volumen 642 kg. Squat snatch 5x3 cada 2' (10\" entre reps): 50, 55, 58, 60 y 63 kg, volumen 858 kg. Volumen de trabajo 1.500 kg. RPE 7 de toda la sesión. Garmin 48,0 min.",
+          "notes": "Calentamiento + 3-position squat snatch cada 1'30\" (1 repetición = complejo seguido de 3 snatch: desde la cadera, hang squat snatch y squat snatch desde el suelo): calentamiento 5 con barra vacía, 1 a 30, 1 a 35, 1 a 38 kg (sin RPE); trabajo 38, 40, 43, 45 y 48 kg, volumen 642 kg. Squat snatch 5x3 cada 2' (10\" entre reps): 50, 55, 58, 60 y 63 kg, volumen 858 kg. Volumen de trabajo 1.500 kg. RPE 7 de toda la sesión. Garmin 48,0 min.",
           "sensations": "",
           "detail_json": {
             "schema_version": 1,
@@ -1632,7 +1636,21 @@
                 "load_unit": "kg_total_barra",
                 "bar_empty_load_kg": 20,
                 "interval_seconds": 90,
-                "rep_definition": "1 repetición = 1 complejo de 3 squat snatch (una desde cada posición)",
+                "rep_definition": "1 repetición = complejo seguido de 3 snatch: desde la cadera, hang squat snatch y squat snatch (confirmado por el atleta 18/11)",
+                "complex": [
+                  {
+                    "name": "squat snatch desde la cadera",
+                    "reps": 1
+                  },
+                  {
+                    "name": "hang squat snatch",
+                    "reps": 1
+                  },
+                  {
+                    "name": "squat snatch",
+                    "reps": 1
+                  }
+                ],
                 "warmup_sets": [
                   {
                     "count": 5,
@@ -1709,7 +1727,7 @@
                 "top_set_kg": 63
               }
             ],
-            "notes": "Clase de halterofilia, semana 1. Calentamiento previo sin RPE. 3-position: 5 series de 1 complejo (3 snatch). Volumen de trabajo 1.500 kg, sin calentamiento. Barra vacía 20 kg y RPE 7 de toda la sesión (confirmado por el atleta 18/11)."
+            "notes": "Clase de halterofilia, semana 1. Calentamiento previo sin RPE. 3-position: 5 series de 1 complejo seguido (cadera + hang + suelo = 3 snatch). Volumen de trabajo 1.500 kg, sin calentamiento. Barra vacía 20 kg y RPE 7 de toda la sesión (confirmado por el atleta 18/11)."
           },
           "minimum_verified_volume_kg": 1500.0,
           "volume_complete": true,
@@ -12837,7 +12855,7 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-11-18T22:50:13.626821+01:00",
+    "checked_at": "2026-11-18T23:15:05.576119+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-11-18",
     "latest_activity_age_days": 0,
@@ -12888,19 +12906,19 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-11-18T22:50:13.626821+01:00",
+    "checked_at": "2026-11-18T23:15:05.576119+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-18T22:48:48.969602+01:00",
+        "generated_at": "2026-11-18T23:13:40.392776+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-11-18T22:49:16.091401+01:00",
+        "generated_at": "2026-11-18T23:14:06.150449+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
@@ -12914,28 +12932,28 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-11-18T22:49:41.453419+01:00",
+        "generated_at": "2026-11-18T23:14:42.569623+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-11-18T22:49:41.453419+01:00",
+        "generated_at": "2026-11-18T23:14:42.569623+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-18T22:48:48.969602+01:00",
+        "generated_at": "2026-11-18T23:13:40.392776+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-11-18T22:49:16.091401+01:00",
+        "generated_at": "2026-11-18T23:14:06.150449+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
@@ -12955,7 +12973,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.9,
+    "generation_skew_minutes": 1.0,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
