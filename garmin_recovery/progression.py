@@ -13,6 +13,8 @@ import re
 import unicodedata
 from pathlib import Path
 
+from .exercise_catalog import canonical, canonical_unit
+
 SCHEMA_VERSION = 1
 HISTORY = Path("exercise_history.json")
 SOURCE = Path("crossfit_insights.json")
@@ -87,9 +89,10 @@ def extract_entries(crossfit: dict) -> tuple[dict[str, dict], set[str]]:
         seen.add(aid)
         for bi, block in enumerate(act.get("manual_blocks") or []):
             detail = block.get("detail_json") if isinstance(block, dict) else None
-            for name, unit, raw, rpe in _containers(detail):
-                if not name or unit in SKIP_UNITS or "calentamiento" in norm(name):
+            for raw_name, raw_unit, raw, rpe in _containers(detail):
+                if not raw_name or raw_unit in SKIP_UNITS or "calentamiento" in norm(raw_name):
                     continue
+                name, unit = canonical(raw_name), canonical_unit(raw_unit)  # V9.8: catálogo de ejercicios
                 sets, complete = _sets(raw)
                 if not sets:
                     continue
@@ -102,6 +105,7 @@ def extract_entries(crossfit: dict) -> tuple[dict[str, dict], set[str]]:
                 entries[key] = {
                     "date": act["date"], "activity_id": aid, "activity": (block.get("activity") or "")[:200],  # V8.7: se recorta al mostrarlo, con «…»
                     "exercise": str(name), "key": norm(name), "unit": unit or "", "unit_label": UNITS.get(unit or "", unit or "sin unidad"),
+                    **({"exercise_raw": str(raw_name)} if str(raw_name) != str(name) else {}),
                     "top_load": top["load"], "top_reps": top["reps"],
                     "volume": round(sum(s["load"] * s["reps"] * s["count"] for s in sets), 1),
                     "volume_complete": complete, "work_sets": int(sum(s["count"] for s in sets)),
@@ -177,9 +181,21 @@ def summary(items: list[dict]) -> dict:
                         "hacen que la mejor carga no siempre sea comparable. Descriptivo: sin causas." if comp else None)}
 
 
+def recanonical(e: dict) -> dict:
+    """V9.8: aplica el catálogo a una entrada ya guardada; conserva el nombre original en «exercise_raw»."""
+    raw = e.get("exercise_raw") or e.get("exercise")
+    name, unit = canonical(raw), canonical_unit(e.get("unit"))
+    if name == e.get("exercise") and unit == e.get("unit"):
+        return e
+    out = dict(e, exercise=name, key=norm(name), unit=unit, unit_label=UNITS.get(unit, unit or "sin unidad"))
+    if str(raw) != name:
+        out["exercise_raw"] = str(raw)
+    return out
+
+
 def build(history: dict | None, crossfit: dict | None = None) -> dict:
     """Historial guardado + sesiones vigentes de crossfit_insights → ejercicios con su comparación."""
-    entries = dict((history or {}).get("entries") or {})
+    entries = {k: recanonical(v) for k, v in ((history or {}).get("entries") or {}).items() if isinstance(v, dict)}
     if crossfit:
         new, seen = extract_entries(crossfit)
         entries = merge(entries, new, seen)

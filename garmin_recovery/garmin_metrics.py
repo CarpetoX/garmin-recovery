@@ -26,9 +26,30 @@ def load_json(path, default):
         return default
 
 
-def save_json(path, data):
+def save_json(path, data, compact=False):
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+        if compact:  # V9.8: sin sangría para los almacenes grandes de series (mismo contenido, ~1/3 del tamaño)
+            json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+            f.write("\n")
+        else:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+ARRAY_KEEP_DAYS = 35  # V9.8: series intradía de estrés y Body Battery solo de los últimos 35 días (ventanas de 28 + margen)
+INTRADAY_KEYS = ("stressValuesArray", "bodyBatteryValuesArray", "stressValueDescriptorsDTOList", "bodyBatteryValueDescriptorsDTOList")
+
+
+def trim_intraday(store, today, keep_days=ARRAY_KEEP_DAYS):
+    """Quita las series intradía de los días más antiguos; conserva medias, máximos y fechas de cada día.
+
+    Ningún cálculo usa las series de días tan antiguos: el historial diario ya guarda sus valores."""
+    cutoff = (today - timedelta(days=keep_days)).isoformat()
+    for day, row in (store.get("days") or {}).items():
+        if isinstance(row, dict) and str(day) < cutoff and any(k in row for k in INTRADAY_KEYS):
+            for k in INTRADAY_KEYS:
+                row.pop(k, None)
+            row["intraday_trimmed"] = True
+    return store
 
 
 def number(value):
@@ -766,7 +787,7 @@ def main():
         heart_store["generated_at"] = NOW.isoformat()
         heart_store["rolling"] = hr_rolling
 
-        save_json(STRESS_PATH, stress_store)
+        save_json(STRESS_PATH, trim_intraday(stress_store, TODAY), compact=True)
         save_json(BB_PATH, bb_store)
         save_json(EXTENDED_PATH, extended_store)
         save_json(HEART_RATE_PATH, heart_store)

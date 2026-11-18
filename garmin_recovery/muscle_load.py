@@ -7,6 +7,8 @@ from collections import defaultdict
 from datetime import date, timedelta
 import math
 
+from .exercise_catalog import canonical
+
 PATTERNS = {
     # V8.7: los olímpicos primero (un squat clean es halterofilia, no sentadilla) y los tirones con sus nombres habituales
     'olympic_lift': ('clean', 'snatch', 'jerk', 'arrancada', 'cargada', 'envion', 'envión'),
@@ -138,7 +140,7 @@ def analyze(activities, as_of):
             for exercise in groups:
                 if not isinstance(exercise, dict): continue
                 # V8.2: un registro de un solo ejercicio lo nombra en «exercise»; el título de la sesión es el último recurso
-                name = str(exercise.get('name') or exercise.get('exercise') or block.get('activity') or 'Sin nombre')
+                name = canonical(str(exercise.get('name') or exercise.get('exercise') or block.get('activity') or 'Sin nombre'))  # V9.8
                 pattern = classify(name)
                 equipment = equipment_for(exercise)
                 external_expected = equipment != 'bodyweight'

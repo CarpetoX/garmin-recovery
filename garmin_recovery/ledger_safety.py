@@ -68,7 +68,8 @@ def atomic_write_ledger(path, items):
     fd, temp_name = tempfile.mkstemp(prefix='.report_cycles-v28-', suffix='.tmp', dir=path.parent)
     try:
         with os.fdopen(fd, 'w', encoding='utf-8') as f:
-            f.write(json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
+            # V9.8: sin sangría (mismo contenido; 7,6 → 4,4 MB). La integridad se comprueba por digest, no por bytes.
+            f.write(json.dumps(payload, ensure_ascii=False, separators=(',', ':'), allow_nan=False) + '\n')
             f.flush()
             os.fsync(f.fileno())
         try:

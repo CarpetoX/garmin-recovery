@@ -196,3 +196,10 @@ Cada tarjeta tiene en «Ver detalle» un «Qué mide y cómo leerlo», y Sistema
 - **Levantamientos olímpicos** (Progreso; `athlete_progress.olympic_lifts`): mejor carga real por número de repeticiones y por sesión, sin Epley; los complejos (3-position, «+», complex) aparte. Los olímpicos salen de «¿Me estoy haciendo más fuerte?».
 - **Monitor:** el Sync de respaldo del cron que se cancela solo (V8.6) porque Apps Script ya hizo la franja es `backup_sync_not_needed` (info), no un fallo.
 - Corregida la línea de las minigráficas de Progreso, que salía rellena de negro.
+
+## V9.8 — Fase 1: datos ordenados
+
+- **Catálogo de ejercicios** (`catalogo_ejercicios.json`, `exercise_catalog.py`): nombre canónico, alias, patrón y unidades equivalentes (`kg_lastre` = `lastre_kg`). El historial (`exercise_history.json`) y la carga por patrón agrupan por el nombre canónico y guardan el original en `exercise_raw`. Un nombre fuera del catálogo no se toca. Con los datos actuales, «press inclinado con mancuernas» pasa de 3 historiales sueltos a uno de 4 sesiones, y el curl de bíceps y el chin up lastrado de 2 a 3.
+- **Zonas de molestia con lado** (`sensations.normalize_zone`, `ZONE_OPTIONS`): «rodilla dcha» → «Rodilla derecha». «¿Dónde tengo molestias?» agrupa por articulación y lado, separa espalda baja y alta, y cuenta los días sin lado indicado.
+- **Datos más ligeros:** `report_cycles.json` se escribe sin sangría (mismo contenido; 7,6 → 4,4 MB; la integridad se comprueba por digest, no por bytes) y `garmin_stress.json` guarda las series intradía solo de los últimos 35 días y sin sangría (3,7 → 0,9 MB). Medias y máximos de cada día se conservan; el historial diario ya guarda sus valores.
+- **Módulos de vigilancia:** revisados los 138 módulos; todos están en uso (por código o por un workflow), así que no se ha retirado ninguno. Unificarlos exige rehacer el monitor y el certificado: queda para una fase posterior.

@@ -70,6 +70,51 @@ def _migrate(e: dict) -> dict:
     return e
 
 
+# V9.8: zonas cerradas con lado. En la encuesta se ofrecen estas (las de lado, siempre con lado).
+JOINTS = ["Rodilla", "Hombro", "Codo", "Muñeca", "Tobillo", "Cadera"]  # tienen lado
+MIDLINE = ["Espalda baja", "Espalda alta", "Cuello"]  # sin lado
+SIDES = {"derecha": "derecha", "derecho": "derecha", "dcha": "derecha", "der": "derecha", "d": "derecha",
+         "izquierda": "izquierda", "izquierdo": "izquierda", "izda": "izquierda", "izq": "izquierda", "i": "izquierda",
+         "ambas": "ambos lados", "ambos": "ambos lados", "las dos": "ambos lados", "los dos": "ambos lados"}
+ZONE_OPTIONS = [f"{j} {s}" for j in JOINTS for s in (("derecho", "izquierdo") if j in ("Hombro", "Codo", "Tobillo") else ("derecha", "izquierda"))] + MIDLINE
+
+
+def _plain(text: str) -> str:
+    import unicodedata
+    return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower().strip()
+
+
+def normalize_zone(z) -> str:
+    """«rodilla dcha» → «Rodilla derecha»; «Rodilla» se queda sin lado; lo desconocido se conserva tal cual."""
+    raw = str(z or "").strip()[:60]
+    low = _plain(raw).replace(".", " ")
+    for j in JOINTS:
+        pj = _plain(j)
+        if low == pj or low.startswith(pj + " "):
+            rest = low[len(pj):].strip()
+            side = SIDES.get(rest)
+            if not rest:
+                return j
+            if side:
+                masc = j in ("Hombro", "Codo", "Tobillo")
+                word = {"derecha": "derecho" if masc else "derecha", "izquierda": "izquierdo" if masc else "izquierda"}.get(side, side)
+                return f"{j} {word}"
+            return raw
+    for m in MIDLINE:
+        if low == _plain(m):
+            return m
+    return raw
+
+
+def side_of(z) -> str | None:
+    """«derecha», «izquierda», «ambos lados» o None (sin lado indicado o zona central)."""
+    low = _plain(normalize_zone(z))
+    for w, side in (("derech", "derecha"), ("izquierd", "izquierda"), ("ambos lados", "ambos lados")):
+        if w in low:
+            return side
+    return None
+
+
 def zones_of(e: dict | None) -> list[str]:
     """Zonas como lista de textos (un texto suelto cuenta como una zona; lo demás se ignora)."""
     z = (e or {}).get("zonas")
@@ -131,7 +176,7 @@ def record(root: str | Path, day: str, answers: dict[str, str], time: str | None
         if moment not in MOMENTS:
             raise ValueError(f"momento desconocido: {moment}")
         entry["moment"] = moment  # V8.19: si se responde después de entrenar, la fatiga incluye la sesión
-    zs = [str(z).strip()[:60] for z in zones or [] if str(z).strip()]
+    zs = [normalize_zone(z) for z in zones or [] if str(z).strip()]  # V9.8: zonas con lado
     if zs:
         entry["zonas"] = zs
     if note:

@@ -31,7 +31,7 @@ GOLDEN = {
     "reliability_history_v294.json": "2cb43340b55911a8",
     "origin_monitor_v292.json": "4ec28a6bfc82d104",
     "report_ready.json": "fae201c5f0812ea3",
-    "report_cycles.json": "328ad363479ad638",
+    "report_cycles.json": "35f6903e5d6c248a",
 }
 NAMES = [("monitor_monthly", "monitor"), ("monitor_origin_integration_v292", "origin_integration"),
          ("report_monitor_v34", "report_monitor"), ("cycle_observer_v373", "cycle_observer"),

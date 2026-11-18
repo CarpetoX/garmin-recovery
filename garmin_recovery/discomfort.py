@@ -41,6 +41,18 @@ def joint_of(zone) -> str:
     return words[0] if words else ""
 
 
+def _group(zone) -> tuple[str, str, str | None]:
+    """(clave, nombre sin lado, lado) — V9.8: «Espalda baja» y «Espalda alta» son zonas distintas."""
+    z = sn.normalize_zone(zone)
+    side = sn.side_of(z)
+    for m in sn.MIDLINE:
+        if norm(z) == norm(m):
+            return norm(m), m, None
+    j = joint_of(z)
+    base = next((x for x in sn.JOINTS if norm(x) == j), z.split()[0] if z.split() else z)
+    return j, base, side
+
+
 def zone_history(entries: list[dict], today: str, days: int = 28) -> list[dict]:
     """Por articulación: días con molestia en 7 y en 28 días, último día, nivel máximo y fechas (28 días)."""
     t = _date.fromisoformat(today)
@@ -51,19 +63,22 @@ def zone_history(entries: list[dict], today: str, days: int = 28) -> list[dict]:
         if not lv or d < since28 or d > today:
             continue
         for z in sn.zones_of(e):
-            j = joint_of(z)
+            j, base, side = _group(z)
             if not j:
                 continue
-            g = by.setdefault(j, {"joint": j, "label": z, "dates": set(), "max_level": 0, "last": d})
+            g = by.setdefault(j, {"joint": j, "base": base, "dates": set(), "max_level": 0, "last": d, "sides": {}})
             g["dates"].add(d)
             g["max_level"] = max(g["max_level"], lv)
             g["last"] = max(g["last"], d)
-            if len(z) > len(g["label"]):
-                g["label"] = z  # la etiqueta más concreta («Rodilla derecha» mejor que «Rodilla»)
+            g["sides"].setdefault(side, set()).add(d)
     out = []
     for g in by.values():
         ds = sorted(g["dates"])
-        out.append({"joint": g["joint"], "label": g["label"], "dates": ds, "days_28": len(ds),
+        known = sorted(s for s in g["sides"] if s)
+        label = g["base"] if not known else (f'{g["base"]} {sn.normalize_zone(g["base"] + " " + known[0]).split(" ", 1)[1]}'
+                                             if len(known) == 1 and known[0] != "ambos lados" else f'{g["base"]} (ambos lados)')
+        unsided = len(g["sides"].get(None, set()) - set().union(*(g["sides"][s] for s in known))) if known and g["base"] in sn.JOINTS else 0
+        out.append({"joint": g["joint"], "label": label, "dates": ds, "days_28": len(ds), "sides": known, "unsided_days": unsided,
                     "days_7": sum(1 for d in ds if d >= since7), "last": g["last"], "max_level": g["max_level"],
                     "max_label": LEVELS[g["max_level"]]})
     out.sort(key=lambda g: (-g["days_7"], -g["days_28"], g["joint"]))
