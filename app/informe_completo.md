@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre nocturno
 
-Miércoles, 18 de noviembre de 2026 · 23:15 · `GR-2026-11-18-2315-231185`
+Miércoles, 18 de noviembre de 2026 · 23:30 · `GR-2026-11-18-2330-22f2d9`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|10 sesiones|sRPE 1376|unavailable
 | Confianza de recuperación | medium |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (23:14), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (23:28), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -78,7 +78,7 @@ La HRV está 20 % por encima de su mediana; la FC en reposo está 4 lpm por deba
 | Modelo de compatibilidad | 🔴 31/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 32/100 | contexto |
 | Tiempo de recuperación Garmin | 14,8 h | contexto |
-| Índice personal experimental | 61/100 | provisional |
+| Índice personal experimental | 59/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (ámbar) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -91,7 +91,7 @@ Hoy dormiste de día tras el turno de noche: se compara con tu último sueño tr
 - FC nocturna: 74,2 → 64,1 lpm (favorable)
 - Sueño: 4,0 → 5,2 h (favorable)
 - Puntuación de sueño: 31 → 53 (favorable)
-- Estrés medio: 51 → 28 (favorable)
+- Estrés medio: 51 → 29 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -108,7 +108,7 @@ Episodio confirmado: 18 de noviembre de 2026, 07:45 → 18 de noviembre de 2026,
 | Sueño profundo | 1 h 43 min |
 | Sueño REM | 0 min |
 
-El REM representa un 0 % y el sueño profundo un 33 % del episodio.
+⚠️ Garmin marca 0 min de REM en 5,2 h de sueño; no es plausible y suele ser un fallo de detección (frecuente en el sueño de día tras un turno de noche). Fases dudosas: no se muestran ni se comparan. La duración es la de Garmin; su puntuación de sueño puede estar penalizada por esas fases.
 
 ![Sueño por noche frente a tu necesidad](charts/sleep.svg)
 
@@ -134,7 +134,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 77,0 lpm | 64,1 lpm |
+| Hoy* | 77,1 lpm | 64,1 lpm |
 | 3 días | 76,9 lpm | 58,5 lpm |
 | 7 días | 78,2 lpm | 61,0 lpm |
 | 28 días | 79,6 lpm | 63,4 lpm |
@@ -154,8 +154,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 28, máximo 90.
-- Body Battery: último valor 26/100, medido a las 21:33 (hace 1 h 42 min: no es una medición nueva).
+- Estrés medio: 29, máximo 90.
+- Body Battery: último valor 21/100, medido a las 23:09.
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -319,7 +319,7 @@ No se atribuyen desgloses no confirmados ni se comparan récords no equivalentes
 
 Turno: hoy libre tras la noche, mañana libre.
 - Señales favorables: duración del sueño igual o superior a tu referencia; HRV en rango respecto a tu historial.
-- Señales adversas: Training Readiness de Garmin bajo (32/100).
+- Señales adversas: Training Readiness de Garmin bajo (32/100); Body Battery bajo (21/100).
 
 ### Recomendaciones
 
@@ -407,4 +407,4 @@ Datos insuficientes para evaluar la recuperación de hoy: la decisión es **🔴
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-11-18-2245 · generado 18/11/2026 23:15 Europe/Madrid · certificado READY · sync_run_id 44405278980.
+Traza: cierre nocturno · ciclo 2026-11-18-2245 · generado 18/11/2026 23:30 Europe/Madrid · certificado READY · sync_run_id 44405278980.
