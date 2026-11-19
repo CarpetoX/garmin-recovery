@@ -1,26 +1,27 @@
-<!-- cycle_id: 2026-11-19-0830 -->
-**En breve:** hoy los datos de sueño y HRV aún no están confirmados; sin intensidad alta hasta tenerlos.
-🟢 Recuperación oficial: pendiente (confianza baja)
-🏋️ Carga 7 días: 8 sesiones, sRPE 1270,8
-❤️ FC en reposo 55 lpm (−1 vs. mediana 56)
-Orientación: día libre de turno; solo técnica ligera o movilidad, RPE ≤ 6, y reevalúa al sincronizar el sueño.
+<!-- cycle_id: 2026-11-19-0830-post-sleep -->
+**En breve:** hoy toca recuperar: las señales del cuerpo son buenas, pero Garmin marca baja disponibilidad.
+🟢 Recuperación oficial 85/100 (confianza alta); el modelo experimental da 77 y la mezcla con Garmin, 49.
+🌙 Sueño 7,4 h, puntuación 77.
+🏋️ Carga: 8 sesiones en 7 días, un 31 % menos que la semana anterior.
+❤️ HRV 54 ms, dentro de tu rango normal (48–59 ms).
+Orientación: hoy sin turno; movilidad o zona 2 suave (RPE ≤ 4, volumen 0–50 %).
 
-**Qué explica la puntuación.** No hay puntuación oficial porque faltan HRV y sueño de hoy. A favor: FC en reposo 55 lpm, estrés de ayer 30 (mediana 34) y ACWR 0,82. Sin sensaciones registradas en Intervals.
+**Qué explica la puntuación.** HRV (media 7 días 54,7 ms, +3 % sobre tu base), FC en reposo (54 lpm, −2 vs. mediana) y estrés de ayer (30 vs. 34) son favorables. Lo que frena es el sueño (deuda 2,4 h en 3 noches) y Garmin Training Readiness (18/100). Rige la decisión más conservadora: rojo.
 
-**Carga reciente.** Semana 126 frente a 184 la anterior (−31,5 %), monotonía 0,83. Ayer: halterofilia (RPE 7) y WOD EMOM (RPE 9). Según el análisis por reglas, 13 de 29 sesiones fueron RPE ≥ 8 (45 %).
+**Carga reciente.** Carga 126 (184 la semana previa), sRPE 1270,8, monotonía 0,83, ACWR 0,82. Ayer: halterofilia y WOD EMOM, ambos RPE 7. Sin sensaciones registradas en Intervals.
 
 **Prioridades**
-1. Sueño: deuda acumulada (7,2 h en el informe completo); suma 30–45 min cada noche.
-2. Intensidad: intercala sesiones RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
-3. Anota cada mañana fatiga, agujetas y ánimo en Intervals.
+1. **Sueño:** recuperar la deuda (deuda acumulada 7,4 h según el análisis por reglas) con 30–45 min más cada noche, no con una noche larga.
+2. **Distribución de la intensidad:** 13 de 29 sesiones fueron RPE ≥ 8 (45 %); intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
+3. **Sensaciones:** anota fatiga, agujetas y ánimo cada mañana en Intervals.
 
-**Plan 7 días** (turno: MT el 21, TN el 22)
-- Jue 19: técnica/movilidad, RPE ≤ 6 (hasta confirmar sueño).
-- Vie 20: si el sueño y la HRV se confirman, fuerza moderada RPE ≤ 7; acuéstate pronto antes del MT.
-- Sáb 21 (MT): solo movilidad corta.
-- Dom 22 (TN): descanso; siesta ancla antes del turno.
-- Lun 23: recuperación del TN, Zona 2 suave.
-- Mar 24: sesión dura (RPE 8) si la recuperación oficial lo permite.
-- Mié 25: suave, RPE 5–6.
+**Plan 7 días** (turnos: 21 MT, 22 TN)
+- Jue 19: movilidad / zona 2 30–40 min, RPE ≤ 4.
+- Vie 20: si mañana mejora la decisión, fuerza o técnica RPE 5–6; si no, repetir suave.
+- Sáb 21 (MT): solo movilidad; acostarte pronto.
+- Dom 22 (TN): descanso o paseo; siesta antes del turno.
+- Lun 23: dormir y recuperar; zona 2 suave si la decisión lo permite.
+- Mar 24: sesión dura (RPE 7–8) solo si la decisión es verde.
+- Mié 25: RPE 5–6, técnica.
 
-_No es un diagnóstico médico._
+_Herramienta de entrenamiento; no es un diagnóstico médico._
