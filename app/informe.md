@@ -1,6 +1,6 @@
-# Informe de seguimiento · 19/11/2026
+# Cierre diario · 19/11/2026
 
-`GR-2026-11-19-1650-8e5c88` · cita este identificador al reenviar el informe.
+`GR-2026-11-19-2250-27443c` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -54,11 +54,10 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-19-1231-8a5faa (19/11 12:31):
-- v3: 77 → 76 (-1).
-- Sesiones con RPE: 13 → 15.
+Frente al informe GR-2026-11-19-1650-8e5c88 (19/11 16:50):
+- Sin cambios en los datos.
 
-## Actividad de hoy
+## Balance del día
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
@@ -70,19 +69,41 @@ Frente al informe GR-2026-11-19-1231-8a5faa (19/11 12:31):
 
 _RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
 
-**¿Encaja con la decisión?** ⚠️ RPE 7,0 supera el máximo recomendado (4): reduce o cambia la sesión restante.
+## Balance de la semana
 
-**Carga 7 días:** 149 en 11 sesiones (-19 % vs. semana previa) · sRPE 1.428 · monotonía 0,99.
+- Carga 7 días: **149** en 11 sesiones (-19 % vs. semana previa).
+- sRPE 7 días 1.428 · monotonía 0,99 · strain 1.414.
+- Fatiga acumulada: ATL 25,3, CTL 13,6, TSB -11,7 (CTL insuficiente: la forma no se interpreta todavía).
+
+## Previsión orientativa para mañana
+
+- Objetivo de sueño esta noche: **8,3 h** (necesidad + parte de la deuda de 2,4 h).
+- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.
 
 ## Gráficas
 
 ![RPE frente al máximo del día](charts/rpe.svg)
 
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+
 ![Carga](charts/load.svg)
 
-![Sesiones](charts/sessions.svg)
+![Disponibilidad](charts/readiness.svg)
 
-_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+## Validación de modelos
+
+_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
+
+**Acumulando datos: 18/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.**
+
+| Modelo | ρ esfuerzo | IC 90 % | Días |
+|---|--:|---|--:|
+| Oficial v2 | -0,27 | -0,61 a 0,15 | 18 |
+| Híbrido | -0,35 | -0,66 a 0,07 | 18 |
+| v3 (en pruebas) | -0,30 | -0,63 a 0,12 | 18 |
+| Decisión operativa | -0,30 | -0,63 a 0,13 | 18 |
+
+- Días entrenados con predicción: 19; por encima del RPE máximo del día: 10.
 
 ## Recuperación: tendencias de 28 días
 
@@ -126,16 +147,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-19-1650-8e5c88`
+- **Identificador del informe:** `GR-2026-11-19-2250-27443c`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-19-1645 · datos sincronizados a las 16:49
-- **Antigüedad:** fin del sueño hace 8,4 h ✓ · última HRV hace 8,4 h ✓ · última FC hace 1,7 h ✓ · último Body Battery hace 1,7 h ✓
+- **Ciclo:** 2026-11-19-2245 · datos sincronizados a las 22:49
+- **Antigüedad:** fin del sueño hace 14,4 h ✓ · última HRV hace 14,4 h ✓ · última FC hace 34 min ✓ · último Body Battery hace 38 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+6 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-19 16:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-19 22:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
