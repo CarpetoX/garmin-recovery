@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-19T12:31:03.635951+01:00",
+  "generated_at": "2026-11-19T16:50:32.412769+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-11-19",
   "decision": {
@@ -59,7 +59,7 @@
         "version": "readiness-v3.2",
         "role": "sombra",
         "used_in_decision": true,
-        "score": 77.0,
+        "score": 76.0,
         "zone": "green",
         "state": "assessed",
         "confidence": "media",
@@ -96,7 +96,7 @@
     "date": "2026-11-19",
     "state": "assessed",
     "zone": "green",
-    "score": 77.0,
+    "score": 76.0,
     "confidence": "media",
     "data_confidence": {
       "level": "alta",
@@ -139,14 +139,14 @@
         "text": "HRV 54 ms hoy; media 7 días +3 % vs. tu base (dentro de tu rango normal)"
       },
       {
+        "component": "load",
+        "z": 0.3,
+        "text": "ACWR 0.9"
+      },
+      {
         "component": "cardiac",
         "z": 0.492897093463666,
         "text": "FC en reposo 54 lpm (-2 vs. tu mediana)"
-      },
-      {
-        "component": "load",
-        "z": 0.54,
-        "text": "ACWR 0.82"
       },
       {
         "component": "stress",
@@ -218,23 +218,23 @@
         "week_load": 149.0,
         "prev_week_load": 184.0,
         "week_change_pct": -19.0,
-        "week_srpe": 1270.8,
+        "week_srpe": 1427.8,
         "week_sessions": 11,
-        "monotony": null,
-        "strain": null,
+        "monotony": 0.99,
+        "strain": 1414.5,
         "internal_load_basis": "srpe_foster",
-        "srpe_coverage_7d_pct": 67.0,
-        "srpe_coverage_28d_pct": 91.0,
-        "acwr": 0.82,
+        "srpe_coverage_7d_pct": 100.0,
+        "srpe_coverage_28d_pct": 100.0,
+        "acwr": 0.9,
         "acwr_basis": "srpe_media_7_vs_28",
         "consecutive_training_days": 3,
-        "component_z": 0.54,
+        "component_z": 0.3,
         "component_basis": "acwr",
         "notes": [
           "CTL 13.6 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
         ],
-        "z": 0.54,
-        "score": 81.8,
+        "z": 0.3,
+        "score": 78.8,
         "weight": 0.1,
         "label": "Carga de entrenamiento"
       },
@@ -261,51 +261,51 @@
     "week_load": 149.0,
     "prev_week_load": 184.0,
     "week_change_pct": -19.0,
-    "week_srpe": 1270.8,
+    "week_srpe": 1427.8,
     "week_sessions": 11,
-    "monotony": null,
-    "strain": null,
+    "monotony": 0.99,
+    "strain": 1414.5,
     "internal_load_basis": "srpe_foster",
-    "srpe_coverage_7d_pct": 67.0,
-    "srpe_coverage_28d_pct": 91.0,
-    "acwr": 0.82,
+    "srpe_coverage_7d_pct": 100.0,
+    "srpe_coverage_28d_pct": 100.0,
+    "acwr": 0.9,
     "acwr_basis": "srpe_media_7_vs_28",
     "consecutive_training_days": 3,
-    "component_z": 0.54,
+    "component_z": 0.3,
     "component_basis": "acwr",
     "notes": [
       "CTL 13.6 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
     ]
   },
   "certificate": {
-    "generated_at": "2026-11-19T12:31:03.635951+01:00",
+    "generated_at": "2026-11-19T16:50:32.412769+01:00",
     "cycle": {
-      "cycle_id": "2026-11-19-0830-post-sleep",
-      "slot_at": "2026-11-19T08:30:00+01:00",
+      "cycle_id": "2026-11-19-1645",
+      "slot_at": "2026-11-19T16:45:00+01:00",
       "status": "ready",
-      "verified_at": "2026-11-19T09:05:37.477565+01:00",
+      "verified_at": "2026-11-19T16:50:30.971848+01:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": true,
-      "data_synced_at": "2026-11-19T12:29:46.781883+01:00",
-      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
+      "data_newer_than_certified_cycle": false,
+      "data_synced_at": "2026-11-19T16:49:27.463617+01:00",
+      "note": null,
       "chain": {
         "sync": {
-          "run_id": 44484490039,
+          "run_id": 44558993540,
           "event": "workflow_dispatch",
           "conclusion": "success"
         },
         "heart": {
-          "run_id": 44484524995,
+          "run_id": 44559076178,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "advanced": {
-          "run_id": 44484626113,
+          "run_id": 44559200617,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "crossfit": {
-          "run_id": 44484678198,
+          "run_id": 44559273733,
           "event": "workflow_run",
           "conclusion": "publishing_in_same_job"
         }
@@ -314,53 +314,53 @@
     "data_age": {
       "confirmed_sleep": {
         "measured_at": "2026-11-19T08:25:16+01:00",
-        "age_minutes": 246.0,
+        "age_minutes": 505.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-11-19T08:23:37+01:00",
-        "age_minutes": 247.0,
+        "age_minutes": 507.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-11-19T12:16:00+01:00",
-        "age_minutes": 15.0,
+        "measured_at": "2026-11-19T15:10:00+01:00",
+        "age_minutes": 101.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
-        "measured_at": "2026-11-19T12:12:00+01:00",
-        "age_minutes": 19.0,
+        "measured_at": "2026-11-19T15:09:00+01:00",
+        "age_minutes": 102.0,
         "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-19T11:30:26.923494+00:00",
-      "latest_date": "2026-11-18",
-      "rows_sha256": "5517fce8d717bfb8",
-      "advanced_run_id": "44515368976"
+      "fetched_at": "2026-11-19T15:49:58.537910+00:00",
+      "latest_date": "2026-11-19",
+      "rows_sha256": "100067db9e75a176",
+      "advanced_run_id": "44559200617"
     },
     "source_sha256": {
-      "wellness.json": "f36626aabc88bfab",
-      "garmin_hrv_timeline.json": "1acf840dfd252cf5",
-      "garmin_sleep_history.json": "7d4e62c32677d57b",
-      "garmin_extended.json": "56e58fd008a84a8a",
-      "garmin_heart_rate.json": "5046d1afaf67c7d2",
-      "garmin_stress.json": "378ea862935e8166",
-      "garmin_body_battery.json": "0892aafbe58d523d",
+      "wellness.json": "7e27beb84b676785",
+      "garmin_hrv_timeline.json": "ca02f42e643519e2",
+      "garmin_sleep_history.json": "713eb7a28041f8e0",
+      "garmin_extended.json": "425530e3122bec99",
+      "garmin_heart_rate.json": "61f95db03c9ce485",
+      "garmin_stress.json": "808fe90d2e212564",
+      "garmin_body_battery.json": "5723144fd325e2e3",
       "activities.json": "e307646625778948",
-      "training_feedback.json": "a6a6d1e375a0026e",
+      "training_feedback.json": "c0238475961a7bb4",
       "shift_calendar.json": "218a0b4ac784d7db",
-      "morning_sleep_status.json": "18fd55abe7ef92fe",
-      "recovery_assessment.json": "1375a92f811e0e09",
-      "report_ready.json": "272022bda2621cd0",
-      "garmin_hr_timeline.json": "c85596d543a9c404",
-      "daily_summary.json": "099ddb9bd37af0ac",
-      "workflow_health.json": "35d4fdd61a30648f",
-      "recovery.csv": "c5fb333f282985d1"
+      "morning_sleep_status.json": "db38c2f356026806",
+      "recovery_assessment.json": "8c2341ae40925bd5",
+      "report_ready.json": "a978b62b501ec443",
+      "garmin_hr_timeline.json": "97cde4830761c4ca",
+      "daily_summary.json": "112ae367e750f78e",
+      "workflow_health.json": "f779a74f2d30f1bc",
+      "recovery.csv": "b327aabc94c5017a"
     },
     "consistency_v3_v2": {
       "status": "ok",
@@ -384,7 +384,7 @@
     },
     "execution_health": {
       "status": "ok",
-      "checked_at": "2026-11-19T09:05:52.364151+01:00",
+      "checked_at": "2026-11-19T12:31:28.757997+01:00",
       "alerts": [
         {
           "code": "no_recent_successful_scheduled_run",
@@ -395,17 +395,17 @@
           "code": "cron_missed_dispatch_recovered",
           "severity": "info",
           "slots": [
-            "2026-11-18T08:30:00+01:00",
             "2026-11-18T16:45:00+01:00",
-            "2026-11-18T22:45:00+01:00"
+            "2026-11-18T22:45:00+01:00",
+            "2026-11-19T08:30:00+01:00"
           ]
         }
       ],
       "missed_slots": [],
       "recovered_slots": [
-        "2026-11-18T08:30:00+01:00",
         "2026-11-18T16:45:00+01:00",
-        "2026-11-18T22:45:00+01:00"
+        "2026-11-18T22:45:00+01:00",
+        "2026-11-19T08:30:00+01:00"
       ]
     },
     "delivery": {
@@ -420,8 +420,8 @@
     "from": "2026-11-06",
     "to": "2026-11-19",
     "sessions": 21,
-    "with_rpe": 13,
-    "rpe_coverage_pct": 81.0,
+    "with_rpe": 15,
+    "rpe_coverage_pct": 100.0,
     "rpe_not_applicable": [
       {
         "id": "i207722998",
@@ -447,34 +447,17 @@
         "id": "i211789156",
         "start_local": "2026-11-18T19:37:10",
         "label": "Calentamiento - WOD"
-      }
-    ],
-    "without_rpe": [
+      },
       {
         "id": "i211957198",
         "start_local": "2026-11-19T09:22:50",
-        "type": "HighIntensityIntervalTraining",
-        "duration_min": 13.3,
-        "load": 3.0
-      },
-      {
-        "id": "i211960917",
-        "start_local": "2026-11-19T09:36:21",
-        "type": "HighIntensityIntervalTraining",
-        "duration_min": 8.9,
-        "load": 5.0
-      },
-      {
-        "id": "i211976633",
-        "start_local": "2026-11-19T09:57:41",
-        "type": "HighIntensityIntervalTraining",
-        "duration_min": 14.8,
-        "load": 15.0
+        "label": "Calentamiento"
       }
     ],
+    "without_rpe": [],
     "rpe_without_activity": [],
     "date_mismatch": [],
-    "status": "revisar",
+    "status": "ok",
     "rule": "Emparejado por ID exacto de actividad; las sesiones sin RPE no se rellenan ni se estiman."
   },
   "planned": {
@@ -1336,7 +1319,7 @@
     },
     {
       "date": "2026-11-19",
-      "score": 77.0,
+      "score": 76.0,
       "zone": "green",
       "state": "assessed",
       "hrv_ms": 54.0,
@@ -1348,9 +1331,9 @@
       "sleep_hours": 7.37,
       "sleep_score": 77.0,
       "load": 23.0,
-      "srpe": null,
+      "srpe": 157.0,
       "sessions": 3,
-      "stress_avg": 24.0,
+      "stress_avg": 26.0,
       "garmin_readiness": 18.0,
       "shift": null,
       "ctl": 13.6,
@@ -1362,7 +1345,7 @@
       "rem_min": 80.0,
       "stages_flag": null,
       "sleep_context": "night_sleep",
-      "stress_avg_full": 24.0,
+      "stress_avg_full": 26.0,
       "rest_confirmed": false
     }
   ],
@@ -1373,14 +1356,14 @@
       "start_local": "2026-11-19T09:57:41",
       "type": "HighIntensityIntervalTraining",
       "name": "HIIT",
-      "label": null,
+      "label": "WOD E3MO3M x5 - box jump over / burpee over the line / V-sit up",
       "duration_min": 14.8,
       "load": 15.0,
       "trimp": 21.981485,
       "avg_hr": 146.0,
       "max_hr": 179.0,
-      "rpe": null,
-      "srpe": null,
+      "rpe": 7.0,
+      "srpe": 103.6,
       "removed": 0
     },
     {
@@ -1389,14 +1372,14 @@
       "start_local": "2026-11-19T09:36:21",
       "type": "HighIntensityIntervalTraining",
       "name": "HIIT",
-      "label": null,
+      "label": "Fuerza - DB split squat con déficit / ring row pies elevados",
       "duration_min": 8.9,
       "load": 5.0,
       "trimp": 7.848654,
       "avg_hr": 126.0,
       "max_hr": 153.0,
-      "rpe": null,
-      "srpe": null,
+      "rpe": 6.0,
+      "srpe": 53.4,
       "removed": 0
     },
     {
@@ -1405,7 +1388,7 @@
       "start_local": "2026-11-19T09:22:50",
       "type": "HighIntensityIntervalTraining",
       "name": "HIIT",
-      "label": null,
+      "label": "Calentamiento",
       "duration_min": 13.3,
       "load": 3.0,
       "trimp": 4.7090917,
@@ -1413,7 +1396,8 @@
       "max_hr": 127.0,
       "rpe": null,
       "srpe": null,
-      "removed": 0
+      "removed": 0,
+      "rpe_na": true
     },
     {
       "id": "i211802592",
@@ -2305,7 +2289,7 @@
       "start_local": "2026-11-19T09:22:50",
       "type": "HighIntensityIntervalTraining",
       "name": "HIIT",
-      "label": null,
+      "label": "Calentamiento",
       "duration_min": 13.3,
       "load": 3.0,
       "trimp": 4.7090917,
@@ -2313,7 +2297,8 @@
       "max_hr": 127.0,
       "rpe": null,
       "srpe": null,
-      "removed": 0
+      "removed": 0,
+      "rpe_na": true
     },
     {
       "id": "i211960917",
@@ -2321,14 +2306,14 @@
       "start_local": "2026-11-19T09:36:21",
       "type": "HighIntensityIntervalTraining",
       "name": "HIIT",
-      "label": null,
+      "label": "Fuerza - DB split squat con déficit / ring row pies elevados",
       "duration_min": 8.9,
       "load": 5.0,
       "trimp": 7.848654,
       "avg_hr": 126.0,
       "max_hr": 153.0,
-      "rpe": null,
-      "srpe": null,
+      "rpe": 6.0,
+      "srpe": 53.4,
       "removed": 0
     },
     {
@@ -2337,14 +2322,14 @@
       "start_local": "2026-11-19T09:57:41",
       "type": "HighIntensityIntervalTraining",
       "name": "HIIT",
-      "label": null,
+      "label": "WOD E3MO3M x5 - box jump over / burpee over the line / V-sit up",
       "duration_min": 14.8,
       "load": 15.0,
       "trimp": 21.981485,
       "avg_hr": 146.0,
       "max_hr": 179.0,
-      "rpe": null,
-      "srpe": null,
+      "rpe": 7.0,
+      "srpe": 103.6,
       "removed": 0
     }
   ],
@@ -2363,38 +2348,38 @@
     "expected_sign": "negativo",
     "min_days": 20,
     "status": "acumulando",
-    "verdict": "Acumulando datos: 17/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.",
+    "verdict": "Acumulando datos: 18/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.",
     "predictions": 34,
     "first_prediction": "2026-10-17",
-    "training_days": 18,
-    "days_over_cap": 9,
+    "training_days": 19,
+    "days_over_cap": 10,
     "models": [
       {
         "id": "v2",
         "label": "Oficial v2",
         "effort": {
-          "rho": -0.29,
+          "rho": -0.27,
           "ci90": [
-            -0.63,
+            -0.61,
             0.15
           ],
-          "n": 17
+          "n": 18
         },
         "next_feel": null,
-        "n_effort": 17,
+        "n_effort": 18,
         "n_feel": 0,
         "effort_by_zone": {
           "green": {
-            "n": 11,
-            "mean_z": -1.05
+            "n": 12,
+            "mean_z": -0.97
           },
           "red": {
             "n": 3,
-            "mean_z": -0.11
+            "mean_z": -0.03
           },
           "yellow": {
             "n": 3,
-            "mean_z": 0.72
+            "mean_z": 0.73
           }
         }
       },
@@ -2402,28 +2387,28 @@
         "id": "hybrid",
         "label": "Híbrido",
         "effort": {
-          "rho": -0.45,
+          "rho": -0.35,
           "ci90": [
-            -0.74,
-            -0.02
+            -0.66,
+            0.07
           ],
-          "n": 17
+          "n": 18
         },
         "next_feel": null,
-        "n_effort": 17,
+        "n_effort": 18,
         "n_feel": 0,
         "effort_by_zone": {
           "green": {
             "n": 8,
-            "mean_z": -0.77
+            "mean_z": -0.65
           },
           "red": {
-            "n": 4,
-            "mean_z": 0.32
+            "n": 5,
+            "mean_z": 0.06
           },
           "yellow": {
             "n": 5,
-            "mean_z": -0.97
+            "mean_z": -0.93
           }
         }
       },
@@ -2431,24 +2416,24 @@
         "id": "v3",
         "label": "v3 (en pruebas)",
         "effort": {
-          "rho": -0.26,
+          "rho": -0.3,
           "ci90": [
-            -0.61,
-            0.18
+            -0.63,
+            0.12
           ],
-          "n": 17
+          "n": 18
         },
         "next_feel": null,
-        "n_effort": 17,
+        "n_effort": 18,
         "n_feel": 0,
         "effort_by_zone": {
           "green": {
-            "n": 12,
-            "mean_z": -0.82
+            "n": 13,
+            "mean_z": -0.77
           },
           "yellow": {
             "n": 5,
-            "mean_z": 0.01
+            "mean_z": 0.09
           }
         }
       },
@@ -2456,39 +2441,39 @@
         "id": "decision",
         "label": "Decisión operativa",
         "effort": {
-          "rho": -0.43,
+          "rho": -0.3,
           "ci90": [
-            -0.73,
-            -0.01
+            -0.63,
+            0.13
           ],
-          "n": 17
+          "n": 18
         },
         "next_feel": null,
-        "n_effort": 17,
+        "n_effort": 18,
         "n_feel": 0,
         "effort_by_zone": {
           "green": {
             "n": 8,
-            "mean_z": -0.77
+            "mean_z": -0.65
           },
           "red": {
-            "n": 4,
-            "mean_z": 0.32
+            "n": 5,
+            "mean_z": 0.06
           },
           "yellow": {
             "n": 5,
-            "mean_z": -0.97
+            "mean_z": -0.93
           }
         }
       }
     ],
     "adherence": {
       "window_days": 28,
-      "trained_days": 16,
-      "over": 8,
+      "trained_days": 17,
+      "over": 9,
       "within": 8,
-      "over_pct": 50,
-      "over_red": 5,
+      "over_pct": 53,
+      "over_red": 6,
       "next_v2_after_over": 62.5,
       "next_v2_after_within": 58.4,
       "next_hrv_after_over": 46.8,
@@ -2654,27 +2639,37 @@
           "excess": 5.0,
           "next_v2": 85.0,
           "next_hrv": 54.0
+        },
+        {
+          "date": "2026-11-19",
+          "zone": "red",
+          "rpe_cap": 4.0,
+          "max_rpe": 7.0,
+          "over": true,
+          "excess": 3.0,
+          "next_v2": null,
+          "next_hrv": null
         }
       ],
       "note": "Días entrenados con RPE y decisión previa al entreno. Coincidencias descriptivas: no prueban causa."
     },
     "paired": {
-      "n": 17,
+      "n": 18,
       "v2": {
-        "rho": -0.29,
-        "ci90": [
-          -0.63,
-          0.15
-        ],
-        "n": 17
-      },
-      "v3": {
-        "rho": -0.26,
+        "rho": -0.27,
         "ci90": [
           -0.61,
-          0.18
+          0.15
         ],
-        "n": 17
+        "n": 18
+      },
+      "v3": {
+        "rho": -0.3,
+        "ci90": [
+          -0.63,
+          0.12
+        ],
+        "n": 18
       }
     }
   }

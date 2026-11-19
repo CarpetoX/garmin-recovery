@@ -1,10 +1,10 @@
 # Resumen semanal · 13/11–19/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-19-1231-8a5faa`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-19-1650-8e5c88`)._
 
 ## En una frase
 
-- 11 sesiones (+1); HRV de 7 días dentro de tu rango normal; 5 de 7 noches con datos por debajo de 7,5 h de sueño; 2 de 4 días comprobados por encima del RPE máximo.
+- 11 sesiones (+1); HRV de 7 días dentro de tu rango normal; 5 de 7 noches con datos por debajo de 7,5 h de sueño; 3 de 5 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: verde 3 · rojo 4.
 
 ## Gráficas de la semana
@@ -28,11 +28,11 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 11 | 10 |
 | Minutos | 274 | 360 |
 | Carga (Intervals) | 149 | 184 |
-| sRPE (RPE × min) | 1271 | 1909 |
+| sRPE (RPE × min) | 1428 | 1909 |
 
-Monotonía — · strain — · ACWR 0,82 · RPE registrado en 6/11 sesiones.
+Monotonía 0,99 · strain 1414 · ACWR 0,90 · RPE registrado en 8/11 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 13/11 (RPE 8,0 > 4), 18/11 (RPE 9,0 > 4).
+**Días por encima del RPE máximo de la decisión:** 13/11 (RPE 8,0 > 4), 18/11 (RPE 9,0 > 4), 19/11 (RPE 7,0 > 4).
 
 ## Recuperación
 
@@ -55,12 +55,13 @@ HRV de 7 días hoy: 54,7 ms (rango normal 47,7–58,8 ms). Turnos: MT, TN.
 | 14/11 | curl femoral tumbado | 67,0 kg | — | — | 4/4 |
 | 18/11 | 3-position squat snatch | 48,0 kg | 48 × 3 | 52,8 kg | 5/5 |
 | 18/11 | squat snatch | 63,0 kg | 63 × 3 | 69,3 kg | 5/5 |
+| 19/11 | DB split squat | 65,0 kg | 65 × 8 | 82,3 kg | 4/4 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
 ## Puntualidad de los informes
 
-**17 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**18 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -83,14 +84,15 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 18/11 | 16:45 | 16:49 | 16:50 | 19 min ✓ |
 | 18/11 | 22:45 | 22:49 | 22:50 | 20 min ✓ |
 | 19/11 | 08:30 | 08:34 | 08:35 | 30 min ✓ |
+| 19/11 | 16:45 | 16:49 | 16:50 | 19 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 6/11.
+- Sesiones con RPE: 8/11.
 
 ## Validación de modelos
 
-Acumulando datos: 17/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
+Acumulando datos: 18/20 días con entrenamiento, RPE y predicción de la mañana del v2 y del v3. Aún no hay veredicto.
 
 _No es un diagnóstico médico._

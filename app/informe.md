@@ -1,6 +1,6 @@
-# Informe matutino · 19/11/2026
+# Informe de seguimiento · 19/11/2026
 
-`GR-2026-11-19-1231-8a5faa` · cita este identificador al reenviar el informe.
+`GR-2026-11-19-1650-8e5c88` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -20,7 +20,7 @@
 |---|--:|---|---|
 | Recuperación oficial | 85 | verde | oficial |
 | Híbrido Garmin + local | 49 | rojo | salvaguarda |
-| Modelo experimental | 77 | verde | sombra |
+| Modelo experimental | 76 | verde | sombra |
 | Modelo de compatibilidad | 80 | verde | compatibilidad |
 | Garmin Training Readiness | 18 | — | contexto |
 
@@ -35,7 +35,7 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## Cómo ajustar tu sesión de hoy
 
-<details open><summary>Reglas por tipo de sesión</summary>
+<details><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
@@ -54,35 +54,39 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-19-0905-c65669 (19/11 09:05):
-- Sesiones nuevas desde entonces: **3** (carga +23).
+Frente al informe GR-2026-11-19-1231-8a5faa (19/11 12:31):
+- v3: 77 → 76 (-1).
+- Sesiones con RPE: 13 → 15.
 
-## Qué ha cambiado respecto a tu línea base
+## Actividad de hoy
 
-- **HRV:** 54 ms esta noche (+2 % vs. base 53 ms); media de 7 días 54,7 ms, dentro de tu rango normal (48–59 ms).
-- **FC:** reposo 54 lpm (-2 vs. mediana 56); nocturna 61,3 lpm (-1,2).
-- **Sueño:** 7,37 h, puntuación 77; deuda 2,4 h en 3 noches frente a 7,5 h de necesidad.
-- **Estrés Garmin ayer:** 30 de media (tu mediana 34).
+| Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
+|---|---|---|--:|--:|--:|--:|--:|
+| 19/11 09:57 | WOD | WOD E3MO3M x5 - box jump over / burpee over the line / V-sit up | 15 | 15 | 146 / 179 | 7,0 | 104 |
+| 19/11 09:36 | Fuerza | Fuerza - DB split squat con déficit / ring row pies elevados | 9 | 5 | 126 / 153 | 6,0 | 53 |
+| 19/11 09:22 | Calentamiento | Calentamiento | 13 | 3 | 97 / 127 | — | — |
 
-**Señales coincidentes:** 0 de 5 señales en contra; a favor: Estrés del día anterior (Garmin), Carga de entrenamiento. Sin datos: Sensaciones (Intervals).
+- ⚠️ Fuerza - DB split squat con déficit / ring row pies elevados: RPE bajo para tu FC: la FC fue alta para el esfuerzo que marcaste.
 
-## Incertidumbre
+_RPE frente a FC: esfuerzo relativo frente a tu historial del mismo tipo de sesión; descriptivo, no cambia la decisión._
 
-- Confianza de los datos: **alta**
-- Confianza de la recomendación: **media** (modelo experimental aún sin validar frente a tu rendimiento real (modo sombra))
-- El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+**¿Encaja con la decisión?** ⚠️ RPE 7,0 supera el máximo recomendado (4): reduce o cambia la sesión restante.
 
-## Plan del día
+**Carga 7 días:** 149 en 11 sesiones (-19 % vs. semana previa) · sRPE 1.428 · monotonía 0,99.
 
-- Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos. RPE ≤ 4, volumen 0–50 %.
+## Gráficas
 
-## Tendencias
+![RPE frente al máximo del día](charts/rpe.svg)
 
-![Disponibilidad](charts/readiness.svg)
+![Carga](charts/load.svg)
+
+![Sesiones](charts/sessions.svg)
+
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
 
 ## Recuperación: tendencias de 28 días
 
-<details open><summary>HRV, FC y sueño</summary>
+<details><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -94,9 +98,6 @@ Frente al informe GR-2026-11-19-0905-c65669 (19/11 09:05):
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i211957198** (19/11 09:22, Sin detalle, 13 min, carga 3) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i211960917** (19/11 09:36, Sin detalle, 9 min, carga 5) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i211976633** (19/11 09:57, Sin detalle, 15 min, carga 15) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -105,6 +106,8 @@ Frente al informe GR-2026-11-19-0905-c65669 (19/11 09:05):
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 19/11 | DB split squat | mancuernas (par) | 65,0 kg total (2 × 32,5 kg) | 65 × 8 | 82,3 kg | 2.080 kg | 4/4 | 6,0 |
+| 19/11 | feet elevated ring row | peso corporal | peso corporal | — | — | — | —/4 | 6,0 |
 | 18/11 | 3-position squat snatch | barra | 48,0 kg con barra | 48 × 3 | 52,8 kg | 642 kg | 5/5 | 7,0 |
 | 18/11 | squat snatch | barra | 63,0 kg con barra | 63 × 3 | 69,3 kg | 858 kg | 5/5 | 7,0 |
 | 14/11 | peso muerto | barra | 180,0 kg con barra | 180 × 3 | 198,0 kg | 8.800 kg | 10/10 | 6,0 |
@@ -115,8 +118,6 @@ Frente al informe GR-2026-11-19-0905-c65669 (19/11 09:05):
 | 12/11 | DB split squat | mancuernas (par) | 60,0 kg total (2 × 30,0 kg) | 60 × 10 | 80,0 kg | 2.400 kg | 4/4 | — |
 | 12/11 | feet elevated ring row | peso corporal | peso corporal | — | — | — | —/4 | — |
 | 10/11 | press banca | barra | 100,0 kg con barra | 90 × 6 | 108,0 kg | 6.030 kg | 8/8 | 7,0 |
-| 10/11 | press inclinado con mancuernas | mancuernas (par) | 67,0 kg total (2 × 33,5 kg) | 67 × 8 | 84,9 kg | 2.104 kg | 4/4 | 7,0 |
-| 10/11 | press superinclinado isolateral | máquina de discos | 50,0 kg total (dos lados) | — | — | 1.680 kg | 4/4 | 7,0 |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -125,16 +126,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-19-1231-8a5faa`
+- **Identificador del informe:** `GR-2026-11-19-1650-8e5c88`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-19-0830-post-sleep · datos sincronizados a las 12:29 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 4,1 h ✓ · última HRV hace 4,1 h ✓ · última FC hace 15 min ✓ · último Body Battery hace 19 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/16 (+5 sin RPE por diseño: calentamiento/técnica) (sin RPE: 19/11 09:22, 19/11 09:36, 19/11 09:57)
+- **Ciclo:** 2026-11-19-1645 · datos sincronizados a las 16:49
+- **Antigüedad:** fin del sueño hace 8,4 h ✓ · última HRV hace 8,4 h ✓ · última FC hace 1,7 h ✓ · último Body Battery hace 1,7 h ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+6 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-19 12:31 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-19 16:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
