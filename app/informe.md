@@ -1,6 +1,6 @@
 # Informe matutino · 19/11/2026
 
-`GR-2026-11-19-0905-c65669` · cita este identificador al reenviar el informe.
+`GR-2026-11-19-1231-8a5faa` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -21,7 +21,7 @@
 | Recuperación oficial | 85 | verde | oficial |
 | Híbrido Garmin + local | 49 | rojo | salvaguarda |
 | Modelo experimental | 77 | verde | sombra |
-| Modelo de compatibilidad | 86 | verde | compatibilidad |
+| Modelo de compatibilidad | 80 | verde | compatibilidad |
 | Garmin Training Readiness | 18 | — | contexto |
 
 _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
@@ -54,10 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-19-0835-5363c9 (19/11 08:35):
-- **Decisión:** pendiente → **rojo**.
-- Híbrido: 74 → 49 (-25).
-- Nueva noche registrada: HRV — → 54 ms, sueño — → 7,37 h, FC reposo 55 → 54 lpm.
+Frente al informe GR-2026-11-19-0905-c65669 (19/11 09:05):
+- Sesiones nuevas desde entonces: **3** (carga +23).
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -96,6 +94,9 @@ Frente al informe GR-2026-11-19-0835-5363c9 (19/11 08:35):
 
 ## Acciones pendientes
 
+- Añade el RPE de la actividad **i211957198** (19/11 09:22, Sin detalle, 13 min, carga 3) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
+- Añade el RPE de la actividad **i211960917** (19/11 09:36, Sin detalle, 9 min, carga 5) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
+- Añade el RPE de la actividad **i211976633** (19/11 09:57, Sin detalle, 15 min, carga 15) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -124,16 +125,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-19-0905-c65669`
+- **Identificador del informe:** `GR-2026-11-19-1231-8a5faa`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-19-0830-post-sleep · datos sincronizados a las 09:04
-- **Antigüedad:** fin del sueño hace 40 min ✓ · última HRV hace 42 min ✓ · última FC hace 18 min ✓ · último Body Battery hace 42 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+5 sin RPE por diseño: calentamiento/técnica)
+- **Ciclo:** 2026-11-19-0830-post-sleep · datos sincronizados a las 12:29 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 4,1 h ✓ · última HRV hace 4,1 h ✓ · última FC hace 15 min ✓ · último Body Battery hace 19 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/16 (+5 sin RPE por diseño: calentamiento/técnica) (sin RPE: 19/11 09:22, 19/11 09:36, 19/11 09:57)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-19 09:05 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-19 12:31 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
