@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre matinal
+# Garmin Recovery · Informe de tarde
 
-Sábado, 21 de noviembre de 2026 · 08:35 · `GR-2026-11-21-0835-e68734`
+Sábado, 21 de noviembre de 2026 · 16:50 · `GR-2026-11-21-1650-498822`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 889|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-21-0830 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-21-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 49/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 7 h 12 min, puntuación 83/100.
 - ❤️ **Principal alerta:** HRV 78 ms, 52,9 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|9 sesiones|sRPE 889|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-21-0830 |
+| Ciclo | 2026-11-21-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 08:34:58 |
+| Certificado generado | 16:50:20 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -91,7 +91,7 @@ Modelo experimental: 59 → 81 (yellow → green). Cambios notables frente a aye
 - FC nocturna: 66,8 → 55,5 lpm (favorable)
 - Sueño: 5,4 → 7,2 h (favorable)
 - Puntuación de sueño: 39 → 83 (favorable)
-- Estrés medio: 36 → 6 (favorable)
+- Estrés medio: 36 → 14 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -134,7 +134,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 71,5 lpm | 55,5 lpm |
+| Hoy* | 69,9 lpm | 55,5 lpm |
 | 3 días | 85,9 lpm | 60,8 lpm |
 | 7 días | 79,7 lpm | 61,1 lpm |
 | 28 días | 80,3 lpm | 63,2 lpm |
@@ -154,8 +154,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 6, máximo 46.
-- Body Battery: último valor 96/100, medido a las 07:21.
+- Estrés medio: 14, máximo 86.
+- Body Battery: último valor 64/100, medido a las 14:09 (hace 2 h 41 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -182,7 +182,7 @@ Solo descriptivo: sirve para ver si la zona se corresponde con tu recuperación 
 
 ## 5. Rendimiento CrossFit
 
-Última actividad registrada: 20 nov. Descansos confirmados por ti: 2 en 7 días y 5 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
+Última actividad registrada: 20 nov. Descansos confirmados por ti: 3 en 7 días y 6 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
 
 Contraste Garmin ↔ Intervals: las 9 actividades de Garmin de los últimos 7 días constan también en Intervals.
 
@@ -219,7 +219,7 @@ El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, m
 18 nov ████████████  556
 19 nov ███           157
 20 nov ██            84
-21 nov —             sin registro
+21 nov —             descanso
 ```
 
 El 18 nov concentra la mayor carga sRPE de la semana. La relación con las señales de recuperación es descriptiva, no causal.
@@ -407,4 +407,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-21-0830 · generado 21/11/2026 08:35 Europe/Madrid · certificado READY · sync_run_id 44880815037.
+Traza: informe de tarde · ciclo 2026-11-21-1645 · generado 21/11/2026 16:50 Europe/Madrid · certificado READY · sync_run_id 44921150200.

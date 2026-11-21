@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21T08:34:54.337590+01:00",
+  "generated_at": "2026-11-21T16:50:15.295007+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
@@ -1255,7 +1255,7 @@
           "physiological_cost_signal": "high"
         },
         "48h": {
-          "hrv_pct": 13.6,
+          "hrv_pct": 13.8,
           "nighttime_hr_delta": -3.9,
           "resting_hr_delta": -1.0,
           "sleep_hours_delta": 0.65,
@@ -1283,7 +1283,7 @@
       },
       "response": {
         "24h": {
-          "hrv_pct": 43.0,
+          "hrv_pct": 43.2,
           "nighttime_hr_delta": -5.8,
           "resting_hr_delta": -1.0,
           "sleep_hours_delta": -0.3,
@@ -1331,7 +1331,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-21T08:34:35.514325+01:00",
+    "generated_at": "2026-11-21T16:49:55.830815+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "green",
@@ -1440,7 +1440,9 @@
       "subjective_checkin": "not_provided",
       "subjective_values_exported": false,
       "intensity_guardrail": "use_v22_guidance",
-      "reason_codes": [],
+      "reason_codes": [
+        "live_measurement_uncertain"
+      ],
       "baseline_caution": "standard",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
       "measurement_provenance": {
@@ -1448,26 +1450,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-11-21T07:38:06+01:00",
-            "age_minutes": 56.5,
+            "age_minutes": 551.8,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-11-21T07:37:57+01:00",
-            "age_minutes": 56.6,
+            "age_minutes": 552.0,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
-            "state": "recent",
-            "measured_at": "2026-11-21T08:10:00+01:00",
-            "age_minutes": 24.6,
+            "state": "delayed",
+            "measured_at": "2026-11-21T14:16:00+01:00",
+            "age_minutes": 153.9,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "recent",
-            "measured_at": "2026-11-21T07:21:00+01:00",
-            "age_minutes": 73.6,
+            "state": "delayed",
+            "measured_at": "2026-11-21T14:09:00+01:00",
+            "age_minutes": 160.9,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -1478,8 +1480,11 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": false,
-        "limited_live_metrics": [],
+        "live_data_limited": true,
+        "limited_live_metrics": [
+          "heart_rate_live",
+          "body_battery_live"
+        ],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -13320,7 +13325,7 @@
               "physiological_cost_signal": "high"
             },
             "48h": {
-              "hrv_pct": 13.6,
+              "hrv_pct": 13.8,
               "nighttime_hr_delta": -3.9,
               "resting_hr_delta": -1.0,
               "sleep_hours_delta": 0.65,
@@ -13348,7 +13353,7 @@
           },
           "response": {
             "24h": {
-              "hrv_pct": 43.0,
+              "hrv_pct": 43.2,
               "nighttime_hr_delta": -5.8,
               "resting_hr_delta": -1.0,
               "sleep_hours_delta": -0.3,
@@ -13542,7 +13547,7 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-11-21T08:34:54.337590+01:00",
+    "checked_at": "2026-11-21T16:50:15.295007+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-11-20",
     "latest_activity_age_days": 1,
@@ -13594,20 +13599,20 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-11-21T08:34:54.337590+01:00",
+    "checked_at": "2026-11-21T16:50:15.295007+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-21T08:33:48.932274+01:00",
+        "generated_at": "2026-11-21T16:48:47.590638+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-11-21T08:34:08.508312+01:00",
-        "age_hours": 0.01,
+        "generated_at": "2026-11-21T16:49:16.937823+01:00",
+        "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
         "garmin_status": "success",
@@ -13620,29 +13625,29 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-11-21T08:34:34.277532+01:00",
+        "generated_at": "2026-11-21T16:49:55.031932+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-11-21T08:34:34.277532+01:00",
+        "generated_at": "2026-11-21T16:49:55.031932+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-21T08:33:48.932274+01:00",
+        "generated_at": "2026-11-21T16:48:47.590638+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-11-21T08:34:08.508312+01:00",
-        "age_hours": 0.01,
+        "generated_at": "2026-11-21T16:49:16.937823+01:00",
+        "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
@@ -13661,7 +13666,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 0.8,
+    "generation_skew_minutes": 1.1,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false

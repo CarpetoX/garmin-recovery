@@ -1,6 +1,6 @@
-# Informe matutino · 21/11/2026
+# Informe de seguimiento · 21/11/2026
 
-`GR-2026-11-21-0835-e68734` · cita este identificador al reenviar el informe.
+`GR-2026-11-21-1650-498822` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -35,7 +35,7 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## Cómo ajustar tu sesión de hoy
 
-<details open><summary>Reglas por tipo de sesión</summary>
+<details><summary>Reglas por tipo de sesión</summary>
 
 Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción habitual):
 
@@ -54,40 +54,30 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-20-2250-1dab30 (20/11 22:50):
-- Oficial v2: 36 → 88 (+52).
-- Híbrido: 17 → 49 (+32).
-- v3: 59 → 81 (+22).
-- Nueva noche registrada: HRV 36 → 78 ms, sueño 5,42 → 7,20 h, FC reposo 57 → 51 lpm.
-- Sesiones con RPE: 16 → 15.
+Frente al informe GR-2026-11-21-0835-e68734 (21/11 08:35):
+- Sin cambios en los datos.
 
-## Qué ha cambiado respecto a tu línea base
+## Actividad de hoy
 
-- **HRV:** 78 ms esta noche (+47 % vs. base 53 ms); media de 7 días 53,7 ms, dentro de tu rango normal (48–58 ms).
-- **FC:** reposo 51 lpm (-5 vs. mediana 56); nocturna 55,5 lpm (-7,0).
-- **Sueño:** 7,20 h, puntuación 83; deuda 2,5 h en 3 noches frente a 7,5 h de necesidad.
-- **Estrés Garmin ayer:** 36 de media (tu mediana 34).
+_Sin sesiones registradas._
 
-**Señales coincidentes:** 0 de 5 señales en contra; a favor: Variabilidad cardiaca (HRV), FC en reposo y nocturna, Carga de entrenamiento. Sin datos: Sensaciones (Intervals).
+**¿Encaja con la decisión?** Sin sesiones registradas todavía hoy.
 
-## Incertidumbre
+**Carga 7 días:** 135 en 9 sesiones (-36 % vs. semana previa) · sRPE 889 · monotonía 0,64.
 
-- Confianza de los datos: **alta**
-- Confianza de la recomendación: **media** (modelo experimental aún sin validar frente a tu rendimiento real (modo sombra))
-- El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+## Gráficas
 
-## Plan del día
+![RPE frente al máximo del día](charts/rpe.svg)
 
-- Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos. RPE ≤ 4, volumen 0–50 %.
-- Turno de hoy: MT.
+![Carga](charts/load.svg)
 
-## Tendencias
+![Sesiones](charts/sessions.svg)
 
-![Disponibilidad](charts/readiness.svg)
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
 
 ## Recuperación: tendencias de 28 días
 
-<details open><summary>HRV, FC y sueño</summary>
+<details><summary>HRV, FC y sueño</summary>
 
 ![HRV](charts/hrv.svg)
 
@@ -127,16 +117,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-21-0835-e68734`
+- **Identificador del informe:** `GR-2026-11-21-1650-498822`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-21-0830 · datos sincronizados a las 08:34
-- **Antigüedad:** fin del sueño hace 57 min ✓ · última HRV hace 57 min ✓ · última FC hace 25 min ✓ · último Body Battery hace 74 min ✓
+- **Ciclo:** 2026-11-21-1645 · datos sincronizados a las 16:49
+- **Antigüedad:** fin del sueño hace 9,2 h ✓ · última HRV hace 9,2 h ✓ · última FC hace 2,6 h ✓ · último Body Battery hace 2,7 h ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+6 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-21 08:35 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-21 16:50 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
