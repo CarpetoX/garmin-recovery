@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre nocturno
 
-Domingo, 22 de noviembre de 2026 · 15:23 · `GR-2026-11-22-1523-a24068`
+Domingo, 22 de noviembre de 2026 · 15:25 · `GR-2026-11-22-1525-5dacac`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -34,7 +34,7 @@ Carga 7 días|9 sesiones|sRPE 889|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (15:22), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (15:24), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -406,4 +406,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-11-21-2245 · generado 22/11/2026 15:23 Europe/Madrid · certificado READY · sync_run_id 44953458859.
+Traza: cierre nocturno · ciclo 2026-11-21-2245 · generado 22/11/2026 15:25 Europe/Madrid · certificado READY · sync_run_id 44953458859.
