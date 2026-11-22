@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre nocturno
 
-Domingo, 22 de noviembre de 2026 · 15:25 · `GR-2026-11-22-1525-5dacac`
+Domingo, 22 de noviembre de 2026 · 16:31 · `GR-2026-11-22-1631-31b913`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -34,7 +34,9 @@ Carga 7 días|9 sesiones|sRPE 889|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (15:24), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 11-22 08:30.
+
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (16:29), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -78,7 +80,7 @@ La HRV está 33 % por encima de su mediana; la FC en reposo está 6 lpm por deba
 | Modelo de compatibilidad | 🟢 100/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 38/100 | contexto |
 | Tiempo de recuperación Garmin | 33,4 h | contexto |
-| Índice personal experimental | 65/100 | provisional |
+| Índice personal experimental | 64/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora.
 
@@ -406,4 +408,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-11-21-2245 · generado 22/11/2026 15:25 Europe/Madrid · certificado READY · sync_run_id 44953458859.
+Traza: cierre nocturno · ciclo 2026-11-21-2245 · generado 22/11/2026 16:31 Europe/Madrid · certificado READY · sync_run_id 44953458859.

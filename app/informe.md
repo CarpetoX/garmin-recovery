@@ -1,6 +1,8 @@
 # Informe de seguimiento · 22/11/2026
 
-`GR-2026-11-22-1525-5dacac` · cita este identificador al reenviar el informe.
+`GR-2026-11-22-1631-31b913` · cita este identificador al reenviar el informe.
+
+> ⚠️ Certificado con avisos: 1 franja(s) de Sync sin ejecutar ni recuperar.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,7 +57,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-22-1523-a24068 (22/11 15:23):
+Frente al informe GR-2026-11-22-1525-5dacac (22/11 15:25):
 - Sin cambios en los datos.
 
 ## Actividad de hoy
@@ -118,16 +120,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-22-1525-5dacac`
+- **Identificador del informe:** `GR-2026-11-22-1631-31b913`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-21-2245 · datos sincronizados a las 15:24 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 4,0 h ✓ · última HRV hace 6,3 h ✓ · última FC hace 6 min ✓ · último Body Battery hace 11 min ✓
+- **Ciclo:** 2026-11-21-2245 · datos sincronizados a las 16:29 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 5,0 h ✓ · última HRV hace 7,4 h ✓ · última FC hace 71 min ✓ · último Body Battery hace 76 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+6 sin RPE por diseño: calentamiento/técnica)
-- **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Ejecución:** 1 franja(s) de Sync perdidas (22/11 08:30)
+- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-22 15:25 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-22 16:31 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
