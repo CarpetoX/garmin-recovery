@@ -1,6 +1,6 @@
-# Garmin Recovery · Cierre nocturno
+# Garmin Recovery · Informe de tarde
 
-Domingo, 22 de noviembre de 2026 · 16:31 · `GR-2026-11-22-1631-31b913`
+Domingo, 22 de noviembre de 2026 · 16:47 · `GR-2026-11-22-1647-a363da`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -13,7 +13,7 @@ Carga 7 días|9 sesiones|sRPE 889|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-21-2245 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-22-1645 validado; 4 de 4 procesos finalizados correctamente.
 - 🟡 **Recuperación:** 82/100 (oficial, confianza high). Híbrido: 74/100. **Decisión: Entrenar con control**, RPE máx. 7.
 - 🌙 **Sueño:** 8 h 42 min, puntuación 72/100.
 - ❤️ **Principal alerta:** HRV 68 ms, 33,3 % por encima de tu mediana de 28 días.
@@ -23,20 +23,20 @@ Carga 7 días|9 sesiones|sRPE 889|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-21-2245 |
+| Ciclo | 2026-11-22-1645 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 22:50:28 |
+| Certificado generado | 16:47:08 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
 ⚠️ Franjas de Sync sin ejecutar o recuperadas tarde: 11-22 08:30.
 
-La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (16:29), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
+La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
 
 ### Fuentes de datos
 
@@ -156,7 +156,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 11, máximo 81.
-- Body Battery: último valor 70/100, medido a las 15:15.
+- Body Battery: último valor 70/100, medido a las 15:15 (hace 1 h 32 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -408,4 +408,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: cierre nocturno · ciclo 2026-11-21-2245 · generado 22/11/2026 16:31 Europe/Madrid · certificado READY · sync_run_id 44953458859.
+Traza: informe de tarde · ciclo 2026-11-22-1645 · generado 22/11/2026 16:47 Europe/Madrid · certificado READY · sync_run_id 45040074162.
