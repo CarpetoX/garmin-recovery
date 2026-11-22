@@ -1,11 +1,11 @@
-# Resumen semanal · 15/11–21/11
+# Resumen semanal · 16/11–22/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-21-2250-c3cd4b`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-22-1523-a24068`)._
 
 ## En una frase
 
-- 9 sesiones (−3); HRV de 7 días dentro de tu rango normal; 6 de 7 noches con datos por debajo de 7,5 h de sueño; 3 de 4 días comprobados por encima del RPE máximo.
-- Decisión registrada en 7/7 días: verde 2 · rojo 5.
+- 9 sesiones (−3); HRV de 7 días por encima de tu rango normal; 5 de 7 noches con datos por debajo de 7,5 h de sueño; 3 de 4 días comprobados por encima del RPE máximo.
+- Decisión registrada en 7/7 días: verde 2 · ámbar 1 · rojo 4.
 
 ## Gráficas de la semana
 
@@ -38,11 +38,11 @@ Monotonía 0,64 · strain 570 · ACWR 0,56 · RPE registrado en 6/9 sesiones.
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| HRV media | 57,3 ms | 54,1 ms |
-| FC en reposo media | 53,3 lpm | 55,7 lpm |
-| Sueño medio | 6,24 h | 7,47 h |
+| HRV media | 62,7 ms | 51,7 ms |
+| FC en reposo media | 52,1 lpm | 56,0 lpm |
+| Sueño medio | 6,91 h | 7,22 h |
 
-HRV de 7 días hoy: 53,7 ms (rango normal 48,0–58,5 ms). Turnos: MT, TN, MT.
+HRV de 7 días hoy: 60,4 ms (rango normal 47,8–58,8 ms). Turnos: MT, TN, MT, TN.
 
 ## Fuerza de la semana
 
@@ -57,13 +57,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**21 de 21** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**18 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
-| 15/11 | 08:30 | 08:34 | 08:34 | 30 min ✓ |
-| 15/11 | 16:45 | 16:49 | 16:50 | 20 min ✓ |
-| 15/11 | 22:45 | 22:49 | 22:50 | 20 min ✓ |
 | 16/11 | 08:30 | 08:34 | 08:35 | 30 min ✓ |
 | 16/11 | 16:45 | 16:49 | 16:50 | 19 min ✓ |
 | 16/11 | 22:45 | 22:49 | 22:50 | 20 min ✓ |
@@ -82,6 +79,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 21/11 | 08:30 | 08:34 | 08:35 | 30 min ✓ |
 | 21/11 | 16:45 | 16:49 | 16:50 | 20 min ✓ |
 | 21/11 | 22:45 | 22:49 | 22:50 | 19 min ✓ |
+| 22/11 | 08:30 | 15:22 | 15:23 | -379 min ⚠️ tarde |
 
 ## Calidad de los datos
 
