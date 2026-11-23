@@ -1,20 +1,20 @@
 # Informe matutino · 23/11/2026
 
-`GR-2026-11-23-1142-089596` · cita este identificador al reenviar el informe.
+`GR-2026-11-23-1207-5a328f` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: 1 franja(s) de Sync sin ejecutar ni recuperar.
 
-> **Hoy: ⚪ pendiente — Pendiente de datos.** RPE ≤ 6 · volumen según sensaciones.
+> **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
-> **Por qué:** faltan datos de hoy.
+> **Por qué:** lo marcan Recuperación oficial (70) y Híbrido Garmin + local (66); señales: Sueño 6,0 h, puntuación 77, deuda 1,9 h en 3 noches.
 >
-> **Qué hacer:** Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño.
+> **Qué hacer:** Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
 
-## ⚪ Decisión: pendiente — Pendiente de datos
+## 🟠 Decisión: ámbar — Entrenar con control
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 6 | según sensaciones | 55 ms | 55 lpm | 5,95 h | 68/100 |
+| 7 | 70–80 % | 55 ms | 55 lpm | 5,95 h | 68/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
@@ -22,7 +22,7 @@
 |---|--:|---|---|
 | Recuperación oficial | 70 | ámbar | oficial |
 | Híbrido Garmin + local | 66 | ámbar | salvaguarda |
-| Modelo experimental | — | pendiente | sombra |
+| Modelo experimental | 78 | verde | sombra |
 | Modelo de compatibilidad | 65 | ámbar | compatibilidad |
 | Garmin Training Readiness | 68 | — | contexto |
 
@@ -32,7 +32,9 @@ _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conser
 
 ## En el box hoy
 
-- Hasta tener datos: solo técnica ligera y movilidad; nada de intensidad alta.
+- Halterofilia técnica al ≤ 80 % de tus cargas habituales, sin singles pesados.
+- Fuerza submáxima: deja 2–3 repeticiones en reserva, sin series al fallo.
+- WOD a ritmo controlado (sin all-out ni lucha contra el cap); recorta un 20–30 % de volumen.
 
 ## Cómo ajustar tu sesión de hoy
 
@@ -42,12 +44,12 @@ Aplica la regla del tipo de sesión que decidas hacer (sobre tu prescripción ha
 
 | Tipo | Ajuste de hoy | RPE máx. |
 |---|---|--:|
-| Fuerza | **Sustituir:** Técnica del patrón con barra vacía o PVC (15–20 min) + movilidad. Sin cargas. | 6 |
-| Halterofilia | **Sustituir:** Técnica con PVC o barra vacía (15–20 min): posiciones y recepciones. Sin cargas. | 6 |
-| WOD | **Sustituir:** Zona 2 suave 30–40 min (remo, bici o caminata), pudiendo hablar. | 6 |
-| Técnica | **Reducir:** Técnica ligera ≤ 15 min, sin fatiga. Revisa de nuevo cuando se confirme el sueño. | 6 |
-| Aeróbico | **Reducir:** Zona 2 suave ≤ 40 min. Revisa de nuevo cuando se confirme el sueño. | 6 |
-| Movilidad | **Mantener:** Movilidad tal como está planificada. Revisa de nuevo cuando se confirme el sueño. | 6 |
+| Fuerza | **Reducir:** −25 % de series; cargas al 90 % de lo habitual; 2–3 repeticiones en reserva, sin fallo. | 7 |
+| Halterofilia | **Reducir:** −25 % de series; cargas al 80 % de lo habitual; técnica, sin singles pesados. | 7 |
+| WOD | **Reducir:** −20–30 % de volumen o tiempo; ritmo controlado, sin all-out; escala cargas un 10–20 %. | 7 |
+| Técnica | **Reducir:** según lo planificado, sin buscar intensidad. | 7 |
+| Aeróbico | **Reducir:** según lo planificado, sin buscar intensidad. | 7 |
+| Movilidad | **Reducir:** según lo planificado, sin buscar intensidad. | 7 |
 
 _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg. Para ajustar una sesión concreta, pregunta con este informe._
 
@@ -55,9 +57,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-23-1037-5159d2 (23/11 10:37):
-- Híbrido: 71 → 66 (-5).
-- Nueva noche registrada: HRV — → 55 ms, sueño — → 5,95 h, FC reposo 56 → 55 lpm.
+Frente al informe GR-2026-11-23-1142-089596 (23/11 11:42):
+- **Decisión:** pendiente → **ámbar**.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -70,12 +71,13 @@ Frente al informe GR-2026-11-23-1037-5159d2 (23/11 10:37):
 
 ## Incertidumbre
 
-- Confianza de los datos: **baja** (sueño de hoy sin confirmar)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
+- Confianza de los datos: **alta**
+- Confianza de la recomendación: **media** (modelo experimental aún sin validar frente a tu rendimiento real (modo sombra))
+- El modelo experimental (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora.
 
 ## Plan del día
 
-- Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño. RPE ≤ 6, volumen según sensaciones.
+- Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos. RPE ≤ 7, volumen 70–80 %.
 - Post-turno de noche: prioriza dormir; cualquier sesión, suave.
 
 ## Tendencias
@@ -124,16 +126,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-23-1142-089596`
+- **Identificador del informe:** `GR-2026-11-23-1207-5a328f`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-23-0830 · datos sincronizados a las 11:41 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 7 min ✓ · última HRV hace 10 min ✓ · última FC hace 5 min ✓ · último Body Battery hace 7 min ✓
+- **Ciclo:** 2026-11-23-0830-post-sleep · datos sincronizados a las 12:06
+- **Antigüedad:** fin del sueño hace 32 min ✓ · última HRV hace 35 min ✓ · última FC hace 30 min ✓ · último Body Battery hace 32 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 1 franja(s) de Sync perdidas (22/11 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-23 11:42 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-23 12:07 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
