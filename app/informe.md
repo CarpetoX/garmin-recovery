@@ -1,6 +1,6 @@
 # Informe matutino · 23/11/2026
 
-`GR-2026-11-23-0932-a4d21f` · cita este identificador al reenviar el informe.
+`GR-2026-11-23-1037-5159d2` · cita este identificador al reenviar el informe.
 
 > ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live; 1 franja(s) de Sync sin ejecutar ni recuperar.
 
@@ -55,7 +55,7 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-23-0831-71414c (23/11 08:31):
+Frente al informe GR-2026-11-23-0932-a4d21f (23/11 09:32):
 - Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
@@ -121,16 +121,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-23-0932-a4d21f`
+- **Identificador del informe:** `GR-2026-11-23-1037-5159d2`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-23-0830 · datos sincronizados a las 09:31 · Sync fuera de franja
-- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 4,1 h ! · último Body Battery hace 4,2 h !
+- **Ciclo:** 2026-11-23-0830 · datos sincronizados a las 10:36 · Sync fuera de franja
+- **Antigüedad:** fin del sueño sin marca ! · última HRV sin marca ! · última FC hace 5,2 h ! · último Body Battery hace 5,3 h !
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 1 franja(s) de Sync perdidas (22/11 08:30)
 - **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-23 09:32 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-23 10:37 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
