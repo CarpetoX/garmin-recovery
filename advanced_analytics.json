@@ -1,17 +1,20 @@
 {
-  "generated_at": "2026-11-22T22:46:53.882102+01:00",
+  "generated_at": "2026-11-23T08:31:34.506685+01:00",
   "timezone": "Europe/Madrid",
   "methodology_version": "1.1",
   "data_quality": {
-    "generated_at": "2026-11-22T22:46:53.882102+01:00",
-    "score": 100,
-    "status": "good",
-    "confidence": "high",
+    "generated_at": "2026-11-23T08:31:34.506685+01:00",
+    "score": 74,
+    "status": "usable",
+    "confidence": "medium",
     "baseline_maturity": "mature",
     "key_history_days": 28,
     "issues": [],
-    "pending_today": [],
-    "today_availability_state": "evaluated",
+    "pending_today": [
+      "sleep_window_pending_day_start",
+      "night_hr_pending_day_start"
+    ],
+    "today_availability_state": "post_tn_sleep_pending",
     "coverage_28d": {
       "hrv": {
         "days_present": 28,
@@ -61,314 +64,312 @@
     },
     "today": {
       "heart_rate_partial_day": true,
-      "day_hr_samples": 388,
-      "night_hr_samples": 290,
-      "sleep_window_available": true
+      "day_hr_samples": 160,
+      "night_hr_samples": 0,
+      "sleep_window_available": false
     },
     "source_generated_at": {
-      "heart_rate": "2026-11-22T22:46:22.546358+01:00",
-      "extended": "2026-11-22T22:46:26.523690+01:00",
-      "daily": "2026-11-22T22:45:51.751695+01:00",
-      "weekly": "2026-11-22T22:45:51.751695+01:00"
+      "heart_rate": "2026-11-23T08:31:05.624195+01:00",
+      "extended": "2026-11-23T08:31:08.539838+01:00",
+      "daily": "2026-11-23T08:30:44.891848+01:00",
+      "weekly": "2026-11-23T08:30:44.891848+01:00"
     }
   },
   "day_context": {
-    "today": "TN",
+    "today": "post-TN",
     "explicit_context_days": 124,
     "calendar_source": "shift_calendar.json",
-    "work_shift": "TN",
-    "post_tn": false,
+    "work_shift": "free",
+    "post_tn": true,
     "calendar_note": "MT/TN/free via shift_calendar.json; DAY_CONTEXT_B64 continua como respaldo para fechas sin calendario."
   },
   "readiness_hybrid": {
-    "score": 74,
-    "raw_score_before_guardrails": 75,
+    "score": 71,
+    "raw_score_before_guardrails": 71,
     "status": "yellow",
-    "recommended_volume": "individualizar; evitar sesión máxima sin confirmar",
-    "recommendation": "moderate",
-    "garmin_score": 38,
-    "garmin_level": "LOW",
-    "local_score": 100,
-    "local_confidence": "high",
+    "recommended_volume": "sin recomendación hasta completar datos",
+    "recommendation": "pending",
+    "garmin_score": 61,
+    "garmin_level": "MODERATE",
+    "local_score": 94,
+    "local_confidence": "low",
     "weights": {
-      "garmin": 0.4,
-      "local": 0.6
+      "garmin": 0.7,
+      "local": 0.3
     },
     "source_mode": "hybrid",
-    "recovery_time_hours": 33.4,
+    "recovery_time_hours": 20.0,
     "guardrails_applied": [
-      "garmin_low_prevents_green",
-      "recovery_time_24h_or_more_prevents_green",
       "recovery_reliability_gate"
     ],
     "note": "V2.2: score compatible, no indicador fisiológico independiente. Para decidir usar recovery_assessment_v2.state, status y confidence.",
-    "score_before_recovery_guardrail": 74,
-    "intensity_guidance": "Evaluación provisional o limitada: adaptar carga a síntomas, calentamiento y RPE.",
-    "confidence": "high",
-    "recovery_assessment_state": "assessed"
+    "score_before_recovery_guardrail": 71,
+    "intensity_guidance": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
+    "confidence": "low",
+    "recovery_assessment_state": "pending"
   },
   "robust_trends": {
     "3d": {
-      "from": "2026-11-20",
-      "to": "2026-11-22",
+      "from": "2026-11-21",
+      "to": "2026-11-23",
       "metrics": {
         "hrv": {
-          "n": 3,
-          "median": 67.49,
-          "mean": 61.31,
-          "p10": 44.12,
-          "p90": 76.02,
-          "mad": 10.66,
-          "slope_per_day": 14.607
+          "n": 2,
+          "median": 72.82,
+          "mean": 72.82,
+          "p10": 68.56,
+          "p90": 77.08,
+          "mad": 5.33,
+          "slope_per_day": null
         },
         "resting_hr": {
           "n": 3,
           "median": 51.0,
-          "mean": 52.67,
+          "mean": 52.33,
           "p10": 50.2,
-          "p90": 55.8,
+          "p90": 55.0,
           "mad": 1.0,
-          "slope_per_day": -3.5
+          "slope_per_day": 2.5
         },
         "sleep_hours": {
-          "n": 3,
-          "median": 7.2,
-          "mean": 7.1,
-          "p10": 5.78,
-          "p90": 8.39,
-          "mad": 1.49,
-          "slope_per_day": 1.635
+          "n": 2,
+          "median": 7.95,
+          "mean": 7.95,
+          "p10": 7.35,
+          "p90": 8.54,
+          "mad": 0.74,
+          "slope_per_day": null
         },
         "sleep_score": {
-          "n": 3,
-          "median": 72.0,
-          "mean": 64.67,
-          "p10": 45.6,
-          "p90": 80.8,
-          "mad": 11.0,
-          "slope_per_day": 16.5
+          "n": 2,
+          "median": 77.5,
+          "mean": 77.5,
+          "p10": 73.1,
+          "p90": 81.9,
+          "mad": 5.5,
+          "slope_per_day": null
         },
         "respiration": {
           "n": 3,
-          "median": 12.55,
-          "mean": 13.06,
-          "p10": 12.43,
-          "p90": 13.89,
-          "mad": 0.15,
-          "slope_per_day": -0.913
+          "median": 13.56,
+          "mean": 13.38,
+          "p10": 12.75,
+          "p90": 13.95,
+          "mad": 0.49,
+          "slope_per_day": 0.747
         },
         "daytime_hr": {
           "n": 2,
-          "median": 73.95,
-          "mean": 73.95,
-          "p10": 71.27,
-          "p90": 76.63,
-          "mad": 3.35,
+          "median": 67.95,
+          "mean": 67.95,
+          "p10": 65.83,
+          "p90": 70.07,
+          "mad": 2.65,
           "slope_per_day": null,
           "partial_days_excluded": 1
         },
         "nighttime_hr": {
-          "n": 3,
-          "median": 57.1,
-          "mean": 59.8,
-          "p10": 55.82,
-          "p90": 64.86,
-          "mad": 1.6,
-          "slope_per_day": -4.85
+          "n": 2,
+          "median": 56.3,
+          "mean": 56.3,
+          "p10": 55.66,
+          "p90": 56.94,
+          "mad": 0.8,
+          "slope_per_day": null
         },
         "stress_avg": {
           "n": 3,
           "median": 19.0,
-          "mean": 23.0,
-          "p10": 15.0,
-          "p90": 32.6,
-          "mad": 5.0,
-          "slope_per_day": -11.0
+          "mean": 17.67,
+          "p10": 15.8,
+          "p90": 19.0,
+          "mad": 0.0,
+          "slope_per_day": 0.0
         },
         "body_battery_latest": {
           "n": 3,
           "median": 33.0,
-          "mean": 29.33,
-          "p10": 14.6,
-          "p90": 42.6,
-          "mad": 12.0,
-          "slope_per_day": 17.5
+          "mean": 35.67,
+          "p10": 32.2,
+          "p90": 40.2,
+          "mad": 1.0,
+          "slope_per_day": -0.5
         }
       }
     },
     "7d": {
-      "from": "2026-11-16",
-      "to": "2026-11-22",
+      "from": "2026-11-17",
+      "to": "2026-11-23",
       "metrics": {
         "hrv": {
-          "n": 7,
-          "median": 67.49,
-          "mean": 62.85,
-          "p10": 42.75,
-          "p90": 81.72,
-          "mad": 12.93,
-          "slope_per_day": -1.027
+          "n": 6,
+          "median": 61.03,
+          "mean": 61.88,
+          "p10": 42.0,
+          "p90": 82.61,
+          "mad": 16.21,
+          "slope_per_day": -0.483
         },
         "resting_hr": {
           "n": 7,
           "median": 52.0,
-          "mean": 52.14,
+          "mean": 52.57,
           "p10": 49.2,
-          "p90": 55.2,
+          "p90": 56.4,
           "mad": 2.0,
-          "slope_per_day": 0.071
+          "slope_per_day": 0.607
         },
         "sleep_hours": {
-          "n": 7,
-          "median": 7.2,
-          "mean": 6.92,
-          "p10": 5.33,
-          "p90": 8.23,
-          "mad": 0.72,
-          "slope_per_day": 0.186
+          "n": 6,
+          "median": 7.35,
+          "mean": 6.99,
+          "p10": 5.3,
+          "p90": 8.3,
+          "mad": 0.96,
+          "slope_per_day": 0.223
         },
         "sleep_score": {
-          "n": 7,
-          "median": 77.0,
-          "mean": 71.43,
-          "p10": 47.4,
-          "p90": 87.8,
-          "mad": 6.0,
-          "slope_per_day": -2.321
+          "n": 6,
+          "median": 74.5,
+          "mean": 69.83,
+          "p10": 46.0,
+          "p90": 89.0,
+          "mad": 14.5,
+          "slope_per_day": -1.8
         },
         "respiration": {
           "n": 7,
           "median": 14.05,
-          "mean": 14.66,
-          "p10": 12.49,
+          "mean": 14.87,
+          "p10": 13.15,
           "p90": 17.72,
-          "mad": 1.5,
-          "slope_per_day": -0.362
+          "mad": 0.49,
+          "slope_per_day": -0.475
         },
         "daytime_hr": {
           "n": 6,
           "median": 77.35,
-          "mean": 79.38,
-          "p10": 69.6,
+          "mean": 78.83,
+          "p10": 67.95,
           "p90": 91.2,
           "mad": 7.75,
-          "slope_per_day": 0.071,
+          "slope_per_day": -4.097,
           "partial_days_excluded": 1
         },
         "nighttime_hr": {
-          "n": 7,
-          "median": 59.4,
-          "mean": 59.74,
-          "p10": 54.9,
-          "p90": 65.18,
-          "mad": 3.9,
-          "slope_per_day": -0.043
+          "n": 6,
+          "median": 59.2,
+          "mean": 59.8,
+          "p10": 54.75,
+          "p90": 65.45,
+          "mad": 4.3,
+          "slope_per_day": -0.137
         },
         "stress_avg": {
           "n": 7,
           "median": 30.0,
-          "mean": 28.57,
-          "p10": 17.0,
+          "mean": 28.29,
+          "p10": 17.4,
           "p90": 39.6,
-          "mad": 8.0,
-          "slope_per_day": -1.714
+          "mad": 11.0,
+          "slope_per_day": -3.607
         },
         "body_battery_latest": {
           "n": 7,
           "median": 17.0,
-          "mean": 23.57,
+          "mean": 22.43,
           "p10": 8.8,
-          "p90": 40.2,
+          "p90": 36.6,
           "mad": 10.0,
-          "slope_per_day": 1.821
+          "slope_per_day": 4.429
         }
       }
     },
     "28d": {
-      "from": "2026-10-26",
-      "to": "2026-11-22",
+      "from": "2026-10-27",
+      "to": "2026-11-23",
       "metrics": {
         "hrv": {
-          "n": 28,
-          "median": 49.94,
-          "mean": 49.02,
-          "p10": 31.57,
-          "p90": 67.84,
-          "mad": 11.8,
-          "slope_per_day": 1.084
+          "n": 27,
+          "median": 50.86,
+          "mean": 49.28,
+          "p10": 31.21,
+          "p90": 67.96,
+          "mad": 12.86,
+          "slope_per_day": 1.149
         },
         "resting_hr": {
           "n": 28,
           "median": 56.0,
-          "mean": 55.5,
-          "p10": 51.0,
+          "mean": 55.68,
+          "p10": 51.7,
           "p90": 60.0,
           "mad": 2.0,
-          "slope_per_day": -0.189
+          "slope_per_day": -0.221
         },
         "sleep_hours": {
-          "n": 28,
-          "median": 7.56,
-          "mean": 7.34,
+          "n": 27,
+          "median": 7.55,
+          "mean": 7.3,
           "p10": 5.16,
-          "p90": 8.82,
-          "mad": 1.02,
-          "slope_per_day": -0.046
+          "p90": 8.84,
+          "mad": 1.05,
+          "slope_per_day": -0.042
         },
         "sleep_score": {
-          "n": 28,
+          "n": 27,
           "median": 79.0,
-          "mean": 72.43,
-          "p10": 46.9,
-          "p90": 90.3,
-          "mad": 6.0,
-          "slope_per_day": -0.248
+          "mean": 71.59,
+          "p10": 46.2,
+          "p90": 89.4,
+          "mad": 5.0,
+          "slope_per_day": -0.084
         },
         "respiration": {
           "n": 28,
           "median": 15.7,
-          "mean": 15.26,
-          "p10": 12.47,
+          "mean": 15.45,
+          "p10": 12.54,
           "p90": 18.06,
-          "mad": 1.91,
-          "slope_per_day": -0.027
+          "mad": 1.77,
+          "slope_per_day": -0.07
         },
         "daytime_hr": {
           "n": 27,
-          "median": 79.1,
-          "mean": 80.8,
-          "p10": 69.8,
+          "median": 78.3,
+          "mean": 80.09,
+          "p10": 68.52,
           "p90": 92.32,
-          "mad": 4.3,
-          "slope_per_day": -0.297,
+          "mad": 4.8,
+          "slope_per_day": -0.39,
           "partial_days_excluded": 1
         },
         "nighttime_hr": {
-          "n": 28,
-          "median": 62.2,
-          "mean": 62.6,
-          "p10": 56.95,
-          "p90": 68.47,
-          "mad": 2.85,
-          "slope_per_day": -0.151
+          "n": 27,
+          "median": 62.6,
+          "mean": 62.83,
+          "p10": 58.06,
+          "p90": 68.56,
+          "mad": 3.1,
+          "slope_per_day": -0.219
         },
         "stress_avg": {
           "n": 28,
           "median": 33.0,
-          "mean": 32.57,
-          "p10": 22.0,
+          "mean": 32.46,
+          "p10": 21.1,
           "p90": 42.2,
           "mad": 4.0,
-          "slope_per_day": -0.204
+          "slope_per_day": -0.374
         },
         "body_battery_latest": {
           "n": 28,
           "median": 18.5,
-          "mean": 19.54,
+          "mean": 19.5,
           "p10": 5.0,
           "p90": 35.6,
           "mad": 9.5,
-          "slope_per_day": 0.382
+          "slope_per_day": 0.537
         }
       }
     }
@@ -379,229 +380,229 @@
       "metrics": {
         "hrv": {
           "n": 28,
-          "median": 49.01,
-          "mean": 47.25,
-          "p10": 25.72,
-          "p90": 66.48,
-          "mad": 11.23
+          "median": 49.94,
+          "mean": 49.02,
+          "p10": 31.57,
+          "p90": 67.84,
+          "mad": 11.8
         },
         "resting_hr": {
           "n": 28,
           "median": 56.0,
-          "mean": 55.79,
-          "p10": 51.7,
+          "mean": 55.5,
+          "p10": 51.0,
           "p90": 60.0,
           "mad": 2.0
         },
         "sleep_hours": {
           "n": 28,
           "median": 7.56,
-          "mean": 7.3,
+          "mean": 7.34,
           "p10": 5.16,
           "p90": 8.82,
-          "mad": 1.0
+          "mad": 1.02
         },
         "sleep_score": {
           "n": 28,
           "median": 79.0,
-          "mean": 71.36,
-          "p10": 42.0,
+          "mean": 72.43,
+          "p10": 46.9,
           "p90": 90.3,
-          "mad": 7.5
+          "mad": 6.0
         },
         "respiration": {
           "n": 28,
-          "median": 16.03,
-          "mean": 15.4,
+          "median": 15.7,
+          "mean": 15.3,
           "p10": 12.51,
           "p90": 18.06,
-          "mad": 1.7
+          "mad": 1.91
         },
         "daytime_hr": {
           "n": 28,
-          "median": 78.85,
-          "mean": 80.72,
-          "p10": 70.0,
+          "median": 78.7,
+          "mean": 80.24,
+          "p10": 68.54,
           "p90": 92.04,
-          "mad": 4.25
+          "mad": 5.0
         },
         "nighttime_hr": {
           "n": 28,
-          "median": 62.95,
-          "mean": 63.4,
-          "p10": 58.07,
-          "p90": 69.67,
-          "mad": 3.2
+          "median": 62.2,
+          "mean": 62.6,
+          "p10": 56.95,
+          "p90": 68.47,
+          "mad": 2.85
         },
         "stress_avg": {
           "n": 28,
           "median": 33.0,
-          "mean": 34.07,
-          "p10": 22.7,
-          "p90": 46.2,
+          "mean": 32.61,
+          "p10": 22.0,
+          "p90": 42.2,
           "mad": 4.0
         },
         "body_battery_latest": {
           "n": 28,
           "median": 18.5,
-          "mean": 18.61,
+          "mean": 19.43,
           "p10": 5.0,
-          "p90": 33.6,
-          "mad": 9.0
+          "p90": 35.6,
+          "mad": 9.5
         }
       }
     },
     "free": {
-      "days": 12,
+      "days": 11,
       "metrics": {
         "hrv": {
-          "n": 12,
-          "median": 40.14,
-          "mean": 39.94,
-          "p10": 19.13,
-          "p90": 56.76,
-          "mad": 10.92
+          "n": 11,
+          "median": 42.0,
+          "mean": 41.93,
+          "p10": 29.02,
+          "p90": 57.0,
+          "mad": 9.33
         },
         "resting_hr": {
-          "n": 12,
+          "n": 11,
           "median": 57.0,
-          "mean": 56.42,
+          "mean": 56.27,
           "p10": 54.0,
-          "p90": 59.8,
-          "mad": 1.5
+          "p90": 60.0,
+          "mad": 2.0
         },
         "sleep_hours": {
-          "n": 12,
-          "median": 8.29,
-          "mean": 7.79,
-          "p10": 5.63,
-          "p90": 8.96,
-          "mad": 0.56
+          "n": 11,
+          "median": 8.36,
+          "mean": 7.8,
+          "p10": 5.42,
+          "p90": 8.98,
+          "mad": 0.39
         },
         "sleep_score": {
-          "n": 12,
-          "median": 78.0,
-          "mean": 70.75,
-          "p10": 39.3,
-          "p90": 88.4,
-          "mad": 5.0
+          "n": 11,
+          "median": 79.0,
+          "mean": 73.36,
+          "p10": 39.0,
+          "p90": 89.0,
+          "mad": 4.0
         },
         "respiration": {
-          "n": 12,
-          "median": 16.92,
-          "mean": 16.34,
-          "p10": 14.34,
-          "p90": 18.27,
-          "mad": 0.99
+          "n": 11,
+          "median": 16.99,
+          "mean": 16.35,
+          "p10": 14.22,
+          "p90": 18.31,
+          "mad": 1.01
         },
         "daytime_hr": {
-          "n": 12,
-          "median": 84.6,
-          "mean": 86.1,
-          "p10": 77.43,
-          "p90": 96.07,
+          "n": 11,
+          "median": 84.9,
+          "mean": 86.78,
+          "p10": 77.3,
+          "p90": 96.3,
           "mad": 6.3
         },
         "nighttime_hr": {
-          "n": 12,
-          "median": 63.8,
-          "mean": 64.96,
-          "p10": 58.84,
-          "p90": 73.51,
-          "mad": 3.25
+          "n": 11,
+          "median": 63.6,
+          "mean": 63.65,
+          "p10": 58.7,
+          "p90": 67.3,
+          "mad": 3.2
         },
         "stress_avg": {
-          "n": 12,
-          "median": 34.5,
-          "mean": 38.17,
-          "p10": 29.2,
-          "p90": 50.8,
-          "mad": 6.0
+          "n": 11,
+          "median": 33.0,
+          "mean": 36.55,
+          "p10": 29.0,
+          "p90": 49.0,
+          "mad": 4.0
         },
         "body_battery_latest": {
-          "n": 12,
-          "median": 18.0,
-          "mean": 15.92,
-          "p10": 5.1,
-          "p90": 27.5,
-          "mad": 9.0
+          "n": 11,
+          "median": 17.0,
+          "mean": 15.64,
+          "p10": 5.0,
+          "p90": 28.0,
+          "mad": 10.0
         }
       }
     },
     "TN": {
-      "days": 5,
+      "days": 6,
       "metrics": {
         "hrv": {
-          "n": 5,
-          "median": 64.55,
-          "mean": 60.07,
-          "p10": 40.1,
-          "p90": 78.47,
-          "mad": 15.53
+          "n": 6,
+          "median": 65.05,
+          "mean": 61.31,
+          "p10": 41.59,
+          "p90": 77.28,
+          "mad": 9.24
         },
         "resting_hr": {
-          "n": 5,
-          "median": 55.0,
-          "mean": 54.8,
-          "p10": 50.4,
-          "p90": 58.8,
-          "mad": 2.0
+          "n": 6,
+          "median": 54.5,
+          "mean": 54.0,
+          "p10": 49.0,
+          "p90": 58.5,
+          "mad": 3.5
         },
         "sleep_hours": {
-          "n": 5,
-          "median": 7.92,
-          "mean": 7.92,
+          "n": 6,
+          "median": 8.0,
+          "mean": 8.05,
           "p10": 7.5,
-          "p90": 8.39,
-          "mad": 0.37
+          "p90": 8.64,
+          "mad": 0.5
         },
         "sleep_score": {
-          "n": 5,
-          "median": 90.0,
-          "mean": 78.6,
-          "p10": 55.2,
-          "p90": 93.4,
-          "mad": 5.0
+          "n": 6,
+          "median": 82.5,
+          "mean": 77.5,
+          "p10": 57.0,
+          "p90": 93.0,
+          "mad": 9.5
         },
         "respiration": {
-          "n": 5,
-          "median": 14.05,
-          "mean": 13.73,
-          "p10": 12.66,
-          "p90": 14.64,
-          "mad": 0.68
+          "n": 6,
+          "median": 13.8,
+          "mean": 13.7,
+          "p10": 12.68,
+          "p90": 14.62,
+          "mad": 0.82
         },
         "daytime_hr": {
-          "n": 5,
-          "median": 83.1,
-          "mean": 82.36,
-          "p10": 78.32,
-          "p90": 85.94,
-          "mad": 3.0
+          "n": 6,
+          "median": 81.1,
+          "mean": 79.52,
+          "p10": 71.55,
+          "p90": 85.9,
+          "mad": 3.95
         },
         "nighttime_hr": {
-          "n": 5,
-          "median": 59.3,
-          "mean": 61.28,
-          "p10": 55.92,
-          "p90": 67.92,
-          "mad": 4.0
+          "n": 6,
+          "median": 59.05,
+          "mean": 60.58,
+          "p10": 55.55,
+          "p90": 67.15,
+          "mad": 3.1
         },
         "stress_avg": {
-          "n": 5,
+          "n": 6,
           "median": 34.0,
-          "mean": 34.6,
-          "p10": 29.8,
-          "p90": 39.4,
-          "mad": 3.0
+          "mean": 31.33,
+          "p10": 21.0,
+          "p90": 39.0,
+          "mad": 5.0
         },
         "body_battery_latest": {
-          "n": 5,
-          "median": 16.0,
-          "mean": 16.0,
-          "p10": 7.8,
-          "p90": 24.6,
-          "mad": 4.0
+          "n": 6,
+          "median": 17.0,
+          "mean": 20.33,
+          "p10": 8.5,
+          "p90": 35.5,
+          "mad": 8.5
         }
       }
     },
@@ -761,69 +762,41 @@
     }
   },
   "personal_recovery_index": {
-    "score": 64,
-    "context": "TN",
-    "baseline_used": "TN",
-    "effective_baseline_days": 5,
+    "score": 63,
+    "context": "post-TN",
+    "baseline_used": "post-TN",
+    "effective_baseline_days": 6,
     "components": [
       {
-        "metric": "hrv",
-        "value": 67.49367,
-        "robust_z": 0.13,
-        "baseline_n": 5,
-        "points": 0.9
-      },
-      {
-        "metric": "nighttime_hr",
-        "value": 57.1,
-        "robust_z": -0.37,
-        "baseline_n": 5,
-        "points": 2.5
-      },
-      {
         "metric": "resting_hr",
-        "value": 50.0,
-        "robust_z": -1.69,
-        "baseline_n": 5,
-        "points": 7.0
-      },
-      {
-        "metric": "sleep_hours",
-        "value": 8.69,
-        "robust_z": 1.4,
-        "baseline_n": 5,
-        "points": 6.5
-      },
-      {
-        "metric": "sleep_score",
-        "value": 72.0,
-        "robust_z": -2.43,
-        "baseline_n": 5,
-        "points": -7.0
+        "value": 56.0,
+        "robust_z": 0.0,
+        "baseline_n": 6,
+        "points": -0.0
       },
       {
         "metric": "stress_avg",
-        "value": 14.0,
-        "robust_z": -4.5,
-        "baseline_n": 5,
+        "value": 19.0,
+        "robust_z": -2.79,
+        "baseline_n": 6,
         "points": 6.0
       },
       {
         "metric": "body_battery_latest",
-        "value": 45.0,
-        "robust_z": 4.89,
-        "baseline_n": 5,
+        "value": 32.0,
+        "robust_z": 1.66,
+        "baseline_n": 6,
         "points": 5.0
       },
       {
         "metric": "recovery_time_hours",
-        "value": 33.4,
-        "points": -4
+        "value": 20.0,
+        "points": 0
       },
       {
         "metric": "garmin_training_readiness",
-        "value": 38.0,
-        "points": -2.4
+        "value": 61.0,
+        "points": 2.2
       }
     ],
     "confidence": "low",
@@ -831,28 +804,22 @@
   },
   "convergence_alert": {
     "severity": "none",
-    "signal_count": 1,
-    "signals": [
-      {
-        "signal": "recovery_time_high",
-        "value_hours": 33.4,
-        "domain": "load"
-      }
-    ],
+    "signal_count": 0,
+    "signals": [],
     "skipped_for_short_baseline": [],
     "baseline_source": "fused_recovery_history_v2.4",
     "baseline_scope": "overall",
     "baseline_metrics": {
       "hrv_ms": {
         "n": 28,
-        "median": 51.0,
+        "median": 51.5,
         "mad": 8.5,
         "scope": "overall"
       },
       "night_hr": {
         "n": 28,
-        "median": 62.95,
-        "mad": 3.2,
+        "median": 62.2,
+        "mad": 2.85,
         "scope": "overall"
       },
       "resting_hr": {
@@ -864,49 +831,38 @@
       "sleep_hours": {
         "n": 28,
         "median": 7.56,
-        "mad": 1.0,
+        "mad": 1.02,
         "scope": "overall"
       },
       "sleep_score": {
         "n": 28,
         "median": 79.0,
-        "mad": 7.5,
+        "mad": 6.0,
         "scope": "overall"
       }
     },
     "rule": "Alerts require converging signals and at least 7 historical observations per metric. HRV/sleep/resting/night HR use fused recovery history; stress/body battery/recovery time retain Advanced Analytics sources. Thresholds are unchanged and isolated changes are not diagnostic.",
-    "raw_metric_signal_count": 1,
-    "domain_count": 1,
-    "active_domains": [
-      "load"
-    ],
-    "domain_summary": {
-      "load": {
-        "signal_count": 1,
-        "signals": [
-          "recovery_time_high"
-        ],
-        "strong": false,
-        "strongest_abs_robust_z": null
-      }
-    },
+    "raw_metric_signal_count": 0,
+    "domain_count": 0,
+    "active_domains": [],
+    "domain_summary": {},
     "aggregation_version": "domain_convergence_v2.4.2",
     "aggregation_rule": "Severity is based on independent physiological domains, not raw metric count. Sleep duration + sleep score count once; resting HR + night HR count once; stress + Body Battery count once. Signal thresholds are unchanged."
   },
   "weekly_load": {
     "period": {
-      "from": "2026-11-16",
-      "to": "2026-11-22"
+      "from": "2026-11-17",
+      "to": "2026-11-23"
     },
     "source": "session_rpe_load",
     "daily_load": {
-      "2026-11-16": 0.0,
       "2026-11-17": 92.7,
       "2026-11-18": 555.6,
       "2026-11-19": 157.0,
       "2026-11-20": 84.0,
       "2026-11-21": 0.0,
-      "2026-11-22": 0.0
+      "2026-11-22": 0.0,
+      "2026-11-23": 0.0
     },
     "active_days": 4,
     "sessions_with_rpe": 6,
@@ -2240,7 +2196,7 @@
         "activity_id": "i209046349",
         "date": "2026-11-12",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.31,
@@ -2302,7 +2258,7 @@
         "activity_id": "i209040432",
         "date": "2026-11-12",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -2356,7 +2312,7 @@
         "activity_id": "i208336297",
         "date": "2026-11-10",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.181,
@@ -2418,7 +2374,7 @@
         "activity_id": "i208232166",
         "date": "2026-11-10",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.141,
@@ -2480,7 +2436,7 @@
         "activity_id": "i208205608",
         "date": "2026-11-10",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.151,
@@ -2542,7 +2498,7 @@
         "activity_id": "i208188125",
         "date": "2026-11-10",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -2596,7 +2552,7 @@
         "activity_id": "i207722998",
         "date": "2026-11-09",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -2650,7 +2606,7 @@
         "activity_id": "i207699384",
         "date": "2026-11-09",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.495,
@@ -2712,7 +2668,7 @@
         "activity_id": "i207696610",
         "date": "2026-11-09",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.191,
@@ -2774,7 +2730,7 @@
         "activity_id": "i206907688",
         "date": "2026-11-07",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.19,
@@ -2836,7 +2792,7 @@
         "activity_id": "i205729094",
         "date": "2026-11-04",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.144,
@@ -2898,7 +2854,7 @@
         "activity_id": "i205607106",
         "date": "2026-11-04",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -2952,7 +2908,7 @@
         "activity_id": "i205581683",
         "date": "2026-11-04",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.14,
@@ -3014,7 +2970,7 @@
         "activity_id": "i205565640",
         "date": "2026-11-04",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -3068,7 +3024,7 @@
         "activity_id": "i205321919",
         "date": "2026-11-03",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.306,
@@ -3130,7 +3086,7 @@
         "activity_id": "i205312875",
         "date": "2026-11-03",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -3184,7 +3140,7 @@
         "activity_id": "i204708747",
         "date": "2026-11-02",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -3238,7 +3194,7 @@
         "activity_id": "i204694109",
         "date": "2026-11-02",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.176,
@@ -3300,7 +3256,7 @@
         "activity_id": "i203859247",
         "date": "2026-10-31",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.317,
@@ -3362,7 +3318,7 @@
         "activity_id": "i203850547",
         "date": "2026-10-31",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.315,
@@ -3424,7 +3380,7 @@
         "activity_id": "i203847707",
         "date": "2026-10-31",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -3478,7 +3434,7 @@
         "activity_id": "i203623693",
         "date": "2026-10-30",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.377,
@@ -3540,7 +3496,7 @@
         "activity_id": "i203615275",
         "date": "2026-10-30",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -3594,7 +3550,7 @@
         "activity_id": "i203065304",
         "date": "2026-10-29",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.319,
@@ -3656,7 +3612,7 @@
         "activity_id": "i202804127",
         "date": "2026-10-28",
         "activity_name": "Orense Carrera",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.091,
@@ -3718,7 +3674,7 @@
         "activity_id": "i202685333",
         "date": "2026-10-28",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.181,
@@ -3780,7 +3736,7 @@
         "activity_id": "i202655592",
         "date": "2026-10-28",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.196,
@@ -3842,7 +3798,7 @@
         "activity_id": "i202655556",
         "date": "2026-10-28",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -3896,7 +3852,7 @@
         "activity_id": "i202211970",
         "date": "2026-10-27",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.272,
@@ -3958,7 +3914,7 @@
         "activity_id": "i202206047",
         "date": "2026-10-27",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -4012,7 +3968,7 @@
         "activity_id": "i201931324",
         "date": "2026-10-26",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.177,
@@ -4074,7 +4030,7 @@
         "activity_id": "i201815507",
         "date": "2026-10-26",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -4128,7 +4084,7 @@
         "activity_id": "i201803181",
         "date": "2026-10-26",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.284,
@@ -4190,7 +4146,7 @@
         "activity_id": "i201797135",
         "date": "2026-10-26",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.319,
@@ -4252,7 +4208,7 @@
         "activity_id": "i200663683",
         "date": "2026-10-23",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.488,
@@ -4314,7 +4270,7 @@
         "activity_id": "i200657489",
         "date": "2026-10-23",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -4368,7 +4324,7 @@
         "activity_id": "i199422349",
         "date": "2026-10-20",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.308,
@@ -4430,7 +4386,7 @@
         "activity_id": "i199422320",
         "date": "2026-10-20",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -4484,7 +4440,7 @@
         "activity_id": "i199136845",
         "date": "2026-10-19",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -4538,7 +4494,7 @@
         "activity_id": "i199113233",
         "date": "2026-10-19",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.41,
@@ -4600,7 +4556,7 @@
         "activity_id": "i199099543",
         "date": "2026-10-19",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.524,
@@ -4662,7 +4618,7 @@
         "activity_id": "i199091404",
         "date": "2026-10-19",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -4716,7 +4672,7 @@
         "activity_id": "i198584544",
         "date": "2026-10-18",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.196,
@@ -4778,7 +4734,7 @@
         "activity_id": "i197499385",
         "date": "2026-10-15",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.452,
@@ -4840,7 +4796,7 @@
         "activity_id": "i197493173",
         "date": "2026-10-15",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.299,
@@ -4902,7 +4858,7 @@
         "activity_id": "i197359590",
         "date": "2026-10-14",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.403,
@@ -4964,7 +4920,7 @@
         "activity_id": "i197353076",
         "date": "2026-10-14",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.384,
@@ -5026,7 +4982,7 @@
         "activity_id": "i197343192",
         "date": "2026-10-14",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.459,
@@ -5088,7 +5044,7 @@
         "activity_id": "i197336949",
         "date": "2026-10-14",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.147,
@@ -5150,7 +5106,7 @@
         "activity_id": "i196728818",
         "date": "2026-10-13",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.4,
@@ -5212,7 +5168,7 @@
         "activity_id": "i196719392",
         "date": "2026-10-13",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.243,
@@ -5274,7 +5230,7 @@
         "activity_id": "i196047961",
         "date": "2026-10-11",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.224,
@@ -5336,7 +5292,7 @@
         "activity_id": "i195697438",
         "date": "2026-10-10",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.191,
@@ -5398,7 +5354,7 @@
         "activity_id": "i195490222",
         "date": "2026-10-09",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.64,
@@ -5460,7 +5416,7 @@
         "activity_id": "i195481427",
         "date": "2026-10-09",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 1.384,
@@ -5522,7 +5478,7 @@
         "activity_id": "i194982429",
         "date": "2026-10-08",
         "activity_name": "Fuerza",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.406,
@@ -5584,7 +5540,7 @@
         "activity_id": "i194967768",
         "date": "2026-10-08",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.29,
@@ -5646,7 +5602,7 @@
         "activity_id": "i194958710",
         "date": "2026-10-08",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": null,
@@ -5700,7 +5656,7 @@
         "activity_id": "i194179774",
         "date": "2026-10-06",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.265,
@@ -5762,7 +5718,7 @@
         "activity_id": "i194171569",
         "date": "2026-10-06",
         "activity_name": "HIIT",
-        "generated_at": "2026-11-22T22:46:53.882102+01:00"
+        "generated_at": "2026-11-23T08:31:34.506685+01:00"
       },
       "ratios": {
         "rpe_per_trimp": 0.175,
@@ -5881,7 +5837,7 @@
         "n": 31
       },
       "pre_night_hr_z": {
-        "r": -0.15,
+        "r": -0.151,
         "n": 31
       },
       "pre_sleep_hours_z": {
@@ -5907,7 +5863,7 @@
     },
     "learned_relative_weights": {
       "pre_hrv_z": 0.195,
-      "pre_night_hr_z": -0.125,
+      "pre_night_hr_z": -0.126,
       "pre_sleep_hours_z": 0.297,
       "pre_stress_z": 0.284,
       "intervals_training_load": -0.017,
@@ -5931,96 +5887,81 @@
     "remote_rows_loaded": 76,
     "remote_latest_date": "2026-11-20",
     "remote_fetch_policy": "cache_bust_query + no_cache_headers",
-    "advanced_run_id": "45073989629",
+    "advanced_run_id": "45131720751",
     "source_rows_sha256": "a1f690c179854ee6784247f41160bb3d8fca1d8fd71479a1fb7aa140686a5c27",
     "remote_fetch_error": null,
     "discrepancies": [],
     "policy": "Intervals RPE has priority when present; external feedback fills missing RPE. Differences >=0.5 are reported."
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-22T22:46:54.755776+01:00",
+    "generated_at": "2026-11-23T08:31:35.432397+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
-    "state": "assessed",
-    "status": "green",
-    "score": 82,
-    "confidence": "high",
-    "reason": null,
-    "missing_essential": [],
+    "state": "pending",
+    "status": "unavailable",
+    "score": null,
+    "confidence": "low",
+    "reason": "faltan_sueno_vfc_o_fc_reposo",
+    "missing_essential": [
+      "hrv_ms",
+      "sleep_hours"
+    ],
     "fresh_sources": true,
-    "context": "night_sleep",
-    "work_shift_context": "TN",
-    "sleep_context": "night_sleep",
+    "context": "post-TN",
+    "work_shift_context": "post-TN",
+    "sleep_context": null,
     "current": {
-      "date": "2026-11-22",
-      "hrv_ms": 68.0,
-      "sleep_hours": 8.7,
-      "sleep_score": 72.0,
-      "resting_hr": 50.0,
-      "night_hr": 57.1,
-      "sleep_context": "night_sleep",
-      "sleep_start_local": "2026-11-22T01:50:00+01:00",
-      "sleep_end_local": "2026-11-22T11:29:00+01:00",
+      "date": "2026-11-23",
+      "hrv_ms": null,
+      "sleep_hours": null,
+      "sleep_score": null,
+      "resting_hr": 56.0,
+      "night_hr": null,
+      "sleep_context": null,
+      "sleep_start_local": null,
+      "sleep_end_local": null,
       "sources": {
-        "hrv_ms": "garmin_hrv_timeline",
-        "sleep_hours": "garmin_sleep_history",
-        "sleep_score": "garmin_sleep_history",
+        "hrv_ms": null,
+        "sleep_hours": null,
+        "sleep_score": null,
         "resting_hr": "garmin_heart_rate",
-        "night_hr": "garmin_heart_rate"
+        "night_hr": null
       }
     },
     "baseline_28d": {
       "hrv_ms": {
         "n": 28,
-        "median": 51.0,
-        "last7_mean": 57.29,
+        "median": 51.5,
+        "last7_mean": 62.71,
         "scope": "overall"
       },
       "sleep_hours": {
         "n": 28,
         "median": 7.56,
-        "last7_mean": 6.24,
+        "last7_mean": 6.91,
         "scope": "overall"
       },
       "sleep_score": {
         "n": 28,
         "median": 79.0,
-        "last7_mean": 65.57,
+        "last7_mean": 71.43,
         "scope": "overall"
       },
       "resting_hr": {
         "n": 28,
         "median": 56.0,
-        "last7_mean": 53.29,
+        "last7_mean": 52.14,
         "scope": "overall"
       },
       "night_hr": {
         "n": 28,
-        "median": 62.95,
-        "last7_mean": 62.19,
+        "median": 62.2,
+        "last7_mean": 59.74,
         "scope": "overall"
       }
     },
-    "metrics_used": [
-      {
-        "metric": "hrv_ms",
-        "value": 68.0,
-        "reference": 51.0,
-        "change_pct": 33.3
-      },
-      {
-        "metric": "resting_hr",
-        "value": 50.0,
-        "reference": 56.0,
-        "delta_bpm": -6.0
-      },
-      {
-        "metric": "sleep_hours",
-        "value": 8.7,
-        "reference": 7.56
-      }
-    ],
+    "metrics_used": [],
     "warnings": [],
-    "recommendation": "Interpretar junto con dolor, sensaciones, RPE y rendimiento; no es un diagnóstico.",
+    "recommendation": "Reevaluar tras el siguiente sueño confirmado; no autorizar intensidad máxima con información incompleta.",
     "limitations": [
       "No mide fatiga neuromuscular directamente.",
       "Puntuación heurística no validada clínicamente.",
@@ -6028,53 +5969,56 @@
     ],
     "v23": {
       "version": "2.3.1",
-      "shift_context": "TN",
+      "shift_context": "post-TN",
       "sleep_integrity": {
-        "main_sleep_confirmed": true,
-        "main_sleep_minutes": 522,
+        "main_sleep_confirmed": false,
+        "main_sleep_minutes": null,
         "unconfirmed_separate_events": 0,
         "unconfirmed_separate_minutes": 0,
-        "overlapping_body_battery_events": 1,
+        "overlapping_body_battery_events": 0,
         "minutes_added_to_sleep": 0,
         "policy": "Body Battery sleep events are candidates only; never add to confirmed Garmin sleep."
       },
       "sleep_score_provenance": {
-        "confirmed_sleep_score": 72.0,
-        "readiness_sleep_field": 72.0,
-        "status": "close_values",
+        "confirmed_sleep_score": null,
+        "readiness_sleep_field": null,
+        "status": "missing_comparison",
         "policy": "Use the confirmed sleep-detail score for the recovery model, not the training-readiness component."
       },
       "subjective_checkin": "not_provided",
       "subjective_values_exported": false,
       "intensity_guardrail": "use_v22_guidance",
-      "reason_codes": [],
+      "reason_codes": [
+        "post_night_shift",
+        "live_measurement_uncertain"
+      ],
       "baseline_caution": "standard",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
       "measurement_provenance": {
         "sources": {
           "confirmed_sleep": {
-            "state": "recent",
-            "measured_at": "2026-11-22T11:29:00+01:00",
-            "age_minutes": 677.9,
+            "state": "unverified_timestamp",
+            "measured_at": null,
+            "age_minutes": null,
             "basis": "confirmed_sleep_end",
-            "garmin_episode_confirmed": true
+            "garmin_episode_confirmed": false
           },
           "sleep_hrv": {
-            "state": "recent",
-            "measured_at": "2026-11-22T09:07:57+01:00",
-            "age_minutes": 819.0,
+            "state": "unverified_timestamp",
+            "measured_at": null,
+            "age_minutes": null,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
-            "state": "recent",
-            "measured_at": "2026-11-22T22:42:00+01:00",
-            "age_minutes": 4.9,
+            "state": "old_measurement",
+            "measured_at": "2026-11-23T05:26:00+01:00",
+            "age_minutes": 185.6,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "recent",
-            "measured_at": "2026-11-22T22:39:00+01:00",
-            "age_minutes": 7.9,
+            "state": "old_measurement",
+            "measured_at": "2026-11-23T05:21:00+01:00",
+            "age_minutes": 190.6,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -6085,8 +6029,11 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": false,
-        "limited_live_metrics": [],
+        "live_data_limited": true,
+        "limited_live_metrics": [
+          "heart_rate_live",
+          "body_battery_live"
+        ],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -6098,15 +6045,15 @@
         "note": "User-confirmed extra naps may inform discussion but are not merged with Garmin HRV, stages or sleep-score baselines."
       },
       "training_guidance": {
-        "guidance_level": "individualize",
+        "guidance_level": "restrict",
         "session_types": {
-          "heavy_strength": "consider_planned_work_after_symptom_and_warmup_check",
-          "olympic_lifting": "consider_planned_technique_after_warmup",
-          "high_intensity_metcon": "consider_planned_session_after_warmup",
-          "easy_aerobic": "usual_program_if_well",
-          "mobility": "usual_program_if_well"
+          "heavy_strength": "postpone_heavy_sets",
+          "olympic_lifting": "avoid_heavy_or_complex_skill",
+          "high_intensity_metcon": "postpone_intense_metcon",
+          "easy_aerobic": "optional_easy_only_if_alert_and_symptoms_allow",
+          "mobility": "optional_light_mobility"
         },
-        "recent_sessions_with_declared_rpe": 1,
+        "recent_sessions_with_declared_rpe": 0,
         "recent_high_rpe_sessions": 0,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
@@ -6142,32 +6089,32 @@
   "recovery_fused_baseline_28d": {
     "hrv_ms": {
       "n": 28,
-      "median": 51.0,
-      "last7_mean": 57.29,
+      "median": 51.5,
+      "last7_mean": 62.71,
       "scope": "overall"
     },
     "sleep_hours": {
       "n": 28,
       "median": 7.56,
-      "last7_mean": 6.24,
+      "last7_mean": 6.91,
       "scope": "overall"
     },
     "sleep_score": {
       "n": 28,
       "median": 79.0,
-      "last7_mean": 65.57,
+      "last7_mean": 71.43,
       "scope": "overall"
     },
     "resting_hr": {
       "n": 28,
       "median": 56.0,
-      "last7_mean": 53.29,
+      "last7_mean": 52.14,
       "scope": "overall"
     },
     "night_hr": {
       "n": 28,
-      "median": 62.95,
-      "last7_mean": 62.19,
+      "median": 62.2,
+      "last7_mean": 59.74,
       "scope": "overall"
     }
   },
