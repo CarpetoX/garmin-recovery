@@ -1,32 +1,27 @@
-<!-- cycle_id: 2026-11-24-0830-post-sleep -->
+<!-- cycle_id: 2026-11-24-1645 -->
 **En breve:** recuperación buena, pero hoy toca entrenar con control.
-🟢 Recuperación oficial 88/100 (confianza alta)
+🟢 Recuperación oficial 88/100, confianza alta
 🌙 Sueño 7,2 h, puntuación 86
-🏋️ Carga: 9 sesiones en 7 días
-❤️ HRV 83 ms esta noche; FC en reposo 48 lpm (8 menos que tu mediana)
-Orientación: día libre; entrena con control (RPE ≤ 7, volumen 70–80 %), sin series al fallo ni WOD máximos.
+🏋️ Carga 7 días: 170 en 11 sesiones (+56 % vs. semana previa)
+❤️ HRV 83 ms hoy, dentro de tu rango normal; FC en reposo 48 lpm
+Orientación: día libre; RPE ≤ 7 y volumen 70–80 %, sin esfuerzos máximos.
 
-## Qué explica la puntuación
-- ↑ HRV: media de 7 días 58,2 ms, dentro de tu rango normal (47,7–58,9 ms).
-- ↑ FC en reposo 48 lpm y nocturna 53,7 lpm, por debajo de tu mediana; estrés de Garmin ayer 19 (mediana 34).
-- ↓ Sueño: deuda de 1,9 h en 3 noches frente a 7,5 h de necesidad.
-- La zona ámbar la marca el modelo híbrido (74), pues Garmin Training Readiness marca 40/100. El experimental (84) es más permisivo; se aplica el más conservador.
+**Qué explica la puntuación.** HRV media 7 días 58,2 ms (+10 % vs. tu base, rango 47,7–58,9) y FC en reposo 48 lpm (−8 vs. mediana) empujan al alza; el estrés de Garmin (19 vs. 34) también. Lo que frena: deuda de sueño de 1,9 h en 3 noches y Garmin Training Readiness en 40. La zona ámbar la marca el híbrido (74); el modelo experimental (84) es más permisivo y se aplica el más conservador.
 
-## Carga reciente
-Carga semanal 134 (+22,9 % vs. semana previa), sRPE 1116, monotonía 0,76, ACWR 0,78. Última sesión: power snatch 23/11, RPE 7. El 38 % de las sesiones recientes fue de RPE ≥ 8.
+**Carga reciente.** sRPE 1.116, monotonía 0,76, ACWR 0,78. Hoy hay 2 HIIT (carga 36) sin RPE; 11 de 29 sesiones con RPE fueron ≥ 8 (38 %), con 4 veces dos días duros seguidos.
 
-## 3 prioridades
-1. **Sueño:** adelanta 30–45 min la hora de acostarte, sobre todo antes de un turno.
-2. **Intensidad:** intercala sesiones de RPE 5–6 entre las duras y deja ≥ 48 h entre esfuerzos máximos.
-3. **Sensaciones:** registra fatiga, agujetas y ánimo en Intervals cada mañana (0 de 14 días).
+**3 prioridades**
+1. **Sueño:** adelanta 30–45 min la hora de acostarte; antes del TN del viernes, siesta corta.
+2. **Intensidad:** intercala RPE 5–6 entre las duras, ≥ 48 h entre esfuerzos máximos.
+3. **Registro:** RPE de las dos sesiones de hoy y sensaciones en Intervals (0 de 14 días).
 
-## Plan de 7 días
-- **Mar 24:** libre, moderada (RPE ≤ 7, 70–80 %).
-- **Mié 25:** libre; sesión exigente solo si mañana el ámbar se ha resuelto y el sueño de esta noche es bueno.
-- **Jue 26 (MT):** movilidad o descanso.
-- **Vie 27 (TN):** si entrenas, por la mañana y moderado.
-- **Sáb 28:** descanso, prioriza dormir tras la TN.
-- **Dom 29:** libre, sesión exigente si la disponibilidad lo permite.
-- **Lun 30:** suave, RPE 5–6.
+**Plan 7 días** (la decisión diaria manda)
+- Mar 24: suave/movilidad, RPE ≤ 7.
+- Mié 25 (libre): sesión exigente solo si mañana la recuperación sigue buena.
+- Jue 26 (MT): movilidad o descanso.
+- Vie 27 (TN): si entrenas, por la mañana y moderado.
+- Sáb 28 (tras TN): descanso y sueño.
+- Dom 29 (libre): exigente.
+- Lun 30: moderada.
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
+_Herramienta de entrenamiento; no es un diagnóstico médico._
