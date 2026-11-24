@@ -1,10 +1,10 @@
 # Resumen semanal · 18/11–24/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-24-0029-ceb6b2`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-24-0832-5f1ad9`)._
 
 ## En una frase
 
-- 9 sesiones (+2); 5 de 6 noches con datos por debajo de 7,5 h de sueño; 4 de 4 días comprobados por encima del RPE máximo.
+- 9 sesiones (+2); HRV de 7 días dentro de tu rango normal; 6 de 7 noches con datos por debajo de 7,5 h de sueño; 4 de 4 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: ámbar 2 · rojo 4 · pendiente 1.
 
 ## Gráficas de la semana
@@ -38,9 +38,11 @@ Monotonía 0,76 · strain 848 · ACWR 0,78 · RPE registrado en 7/9 sesiones.
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| HRV media | 56,5 ms | 59,6 ms |
-| FC en reposo media | 53,7 lpm | 54,6 lpm |
-| Sueño medio | 6,64 h | 6,79 h |
+| HRV media | 60,3 ms | 59,6 ms |
+| FC en reposo media | 52,4 lpm | 54,6 lpm |
+| Sueño medio | 6,72 h | 6,79 h |
+
+HRV de 7 días hoy: 58,2 ms (rango normal 47,7–58,9 ms). Turnos: MT, TN.
 
 ## Fuerza de la semana
 
@@ -56,7 +58,7 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**17 de 18** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**18 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -78,10 +80,11 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 23/11 | 08:30 | 08:31 | 08:31 | 33 min ✓ |
 | 23/11 | 16:45 | 16:46 | 16:47 | 23 min ✓ |
 | 23/11 | 22:45 | 22:46 | 22:47 | 23 min ✓ |
+| 24/11 | 08:30 | 08:31 | 08:32 | 33 min ✓ |
 
 ## Calidad de los datos
 
-- Noches con HRV: 6/7 · con sueño: 6/7.
+- Noches con HRV: 7/7 · con sueño: 7/7.
 - Sesiones con RPE: 7/9.
 
 ## Validación de modelos
