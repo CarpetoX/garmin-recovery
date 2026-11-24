@@ -7,13 +7,13 @@
     "schema_version": 2,
     "ledger_version": "2.8.0",
     "purpose": "Historical data-readiness ledger (not an outgoing notification receipt)",
-    "count": 161
+    "count": 162
   },
-  "source_bytes_sha256": "cf8b4a7a4428c47e6de088834d741b2a3b1413c91fb223fc1388f78a55412f39",
-  "source_ledger_sha256": "6b2f669cd229923ed2de32dda9050758abe7b3a5f419c793240cf24b6a12a8a0",
-  "source_cycle_count": 161,
-  "source_cycles_sha256": "f4fa858f7f4748b316d76e48aa889e7d138052e95ea9784d39f792046806bbe9",
-  "shard_index_bytes_sha256": "9ba54f51d80b2476e6db41d39360ac0687e20e2ae45e2d7ae039cf2359b6c38d",
+  "source_bytes_sha256": "171ab0c1c606f7dfc965965258920c5cf742a5c54c7b3ea37ab35abc105465f5",
+  "source_ledger_sha256": "17803cba6ee73f453c21062aa9e5a0d5a77de07e1a41f4e41bd73bd1cac51b03",
+  "source_cycle_count": 162,
+  "source_cycles_sha256": "75c0cb4d44632548aa4317554a0a0914261c9ff746f4b1edd8e29f1f4d70e637",
+  "shard_index_bytes_sha256": "7ab510bd8bc81023d4de6c85c75add26685a2743d69eb7c2c66cee16ea265dd0",
   "shard_index_name": "index.json",
   "snapshot_payloads_stored_only_in_shards": true,
   "cycles": [
@@ -13945,6 +13945,93 @@
         "recovery_state": "assessed",
         "recovery_confidence": "high",
         "snapshot_sha256": "efb676954f3980606630421eadd39f516d8304c686032c48c7e1d8a89720e2d3",
+        "state": "data_ready",
+        "notification_delivery": "unverified",
+        "notice": "No ChatGPT delivery acknowledgment is available to GitHub Actions."
+      }
+    },
+    {
+      "record_index": 161,
+      "cycle_id": "2026-11-24-1645",
+      "shard_ref": {
+        "path": "shards/2026-11-24/0001.json",
+        "offset": 2
+      },
+      "metadata": {
+        "entry_schema_version": 2,
+        "certificate_kind": "scheduled_cycle",
+        "parent_cycle_id": null,
+        "cycle_id": "2026-11-24-1645",
+        "ready_at": "2026-11-24T16:47:40.279154+01:00",
+        "slot_at": "2026-11-24T16:45:00+01:00",
+        "target_report_at": "17:10",
+        "sync_run_id": 45429234913,
+        "crossfit_run_id": 45429550068,
+        "chain": {
+          "sync": {
+            "id": 45429234913,
+            "event": "workflow_dispatch",
+            "started_at": "2026-11-24T16:45:42+01:00",
+            "finished_at": "2026-11-24T16:46:03+01:00",
+            "conclusion": "success"
+          },
+          "heart": {
+            "id": 45429319789,
+            "event": "workflow_run",
+            "started_at": "2026-11-24T16:46:08+01:00",
+            "finished_at": "2026-11-24T16:46:47+01:00",
+            "conclusion": "success"
+          },
+          "advanced": {
+            "id": 45429460656,
+            "event": "workflow_run",
+            "started_at": "2026-11-24T16:46:52+01:00",
+            "finished_at": "2026-11-24T16:47:12+01:00",
+            "conclusion": "success"
+          },
+          "crossfit": {
+            "id": 45429550068,
+            "event": "workflow_run",
+            "started_at": "2026-11-24T16:47:21+01:00",
+            "finished_at": "2026-11-24T16:47:25+01:00",
+            "conclusion": "publishing_in_same_job"
+          }
+        },
+        "source_generated_at": {
+          "daily_summary.json": "2026-11-24T16:45:58.496723+01:00",
+          "weekly_summary.json": "2026-11-24T16:45:58.496723+01:00",
+          "garmin_status.json": "2026-11-24T16:46:29.218120+01:00",
+          "garmin_heart_rate.json": "2026-11-24T16:46:29.218120+01:00",
+          "recovery_assessment.json": "2026-11-24T16:47:04.693851+01:00",
+          "advanced_analytics.json": "2026-11-24T16:47:02.399483+01:00",
+          "data_quality.json": "2026-11-24T16:47:02.399483+01:00",
+          "crossfit_insights.json": "2026-11-24T16:47:31.781071+01:00"
+        },
+        "measurement_provenance": {
+          "confirmed_sleep": {
+            "state": "recent",
+            "measured_at": "2026-11-24T08:18:09+01:00"
+          },
+          "sleep_hrv": {
+            "state": "recent",
+            "measured_at": "2026-11-24T08:17:58+01:00"
+          },
+          "heart_rate_live": {
+            "state": "old_measurement",
+            "measured_at": "2026-11-24T13:20:00+01:00"
+          },
+          "body_battery_live": {
+            "state": "old_measurement",
+            "measured_at": "2026-11-24T12:39:00+01:00"
+          },
+          "resting_hr_summary": {
+            "state": "daily_summary_not_instantaneous",
+            "measured_at": null
+          }
+        },
+        "recovery_state": "assessed",
+        "recovery_confidence": "high",
+        "snapshot_sha256": "7022009a8f96eff448e9863717e20a150c58229adb1f7b5d12665fcbf06b5d25",
         "state": "data_ready",
         "notification_delivery": "unverified",
         "notice": "No ChatGPT delivery acknowledgment is available to GitHub Actions."
