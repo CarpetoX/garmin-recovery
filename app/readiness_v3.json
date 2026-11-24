@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-24T16:47:41.907124+01:00",
+  "generated_at": "2026-11-24T21:40:01.999457+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-11-24",
   "decision": {
@@ -279,16 +279,16 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-11-24T16:47:41.907124+01:00",
+    "generated_at": "2026-11-24T21:40:01.999457+01:00",
     "cycle": {
       "cycle_id": "2026-11-24-1645",
       "slot_at": "2026-11-24T16:45:00+01:00",
       "status": "ready",
       "verified_at": "2026-11-24T16:47:40.279154+01:00",
       "scheduled_cycle_today": true,
-      "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-11-24T16:46:29.218120+01:00",
-      "note": null,
+      "data_newer_than_certified_cycle": true,
+      "data_synced_at": "2026-11-24T21:38:39.143092+01:00",
+      "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
           "run_id": 45429234913,
@@ -315,53 +315,53 @@
     "data_age": {
       "confirmed_sleep": {
         "measured_at": "2026-11-24T08:18:09+01:00",
-        "age_minutes": 510.0,
+        "age_minutes": 802.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-11-24T08:17:58+01:00",
-        "age_minutes": 510.0,
+        "age_minutes": 802.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-11-24T13:20:00+01:00",
-        "age_minutes": 208.0,
-        "state": "antigua",
+        "measured_at": "2026-11-24T20:08:00+01:00",
+        "age_minutes": 92.0,
+        "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
-        "measured_at": "2026-11-24T12:39:00+01:00",
-        "age_minutes": 249.0,
-        "state": "antigua",
+        "measured_at": "2026-11-24T19:30:00+01:00",
+        "age_minutes": 130.0,
+        "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-24T15:47:02.358704+00:00",
+      "fetched_at": "2026-11-24T20:39:19.734096+00:00",
       "latest_date": "2026-11-23",
       "rows_sha256": "6131228054e88e71",
-      "advanced_run_id": "45429460656"
+      "advanced_run_id": "45483001385"
     },
     "source_sha256": {
-      "wellness.json": "287193c90d85bf07",
-      "garmin_hrv_timeline.json": "bd94f9c10539267b",
-      "garmin_sleep_history.json": "ecdbafd35642d3f5",
-      "garmin_extended.json": "1ded9a088ae2fe42",
-      "garmin_heart_rate.json": "5897ee54a50f05f2",
-      "garmin_stress.json": "254c12715f3db4c2",
-      "garmin_body_battery.json": "50f984c03acb5c3e",
+      "wellness.json": "66c6f42f8e21331e",
+      "garmin_hrv_timeline.json": "54bd157edcf6d1cc",
+      "garmin_sleep_history.json": "7cac16d71b68b4cc",
+      "garmin_extended.json": "b34ed0fea5b37ce3",
+      "garmin_heart_rate.json": "af656007ebf729c9",
+      "garmin_stress.json": "7edb18a05f33e9d6",
+      "garmin_body_battery.json": "3248ad6c32d80cc4",
       "activities.json": "c568314184a024bf",
-      "training_feedback.json": "937bf293dbb7570f",
+      "training_feedback.json": "f999abaa9fcf6847",
       "shift_calendar.json": "218a0b4ac784d7db",
-      "morning_sleep_status.json": "164c67879fe73ca5",
-      "recovery_assessment.json": "560bd149f257c111",
+      "morning_sleep_status.json": "3c59cc4b1ca119be",
+      "recovery_assessment.json": "95bbcb8bd4b8ffd8",
       "report_ready.json": "033e054ffd94fd24",
-      "garmin_hr_timeline.json": "c30ae4f558facf6b",
-      "daily_summary.json": "2bb409a86b84776e",
-      "workflow_health.json": "28142b770cefa54e",
-      "recovery.csv": "3fe9b75e52a7faac"
+      "garmin_hr_timeline.json": "ffc3a97a5b89ff5b",
+      "daily_summary.json": "8f0514ed085fcd6d",
+      "workflow_health.json": "aa9071f32bd7589e",
+      "recovery.csv": "42e716ecf2f08d7d"
     },
     "consistency_v3_v2": {
       "status": "ok",
@@ -384,34 +384,57 @@
       }
     },
     "execution_health": {
-      "status": "ok",
-      "checked_at": "2026-11-24T10:54:35.783550+01:00",
+      "status": "attention",
+      "checked_at": "2026-11-24T21:35:42.388836+01:00",
       "alerts": [
+        {
+          "code": "backup_sync_not_needed",
+          "severity": "info",
+          "slots": null
+        },
+        {
+          "code": "latest_run_skipped",
+          "severity": "info",
+          "slots": null
+        },
+        {
+          "code": "latest_run_skipped",
+          "severity": "info",
+          "slots": null
+        },
+        {
+          "code": "latest_run_skipped",
+          "severity": "info",
+          "slots": null
+        },
         {
           "code": "cron_missed_dispatch_recovered",
           "severity": "info",
           "slots": [
-            "2026-11-23T08:30:00+01:00",
-            "2026-11-23T16:45:00+01:00",
-            "2026-11-23T22:45:00+01:00"
+            "2026-11-23T22:45:00+01:00",
+            "2026-11-24T08:30:00+01:00",
+            "2026-11-24T16:45:00+01:00"
           ]
+        },
+        {
+          "code": "latest_pipeline_not_complete",
+          "severity": "warning",
+          "slots": null
         }
       ],
       "missed_slots": [],
       "recovered_slots": [
-        "2026-11-23T08:30:00+01:00",
-        "2026-11-23T16:45:00+01:00",
-        "2026-11-23T22:45:00+01:00"
+        "2026-11-23T22:45:00+01:00",
+        "2026-11-24T08:30:00+01:00",
+        "2026-11-24T16:45:00+01:00"
       ]
     },
     "delivery": {
       "status": "no_verificable_en_etapa_de_datos",
       "detail": "Este certificado acredita datos preparados, no la recepción del informe. ChatGPT no devuelve acuse; la rutina de Claude registra el ID de sesión en el paso V5.1."
     },
-    "status": "con_avisos",
-    "issues": [
-      "mediciones no recientes: heart_rate_live, body_battery_live"
-    ]
+    "status": "ok",
+    "issues": []
   },
   "training_integrity": {
     "window_days": 14,
@@ -1336,7 +1359,7 @@
       "load": 36.0,
       "srpe": null,
       "sessions": 2,
-      "stress_avg": 10.0,
+      "stress_avg": 17.0,
       "garmin_readiness": 40.0,
       "shift": null,
       "ctl": 14.3,
@@ -1348,7 +1371,7 @@
       "rem_min": 117.0,
       "stages_flag": null,
       "sleep_context": "night_sleep",
-      "stress_avg_full": 10.0,
+      "stress_avg_full": 17.0,
       "rest_confirmed": false
     }
   ],

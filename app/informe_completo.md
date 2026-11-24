@@ -1,6 +1,6 @@
 # Garmin Recovery · Informe de tarde
 
-Martes, 24 de noviembre de 2026 · 16:47 · `GR-2026-11-24-1647-a99df9`
+Martes, 24 de noviembre de 2026 · 21:40 · `GR-2026-11-24-2140-9f5f91`
 
 ```cards
 Decisión|Entrenar con control|RPE máx. 7|yellow
@@ -34,7 +34,7 @@ Carga 7 días|11 sesiones|sRPE 1116|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (21:38), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -133,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 78,9 lpm | 53,6 lpm |
+| Hoy* | 74,7 lpm | 53,6 lpm |
 | 3 días | 67,6 lpm | 56,6 lpm |
 | 7 días | 75,9 lpm | 59,2 lpm |
 | 28 días | 78,6 lpm | 62,2 lpm |
@@ -153,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 10, máximo 66.
-- Body Battery: último valor 72/100, medido a las 12:39 (hace 4 h 09 min: no es una medición nueva).
+- Estrés medio: 17, máximo 90.
+- Body Battery: último valor 45/100, medido a las 19:30 (hace 2 h 10 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -323,7 +323,7 @@ Turno: hoy libre, mañana libre.
 ### Recomendaciones
 
 1. **Entrenar con control** — Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -406,4 +406,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🟡 E
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-24-1645 · generado 24/11/2026 16:47 Europe/Madrid · certificado READY · sync_run_id 45429234913.
+Traza: informe de tarde · ciclo 2026-11-24-1645 · generado 24/11/2026 21:40 Europe/Madrid · certificado READY · sync_run_id 45429234913.
