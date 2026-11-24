@@ -1,6 +1,6 @@
 # Cierre diario · 24/11/2026
 
-`GR-2026-11-24-2140-9f5f91` · cita este identificador al reenviar el informe.
+`GR-2026-11-24-2247-11a29a` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🟠 ámbar — Entrenar con control.** RPE ≤ 7 · volumen 70–80 %.
 >
@@ -55,20 +55,20 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-24-1647-a99df9 (24/11 16:47):
-- Sin cambios en los datos.
+Frente al informe GR-2026-11-24-2140-9f5f91 (24/11 21:40):
+- Sesiones con RPE: 12 → 13.
 
 ## Balance del día
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 24/11 10:51 | Sin detalle | HIIT | 15 | 18 | 160 / 179 | — | — |
-| 24/11 10:16 | Sin detalle | HIIT | 35 | 18 | 124 / 176 | — | — |
+| 24/11 10:51 | WOD | WOD 3 RFT (TC 14') - remo / wall ball / bar muscle-up | 15 | 18 | 160 / 179 | 9,0 | 131 |
+| 24/11 10:16 | Técnica | Técnica - comba (single, crossover, DU, DU crossover) + bar muscle-up 2x2 (+ calentamiento) | 35 | 18 | 124 / 176 | — | — |
 
 ## Balance de la semana
 
 - Carga 7 días: **170** en 11 sesiones (+56 % vs. semana previa).
-- sRPE 7 días 1.116 · monotonía 0,76 · strain 848.
+- sRPE 7 días 1.248 · monotonía 0,90 · strain 1.118.
 - Fatiga acumulada: ATL 23,3, CTL 14,3, TSB -9,0 (CTL insuficiente: la forma no se interpreta todavía).
 
 ## Previsión orientativa para mañana
@@ -94,12 +94,12 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 
 | Modelo | ρ esfuerzo | IC 90 % | Días |
 |---|--:|---|--:|
-| Oficial v2 | -0,15 | -0,50 a 0,25 | 20 |
-| Híbrido | -0,15 | -0,50 a 0,25 | 20 |
-| v3 (en pruebas) | -0,16 | -0,51 a 0,24 | 20 |
-| Decisión operativa | -0,14 | -0,50 a 0,25 | 20 |
+| Oficial v2 | -0,14 | -0,48 a 0,25 | 21 |
+| Híbrido | -0,16 | -0,50 a 0,22 | 21 |
+| v3 (en pruebas) | -0,15 | -0,49 a 0,23 | 21 |
+| Decisión operativa | -0,16 | -0,50 a 0,22 | 21 |
 
-- Días entrenados con predicción: 21; por encima del RPE máximo del día: 12.
+- Días entrenados con predicción: 22; por encima del RPE máximo del día: 13.
 
 ## Recuperación: tendencias de 28 días
 
@@ -115,8 +115,6 @@ _¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i214004300** (24/11 10:16, Sin detalle, 35 min, carga 18) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i214013166** (24/11 10:51, Sin detalle, 15 min, carga 18) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -145,16 +143,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-24-2140-9f5f91`
+- **Identificador del informe:** `GR-2026-11-24-2247-11a29a`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-24-1645 · datos sincronizados a las 21:38 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 13,4 h ✓ · última HRV hace 13,4 h ✓ · última FC hace 1,5 h ✓ · último Body Battery hace 2,2 h ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 12/14 (+4 sin RPE por diseño: calentamiento/técnica) (sin RPE: 24/11 10:16, 24/11 10:51)
+- **Ciclo:** 2026-11-24-2245 · datos sincronizados a las 22:46
+- **Antigüedad:** fin del sueño hace 14,5 h ✓ · última HRV hace 14,5 h ✓ · última FC hace 69 min ✓ · último Body Battery hace 77 min ✓
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-24 21:40 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-24 22:47 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
