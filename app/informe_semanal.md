@@ -1,10 +1,10 @@
 # Resumen semanal · 19/11–25/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-25-1947-27e73d`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-25-2247-b9ba6a`)._
 
 ## En una frase
 
-- 11 sesiones (+1); HRV de 7 días por encima de tu rango normal; 6 de 7 noches con datos por debajo de 7,5 h de sueño; 4 de 4 días comprobados por encima del RPE máximo.
+- 11 sesiones (+1); HRV de 7 días por encima de tu rango normal; 6 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 5 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: ámbar 3 · rojo 4.
 
 ## Gráficas de la semana
@@ -28,11 +28,11 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 | Sesiones | 11 | 10 |
 | Minutos | 337 | 283 |
 | Carga (Intervals) | 215 | 155 |
-| sRPE (RPE × min) | 692 | 1376 |
+| sRPE (RPE × min) | 1722 | 1376 |
 
-Monotonía — · strain — · ACWR 0,56 · RPE registrado en 6/11 sesiones.
+Monotonía 0,68 · strain 1169 · ACWR 1,16 · RPE registrado en 9/11 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 19/11 (RPE 7,0 > 4), 20/11 (RPE 7,0 > 4), 23/11 (RPE 8,0 > 7), 24/11 (RPE 9,0 > 7).
+**Días por encima del RPE máximo de la decisión:** 19/11 (RPE 7,0 > 4), 20/11 (RPE 7,0 > 4), 23/11 (RPE 8,0 > 7), 24/11 (RPE 9,0 > 7), 25/11 (RPE 8,0 > 4).
 
 ## Recuperación
 
@@ -51,12 +51,20 @@ HRV de 7 días hoy: 61,5 ms (rango normal 47,7–58,8 ms). Turnos: MT, TN.
 | 19/11 | DB split squat | 65,0 kg | 65 × 8 | 82,3 kg | 4/4 |
 | 20/11 | chin up lastrado | 42,5 kg | — | — | 8/8 |
 | 23/11 | power snatch | 60,0 kg | 60 × 5 | 70,0 kg | 5/5 |
+| 25/11 | sentadilla trasera | 150,0 kg | 140 × 6 | 168,0 kg | 8/8 |
+| 25/11 | sentadilla péndulo | 70,0 kg | — | — | 4/4 |
+| 25/11 | extensión de cuádriceps sentado unilateral | 30,0 kg | — | — | 3/3 |
+| 25/11 | curl femoral tumbado | 74,0 kg | — | — | 4/4 |
+| 25/11 | curl femoral de pie unilateral | 30,0 kg | — | — | 3/3 |
+| 25/11 | clean pull + hang power clean + power clean | 75,0 kg | 75 × 3 | 82,5 kg | 3/3 |
+| 25/11 | power clean | 90,0 kg | 90 × 3 | 99,0 kg | 3/3 |
+| 25/11 | push press | 78,0 kg | 78 × 5 | 91,0 kg | 3/3 |
 
 _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es igual o mayor. Solo es comparable con el mismo ejercicio e implemento._
 
 ## Puntualidad de los informes
 
-**19 de 20** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**20 de 21** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
@@ -80,11 +88,12 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 24/11 | 22:45 | 22:46 | 22:47 | 23 min ✓ |
 | 25/11 | 08:30 | 08:31 | 08:32 | 33 min ✓ |
 | 25/11 | 16:45 | 16:52 | 16:53 | 17 min ✓ |
+| 25/11 | 22:45 | 22:46 | 22:47 | 23 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 6/11.
+- Sesiones con RPE: 9/11.
 
 ## Validación de modelos
 

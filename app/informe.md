@@ -1,6 +1,8 @@
-# Informe de seguimiento · 25/11/2026
+# Cierre diario · 25/11/2026
 
-`GR-2026-11-25-1947-27e73d` · cita este identificador al reenviar el informe.
+`GR-2026-11-25-2247-b9ba6a` · cita este identificador al reenviar el informe.
+
+> ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -54,30 +56,53 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-25-1653-31fd7e (25/11 16:53):
-- Sin cambios en los datos.
+Frente al informe GR-2026-11-25-1947-27e73d (25/11 19:47):
+- Sesiones con RPE: 13 → 16.
 
-## Actividad de hoy
+## Balance del día
 
 | Fecha | Tipo | Sesión | Min | Carga | FC media / máx. | RPE | sRPE |
 |---|---|---|--:|--:|--:|--:|--:|
-| 25/11 15:12 | Fuerza | Fuerza | 71 | 32 | 118 / 150 | — | — |
-| 25/11 10:19 | Sin detalle | HIIT | 54 | 26 | 122 / 153 | — | — |
-| 25/11 09:19 | Sin detalle | HIIT | 38 | 33 | 144 / 187 | — | — |
+| 25/11 15:12 | Fuerza | Fuerza - pierna: sentadilla trasera, sentadilla péndulo, extensión de cuádriceps, curl femoral y sit-ups | 71 | 32 | 118 / 150 | 6,0 | 425 |
+| 25/11 10:19 | Halterofilia | Halterofilia - complex clean pull + hang power clean + power clean / power clean 3x3 / push press 3x5 | 54 | 26 | 122 / 153 | 7,0 | 381 |
+| 25/11 09:19 | Calentamiento | Calentamiento - WOD + WOD EMOM 28' - max cal SkiErg-remo / devil press / burpee box jump | 38 | 33 | 144 / 187 | 8,0 | 224 |
 
-**¿Encaja con la decisión?** La actividad de hoy (carga 91, RPE máx. 0,0) encaja con la decisión.
+## Balance de la semana
 
-**Carga 7 días:** 215 en 11 sesiones (+39 % vs. semana previa) · sRPE 692 · monotonía —.
+- Carga 7 días: **215** en 11 sesiones (+39 % vs. semana previa).
+- sRPE 7 días 1.722 · monotonía 0,68 · strain 1.169.
+- Fatiga acumulada: ATL 32,3, CTL 15,4, TSB -16,9.
+
+## Previsión orientativa para mañana
+
+- Objetivo de sueño esta noche: **8,2 h** (necesidad + parte de la deuda de 2,2 h).
+- Mañana turno **MT**.
+- La decisión de mañana dependerá del sueño y la HRV de esta noche; no se anticipa.
 
 ## Gráficas
 
 ![RPE frente al máximo del día](charts/rpe.svg)
 
+_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+
 ![Carga](charts/load.svg)
 
-![Sesiones](charts/sessions.svg)
+![Disponibilidad](charts/readiness.svg)
 
-_Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo que permitía la decisión de ese día (verde 9, ámbar 7, rojo 4, pendiente 6); en días verdes un WOD a RPE 8–9 está dentro. Punto rojo: por encima del máximo. Franja superior: decisión del día._
+## Validación de modelos
+
+_¿La puntuación de la mañana anticipa cuánto te cuesta entrenar? Se compara con tu esfuerzo relativo (RPE × duración frente a la carga cardiaca, dentro de cada tipo de sesión). Un modelo útil tiene correlación negativa: puntuación baja → el mismo trabajo te cuesta más._
+
+**El v3 todavía no muestra relación clara con el esfuerzo: se mantiene el v2.**
+
+| Modelo | ρ esfuerzo | IC 90 % | Días |
+|---|--:|---|--:|
+| Oficial v2 | -0,13 | -0,47 a 0,25 | 22 |
+| Híbrido | -0,15 | -0,49 a 0,22 | 22 |
+| v3 (en pruebas) | -0,16 | -0,50 a 0,21 | 22 |
+| Decisión operativa | -0,14 | -0,48 a 0,24 | 22 |
+
+- Días entrenados con predicción: 23; por encima del RPE máximo del día: 14.
 
 ## Recuperación: tendencias de 28 días
 
@@ -93,9 +118,6 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 ## Acciones pendientes
 
-- Añade el RPE de la actividad **i214431565** (25/11 09:19, Sin detalle, 38 min, carga 33) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i214451909** (25/11 10:19, Sin detalle, 54 min, carga 26) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
-- Añade el RPE de la actividad **i214561355** (25/11 15:12, Sin detalle, 71 min, carga 32) en la pestaña `RPE` de tu hoja, con ese ID exacto. Si fue un calentamiento registrado aparte, anótalo así. No se estima.
 - Registra en Intervals.icu fatiga, agujetas, estrés, ánimo y motivación (1 = mejor, 4 = peor).
 
 ## Fuerza (últimos 28 días)
@@ -104,18 +126,18 @@ _Barras: RPE de la sesión más dura de cada día, por tipo. Raya gris: máximo 
 
 | Fecha | Ejercicio | Implemento | Carga máx. | Mejor serie | 1RM mín. | Volumen verificado | Series | RPE sesión |
 |---|---|---|---|--:|--:|--:|--:|--:|
+| 25/11 | sentadilla trasera | barra | 150,0 kg con barra | 140 × 6 | 168,0 kg | 6.290 kg | 8/8 | 6,0 |
+| 25/11 | sentadilla péndulo | máquina de placas | 70,0 kg indicados en máquina | — | — | 1.940 kg | 4/4 | 6,0 |
+| 25/11 | extensión de cuádriceps sentado unilateral | máquina de placas | 30,0 kg indicados en máquina | — | — | 1.125 kg | 3/3 | 6,0 |
+| 25/11 | curl femoral tumbado | máquina de placas | 74,0 kg indicados en máquina | — | — | 2.384 kg | 4/4 | 6,0 |
+| 25/11 | curl femoral de pie unilateral | máquina de placas | 30,0 kg indicados en máquina | — | — | 720 kg | 3/3 | 6,0 |
+| 25/11 | sit-ups | peso corporal | peso corporal | — | — | — | —/4 | 6,0 |
+| 25/11 | clean pull + hang power clean + power clean | barra | 75,0 kg con barra | 75 × 3 | 82,5 kg | 630 kg | 3/3 | 7,0 |
+| 25/11 | power clean | barra | 90,0 kg con barra | 90 × 3 | 99,0 kg | 735 kg | 3/3 | 7,0 |
+| 25/11 | push press | barra | 78,0 kg con barra | 78 × 5 | 91,0 kg | 1.115 kg | 3/3 | 7,0 |
 | 23/11 | power snatch | barra | 60,0 kg con barra | 60 × 5 | 70,0 kg | 1.340 kg | 5/5 | 7,0 |
 | 20/11 | chin up lastrado | sin especificar | 42,5 kg (unidad sin especificar) | — | — | 335 kg | 8/8 | — |
 | 19/11 | DB split squat | mancuernas (par) | 65,0 kg total (2 × 32,5 kg) | 65 × 8 | 82,3 kg | 2.080 kg | 4/4 | 6,0 |
-| 19/11 | feet elevated ring row | peso corporal | peso corporal | — | — | — | —/4 | 6,0 |
-| 18/11 | 3-position squat snatch | barra | 48,0 kg con barra | 48 × 3 | 52,8 kg | 642 kg | 5/5 | 7,0 |
-| 18/11 | squat snatch | barra | 63,0 kg con barra | 63 × 3 | 69,3 kg | 858 kg | 5/5 | 7,0 |
-| 14/11 | peso muerto | barra | 180,0 kg con barra | 180 × 3 | 198,0 kg | 8.800 kg | 10/10 | 6,0 |
-| 14/11 | peso muerto piernas semirrígidas con mancuernas | mancuernas (par) | 100,0 kg total (2 × 50,0 kg) | — | — | 3.984 kg | 4/4 | 6,0 |
-| 14/11 | jalón al pecho en polea agarre ancho | máquina de placas | 80,0 kg indicados en máquina | — | — | 2.520 kg | 4/4 | 6,0 |
-| 14/11 | curl femoral tumbado | máquina de placas | 67,0 kg indicados en máquina | — | — | 2.208 kg | 4/4 | 6,0 |
-| 13/11 | chin up lastrado | sin especificar | 37,5 kg (unidad sin especificar) | — | — | 345 kg | 7/7 | 7,0 |
-| 12/11 | DB split squat | mancuernas (par) | 60,0 kg total (2 × 30,0 kg) | 60 × 10 | 80,0 kg | 2.400 kg | 4/4 | — |
 
 _1RM mín. = Epley con tu mejor serie (kg × repeticiones, hasta 10). Si la serie no fue al fallo, tu 1RM real es igual o mayor: es un mínimo, no un máximo. No usa el RPE de la sesión._
 _Volumen = kg × repeticiones de las series con carga conocida. No se comparan implementos distintos (barra, mancuernas, máquinas); las máquinas no son comparables con peso libre; el RPE es de la sesión, no de cada serie._
@@ -124,16 +146,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-25-1947-27e73d`
+- **Identificador del informe:** `GR-2026-11-25-2247-b9ba6a`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-25-1645 · datos sincronizados a las 19:46 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 11,5 h ✓ · última HRV hace 11,6 h ✓ · última FC hace 15 min ✓ · último Body Battery hace 23 min ✓
-- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/16 (+5 sin RPE por diseño: calentamiento/técnica) (sin RPE: 25/11 09:19, 25/11 10:19, 25/11 15:12)
+- **Ciclo:** 2026-11-25-2245 · datos sincronizados a las 22:46
+- **Antigüedad:** fin del sueño hace 14,5 h ✓ · última HRV hace 14,6 h ✓ · última FC hace 3,2 h ! · último Body Battery hace 3,4 h !
+- **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 16/16 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-25 19:47 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-25 22:47 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._

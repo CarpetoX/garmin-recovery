@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-11-25T19:47:20.281021+01:00",
+  "generated_at": "2026-11-25T22:47:21.511922+01:00",
   "source_measurement_note": "La generación del JSON no es hora de medición",
   "sheet_source": "cycle_snapshot",
   "sheet_error": null,
-  "sheet_rows_loaded": 80,
+  "sheet_rows_loaded": 84,
   "sheet_fetch_policy": "same_advanced_run_sha256_snapshot",
-  "sheet_latest_date": "2026-11-24",
+  "sheet_latest_date": "2026-11-25",
   "latest_activity_date": "2026-11-25",
   "sheet_has_detail_json": true,
   "manual_source_rule": "Advanced RPE snapshot para workflow encadenado; CSV en vivo para ejecución manual.",
@@ -1383,7 +1383,7 @@
         "intervals_training_load": 91.0,
         "garmin_activity_load": 314.3,
         "trimp": 154.6,
-        "session_rpe_load": 0
+        "session_rpe_load": 1029.6
       },
       "baseline_previous_3d": {
         "hrv": 67.49,
@@ -1442,7 +1442,7 @@
     "recovery_assessment_state": "assessed"
   },
   "recovery_assessment_v2": {
-    "generated_at": "2026-11-25T19:46:53.691049+01:00",
+    "generated_at": "2026-11-25T22:47:02.528911+01:00",
     "methodology_version": "recovery-reliability-v2.3.1",
     "state": "assessed",
     "status": "green",
@@ -1551,7 +1551,9 @@
       "subjective_checkin": "not_provided",
       "subjective_values_exported": false,
       "intensity_guardrail": "use_v22_guidance",
-      "reason_codes": [],
+      "reason_codes": [
+        "live_measurement_uncertain"
+      ],
       "baseline_caution": "standard",
       "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
       "measurement_provenance": {
@@ -1559,26 +1561,26 @@
           "confirmed_sleep": {
             "state": "recent",
             "measured_at": "2026-11-25T08:17:54+01:00",
-            "age_minutes": 689.0,
+            "age_minutes": 869.1,
             "basis": "confirmed_sleep_end",
             "garmin_episode_confirmed": true
           },
           "sleep_hrv": {
             "state": "recent",
             "measured_at": "2026-11-25T08:12:59+01:00",
-            "age_minutes": 693.9,
+            "age_minutes": 874.1,
             "basis": "actual_sleep_hrv_sample"
           },
           "heart_rate_live": {
-            "state": "recent",
+            "state": "old_measurement",
             "measured_at": "2026-11-25T19:32:00+01:00",
-            "age_minutes": 14.9,
+            "age_minutes": 195.0,
             "basis": "actual_hr_sample"
           },
           "body_battery_live": {
-            "state": "recent",
+            "state": "old_measurement",
             "measured_at": "2026-11-25T19:24:00+01:00",
-            "age_minutes": 22.9,
+            "age_minutes": 203.0,
             "basis": "actual_body_battery_sample"
           },
           "resting_hr_summary": {
@@ -1589,8 +1591,11 @@
           }
         },
         "invalid_core_episode": false,
-        "live_data_limited": false,
-        "limited_live_metrics": [],
+        "live_data_limited": true,
+        "limited_live_metrics": [
+          "heart_rate_live",
+          "body_battery_live"
+        ],
         "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
       },
       "sleep_fragmentation": {
@@ -1610,8 +1615,8 @@
           "easy_aerobic": "usual_program_if_well",
           "mobility": "usual_program_if_well"
         },
-        "recent_sessions_with_declared_rpe": 3,
-        "recent_high_rpe_sessions": 2,
+        "recent_sessions_with_declared_rpe": 6,
+        "recent_high_rpe_sessions": 3,
         "note": "Guidance only; no direct measure of neuromuscular readiness, and sleepiness can affect coordination independently of muscle fatigue."
       }
     },
@@ -1627,14 +1632,181 @@
       "date": "2026-11-25",
       "context": "free",
       "name": "Fuerza",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Fuerza - pierna: sentadilla trasera, sentadilla péndulo, extensión de cuádriceps, curl femoral y sit-ups",
+          "rpe": 6.0,
+          "notes": "Sentadilla trasera: 12x20 (barra vacía), 12x40, 12x60, 10x80, 10x100, 8x120, 8x130, 6x140, 3x150 kg; volumen 6.290 kg sin barra vacía (6.530 con ella). Sentadilla péndulo: 10x40, 10x50, 8x60, 8x70 kg. Extensión de cuádriceps unilateral: 15x20, 15x25, 15x30 kg por pierna. Curl femoral tumbado: 12x60, 2x8x67, 8x74 kg. Curl femoral de pie unilateral: 3x8x30 kg por pierna. Sit-ups 4x25. RPE 6 de toda la sesión. Garmin 70,9 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "garmin_activity_id": "i214561355",
+            "rpe": 6,
+            "rpe_scope": "sesión completa",
+            "recorded_garmin_minutes": 70.85,
+            "exercises": [
+              {
+                "name": "sentadilla trasera",
+                "load_unit": "kg_total_barra",
+                "bar_empty_load_kg": 20,
+                "sets": [
+                  {
+                    "reps": 12,
+                    "load_kg": 20,
+                    "bar_empty": true
+                  },
+                  {
+                    "reps": 12,
+                    "load_kg": 40
+                  },
+                  {
+                    "reps": 12,
+                    "load_kg": 60
+                  },
+                  {
+                    "reps": 10,
+                    "load_kg": 80
+                  },
+                  {
+                    "reps": 10,
+                    "load_kg": 100
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 120
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 130
+                  },
+                  {
+                    "reps": 6,
+                    "load_kg": 140
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 150
+                  }
+                ],
+                "verified_volume_kg": 6290,
+                "volume_with_empty_bar_kg": 6530,
+                "top_set_kg": 150
+              },
+              {
+                "name": "sentadilla péndulo",
+                "load_unit": "kg_indicado_maquina",
+                "sets": [
+                  {
+                    "reps": 10,
+                    "load_kg": 40
+                  },
+                  {
+                    "reps": 10,
+                    "load_kg": 50
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 60
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 70
+                  }
+                ]
+              },
+              {
+                "name": "extensión de cuádriceps sentado unilateral",
+                "load_unit": "kg_indicado_maquina",
+                "unilateral": true,
+                "side_assignment": "both_legs_declared",
+                "sets": [
+                  {
+                    "reps": 15,
+                    "load_kg": 20,
+                    "reps_per_side": 15,
+                    "load_per_side_kg": 20,
+                    "side_count": 2
+                  },
+                  {
+                    "reps": 15,
+                    "load_kg": 25,
+                    "reps_per_side": 15,
+                    "load_per_side_kg": 25,
+                    "side_count": 2
+                  },
+                  {
+                    "reps": 15,
+                    "load_kg": 30,
+                    "reps_per_side": 15,
+                    "load_per_side_kg": 30,
+                    "side_count": 2
+                  }
+                ]
+              },
+              {
+                "name": "curl femoral tumbado",
+                "load_unit": "kg_indicado_maquina",
+                "sets": [
+                  {
+                    "reps": 12,
+                    "load_kg": 60
+                  },
+                  {
+                    "count": 2,
+                    "reps": 8,
+                    "load_kg": 67
+                  },
+                  {
+                    "reps": 8,
+                    "load_kg": 74
+                  }
+                ]
+              },
+              {
+                "name": "curl femoral de pie unilateral",
+                "load_unit": "kg_indicado_maquina",
+                "unilateral": true,
+                "side_assignment": "both_legs_declared",
+                "sets": [
+                  {
+                    "count": 3,
+                    "reps": 8,
+                    "load_kg": 30,
+                    "reps_per_side": 8,
+                    "load_per_side_kg": 30,
+                    "side_count": 2
+                  }
+                ]
+              },
+              {
+                "name": "sit-ups",
+                "load_unit": "peso_corporal",
+                "sets": [
+                  {
+                    "count": 4,
+                    "reps": 25,
+                    "load_kg": null
+                  }
+                ]
+              }
+            ],
+            "notes": "Barra vacía 20 kg. Volumen de sentadilla trasera 6.290 kg sin barra vacía (6.530 con ella). Unilaterales: reps y kg por pierna, ambas piernas. Cargas de máquina no comparables con barra. RPE 6 de toda la sesión."
+          },
+          "minimum_verified_volume_kg": 6290.0,
+          "volume_complete": true,
+          "structured_sets_known": 8,
+          "structured_sets_total": 8
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 6.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 70.85,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 425.1,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -1658,14 +1830,167 @@
       "date": "2026-11-25",
       "context": "free",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Halterofilia - complex clean pull + hang power clean + power clean / power clean 3x3 / push press 3x5",
+          "rpe": 7.0,
+          "notes": "Complex 3x1 cada 1'30\" (clean pull + hang power clean + power clean): calentamiento con barra vacía, 40, 50 y 60 kg; trabajo 65, 70 y 75 kg (RPE 6). Power clean 3x3 cada 2' (10\" entre reps): 75, 80 y 90 kg (RPE 6,5). Push press 3x5 cada 2': calentamiento en series de 3 con barra vacía, 40, 50, 60 y 65 kg; trabajo 70, 75 y 78 kg (RPE 7,5). Volumen de trabajo 2.480 kg. RPE de sesión 7 (media aproximada). Garmin 54,4 min.",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "strength",
+            "garmin_activity_id": "i214451909",
+            "rpe": 7,
+            "rpe_scope": "sesión completa (media aproximada elegida por el atleta)",
+            "rpe_by_block": {
+              "complex": 6,
+              "power clean 3x3": 6.5,
+              "push press 3x5": 7.5
+            },
+            "recorded_garmin_minutes": 54.4,
+            "exercises": [
+              {
+                "name": "clean pull + hang power clean + power clean",
+                "load_unit": "kg_total_barra",
+                "bar_empty_load_kg": 20,
+                "interval_seconds": 90,
+                "rep_definition": "1 repetición = 1 complejo (clean pull + hang power clean + power clean)",
+                "complex": [
+                  {
+                    "name": "clean pull",
+                    "reps": 1
+                  },
+                  {
+                    "name": "hang power clean",
+                    "reps": 1
+                  },
+                  {
+                    "name": "power clean",
+                    "reps": 1
+                  }
+                ],
+                "warmup_sets": [
+                  {
+                    "reps": 3,
+                    "load_kg": 20,
+                    "bar_empty": true
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 40
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 50
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 60
+                  }
+                ],
+                "sets": [
+                  {
+                    "reps": 3,
+                    "load_kg": 65
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 70
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 75
+                  }
+                ],
+                "verified_volume_kg": 630,
+                "top_set_kg": 75,
+                "rpe": 6
+              },
+              {
+                "name": "power clean",
+                "load_unit": "kg_total_barra",
+                "interval_seconds": 130,
+                "interval_note": "cada 2', 10\" entre repeticiones",
+                "sets": [
+                  {
+                    "reps": 3,
+                    "load_kg": 75
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 80
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 90
+                  }
+                ],
+                "verified_volume_kg": 735,
+                "top_set_kg": 90,
+                "rpe": 6.5
+              },
+              {
+                "name": "push press",
+                "load_unit": "kg_total_barra",
+                "interval_seconds": 120,
+                "warmup_sets": [
+                  {
+                    "reps": 3,
+                    "load_kg": 20,
+                    "bar_empty": true
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 40
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 50
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 60
+                  },
+                  {
+                    "reps": 3,
+                    "load_kg": 65
+                  }
+                ],
+                "sets": [
+                  {
+                    "reps": 5,
+                    "load_kg": 70
+                  },
+                  {
+                    "reps": 5,
+                    "load_kg": 75
+                  },
+                  {
+                    "reps": 5,
+                    "load_kg": 78
+                  }
+                ],
+                "verified_volume_kg": 1115,
+                "top_set_kg": 78,
+                "rpe": 7.5
+              }
+            ],
+            "notes": "Complex 3x1 cada 1'30\" (cada repetición = clean pull + hang power clean + power clean), calentado con barra vacía, 40, 50 y 60 kg. Power clean 3x3 cada 2' con 10\" entre repeticiones. Push press 3x5 cada 2' tras series de 3 de calentamiento. RPE por bloque: complex 6, power clean 6,5, push press 7,5; RPE 7 de sesión elegido por el atleta. Barra vacía 20 kg (como en sesiones anteriores). Volumen de trabajo 2.480 kg."
+          },
+          "minimum_verified_volume_kg": 2480.0,
+          "volume_complete": true,
+          "structured_sets_known": 9,
+          "structured_sets_total": 9
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 7.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 54.4,
-      "srpe_using_recorded_minutes": null,
+      "srpe_using_recorded_minutes": 380.8,
       "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
       "external_work": {
         "distance_m": null,
@@ -1689,15 +2014,164 @@
       "date": "2026-11-25",
       "context": "free",
       "name": "HIIT",
-      "manual_match": "unmatched",
-      "manual_blocks": [],
+      "manual_match": "sheet_id",
+      "manual_blocks": [
+        {
+          "activity": "Calentamiento - WOD",
+          "rpe": null,
+          "notes": "Calentamiento del WOD. Sin RPE: no puntuado por decisión del atleta. Tramo 0:00–10:00 de la actividad (10 min).",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "warmup",
+            "garmin_activity_id": "i214431565",
+            "exercise": "calentamiento del WOD",
+            "rpe": null,
+            "segment": {
+              "start_s": 0,
+              "end_s": 600
+            },
+            "recorded_garmin_minutes": 10.0,
+            "notes": "Primeros 10 min de la actividad. Sin RPE por decisión del atleta."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        },
+        {
+          "activity": "WOD EMOM 28' - max cal SkiErg-remo / devil press / burpee box jump",
+          "rpe": 8.0,
+          "notes": "EMOM 28' (7 rondas de 4 min): M1 máx. calorías en 50\" alternando SkiErg y remo (empieza SkiErg); M2 6 devil press con dos mancuernas de 22,5 kg; M3 6 burpee box jumps a 60 cm (pizarra 5–10); M4 descanso. Calorías por ronda: 17, 17, 14, 15, 12, 14, 12 = 101 (SkiErg 55, remo 46). Totales: 42 devil press (1.890 kg), 42 burpee box jumps. RPE 8. Tramo 10:00–38:00 de la actividad (28 min).",
+          "sensations": "",
+          "detail_json": {
+            "schema_version": 1,
+            "source": "user_in_chat",
+            "type": "metcon",
+            "format": "EMOM",
+            "duration_minutes": 28,
+            "interval_seconds": 60,
+            "rounds": 7,
+            "garmin_activity_id": "i214431565",
+            "rpe": 8,
+            "segment": {
+              "start_s": 600,
+              "end_s": 2280
+            },
+            "recorded_garmin_minutes": 28.0,
+            "prescribed_round": [
+              {
+                "minute": 1,
+                "name": "max calorías en 50\" (cualquier máquina)"
+              },
+              {
+                "minute": 2,
+                "name": "devil press 2 DB",
+                "reps": 6,
+                "load_kg": 45,
+                "load_per_dumbbell_kg": 22.5,
+                "load_unit": "kg_total_dos_mancuernas",
+                "implements": 2
+              },
+              {
+                "minute": 3,
+                "name": "burpee box jump",
+                "reps": "5-10",
+                "box_height_cm": 60
+              },
+              {
+                "minute": 4,
+                "name": "descanso"
+              }
+            ],
+            "performed_round": [
+              {
+                "minute": 1,
+                "name": "max calorías en 50\" alternando SkiErg y remo (empieza SkiErg)"
+              },
+              {
+                "minute": 2,
+                "name": "devil press 2 DB",
+                "reps": 6,
+                "load_kg": 45,
+                "load_per_dumbbell_kg": 22.5,
+                "load_unit": "kg_total_dos_mancuernas",
+                "implements": 2
+              },
+              {
+                "minute": 3,
+                "name": "burpee box jump",
+                "reps": 6,
+                "box_height_cm": 60
+              },
+              {
+                "minute": 4,
+                "name": "descanso"
+              }
+            ],
+            "performed": {
+              "calories_by_round": [
+                {
+                  "round": 1,
+                  "machine": "SkiErg",
+                  "calories": 17
+                },
+                {
+                  "round": 2,
+                  "machine": "remo",
+                  "calories": 17
+                },
+                {
+                  "round": 3,
+                  "machine": "SkiErg",
+                  "calories": 14
+                },
+                {
+                  "round": 4,
+                  "machine": "remo",
+                  "calories": 15
+                },
+                {
+                  "round": 5,
+                  "machine": "SkiErg",
+                  "calories": 12
+                },
+                {
+                  "round": 6,
+                  "machine": "remo",
+                  "calories": 14
+                },
+                {
+                  "round": 7,
+                  "machine": "SkiErg",
+                  "calories": 12
+                }
+              ],
+              "totals": {
+                "calories": 101,
+                "skierg_cal": 55,
+                "row_cal": 46,
+                "devil_press_reps": 42,
+                "burpee_box_jump_reps": 42
+              },
+              "devil_press_volume_kg": 1890
+            },
+            "notes": "7 rondas de 4 min. Calorías por ronda 17, 17, 14, 15, 12, 14, 12 (SkiErg en rondas impares, remo en pares). Devil press con dos mancuernas de 22,5 kg. Burpee box jump: la pizarra admitía 5–10; hizo 6 en cada ronda, cajón 60 cm. Tramo 10:00–38:00 de la actividad."
+          },
+          "minimum_verified_volume_kg": null,
+          "volume_complete": false,
+          "structured_sets_known": 0,
+          "structured_sets_total": 0
+        }
+      ],
       "manual_rpe_conflict": false,
-      "rpe_used": null,
+      "rpe_used": 8.0,
       "rpe_interval": null,
       "rpe_disagreement": false,
       "recorded_minutes": 38.38,
-      "srpe_using_recorded_minutes": null,
-      "srpe_caveat": "Duración grabada; no equivale necesariamente al tiempo efectivo del WOD.",
+      "srpe_using_recorded_minutes": 224.0,
+      "srpe_caveat": "Solo los tramos con RPE declarados en la hoja.",
       "external_work": {
         "distance_m": null,
         "reps": null,
@@ -1713,7 +2187,8 @@
         "max": 187.0
       },
       "efficiency": "insufficient_matched_repeated_workouts",
-      "neuromuscular_fatigue": "not_directly_measured"
+      "neuromuscular_fatigue": "not_directly_measured",
+      "scored_minutes": 28.0
     },
     {
       "activity_id": "i214013166",
@@ -9842,6 +10317,231 @@
     "source": "explicit manual strength sets only",
     "strength_exercises": [
       {
+        "date": "2026-11-25",
+        "activity_id": "i214561355",
+        "exercise": "sentadilla trasera",
+        "movement_pattern": "squat",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 6290.0,
+        "known_sets": 8,
+        "total_sets": 8,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 150.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 140.0,
+        "top_set_reps": 6,
+        "e1rm_min_kg": 168.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214561355",
+        "exercise": "sentadilla péndulo",
+        "movement_pattern": "squat",
+        "equipment": "machine_stack",
+        "load_unit": "kg_indicado_maquina",
+        "external_load_applicable": true,
+        "verified_volume_kg": 1940.0,
+        "known_sets": 4,
+        "total_sets": 4,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 70.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "unsupported_equipment",
+        "estimated_1rm_method": null,
+        "top_set_kg": null,
+        "top_set_reps": null,
+        "e1rm_min_kg": null,
+        "e1rm_min_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214561355",
+        "exercise": "extensión de cuádriceps sentado unilateral",
+        "movement_pattern": "other",
+        "equipment": "machine_stack",
+        "load_unit": "kg_indicado_maquina",
+        "external_load_applicable": true,
+        "verified_volume_kg": 1125.0,
+        "known_sets": 3,
+        "total_sets": 3,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 30.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "unsupported_equipment",
+        "estimated_1rm_method": null,
+        "top_set_kg": null,
+        "top_set_reps": null,
+        "e1rm_min_kg": null,
+        "e1rm_min_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214561355",
+        "exercise": "curl femoral tumbado",
+        "movement_pattern": "knee_flexion",
+        "equipment": "machine_stack",
+        "load_unit": "kg_indicado_maquina",
+        "external_load_applicable": true,
+        "verified_volume_kg": 2384.0,
+        "known_sets": 4,
+        "total_sets": 4,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 74.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "unsupported_equipment",
+        "estimated_1rm_method": null,
+        "top_set_kg": null,
+        "top_set_reps": null,
+        "e1rm_min_kg": null,
+        "e1rm_min_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214561355",
+        "exercise": "curl femoral de pie unilateral",
+        "movement_pattern": "knee_flexion",
+        "equipment": "machine_stack",
+        "load_unit": "kg_indicado_maquina",
+        "external_load_applicable": true,
+        "verified_volume_kg": 720.0,
+        "known_sets": 3,
+        "total_sets": 3,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 30.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "unsupported_equipment",
+        "estimated_1rm_method": null,
+        "top_set_kg": null,
+        "top_set_reps": null,
+        "e1rm_min_kg": null,
+        "e1rm_min_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214561355",
+        "exercise": "sit-ups",
+        "movement_pattern": "core",
+        "equipment": "bodyweight",
+        "load_unit": "peso_corporal",
+        "external_load_applicable": false,
+        "verified_volume_kg": null,
+        "known_sets": 0,
+        "total_sets": 4,
+        "volume_complete": null,
+        "volume_status": "bodyweight_no_external_load",
+        "peak_declared_load_kg": null,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "unsupported_equipment",
+        "estimated_1rm_method": null,
+        "top_set_kg": null,
+        "top_set_reps": null,
+        "e1rm_min_kg": null,
+        "e1rm_min_method": null,
+        "rpe": 6.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214451909",
+        "exercise": "clean pull + hang power clean + power clean",
+        "movement_pattern": "olympic_lift",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 630.0,
+        "known_sets": 3,
+        "total_sets": 3,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 75.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 75.0,
+        "top_set_reps": 3,
+        "e1rm_min_kg": 82.5,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 7.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214451909",
+        "exercise": "power clean",
+        "movement_pattern": "olympic_lift",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 735.0,
+        "known_sets": 3,
+        "total_sets": 3,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 90.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 90.0,
+        "top_set_reps": 3,
+        "e1rm_min_kg": 99.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 7.0,
+        "pain": null
+      },
+      {
+        "date": "2026-11-25",
+        "activity_id": "i214451909",
+        "exercise": "push press",
+        "movement_pattern": "vertical_push",
+        "equipment": "barbell",
+        "load_unit": "kg_total_barra",
+        "external_load_applicable": true,
+        "verified_volume_kg": 1115.0,
+        "known_sets": 3,
+        "total_sets": 3,
+        "volume_complete": true,
+        "volume_status": "complete",
+        "peak_declared_load_kg": 78.0,
+        "laterality_unconfirmed": false,
+        "estimated_1rm_kg": null,
+        "estimated_1rm_status": "set_effort_not_reported",
+        "estimated_1rm_method": null,
+        "top_set_kg": 78.0,
+        "top_set_reps": 5,
+        "e1rm_min_kg": 91.0,
+        "e1rm_min_method": "Epley sin RIR: limite inferior",
+        "rpe": 7.0,
+        "pain": null
+      },
+      {
         "date": "2026-11-23",
         "activity_id": "i213684849",
         "exercise": "power snatch",
@@ -11819,10 +12519,50 @@
     ],
     "movement_pattern_load": {
       "7d": {
+        "squat": {
+          "verified_volume_kg": 10310.0,
+          "known_sets": 16,
+          "total_sets": 16,
+          "sessions": 3,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "other": {
+          "verified_volume_kg": 1125.0,
+          "known_sets": 3,
+          "total_sets": 3,
+          "sessions": 1,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "knee_flexion": {
+          "verified_volume_kg": 3104.0,
+          "known_sets": 7,
+          "total_sets": 7,
+          "sessions": 2,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "core": {
+          "verified_volume_kg": 0.0,
+          "known_sets": 0,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": false,
+          "mixed_equipment_caution": true
+        },
         "olympic_lift": {
-          "verified_volume_kg": 1340.0,
-          "known_sets": 5,
-          "total_sets": 5,
+          "verified_volume_kg": 2705.0,
+          "known_sets": 11,
+          "total_sets": 11,
+          "sessions": 3,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "vertical_push": {
+          "verified_volume_kg": 1115.0,
+          "known_sets": 3,
+          "total_sets": 3,
           "sessions": 1,
           "volume_complete": true,
           "mixed_equipment_caution": true
@@ -11831,14 +12571,6 @@
           "verified_volume_kg": 335.0,
           "known_sets": 8,
           "total_sets": 8,
-          "sessions": 1,
-          "volume_complete": true,
-          "mixed_equipment_caution": true
-        },
-        "squat": {
-          "verified_volume_kg": 2080.0,
-          "known_sets": 4,
-          "total_sets": 4,
           "sessions": 1,
           "volume_complete": true,
           "mixed_equipment_caution": true
@@ -11853,11 +12585,51 @@
         }
       },
       "28d": {
-        "olympic_lift": {
-          "verified_volume_kg": 7926.0,
-          "known_sets": 64,
-          "total_sets": 64,
+        "squat": {
+          "verified_volume_kg": 26652.0,
+          "known_sets": 39,
+          "total_sets": 50,
           "sessions": 9,
+          "volume_complete": false,
+          "mixed_equipment_caution": true
+        },
+        "other": {
+          "verified_volume_kg": 2400.0,
+          "known_sets": 7,
+          "total_sets": 7,
+          "sessions": 2,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "knee_flexion": {
+          "verified_volume_kg": 9760.0,
+          "known_sets": 23,
+          "total_sets": 23,
+          "sessions": 5,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "core": {
+          "verified_volume_kg": 3000.0,
+          "known_sets": 4,
+          "total_sets": 12,
+          "sessions": 3,
+          "volume_complete": false,
+          "mixed_equipment_caution": true
+        },
+        "olympic_lift": {
+          "verified_volume_kg": 9291.0,
+          "known_sets": 70,
+          "total_sets": 70,
+          "sessions": 11,
+          "volume_complete": true,
+          "mixed_equipment_caution": true
+        },
+        "vertical_push": {
+          "verified_volume_kg": 1115.0,
+          "known_sets": 3,
+          "total_sets": 3,
+          "sessions": 1,
           "volume_complete": true,
           "mixed_equipment_caution": true
         },
@@ -11866,14 +12638,6 @@
           "known_sets": 24,
           "total_sets": 29,
           "sessions": 5,
-          "volume_complete": false,
-          "mixed_equipment_caution": true
-        },
-        "squat": {
-          "verified_volume_kg": 18422.0,
-          "known_sets": 27,
-          "total_sets": 38,
-          "sessions": 7,
           "volume_complete": false,
           "mixed_equipment_caution": true
         },
@@ -11889,14 +12653,6 @@
           "verified_volume_kg": 15544.0,
           "known_sets": 18,
           "total_sets": 18,
-          "sessions": 3,
-          "volume_complete": true,
-          "mixed_equipment_caution": true
-        },
-        "knee_flexion": {
-          "verified_volume_kg": 6656.0,
-          "known_sets": 16,
-          "total_sets": 16,
           "sessions": 3,
           "volume_complete": true,
           "mixed_equipment_caution": true
@@ -11924,32 +12680,64 @@
           "sessions": 2,
           "volume_complete": true,
           "mixed_equipment_caution": true
-        },
-        "core": {
-          "verified_volume_kg": 3000.0,
-          "known_sets": 4,
-          "total_sets": 8,
-          "sessions": 2,
-          "volume_complete": false,
-          "mixed_equipment_caution": true
-        },
-        "other": {
-          "verified_volume_kg": 1275.0,
-          "known_sets": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true,
-          "mixed_equipment_caution": true
         }
       }
     },
     "movement_pattern_load_by_equipment": {
       "7d": {
+        "squat:barbell": {
+          "verified_volume_kg": 6290.0,
+          "known_sets": 8,
+          "external_sets_expected": 8,
+          "total_sets": 8,
+          "sessions": 1,
+          "volume_complete": true
+        },
+        "squat:machine_stack": {
+          "verified_volume_kg": 1940.0,
+          "known_sets": 4,
+          "external_sets_expected": 4,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": true
+        },
+        "other:machine_stack": {
+          "verified_volume_kg": 1125.0,
+          "known_sets": 3,
+          "external_sets_expected": 3,
+          "total_sets": 3,
+          "sessions": 1,
+          "volume_complete": true
+        },
+        "knee_flexion:machine_stack": {
+          "verified_volume_kg": 3104.0,
+          "known_sets": 7,
+          "external_sets_expected": 7,
+          "total_sets": 7,
+          "sessions": 2,
+          "volume_complete": true
+        },
+        "core:bodyweight": {
+          "verified_volume_kg": 0.0,
+          "known_sets": 0,
+          "external_sets_expected": 0,
+          "total_sets": 4,
+          "sessions": 1,
+          "volume_complete": true
+        },
         "olympic_lift:barbell": {
-          "verified_volume_kg": 1340.0,
-          "known_sets": 5,
-          "external_sets_expected": 5,
-          "total_sets": 5,
+          "verified_volume_kg": 2705.0,
+          "known_sets": 11,
+          "external_sets_expected": 11,
+          "total_sets": 11,
+          "sessions": 3,
+          "volume_complete": true
+        },
+        "vertical_push:barbell": {
+          "verified_volume_kg": 1115.0,
+          "known_sets": 3,
+          "external_sets_expected": 3,
+          "total_sets": 3,
           "sessions": 1,
           "volume_complete": true
         },
@@ -11979,12 +12767,60 @@
         }
       },
       "28d": {
+        "squat:barbell": {
+          "verified_volume_kg": 18472.0,
+          "known_sets": 23,
+          "external_sets_expected": 23,
+          "total_sets": 23,
+          "sessions": 3,
+          "volume_complete": true
+        },
+        "squat:machine_stack": {
+          "verified_volume_kg": 3700.0,
+          "known_sets": 8,
+          "external_sets_expected": 8,
+          "total_sets": 8,
+          "sessions": 2,
+          "volume_complete": true
+        },
+        "other:machine_stack": {
+          "verified_volume_kg": 2400.0,
+          "known_sets": 7,
+          "external_sets_expected": 7,
+          "total_sets": 7,
+          "sessions": 2,
+          "volume_complete": true
+        },
+        "knee_flexion:machine_stack": {
+          "verified_volume_kg": 9760.0,
+          "known_sets": 23,
+          "external_sets_expected": 23,
+          "total_sets": 23,
+          "sessions": 5,
+          "volume_complete": true
+        },
+        "core:bodyweight": {
+          "verified_volume_kg": 0.0,
+          "known_sets": 0,
+          "external_sets_expected": 0,
+          "total_sets": 8,
+          "sessions": 2,
+          "volume_complete": true
+        },
         "olympic_lift:barbell": {
-          "verified_volume_kg": 7926.0,
-          "known_sets": 64,
-          "external_sets_expected": 64,
-          "total_sets": 64,
-          "sessions": 9,
+          "verified_volume_kg": 9291.0,
+          "known_sets": 70,
+          "external_sets_expected": 70,
+          "total_sets": 70,
+          "sessions": 11,
+          "volume_complete": true
+        },
+        "vertical_push:barbell": {
+          "verified_volume_kg": 1115.0,
+          "known_sets": 3,
+          "external_sets_expected": 3,
+          "total_sets": 3,
+          "sessions": 1,
           "volume_complete": true
         },
         "vertical_pull:unspecified": {
@@ -12035,14 +12871,6 @@
           "sessions": 1,
           "volume_complete": true
         },
-        "knee_flexion:machine_stack": {
-          "verified_volume_kg": 6656.0,
-          "known_sets": 16,
-          "external_sets_expected": 16,
-          "total_sets": 16,
-          "sessions": 3,
-          "volume_complete": true
-        },
         "horizontal_push:barbell": {
           "verified_volume_kg": 11800.0,
           "known_sets": 15,
@@ -12091,14 +12919,6 @@
           "sessions": 1,
           "volume_complete": true
         },
-        "squat:barbell": {
-          "verified_volume_kg": 12182.0,
-          "known_sets": 15,
-          "external_sets_expected": 15,
-          "total_sets": 15,
-          "sessions": 2,
-          "volume_complete": true
-        },
         "squat:bodyweight": {
           "verified_volume_kg": 0.0,
           "known_sets": 0,
@@ -12107,34 +12927,10 @@
           "sessions": 2,
           "volume_complete": true
         },
-        "squat:machine_stack": {
-          "verified_volume_kg": 1760.0,
-          "known_sets": 4,
-          "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "other:machine_stack": {
-          "verified_volume_kg": 1275.0,
-          "known_sets": 4,
-          "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
         "chest_isolation:dumbbell_pair": {
           "verified_volume_kg": 1280.0,
           "known_sets": 4,
           "external_sets_expected": 4,
-          "total_sets": 4,
-          "sessions": 1,
-          "volume_complete": true
-        },
-        "core:bodyweight": {
-          "verified_volume_kg": 0.0,
-          "known_sets": 0,
-          "external_sets_expected": 0,
           "total_sets": 4,
           "sessions": 1,
           "volume_complete": true
@@ -12159,6 +12955,28 @@
   "training_extensions": {
     "metcon_exposure": {
       "entries": [
+        {
+          "date": "2026-11-25",
+          "activity_id": "i214431565",
+          "movement": "devil press alterno con mancuerna",
+          "verified_reps": 42,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 28.0
+        },
+        {
+          "date": "2026-11-25",
+          "activity_id": "i214431565",
+          "movement": "burpee box jump",
+          "verified_reps": 42,
+          "verified_distance_m": null,
+          "declared_load_kg": null,
+          "evidence": "performed.totals",
+          "time_cap_minutes": null,
+          "recorded_garmin_minutes": 28.0
+        },
         {
           "date": "2026-11-24",
           "activity_id": "i214013166",
@@ -12624,6 +13442,16 @@
       ],
       "movement_work": {
         "7d": {
+          "devil press alterno con mancuerna": {
+            "reps": 66,
+            "distance_m": 0.0,
+            "entries": 2
+          },
+          "burpee box jump": {
+            "reps": 42,
+            "distance_m": 0.0,
+            "entries": 1
+          },
           "remo": {
             "reps": 0,
             "distance_m": 1166.0,
@@ -12638,11 +13466,6 @@
             "reps": 37,
             "distance_m": 0.0,
             "entries": 2
-          },
-          "devil press alterno con mancuerna": {
-            "reps": 24,
-            "distance_m": 0.0,
-            "entries": 1
           },
           "push press db": {
             "reps": 64,
@@ -12671,6 +13494,16 @@
           }
         },
         "28d": {
+          "devil press alterno con mancuerna": {
+            "reps": 66,
+            "distance_m": 0.0,
+            "entries": 2
+          },
+          "burpee box jump": {
+            "reps": 42,
+            "distance_m": 0.0,
+            "entries": 1
+          },
           "remo": {
             "reps": 0,
             "distance_m": 2966.0,
@@ -12685,11 +13518,6 @@
             "reps": 37,
             "distance_m": 0.0,
             "entries": 2
-          },
-          "devil press alterno con mancuerna": {
-            "reps": 24,
-            "distance_m": 0.0,
-            "entries": 1
           },
           "push press db": {
             "reps": 64,
@@ -14145,7 +14973,7 @@
             "intervals_training_load": 91.0,
             "garmin_activity_load": 314.3,
             "trimp": 154.6,
-            "session_rpe_load": 0
+            "session_rpe_load": 1029.6
           },
           "baseline_previous_3d": {
             "hrv": 67.49,
@@ -14201,20 +15029,20 @@
       "window_summaries": {
         "recent_7d": {
           "sessions": 11,
-          "sessions_with_rpe": 6,
-          "high_rpe_sessions": 2,
+          "sessions_with_rpe": 9,
+          "high_rpe_sessions": 3,
           "recorded_duration_minutes": 337.0,
           "sessions_with_duration": 11,
-          "srpe_from_recorded_duration": 692.0,
-          "srpe_sessions": 6,
-          "minimum_recorded_external_volume_kg": 1340.0,
-          "strength_blocks_with_quantified_weight": 1,
-          "strength_blocks_missing_quantified_weight": 8,
+          "srpe_from_recorded_duration": 1721.9,
+          "srpe_sessions": 9,
+          "minimum_recorded_external_volume_kg": 10110.0,
+          "strength_blocks_with_quantified_weight": 3,
+          "strength_blocks_missing_quantified_weight": 10,
           "garmin_intervals_load_separate": 215.0,
           "intervals_load_sessions": 11,
           "trimp_separate": 348.2,
           "trimp_sessions": 11,
-          "mean_recorded_rpe": 7.33
+          "mean_recorded_rpe": 7.22
         },
         "previous_7d": {
           "sessions": 10,
@@ -14235,20 +15063,20 @@
         },
         "recent_28d": {
           "sessions": 43,
-          "sessions_with_rpe": 27,
-          "high_rpe_sessions": 11,
+          "sessions_with_rpe": 30,
+          "high_rpe_sessions": 12,
           "recorded_duration_minutes": 1395.6,
           "sessions_with_duration": 43,
-          "srpe_from_recorded_duration": 4917.0,
-          "srpe_sessions": 27,
-          "minimum_recorded_external_volume_kg": 40708.0,
-          "strength_blocks_with_quantified_weight": 10,
-          "strength_blocks_missing_quantified_weight": 34,
+          "srpe_from_recorded_duration": 5946.9,
+          "srpe_sessions": 30,
+          "minimum_recorded_external_volume_kg": 49478.0,
+          "strength_blocks_with_quantified_weight": 12,
+          "strength_blocks_missing_quantified_weight": 36,
           "garmin_intervals_load_separate": 746.0,
           "intervals_load_sessions": 43,
           "trimp_separate": 1206.4,
           "trimp_sessions": 43,
-          "mean_recorded_rpe": 7.28
+          "mean_recorded_rpe": 7.25
         }
       },
       "daily_chart_7d": [
@@ -14297,27 +15125,27 @@
         {
           "date": "2026-11-25",
           "sessions": 3,
-          "mean_recorded_rpe": null,
+          "mean_recorded_rpe": 7.0,
           "recorded_minutes": 163.6,
-          "srpe_from_recorded_duration": 0.0
+          "srpe_from_recorded_duration": 1029.9
         }
       ],
       "latest_session": {
         "date": "2026-11-25",
         "activity_id": "i214561355",
         "name": "Fuerza",
-        "rpe": null,
+        "rpe": 6.0,
         "recorded_minutes": 70.85,
         "heart_rate": {
           "average": 118.0,
           "max": 150.0
         },
-        "manual_blocks_recorded": 0
+        "manual_blocks_recorded": 1
       },
       "previous_week_context": {
         "sufficient_for_descriptive_comparison": true,
         "session_count_change": 1,
-        "mean_rpe_change": -0.38,
+        "mean_rpe_change": -0.49,
         "note": "El cambio de número de sesiones o RPE no demuestra mejora física ni equivalencia de entrenamiento."
       },
       "benchmark_comparisons": [],
@@ -14330,6 +15158,10 @@
         {
           "code": "recovery_context",
           "text": "Usar recuperación junto con objetivos de entrenamiento, síntomas y rendimiento, no como permiso automático para hacer máximos."
+        },
+        {
+          "code": "frequent_high_rpe",
+          "text": "Registrar recuperación 24-48 h y ajustar volumen si coinciden fatiga o bajada del rendimiento; no asumir sobreentrenamiento."
         },
         {
           "code": "benchmark_history_incomplete",
@@ -14350,36 +15182,25 @@
   },
   "data_quality": {
     "status": "ok",
-    "checked_at": "2026-11-25T19:47:20.281021+01:00",
+    "checked_at": "2026-11-25T22:47:21.511922+01:00",
     "advanced_age_hours": 0.0,
     "latest_activity_date": "2026-11-25",
     "latest_activity_age_days": 0,
-    "sheet_rows": 80,
-    "manual_coverage_7d_pct": 72.7,
-    "flags": [
-      {
-        "severity": "info",
-        "code": "activities_without_manual_rpe",
-        "count": 3,
-        "ids": [
-          "i214561355",
-          "i214451909",
-          "i214431565"
-        ]
-      }
-    ],
+    "sheet_rows": 84,
+    "manual_coverage_7d_pct": 100.0,
+    "flags": [],
     "scope_note": "No activity for 3+ days may reflect rest; freshness of Garmin raw measurements is not verified from this summary alone."
   },
   "weekly_report": {
     "window_start": "2026-11-19",
     "window_end": "2026-11-25",
     "activities": 11,
-    "activities_with_manual_sheet_match": 8,
-    "activities_missing_manual_match": 3,
-    "mean_rpe": 7.33,
-    "recorded_srpe_sum": 692.0,
+    "activities_with_manual_sheet_match": 11,
+    "activities_missing_manual_match": 0,
+    "mean_rpe": 7.22,
+    "recorded_srpe_sum": 1721.9,
     "recorded_srpe_note": "Only recorded duration x RPE; not equivalent to effective WOD duration, and not comparable with TRIMP.",
-    "minimum_verified_strength_volume_kg": 1340.0,
+    "minimum_verified_strength_volume_kg": 10110.0,
     "strength_blocks_with_missing_weights": 0,
     "readiness_latest": {
       "score": 49,
@@ -14413,20 +15234,20 @@
     "not_a_diagnosis": true
   },
   "report_audit": {
-    "checked_at": "2026-11-25T19:47:20.281021+01:00",
+    "checked_at": "2026-11-25T22:47:21.511922+01:00",
     "status": "ok",
     "sources": {
       "daily_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-25T19:45:53.577598+01:00",
+        "generated_at": "2026-11-25T22:45:52.208459+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_status.json": {
         "state": "ok",
-        "generated_at": "2026-11-25T19:46:16.852253+01:00",
-        "age_hours": 0.02,
+        "generated_at": "2026-11-25T22:46:29.617262+01:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit",
         "garmin_status": "success",
@@ -14439,29 +15260,29 @@
       },
       "data_quality.json": {
         "state": "ok",
-        "generated_at": "2026-11-25T19:46:52.478752+01:00",
+        "generated_at": "2026-11-25T22:47:01.727229+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "advanced_analytics.json": {
         "state": "ok",
-        "generated_at": "2026-11-25T19:46:52.478752+01:00",
+        "generated_at": "2026-11-25T22:47:01.727229+01:00",
         "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "weekly_summary.json": {
         "state": "ok",
-        "generated_at": "2026-11-25T19:45:53.577598+01:00",
+        "generated_at": "2026-11-25T22:45:52.208459+01:00",
         "age_hours": 0.02,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
       "garmin_heart_rate.json": {
         "state": "ok",
-        "generated_at": "2026-11-25T19:46:16.852253+01:00",
-        "age_hours": 0.02,
+        "generated_at": "2026-11-25T22:46:29.617262+01:00",
+        "age_hours": 0.01,
         "measurement_at": null,
         "measurement_note": "No verified per-sample timestamp in this audit"
       },
@@ -14480,7 +15301,7 @@
         "measurement_note": "No verified per-sample timestamp in this audit"
       }
     },
-    "generation_skew_minutes": 1.0,
+    "generation_skew_minutes": 1.2,
     "flags": [],
     "chain_verification": "timestamps_only; GitHub Actions run conclusions not checked",
     "measurement_timestamp_verified": false
