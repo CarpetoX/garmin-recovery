@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-25T08:52:42.948439+01:00",
+  "generated_at": "2026-11-25T16:53:08.053176+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-11-25",
   "decision": {
@@ -59,7 +59,7 @@
         "version": "readiness-v3.2",
         "role": "sombra",
         "used_in_decision": true,
-        "score": 84.0,
+        "score": 78.0,
         "zone": "green",
         "state": "assessed",
         "confidence": "media",
@@ -71,7 +71,7 @@
         "version": "V2.2",
         "role": "compatibilidad",
         "used_in_decision": false,
-        "score": 100,
+        "score": 91,
         "zone": "green",
         "state": null,
         "confidence": "high",
@@ -96,7 +96,7 @@
     "date": "2026-11-25",
     "state": "assessed",
     "zone": "green",
-    "score": 84.0,
+    "score": 78.0,
     "confidence": "media",
     "data_confidence": {
       "level": "alta",
@@ -129,6 +129,11 @@
     ],
     "drivers": [
       {
+        "component": "load",
+        "z": -3.0,
+        "text": "Forma -110 % (riesgo_alto)"
+      },
+      {
         "component": "sleep",
         "z": -0.2066666666666667,
         "text": "Sueño 7,2 h, puntuación 84, deuda 2,2 h en 3 noches"
@@ -142,11 +147,6 @@
         "component": "stress",
         "z": 1.0,
         "text": "Estrés Garmin ayer 19 de media (tu mediana 34)"
-      },
-      {
-        "component": "load",
-        "z": 1.0,
-        "text": "ACWR 0.56"
       },
       {
         "component": "hrv",
@@ -209,32 +209,30 @@
       "load": {
         "source": "intervals_icu",
         "coverage_days": 51,
-        "ctl": 14.0,
-        "atl": 20.2,
-        "tsb": -6.2,
-        "form_pct": null,
-        "form_zone": null,
-        "form_interpretable": false,
-        "week_load": 124.0,
+        "ctl": 15.4,
+        "atl": 32.3,
+        "tsb": -16.9,
+        "form_pct": -110.0,
+        "form_zone": "riesgo_alto",
+        "form_interpretable": true,
+        "week_load": 215.0,
         "prev_week_load": 155.0,
-        "week_change_pct": -20.0,
+        "week_change_pct": 38.7,
         "week_srpe": 692.2,
-        "week_sessions": 8,
-        "monotony": 0.84,
-        "strain": 582.7,
+        "week_sessions": 11,
+        "monotony": null,
+        "strain": null,
         "internal_load_basis": "srpe_foster",
-        "srpe_coverage_7d_pct": 100.0,
-        "srpe_coverage_28d_pct": 100.0,
+        "srpe_coverage_7d_pct": 67.0,
+        "srpe_coverage_28d_pct": 90.0,
         "acwr": 0.56,
         "acwr_basis": "srpe_media_7_vs_28",
-        "consecutive_training_days": 0,
-        "component_z": 1.0,
-        "component_basis": "acwr",
-        "notes": [
-          "CTL 14.0 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
-        ],
-        "z": 1.0,
-        "score": 87.5,
+        "consecutive_training_days": 3,
+        "component_z": -3.0,
+        "component_basis": "forma_tsb",
+        "notes": [],
+        "z": -3.0,
+        "score": 37.5,
         "weight": 0.1,
         "label": "Carga de entrenamiento"
       },
@@ -252,60 +250,58 @@
   "load": {
     "source": "intervals_icu",
     "coverage_days": 51,
-    "ctl": 14.0,
-    "atl": 20.2,
-    "tsb": -6.2,
-    "form_pct": null,
-    "form_zone": null,
-    "form_interpretable": false,
-    "week_load": 124.0,
+    "ctl": 15.4,
+    "atl": 32.3,
+    "tsb": -16.9,
+    "form_pct": -110.0,
+    "form_zone": "riesgo_alto",
+    "form_interpretable": true,
+    "week_load": 215.0,
     "prev_week_load": 155.0,
-    "week_change_pct": -20.0,
+    "week_change_pct": 38.7,
     "week_srpe": 692.2,
-    "week_sessions": 8,
-    "monotony": 0.84,
-    "strain": 582.7,
+    "week_sessions": 11,
+    "monotony": null,
+    "strain": null,
     "internal_load_basis": "srpe_foster",
-    "srpe_coverage_7d_pct": 100.0,
-    "srpe_coverage_28d_pct": 100.0,
+    "srpe_coverage_7d_pct": 67.0,
+    "srpe_coverage_28d_pct": 90.0,
     "acwr": 0.56,
     "acwr_basis": "srpe_media_7_vs_28",
-    "consecutive_training_days": 0,
-    "component_z": 1.0,
-    "component_basis": "acwr",
-    "notes": [
-      "CTL 14.0 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
-    ]
+    "consecutive_training_days": 3,
+    "component_z": -3.0,
+    "component_basis": "forma_tsb",
+    "notes": []
   },
   "certificate": {
-    "generated_at": "2026-11-25T08:52:42.948439+01:00",
+    "generated_at": "2026-11-25T16:53:08.053176+01:00",
     "cycle": {
-      "cycle_id": "2026-11-25-0830-post-sleep",
-      "slot_at": "2026-11-25T08:30:00+01:00",
+      "cycle_id": "2026-11-25-1645",
+      "slot_at": "2026-11-25T16:45:00+01:00",
       "status": "ready",
-      "verified_at": "2026-11-25T08:52:41.572958+01:00",
+      "verified_at": "2026-11-25T16:53:06.423526+01:00",
       "scheduled_cycle_today": true,
       "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-11-25T08:51:48.397746+01:00",
+      "data_synced_at": "2026-11-25T16:52:02.153984+01:00",
       "note": null,
       "chain": {
         "sync": {
-          "run_id": 45571368743,
+          "run_id": 45649133198,
           "event": "workflow_dispatch",
           "conclusion": "success"
         },
         "heart": {
-          "run_id": 45571420445,
+          "run_id": 45649264516,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "advanced": {
-          "run_id": 45571493320,
+          "run_id": 45649356760,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "crossfit": {
-          "run_id": 45571533943,
+          "run_id": 45649404872,
           "event": "workflow_run",
           "conclusion": "publishing_in_same_job"
         }
@@ -314,53 +310,53 @@
     "data_age": {
       "confirmed_sleep": {
         "measured_at": "2026-11-25T08:17:54+01:00",
-        "age_minutes": 35.0,
+        "age_minutes": 515.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-11-25T08:12:59+01:00",
-        "age_minutes": 40.0,
+        "age_minutes": 520.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-11-25T08:40:00+01:00",
-        "age_minutes": 13.0,
+        "measured_at": "2026-11-25T16:26:00+01:00",
+        "age_minutes": 27.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
-        "measured_at": "2026-11-25T08:18:00+01:00",
+        "measured_at": "2026-11-25T16:18:00+01:00",
         "age_minutes": 35.0,
         "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-25T07:52:16.048289+00:00",
+      "fetched_at": "2026-11-25T15:52:39.681039+00:00",
       "latest_date": "2026-11-24",
       "rows_sha256": "363e2436b27d5514",
-      "advanced_run_id": "45571493320"
+      "advanced_run_id": "45649356760"
     },
     "source_sha256": {
-      "wellness.json": "8aeb49fa3c78e4b9",
-      "garmin_hrv_timeline.json": "3f1d622cb6a6d949",
-      "garmin_sleep_history.json": "2aaca8f8308036a3",
-      "garmin_extended.json": "9f32467b4b198a1e",
-      "garmin_heart_rate.json": "d117085f6297a235",
-      "garmin_stress.json": "68ef6a3897421199",
-      "garmin_body_battery.json": "4b628fd84301d3e1",
-      "activities.json": "c568314184a024bf",
-      "training_feedback.json": "5c274c28432b9072",
+      "wellness.json": "45b18044f3dc401a",
+      "garmin_hrv_timeline.json": "ae1c697757ec3d5d",
+      "garmin_sleep_history.json": "b75cfc0d8e7a4719",
+      "garmin_extended.json": "1200e97f5ae57148",
+      "garmin_heart_rate.json": "5160467889766e60",
+      "garmin_stress.json": "706cdb248e2ddf36",
+      "garmin_body_battery.json": "370d9a390d570a9b",
+      "activities.json": "6f23e89df856adf9",
+      "training_feedback.json": "48f7560a1b9fe4f4",
       "shift_calendar.json": "218a0b4ac784d7db",
-      "morning_sleep_status.json": "f78c27d18f8a951d",
-      "recovery_assessment.json": "fe2260538f589438",
-      "report_ready.json": "d1998bca54580f0d",
-      "garmin_hr_timeline.json": "2a9e4c9e479f0f3a",
-      "daily_summary.json": "6a2e98a66d240e1e",
-      "workflow_health.json": "138a17eea75ba81a",
-      "recovery.csv": "515dfa3c415189fc"
+      "morning_sleep_status.json": "b7dbc7c2106a7e33",
+      "recovery_assessment.json": "cbcdba8346821bc8",
+      "report_ready.json": "e31a4c779dca176e",
+      "garmin_hr_timeline.json": "32ebce2afadcd921",
+      "daily_summary.json": "a016be08b66c4647",
+      "workflow_health.json": "e8005848480ccf4c",
+      "recovery.csv": "7aac5532ab9716cb"
     },
     "consistency_v3_v2": {
       "status": "ok",
@@ -384,7 +380,7 @@
     },
     "execution_health": {
       "status": "ok",
-      "checked_at": "2026-11-25T08:32:37.108685+01:00",
+      "checked_at": "2026-11-25T09:34:08.527034+01:00",
       "alerts": [
         {
           "code": "cron_missed_dispatch_recovered",
@@ -414,9 +410,9 @@
     "window_days": 14,
     "from": "2026-11-12",
     "to": "2026-11-25",
-    "sessions": 18,
+    "sessions": 21,
     "with_rpe": 13,
-    "rpe_coverage_pct": 100.0,
+    "rpe_coverage_pct": 81.0,
     "rpe_not_applicable": [
       {
         "id": "i209040432",
@@ -444,10 +440,32 @@
         "label": "Técnica - comba (single, crossover, DU, DU crossover) + bar muscle-up 2x2 (+ calentamiento)"
       }
     ],
-    "without_rpe": [],
+    "without_rpe": [
+      {
+        "id": "i214431565",
+        "start_local": "2026-11-25T09:19:07",
+        "type": "HighIntensityIntervalTraining",
+        "duration_min": 38.4,
+        "load": 33.0
+      },
+      {
+        "id": "i214451909",
+        "start_local": "2026-11-25T10:19:04",
+        "type": "HighIntensityIntervalTraining",
+        "duration_min": 54.4,
+        "load": 26.0
+      },
+      {
+        "id": "i214561355",
+        "start_local": "2026-11-25T15:12:19",
+        "type": "WeightTraining",
+        "duration_min": 70.8,
+        "load": 32.0
+      }
+    ],
     "rpe_without_activity": [],
     "date_mismatch": [],
-    "status": "ok",
+    "status": "revisar",
     "rule": "Emparejado por ID exacto de actividad; las sesiones sin RPE no se rellenan ni se estiman."
   },
   "planned": {
@@ -467,7 +485,7 @@
     "days": 63,
     "first_date": "2026-09-24",
     "last_date": "2026-11-25",
-    "sessions": 76
+    "sessions": 79
   },
   "trend_28d": [
     {
@@ -1309,7 +1327,7 @@
     },
     {
       "date": "2026-11-25",
-      "score": 84.0,
+      "score": 78.0,
       "zone": "green",
       "state": "assessed",
       "hrv_ms": 71.0,
@@ -1320,14 +1338,14 @@
       "night_hr": 55.4,
       "sleep_hours": 7.21,
       "sleep_score": 84.0,
-      "load": 0.0,
+      "load": 91.0,
       "srpe": null,
-      "sessions": 0,
-      "stress_avg": 11.0,
+      "sessions": 3,
+      "stress_avg": 19.0,
       "garmin_readiness": 20.0,
       "shift": null,
-      "ctl": 14.0,
-      "atl": 20.2,
+      "ctl": 15.4,
+      "atl": 32.3,
       "v2_score": 88,
       "hybrid_score": 49,
       "decision_zone": "red",
@@ -1335,11 +1353,59 @@
       "rem_min": 89.0,
       "stages_flag": null,
       "sleep_context": "night_sleep",
-      "stress_avg_full": 11.0,
+      "stress_avg_full": 19.0,
       "rest_confirmed": false
     }
   ],
   "recent_sessions": [
+    {
+      "id": "i214561355",
+      "date": "2026-11-25",
+      "start_local": "2026-11-25T15:12:19",
+      "type": "WeightTraining",
+      "name": "Fuerza",
+      "label": null,
+      "duration_min": 70.8,
+      "load": 32.0,
+      "trimp": 53.018394,
+      "avg_hr": 118.0,
+      "max_hr": 150.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i214451909",
+      "date": "2026-11-25",
+      "start_local": "2026-11-25T10:19:04",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 54.4,
+      "load": 26.0,
+      "trimp": 45.464413,
+      "avg_hr": 122.0,
+      "max_hr": 153.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i214431565",
+      "date": "2026-11-25",
+      "start_local": "2026-11-25T09:19:07",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 38.4,
+      "load": 33.0,
+      "trimp": 56.156982,
+      "avg_hr": 144.0,
+      "max_hr": 187.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
     {
       "id": "i214013166",
       "date": "2026-11-24",
@@ -1485,55 +1551,6 @@
       "max_hr": 193.0,
       "rpe": 9.0,
       "srpe": 219.6,
-      "removed": 0
-    },
-    {
-      "id": "i211789156",
-      "date": "2026-11-18",
-      "start_local": "2026-11-18T19:37:10",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "Calentamiento - WOD",
-      "duration_min": 14.6,
-      "load": 5.0,
-      "trimp": 7.1244555,
-      "avg_hr": 105.0,
-      "max_hr": 149.0,
-      "rpe": null,
-      "srpe": null,
-      "removed": 0,
-      "rpe_na": true
-    },
-    {
-      "id": "i211772102",
-      "date": "2026-11-18",
-      "start_local": "2026-11-18T18:17:33",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "Halterofilia - 3-position squat snatch 5x1 + squat snatch 5x3",
-      "duration_min": 48.0,
-      "load": 17.0,
-      "trimp": 25.805288,
-      "avg_hr": 108.0,
-      "max_hr": 157.0,
-      "rpe": 7.0,
-      "srpe": 336.0,
-      "removed": 0
-    },
-    {
-      "id": "i211147729",
-      "date": "2026-11-17",
-      "start_local": "2026-11-17T11:03:56",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "WOD For Time 50-40-30-20-10 - wall ball / DB snatch / C2B / DB thruster / devil press",
-      "duration_min": 10.3,
-      "load": 14.0,
-      "trimp": 25.612068,
-      "avg_hr": 167.0,
-      "max_hr": 178.0,
-      "rpe": 9.0,
-      "srpe": 92.7,
       "removed": 0
     }
   ],
@@ -2209,6 +2226,54 @@
       "max_hr": 179.0,
       "rpe": 9.0,
       "srpe": 131.4,
+      "removed": 0
+    },
+    {
+      "id": "i214431565",
+      "date": "2026-11-25",
+      "start_local": "2026-11-25T09:19:07",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 38.4,
+      "load": 33.0,
+      "trimp": 56.156982,
+      "avg_hr": 144.0,
+      "max_hr": 187.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i214451909",
+      "date": "2026-11-25",
+      "start_local": "2026-11-25T10:19:04",
+      "type": "HighIntensityIntervalTraining",
+      "name": "HIIT",
+      "label": null,
+      "duration_min": 54.4,
+      "load": 26.0,
+      "trimp": 45.464413,
+      "avg_hr": 122.0,
+      "max_hr": 153.0,
+      "rpe": null,
+      "srpe": null,
+      "removed": 0
+    },
+    {
+      "id": "i214561355",
+      "date": "2026-11-25",
+      "start_local": "2026-11-25T15:12:19",
+      "type": "WeightTraining",
+      "name": "Fuerza",
+      "label": null,
+      "duration_min": 70.8,
+      "load": 32.0,
+      "trimp": 53.018394,
+      "avg_hr": 118.0,
+      "max_hr": 150.0,
+      "rpe": null,
+      "srpe": null,
       "removed": 0
     }
   ],
