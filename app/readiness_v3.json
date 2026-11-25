@@ -2,22 +2,21 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-24T22:47:20.351809+01:00",
+  "generated_at": "2026-11-25T08:32:24.131921+01:00",
   "timezone": "Europe/Madrid",
-  "date": "2026-11-24",
+  "date": "2026-11-25",
   "decision": {
-    "zone": "yellow",
-    "zone_es": "ámbar",
+    "zone": "red",
+    "zone_es": "rojo",
     "guidance": {
-      "label": "Entrenar con control",
-      "rpe_max": 7,
-      "volume": "70–80 %",
-      "text": "Mantén técnica y fuerza submáxima; reduce volumen un 20–30 % y evita series al fallo y WOD máximos."
+      "label": "Prioriza recuperar",
+      "rpe_max": 4,
+      "volume": "0–50 %",
+      "text": "Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos."
     },
     "crossfit": [
-      "Halterofilia técnica al ≤ 80 % de tus cargas habituales, sin singles pesados.",
-      "Fuerza submáxima: deja 2–3 repeticiones en reserva, sin series al fallo.",
-      "WOD a ritmo controlado (sin all-out ni lucha contra el cap); recorta un 20–30 % de volumen."
+      "Sin WOD ni cargas pesadas: movilidad, técnica con PVC o barra vacía.",
+      "Si te mueves, zona 2 suave en remo, bici o caminata (30–40 min, poder hablar)."
     ],
     "official_model": "recovery_assessment_v2",
     "rule": "Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy.",
@@ -27,7 +26,7 @@
     "missing_models": [],
     "agreement": "parcial",
     "divergence": [
-      "El modelo experimental (verde) es más permisivo que la decisión (ámbar); se aplica la más conservadora."
+      "El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora."
     ],
     "registry": [
       {
@@ -48,8 +47,8 @@
         "version": "V2.2",
         "role": "salvaguarda",
         "used_in_decision": true,
-        "score": 74,
-        "zone": "yellow",
+        "score": 49,
+        "zone": "red",
         "state": null,
         "confidence": "high",
         "rule": "55 % Garmin Training Readiness + 45 % local; Garmin < 35 fuerza rojo."
@@ -60,10 +59,10 @@
         "version": "readiness-v3.2",
         "role": "sombra",
         "used_in_decision": true,
-        "score": 84.0,
-        "zone": "green",
-        "state": "assessed",
-        "confidence": "media",
+        "score": null,
+        "zone": "unavailable",
+        "state": "pending",
+        "confidence": "baja",
         "rule": "Componentes continuos: HRV 7 días vs. rango normal, FC, sueño, estrés, carga y sensaciones."
       },
       {
@@ -84,7 +83,7 @@
         "version": "Garmin",
         "role": "contexto",
         "used_in_decision": false,
-        "score": 40.0,
+        "score": 15.0,
         "zone": null,
         "state": null,
         "confidence": null,
@@ -94,36 +93,40 @@
   },
   "readiness": {
     "model_version": "readiness-v3.2",
-    "date": "2026-11-24",
-    "state": "assessed",
-    "zone": "green",
-    "score": 84.0,
-    "confidence": "media",
+    "date": "2026-11-25",
+    "state": "pending",
+    "zone": "unavailable",
+    "score": null,
+    "confidence": "baja",
     "data_confidence": {
-      "level": "alta",
+      "level": "baja",
       "coverage_7d": {
         "hrv_ms": 7,
         "sleep_hours": 7,
         "resting_hr": 7
       },
-      "why": []
+      "why": [
+        "sueño de hoy sin confirmar"
+      ]
     },
     "recommendation_confidence": {
-      "level": "media",
-      "baseline_nights": 53,
+      "level": "baja",
+      "baseline_nights": 54,
       "rolling_nights": 7,
       "model_validated": false,
       "why": [
-        "modelo experimental aún sin validar frente a tu rendimiento real (modo sombra)"
+        "sin evaluación completa hoy"
       ]
     },
-    "reasons": [],
+    "reasons": [
+      "sueno_no_confirmado:confirmed_wait_30m"
+    ],
     "safety_caps": [],
     "guidance": {
-      "label": "Listo para entrenar",
-      "rpe_max": 9,
-      "volume": "100 %",
-      "text": "Entrena según lo planificado. Intensidad alta permitida si el calentamiento responde bien."
+      "label": "Pendiente de datos",
+      "rpe_max": 6,
+      "volume": "según sensaciones",
+      "text": "Faltan datos de hoy: no se autoriza intensidad alta. Reevaluar tras sincronizar el sueño."
     },
     "notes": [
       "Sin sensaciones registradas hoy: anota fatiga, agujetas, estrés, ánimo y motivación en Intervals.icu para afinar el modelo."
@@ -131,18 +134,13 @@
     "drivers": [
       {
         "component": "sleep",
-        "z": -0.11277777777777791,
-        "text": "Sueño 7,2 h, puntuación 86, deuda 1,9 h en 3 noches"
-      },
-      {
-        "component": "load",
-        "z": 0.44,
-        "text": "ACWR 0.85"
+        "z": -0.2066666666666667,
+        "text": "Sueño 7,2 h, puntuación 84, deuda 2,2 h en 3 noches"
       },
       {
         "component": "cardiac",
         "z": 1.0,
-        "text": "FC en reposo 48 lpm (-8 vs. tu mediana)"
+        "text": "FC en reposo 50 lpm (-6 vs. tu mediana)"
       },
       {
         "component": "stress",
@@ -150,51 +148,56 @@
         "text": "Estrés Garmin ayer 19 de media (tu mediana 34)"
       },
       {
+        "component": "load",
+        "z": 1.0,
+        "text": "ACWR 0.56"
+      },
+      {
         "component": "hrv",
-        "z": 1.2224545890087777,
-        "text": "HRV 83 ms hoy; media 7 días +10 % vs. tu base (dentro de tu rango normal)"
+        "z": 1.0557107952919358,
+        "text": "HRV 71 ms hoy; media 7 días +16 % vs. tu base (por encima de tu rango normal)"
       }
     ],
     "components": {
       "hrv": {
-        "n_baseline": 53,
+        "n_baseline": 54,
         "n_rolling": 7,
-        "today_ms": 83.0,
-        "z": 1.2224545890087777,
+        "today_ms": 71.0,
+        "z": 1.0557107952919358,
         "baseline_ms": 53.0,
-        "rolling_ms": 58.2,
+        "rolling_ms": 61.5,
         "normal_low_ms": 47.7,
-        "normal_high_ms": 58.9,
-        "today_vs_baseline_pct": 56.6,
-        "rolling_vs_baseline_pct": 9.8,
-        "band": "normal",
-        "cv_7d_pct": 7.19,
-        "score": 90.3,
+        "normal_high_ms": 58.8,
+        "today_vs_baseline_pct": 34.0,
+        "rolling_vs_baseline_pct": 16.1,
+        "band": "elevada",
+        "cv_7d_pct": 6.96,
+        "score": 88.2,
         "weight": 0.3,
         "label": "Variabilidad cardiaca (HRV)"
       },
       "cardiac": {
         "z": 1.0,
-        "resting_hr": 48.0,
-        "night_hr": 53.6,
+        "resting_hr": 50.0,
+        "night_hr": 55.4,
         "baseline_resting_hr": 56.0,
         "baseline_night_hr": 62.5,
-        "resting_delta_bpm": -8.0,
-        "night_delta_bpm": -8.9,
-        "n_baseline": 55,
+        "resting_delta_bpm": -6.0,
+        "night_delta_bpm": -7.1,
+        "n_baseline": 56,
         "score": 87.5,
         "weight": 0.15,
         "label": "FC en reposo y nocturna"
       },
       "sleep": {
-        "z": -0.11277777777777791,
-        "hours": 7.18,
-        "sleep_score": 86.0,
+        "z": -0.2066666666666667,
+        "hours": 7.21,
+        "sleep_score": 84.0,
         "need_hours": 7.5,
-        "debt_hours": 1.87,
+        "debt_hours": 2.16,
         "debt_nights": 3,
         "context": "night_sleep",
-        "score": 73.6,
+        "score": 72.4,
         "weight": 0.25,
         "label": "Sueño"
       },
@@ -202,40 +205,40 @@
         "z": 1.0,
         "yesterday_avg": 19.0,
         "baseline_median": 34.0,
-        "n_baseline": 53,
+        "n_baseline": 54,
         "score": 87.5,
         "weight": 0.1,
         "label": "Estrés del día anterior (Garmin)"
       },
       "load": {
         "source": "intervals_icu",
-        "coverage_days": 50,
-        "ctl": 14.3,
-        "atl": 23.3,
-        "tsb": -9.0,
+        "coverage_days": 51,
+        "ctl": 14.0,
+        "atl": 20.2,
+        "tsb": -6.2,
         "form_pct": null,
         "form_zone": null,
         "form_interpretable": false,
-        "week_load": 170.0,
-        "prev_week_load": 109.0,
-        "week_change_pct": 56.0,
-        "week_srpe": 1247.8,
-        "week_sessions": 11,
-        "monotony": 0.9,
-        "strain": 1118.0,
+        "week_load": 124.0,
+        "prev_week_load": 155.0,
+        "week_change_pct": -20.0,
+        "week_srpe": 692.2,
+        "week_sessions": 8,
+        "monotony": 0.84,
+        "strain": 582.7,
         "internal_load_basis": "srpe_foster",
         "srpe_coverage_7d_pct": 100.0,
         "srpe_coverage_28d_pct": 100.0,
-        "acwr": 0.85,
+        "acwr": 0.56,
         "acwr_basis": "srpe_media_7_vs_28",
-        "consecutive_training_days": 2,
-        "component_z": 0.44,
+        "consecutive_training_days": 0,
+        "component_z": 1.0,
         "component_basis": "acwr",
         "notes": [
-          "CTL 14.3 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
+          "CTL 14.0 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
         ],
-        "z": 0.44,
-        "score": 80.5,
+        "z": 1.0,
+        "score": 87.5,
         "weight": 0.1,
         "label": "Carga de entrenamiento"
       },
@@ -252,61 +255,61 @@
   },
   "load": {
     "source": "intervals_icu",
-    "coverage_days": 50,
-    "ctl": 14.3,
-    "atl": 23.3,
-    "tsb": -9.0,
+    "coverage_days": 51,
+    "ctl": 14.0,
+    "atl": 20.2,
+    "tsb": -6.2,
     "form_pct": null,
     "form_zone": null,
     "form_interpretable": false,
-    "week_load": 170.0,
-    "prev_week_load": 109.0,
-    "week_change_pct": 56.0,
-    "week_srpe": 1247.8,
-    "week_sessions": 11,
-    "monotony": 0.9,
-    "strain": 1118.0,
+    "week_load": 124.0,
+    "prev_week_load": 155.0,
+    "week_change_pct": -20.0,
+    "week_srpe": 692.2,
+    "week_sessions": 8,
+    "monotony": 0.84,
+    "strain": 582.7,
     "internal_load_basis": "srpe_foster",
     "srpe_coverage_7d_pct": 100.0,
     "srpe_coverage_28d_pct": 100.0,
-    "acwr": 0.85,
+    "acwr": 0.56,
     "acwr_basis": "srpe_media_7_vs_28",
-    "consecutive_training_days": 2,
-    "component_z": 0.44,
+    "consecutive_training_days": 0,
+    "component_z": 1.0,
     "component_basis": "acwr",
     "notes": [
-      "CTL 14.3 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
+      "CTL 14.0 < 15.0: la forma (TSB %) no se interpreta todavía; la carga no penaliza la puntuación hasta tener carga crónica suficiente."
     ]
   },
   "certificate": {
-    "generated_at": "2026-11-24T22:47:20.351809+01:00",
+    "generated_at": "2026-11-25T08:32:24.131921+01:00",
     "cycle": {
-      "cycle_id": "2026-11-24-2245",
-      "slot_at": "2026-11-24T22:45:00+01:00",
+      "cycle_id": "2026-11-25-0830",
+      "slot_at": "2026-11-25T08:30:00+01:00",
       "status": "ready",
-      "verified_at": "2026-11-24T22:47:19.146914+01:00",
+      "verified_at": "2026-11-25T08:32:22.892918+01:00",
       "scheduled_cycle_today": true,
       "data_newer_than_certified_cycle": false,
-      "data_synced_at": "2026-11-24T22:46:11.817966+01:00",
+      "data_synced_at": "2026-11-25T08:31:11.749521+01:00",
       "note": null,
       "chain": {
         "sync": {
-          "run_id": 45494305497,
+          "run_id": 45568686422,
           "event": "workflow_dispatch",
           "conclusion": "success"
         },
         "heart": {
-          "run_id": 45494377376,
+          "run_id": 45568732277,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "advanced": {
-          "run_id": 45494456291,
+          "run_id": 45568814515,
           "event": "workflow_run",
           "conclusion": "success"
         },
         "crossfit": {
-          "run_id": 45494535685,
+          "run_id": 45568878227,
           "event": "workflow_run",
           "conclusion": "publishing_in_same_job"
         }
@@ -314,119 +317,94 @@
     },
     "data_age": {
       "confirmed_sleep": {
-        "measured_at": "2026-11-24T08:18:09+01:00",
-        "age_minutes": 869.0,
+        "measured_at": "2026-11-25T08:17:54+01:00",
+        "age_minutes": 15.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
-        "measured_at": "2026-11-24T08:17:58+01:00",
-        "age_minutes": 869.0,
+        "measured_at": "2026-11-25T08:12:59+01:00",
+        "age_minutes": 19.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
-        "measured_at": "2026-11-24T21:38:00+01:00",
-        "age_minutes": 69.0,
+        "measured_at": "2026-11-25T08:16:00+01:00",
+        "age_minutes": 16.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
-        "measured_at": "2026-11-24T21:30:00+01:00",
-        "age_minutes": 77.0,
+        "measured_at": "2026-11-25T07:57:00+01:00",
+        "age_minutes": 35.0,
         "state": "reciente",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-24T21:46:45.829453+00:00",
+      "fetched_at": "2026-11-25T07:31:50.734842+00:00",
       "latest_date": "2026-11-24",
       "rows_sha256": "363e2436b27d5514",
-      "advanced_run_id": "45494456291"
+      "advanced_run_id": "45568814515"
     },
     "source_sha256": {
-      "wellness.json": "96129ee2ae2f4fb4",
-      "garmin_hrv_timeline.json": "b2dda06cdcce08bc",
-      "garmin_sleep_history.json": "6e0f9db6ac2c80bb",
-      "garmin_extended.json": "4d3eed24a74a102e",
-      "garmin_heart_rate.json": "1e9e4896b5779305",
-      "garmin_stress.json": "5775c63ddc6cddc8",
-      "garmin_body_battery.json": "34b1af77f476407b",
+      "wellness.json": "3e6910407a91253f",
+      "garmin_hrv_timeline.json": "7faa61c7f1fe73f8",
+      "garmin_sleep_history.json": "253666b1bf5e54ec",
+      "garmin_extended.json": "2c092d752534c9b8",
+      "garmin_heart_rate.json": "e73716714ccffd5d",
+      "garmin_stress.json": "b8d91fb0c75764c4",
+      "garmin_body_battery.json": "7e85b673dc23d7fa",
       "activities.json": "c568314184a024bf",
-      "training_feedback.json": "2d3a21f848558477",
+      "training_feedback.json": "c243a861af5e155a",
       "shift_calendar.json": "218a0b4ac784d7db",
-      "morning_sleep_status.json": "6411e75d4cdb7104",
-      "recovery_assessment.json": "332ba8c71172eaa9",
-      "report_ready.json": "b7a0da20b36a594c",
-      "garmin_hr_timeline.json": "6306a457735a7adc",
-      "daily_summary.json": "57d586474ece1376",
-      "workflow_health.json": "aa9071f32bd7589e",
-      "recovery.csv": "ce787cd1d94071bb"
+      "morning_sleep_status.json": "e5f9e90d2e1586f1",
+      "recovery_assessment.json": "04f32a2810729f63",
+      "report_ready.json": "c03a7ebd99544f07",
+      "garmin_hr_timeline.json": "9e2b41d03a045013",
+      "daily_summary.json": "8d084fa759ece278",
+      "workflow_health.json": "d10d6278f1e830e2",
+      "recovery.csv": "98833f7263bdc859"
     },
     "consistency_v3_v2": {
       "status": "ok",
       "checks": {
         "hrv_ms": {
-          "v3": 83.0,
-          "v2": 83.0,
+          "v3": 71.0,
+          "v2": 71.0,
           "ok": true
         },
         "resting_hr": {
-          "v3": 48.0,
-          "v2": 48.0,
+          "v3": 50.0,
+          "v2": 50.0,
           "ok": true
         },
         "sleep_hours": {
-          "v3": 7.18,
-          "v2": 7.18,
+          "v3": 7.21,
+          "v2": 7.21,
           "ok": true
         }
       }
     },
     "execution_health": {
-      "status": "attention",
-      "checked_at": "2026-11-24T21:35:42.388836+01:00",
+      "status": "ok",
+      "checked_at": "2026-11-25T03:32:19.620427+01:00",
       "alerts": [
-        {
-          "code": "backup_sync_not_needed",
-          "severity": "info",
-          "slots": null
-        },
-        {
-          "code": "latest_run_skipped",
-          "severity": "info",
-          "slots": null
-        },
-        {
-          "code": "latest_run_skipped",
-          "severity": "info",
-          "slots": null
-        },
-        {
-          "code": "latest_run_skipped",
-          "severity": "info",
-          "slots": null
-        },
         {
           "code": "cron_missed_dispatch_recovered",
           "severity": "info",
           "slots": [
-            "2026-11-23T22:45:00+01:00",
             "2026-11-24T08:30:00+01:00",
-            "2026-11-24T16:45:00+01:00"
+            "2026-11-24T16:45:00+01:00",
+            "2026-11-24T22:45:00+01:00"
           ]
-        },
-        {
-          "code": "latest_pipeline_not_complete",
-          "severity": "warning",
-          "slots": null
         }
       ],
       "missed_slots": [],
       "recovered_slots": [
-        "2026-11-23T22:45:00+01:00",
         "2026-11-24T08:30:00+01:00",
-        "2026-11-24T16:45:00+01:00"
+        "2026-11-24T16:45:00+01:00",
+        "2026-11-24T22:45:00+01:00"
       ]
     },
     "delivery": {
@@ -438,8 +416,8 @@
   },
   "training_integrity": {
     "window_days": 14,
-    "from": "2026-11-11",
-    "to": "2026-11-24",
+    "from": "2026-11-12",
+    "to": "2026-11-25",
     "sessions": 18,
     "with_rpe": 13,
     "rpe_coverage_pct": 100.0,
@@ -487,46 +465,15 @@
     "score": 88,
     "status": "green",
     "state": "assessed",
-    "date": "2026-11-24"
+    "date": "2026-11-25"
   },
   "history": {
-    "days": 62,
+    "days": 63,
     "first_date": "2026-09-24",
-    "last_date": "2026-11-24",
+    "last_date": "2026-11-25",
     "sessions": 76
   },
   "trend_28d": [
-    {
-      "date": "2026-10-28",
-      "score": 68.0,
-      "zone": "yellow",
-      "state": "assessed",
-      "hrv_ms": 43.0,
-      "hrv_rolling_ms": 49.4,
-      "hrv_low_ms": 52.9,
-      "hrv_high_ms": 61.4,
-      "resting_hr": 60.0,
-      "night_hr": 65.7,
-      "sleep_hours": 8.55,
-      "sleep_score": 75.0,
-      "load": 104.0,
-      "srpe": 929.0,
-      "sessions": 4,
-      "stress_avg": 41.0,
-      "garmin_readiness": 45.0,
-      "shift": null,
-      "ctl": 9.1,
-      "atl": 32.8,
-      "v2_score": 58.0,
-      "hybrid_score": 74.0,
-      "decision_zone": "yellow",
-      "deep_min": 62.0,
-      "rem_min": 68.0,
-      "stages_flag": null,
-      "sleep_context": "night_sleep",
-      "stress_avg_full": 41.0,
-      "rest_confirmed": false
-    },
     {
       "date": "2026-10-29",
       "score": 57.0,
@@ -1349,19 +1296,50 @@
       "load": 36.0,
       "srpe": 131.4,
       "sessions": 2,
-      "stress_avg": 18.0,
+      "stress_avg": 19.0,
       "garmin_readiness": 40.0,
       "shift": null,
       "ctl": 14.3,
       "atl": 23.3,
-      "v2_score": 88,
-      "hybrid_score": 74,
+      "v2_score": 88.0,
+      "hybrid_score": 74.0,
       "decision_zone": "yellow",
       "deep_min": 52.0,
       "rem_min": 117.0,
       "stages_flag": null,
       "sleep_context": "night_sleep",
-      "stress_avg_full": 18.0,
+      "stress_avg_full": 19.0,
+      "rest_confirmed": false
+    },
+    {
+      "date": "2026-11-25",
+      "score": 84.0,
+      "zone": "green",
+      "state": "assessed",
+      "hrv_ms": 71.0,
+      "hrv_rolling_ms": 61.5,
+      "hrv_low_ms": 47.7,
+      "hrv_high_ms": 58.8,
+      "resting_hr": 50.0,
+      "night_hr": 55.4,
+      "sleep_hours": 7.21,
+      "sleep_score": 84.0,
+      "load": 0.0,
+      "srpe": null,
+      "sessions": 0,
+      "stress_avg": 11.0,
+      "garmin_readiness": 15.0,
+      "shift": null,
+      "ctl": 14.0,
+      "atl": 20.2,
+      "v2_score": 88,
+      "hybrid_score": 49,
+      "decision_zone": "red",
+      "deep_min": 41.0,
+      "rem_min": 89.0,
+      "stages_flag": null,
+      "sleep_context": "night_sleep",
+      "stress_avg_full": 11.0,
       "rest_confirmed": false
     }
   ],
@@ -1581,71 +1559,6 @@
     "note": "Solo cuentan los días que el atleta confirma; un día sin registro no demuestra descanso."
   },
   "sessions_28d": [
-    {
-      "id": "i202655556",
-      "date": "2026-10-28",
-      "start_local": "2026-10-28T09:22:15",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "Calentamiento - WOD E3MO3M",
-      "duration_min": 13.8,
-      "load": 6.0,
-      "trimp": 9.946705,
-      "avg_hr": 122.0,
-      "max_hr": 162.0,
-      "rpe": null,
-      "srpe": null,
-      "removed": 0,
-      "rpe_na": true
-    },
-    {
-      "id": "i202655592",
-      "date": "2026-10-28",
-      "start_local": "2026-10-28T09:36:43",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "WOD E3MO3M x8 - SkiErg/Assault Bike / DB hang clean + S2OH / box jump",
-      "duration_min": 24.6,
-      "load": 28.0,
-      "trimp": 45.81151,
-      "avg_hr": 157.0,
-      "max_hr": 192.0,
-      "rpe": 9.0,
-      "srpe": 221.4,
-      "removed": 0
-    },
-    {
-      "id": "i202685333",
-      "date": "2026-10-28",
-      "start_local": "2026-10-28T10:21:50",
-      "type": "HighIntensityIntervalTraining",
-      "name": "HIIT",
-      "label": "Halterofilia - complex squat clean + front squat + split jerk / complex 2 squat clean + split jerk / complex squat clean + split jerk",
-      "duration_min": 55.9,
-      "load": 25.0,
-      "trimp": 41.444862,
-      "avg_hr": 123.0,
-      "max_hr": 153.0,
-      "rpe": 7.5,
-      "srpe": 419.2,
-      "removed": 0
-    },
-    {
-      "id": "i202804127",
-      "date": "2026-10-28",
-      "start_local": "2026-10-28T15:38:52",
-      "type": "Run",
-      "name": "Orense Carrera",
-      "label": "Carrera - 8 km",
-      "duration_min": 41.2,
-      "load": 45.0,
-      "trimp": 76.714134,
-      "avg_hr": 157.0,
-      "max_hr": 177.0,
-      "rpe": 7.0,
-      "srpe": 288.4,
-      "removed": 0
-    },
     {
       "id": "i203065304",
       "date": "2026-10-29",
@@ -2319,7 +2232,7 @@
     "min_days": 20,
     "status": "v3_no_probado",
     "verdict": "El v3 todavía no muestra relación clara con el esfuerzo: se mantiene el v2.",
-    "predictions": 39,
+    "predictions": 40,
     "first_prediction": "2026-10-17",
     "training_days": 22,
     "days_over_cap": 13,
@@ -2439,27 +2352,17 @@
     ],
     "adherence": {
       "window_days": 28,
-      "trained_days": 18,
-      "over": 12,
+      "trained_days": 17,
+      "over": 11,
       "within": 6,
-      "over_pct": 67,
+      "over_pct": 65,
       "over_red": 7,
-      "next_v2_after_over": 64.7,
+      "next_v2_after_over": 69.2,
       "next_v2_after_within": 58.5,
-      "next_hrv_after_over": 51.9,
+      "next_hrv_after_over": 55.2,
       "next_hrv_after_within": 47.0,
       "min_group": 3,
       "days": [
-        {
-          "date": "2026-10-28",
-          "zone": "yellow",
-          "rpe_cap": 7.0,
-          "max_rpe": 9.0,
-          "over": true,
-          "excess": 2.0,
-          "next_v2": 39.0,
-          "next_hrv": 35.0
-        },
         {
           "date": "2026-10-29",
           "zone": "red",
@@ -2627,8 +2530,8 @@
           "max_rpe": 9.0,
           "over": true,
           "excess": 2.0,
-          "next_v2": null,
-          "next_hrv": null
+          "next_v2": 88.0,
+          "next_hrv": 71.0
         }
       ],
       "note": "Días entrenados con RPE y decisión previa al entreno. Coincidencias descriptivas: no prueban causa."
