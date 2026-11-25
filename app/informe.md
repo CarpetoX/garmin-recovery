@@ -1,6 +1,6 @@
 # Informe matutino · 25/11/2026
 
-`GR-2026-11-25-0832-778151` · cita este identificador al reenviar el informe.
+`GR-2026-11-25-0852-e50926` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
@@ -12,7 +12,7 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 4 | 0–50 % | 71 ms | 50 lpm | 7,21 h | 15/100 |
+| 4 | 0–50 % | 71 ms | 50 lpm | 7,21 h | 20/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
@@ -20,9 +20,9 @@
 |---|--:|---|---|
 | Recuperación oficial | 88 | verde | oficial |
 | Híbrido Garmin + local | 49 | rojo | salvaguarda |
-| Modelo experimental | — | pendiente | sombra |
+| Modelo experimental | 84 | verde | sombra |
 | Modelo de compatibilidad | 100 | verde | compatibilidad |
-| Garmin Training Readiness | 15 | — | contexto |
+| Garmin Training Readiness | 20 | — | contexto |
 
 _Las puntuaciones no son equivalentes entre sí. Zona operativa = la más conservadora entre el modelo oficial, el híbrido y el experimental. Un rojo prevalece siempre; si no hay rojo y algún modelo está pendiente, sin datos o es de otro día, queda pendiente. Un rojo de otro día sigue limitando hasta que llegue el dato de hoy._
 
@@ -54,10 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-24-2247-11a29a (24/11 22:47):
-- **Decisión:** ámbar → **rojo**.
-- Híbrido: 74 → 49 (-25).
-- Nueva noche registrada: HRV 83 → 71 ms, sueño 7,18 → 7,21 h, FC reposo 48 → 50 lpm.
+Frente al informe GR-2026-11-25-0832-778151 (25/11 08:32):
+- Sin cambios en los datos.
 
 ## Qué ha cambiado respecto a tu línea base
 
@@ -70,9 +68,9 @@ Frente al informe GR-2026-11-24-2247-11a29a (24/11 22:47):
 
 ## Incertidumbre
 
-- Confianza de los datos: **baja** (sueño de hoy sin confirmar)
-- Confianza de la recomendación: **baja** (sin evaluación completa hoy)
-- El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
+- Confianza de los datos: **alta**
+- Confianza de la recomendación: **media** (modelo experimental aún sin validar frente a tu rendimiento real (modo sombra))
+- El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
 ## Plan del día
 
@@ -124,16 +122,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-25-0832-778151`
+- **Identificador del informe:** `GR-2026-11-25-0852-e50926`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-25-0830 · datos sincronizados a las 08:31
-- **Antigüedad:** fin del sueño hace 15 min ✓ · última HRV hace 19 min ✓ · última FC hace 16 min ✓ · último Body Battery hace 35 min ✓
+- **Ciclo:** 2026-11-25-0830-post-sleep · datos sincronizados a las 08:51
+- **Antigüedad:** fin del sueño hace 35 min ✓ · última HRV hace 40 min ✓ · última FC hace 13 min ✓ · último Body Battery hace 35 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 13/13 (+5 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
 - **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-25 08:32 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-25 08:52 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
