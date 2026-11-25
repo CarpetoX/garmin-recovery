@@ -1,32 +1,27 @@
-<!-- cycle_id: 2026-11-25-0830 -->
-**En breve:** recuperación oficial alta, pero la decisión de hoy es prudente (rojo) porque Garmin marca 15/100 y el sueño aún no está confirmado del todo.
-🟢 Recuperación oficial 88/100, confianza alta.
-🌙 Sueño 7,2 h, puntuación 84.
-🏋️ Carga: 8 sesiones en 7 días, 20 % menos que la semana previa.
-❤️ HRV 71 ms, por encima de tu rango normal (48–59 ms); FC en reposo 50 lpm (−6 vs. mediana).
-Orientación: hoy libre de turno; movilidad o zona 2 suave (RPE ≤ 4, volumen 0–50 %).
+<!-- cycle_id: 2026-11-25-0830-post-sleep -->
+**En breve:** buena recuperación oficial, pero la decisión del día es prudente (rojo) por la señal de Garmin.
+🟢 Recuperación oficial 88/100, confianza alta
+🌙 Sueño 7,2 h, puntuación 84 (deuda 2,2 h en 3 noches)
+🏋️ Carga: 8 sesiones en 7 días, 124 de carga (−20 % vs. semana previa)
+❤️ HRV 71 ms, media 7 días 61,5 ms, por encima de tu rango normal (48–59 ms)
+Orientación: hoy sin turno; RPE ≤ 4, volumen 0–50 %: movilidad o zona 2 suave. Mañana MT.
 
-## Qué explica la puntuación
-- ↑ HRV media 7 días 61,5 ms (+16 % vs. base 53 ms) y FC en reposo 50 lpm: señales favorables.
-- ↑ Estrés Garmin ayer 19 (tu mediana 34).
-- ↓ Sueño: deuda de 2,2 h en 3 noches frente a una necesidad de 7,5 h.
-- ↓ Garmin Training Readiness 15/100 arrastra el híbrido a 49 (rojo), que es la señal más conservadora y manda. El modelo experimental sigue pendiente (sueño sin confirmar): no se autoriza intensidad alta.
+**Qué explica la puntuación.** HRV y FC en reposo (50 lpm, −6 vs. mediana) y el estrés bajo (19 vs. 34) empujan al alza; el sueño es lo único que resta. El modelo experimental (84, verde) es más permisivo; manda el híbrido con Garmin Training Readiness 20 (49, rojo), así que se aplica la decisión más conservadora.
 
-## Carga reciente
-8 sesiones, carga 124, sRPE 692, monotonía 0,84, ACWR 0,56. Ayer: WOD 3 RFT (RPE 9) y el 23/11 AMRAP 12' (RPE 8) y power snatch (RPE 7): dos días duros seguidos.
+**Carga reciente.** sRPE semanal 692, monotonía 0,84, ACWR 0,56 (carga aguda baja frente a la crónica). Últimas: WOD 3 RFT RPE 9 (24/11), AMRAP 12' RPE 8 y power snatch RPE 7 (23/11). Dos días duros seguidos: el análisis por reglas ya lo señala (11 de 27 sesiones con RPE ≥ 8, 41 %).
 
-## Prioridades
-1. **Sueño:** adelanta 30–45 min la hora de acostarte, sobre todo antes de un turno de noche; siesta corta antes de TN.
-2. **Intensidad:** 11 de 27 sesiones con RPE ≥ 8 (41 %); intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
-3. **Sensaciones:** registra fatiga, agujetas y ánimo en Intervals (0 de 14 días).
+**3 prioridades**
+1. Sueño: acostarte 30–45 min antes, sobre todo antes del TN del 27/11 (deuda acumulada 4,7 h según el informe completo).
+2. Intensidad: intercalar RPE 5–6 entre sesiones duras y dejar ≥ 48 h entre esfuerzos máximos.
+3. Sensaciones: registrarlas cada mañana en Intervals (0 de 14 días).
 
-## Plan de 7 días
-- **mié 25:** suave/movilidad (RPE ≤ 4).
-- **jue 26 (MT):** movilidad o descanso.
-- **vie 27 (TN):** moderada por la mañana, si entrenas.
-- **sáb 28:** descanso, prioriza dormir.
-- **dom 29:** sesión exigente si la decisión lo permite.
-- **lun 30:** moderada.
-- **mar 01 (MT):** suave/movilidad.
+**Plan 7 días** (turnos: 26 MT, 27 TN)
+- Mié 25: movilidad / zona 2 suave, RPE ≤ 4.
+- Jue 26 (MT): descanso o movilidad corta; dormir temprano.
+- Vie 27 (TN): sin entrenar; siesta/ancla de sueño al salir.
+- Sáb 28: recuperar sueño; si la zona mejora, técnica RPE 5–6.
+- Dom 29: sesión de fuerza moderada RPE ≤ 7 solo si la decisión no es roja.
+- Lun 30: zona 2 30–40 min.
+- Mar 1 (MT): una sesión dura (RPE 8) únicamente con zona verde; después 48 h sin otra.
 
-Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico.
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
