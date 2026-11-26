@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Jueves, 26 de noviembre de 2026 · 16:47 · `GR-2026-11-26-1647-b0f84a`
+Jueves, 26 de noviembre de 2026 · 22:47 · `GR-2026-11-26-2247-17c155`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|8 sesiones|sRPE 1565|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-26-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-26-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 72/100 (oficial, confianza high). Híbrido: 36/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 6 h 23 min, puntuación 70/100.
 - ❤️ **Principal alerta:** HRV 52 ms, 1,0 % por debajo de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|8 sesiones|sRPE 1565|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-26-1645 |
+| Ciclo | 2026-11-26-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:47:19 |
+| Certificado generado | 22:47:22 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -78,7 +78,7 @@ La HRV está 1 % por debajo de su mediana; la FC en reposo está 1 lpm por encim
 | Modelo de compatibilidad | 🟡 52/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 12/100 | contexto |
 | Tiempo de recuperación Garmin | 73,1 h | contexto |
-| Índice personal experimental | 1/100 | provisional |
+| Índice personal experimental | 0/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -91,7 +91,7 @@ Modelo experimental: 78 → 71 (green → green). Cambios notables frente a ayer
 - FC nocturna: 55,4 → 62,2 lpm (desfavorable)
 - Sueño: 7,2 → 6,4 h (desfavorable)
 - Puntuación de sueño: 84 → 70 (desfavorable)
-- Estrés medio: 21 → 32 (desfavorable)
+- Estrés medio: 21 → 31 (desfavorable)
 
 Son diferencias observadas, no causas.
 
@@ -134,7 +134,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 72,6 lpm | 62,2 lpm |
+| Hoy* | 70,7 lpm | 62,2 lpm |
 | 3 días | 76,9 lpm | 57,0 lpm |
 | 7 días | 73,0 lpm | 58,2 lpm |
 | 28 días | 78,0 lpm | 61,5 lpm |
@@ -154,8 +154,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 32, máximo 87.
-- Body Battery: último valor 37/100, medido a las 16:24.
+- Estrés medio: 31, máximo 87.
+- Body Battery: último valor 29/100, medido a las 21:27.
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -182,7 +182,7 @@ Solo descriptivo: sirve para ver si la zona se corresponde con tu recuperación 
 
 ## 5. Rendimiento CrossFit
 
-Última actividad registrada: 25 nov. Descansos confirmados por ti: 2 en 7 días y 7 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
+Última actividad registrada: 25 nov. Descansos confirmados por ti: 3 en 7 días y 8 en 28. Un día sin registro y sin confirmar no demuestra que fuera de descanso.
 
 Contraste Garmin ↔ Intervals: las 8 actividades de Garmin de los últimos 7 días constan también en Intervals.
 
@@ -219,7 +219,7 @@ El volumen es un mínimo cuantificable, no un tonelaje comparable entre barra, m
 23 nov ████          320
 24 nov ██            131
 25 nov ████████████  1030
-26 nov —             sin registro
+26 nov —             descanso
 ```
 
 El 25 nov concentra la mayor carga sRPE de la semana. La relación con las señales de recuperación es descriptiva, no causal.
@@ -330,7 +330,7 @@ Turno: hoy MT (08–22), mañana TN (15–08).
 ### Recomendaciones
 
 1. **Prioriza recuperar** — Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -413,4 +413,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-26-1645 · generado 26/11/2026 16:47 Europe/Madrid · certificado READY · sync_run_id 45852267603.
+Traza: cierre nocturno · ciclo 2026-11-26-2245 · generado 26/11/2026 22:47 Europe/Madrid · certificado READY · sync_run_id 45900316605.
