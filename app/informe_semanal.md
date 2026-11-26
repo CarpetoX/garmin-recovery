@@ -1,10 +1,10 @@
-# Resumen semanal · 19/11–25/11
+# Resumen semanal · 20/11–26/11
 
-_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-25-2247-b9ba6a`)._
+_Semana móvil que termina hoy, comparada con los 7 días anteriores. Fuente: `app/readiness_v3.json` (informe `GR-2026-11-26-0832-772cc3`)._
 
 ## En una frase
 
-- 11 sesiones (+1); HRV de 7 días por encima de tu rango normal; 6 de 7 noches con datos por debajo de 7,5 h de sueño; 5 de 5 días comprobados por encima del RPE máximo.
+- 8 sesiones (−3); HRV de 7 días por encima de tu rango normal; 6 de 7 noches con datos por debajo de 7,5 h de sueño; 4 de 4 días comprobados por encima del RPE máximo.
 - Decisión registrada en 7/7 días: ámbar 3 · rojo 4.
 
 ## Gráficas de la semana
@@ -25,30 +25,29 @@ _Barras: RPE de la sesión más dura de cada día; raya gris: máximo que permit
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| Sesiones | 11 | 10 |
-| Minutos | 337 | 283 |
-| Carga (Intervals) | 215 | 155 |
-| sRPE (RPE × min) | 1722 | 1376 |
+| Sesiones | 8 | 11 |
+| Minutos | 300 | 274 |
+| Carga (Intervals) | 192 | 149 |
+| sRPE (RPE × min) | 1565 | 1428 |
 
-Monotonía 0,68 · strain 1169 · ACWR 1,16 · RPE registrado en 9/11 sesiones.
+Monotonía 0,60 · strain 937 · ACWR 1,06 · RPE registrado en 7/8 sesiones.
 
-**Días por encima del RPE máximo de la decisión:** 19/11 (RPE 7,0 > 4), 20/11 (RPE 7,0 > 4), 23/11 (RPE 8,0 > 7), 24/11 (RPE 9,0 > 7), 25/11 (RPE 8,0 > 4).
+**Días por encima del RPE máximo de la decisión:** 20/11 (RPE 7,0 > 4), 23/11 (RPE 8,0 > 7), 24/11 (RPE 9,0 > 7), 25/11 (RPE 8,0 > 4).
 
 ## Recuperación
 
 | | Esta semana | Semana previa |
 |---|--:|--:|
-| HRV media | 63,6 ms | 58,9 ms |
-| FC en reposo media | 52,1 lpm | 53,9 lpm |
-| Sueño medio | 7,00 h | 6,51 h |
+| HRV media | 63,3 ms | 57,1 ms |
+| FC en reposo media | 52,4 lpm | 53,7 lpm |
+| Sueño medio | 6,86 h | 6,41 h |
 
-HRV de 7 días hoy: 61,5 ms (rango normal 47,7–58,8 ms). Turnos: MT, TN.
+HRV de 7 días hoy: 61,2 ms (rango normal 47,8–58,8 ms). Turnos: MT, TN, MT.
 
 ## Fuerza de la semana
 
 | Fecha | Ejercicio | Carga máx. declarada | Mejor serie | 1RM mín. | Series |
 |---|---|--:|--:|--:|--:|
-| 19/11 | DB split squat | 65,0 kg | 65 × 8 | 82,3 kg | 4/4 |
 | 20/11 | chin up lastrado | 42,5 kg | — | — | 8/8 |
 | 23/11 | power snatch | 60,0 kg | 60 × 5 | 70,0 kg | 5/5 |
 | 25/11 | sentadilla trasera | 150,0 kg | 140 × 6 | 168,0 kg | 8/8 |
@@ -64,13 +63,10 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 
 ## Puntualidad de los informes
 
-**20 de 21** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
+**18 de 19** franjas con el informe listo antes de que ChatGPT lo lea (09:05, 17:10 y 23:10).
 
 | Fecha | Franja | Sync | Informe listo | Margen |
 |---|---|--:|--:|--:|
-| 19/11 | 08:30 | 08:34 | 08:35 | 30 min ✓ |
-| 19/11 | 16:45 | 16:49 | 16:50 | 19 min ✓ |
-| 19/11 | 22:45 | 22:49 | 22:50 | 20 min ✓ |
 | 20/11 | 08:30 | 08:34 | 08:35 | 30 min ✓ |
 | 20/11 | 16:45 | 16:49 | 16:50 | 20 min ✓ |
 | 20/11 | 22:45 | 22:49 | 22:50 | 20 min ✓ |
@@ -89,11 +85,12 @@ _1RM mín. = Epley con la mejor serie (hasta 10 repeticiones): tu 1RM real es ig
 | 25/11 | 08:30 | 08:31 | 08:32 | 33 min ✓ |
 | 25/11 | 16:45 | 16:52 | 16:53 | 17 min ✓ |
 | 25/11 | 22:45 | 22:46 | 22:47 | 23 min ✓ |
+| 26/11 | 08:30 | 08:31 | 08:32 | 33 min ✓ |
 
 ## Calidad de los datos
 
 - Noches con HRV: 7/7 · con sueño: 7/7.
-- Sesiones con RPE: 9/11.
+- Sesiones con RPE: 7/8.
 
 ## Validación de modelos
 
