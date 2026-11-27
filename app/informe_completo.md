@@ -1,6 +1,6 @@
-# Garmin Recovery · Informe de tarde
+# Garmin Recovery · Cierre nocturno
 
-Viernes, 27 de noviembre de 2026 · 16:47 · `GR-2026-11-27-1647-99d45f`
+Viernes, 27 de noviembre de 2026 · 22:47 · `GR-2026-11-27-2247-c5ba8f`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -13,7 +13,7 @@ Carga 7 días|10 sesiones|sRPE 1903|unavailable
 
 ## Resumen ejecutivo
 
-- 🟢 **Certificación:** ciclo 2026-11-27-1645 validado; 4 de 4 procesos finalizados correctamente.
+- 🟢 **Certificación:** ciclo 2026-11-27-2245 validado; 4 de 4 procesos finalizados correctamente.
 - 🔴 **Recuperación:** 88/100 (oficial, confianza high). Híbrido: 49/100. **Decisión: Prioriza recuperar**, RPE máx. 4.
 - 🌙 **Sueño:** 7 h 58 min, puntuación 81/100.
 - ❤️ **Principal alerta:** HRV 71 ms, 35,2 % por encima de tu mediana de 28 días.
@@ -23,13 +23,13 @@ Carga 7 días|10 sesiones|sRPE 1903|unavailable
 
 | Comprobación | Resultado |
 |---|---|
-| Ciclo | 2026-11-27-1645 |
+| Ciclo | 2026-11-27-2245 |
 | Estado del certificado | READY |
 | Sync | Correcto |
 | Heart Rate | Correcto |
 | Advanced Analytics | Correcto |
 | CrossFit Insights | Correcto (publicando en este mismo ciclo) |
-| Certificado generado | 16:47:01 |
+| Certificado generado | 22:47:09 |
 | Instantánea inmutable (SHA-256) | Disponible |
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
@@ -75,10 +75,10 @@ La HRV está 35 % por encima de su mediana; la FC en reposo está 3 lpm por deba
 | Recuperación oficial | 🟢 88/100 | oficial |
 | Híbrido Garmin + local | 🔴 49/100 | salvaguarda |
 | Modelo experimental | 🟢 79/100 | sombra |
-| Modelo de compatibilidad | 🟢 84/100 | compatibilidad |
+| Modelo de compatibilidad | 🟢 91/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 32/100 | contexto |
 | Tiempo de recuperación Garmin | 47,3 h | contexto |
-| Índice personal experimental | 61/100 | provisional |
+| Índice personal experimental | 59/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (verde) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -91,7 +91,6 @@ Modelo experimental: 71 → 79 (green → green). Cambios notables frente a ayer
 - FC nocturna: 62,2 → 56,7 lpm (favorable)
 - Sueño: 6,4 → 8,0 h (favorable)
 - Puntuación de sueño: 70 → 81 (favorable)
-- Estrés medio: 31 → 23 (favorable)
 
 Son diferencias observadas, no causas.
 
@@ -134,7 +133,7 @@ No se incorporan siestas no confirmadas.
 
 | Ventana | FC diurna | FC nocturna |
 |---|---|---|
-| Hoy* | 86,2 lpm | 56,7 lpm |
+| Hoy* | 83,6 lpm | 56,7 lpm |
 | 3 días | 76,1 lpm | 58,0 lpm |
 | 7 días | 71,8 lpm | 57,1 lpm |
 | 28 días | 77,7 lpm | 61,1 lpm |
@@ -154,8 +153,8 @@ Cobertura histórica fusionada (días con dato de 28):
 
 ### Estrés y Body Battery
 
-- Estrés medio: 23, máximo 98.
-- Body Battery: último valor 44/100, medido a las 16:36.
+- Estrés medio: 28, máximo 98.
+- Body Battery: último valor 29/100, medido a las 20:39 (hace 2 h 08 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -336,7 +335,7 @@ Turno: hoy TN (15–08), mañana libre tras la noche.
 ### Recomendaciones
 
 1. **Prioriza recuperar** — Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
-2. Ajusta la sesión de hoy con las reglas por tipo del informe del ciclo (`app/informe.md`).
+2. Prioriza el próximo sueño y comprueba al despertar si HRV, FC en reposo y puntuación de sueño se acercan a tus referencias.
 3. Registra sensaciones y fatiga percibida en Intervals: ayudan a contextualizar la recuperación tras varios entrenamientos exigentes.
 
 ## 8. Análisis de mejora física y recuperación
@@ -419,4 +418,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: informe de tarde · ciclo 2026-11-27-1645 · generado 27/11/2026 16:47 Europe/Madrid · certificado READY · sync_run_id 46027742791.
+Traza: cierre nocturno · ciclo 2026-11-27-2245 · generado 27/11/2026 22:47 Europe/Madrid · certificado READY · sync_run_id 46072357424.
