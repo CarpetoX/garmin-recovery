@@ -1,31 +1,29 @@
-<!-- cycle_id: 2026-11-27-0830-post-sleep -->
-**En breve:** la recuperación oficial es buena, pero la salvaguarda con Garmin marca rojo: hoy toca recuperar.
+<!-- cycle_id: 2026-11-27-1645 -->
+**En breve:** hoy la recuperación oficial es buena, pero la carga reciente pide frenar.
 🟢 Recuperación oficial 88/100, confianza alta.
 🌙 Sueño 7,97 h, puntuación 81.
-🏋️ Carga: 10 sesiones en 7 días, carga 192 (+18 % vs. semana previa).
-❤️ HRV 71 ms, por encima de tu rango normal (48–59 ms).
-Orientación: hoy turno de noche; movilidad o zona 2 suave (RPE ≤ 4), corto y sin máximos.
+🏋️ Carga 7 días: 192 en 10 sesiones (+18 % vs. semana previa).
+❤️ HRV media 7 días 67,4 ms, +27 % sobre tu base.
+Orientación: turno de noche hoy; descanso o movilidad y zona 2 suave (RPE ≤ 4); ya has entrenado esta mañana.
 
 ## Qué explica la puntuación
-HRV media de 7 días 67,4 ms (+27 % sobre tu base de 53 ms) y FC en reposo 52 lpm (−4 vs. mediana) son señales favorables. El sueño cumple, aunque arrastras 1,4 h de deuda en 3 noches. Estrés de ayer 31 (mediana 34). El rojo lo fuerza el híbrido (49), por Garmin Training Readiness 32 y la forma −88 %; el modelo experimental (79) es más permisivo y manda el más conservador.
+HRV 67,4 ms (7 días) por encima de tu rango normal (47,7–58,8 ms) y FC en reposo 52 lpm (−4 vs. mediana) empujan al alza. El sueño es correcto (8,0 h, deuda 1,4 h en 3 noches) y el estrés de Garmin es bajo (31 vs. mediana 34). Lo que frena es la carga: forma −88 % (riesgo alto), que activa el rojo del híbrido (49) con Garmin Training Readiness en 32. El modelo experimental (79) es más permisivo; se aplica la decisión más conservadora: RPE máx. 4, volumen 0–50 %.
 
 ## Carga reciente
-Hoy ya hay 3 sesiones (carga 34), sin RPE registrado: HIIT 10:21, HIIT 10:57 y Fuerza 11:29. Forma (TSB) −13,5, ATL 28,8 frente a CTL 15,3; sRPE semanal 1.481.
+sRPE 1.903, monotonía 0,73, ACWR 1,22. Hoy: front squat RPE 7, WOD RPE 7,5 y fuerza de pecho RPE 5, por encima del máximo del día. Sin sensaciones registradas en Intervals.
 
 ## 3 prioridades
-1. **Sueño:** media de 7 noches 7,2 h (necesidad 7,5 h), deuda 3,6 h. Adelanta 30–45 min la hora de acostarte y haz siesta corta antes de un TN.
-2. **Intensidad:** 11 de 28 sesiones con RPE ≥ 8 (39 %) y 5 veces dos días duros seguidos. Intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
-3. **Registro:** anota RPE de cada sesión y sensaciones en Intervals (0 de 14 días registrados).
+1. **Sueño:** media de 7 noches 7,2 h frente a 7,5 h necesarias y deuda de 3,6 h; acuéstate 30–45 min antes, sobre todo antes de un TN.
+2. **Intensidad:** 11 de 31 sesiones con RPE ≥ 8 (35 %) y 5 veces dos días duros seguidos; intercala RPE 5–6 y deja ≥ 48 h entre esfuerzos máximos.
+3. **Sensaciones:** 0 de 14 días registrados; anota fatiga, agujetas y ánimo en Intervals.
 
-## Plan de 7 días (orientativo)
-- **Vie 27 (TN):** movilidad o zona 2, RPE ≤ 4.
-- **Sáb 28:** descanso, prioriza dormir tras el TN.
-- **Dom 29:** moderada (RPE 5–6).
-- **Lun 30:** sesión exigente solo si el sábado y el domingo salen bien y el estado lo permite.
-- **Mar 1 (MT):** movilidad.
-- **Mié 2 (TN):** moderada por la mañana, corta.
-- **Jue 3:** descanso.
-
-Máximo 2–3 sesiones RPE ≥ 8 por semana. La decisión del día manda sobre el plan.
+## Plan de 7 días (parte del plan por reglas)
+- **vie 27 (TN):** suave/movilidad; prioriza dormir después.
+- **sáb 28 (tras TN):** descanso.
+- **dom 29:** moderada (RPE 5–6).
+- **lun 30:** exigente solo si el sueño y la decisión del día lo permiten.
+- **mar 01 (MT):** movilidad o descanso.
+- **mié 02 (TN):** si entrenas, por la mañana y moderado.
+- Cada día manda la decisión del ciclo; si sale rojo, RPE ≤ 4.
 
 _Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico._
