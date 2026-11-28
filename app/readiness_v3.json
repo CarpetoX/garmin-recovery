@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "6.1.0",
   "model_version": "readiness-v3.2",
-  "generated_at": "2026-11-28T09:32:34.735989+01:00",
+  "generated_at": "2026-11-28T10:37:37.319760+01:00",
   "timezone": "Europe/Madrid",
   "date": "2026-11-28",
   "decision": {
@@ -284,7 +284,7 @@
     ]
   },
   "certificate": {
-    "generated_at": "2026-11-28T09:32:34.735989+01:00",
+    "generated_at": "2026-11-28T10:37:37.319760+01:00",
     "cycle": {
       "cycle_id": "2026-11-28-0830",
       "slot_at": "2026-11-28T08:30:00+01:00",
@@ -292,7 +292,7 @@
       "verified_at": "2026-11-28T08:32:11.539160+01:00",
       "scheduled_cycle_today": true,
       "data_newer_than_certified_cycle": true,
-      "data_synced_at": "2026-11-28T09:31:34.116093+01:00",
+      "data_synced_at": "2026-11-28T10:36:32.800204+01:00",
       "note": "Datos de un Sync posterior al último ciclo programado (p. ej. manual): válidos, sin certificado de franja propio.",
       "chain": {
         "sync": {
@@ -320,51 +320,51 @@
     "data_age": {
       "confirmed_sleep": {
         "measured_at": "2026-11-28T04:15:26+01:00",
-        "age_minutes": 317.0,
+        "age_minutes": 382.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "sleep_hrv": {
         "measured_at": "2026-11-28T04:13:00+01:00",
-        "age_minutes": 320.0,
+        "age_minutes": 385.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "heart_rate_live": {
         "measured_at": "2026-11-28T08:24:00+01:00",
-        "age_minutes": 69.0,
+        "age_minutes": 134.0,
         "state": "reciente",
         "basis": "fuente"
       },
       "body_battery_live": {
         "measured_at": "2026-11-28T07:21:00+01:00",
-        "age_minutes": 132.0,
-        "state": "reciente",
+        "age_minutes": 197.0,
+        "state": "antigua",
         "basis": "fuente"
       }
     },
     "rpe_source": {
-      "fetched_at": "2026-11-28T08:32:08.368803+00:00",
+      "fetched_at": "2026-11-28T09:37:08.994923+00:00",
       "latest_date": "2026-11-27",
       "rows_sha256": "6b5689921180b0f5",
-      "advanced_run_id": "46126247133"
+      "advanced_run_id": "46131293275"
     },
     "source_sha256": {
       "wellness.json": "56cc71836ecf3ff0",
-      "garmin_hrv_timeline.json": "dc3cad24aa9c7d37",
-      "garmin_sleep_history.json": "ecda8e0157bdf742",
-      "garmin_extended.json": "54e98b5f2b9e643b",
-      "garmin_heart_rate.json": "0f15f30c86df6e95",
-      "garmin_stress.json": "3b65e8febaa6f800",
-      "garmin_body_battery.json": "bf2cf737d2e3ce4b",
+      "garmin_hrv_timeline.json": "a763e002354e87a1",
+      "garmin_sleep_history.json": "5a4b9ed1d85b97db",
+      "garmin_extended.json": "bb1811bff43661d0",
+      "garmin_heart_rate.json": "59794480e07593cb",
+      "garmin_stress.json": "c098a09bb60f7a23",
+      "garmin_body_battery.json": "47ef2b5b850e90d4",
       "activities.json": "5faae73f7a5e4750",
-      "training_feedback.json": "5739ca1d8bd0347a",
+      "training_feedback.json": "0eab964cc3ce83e2",
       "shift_calendar.json": "218a0b4ac784d7db",
-      "morning_sleep_status.json": "9e33fc6747c0cc28",
-      "recovery_assessment.json": "b63a125e70dddb09",
+      "morning_sleep_status.json": "ae96701b19728cdb",
+      "recovery_assessment.json": "a3ad88e5d9f0c8b4",
       "report_ready.json": "c6b90abbefb15741",
-      "garmin_hr_timeline.json": "7024a36b324fccb2",
-      "daily_summary.json": "5509e7d9c446fe7d",
+      "garmin_hr_timeline.json": "43c03f5ac30ead34",
+      "daily_summary.json": "1e563791f86973f9",
       "workflow_health.json": "197b60140581102e",
       "recovery.csv": "10fe911d361d8dfa"
     },
@@ -418,8 +418,10 @@
       "status": "no_verificable_en_etapa_de_datos",
       "detail": "Este certificado acredita datos preparados, no la recepción del informe. ChatGPT no devuelve acuse; la rutina de Claude registra el ID de sesión en el paso V5.1."
     },
-    "status": "ok",
-    "issues": []
+    "status": "con_avisos",
+    "issues": [
+      "mediciones no recientes: body_battery_live"
+    ]
   },
   "training_integrity": {
     "window_days": 14,
