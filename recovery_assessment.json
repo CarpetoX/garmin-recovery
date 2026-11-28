@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-28T08:31:41.261783+01:00",
+  "generated_at": "2026-11-28T09:32:09.110558+01:00",
   "methodology_version": "recovery-reliability-v2.3.1",
   "state": "assessed",
   "status": "red",
@@ -113,7 +113,8 @@
     "intensity_guardrail": "avoid_maximum",
     "reason_codes": [
       "post_night_shift",
-      "short_sleep"
+      "short_sleep",
+      "live_measurement_uncertain"
     ],
     "baseline_caution": "standard",
     "note": "V2.3.1 reliability overlay; the V2.2 baseline score is retained unless invalid measurements or a restrictive private guardrail block clearance.",
@@ -122,26 +123,26 @@
         "confirmed_sleep": {
           "state": "recent",
           "measured_at": "2026-11-28T04:15:26+01:00",
-          "age_minutes": 256.3,
+          "age_minutes": 316.7,
           "basis": "confirmed_sleep_end",
           "garmin_episode_confirmed": true
         },
         "sleep_hrv": {
           "state": "recent",
           "measured_at": "2026-11-28T04:13:00+01:00",
-          "age_minutes": 258.7,
+          "age_minutes": 319.2,
           "basis": "actual_sleep_hrv_sample"
         },
         "heart_rate_live": {
           "state": "recent",
           "measured_at": "2026-11-28T08:24:00+01:00",
-          "age_minutes": 7.7,
+          "age_minutes": 68.2,
           "basis": "actual_hr_sample"
         },
         "body_battery_live": {
-          "state": "recent",
+          "state": "delayed",
           "measured_at": "2026-11-28T07:21:00+01:00",
-          "age_minutes": 70.7,
+          "age_minutes": 131.2,
           "basis": "actual_body_battery_sample"
         },
         "resting_hr_summary": {
@@ -152,8 +153,10 @@
         }
       },
       "invalid_core_episode": false,
-      "live_data_limited": false,
-      "limited_live_metrics": [],
+      "live_data_limited": true,
+      "limited_live_metrics": [
+        "body_battery_live"
+      ],
       "note": "Measurement timestamps are independent from file generation times. Nightly HRV is expected during sleep, not continuously."
     },
     "sleep_fragmentation": {
