@@ -1,6 +1,6 @@
 # Garmin Recovery · Cierre matinal
 
-Sábado, 28 de noviembre de 2026 · 08:32 · `GR-2026-11-28-0832-f9ce92`
+Sábado, 28 de noviembre de 2026 · 09:32 · `GR-2026-11-28-0932-d0520c`
 
 ```cards
 Decisión|Prioriza recuperar|RPE máx. 4|red
@@ -34,7 +34,7 @@ Carga 7 días|10 sesiones|sRPE 1903|unavailable
 | Confianza de recuperación | high |
 | Calidad fisiológica de los datos | 100/100 (good) |
 
-La calidad describe los datos disponibles, no el software. No se han incorporado mediciones posteriores al ciclo.
+La calidad describe los datos disponibles, no el software. Incluye datos de un Sync posterior al ciclo (09:31), sin certificado de franja propio: sesiones, FC diurna y Body Battery pueden ser más recientes que el certificado.
 
 ### Fuentes de datos
 
@@ -78,7 +78,7 @@ La HRV está 4 % por debajo de su mediana; la FC en reposo coincide con su media
 | Modelo de compatibilidad | 🔴 23/100 | compatibilidad |
 | Garmin Training Readiness | ⚪ 3/100 | contexto |
 | Tiempo de recuperación Garmin | 76,0 h | contexto |
-| Índice personal experimental | 10/100 | provisional |
+| Índice personal experimental | 2/100 | provisional |
 
 _Divergencia entre modelos:_ El modelo experimental (pendiente) es más permisivo que la decisión (rojo); se aplica la más conservadora.
 
@@ -154,7 +154,7 @@ Cobertura histórica fusionada (días con dato de 28):
 ### Estrés y Body Battery
 
 - Estrés medio: 36, máximo 94.
-- Body Battery: último valor 15/100, medido a las 07:21.
+- Body Battery: último valor 15/100, medido a las 07:21 (hace 2 h 12 min: no es una medición nueva).
 - Recuperación de FC a 1 min tras el ejercicio: 7 observaciones recientes, mediana 24,0 lpm.
 
 **Diario de correlaciones (HRV del día siguiente)**
@@ -417,4 +417,4 @@ Datos suficientes para evaluar la recuperación de hoy: la decisión es **🔴 P
 
 ---
 
-Traza: cierre matinal · ciclo 2026-11-28-0830 · generado 28/11/2026 08:32 Europe/Madrid · certificado READY · sync_run_id 46121523637.
+Traza: cierre matinal · ciclo 2026-11-28-0830 · generado 28/11/2026 09:32 Europe/Madrid · certificado READY · sync_run_id 46121523637.
