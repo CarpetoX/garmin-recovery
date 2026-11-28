@@ -1,12 +1,10 @@
 # Informe de seguimiento · 28/11/2026
 
-`GR-2026-11-28-1247-3be062` · cita este identificador al reenviar el informe.
-
-> ⚠️ Certificado con avisos: mediciones no recientes: heart_rate_live, body_battery_live.
+`GR-2026-11-28-1352-09d72f` · cita este identificador al reenviar el informe.
 
 > **Hoy: 🔴 rojo — Prioriza recuperar.** RPE ≤ 4 · volumen 0–50 %.
 >
-> **Por qué:** lo marcan Recuperación oficial (48) y Híbrido Garmin + local (15); señales: Sueño 1,2 h, puntuación 22, deuda 7,4 h en 3 noches · ACWR 1.26.
+> **Por qué:** lo marca Híbrido Garmin + local (15); señales: Sueño 2,6 h, puntuación 22, deuda 6,0 h en 3 noches · ACWR 1.26.
 >
 > **Qué hacer:** Movilidad, zona 2 suave (30–40 min) o descanso. Sin cargas máximas ni WOD intensos.
 
@@ -14,15 +12,15 @@
 
 | RPE máximo | Volumen | HRV | FC reposo | Sueño | Garmin Readiness |
 |--:|--:|--:|--:|--:|--:|
-| 4 | 0–50 % | 51 ms | 55 lpm | 1,18 h | 3/100 |
+| 4 | 0–50 % | 51 ms | 55 lpm | 2,57 h | 3/100 |
 
 <details><summary>Cómo se decide (modelos)</summary>
 
 | Modelo | Puntuación | Zona | Papel |
 |---|--:|---|---|
-| Recuperación oficial | 48 | rojo | oficial |
+| Recuperación oficial | — | pendiente | oficial |
 | Híbrido Garmin + local | 15 | rojo | salvaguarda |
-| Modelo experimental | — | pendiente | sombra |
+| Modelo experimental | 63 | ámbar | sombra |
 | Modelo de compatibilidad | 23 | rojo | compatibilidad |
 | Garmin Training Readiness | 3 | — | contexto |
 
@@ -56,8 +54,8 @@ _Ejemplo en ámbar: sentadilla 5 × 3 a 150–160 kg → 4 × 3 a 135–142,5 kg
 
 ## Qué ha cambiado desde el informe anterior
 
-Frente al informe GR-2026-11-28-1142-3e5635 (28/11 11:42):
-- Sin cambios en los datos.
+Frente al informe GR-2026-11-28-1247-3be062 (28/11 12:47):
+- Nueva noche registrada: HRV 51 → 51 ms, sueño 1,18 → 2,57 h, FC reposo 55 → 55 lpm.
 
 ## Actividad de hoy
 
@@ -119,16 +117,16 @@ _Volumen = kg × repeticiones de las series con carga conocida. No se comparan i
 
 ## Certificado
 
-- **Identificador del informe:** `GR-2026-11-28-1247-3be062`
+- **Identificador del informe:** `GR-2026-11-28-1352-09d72f`
 
 <details><summary>Detalle del certificado</summary>
 
-- **Ciclo:** 2026-11-28-0830 · datos sincronizados a las 12:46 · Sync fuera de franja
-- **Antigüedad:** fin del sueño hace 8,5 h ✓ · última HRV hace 8,6 h ✓ · última FC hace 4,4 h ! · último Body Battery hace 5,5 h !
+- **Ciclo:** 2026-11-28-0830 · datos sincronizados a las 13:51 · Sync fuera de franja
+- **Antigüedad:** fin del sueño hace 82 min ✓ · última HRV hace 9,7 h ✓ · última FC hace 66 min ✓ · último Body Battery hace 79 min ✓
 - **Integridad:** coherencia experimental/oficial ✓ · sesiones con RPE 15/15 (+4 sin RPE por diseño: calentamiento/técnica)
 - **Ejecución:** 0 franja(s) de Sync perdidas
-- **Estado:** con avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
+- **Estado:** sin avisos · fuentes con huella SHA-256: 17 · entrega: no verificable desde los datos
 
 </details>
 
-_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-28 12:47 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
+_Herramienta de entrenamiento basada en tendencias personales; no es un diagnóstico médico. Generado 2026-11-28 13:52 · app 6.1.0 · modelo readiness-v3.2. Fuente única: `app/readiness_v3.json`._
